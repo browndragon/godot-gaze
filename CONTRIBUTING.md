@@ -15,6 +15,8 @@ To ensure complete testability and cross-platform flexibility, the code is separ
 - `tests/`: Standalone unit tests executing core logic without spinning up Godot.
 - `thirdparty/`: External vendored packages (e.g. `doctest`, `one_euro_filter`).
 
+This **6-Layer Decoupled Architecture**: Modular interfaces (Camera Capture, Image Pipeline, ONNX Model Inference, Screen Projection, Filtering, and Godot wrappers) allow testing and compiling layers independently.
+
 ## 2. Test-Driven Development (TDD) Practice
 
 Any modifications or additions to the mathematical projection formulas, calibration logic, or smoothing filters **must be written in `src/core/` and validated using the C++ unit test suite**.

@@ -1,0 +1,23 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6v2nkvgsw1n1"]
+
+[ext_resource type="Script" path="res://addons/godot-gaze/tests/test_scene.gd" id="1_test_scene"]
+
+[node name="TestScene" type="Node2D"]
+script = ExtResource("1_test_scene")
+
+[node name="GazeTracker" type="GazeTracker" parent="."]
+camera_offset = Vector3(0, -148, 10)
+screen_size_pixels = Vector2i(1920, 1080)
+screen_size_mm = Vector2(527, 296)
+
+[node name="Cursor" type="ColorRect" parent="."]
+offset_right = 24.0
+offset_bottom = 24.0
+color = Color(1, 0, 0, 1)
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+text = "Status: Idle"

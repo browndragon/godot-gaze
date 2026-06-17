@@ -335,31 +335,20 @@ func _process(delta):
 	center_pos = get_viewport().get_visible_rect().size / 2.0
 	
 	if tracker.is_face_detected():
-		var left_origin = tracker.get_left_eye_center()
-		var left_dir = tracker.get_left_eye_gaze_direction()
-		var left_pixel = project_ray_to_screen_pixels(left_origin, left_dir)
-		
-		var right_origin = tracker.get_right_eye_center()
-		var right_dir = tracker.get_right_eye_gaze_direction()
-		var right_pixel = project_ray_to_screen_pixels(right_origin, right_dir)
+		var gaze_origin = tracker.get_gaze_origin()
+		var gaze_dir = tracker.get_gaze_direction()
+		var gaze_pixel = project_ray_to_screen_pixels(gaze_origin, gaze_dir)
 		
 		var window_pos = DisplayServer.window_get_position()
 		
-		var lp_win = left_pixel - Vector2(window_pos) if left_pixel != Vector2(-1, -1) else Vector2.ZERO
-		var rp_win = right_pixel - Vector2(window_pos) if right_pixel != Vector2(-1, -1) else Vector2.ZERO
-		
-		if lp_win != Vector2.ZERO and rp_win != Vector2.ZERO:
-			eye_gaze_pos = (lp_win + rp_win) * 0.5
-		elif lp_win != Vector2.ZERO:
-			eye_gaze_pos = lp_win
-		elif rp_win != Vector2.ZERO:
-			eye_gaze_pos = rp_win
+		if gaze_pixel != Vector2(-1, -1):
+			eye_gaze_pos = gaze_pixel - Vector2(window_pos)
 		else:
 			eye_gaze_pos = Vector2.ZERO
 			
 		# Head forward / nose gaze
 		var head_transform: Transform3D = tracker.get_head_transform()
-		var head_forward: Vector3 = -head_transform.basis.z.normalized()
+		var head_forward: Vector3 = head_transform.basis.z.normalized()
 		var nose_pixel = project_ray_to_screen_pixels(head_transform.origin, head_forward)
 		if nose_pixel != Vector2(-1, -1):
 			nose_gaze_pos = nose_pixel - Vector2(window_pos)
@@ -399,12 +388,10 @@ func process_calibration(delta):
 	# If time elapsed, collect sample and advance
 	if target_timer >= target_hold_time:
 		if tracker.is_face_detected():
-			var left_orig = tracker.get_left_eye_center()
-			var left_dir = tracker.get_left_eye_gaze_direction()
-			var right_orig = tracker.get_right_eye_center()
-			var right_dir = tracker.get_right_eye_gaze_direction()
+			var gaze_orig = tracker.get_gaze_origin()
+			var gaze_dir = tracker.get_gaze_direction()
 			
-			calib_session.add_sample(current_target_screen_pos, left_orig, left_dir, right_orig, right_dir)
+			calib_session.add_sample(current_target_screen_pos, gaze_orig, gaze_dir)
 			
 			# Print/Log raw-ish instrumentation data for unit test creation
 			print("--- CALIBRATION SAMPLE POINT %d ---" % current_target_idx)
@@ -415,10 +402,8 @@ func process_calibration(delta):
 			print("Raw Right Eye Center (X, Y, Z mm): Vector3(%f, %f, %f)" % [tracker.get_raw_right_eye_center().x, tracker.get_raw_right_eye_center().y, tracker.get_raw_right_eye_center().z])
 			print("Raw Gaze Direction (X, Y, Z): Vector3(%f, %f, %f)" % [tracker.get_raw_gaze_direction().x, tracker.get_raw_gaze_direction().y, tracker.get_raw_gaze_direction().z])
 			print("Godot Head Transform: ", tracker.get_head_transform())
-			print("Godot Left Eye Center: ", tracker.get_left_eye_center())
-			print("Godot Right Eye Center: ", tracker.get_right_eye_center())
-			print("Godot Left Eye Direction: ", tracker.get_left_eye_gaze_direction())
-			print("Godot Right Eye Direction: ", tracker.get_right_eye_gaze_direction())
+			print("Godot Gaze Origin: ", tracker.get_gaze_origin())
+			print("Godot Gaze Direction: ", tracker.get_gaze_direction())
 			print("---------------------------------")
 			
 		current_target_idx += 1
@@ -464,7 +449,7 @@ func process_verification(delta):
 		else:
 			avg_measured = eye_gaze_pos + Vector2(DisplayServer.window_get_position())
 			
-		var distance = tracker.get_left_eye_center().z # user distance in mm
+		var distance = tracker.get_gaze_origin().z # user distance in mm
 		if distance <= 0.0:
 			distance = 600.0 # fallback
 			
@@ -625,14 +610,5 @@ func project_ray_to_screen_pixels(origin_cam: Vector3, dir_cam: Vector3) -> Vect
 	if t < 0:
 		return Vector2(-1, -1)
 		
-	var intersection_mm = Vector2(origin_scr.x + t * dir_scr.x, origin_scr.y + t * dir_scr.y)
-	
-	var px_size = tracker.screen_size_pixels
-	var mm_size = tracker.screen_size_mm
-	
-	if mm_size.x <= 0 or mm_size.y <= 0:
-		return Vector2(-1, -1)
-		
-	var px_x = px_size.x / 2.0 + intersection_mm.x * (px_size.x / mm_size.x)
-	var px_y = px_size.y / 2.0 - intersection_mm.y * (px_size.y / mm_size.y)
-	return Vector2(px_x, px_y)
+	var p = origin_scr + t * dir_scr
+	return Vector2(p.x, p.y)

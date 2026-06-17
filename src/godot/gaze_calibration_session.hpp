@@ -16,10 +16,8 @@ class GazeCalibrationSession : public Resource {
 
 private:
     Array target_pixels;
-    Array left_origins;
-    Array left_directions;
-    Array right_origins;
-    Array right_directions;
+    Array gaze_origins;
+    Array gaze_directions;
 
 protected:
     static void _bind_methods();
@@ -28,7 +26,7 @@ public:
     GazeCalibrationSession() = default;
     virtual ~GazeCalibrationSession() = default;
 
-    void add_sample(Vector2 target_pixel, Vector3 left_origin, Vector3 left_direction, Vector3 right_origin, Vector3 right_direction);
+    void add_sample(Vector2 target_pixel, Vector3 gaze_origin, Vector3 gaze_direction);
     void clear();
     int get_sample_count() const;
 
@@ -38,17 +36,11 @@ public:
     void set_target_pixels(const Array& arr) { target_pixels = arr; }
     Array get_target_pixels() const { return target_pixels; }
 
-    void set_left_origins(const Array& arr) { left_origins = arr; }
-    Array get_left_origins() const { return left_origins; }
+    void set_gaze_origins(const Array& arr) { gaze_origins = arr; }
+    Array get_gaze_origins() const { return gaze_origins; }
 
-    void set_left_directions(const Array& arr) { left_directions = arr; }
-    Array get_left_directions() const { return left_directions; }
-
-    void set_right_origins(const Array& arr) { right_origins = arr; }
-    Array get_right_origins() const { return right_origins; }
-
-    void set_right_directions(const Array& arr) { right_directions = arr; }
-    Array get_right_directions() const { return right_directions; }
+    void set_gaze_directions(const Array& arr) { gaze_directions = arr; }
+    Array get_gaze_directions() const { return gaze_directions; }
 };
 
 } // namespace godot

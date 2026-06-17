@@ -85,11 +85,11 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     // --- Head Pose Estimation (SolvePnP Approximation) ---
     // Define a standard 3D facial model for PnP (eyes, nose, mouth corners)
     std::vector<cv::Point3f> model_points = {
-        cv::Point3f(-30.0f, -20.0f, 0.0f), // Right eye
-        cv::Point3f(30.0f, -20.0f, 0.0f),  // Left eye
-        cv::Point3f(0.0f, 0.0f, -30.0f),   // Nose tip
-        cv::Point3f(-25.0f, 30.0f, -10.0f), // Right mouth corner
-        cv::Point3f(25.0f, 30.0f, -10.0f)  // Left mouth corner
+        cv::Point3f(-30.0f, -28.676f, 0.0f), // Right eye
+        cv::Point3f(30.0f, -28.676f, 0.0f),  // Left eye
+        cv::Point3f(0.0f, -5.000f, -59.859f),   // Nose tip
+        cv::Point3f(-18.462f, 31.712f, -4.550f), // Right mouth corner
+        cv::Point3f(18.462f, 31.712f, -4.550f)  // Left mouth corner
     };
 
     std::vector<cv::Point2f> image_points = {

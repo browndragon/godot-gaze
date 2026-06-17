@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.os
 
 # Precompiled Headers
 *.gch
@@ -30,3 +31,11 @@
 *.exe
 *.out
 *.app
+
+# SCons
+.sconsign.dblite
+
+# Paths
+project/addons/godot-gaze/bin/
+project/addons/godot-gaze/models/
+project/models/

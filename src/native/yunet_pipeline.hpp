@@ -16,7 +16,7 @@ private:
     int top_k;
 
     // Helper to perform perspective warp / crop on eye landmarks
-    bool crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[2160]);
+    bool crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800]);
 
 public:
     YuNetPipeline(const std::string& yunet_model_path, float score_thresh = 0.9f, float nms_thresh = 0.3f, int k = 5000);

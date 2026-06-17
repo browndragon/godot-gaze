@@ -2,6 +2,7 @@
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/project_settings.hpp>
 
 #ifdef WEB_ENABLED
 #include "web_gaze_model.hpp"
@@ -180,8 +181,10 @@ bool GazeTracker::initialize_tracker() {
     return true;
 #else
     camera = new Gaze::OpenCVCamera(camera_device_id);
-    pipeline = new Gaze::YuNetPipeline(yunet_model_path.utf8().get_data());
-    model = new Gaze::OpenCVGazeModel(gaze_onnx_path.utf8().get_data());
+    String global_yunet_path = ProjectSettings::get_singleton()->globalize_path(yunet_model_path);
+    String global_gaze_path = ProjectSettings::get_singleton()->globalize_path(gaze_onnx_path);
+    pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
+    model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
 
     if (!camera->initialize()) {
         stop_tracker();

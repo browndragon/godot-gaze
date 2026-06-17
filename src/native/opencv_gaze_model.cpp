@@ -8,7 +8,18 @@ OpenCVGazeModel::OpenCVGazeModel(const std::string& gaze_onnx_path) : model_path
 bool OpenCVGazeModel::initialize() {
     log_info("OpenCVGazeModelInitAttempt", "model_path", model_path);
     try {
-        net = cv::dnn::readNetFromONNX(model_path);
+        if (model_path.rfind(".xml") != std::string::npos) {
+            std::string bin_path = model_path;
+            size_t ext_pos = bin_path.rfind(".xml");
+            if (ext_pos != std::string::npos) {
+                bin_path.replace(ext_pos, 4, ".bin");
+            }
+            log_info("OpenCVGazeModelLoadOpenVINO", "xml", model_path, "bin", bin_path);
+            net = cv::dnn::readNet(model_path, bin_path);
+        } else {
+            net = cv::dnn::readNetFromONNX(model_path);
+        }
+        
         if (net.empty()) {
             log_error("OpenCVGazeModelInitFailed", "reason", "net reading returned empty");
             return false;
@@ -31,29 +42,29 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
         return false;
     }
 
-    // 1. Convert eye crop arrays to OpenCV Mats
-    cv::Mat left_eye_mat(36, 60, CV_8UC1, const_cast<unsigned char*>(crops.left_eye_data));
-    cv::Mat right_eye_mat(36, 60, CV_8UC1, const_cast<unsigned char*>(crops.right_eye_data));
+    // 1. Convert eye crop arrays to OpenCV Mats (60x60 px, 3-channel BGR)
+    cv::Mat left_eye_mat(60, 60, CV_8UC3, const_cast<unsigned char*>(crops.left_eye_data));
+    cv::Mat right_eye_mat(60, 60, CV_8UC3, const_cast<unsigned char*>(crops.right_eye_data));
 
-    // 2. Normalize and format images into DNN input blobs
-    // Scale pixel values to [0.0, 1.0]
-    cv::Mat left_blob = cv::dnn::blobFromImage(left_eye_mat, 1.0 / 255.0, cv::Size(60, 36), cv::Scalar(0), false);
-    cv::Mat right_blob = cv::dnn::blobFromImage(right_eye_mat, 1.0 / 255.0, cv::Size(60, 36), cv::Scalar(0), false);
+    // 2. Format images into DNN input blobs (raw pixel values in [0, 255])
+    cv::Mat left_blob = cv::dnn::blobFromImage(left_eye_mat, 1.0, cv::Size(60, 60), cv::Scalar(0), false);
+    cv::Mat right_blob = cv::dnn::blobFromImage(right_eye_mat, 1.0, cv::Size(60, 60), cv::Scalar(0), false);
 
-    // 3. Format head pose features (only pitch & yaw are typically required by CNN)
-    float head_pose_data[2] = {
+    // 3. Format head pose features: Yaw, Pitch, Roll in degrees
+    float head_pose_data[3] = {
+        static_cast<float>(crops.head_pose_rotation.y), // Yaw
         static_cast<float>(crops.head_pose_rotation.x), // Pitch
-        static_cast<float>(crops.head_pose_rotation.y)  // Yaw
+        static_cast<float>(crops.head_pose_rotation.z)  // Roll
     };
-    cv::Mat head_pose_blob(1, 2, CV_32F, head_pose_data);
+    cv::Mat head_pose_blob(1, 3, CV_32F, head_pose_data);
 
-    // 4. Set inputs into their corresponding ONNX tensor nodes
-    net.setInput(left_blob, "left_eye_input");
-    net.setInput(right_blob, "right_eye_input");
-    net.setInput(head_pose_blob, "head_pose_input");
+    // 4. Set inputs into their corresponding ONNX tensor nodes (Intel ADAS names)
+    net.setInput(left_blob, "left_eye_image");
+    net.setInput(right_blob, "right_eye_image");
+    net.setInput(head_pose_blob, "head_pose_angles");
 
     // 5. Run forward pass
-    cv::Mat output = net.forward("gaze_output");
+    cv::Mat output = net.forward("gaze_vector");
 
     if (output.empty() || output.cols < 2) {
         log_error("OpenCVGazeModelForwardFailed");

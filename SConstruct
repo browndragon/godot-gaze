@@ -14,7 +14,7 @@ opts.Add(PathVariable("opencv_dir", "Path to OpenCV SDK root", os.environ.get("O
 env = Environment(variables=opts)
 
 # Set build target directory
-env.Append(CPPPATH=["src/core", "thirdparty/one_euro_filter"])
+env.Append(CPPPATH=["src/core", "src/native", "src/web", "src/godot", "thirdparty/one_euro_filter"])
 
 # Detect compilers and setup platform-specific flags
 if env["platform"] == "macos":
@@ -30,6 +30,9 @@ else:  # Linux/Android/iOS
 
 # Godot cpp bindings setup (assuming godot-cpp is present as submodule/directory)
 godot_cpp_dir = os.environ.get("GODOT_CPP_DIR", "godot-cpp")
+if not os.path.isdir(godot_cpp_dir) and os.path.isdir("thirdparty/godot-cpp"):
+    godot_cpp_dir = "thirdparty/godot-cpp"
+
 env.Append(CPPPATH=[
     godot_cpp_dir + "/include",
     godot_cpp_dir + "/gen/include",
@@ -39,7 +42,15 @@ env.Append(CPPPATH=[
 # Setup platform-specific library paths
 if env["platform"] == "macos":
     env.Append(LIBPATH=[godot_cpp_dir + "/bin"])
-    env.Append(LIBS=["godot-cpp.macos.template_debug.arm64"]) # Default, SCons will expand based on target
+    # Scan the bin folder to detect if it compiled as universal, arm64, etc.
+    lib_name = "godot-cpp.macos.template_debug.arm64" # Default fallback
+    bin_dir = godot_cpp_dir + "/bin"
+    if os.path.isdir(bin_dir):
+        for f in os.listdir(bin_dir):
+            if f.startswith("libgodot-cpp.macos.") and f.endswith(".a"):
+                lib_name = f[3:-2] # Strip 'lib' prefix and '.a' suffix
+                break
+    env.Append(LIBS=[lib_name])
 
 # Conditional Source and OpenCV dependency mapping
 sources = Glob("src/core/*.cpp") + Glob("src/godot/*.cpp")
@@ -63,6 +74,12 @@ else:
             opencv_sdk = local_opencv
         elif env["platform"] == "macos" and os.path.isdir("thirdparty/opencv/macos"):
             opencv_sdk = "thirdparty/opencv/macos"
+        elif env["platform"] == "macos":
+            # Check standard Homebrew paths on macOS
+            for hb_path in ["/opt/homebrew/opt/opencv", "/usr/local/opt/opencv"]:
+                if os.path.isdir(hb_path):
+                    opencv_sdk = hb_path
+                    break
 
     if opencv_sdk and os.path.isdir(opencv_sdk):
         print("Using OpenCV SDK located at: " + opencv_sdk)

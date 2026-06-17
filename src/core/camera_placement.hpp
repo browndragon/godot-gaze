@@ -1,4 +1,4 @@
-// src/core/camera_placement.hpp
+// Position offset and tilt angle representation.
 #pragma once
 
 #include "math_defs.hpp"

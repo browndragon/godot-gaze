@@ -1,4 +1,4 @@
-// src/core/camera_interface.hpp
+// Frame ingestion interface (Layer 1).
 #pragma once
 
 namespace Gaze {

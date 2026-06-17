@@ -1,4 +1,3 @@
-// src/godot/register_types.cpp
 #include "register_types.hpp"
 #include "gaze_tracker.hpp"
 #include "gaze_calibration_resource.hpp"

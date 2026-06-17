@@ -1,4 +1,3 @@
-// thirdparty/one_euro_filter/one_euro_filter.hpp
 #pragma once
 
 #include <cmath>

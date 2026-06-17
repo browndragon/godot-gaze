@@ -1,4 +1,3 @@
-// src/native/yunet_pipeline.cpp
 #include "yunet_pipeline.hpp"
 #include "log.hpp"
 #include <opencv2/imgproc.hpp>

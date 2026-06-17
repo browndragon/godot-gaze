@@ -1,4 +1,4 @@
-// src/godot/register_types.hpp
+// Standard GDExtension initialization entry points.
 #pragma once
 
 #include <godot_cpp/core/class_db.hpp>

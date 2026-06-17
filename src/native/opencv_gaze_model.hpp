@@ -1,4 +1,4 @@
-// src/native/opencv_gaze_model.hpp
+// Runs gaze estimation network ONNX models.
 #pragma once
 
 #include "gaze_model.hpp"

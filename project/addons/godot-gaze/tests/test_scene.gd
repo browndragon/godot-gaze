@@ -1,4 +1,3 @@
-# test_scene.gd
 # Helper script to test the GazeTracker GDExtension module integration.
 
 extends Node2D

@@ -1,4 +1,3 @@
-// src/core/projection_engine.cpp
 #include "projection_engine.hpp"
 #include <cmath>
 

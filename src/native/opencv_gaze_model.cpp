@@ -1,4 +1,3 @@
-// src/native/opencv_gaze_model.cpp
 #include "opencv_gaze_model.hpp"
 #include "log.hpp"
 

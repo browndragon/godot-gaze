@@ -1,4 +1,3 @@
-// src/web/web_gaze_model.cpp
 #include "web_gaze_model.hpp"
 
 namespace Gaze {

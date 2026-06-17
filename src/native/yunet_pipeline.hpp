@@ -1,4 +1,4 @@
-// src/native/yunet_pipeline.hpp
+// Detects faces via YuNet, normalizes roll via affine warps, crops eyes, and estimates camera space 3D eye coordinates.
 #pragma once
 
 #include "face_pipeline.hpp"

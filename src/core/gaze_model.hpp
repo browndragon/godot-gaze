@@ -1,4 +1,4 @@
-// src/core/gaze_model.hpp
+// Raw model inference interface (Layer 3).
 #pragma once
 
 #include "face_pipeline.hpp"

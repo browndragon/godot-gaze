@@ -1,4 +1,4 @@
-// src/native/opencv_camera.hpp
+// Captures hardware camera input and outputs gray frame buffers.
 #pragma once
 
 #include "camera_interface.hpp"

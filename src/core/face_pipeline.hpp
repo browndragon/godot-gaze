@@ -1,4 +1,4 @@
-// src/core/face_pipeline.hpp
+// Face detector and normalizer interface (Layer 2).
 #pragma once
 
 #include "camera_interface.hpp"

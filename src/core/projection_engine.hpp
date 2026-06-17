@@ -1,4 +1,4 @@
-// src/core/projection_engine.hpp
+// 3D ray-plane intersection, focal depth calculation, and 3D/2D analytical calibration (Layer 4).
 #pragma once
 
 #include "camera_placement.hpp"

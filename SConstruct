@@ -91,18 +91,25 @@ else:
         print("WARNING: OpenCV SDK was not found! Compilation will fail on native targets unless OPENCV_DIR is set.")
 
 # Output library name mapping
-lib_prefix = "lib"
+# We let SCons use default prefixes for native desktop platforms:
+# - macOS: libgaze.macos.template_debug.dylib
+# - Linux: libgaze.linux.template_debug.so
+# - Windows: gaze.windows.template_debug.dll
+# For Web (Javascript), we customize prefix for WASM.
+if env["platform"] == "javascript":
+    env.Replace(SHLIBPREFIX="")
+
+# We explicitly determine and append the suffix to prevent SCons from treating 
+# the dot in ".platform.target" as a file extension and omitting the actual suffix.
 lib_suffix = ".so"
 if env["platform"] == "windows":
-    lib_prefix = ""
     lib_suffix = ".dll"
 elif env["platform"] == "macos":
     lib_suffix = ".dylib"
 elif env["platform"] == "javascript":
-    lib_prefix = "lib"
     lib_suffix = ".wasm"
 
-target_lib = "project/addons/godot-gaze/bin/gaze." + env["platform"] + "." + env["target"]
+target_lib = "project/addons/godot-gaze/bin/gaze." + env["platform"] + "." + env["target"] + lib_suffix
 
 # Create shared library builder call
 env.SharedLibrary(target=target_lib, source=sources)

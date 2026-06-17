@@ -10,9 +10,12 @@ MODELS_DIR="${BASE_DIR}/project/models"
 echo "=== Gaze Tracker Pre-trained Models Setup ==="
 mkdir -p "${MODELS_DIR}"
 
-# 1. Download YuNet Face Detector Model from OpenCV Zoo
-YUNET_URL="https://github.com/opencv/opencv_zoo/raw/master/models/face_detection_yunet/face_detection_yunet_2024may.onnx"
-YUNET_FILE="${MODELS_DIR}/face_detection_yunet_2024may.onnx"
+# 1. Download YuNet Face Detector Model (using stable Hugging Face mirror to avoid raw Git LFS pointer text or 404s)
+YUNET_URL="https://huggingface.co/opencv/face_detection_yunet/resolve/main/face_detection_yunet_2023mar.onnx"
+YUNET_FILE="${MODELS_DIR}/face_detection_yunet_2023mar.onnx"
+
+# Remove corrupted or legacy 2024may HTML/ONNX file if present
+rm -f "${MODELS_DIR}/face_detection_yunet_2024may.onnx"
 
 if [ -f "${YUNET_FILE}" ]; then
     echo "YuNet model already exists at: ${YUNET_FILE}"

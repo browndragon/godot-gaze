@@ -19,7 +19,7 @@ private:
     bool crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800]);
 
 public:
-    YuNetPipeline(const std::string& yunet_model_path, float score_thresh = 0.9f, float nms_thresh = 0.3f, int k = 5000);
+    YuNetPipeline(const std::string& yunet_model_path, float score_thresh = 0.6f, float nms_thresh = 0.3f, int k = 5000);
     virtual ~YuNetPipeline() = default;
 
     virtual bool initialize() override;

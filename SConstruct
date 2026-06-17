@@ -86,7 +86,7 @@ else:
         env.Append(CPPPATH=[opencv_sdk + "/include", opencv_sdk + "/include/opencv4"])
         env.Append(LIBPATH=[opencv_sdk + "/lib"])
         # Standard OpenCV libraries we require
-        env.Append(LIBS=["opencv_core", "opencv_imgproc", "opencv_objdetect", "opencv_videoio", "opencv_dnn", "opencv_calib3d"])
+        env.Append(LIBS=["opencv_core", "opencv_imgproc", "opencv_imgcodecs", "opencv_objdetect", "opencv_videoio", "opencv_dnn", "opencv_calib3d"])
     else:
         print("WARNING: OpenCV SDK was not found! Compilation will fail on native targets unless OPENCV_DIR is set.")
 

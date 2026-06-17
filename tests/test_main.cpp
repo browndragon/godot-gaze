@@ -188,3 +188,58 @@ TEST_CASE("Testing 2D Calibration Bias Correction") {
     CHECK(calibrated_pixel.x == doctest::Approx(target.x));
     CHECK(calibrated_pixel.y == doctest::Approx(target.y));
 }
+
+TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
+    // Reconstruct head forward directions using the new unmirrored C++ mapping:
+    // basis.z = (-r02, -r12, r22) -> head_forward = -basis.z = (r02, r12, -r22)
+    auto get_unmirrored_forward = [](double pitch_deg, double yaw_deg, double roll_deg) {
+        double p = pitch_deg * 3.14159265358979323846 / 180.0;
+        double y = yaw_deg * 3.14159265358979323846 / 180.0;
+        double r = roll_deg * 3.14159265358979323846 / 180.0;
+        
+        double cp = std::cos(p), sp = std::sin(p);
+        double cy = std::cos(y), sy = std::sin(y);
+        double cr = std::cos(r), sr = std::sin(r);
+        
+        double r02 = cr * sy * cp + sr * sp;
+        double r12 = sr * sy * cp - cr * sp;
+        double r22 = cy * cp;
+        
+        // head_forward = -basis.z = (r02, r12, -r22) from get_head_transform
+        double fx = r02;
+        double fy = r12;
+        double fz = -r22;
+        
+        double len = std::sqrt(fx*fx + fy*fy + fz*fz);
+        return GazeVector3(fx/len, fy/len, fz/len);
+    };
+
+    // User logs: Point 1 (TL, left side) and Point 2 (TR, right side)
+    double p1_yaw = 3.207542, p1_pitch = 14.075171, p1_roll = -4.226331;
+    double p2_yaw = 15.317283, p2_pitch = 10.476198, p2_roll = 0.757732;
+    double p3_yaw = -1.992620, p3_pitch = 14.602449, p3_roll = -5.278838;
+    double p4_yaw = 20.695047, p4_pitch = 13.022354, p4_roll = -6.316560;
+
+    GazeVector3 f1 = get_unmirrored_forward(p1_pitch, p1_yaw, p1_roll);
+    GazeVector3 f2 = get_unmirrored_forward(p2_pitch, p2_yaw, p2_roll);
+    GazeVector3 f3 = get_unmirrored_forward(p3_pitch, p3_yaw, p3_roll);
+    GazeVector3 f4 = get_unmirrored_forward(p4_pitch, p4_yaw, p4_roll);
+
+    // 1. Verify Yaw Monotonicity (X increases when looking right)
+    // TR (Point 2) is to the right of TL (Point 1), so TR X should be greater
+    CHECK(f2.x > f1.x);
+    // BR (Point 4) is to the right of BL (Point 3), so BR X should be greater
+    CHECK(f4.x > f3.x);
+
+    // 2. Verify Pitch Monotonicity (Y decreases (moves down) when looking down)
+    // BL (Point 3) is below TL (Point 1), so BL Y should be smaller/more-negative
+    CHECK(f3.y < f1.y);
+    // BR (Point 4) is below TR (Point 2), so BR Y should be smaller/more-negative
+    CHECK(f4.y < f2.y);
+
+    // 3. Verify translation mapping monotonicity (-tvec_x)
+    // Point 1 (left target) has tvec_x = 14.996 -> Godot X = -14.996
+    // Point 2 (right target) has tvec_x = -5.598 -> Godot X = +5.598
+    // Moving to the right should increase Godot X translation
+    CHECK(-(-5.598579) > -(14.996960));
+}

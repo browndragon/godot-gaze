@@ -87,9 +87,8 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
             std::sin(pitch),
             std::cos(yaw) * cos_pitch
         ).normalized();
-    }
-    // Case B: Model outputs direct 3D gaze vector (X, Y, Z) in camera space
-    else if (output.cols == 3) {
+    } else if (output.cols == 3) {
+        // Keep Intel ADAS coordinate system output directly
         out_raw_gaze_dir = GazeVector3(
             output.at<float>(0, 0),
             output.at<float>(0, 1),

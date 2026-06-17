@@ -41,23 +41,23 @@ bool OpenCVCamera::grab_frame(Frame& out_frame) {
         return false;
     }
 
-    // Convert frame to standard grayscale to simplify face detection and pipeline processing
-    cv::Mat gray;
-    if (mat.channels() == 3) {
-        cv::cvtColor(mat, gray, cv::COLOR_BGR2GRAY);
+    // Ensure the frame has 3 channels (BGR) to support YuNet face detector requirements
+    cv::Mat bgr;
+    if (mat.channels() == 1) {
+        cv::cvtColor(mat, bgr, cv::COLOR_GRAY2BGR);
     } else {
-        gray = mat;
+        bgr = mat;
     }
 
     // Copy to persistent frame buffer to avoid lifetime issues
-    frame_buffer.resize(gray.total() * gray.elemSize());
-    std::memcpy(frame_buffer.data(), gray.data, frame_buffer.size());
+    frame_buffer.resize(bgr.total() * bgr.elemSize());
+    std::memcpy(frame_buffer.data(), bgr.data, frame_buffer.size());
 
     auto now = std::chrono::steady_clock::now();
     double current_time = std::chrono::duration<double>(now.time_since_epoch()).count();
 
-    out_frame.width = gray.cols;
-    out_frame.height = gray.rows;
+    out_frame.width = bgr.cols;
+    out_frame.height = bgr.rows;
     out_frame.data = frame_buffer.data();
     out_frame.timestamp = current_time - start_time;
 

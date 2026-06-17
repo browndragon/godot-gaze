@@ -13,10 +13,10 @@ struct EyeCrops {
     GazeVector3 head_pose_rotation;    // Rotational angles (pitch, yaw, roll)
     GazeVector3 head_pose_translation; // Position of the head
 
-    // Left and right eye crops (standardized to 60x36 px)
-    // grayscale buffer (60 * 36 = 2160 bytes)
-    unsigned char left_eye_data[2160] = {0};
-    unsigned char right_eye_data[2160] = {0};
+    // Left and right eye crops (standardized to 60x60 px, 3-channel BGR)
+    // BGR buffer (60 * 60 * 3 = 10800 bytes)
+    unsigned char left_eye_data[10800] = {0};
+    unsigned char right_eye_data[10800] = {0};
 
     // 3D coordinates of left and right eye centers in camera space (in mm)
     // Used to calculate Z distance based on IPD (Interpupillary Distance)

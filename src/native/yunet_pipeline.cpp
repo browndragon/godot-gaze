@@ -111,13 +111,31 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     bool pnp_success = cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, false, cv::SOLVEPNP_ITERATIVE);
 
     if (pnp_success) {
-        // Output head pose rotation & translation
-        out_crops.head_pose_rotation = GazeVector3(rvec.at<double>(0), rvec.at<double>(1), rvec.at<double>(2));
-        out_crops.head_pose_translation = GazeVector3(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
-
         // Use tvec + model points to find eye centers in camera coordinates (mm)
         cv::Mat R;
         cv::Rodrigues(rvec, R);
+
+        // Extract Euler angles (Yaw, Pitch, Roll) in degrees from R
+        double sy = std::sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
+        bool singular = sy < 1e-6;
+
+        double roll_deg = 0.0;
+        double pitch_deg = 0.0;
+        double yaw_deg = 0.0;
+
+        if (!singular) {
+            roll_deg  = std::atan2(R.at<double>(2, 1), R.at<double>(2, 2)) * (180.0 / 3.141592653589793);
+            pitch_deg = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
+            yaw_deg   = std::atan2(R.at<double>(1, 0), R.at<double>(0, 0)) * (180.0 / 3.141592653589793);
+        } else {
+            roll_deg  = std::atan2(-R.at<double>(1, 2), R.at<double>(1, 1)) * (180.0 / 3.141592653589793);
+            pitch_deg = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
+            yaw_deg   = 0.0;
+        }
+
+        // Output head pose rotation (Pitch, Yaw, Roll) in degrees
+        out_crops.head_pose_rotation = GazeVector3(pitch_deg, yaw_deg, roll_deg);
+        out_crops.head_pose_translation = GazeVector3(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
         
         cv::Mat left_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << 30.0, -20.0, 0.0) + tvec;
         cv::Mat right_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << -30.0, -20.0, 0.0) + tvec;
@@ -148,7 +166,7 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     return true;
 }
 
-bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[2160]) {
+bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800]) {
     // Select primary eye landmark
     cv::Point2f eye_center = is_left ? landmarks[1] : landmarks[0];
     cv::Point2f other_eye = is_left ? landmarks[0] : landmarks[1];
@@ -156,15 +174,15 @@ bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5]
     // Compute eye tilt angle to normalize head roll
     double dx = other_eye.x - eye_center.x;
     double dy = other_eye.y - eye_center.y;
-    double angle = std::atan2(dy, dx) * (180.0 / PI);
+    double angle = std::atan2(dy, dx) * (180.0 / 3.141592653589793);
 
     // If capturing the right eye (face's right, which is image left), flip the rotation direction
     if (!is_left) {
-        angle = std::atan2(-dy, -dx) * (180.0 / PI);
+        angle = std::atan2(-dy, -dx) * (180.0 / 3.141592653589793);
     }
 
-    // Define eye crop target dimensions
-    cv::Size target_size(60, 36);
+    // Define eye crop target dimensions (Intel ADAS model expects 60x60)
+    cv::Size target_size(60, 60);
 
     // Create rotation matrix around eye center to neutralize roll
     cv::Mat M = cv::getRotationMatrix2D(eye_center, angle, 1.0);
@@ -177,8 +195,12 @@ bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5]
     cv::Mat warped;
     cv::warpAffine(gray, warped, M, target_size, cv::INTER_LINEAR, cv::BORDER_REPLICATE);
 
-    // Copy to flat output buffer (2160 bytes)
-    std::memcpy(out_buffer, warped.data, 2160);
+    // Convert grayscale eye crop to 3-channel BGR expected by the ONNX model
+    cv::Mat warped_bgr;
+    cv::cvtColor(warped, warped_bgr, cv::COLOR_GRAY2BGR);
+
+    // Copy to flat output buffer (10800 bytes)
+    std::memcpy(out_buffer, warped_bgr.data, 10800);
     return true;
 }
 

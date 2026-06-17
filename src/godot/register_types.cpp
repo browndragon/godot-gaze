@@ -5,6 +5,8 @@
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
+#include "log.hpp"
 
 namespace godot {
 
@@ -16,12 +18,24 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     // Register GDExtension classes so they are exposed to GDScript/Editor
     ClassDB::register_class<GazeCalibrationResource>();
     ClassDB::register_class<GazeTracker>();
+
+    // Redirect gaze library logging messages to Godot output console
+    Gaze::register_log_handler([](bool is_error, const char* msg) {
+        String godot_msg = String(msg);
+        if (is_error) {
+            UtilityFunctions::printerr(godot_msg);
+        } else {
+            UtilityFunctions::print(godot_msg);
+        }
+    });
 }
 
 void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
+    // Clean up registry
+    Gaze::register_log_handler(nullptr);
 }
 
 extern "C" {

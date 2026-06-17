@@ -12,7 +12,7 @@ func _ready():
 	tracker.face_detected.connect(_on_face_detected)
 	
 	# Set model paths (relative to project root)
-	tracker.yunet_model_path = "res://models/face_detection_yunet_2024may.onnx"
+	tracker.yunet_model_path = "res://models/face_detection_yunet_2023mar.onnx"
 	tracker.gaze_onnx_path = "res://models/gaze-estimation-adas-0002.xml"
 	
 	# Start tracking

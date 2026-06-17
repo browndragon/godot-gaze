@@ -26,8 +26,12 @@ bool OpenCVGazeModel::initialize() {
         }
         
         // Optimizations for inference speed
-        net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
-        net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU); // Can target CUDA/OpenCL depending on platform
+        try {
+            net.setPreferableBackend(cv::dnn::DNN_BACKEND_OPENCV);
+            net.setPreferableTarget(cv::dnn::DNN_TARGET_CPU); // Can target CUDA/OpenCL depending on platform
+        } catch (const std::exception& e) {
+            log_info("OpenCVGazeModelOptimizationFallback", "reason", e.what());
+        }
 
     } catch (const std::exception& e) {
         log_error("OpenCVGazeModelInitException", "what", e.what());

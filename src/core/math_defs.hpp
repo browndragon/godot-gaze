@@ -1,4 +1,4 @@
-// src/core/math_defs.hpp
+// Zero-dependency 3D/2D vector and matrix math structures.
 #pragma once
 
 #include <cmath>

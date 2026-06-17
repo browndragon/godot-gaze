@@ -1,4 +1,3 @@
-// src/godot/gaze_tracker.cpp
 #include "gaze_tracker.hpp"
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>

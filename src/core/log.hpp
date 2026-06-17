@@ -1,4 +1,4 @@
-// src/core/log.hpp
+// Structured key-value logger macro.
 #pragma once
 
 #include <iostream>

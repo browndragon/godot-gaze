@@ -1,4 +1,3 @@
-// src/native/opencv_camera.cpp
 #include "opencv_camera.hpp"
 #include "log.hpp"
 #include <chrono>

@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# scripts/download_opencv.sh
 # Automates the retrieval and setup of OpenCV dependencies for godot-gaze compilation.
 
 set -euo pipefail

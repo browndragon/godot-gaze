@@ -1,4 +1,4 @@
-// src/core/gaze_calibration.hpp
+// Decoupled calibration data structure.
 #pragma once
 
 namespace Gaze {

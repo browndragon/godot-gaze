@@ -1,4 +1,3 @@
-// src/godot/gaze_calibration_resource.cpp
 #include "gaze_calibration_resource.hpp"
 #include <godot_cpp/core/class_db.hpp>
 

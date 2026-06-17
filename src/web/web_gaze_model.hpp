@@ -1,4 +1,4 @@
-// src/web/web_gaze_model.hpp
+// Receives pre-calculated gaze values from browser JavaScript.
 #pragma once
 
 #include "gaze_model.hpp"

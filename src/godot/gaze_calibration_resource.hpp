@@ -1,4 +1,4 @@
-// src/godot/gaze_calibration_resource.hpp
+// Wraps core calibration data structure into a serializable Godot Resource.
 #pragma once
 
 #include <godot_cpp/classes/resource.hpp>

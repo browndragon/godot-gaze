@@ -1,4 +1,4 @@
-// src/godot/gaze_tracker.hpp
+// Exposes tracker node properties, handles platform execution branches (native vs Web), applies filtering, and emits signals.
 #pragma once
 
 #include <godot_cpp/classes/node.hpp>

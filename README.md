@@ -1,6 +1,6 @@
 # godot-gaze
 
-A high-frequency, real-time 3D gaze estimation and expression tracking GDExtension plugin for Godot 4.7+. 
+A high-frequency, real-time 3D gaze estimation and expression tracking GDExtension plugin for Godot 4.7+.
 
 Optimized for cross-platform games, this library provides precise gaze ray projection onto the screen using configurable display geometries, customizable calibration, and adaptive signal filtering.
 
@@ -8,7 +8,6 @@ Optimized for cross-platform games, this library provides precise gaze ray proje
 
 ## Key Features
 
-- **6-Layer Decoupled Architecture**: Modular interfaces (Camera Capture, Image Pipeline, ONNX Model Inference, Screen Projection, Filtering, and Godot wrappers) allow testing and compiling layers independently.
 - **Cross-Platform Delivery (Native vs Web Split)**:
   - **Native Desktop/Mobile/iOS**: Uses an OpenCV (`cv::dnn`) pipeline for face detection (YuNet) and gaze estimation.
   - **WebAssembly (WASM)**: Leverages browser-native **ONNX Runtime Web** (utilizing WebGPU/WebGL acceleration) and **Google MediaPipe Face Landmarker JS** to run inference outside WebAssembly, passing payloads back via Godot's Emscripten JS Bridge.
@@ -49,10 +48,12 @@ godot-gaze/
 
 ## Getting Started & Build Instructions
 
-Ensure you have Python, SCons, and OpenCV installed (see [CONTRIBUTING.md](CONTRIBUTING.md) for automated setup).
+If you're building from source, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ### 1. Build the GDExtension Binary
+
 SCons is used to compile the library. Adjust the `platform` parameter as required:
+
 ```bash
 # Build for macOS
 scons platform=macos target=template_debug
@@ -78,6 +79,7 @@ scons platform=javascript target=template_debug
 ### 3. Basic GDScript Usage
 
 Attach a script to your scene root node:
+
 ```gdscript
 extends Node2D
 
@@ -87,7 +89,7 @@ func _ready():
     # Connect signals
     gaze_tracker.gaze_updated.connect(_on_gaze_updated)
     gaze_tracker.face_detected.connect(_on_face_detected)
-    
+
     # Start tracker
     if gaze_tracker.initialize_tracker():
         print("Gaze Tracker Started.")
@@ -110,6 +112,7 @@ func _input(event):
 ## Web / HTML5 Export Integration
 
 When exporting for Web/WASM:
+
 1. SCons compiles out OpenCV libraries and links a lightweight data bridge.
 2. Load `opencv.js` and `onnxruntime-web` in your HTML page shell.
 3. Run eye extraction on a canvas and feed crops to ONNX Runtime Web.

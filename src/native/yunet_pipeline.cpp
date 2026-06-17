@@ -37,14 +37,14 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         return false;
     }
 
-    // Wrap the raw frame buffer into an OpenCV Mat
-    cv::Mat gray(frame.height, frame.width, CV_8UC1, const_cast<unsigned char*>(frame.data));
+    // Wrap the raw frame buffer into an OpenCV Mat (BGR CV_8UC3)
+    cv::Mat bgr(frame.height, frame.width, CV_8UC3, const_cast<unsigned char*>(frame.data));
 
     // Update detector input size if frame dimensions changed
-    detector->setInputSize(gray.size());
+    detector->setInputSize(bgr.size());
 
     cv::Mat faces;
-    detector->detect(gray, faces);
+    detector->detect(bgr, faces);
 
     if (faces.empty() || faces.rows == 0) {
         out_crops.face_detected = false;
@@ -74,6 +74,10 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     cv::Point2f right_eye_img = landmarks[0];
     cv::Point2f left_eye_img = landmarks[1];
 
+    // Convert BGR frame to grayscale for eye crops extraction
+    cv::Mat gray;
+    cv::cvtColor(bgr, gray, cv::COLOR_BGR2GRAY);
+
     // Crop and warp eyes (60x36 px)
     crop_eye(gray, landmarks, true, out_crops.left_eye_data);  // Left Eye crop
     crop_eye(gray, landmarks, false, out_crops.right_eye_data); // Right Eye crop
@@ -83,9 +87,9 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     std::vector<cv::Point3f> model_points = {
         cv::Point3f(-30.0f, -20.0f, 0.0f), // Right eye
         cv::Point3f(30.0f, -20.0f, 0.0f),  // Left eye
-        cv::Point3f(0.0f, 0.0f, 30.0f),    // Nose tip
-        cv::Point3f(-25.0f, 30.0f, 10.0f), // Right mouth corner
-        cv::Point3f(25.0f, 30.0f, 10.0f)   // Left mouth corner
+        cv::Point3f(0.0f, 0.0f, -30.0f),   // Nose tip
+        cv::Point3f(-25.0f, 30.0f, -10.0f), // Right mouth corner
+        cv::Point3f(25.0f, 30.0f, -10.0f)  // Left mouth corner
     };
 
     std::vector<cv::Point2f> image_points = {
@@ -99,7 +103,7 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     // Camera matrix approximation
     double cx = frame.width / 2.0;
     double cy = frame.height / 2.0;
-    double fx = frame.width * 0.8; // Estimated focal length
+    double fx = frame.width * 1.5625; // Estimated focal length matching 1000px at 640x480
     cv::Mat camera_matrix = (cv::Mat_<double>(3, 3) << 
         fx,  0.0, cx,
         0.0, fx,  cy,
@@ -108,7 +112,12 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, CV_64F);
 
     cv::Mat rvec, tvec;
-    bool pnp_success = cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, false, cv::SOLVEPNP_ITERATIVE);
+    bool pnp_success = false;
+    try {
+        pnp_success = cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, false, cv::SOLVEPNP_SQPNP);
+    } catch (const std::exception& e) {
+        log_error("YuNetPipelinePnPException", "what", e.what());
+    }
 
     if (pnp_success) {
         // Use tvec + model points to find eye centers in camera coordinates (mm)
@@ -119,18 +128,18 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         double sy = std::sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
         bool singular = sy < 1e-6;
 
-        double roll_deg = 0.0;
         double pitch_deg = 0.0;
         double yaw_deg = 0.0;
+        double roll_deg = 0.0;
 
         if (!singular) {
-            roll_deg  = std::atan2(R.at<double>(2, 1), R.at<double>(2, 2)) * (180.0 / 3.141592653589793);
-            pitch_deg = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
-            yaw_deg   = std::atan2(R.at<double>(1, 0), R.at<double>(0, 0)) * (180.0 / 3.141592653589793);
+            pitch_deg = std::atan2(R.at<double>(2, 1), R.at<double>(2, 2)) * (180.0 / 3.141592653589793);
+            yaw_deg   = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
+            roll_deg  = std::atan2(R.at<double>(1, 0), R.at<double>(0, 0)) * (180.0 / 3.141592653589793);
         } else {
-            roll_deg  = std::atan2(-R.at<double>(1, 2), R.at<double>(1, 1)) * (180.0 / 3.141592653589793);
-            pitch_deg = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
-            yaw_deg   = 0.0;
+            pitch_deg = std::atan2(-R.at<double>(1, 2), R.at<double>(1, 1)) * (180.0 / 3.141592653589793);
+            yaw_deg   = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
+            roll_deg  = 0.0;
         }
 
         // Output head pose rotation (Pitch, Yaw, Roll) in degrees

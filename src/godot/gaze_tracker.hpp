@@ -5,6 +5,8 @@
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/variant/vector2i.hpp>
 #include <godot_cpp/variant/vector3.hpp>
+#include <godot_cpp/variant/transform3d.hpp>
+#include <godot_cpp/variant/basis.hpp>
 #include <godot_cpp/classes/ref.hpp>
 #include "gaze_calibration_resource.hpp"
 
@@ -35,7 +37,7 @@ private:
 
     // Configurable Properties
     Ref<GazeCalibrationResource> calibration_resource;
-    Vector3 camera_offset = Vector3(0.0, -148.0, 10.0); // mm relative to screen center
+    Vector3 camera_offset = Vector3(0.0, 148.0, 10.0); // mm relative to screen center
     double camera_tilt = 0.0;                           // degrees
     Vector2i screen_size_pixels = Vector2i(1920, 1080);
     Vector2 screen_size_mm = Vector2(527.0, 296.0);
@@ -55,8 +57,9 @@ private:
     Vector2 latest_filtered_gaze_px;
     bool tracker_initialized = false;
     bool is_face_tracked = false;
-    Gaze::GazeVector3 web_gaze_origin = Gaze::GazeVector3(0.0, 0.0, 500.0);
-    Gaze::GazeVector3 web_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
+    Gaze::GazeVector3 latest_gaze_origin = Gaze::GazeVector3(0.0, 0.0, 500.0);
+    Gaze::GazeVector3 latest_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
+    Gaze::EyeCrops latest_crops;
 
     void update_projection_parameters();
     void update_filter_parameters();
@@ -127,6 +130,21 @@ public:
     Vector2 get_latest_projected_gaze() const { return latest_projected_gaze_px; }
     Vector2 get_latest_filtered_gaze() const { return latest_filtered_gaze_px; }
     bool is_face_detected() const { return is_face_tracked; }
+
+    Transform3D get_head_transform() const;
+    Transform3D get_camera_to_screen_transform() const;
+    Vector3 get_left_eye_center() const;
+    Vector3 get_right_eye_center() const;
+    Vector3 get_left_eye_gaze_direction() const;
+    Vector3 get_right_eye_gaze_direction() const;
+
+    Vector3 get_raw_head_rotation() const;
+    Vector3 get_raw_head_translation() const;
+    Vector3 get_raw_left_eye_center() const;
+    Vector3 get_raw_right_eye_center() const;
+    Vector3 get_raw_gaze_direction() const;
+
+    const Gaze::ProjectionEngine& get_projection_engine() const { return projection_engine; }
 };
 
 } // namespace godot

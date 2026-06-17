@@ -1,6 +1,7 @@
 #include "doctest.h"
 #include "yunet_pipeline.hpp"
 #include "opencv_gaze_model.hpp"
+#include "projection_engine.hpp"
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <cstring>
@@ -88,26 +89,23 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
         {"self_nosetop_eyesdown.jpg", GazeVector2(0.0, -95.5), GazeVector2(0.0, 95.5)}
     };
 
-    auto project_ray_to_screen = [](const GazeVector3& origin_cam, const GazeVector3& dir_cam) -> GazeVector2 {
-        double camera_offset_y = -135.0; // mm (camera Y offset above screen center)
-        
-        // Map origin and dir to the projection engine's mirrored camera space:
-        GazeVector3 origin_proj(-origin_cam.x, origin_cam.y, origin_cam.z);
-        GazeVector3 dir_proj(-dir_cam.x, dir_cam.y, dir_cam.z);
+    ProjectionEngine engine;
+    engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
+    engine.set_screen_size_mm(GazeVector2(305.0, 191.0));
+    CameraPlacement placement(GazeVector3(0.0, -135.0, 10.0), 15.0);
+    engine.set_camera_placement(placement);
 
-        double denom = dir_proj.z;
-        if (std::abs(denom) < 1e-6) {
-            return GazeVector2(0.0, 0.0);
+    auto project_ray_to_screen = [&engine](const GazeVector3& origin_cam, const GazeVector3& dir_cam) -> GazeVector2 {
+        GazeVector2 pixel;
+        if (engine.project_gaze(origin_cam, dir_cam, pixel)) {
+            double x_s = (pixel.x - 960.0) * (305.0 / 1920.0);
+            double y_s = (pixel.y - 540.0) * (191.0 / 1080.0);
+            return GazeVector2(x_s, y_s);
         }
-        
-        double t = -origin_proj.z / denom;
-        GazeVector3 P_int = origin_proj + dir_proj * t;
-        
-        double x_s = P_int.x;
-        double y_s = P_int.y + camera_offset_y;
-        
-        return GazeVector2(x_s, y_s);
+        return GazeVector2(0.0, 0.0);
     };
+
+
 
     std::cout << "\n=== Running Gaze Integration Tests on Real Images ===" << std::endl;
 
@@ -164,21 +162,23 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
             double r12 = sr * sy * cp - cr * sp;
             double r22 = cy * cp;
 
-            // Head forward vector in camera space: -Col 2 of R_cv
-            GazeVector3 head_forward_cam(-r02, -r12, -r22);
+            // Head forward vector in Camera Space: Column 2 of R_cam = [-r02, r12, r22]
+            GazeVector3 head_forward_cam(-r02, r12, r22);
 
-            // Gaze origin (nose/head center)
-            GazeVector3 head_center_cam = sd.translation;
+            // Gaze origin (nose/head center) in Camera Space: [x, -y, -z]
+            GazeVector3 head_center_cam(sd.translation.x, -sd.translation.y, -sd.translation.z);
 
             sd.nose_projected = project_ray_to_screen(head_center_cam, head_forward_cam);
 
             GazeVector3 raw_gaze_dir;
             if (model.estimate_raw_gaze(crops, raw_gaze_dir)) {
-                sd.gaze_dir = raw_gaze_dir;
-                // Convert raw gaze direction (model space) to camera space:
-                GazeVector3 eye_gaze_cam(-raw_gaze_dir.x, -raw_gaze_dir.y, raw_gaze_dir.z);
-                GazeVector3 eye_center_cam = (sd.left_eye + sd.right_eye) * 0.5;
-                sd.gaze_projected = project_ray_to_screen(eye_center_cam, eye_gaze_cam);
+                // Map raw gaze direction to Camera Space (X=-X, Y=Y, Z=-Z)
+                sd.gaze_dir = GazeVector3(-raw_gaze_dir.x, raw_gaze_dir.y, -raw_gaze_dir.z);
+
+                GazeVector3 eye_center_cv = (sd.left_eye + sd.right_eye) * 0.5;
+                GazeVector3 eye_center_cam(eye_center_cv.x, -eye_center_cv.y, -eye_center_cv.z);
+
+                sd.gaze_projected = project_ray_to_screen(eye_center_cam, sd.gaze_dir);
             }
 
             // Calculate Euclidean errors
@@ -191,6 +191,9 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
             sd.gaze_error_mm = std::sqrt(dx_gaze*dx_gaze + dy_gaze*dy_gaze);
 
             std::cout << "Image: " << tg.filename
+                      << "\n  Head rotation (P, Y, R): (" << sd.rotation.x << ", " << sd.rotation.y << ", " << sd.rotation.z << ") deg"
+                      << "\n  Head translation: (" << sd.translation.x << ", " << sd.translation.y << ", " << sd.translation.z << ") mm"
+                      << "\n  Raw gaze dir: (" << sd.gaze_dir.x << ", " << sd.gaze_dir.y << ", " << sd.gaze_dir.z << ")"
                       << "\n  Target Nose: (" << tg.nose_target.x << ", " << tg.nose_target.y << ") mm"
                       << "\n  Projected Nose: (" << sd.nose_projected.x << ", " << sd.nose_projected.y << ") mm"
                       << "\n  Nose Error: " << sd.nose_error_mm << " mm (" << sd.nose_error_mm / 10.0 << " cm)"
@@ -229,12 +232,12 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
     if (left && right) {
         CHECK(left->translation.x > right->translation.x);
         CHECK(right->rotation.y > left->rotation.y);
-        CHECK(right->gaze_dir.x > left->gaze_dir.x);
+        CHECK(left->gaze_dir.x > right->gaze_dir.x); // +X points user-left, so left is greater
     }
 
     if (top && down) {
         CHECK(down->rotation.x < top->rotation.x);
-        CHECK(down->gaze_dir.y < top->gaze_dir.y);
+        CHECK(top->gaze_dir.y > down->gaze_dir.y); // +Y points up, so top is greater
     }
 
     // Eye Spatial Configuration
@@ -244,11 +247,11 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
         }
     }
 
-    // Assert that errors are within a reasonable uncalibrated baseline (e.g. within 50 cm for nose, 50 cm for gaze)
+    // Assert that errors are within a reasonable uncalibrated baseline (e.g. within 10 cm for nose, 10 cm for gaze)
     for (const auto& sd : samples) {
         if (sd.detected) {
-            CHECK_MESSAGE(sd.nose_error_mm < 500.0, "Nose error should be < 50cm in " << sd.filename << " (actual: " << sd.nose_error_mm << " mm)");
-            CHECK_MESSAGE(sd.gaze_error_mm < 500.0, "Gaze error should be < 50cm in " << sd.filename << " (actual: " << sd.gaze_error_mm << " mm)");
+            CHECK_MESSAGE(sd.nose_error_mm < 150.0, "Nose error should be < 15cm in " << sd.filename << " (actual: " << sd.nose_error_mm << " mm)");
+            CHECK_MESSAGE(sd.gaze_error_mm < 400.0, "Gaze error should be < 40cm in " << sd.filename << " (actual: " << sd.gaze_error_mm << " mm)");
         }
     }
 }

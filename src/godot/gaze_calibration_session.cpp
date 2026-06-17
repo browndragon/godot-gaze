@@ -7,7 +7,7 @@
 namespace godot {
 
 void GazeCalibrationSession::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("add_sample", "target_pixel", "left_origin", "left_direction", "right_origin", "right_direction"), &GazeCalibrationSession::add_sample);
+    ClassDB::bind_method(D_METHOD("add_sample", "target_pixel", "gaze_origin", "gaze_direction"), &GazeCalibrationSession::add_sample);
     ClassDB::bind_method(D_METHOD("clear"), &GazeCalibrationSession::clear);
     ClassDB::bind_method(D_METHOD("get_sample_count"), &GazeCalibrationSession::get_sample_count);
     ClassDB::bind_method(D_METHOD("calculate_calibration", "tracker", "use_3d"), &GazeCalibrationSession::calculate_calibration);
@@ -16,37 +16,25 @@ void GazeCalibrationSession::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_target_pixels"), &GazeCalibrationSession::get_target_pixels);
     ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "target_pixels"), "set_target_pixels", "get_target_pixels");
 
-    ClassDB::bind_method(D_METHOD("set_left_origins", "arr"), &GazeCalibrationSession::set_left_origins);
-    ClassDB::bind_method(D_METHOD("get_left_origins"), &GazeCalibrationSession::get_left_origins);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "left_origins"), "set_left_origins", "get_left_origins");
+    ClassDB::bind_method(D_METHOD("set_gaze_origins", "arr"), &GazeCalibrationSession::set_gaze_origins);
+    ClassDB::bind_method(D_METHOD("get_gaze_origins"), &GazeCalibrationSession::get_gaze_origins);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "gaze_origins"), "set_gaze_origins", "get_gaze_origins");
 
-    ClassDB::bind_method(D_METHOD("set_left_directions", "arr"), &GazeCalibrationSession::set_left_directions);
-    ClassDB::bind_method(D_METHOD("get_left_directions"), &GazeCalibrationSession::get_left_directions);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "left_directions"), "set_left_directions", "get_left_directions");
-
-    ClassDB::bind_method(D_METHOD("set_right_origins", "arr"), &GazeCalibrationSession::set_right_origins);
-    ClassDB::bind_method(D_METHOD("get_right_origins"), &GazeCalibrationSession::get_right_origins);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "right_origins"), "set_right_origins", "get_right_origins");
-
-    ClassDB::bind_method(D_METHOD("set_right_directions", "arr"), &GazeCalibrationSession::set_right_directions);
-    ClassDB::bind_method(D_METHOD("get_right_directions"), &GazeCalibrationSession::get_right_directions);
-    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "right_directions"), "set_right_directions", "get_right_directions");
+    ClassDB::bind_method(D_METHOD("set_gaze_directions", "arr"), &GazeCalibrationSession::set_gaze_directions);
+    ClassDB::bind_method(D_METHOD("get_gaze_directions"), &GazeCalibrationSession::get_gaze_directions);
+    ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "gaze_directions"), "set_gaze_directions", "get_gaze_directions");
 }
 
-void GazeCalibrationSession::add_sample(Vector2 target_pixel, Vector3 left_origin, Vector3 left_direction, Vector3 right_origin, Vector3 right_direction) {
+void GazeCalibrationSession::add_sample(Vector2 target_pixel, Vector3 gaze_origin, Vector3 gaze_direction) {
     target_pixels.push_back(target_pixel);
-    left_origins.push_back(left_origin);
-    left_directions.push_back(left_direction);
-    right_origins.push_back(right_origin);
-    right_directions.push_back(right_direction);
+    gaze_origins.push_back(gaze_origin);
+    gaze_directions.push_back(gaze_direction);
 }
 
 void GazeCalibrationSession::clear() {
     target_pixels.clear();
-    left_origins.clear();
-    left_directions.clear();
-    right_origins.clear();
-    right_directions.clear();
+    gaze_origins.clear();
+    gaze_directions.clear();
 }
 
 int GazeCalibrationSession::get_sample_count() const {
@@ -75,63 +63,40 @@ Ref<GazeCalibrationResource> GazeCalibrationSession::calculate_calibration(GazeT
     const Gaze::ProjectionEngine& engine = tracker->get_projection_engine();
 
     for (int i = 0; i < count; ++i) {
-        if (i >= left_origins.size() || i >= left_directions.size() ||
-            i >= right_origins.size() || i >= right_directions.size()) {
+        if (i >= gaze_origins.size() || i >= gaze_directions.size()) {
             break;
         }
 
         Vector2 target_val = target_pixels[i];
-        Vector3 left_orig_val = left_origins[i];
-        Vector3 left_dir_val = left_directions[i];
-        Vector3 right_orig_val = right_origins[i];
-        Vector3 right_dir_val = right_directions[i];
+        Vector3 gaze_orig_val = gaze_origins[i];
+        Vector3 gaze_dir_val = gaze_directions[i];
 
         Gaze::GazeVector2 target_pixel_gaze(target_val.x, target_val.y);
 
-        // Calibrate left eye
-        Gaze::GazeCalibration calib_l;
-        bool success_l = false;
+        Gaze::GazeCalibration calib;
+        bool success = false;
         if (use_3d) {
-            success_l = engine.calibrate_3d_bias(
-                Gaze::GazeVector3(left_orig_val.x, left_orig_val.y, left_orig_val.z),
-                Gaze::GazeVector3(left_dir_val.x, left_dir_val.y, left_dir_val.z),
+            success = engine.calibrate_3d_bias(
+                Gaze::GazeVector3(gaze_orig_val.x, gaze_orig_val.y, gaze_orig_val.z),
+                Gaze::GazeVector3(gaze_dir_val.x, gaze_dir_val.y, gaze_dir_val.z),
                 target_pixel_gaze,
-                calib_l
+                calib
             );
         } else {
-            success_l = engine.calibrate_2d_bias(
-                Gaze::GazeVector3(left_orig_val.x, left_orig_val.y, left_orig_val.z),
-                Gaze::GazeVector3(left_dir_val.x, left_dir_val.y, left_dir_val.z),
+            success = engine.calibrate_2d_bias(
+                Gaze::GazeVector3(gaze_orig_val.x, gaze_orig_val.y, gaze_orig_val.z),
+                Gaze::GazeVector3(gaze_dir_val.x, gaze_dir_val.y, gaze_dir_val.z),
                 target_pixel_gaze,
-                calib_l
+                calib
             );
         }
 
-        // Calibrate right eye
-        Gaze::GazeCalibration calib_r;
-        bool success_r = false;
-        if (use_3d) {
-            success_r = engine.calibrate_3d_bias(
-                Gaze::GazeVector3(right_orig_val.x, right_orig_val.y, right_orig_val.z),
-                Gaze::GazeVector3(right_dir_val.x, right_dir_val.y, right_dir_val.z),
-                target_pixel_gaze,
-                calib_r
-            );
-        } else {
-            success_r = engine.calibrate_2d_bias(
-                Gaze::GazeVector3(right_orig_val.x, right_orig_val.y, right_orig_val.z),
-                Gaze::GazeVector3(right_dir_val.x, right_dir_val.y, right_dir_val.z),
-                target_pixel_gaze,
-                calib_r
-            );
-        }
-
-        if (success_l && success_r) {
-            sum_pitch += calib_l.bias_pitch + calib_r.bias_pitch;
-            sum_yaw += calib_l.bias_yaw + calib_r.bias_yaw;
-            sum_px += calib_l.bias_pixel_x + calib_r.bias_pixel_x;
-            sum_py += calib_l.bias_pixel_y + calib_r.bias_pixel_y;
-            valid_samples += 2;
+        if (success) {
+            sum_pitch += calib.bias_pitch;
+            sum_yaw += calib.bias_yaw;
+            sum_px += calib.bias_pixel_x;
+            sum_py += calib.bias_pixel_y;
+            valid_samples += 1;
         }
     }
 

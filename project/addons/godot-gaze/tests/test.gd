@@ -38,8 +38,7 @@ func _process(_delta):
 		print("==================== GAZE DEBUG ====================")
 		print("Face Tracked: ", tracker.is_face_detected())
 		if tracker.is_face_detected():
-			print("Left Eye Center: ", tracker.get_left_eye_center(), " Gaze Dir: ", tracker.get_left_eye_gaze_direction())
-			print("Right Eye Center: ", tracker.get_right_eye_center(), " Gaze Dir: ", tracker.get_right_eye_gaze_direction())
+			print("Gaze Origin: ", tracker.get_gaze_origin(), " Gaze Dir: ", tracker.get_gaze_direction())
 			print("Head Transform:\n", tracker.get_head_transform())
 			print("Eye Gaze Pos: ", eye_gaze_pos, " Nose Gaze Pos: ", nose_gaze_pos)
 			print("Camera-to-Screen Transform:\n", tracker.get_camera_to_screen_transform())
@@ -48,50 +47,28 @@ func _process(_delta):
 	center_pos = get_viewport().get_visible_rect().size / 2.0
 	
 	if tracker.is_face_detected():
-		# Left Eye Gaze projection
-		var left_origin = tracker.get_left_eye_center()
-		var left_dir = tracker.get_left_eye_gaze_direction()
-		var left_pixel = project_ray_to_screen_pixels(left_origin, left_dir)
-		
-		# Right Eye Gaze projection
-		var right_origin = tracker.get_right_eye_center()
-		var right_dir = tracker.get_right_eye_gaze_direction()
-		var right_pixel = project_ray_to_screen_pixels(right_origin, right_dir)
+		# Unified Eye Gaze projection
+		var gaze_origin = tracker.get_gaze_origin()
+		var gaze_dir = tracker.get_gaze_direction()
+		var gaze_pixel = project_ray_to_screen_pixels(gaze_origin, gaze_dir)
 		
 		var window_pos = DisplayServer.window_get_position()
 		
-		if left_pixel != Vector2(-1, -1):
-			left_eye_pos = left_pixel - Vector2(window_pos)
-		else:
-			left_eye_pos = Vector2.ZERO
-			
-		if right_pixel != Vector2(-1, -1):
-			right_eye_pos = right_pixel - Vector2(window_pos)
-		else:
-			right_eye_pos = Vector2.ZERO
-			
-		# Weighted average of eye gaze intersections (50/50 split)
-		if left_eye_pos != Vector2.ZERO and right_eye_pos != Vector2.ZERO:
-			eye_gaze_pos = (left_eye_pos + right_eye_pos) * 0.5
-		elif left_eye_pos != Vector2.ZERO:
-			eye_gaze_pos = left_eye_pos
-		elif right_eye_pos != Vector2.ZERO:
-			eye_gaze_pos = right_eye_pos
+		if gaze_pixel != Vector2(-1, -1):
+			eye_gaze_pos = gaze_pixel - Vector2(window_pos)
 		else:
 			eye_gaze_pos = Vector2.ZERO
 			
 		# Head Pose / Nose Gaze projection
 		var head_transform: Transform3D = tracker.get_head_transform()
-		# Z-axis basis represents the forward direction vector in this space, negated to point toward screen
-		var head_forward: Vector3 = -head_transform.basis.z.normalized()
+		# Z-axis basis represents the forward direction vector in Camera Space, pointing toward screen
+		var head_forward: Vector3 = head_transform.basis.z.normalized()
 		var nose_pixel = project_ray_to_screen_pixels(head_transform.origin, head_forward)
 		if nose_pixel != Vector2(-1, -1):
 			nose_gaze_pos = nose_pixel - Vector2(window_pos)
 		else:
 			nose_gaze_pos = Vector2.ZERO
 	else:
-		left_eye_pos = Vector2.ZERO
-		right_eye_pos = Vector2.ZERO
 		eye_gaze_pos = Vector2.ZERO
 		nose_gaze_pos = Vector2.ZERO
 		
@@ -109,7 +86,7 @@ func _process(_delta):
 		coords_label.text = ""
 		
 	queue_redraw()
-
+ 
 func _draw():
 	# Draw center point reference
 	draw_circle(center_pos, 6, Color.WHITE)
@@ -123,11 +100,11 @@ func _draw():
 	if nose_gaze_pos != Vector2.ZERO:
 		draw_line(center_pos, nose_gaze_pos, Color.CYAN, 2.0)
 		draw_circle(nose_gaze_pos, 8, Color.CYAN)
-
+ 
 func _on_gaze_updated(_pixel: Vector2):
 	# Coordinate math is run dynamically in _process to handle window shifts
 	pass
-
+ 
 func _on_face_detected(detected: bool):
 	if detected:
 		cursor.color = Color.GREEN
@@ -135,7 +112,7 @@ func _on_face_detected(detected: bool):
 	else:
 		cursor.color = Color.RED
 		status_label.text = "Status: Face Lost"
-
+ 
 func _input(event):
 	# Press SPACE to trigger a 3D calibration at the center of the screen
 	if event.is_action_pressed("ui_select"):
@@ -144,7 +121,7 @@ func _input(event):
 		var screen_center = viewport_center + Vector2(DisplayServer.window_get_position())
 		tracker.calibrate_3d(screen_center)
 		status_label.text = "Status: Calibrated at Screen Center"
-
+ 
 func project_ray_to_screen_pixels(origin_cam: Vector3, dir_cam: Vector3) -> Vector2:
 	var transform: Transform3D = tracker.get_camera_to_screen_transform()
 	var origin_scr = transform * origin_cam
@@ -157,14 +134,5 @@ func project_ray_to_screen_pixels(origin_cam: Vector3, dir_cam: Vector3) -> Vect
 	if t < 0:
 		return Vector2(-1, -1)
 		
-	var intersection_mm = Vector2(origin_scr.x + t * dir_scr.x, origin_scr.y + t * dir_scr.y)
-	
-	var px_size = tracker.screen_size_pixels
-	var mm_size = tracker.screen_size_mm
-	
-	if mm_size.x <= 0 or mm_size.y <= 0:
-		return Vector2(-1, -1)
-		
-	var px_x = px_size.x / 2.0 + intersection_mm.x * (px_size.x / mm_size.x)
-	var px_y = px_size.y / 2.0 - intersection_mm.y * (px_size.y / mm_size.y)
-	return Vector2(px_x, px_y)
+	var p = origin_scr + t * dir_scr
+	return Vector2(p.x, p.y)

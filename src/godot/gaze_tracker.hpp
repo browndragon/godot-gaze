@@ -133,10 +133,8 @@ public:
 
     Transform3D get_head_transform() const;
     Transform3D get_camera_to_screen_transform() const;
-    Vector3 get_left_eye_center() const;
-    Vector3 get_right_eye_center() const;
-    Vector3 get_left_eye_gaze_direction() const;
-    Vector3 get_right_eye_gaze_direction() const;
+    Vector3 get_gaze_origin() const;
+    Vector3 get_gaze_direction() const;
 
     Vector3 get_raw_head_rotation() const;
     Vector3 get_raw_head_translation() const;

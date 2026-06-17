@@ -83,10 +83,8 @@ void GazeTracker::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_head_transform"), &GazeTracker::get_head_transform);
     ClassDB::bind_method(D_METHOD("get_camera_to_screen_transform"), &GazeTracker::get_camera_to_screen_transform);
-    ClassDB::bind_method(D_METHOD("get_left_eye_center"), &GazeTracker::get_left_eye_center);
-    ClassDB::bind_method(D_METHOD("get_right_eye_center"), &GazeTracker::get_right_eye_center);
-    ClassDB::bind_method(D_METHOD("get_left_eye_gaze_direction"), &GazeTracker::get_left_eye_gaze_direction);
-    ClassDB::bind_method(D_METHOD("get_right_eye_gaze_direction"), &GazeTracker::get_right_eye_gaze_direction);
+    ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeTracker::get_gaze_origin);
+    ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeTracker::get_gaze_direction);
 
     ClassDB::bind_method(D_METHOD("get_raw_head_rotation"), &GazeTracker::get_raw_head_rotation);
     ClassDB::bind_method(D_METHOD("get_raw_head_translation"), &GazeTracker::get_raw_head_translation);
@@ -144,14 +142,12 @@ void GazeTracker::_process(double delta) {
                     latest_crops = crops;
                     Gaze::GazeVector3 raw_gaze_dir_cam;
                     if (model->estimate_raw_gaze(crops, raw_gaze_dir_cam)) {
-                        // Calculate midpoint of eyes as gaze origin in camera space
-                        Gaze::GazeVector3 gaze_origin_cam = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5;
+                        // Calculate midpoint of eyes as gaze origin in OpenCV camera space
+                        Gaze::GazeVector3 gaze_origin_cv = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5;
 
-                        // Convert eye center origin and raw gaze direction to the projection engine's mirrored camera space:
-                        // - latest_gaze_origin: X is negated (camera-left is screen-right / positive).
-                        // - latest_gaze_dir: X is unchanged, Y is negated (model has up positive, projection expects down positive).
-                        latest_gaze_origin = Gaze::GazeVector3(-gaze_origin_cam.x, gaze_origin_cam.y, gaze_origin_cam.z);
-                        latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, -raw_gaze_dir_cam.y, raw_gaze_dir_cam.z);
+                        // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
+                        latest_gaze_origin = Gaze::GazeVector3(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
+                        latest_gaze_dir = Gaze::GazeVector3(-raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
 
                         Gaze::GazeVector2 pixel;
                         if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
@@ -483,85 +479,62 @@ Transform3D GazeTracker::get_head_transform() const {
     double r12 = sr * sy * cp - cr * sp;
     double r22 = cy * cp;
 
-    // Map R to Godot basis columns (using unmirrored proper rotation R_gd = M * R_cv):
+    // Map R to Camera Space basis columns (using unmirrored proper rotation R_cam = M * R_cv * M):
     Basis basis(
-        Vector3(-r00, -r10, r20),
-        Vector3(-r01, -r11, r21),
-        Vector3(-r02, -r12, r22)
+        Vector3(r00, -r10, -r20),
+        Vector3(-r01, r11, r21),
+        Vector3(-r02, r12, r22)
     );
 
-    // OpenCV translation to Godot: X = -X, Y = -Y, Z = Z (unmirrored proper mapping)
+    // OpenCV translation to Camera Space: X = X, Y = -Y, Z = -Z (unmirrored proper mapping)
     Vector3 translation(
-        -latest_crops.head_pose_translation.x,
+        latest_crops.head_pose_translation.x,
         -latest_crops.head_pose_translation.y,
-        latest_crops.head_pose_translation.z
+        -latest_crops.head_pose_translation.z
     );
 
     return Transform3D(basis, translation);
 }
 
 Transform3D GazeTracker::get_camera_to_screen_transform() const {
+    double scale_x = screen_size_pixels.x / screen_size_mm.x;
+    double scale_y = -screen_size_pixels.y / screen_size_mm.y;
+    double W_half = screen_size_pixels.x / 2.0;
+    double H_half = screen_size_pixels.y / 2.0;
+
     double theta_rad = camera_tilt * (3.14159265358979323846 / 180.0);
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
     Basis basis(
-        Vector3(1.0, 0.0, 0.0),
-        Vector3(0.0, cos_t, sin_t),
-        Vector3(0.0, -sin_t, cos_t)
+        Vector3(-scale_x, 0.0, 0.0),
+        Vector3(0.0, cos_t * scale_y, sin_t),
+        Vector3(0.0, sin_t * scale_y, -cos_t)
     );
-    // OpenCV to Godot: X = X, Y = Y, Z = Z for screen placement offset (unmirrored proper mapping)
-    Vector3 translation(camera_offset.x, camera_offset.y, camera_offset.z);
+
+    // camera_offset.y is negated because camera_offset.y is positive above screen center,
+    // but in Camera Space / physical offset coordinates, Y is negative above center.
+    double Cx = camera_offset.x;
+    double Cy = -camera_offset.y;
+    double Cz = camera_offset.z;
+
+    Vector3 translation(Cx * scale_x + W_half, -Cy * scale_y + H_half, Cz);
 
     return Transform3D(basis, translation);
 }
 
-Vector3 GazeTracker::get_left_eye_center() const {
+Vector3 GazeTracker::get_gaze_origin() const {
     if (!is_face_tracked) {
         return Vector3(0.0, 0.0, 0.0);
     }
-    // OpenCV to Godot: X = -X, Y = -Y, Z = Z (unmirrored proper mapping)
-    return Vector3(
-        -latest_crops.left_eye_center_cam.x,
-        -latest_crops.left_eye_center_cam.y,
-        latest_crops.left_eye_center_cam.z
-    );
+    return Vector3(latest_gaze_origin.x, latest_gaze_origin.y, latest_gaze_origin.z);
 }
 
-Vector3 GazeTracker::get_right_eye_center() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, 0.0);
-    }
-    // OpenCV to Godot: X = -X, Y = -Y, Z = Z (unmirrored proper mapping)
-    return Vector3(
-        -latest_crops.right_eye_center_cam.x,
-        -latest_crops.right_eye_center_cam.y,
-        latest_crops.right_eye_center_cam.z
-    );
-}
-
-Vector3 GazeTracker::get_left_eye_gaze_direction() const {
+Vector3 GazeTracker::get_gaze_direction() const {
     if (!is_face_tracked) {
         return Vector3(0.0, 0.0, -1.0);
     }
-    // Projection space to Godot: X = X, Y = -Y, Z = Z (proper screen space mapping)
-    return Vector3(
-        latest_gaze_dir.x,
-        -latest_gaze_dir.y,
-        latest_gaze_dir.z
-    );
-}
-
-Vector3 GazeTracker::get_right_eye_gaze_direction() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, -1.0);
-    }
-    // Projection space to Godot: X = X, Y = -Y, Z = Z (proper screen space mapping)
-    return Vector3(
-        latest_gaze_dir.x,
-        -latest_gaze_dir.y,
-        latest_gaze_dir.z
-    );
+    return Vector3(latest_gaze_dir.x, latest_gaze_dir.y, latest_gaze_dir.z);
 }
 
 Vector3 GazeTracker::get_raw_head_rotation() const {

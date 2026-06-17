@@ -106,8 +106,8 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)") {
     REQUIRE(success == true);
     // Check that vertical coordinate incorporates the 15-degree tilt
     CHECK(pixel.x == doctest::Approx(960.0));
-    // Since camera is tilted down, looking straight along the optical axis projects lower down on the screen
-    CHECK(pixel.y > 0.0); 
+    // Since camera is tilted down, looking straight along the optical axis projects higher up (above the screen top edge)
+    CHECK(pixel.y < 0.0); 
 }
 
 TEST_CASE("Testing 3D Calibration Bias Correction") {
@@ -205,10 +205,10 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
         double r12 = sr * sy * cp - cr * sp;
         double r22 = cy * cp;
         
-        // head_forward = -basis.z = (r02, r12, -r22) from get_head_transform
-        double fx = r02;
+        // head_forward = basis.z = (-r02, r12, r22) from get_head_transform
+        double fx = -r02;
         double fy = r12;
-        double fz = -r22;
+        double fz = r22;
         
         double len = std::sqrt(fx*fx + fy*fy + fz*fz);
         return GazeVector3(fx/len, fy/len, fz/len);
@@ -225,11 +225,11 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
     GazeVector3 f3 = get_unmirrored_forward(p3_pitch, p3_yaw, p3_roll);
     GazeVector3 f4 = get_unmirrored_forward(p4_pitch, p4_yaw, p4_roll);
 
-    // 1. Verify Yaw Monotonicity (X increases when looking right)
-    // TR (Point 2) is to the right of TL (Point 1), so TR X should be greater
-    CHECK(f2.x > f1.x);
-    // BR (Point 4) is to the right of BL (Point 3), so BR X should be greater
-    CHECK(f4.x > f3.x);
+    // 1. Verify Yaw Monotonicity (X increases when looking left in Camera Space)
+    // TR (Point 2) is to the right of TL (Point 1), so TL X (left) should be greater than TR X (right)
+    CHECK(f1.x > f2.x);
+    // BR (Point 4) is to the right of BL (Point 3), so BL X (left) should be greater than BR X (right)
+    CHECK(f3.x > f4.x);
 
     // 2. Verify Pitch Monotonicity (Y decreases (moves down) when looking down)
     // BL (Point 3) is below TL (Point 1), so BL Y should be smaller/more-negative

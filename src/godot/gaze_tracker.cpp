@@ -312,7 +312,7 @@ void GazeTracker::feed_expression_web(String name, double value) {
 
 void GazeTracker::update_projection_parameters() {
     Gaze::CameraPlacement placement(
-        Gaze::GazeVector3(camera_offset.x, -camera_offset.y, camera_offset.z),
+        Gaze::GazeVector3(camera_offset.x, camera_offset.y, camera_offset.z),
         camera_tilt
     );
     projection_engine.set_camera_placement(placement);
@@ -454,44 +454,18 @@ Transform3D GazeTracker::get_head_transform() const {
     if (!is_face_tracked) {
         return Transform3D();
     }
-    // Reconstruct the OpenCV rotation matrix R from ZYX Euler angles
-    double pitch_rad = latest_crops.head_pose_rotation.x * (3.14159265358979323846 / 180.0);
-    double yaw_rad = latest_crops.head_pose_rotation.y * (3.14159265358979323846 / 180.0);
-    double roll_rad = latest_crops.head_pose_rotation.z * (3.14159265358979323846 / 180.0);
+    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
+        latest_crops.head_pose_translation,
+        latest_crops.head_pose_rotation
+    );
 
-    double cp = std::cos(pitch_rad);
-    double sp = std::sin(pitch_rad);
-    double cy = std::cos(yaw_rad);
-    double sy = std::sin(yaw_rad);
-    double cr = std::cos(roll_rad);
-    double sr = std::sin(roll_rad);
-
-    // Columns of R (OpenCV):
-    double r00 = cr * cy;
-    double r10 = sr * cy;
-    double r20 = -sy;
-
-    double r01 = cr * sy * sp - sr * cp;
-    double r11 = sr * sy * sp + cr * cp;
-    double r21 = cy * sp;
-
-    double r02 = cr * sy * cp + sr * sp;
-    double r12 = sr * sy * cp - cr * sp;
-    double r22 = cy * cp;
-
-    // Map R to Camera Space basis columns (using unmirrored proper rotation R_cam = M * R_cv * M):
     Basis basis(
-        Vector3(r00, -r10, -r20),
-        Vector3(-r01, r11, r21),
-        Vector3(-r02, r12, r22)
+        Vector3(gt.basis.x.x, gt.basis.x.y, gt.basis.x.z),
+        Vector3(gt.basis.y.x, gt.basis.y.y, gt.basis.y.z),
+        Vector3(gt.basis.z.x, gt.basis.z.y, gt.basis.z.z)
     );
 
-    // OpenCV translation to Camera Space: X = X, Y = -Y, Z = -Z (unmirrored proper mapping)
-    Vector3 translation(
-        latest_crops.head_pose_translation.x,
-        -latest_crops.head_pose_translation.y,
-        -latest_crops.head_pose_translation.z
-    );
+    Vector3 translation(gt.origin.x, gt.origin.y, gt.origin.z);
 
     return Transform3D(basis, translation);
 }
@@ -512,13 +486,12 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
         Vector3(0.0, sin_t * scale_y, -cos_t)
     );
 
-    // camera_offset.y is negated because camera_offset.y is positive above screen center,
-    // but in Camera Space / physical offset coordinates, Y is negative above center.
+    // camera_offset.y is positive above screen center in both Godot and Camera Space.
     double Cx = camera_offset.x;
-    double Cy = -camera_offset.y;
+    double Cy = camera_offset.y;
     double Cz = camera_offset.z;
 
-    Vector3 translation(Cx * scale_x + W_half, -Cy * scale_y + H_half, Cz);
+    Vector3 translation(Cx * scale_x + W_half, Cy * scale_y + H_half, Cz);
 
     return Transform3D(basis, translation);
 }

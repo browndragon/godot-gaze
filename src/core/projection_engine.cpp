@@ -55,7 +55,7 @@ bool ProjectionEngine::project_gaze(const GazeVector3& gaze_origin_cam,
 
     // 2. Transform origin and direction from Camera Space to Display Space
     double O_disp_x = -scale_x * gaze_origin_cam.x + placement.offset.x * scale_x + W_half;
-    double O_disp_y = cos_t * scale_y * gaze_origin_cam.y + sin_t * scale_y * gaze_origin_cam.z - placement.offset.y * scale_y + H_half;
+    double O_disp_y = cos_t * scale_y * gaze_origin_cam.y + sin_t * scale_y * gaze_origin_cam.z + placement.offset.y * scale_y + H_half;
     double O_disp_z = sin_t * gaze_origin_cam.y - cos_t * gaze_origin_cam.z + placement.offset.z;
 
     double v_disp_x = -scale_x * v.x;
@@ -79,6 +79,35 @@ bool ProjectionEngine::project_gaze(const GazeVector3& gaze_origin_cam,
     return true;
 }
 
+GazeVector2 ProjectionEngine::pixel_to_millimeter(const GazeVector2& pixel) const {
+    if (screen_size_pixels.x <= 0.0 || screen_size_pixels.y <= 0.0 ||
+        screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
+        return GazeVector2(0.0, 0.0);
+    }
+    double scale_x = screen_size_pixels.x / screen_size_mm.x;
+    double scale_y = -screen_size_pixels.y / screen_size_mm.y;
+    double W_half = screen_size_pixels.x / 2.0;
+    double H_half = screen_size_pixels.y / 2.0;
+
+    return GazeVector2(
+        (pixel.x - W_half) / scale_x,
+        -((pixel.y - H_half) / scale_y)
+    );
+}
+
+GazeVector3 ProjectionEngine::screen_mm_to_camera_space(const GazeVector2& screen_mm) const {
+    double A = -screen_mm.y - placement.offset.y;
+    double theta_rad = placement.tilt_degrees * (PI / 180.0);
+    double cos_t = std::cos(theta_rad);
+    double sin_t = std::sin(theta_rad);
+
+    double P_cam_target_x = -screen_mm.x + placement.offset.x;
+    double P_cam_target_y = A * cos_t - placement.offset.z * sin_t;
+    double P_cam_target_z = A * sin_t + placement.offset.z * cos_t;
+
+    return GazeVector3(P_cam_target_x, P_cam_target_y, P_cam_target_z);
+}
+
 bool ProjectionEngine::calibrate_3d_bias(const GazeVector3& gaze_origin_cam,
                                        const GazeVector3& raw_gaze_dir_cam,
                                        const GazeVector2& target_pixel,
@@ -88,22 +117,7 @@ bool ProjectionEngine::calibrate_3d_bias(const GazeVector3& gaze_origin_cam,
         return false;
     }
 
-    double scale_x = screen_size_pixels.x / screen_size_mm.x;
-    double scale_y = -screen_size_pixels.y / screen_size_mm.y;
-    double W_half = screen_size_pixels.x / 2.0;
-    double H_half = screen_size_pixels.y / 2.0;
-
-    // 1. Perform inverse transform from Display Space to Camera Space
-    double A = (target_pixel.y - H_half) / scale_y + placement.offset.y;
-    double theta_rad = placement.tilt_degrees * (PI / 180.0);
-    double cos_t = std::cos(theta_rad);
-    double sin_t = std::sin(theta_rad);
-
-    double P_cam_target_x = -(target_pixel.x - W_half) / scale_x + placement.offset.x;
-    double P_cam_target_y = A * cos_t - placement.offset.z * sin_t;
-    double P_cam_target_z = A * sin_t + placement.offset.z * cos_t;
-
-    GazeVector3 P_cam_target(P_cam_target_x, P_cam_target_y, P_cam_target_z);
+    GazeVector3 P_cam_target = screen_mm_to_camera_space(pixel_to_millimeter(target_pixel));
 
     // 2. Compute the required 3D gaze direction vector in camera space
     GazeVector3 v_req = (P_cam_target - gaze_origin_cam).normalized();
@@ -153,6 +167,34 @@ bool ProjectionEngine::calibrate_2d_bias(const GazeVector3& gaze_origin_cam,
     out_calib.bias_pixel_y = target_pixel.y - projected_pixel.y;
 
     return true;
+}
+
+GazeTransform3D ProjectionEngine::get_head_transform_in_camera_space(const GazeVector3& opencv_translation,
+                                                                     const GazeVector3& opencv_rotation_deg) const {
+    // 1. T_cv_cam_to_ggaze_cam = Transform(R_X(180), zero)
+    // R_X(180) = diag(1, -1, -1)
+    GazeBasis3D r_x_180(
+        GazeVector3(1, 0, 0),
+        GazeVector3(0, -1, 0),
+        GazeVector3(0, 0, -1)
+    );
+    GazeTransform3D T_cv_cam_to_ggaze_cam(r_x_180, GazeVector3(0, 0, 0));
+
+    // 2. T_cv_face_to_cv_cam = Transform(R_cv, t_cv)
+    GazeBasis3D R_cv = GazeBasis3D::from_euler_zyx(opencv_rotation_deg.x, opencv_rotation_deg.y, opencv_rotation_deg.z);
+    GazeTransform3D T_cv_face_to_cv_cam(R_cv, opencv_translation);
+
+    // 3. T_ggaze_face_to_cv_face = Transform(R_Z(180), zero)
+    // R_Z(180) = diag(-1, -1, 1)
+    GazeBasis3D r_z_180(
+        GazeVector3(-1, 0, 0),
+        GazeVector3(0, -1, 0),
+        GazeVector3(0, 0, 1)
+    );
+    GazeTransform3D T_ggaze_face_to_cv_face(r_z_180, GazeVector3(0, 0, 0));
+
+    // Chain: T_ggaze_face_to_ggaze_cam = T_cv_cam_to_ggaze_cam * T_cv_face_to_cv_cam * T_ggaze_face_to_cv_face
+    return T_cv_cam_to_ggaze_cam * T_cv_face_to_cv_cam * T_ggaze_face_to_cv_face;
 }
 
 } // namespace Gaze

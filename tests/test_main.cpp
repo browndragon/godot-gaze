@@ -67,23 +67,23 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)") {
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     // Camera placed top-center, 10mm in front of screen plane
-    CameraPlacement placement(GazeVector3(0.0, -148.0, 10.0), 0.0);
+    CameraPlacement placement(GazeVector3(0.0, 148.0, 10.0), 0.0);
     engine.set_camera_placement(placement);
 
-    // Gaze origin (user's eyes) straight in front at 500mm, looking back
-    GazeVector3 origin(0.0, 0.0, 500.0);
-    GazeVector3 dir(0.0, 0.0, -1.0); // Looking straight at camera
+    // Gaze origin (user's eyes) straight in front at -500mm, looking forward along Z axis
+    GazeVector3 origin(0.0, 0.0, -500.0);
+    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at screen center
 
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
     
     REQUIRE(success == true);
     // Center of screen horizontally, top of screen vertically (10mm offset below camera)
-    // Camera is at y = -148mm (top edge). Gaze hits at y = 0mm camera space.
-    // Screen coordinate y_s = 0 + (-148) = -148mm.
-    // Since -148mm is top-center, pixel should be:
+    // Camera is at y = 148mm (top edge). Gaze hits at y = 0mm screen relative coordinate.
+    // Screen coordinate y_s = 0.
+    // Since 0mm relative is center vertically, and camera Y-offset of 148mm places it at the top:
     // x = 960
-    // y = 540 + (-148 * (1080 / 296)) = 540 - 540 = 0
+    // y = 540 + (148 * (-1080 / 296)) = 540 - 540 = 0
     CHECK(pixel.x == doctest::Approx(960.0));
     CHECK(pixel.y == doctest::Approx(0.0));
 }
@@ -94,11 +94,11 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)") {
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     // Camera top-center, tilted down by 15 degrees
-    CameraPlacement placement(GazeVector3(0.0, -148.0, 10.0), 15.0);
+    CameraPlacement placement(GazeVector3(0.0, 148.0, 10.0), 15.0);
     engine.set_camera_placement(placement);
 
-    GazeVector3 origin(0.0, 0.0, 500.0);
-    GazeVector3 dir(0.0, 0.0, -1.0); // Looking straight back along optical axis
+    GazeVector3 origin(0.0, 0.0, -500.0);
+    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight along camera optical axis
 
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
@@ -116,16 +116,16 @@ TEST_CASE("Testing 3D Calibration Bias Correction") {
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     // Camera at top center, tilted down by 10 degrees
-    CameraPlacement placement(GazeVector3(0.0, -148.0, 15.0), 10.0);
+    CameraPlacement placement(GazeVector3(0.0, 148.0, 15.0), 10.0);
     engine.set_camera_placement(placement);
 
     // Initial state: no calibration
     GazeCalibration calib;
     engine.set_calibration(calib);
 
-    // User is looking from (10.0, -20.0, 600.0) with a raw gaze direction
-    GazeVector3 origin(10.0, -20.0, 600.0);
-    GazeVector3 raw_dir(-0.02, 0.05, -0.99);
+    // User is looking from (10.0, 20.0, -600.0) with a raw gaze direction pointing towards screen
+    GazeVector3 origin(10.0, 20.0, -600.0);
+    GazeVector3 raw_dir(0.02, 0.05, 0.99);
 
     // Let's say the user is instructed to look at the center of the screen (960, 540)
     GazeVector2 target(960.0, 540.0);
@@ -154,14 +154,14 @@ TEST_CASE("Testing 2D Calibration Bias Correction") {
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
-    CameraPlacement placement(GazeVector3(10.0, -140.0, 20.0), 12.0);
+    CameraPlacement placement(GazeVector3(10.0, 140.0, 20.0), 12.0);
     engine.set_camera_placement(placement);
 
     GazeCalibration calib;
     engine.set_calibration(calib);
 
-    GazeVector3 origin(-5.0, 15.0, 550.0);
-    GazeVector3 raw_dir(0.04, -0.02, -0.98);
+    GazeVector3 origin(-5.0, -15.0, -550.0);
+    GazeVector3 raw_dir(-0.04, -0.02, 0.98);
 
     // Target a specific point on screen
     GazeVector2 target(1200.0, 800.0);

@@ -56,6 +56,106 @@ struct GazeVector3 {
         }
         return GazeVector3(0.0, 0.0, 0.0);
     }
+
+    GazeVector2 get_pitch_yaw(const GazeVector3& relative = GazeVector3(0, 0, -1)) const {
+        GazeVector3 n = normalized();
+        double pitch_rad = std::asin(n.y);
+        
+        double yaw_rad = std::atan2(-n.x, -n.z);
+        double rel_yaw_rad = std::atan2(-relative.x, -relative.z);
+        double yaw_diff = yaw_rad - rel_yaw_rad;
+        while (yaw_diff > 3.14159265358979323846) yaw_diff -= 2.0 * 3.14159265358979323846;
+        while (yaw_diff < -3.14159265358979323846) yaw_diff += 2.0 * 3.14159265358979323846;
+
+        return GazeVector2(
+            pitch_rad * (180.0 / 3.14159265358979323846),
+            yaw_diff * (180.0 / 3.14159265358979323846)
+        );
+    }
 };
+
+struct GazeBasis3D {
+    GazeVector3 x;
+    GazeVector3 y;
+    GazeVector3 z;
+
+    GazeBasis3D() : x(1, 0, 0), y(0, 1, 0), z(0, 0, 1) {}
+    GazeBasis3D(const GazeVector3& px, const GazeVector3& py, const GazeVector3& pz) : x(px), y(py), z(pz) {}
+
+    GazeVector3 multiply_vector(const GazeVector3& v) const {
+        return x * v.x + y * v.y + z * v.z;
+    }
+
+    GazeBasis3D operator*(const GazeBasis3D& other) const {
+        return GazeBasis3D(
+            multiply_vector(other.x),
+            multiply_vector(other.y),
+            multiply_vector(other.z)
+        );
+    }
+
+    static GazeBasis3D from_euler_zyx(double pitch_deg, double yaw_deg, double roll_deg) {
+        double p = pitch_deg * (3.14159265358979323846 / 180.0);
+        double y = yaw_deg * (3.14159265358979323846 / 180.0);
+        double r = roll_deg * (3.14159265358979323846 / 180.0);
+        double cp = std::cos(p), sp = std::sin(p);
+        double cy = std::cos(y), sy = std::sin(y);
+        double cr = std::cos(r), sr = std::sin(r);
+        return GazeBasis3D(
+            GazeVector3(cr * cy, sr * cy, -sy),
+            GazeVector3(cr * sy * sp - sr * cp, sr * sy * sp + cr * cp, cy * sp),
+            GazeVector3(cr * sy * cp + sr * sp, sr * sy * cp - cr * sp, cy * cp)
+        );
+    }
+
+    GazeVector3 get_euler_deg() const {
+        double sy = std::sqrt(x.x * x.x + x.y * x.y);
+        bool singular = sy < 1e-6;
+        double pitch = 0.0, yaw = 0.0, roll = 0.0;
+        if (!singular) {
+            // Since the face points towards the camera, yaw is around 180 degrees.
+            // This means cos(yaw) < 0. We decompose choosing the branch where cos(yaw) is negative.
+            pitch = std::atan2(-y.z, -z.z) * (180.0 / 3.14159265358979323846);
+            yaw   = std::atan2(-x.z, -sy) * (180.0 / 3.14159265358979323846);
+            roll  = std::atan2(-x.y, -x.x) * (180.0 / 3.14159265358979323846);
+        } else {
+            pitch = std::atan2(-y.y, y.x) * (180.0 / 3.14159265358979323846);
+            yaw   = std::atan2(-x.z, -sy) * (180.0 / 3.14159265358979323846);
+            roll  = 0.0;
+        }
+        return GazeVector3(pitch, yaw, roll);
+    }
+};
+
+struct GazeTransform3D {
+    GazeBasis3D basis;
+    GazeVector3 origin;
+
+    GazeTransform3D() : basis(), origin() {}
+    GazeTransform3D(const GazeBasis3D& b, const GazeVector3& o) : basis(b), origin(o) {}
+
+    GazeTransform3D operator*(const GazeTransform3D& other) const {
+        return GazeTransform3D(
+            basis * other.basis,
+            basis.multiply_vector(other.origin) + origin
+        );
+    }
+};
+
+inline GazeVector3 get_head_forward_in_camera_space(const GazeVector3& rotation_deg) {
+    double pitch_rad = rotation_deg.x * (3.14159265358979323846 / 180.0);
+    double yaw_rad = rotation_deg.y * (3.14159265358979323846 / 180.0);
+    double roll_rad = rotation_deg.z * (3.14159265358979323846 / 180.0);
+
+    double cp = std::cos(pitch_rad), sp = std::sin(pitch_rad);
+    double cy = std::cos(yaw_rad), sy = std::sin(yaw_rad);
+    double cr = std::cos(roll_rad), sr = std::sin(roll_rad);
+
+    double r02 = cr * sy * cp + sr * sp;
+    double r12 = sr * sy * cp - cr * sp;
+    double r22 = cy * cp;
+
+    return GazeVector3(-r02, r12, r22);
+}
 
 } // namespace Gaze

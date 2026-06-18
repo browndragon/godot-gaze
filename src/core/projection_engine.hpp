@@ -37,6 +37,12 @@ public:
     // Estimate depth Z (mm) from 2D eye center pixel distance
     double estimate_depth_z(double eye_distance_px, double ipd_mm = 63.0) const;
 
+    // Convert screen pixel coordinates to screen millimeter coordinates (relative to center, Y-down +)
+    GazeVector2 pixel_to_millimeter(const GazeVector2& pixel) const;
+
+    // Map screen millimeter coordinates (relative to center, Y-down +) to 3D position in Camera Space
+    GazeVector3 screen_mm_to_camera_space(const GazeVector2& screen_mm) const;
+
     // Apply pitch/yaw angular bias to raw 3D gaze vector
     GazeVector3 apply_3d_bias(const GazeVector3& raw_gaze_dir) const;
 
@@ -58,6 +64,10 @@ public:
                            const GazeVector3& raw_gaze_dir_cam,
                            const GazeVector2& target_pixel,
                            GazeCalibration& out_calib) const;
+
+    // Map OpenCV Face-to-Camera translation and rotation to standard Camera Space GazeTransform3D
+    GazeTransform3D get_head_transform_in_camera_space(const GazeVector3& opencv_translation,
+                                                       const GazeVector3& opencv_rotation_deg) const;
 };
 
 } // namespace Gaze

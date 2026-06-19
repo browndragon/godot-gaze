@@ -11,6 +11,7 @@ class OpenCVGazeModel : public GazeModel {
 private:
     std::string model_path;
     cv::dnn::Net net;
+    PipelineConfig config;
 
 public:
     OpenCVGazeModel(const std::string& gaze_onnx_path);
@@ -18,6 +19,7 @@ public:
 
     virtual bool initialize() override;
     virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) override;
+    virtual void set_config(const PipelineConfig& cfg) override { config = cfg; }
 };
 
 } // namespace Gaze

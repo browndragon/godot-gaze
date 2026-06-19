@@ -46,6 +46,7 @@ This is the standard local coordinate space of the user's head:
   $$X_{\text{face\_cv}} = -X_{\text{local}}$$
   $$Y_{\text{face\_cv}} = -Y_{\text{local}}$$
   $$Z_{\text{face\_cv}} = Z_{\text{local}}$$
+  Note that both spaces share the same $+Z$ direction (pointing to the back of the head, away from the camera). However, $+X$ points to the face's own left in OpenCV face space and to the user's right in GodotGaze Face Space, and $+Y$ points down in OpenCV face space and up in GodotGaze Face Space. Thus, the mapping is a pure $180^\circ$ rotation around the Z-axis ($R_Z(180^\circ)$), which flips both X and Y while preserving Z.
 
 ### 1.5. Transformation between Spaces
 Any local point $P_{\text{local}}$ in GodotGaze Face Space is mapped to GodotGaze Camera Space $P_{\text{cam}}$ via:
@@ -64,27 +65,26 @@ where:
   *(Note that the net effect $R_X(180^\circ) \cdot R_Z(180^\circ) = R_Y(180^\circ)$, which is a $180^\circ$ yaw rotation around the vertical axis).*
 
 
-### Screen Local Space
-* **Origin ($S$)**: Center of the display screen.
+### Physical Display Space (Monitor Local Space)
+This centered millimeter coordinate system is standard for desktop gaze geometry modeling (e.g. eye-tracking and OpenCV solvers) to define symmetric screen planes:
+* **Origin ($S$)**: Center of the physical display/monitor screen.
 * **X-axis**: Horizontal, pointing right (in mm).
 * **Y-axis**: Vertical, pointing down (in mm).
 * **Z-axis**: Perpendicular to the screen plane, pointing toward the user (in mm).
-* The flat screen plane is defined by the equation $z_{screen} = 0$.
-
-
+* The flat display plane is defined by the equation $z_{screen} = 0$.
 
 ---
 
-## 2. Camera-to-Screen Transformation
+## 2. Camera-to-Display Transformation
 
-Let the camera's physical position in Screen Local Space be configured as:
+Let the camera's physical position in Physical Display Space be configured as:
 * **Camera Offset ($O_{cam}$)**: Vector $(x_{off}, y_{off}, z_{off})$ in mm.
 * **Camera Tilt ($\theta$)**: Downward tilt angle in degrees about the camera's local X-axis.
 
-The rotation matrix $R$ rotating vectors from Camera Space to Screen Space (for tilt angle $\theta$ in radians) is:
+The rotation matrix $R$ rotating vectors from Camera Space to Physical Display Space (for tilt angle $\theta$ in radians) is:
 $$R = R_x(\theta) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & \cos\theta & -\sin\theta \\ 0 & \sin\theta & \cos\theta \end{pmatrix}$$
 
-For any point $P_{cam}$ in Camera Space, its position in Screen Local Space is:
+For any point $P_{cam}$ in Camera Space, its position in Physical Display Space is:
 $$P_{screen} = R \cdot P_{cam} + O_{cam}$$
 
 Substituting components:
@@ -99,7 +99,7 @@ $$z_s = y_{cam} \sin\theta + z_{cam} \cos\theta + z_{off}$$
 A gaze ray starting at origin $P_{0\_cam} = (x_0, y_0, z_0)$ with normalized direction vector $V_{cam} = (v_x, v_y, v_z)$ in Camera Space is parameterized by $t$:
 $$P_{cam}(t) = P_{0\_cam} + t \cdot V_{cam}$$
 
-To find where it intersects the screen plane, we project the ray into Screen Local Space and solve for $z_s(t) = 0$:
+To find where it intersects the screen plane, we project the ray into Physical Display Space and solve for $z_s(t) = 0$:
 $$z_s(t) = (y_0 + t v_y) \sin\theta + (z_0 + t v_z) \cos\theta + z_{off} = 0$$
 
 Solving for $t$:
@@ -109,21 +109,26 @@ If $t < 0$, the gaze ray points away from the screen (no intersection).
 Otherwise, we compute the camera-space intersection point:
 $$P_{int\_cam} = P_{0\_cam} + t \cdot V_{cam}$$
 
-And transform it to the screen physical coordinates $(x_s, y_s)$ in mm:
+And transform it to the display physical coordinates $(x_s, y_s)$ in mm:
 $$x_s = P_{int\_cam}.x + x_{off}$$
 $$y_s = P_{int\_cam}.y \cos\theta - P_{int\_cam}.z \sin\theta + y_{off}$$
 
 ---
 
-## 4. Screen MM-to-Pixel Mapping
+## 4. Monitor-to-Viewport Pixel Mapping
 
 Let:
 * Screen resolution in pixels be $(W_{px}, H_{px})$ (e.g., $1920 \times 1080$).
 * Screen physical size in mm be $(W_{mm}, H_{mm})$ (e.g., $527 \times 296$).
 
-We map $(x_s, y_s)$ in mm relative to the screen center to screen pixels $(x_{px}, y_{px})$, where top-left is $(0, 0)$:
+We map $(x_s, y_s)$ in mm relative to the screen center to monitor-absolute pixels $(x_{px}, y_{px})$, where the top-left of the monitor is $(0, 0)$:
 $$x_{px} = \frac{W_{px}}{2} + x_s \cdot \frac{W_{px}}{W_{mm}}$$
 $$y_{px} = \frac{H_{px}}{2} + y_s \cdot \frac{H_{px}}{H_{mm}}$$
+
+### Viewport Localization
+In a windowed Godot game, the final viewport/window-local coordinate is computed by subtracting the window offset:
+$$x_{viewport} = x_{px} - \text{window\_pos.x}$$
+$$y_{viewport} = y_{px} - \text{window\_pos.y}$$
 
 ---
 
@@ -192,6 +197,18 @@ The OpenModelZoo gaze estimation network (`gaze-estimation-adas-0002`) operates 
 
 ### Output Vector Mapping
 The 3D direction vector output by the model (`raw_gaze_dir`) is mapped to GodotGaze Camera Space:
-*   **X Component**: Direct (`raw_gaze_dir.x`), as $+X$ points left in both spaces.
-*   **Y Component**: Direct (`raw_gaze_dir.y`), as $+Y$ points up in both spaces.
+*   **X Component**: Direct (`raw_gaze_dir.x`), as $+X$ points right (camera's left / user's right) in both spaces.
+*   **Y Component**: Direct (`raw_gaze_dir.y`), as $+Y$ points UP in both spaces.
 *   **Z Component**: Negated (`-raw_gaze_dir.z`), reversing the optical direction so the unit vector points forward towards the screen plane ($Z_{\text{cam}} = 0$, $v_z > 0$) rather than backward into the camera ($v_z < 0$).
+*   *Note*: The model outputs its gaze vector in its own left-handed space (+X right, +Y up, +Z forward towards the user). To transform this left-handed vector to the right-handed GodotGaze Camera Space (+X right, +Y up, +Z backward), we preserve X and Y and negate Z. This reflection transforms the coordinate systems correctly.
+
+---
+
+## 8. Pipeline Configurations (GazePipelineConfig)
+
+The pipeline parameters can be customized dynamically using the `GazePipelineConfig` resource:
+*   `pitch_t_gain` (default: `0.5`): Gain multiplier applied to vertical translation ($t_y$) to compensate for the coplanar landmark PnP vertical pitch ambiguity.
+*   `yaw_t_gain` (default: `0.0`): Gain multiplier applied to horizontal translation ($t_x$) to compensate for the PnP yaw ambiguity (disabled by default as yaw is highly stable).
+*   `nose_z` (default: `-45.0` mm): Physical nose tip depth relative to the eye plane. Affects the vertical pitch sensitivity in the PnP solver.
+*   `ipd_mm` (default: `63.0` mm): Interpupillary distance in millimeters, used for real-time depth triangulation.
+

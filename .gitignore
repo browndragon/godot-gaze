@@ -39,5 +39,5 @@
 project/addons/godot-gaze/bin/
 project/addons/godot-gaze/models/
 project/models/
-build/tests/
+build/
 thirdparty/opencv/

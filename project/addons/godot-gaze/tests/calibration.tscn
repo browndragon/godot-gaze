@@ -12,7 +12,7 @@ grow_vertical = 2
 script = ExtResource("1_calibration")
 
 [node name="GazeTracker" type="GazeTracker" parent="."]
-camera_offset = Vector3(0, -148, 10)
+camera_offset = Vector3(0, 148, 0)
 screen_size_pixels = Vector2i(1920, 1080)
 screen_size_mm = Vector2(527, 296)
 

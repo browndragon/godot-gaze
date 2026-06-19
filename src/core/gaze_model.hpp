@@ -3,6 +3,7 @@
 
 #include "face_pipeline.hpp"
 #include "math_defs.hpp"
+#include "pipeline_config.hpp"
 
 namespace Gaze {
 
@@ -16,6 +17,9 @@ public:
     // Computes the raw, uncalibrated 3D gaze direction vector in camera space
     // X is right, Y is down, Z is forward (optical axis)
     virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) = 0;
+
+    // Configure model settings
+    virtual void set_config(const PipelineConfig& config) {}
 };
 
 } // namespace Gaze

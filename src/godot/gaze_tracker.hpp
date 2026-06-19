@@ -9,6 +9,7 @@
 #include <godot_cpp/variant/basis.hpp>
 #include <godot_cpp/classes/ref.hpp>
 #include "gaze_calibration_resource.hpp"
+#include "gaze_pipeline_config.hpp"
 
 // Core interfaces (included in both Web and Native)
 #include "camera_interface.hpp"
@@ -37,7 +38,8 @@ private:
 
     // Configurable Properties
     Ref<GazeCalibrationResource> calibration_resource;
-    Vector3 camera_offset = Vector3(0.0, 148.0, 10.0); // mm relative to screen center
+    Ref<GazePipelineConfig> pipeline_config;
+    Vector3 camera_offset = Vector3(0.0, 148.0, 0.0); // mm relative to screen center (flush with bezel)
     double camera_tilt = 0.0;                           // degrees
     Vector2i screen_size_pixels = Vector2i(1920, 1080);
     Vector2 screen_size_mm = Vector2(527.0, 296.0);
@@ -63,6 +65,7 @@ private:
 
     void update_projection_parameters();
     void update_filter_parameters();
+    void update_pipeline_config();
 
 protected:
     static void _bind_methods();
@@ -88,6 +91,9 @@ public:
     void feed_expression_web(String name, double value);
 
     // Getters / Setters for properties
+    void set_pipeline_config(const Ref<GazePipelineConfig>& res);
+    Ref<GazePipelineConfig> get_pipeline_config() const;
+
     void set_calibration_resource(const Ref<GazeCalibrationResource>& res);
     Ref<GazeCalibrationResource> get_calibration_resource() const;
 
@@ -137,7 +143,20 @@ public:
     Vector3 get_gaze_direction() const;
 
     Vector3 get_raw_head_rotation() const;
-    Vector3 get_raw_head_translation() const;
+    Vector3 get_head_position() const;
+    Vector3 get_head_forward() const;
+
+    /**
+     * Projects a 3D ray in Camera Space (in millimeters) onto the physical screen plane,
+     * and maps it to viewport/window-local pixel coordinates by subtracting the window position.
+     *
+     * @param origin The 3D start point of the ray in Camera Space.
+     * @param direction The 3D direction vector of the ray in Camera Space.
+     * @return The 2D viewport-local pixel coordinates of the intersection point,
+     *         or Vector2(INFINITY, INFINITY) (resolving to Vector2.INF in Godot) if the ray
+     *         is parallel to or points away from the screen.
+     */
+    Vector2 project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction) const;
     Vector3 get_raw_left_eye_center() const;
     Vector3 get_raw_right_eye_center() const;
     Vector3 get_raw_gaze_direction() const;

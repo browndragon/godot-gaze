@@ -147,7 +147,7 @@ void GazeTracker::_process(double delta) {
 
                         // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
                         latest_gaze_origin = Gaze::GazeVector3(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
-                        latest_gaze_dir = Gaze::GazeVector3(-raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
+                        latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, -raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
 
                         Gaze::GazeVector2 pixel;
                         if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
@@ -196,6 +196,7 @@ bool GazeTracker::initialize_tracker() {
     String global_yunet_path = ProjectSettings::get_singleton()->globalize_path(yunet_model_path);
     String global_gaze_path = ProjectSettings::get_singleton()->globalize_path(gaze_onnx_path);
     pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
+    pipeline->set_camera_focal_length_px(camera_focal_length_px);
     model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
 
     if (!camera->initialize()) {
@@ -319,6 +320,9 @@ void GazeTracker::update_projection_parameters() {
     projection_engine.set_screen_size_pixels(Gaze::GazeVector2(screen_size_pixels.x, screen_size_pixels.y));
     projection_engine.set_screen_size_mm(Gaze::GazeVector2(screen_size_mm.x, screen_size_mm.y));
     projection_engine.set_camera_focal_length_px(camera_focal_length_px);
+    if (pipeline) {
+        pipeline->set_camera_focal_length_px(camera_focal_length_px);
+    }
 }
 
 void GazeTracker::update_filter_parameters() {

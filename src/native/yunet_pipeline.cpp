@@ -103,7 +103,7 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     // Camera matrix approximation
     double cx = frame.width / 2.0;
     double cy = frame.height / 2.0;
-    double fx = frame.width * 1.5625; // Estimated focal length matching 1000px at 640x480
+    double fx = (camera_focal_length_px > 0.0) ? camera_focal_length_px : (frame.width * 1.5625);
     cv::Mat camera_matrix = (cv::Mat_<double>(3, 3) << 
         fx,  0.0, cx,
         0.0, fx,  cy,
@@ -176,25 +176,23 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
 }
 
 bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800]) {
-    // Select primary eye landmark
+    // Select primary eye landmark (landmarks[1] is left eye, landmarks[0] is right eye)
     cv::Point2f eye_center = is_left ? landmarks[1] : landmarks[0];
-    cv::Point2f other_eye = is_left ? landmarks[0] : landmarks[1];
 
-    // Compute eye tilt angle to normalize head roll
-    double dx = other_eye.x - eye_center.x;
-    double dy = other_eye.y - eye_center.y;
-    double angle = std::atan2(dy, dx) * (180.0 / 3.141592653589793);
+    // Compute face roll angle from the eye-to-eye vector (right eye landmarks[0] to left eye landmarks[1])
+    double roll_dx = landmarks[1].x - landmarks[0].x;
+    double roll_dy = landmarks[1].y - landmarks[0].y;
+    double angle = std::atan2(roll_dy, roll_dx) * (180.0 / 3.141592653589793);
 
-    // If capturing the right eye (face's right, which is image left), flip the rotation direction
-    if (!is_left) {
-        angle = std::atan2(-dy, -dx) * (180.0 / 3.141592653589793);
-    }
+    // Calculate inter-pupillary distance in pixels
+    double dist_px = std::sqrt(roll_dx * roll_dx + roll_dy * roll_dy);
+    double scale = 1.0;
 
     // Define eye crop target dimensions (Intel ADAS model expects 60x60)
     cv::Size target_size(60, 60);
 
-    // Create rotation matrix around eye center to neutralize roll
-    cv::Mat M = cv::getRotationMatrix2D(eye_center, angle, 1.0);
+    // Create rotation matrix around eye center to neutralize roll and normalize scale
+    cv::Mat M = cv::getRotationMatrix2D(eye_center, angle, scale);
 
     // Adjust transformation translation to center the eye crop
     M.at<double>(0, 2) += (target_size.width / 2.0) - eye_center.x;
@@ -211,6 +209,10 @@ bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5]
     // Copy to flat output buffer (10800 bytes)
     std::memcpy(out_buffer, warped_bgr.data, 10800);
     return true;
+}
+
+void YuNetPipeline::set_camera_focal_length_px(double f) {
+    camera_focal_length_px = f;
 }
 
 } // namespace Gaze

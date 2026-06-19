@@ -277,11 +277,19 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
 
             GazeVector3 raw_gaze_dir;
             if (model.estimate_raw_gaze(crops, raw_gaze_dir)) {
-                // Map raw gaze direction to Camera Space (X=-X, Y=Y, Z=-Z)
-                sd.gaze_dir = GazeVector3(-raw_gaze_dir.x, raw_gaze_dir.y, -raw_gaze_dir.z);
+                // Map raw gaze direction directly to Camera Space (X=X, Y=Y, Z=-Z)
+                sd.gaze_dir = GazeVector3(raw_gaze_dir.x, raw_gaze_dir.y, -raw_gaze_dir.z);
 
                 GazeVector3 eye_center_cv = (sd.left_eye + sd.right_eye) * 0.5;
                 GazeVector3 eye_center_cam(eye_center_cv.x, -eye_center_cv.y, -eye_center_cv.z);
+
+                std::cout << "DEBUG for " << sd.filename << ":\n"
+                          << "  sd.left_eye: (" << sd.left_eye.x << ", " << sd.left_eye.y << ", " << sd.left_eye.z << ")\n"
+                          << "  sd.right_eye: (" << sd.right_eye.x << ", " << sd.right_eye.y << ", " << sd.right_eye.z << ")\n"
+                          << "  eye_center_cam: (" << eye_center_cam.x << ", " << eye_center_cam.y << ", " << eye_center_cam.z << ")\n"
+                          << "  crops.head_pose_rotation: (" << crops.head_pose_rotation.x << ", " << crops.head_pose_rotation.y << ", " << crops.head_pose_rotation.z << ")\n"
+                          << "  raw_gaze_dir: (" << raw_gaze_dir.x << ", " << raw_gaze_dir.y << ", " << raw_gaze_dir.z << ")\n"
+                          << "  sd.gaze_dir: (" << sd.gaze_dir.x << ", " << sd.gaze_dir.y << ", " << sd.gaze_dir.z << ")\n";
 
                 sd.gaze_projected = project_ray_to_screen(eye_center_cam, sd.gaze_dir);
             }

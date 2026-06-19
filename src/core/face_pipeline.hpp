@@ -33,6 +33,9 @@ public:
 
     // Process frame, detect faces, estimate head pose, and crop eyes
     virtual bool process_frame(const Frame& frame, EyeCrops& out_crops) = 0;
+
+    // Configure camera focal length
+    virtual void set_camera_focal_length_px(double f) {}
 };
 
 } // namespace Gaze

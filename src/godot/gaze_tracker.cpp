@@ -92,6 +92,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_gaze_direction", "apply_calibration"), &GazeTracker::get_gaze_direction, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("get_raw_head_rotation"), &GazeTracker::get_raw_head_rotation);
+    ClassDB::bind_method(D_METHOD("get_raw_head_translation"), &GazeTracker::get_raw_head_translation);
     ClassDB::bind_method(D_METHOD("get_head_position"), &GazeTracker::get_head_position);
     ClassDB::bind_method(D_METHOD("get_head_forward"), &GazeTracker::get_head_forward);
     ClassDB::bind_method(D_METHOD("project_gaze_ray_to_viewport", "origin", "direction"), &GazeTracker::project_gaze_ray_to_viewport);
@@ -603,6 +604,10 @@ Vector3 GazeTracker::get_gaze_direction(bool apply_calibration) const {
 
 Vector3 GazeTracker::get_raw_head_rotation() const {
     return Vector3(latest_crops.head_pose_rotation.x, latest_crops.head_pose_rotation.y, latest_crops.head_pose_rotation.z);
+}
+
+Vector3 GazeTracker::get_raw_head_translation() const {
+    return get_head_position();
 }
 
 Vector3 GazeTracker::get_raw_left_eye_center() const {

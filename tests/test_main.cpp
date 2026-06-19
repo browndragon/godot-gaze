@@ -197,7 +197,7 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
     // Reconstruct head forward directions using the new unmirrored C++ mapping:
     // basis.z = (-r02, -r12, r22) -> head_forward = -basis.z = (r02, r12, -r22)
     auto get_unmirrored_forward = [](double pitch_deg, double yaw_deg, double roll_deg) {
-        double p = -pitch_deg * 3.14159265358979323846 / 180.0;
+        double p = pitch_deg * 3.14159265358979323846 / 180.0;
         double y = yaw_deg * 3.14159265358979323846 / 180.0;
         double r = -roll_deg * 3.14159265358979323846 / 180.0;
         

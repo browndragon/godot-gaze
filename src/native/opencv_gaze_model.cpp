@@ -56,15 +56,15 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
 
     // 3. Format head pose features: Yaw, Pitch, Roll in degrees
     float head_pose_data[3] = {
-        static_cast<float>(crops.head_pose_rotation.y), // Yaw
-        static_cast<float>(crops.head_pose_rotation.x), // Pitch
-        static_cast<float>(crops.head_pose_rotation.z)  // Roll
+        static_cast<float>(-crops.head_pose_rotation.y), // Yaw (Model expects positive yaw turning left)
+        static_cast<float>(crops.head_pose_rotation.x),  // Pitch
+        static_cast<float>(-crops.head_pose_rotation.z)   // Roll
     };
     cv::Mat head_pose_blob(1, 3, CV_32F, head_pose_data);
 
     // 4. Set inputs into their corresponding ONNX tensor nodes (Intel ADAS names)
-    net.setInput(left_blob, "left_eye_image");
-    net.setInput(right_blob, "right_eye_image");
+    net.setInput(right_blob, "left_eye_image");
+    net.setInput(left_blob, "right_eye_image");
     net.setInput(head_pose_blob, "head_pose_angles");
 
     // 5. Run forward pass

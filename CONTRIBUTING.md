@@ -83,3 +83,24 @@ This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
    ```bash
    ./scripts/download_opencv.sh
    ```
+
+---
+
+## 4. Gaze Pipeline Regression Benchmarking
+
+We enforce automated regression testing against 9 real-image cases (`self_*.jpg`) representing various head poses and gaze targets.
+
+### Running Regression Tests
+To run both the core unit tests and the native OpenCV integration tests:
+```bash
+./scripts/run_tests.sh
+```
+
+### Benchmarking and Promotion
+1. Every run generates a report at `test_artifacts/gaze_benchmark_report.md`.
+2. The report is verified against the baseline in `test_assets/gaze_benchmark_report.md`.
+3. If errors regress relative to the baseline (beyond a small tolerance), the test suite will fail.
+4. If a change is correct and accepted, promote the new benchmark to update the baseline:
+   ```bash
+   cp test_artifacts/gaze_benchmark_report.md test_assets/gaze_benchmark_report.md
+   ```

@@ -89,7 +89,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_head_transform"), &GazeTracker::get_head_transform);
     ClassDB::bind_method(D_METHOD("get_camera_to_screen_transform"), &GazeTracker::get_camera_to_screen_transform);
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeTracker::get_gaze_origin);
-    ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeTracker::get_gaze_direction);
+    ClassDB::bind_method(D_METHOD("get_gaze_direction", "apply_calibration"), &GazeTracker::get_gaze_direction, DEFVAL(true));
 
     ClassDB::bind_method(D_METHOD("get_raw_head_rotation"), &GazeTracker::get_raw_head_rotation);
     ClassDB::bind_method(D_METHOD("get_head_position"), &GazeTracker::get_head_position);
@@ -122,11 +122,12 @@ void GazeTracker::_process(double delta) {
 #ifdef WEB_ENABLED
     // Web Pipeline update
     if (model) {
+        Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(latest_gaze_dir);
         Gaze::GazeVector2 pixel;
-        if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
+        if (projection_engine.project_gaze(latest_gaze_origin, calib_dir, pixel)) {
             Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
-            double local_x = pixel.x - window_pos.x;
-            double local_y = pixel.y - window_pos.y;
+            double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
+            double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
             latest_projected_gaze_px = Vector2(local_x, local_y);
 
             double fx = filter_x->filter(local_x);
@@ -161,11 +162,12 @@ void GazeTracker::_process(double delta) {
                         latest_gaze_origin = Gaze::GazeVector3(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
                         latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
 
+                        Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(latest_gaze_dir);
                         Gaze::GazeVector2 pixel;
-                        if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
+                        if (projection_engine.project_gaze(latest_gaze_origin, calib_dir, pixel)) {
                             Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
-                            double local_x = pixel.x - window_pos.x;
-                            double local_y = pixel.y - window_pos.y;
+                            double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
+                            double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
                             latest_projected_gaze_px = Vector2(local_x, local_y);
 
                             double fx = filter_x->filter(local_x);
@@ -191,6 +193,32 @@ void GazeTracker::_process(double delta) {
 
 bool GazeTracker::initialize_tracker() {
     if (tracker_initialized) return true;
+
+    DisplayServer* ds = DisplayServer::get_singleton();
+    if (ds) {
+        int screen_id = ds->window_get_current_screen();
+        if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0) {
+            screen_size_pixels = ds->screen_get_size(screen_id);
+        }
+        if (screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
+            double dpi = ds->screen_get_dpi(screen_id);
+            if (dpi > 0.0) {
+                screen_size_mm.x = (screen_size_pixels.x / dpi) * 25.4;
+                screen_size_mm.y = (screen_size_pixels.y / dpi) * 25.4;
+            } else {
+                screen_size_mm = Vector2(345.0, 215.0); // MacBook 15" fallback
+            }
+        }
+        if (camera_offset.y == 148.0 && screen_size_mm.y != 296.0) {
+            camera_offset.y = screen_size_mm.y * 0.5;
+        }
+    }
+
+    if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0 ||
+        screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
+        Gaze::log_error("GazeTrackerInitFailed", "reason", "invalid screen geometry");
+        return false;
+    }
 
     update_projection_parameters();
     update_filter_parameters();
@@ -499,22 +527,26 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
     double W_half = screen_size_pixels.x / 2.0;
     double H_half = screen_size_pixels.y / 2.0;
 
-    double theta_rad = camera_tilt * (3.14159265358979323846 / 180.0);
+    double theta_rad = camera_tilt * Gaze::DEG_TO_RAD;
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
     Basis basis(
         Vector3(-scale_x, 0.0, 0.0),
-        Vector3(0.0, cos_t * scale_y, sin_t * scale_y),
-        Vector3(0.0, sin_t, -cos_t)
+        Vector3(0.0, cos_t * scale_y, sin_t),
+        Vector3(0.0, sin_t * scale_y, -cos_t)
     );
 
-    // camera_offset.y is positive above screen center in both Godot and Camera Space.
     double Cx = camera_offset.x;
     double Cy = camera_offset.y;
     double Cz = camera_offset.z;
 
-    Vector3 translation(Cx * scale_x + W_half, Cy * scale_y + H_half, Cz);
+    Vector2i window_pos(0, 0);
+    DisplayServer* ds = DisplayServer::get_singleton();
+    if (ds) {
+        window_pos = ds->window_get_position();
+    }
+    Vector3 translation(Cx * scale_x + W_half - window_pos.x, Cy * scale_y + H_half - window_pos.y, Cz);
 
     return Transform3D(basis, translation);
 }
@@ -561,11 +593,12 @@ Vector3 GazeTracker::get_gaze_origin() const {
     return Vector3(latest_gaze_origin.x, latest_gaze_origin.y, latest_gaze_origin.z);
 }
 
-Vector3 GazeTracker::get_gaze_direction() const {
+Vector3 GazeTracker::get_gaze_direction(bool apply_calibration) const {
     if (!is_face_tracked) {
         return Vector3(0.0, 0.0, -1.0);
     }
-    return Vector3(latest_gaze_dir.x, latest_gaze_dir.y, latest_gaze_dir.z);
+    Gaze::GazeVector3 dir = apply_calibration ? projection_engine.apply_3d_bias(latest_gaze_dir) : latest_gaze_dir;
+    return Vector3(dir.x, dir.y, dir.z);
 }
 
 Vector3 GazeTracker::get_raw_head_rotation() const {

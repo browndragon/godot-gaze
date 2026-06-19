@@ -386,7 +386,7 @@ func process_calibration(delta):
 	if target_timer >= target_hold_time:
 		if tracker.is_face_detected():
 			var gaze_orig = tracker.get_gaze_origin()
-			var gaze_dir = tracker.get_gaze_direction()
+			var gaze_dir = tracker.get_gaze_direction(false)
 			
 			calib_session.add_sample(current_target_screen_pos, gaze_orig, gaze_dir)
 			

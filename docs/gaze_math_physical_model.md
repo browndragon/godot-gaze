@@ -173,3 +173,25 @@ Using a pinhole camera model, the distance $Z$ from the camera sensor is calcula
 
 $$Z_{mm} = \frac{IPD_{mm} \cdot f_{px}}{d_{px}}$$
 $$Z_{cm} = \frac{Z_{mm}}{10.0}$$
+
+---
+
+## 7. OpenVINO Gaze Estimation Model (ADAS-0002) Conventions
+
+The OpenModelZoo gaze estimation network (`gaze-estimation-adas-0002`) operates with distinct input/output coordinate space and sign conventions which are reconciled in the wrapper layer:
+
+### Input Feature Preprocessing
+*   **Eye Crop Inputs**: The model defines its inputs from the camera/viewer's perspective.
+    *   `"left_eye_image"` receives the crop of the eye appearing on the **left side of the image frame** (which is the subject's anatomical **right eye**).
+    *   `"right_eye_image"` receives the crop of the eye appearing on the **right side of the image frame** (the subject's anatomical **left eye**).
+    *   *Effect*: The eye crops are swapped relative to anatomical labeling when passed to the model.
+*   **Head Pose Sign Alignment**: The model expects input head pose angles in degrees with positive-left (yaw), positive-down (pitch), and positive-clockwise (roll) orientations:
+    *   **Yaw**: Negated (`-crops.head_pose_rotation.y`), mapping negative SolvePnP yaw to positive model yaw.
+    *   **Pitch**: Direct (`crops.head_pose_rotation.x`).
+    *   **Roll**: Negated (`-crops.head_pose_rotation.z`), aligning the roll coordinate signs.
+
+### Output Vector Mapping
+The 3D direction vector output by the model (`raw_gaze_dir`) is mapped to GodotGaze Camera Space:
+*   **X Component**: Direct (`raw_gaze_dir.x`), as $+X$ points left in both spaces.
+*   **Y Component**: Direct (`raw_gaze_dir.y`), as $+Y$ points up in both spaces.
+*   **Z Component**: Negated (`-raw_gaze_dir.z`), reversing the optical direction so the unit vector points forward towards the screen plane ($Z_{\text{cam}} = 0$, $v_z > 0$) rather than backward into the camera ($v_z < 0$).

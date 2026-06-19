@@ -143,6 +143,7 @@ public:
     Vector3 get_gaze_direction(bool apply_calibration = true) const;
 
     Vector3 get_raw_head_rotation() const;
+    Vector3 get_raw_head_translation() const;
     Vector3 get_head_position() const;
     Vector3 get_head_forward() const;
 

@@ -55,14 +55,19 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
     cv::Mat right_blob = cv::dnn::blobFromImage(right_eye_mat, 1.0, cv::Size(60, 60), cv::Scalar(0), false);
 
     // 3. Format head pose features: Yaw, Pitch, Roll in degrees
+    // We negate yaw and roll to align SolvePnP coordinates with the gaze model's
+    // conventions (positive-left for yaw, positive-down for pitch, positive-clockwise for roll).
     float head_pose_data[3] = {
         static_cast<float>(-crops.head_pose_rotation.y), // Yaw (Model expects positive yaw turning left)
-        static_cast<float>(crops.head_pose_rotation.x),  // Pitch
-        static_cast<float>(-crops.head_pose_rotation.z)   // Roll
+        static_cast<float>(crops.head_pose_rotation.x),  // Pitch (Model expects positive pitch looking down)
+        static_cast<float>(-crops.head_pose_rotation.z)  // Roll (Model expects positive roll tilting right)
     };
     cv::Mat head_pose_blob(1, 3, CV_32F, head_pose_data);
-
+ 
     // 4. Set inputs into their corresponding ONNX tensor nodes (Intel ADAS names)
+    // Note: The model's inputs are named from the viewer's (camera's) perspective.
+    // Therefore, "left_eye_image" receives the image-left eye crop (anatomical right eye)
+    // and "right_eye_image" receives the image-right eye crop (anatomical left eye).
     net.setInput(right_blob, "left_eye_image");
     net.setInput(left_blob, "right_eye_image");
     net.setInput(head_pose_blob, "head_pose_angles");

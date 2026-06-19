@@ -3,6 +3,7 @@
 
 #include "camera_interface.hpp"
 #include "math_defs.hpp"
+#include "pipeline_config.hpp"
 
 namespace Gaze {
 
@@ -36,6 +37,9 @@ public:
 
     // Configure camera focal length
     virtual void set_camera_focal_length_px(double f) {}
+
+    // Configure pipeline settings
+    virtual void set_config(const PipelineConfig& config) {}
 };
 
 } // namespace Gaze

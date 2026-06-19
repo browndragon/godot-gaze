@@ -2,6 +2,7 @@
 #include "gaze_tracker.hpp"
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_session.hpp"
+#include "gaze_pipeline_config.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -19,6 +20,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     // Register GDExtension classes so they are exposed to GDScript/Editor
     ClassDB::register_class<GazeCalibrationResource>();
     ClassDB::register_class<GazeCalibrationSession>();
+    ClassDB::register_class<GazePipelineConfig>();
     ClassDB::register_class<GazeTracker>();
 
     // Redirect gaze library logging messages to Godot output console

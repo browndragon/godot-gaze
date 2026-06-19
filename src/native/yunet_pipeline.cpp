@@ -82,12 +82,11 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     crop_eye(gray, landmarks, true, out_crops.left_eye_data);  // Left Eye crop
     crop_eye(gray, landmarks, false, out_crops.right_eye_data); // Right Eye crop
 
-    // --- Head Pose Estimation (SolvePnP Approximation) ---
     // Define a standard 3D facial model for PnP (eyes, nose, mouth corners)
     std::vector<cv::Point3f> model_points = {
         cv::Point3f(-30.0f, -28.676f, 0.0f), // Right eye
         cv::Point3f(30.0f, -28.676f, 0.0f),  // Left eye
-        cv::Point3f(0.0f, -5.000f, -59.859f),   // Nose tip
+        cv::Point3f(0.0f, -5.000f, static_cast<float>(config.nose_z)),   // Nose tip
         cv::Point3f(-18.462f, 31.712f, -4.550f), // Right mouth corner
         cv::Point3f(18.462f, 31.712f, -4.550f)  // Left mouth corner
     };
@@ -142,6 +141,10 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
             roll_deg  = 0.0;
         }
 
+        // Correct pitch/yaw for coplanar landmark PnP translation compensation
+        pitch_deg += config.pitch_t_gain * tvec.at<double>(1);
+        yaw_deg += config.yaw_t_gain * tvec.at<double>(0);
+
         // Output head pose rotation (Pitch, Yaw, Roll) in degrees
         out_crops.head_pose_rotation = GazeVector3(pitch_deg, yaw_deg, roll_deg);
         out_crops.head_pose_translation = GazeVector3(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
@@ -156,7 +159,7 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         double dx = left_eye_img.x - right_eye_img.x;
         double dy = left_eye_img.y - right_eye_img.y;
         double dist_px = std::sqrt(dx * dx + dy * dy);
-        double depth_z = (63.0 * fx) / dist_px; // 63mm IPD
+        double depth_z = (config.ipd_mm * fx) / dist_px;
 
         // Midpoint of eyes in pixels
         double mid_x = (left_eye_img.x + right_eye_img.x) / 2.0;
@@ -166,8 +169,9 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         double mid_cam_y = (mid_y - cy) * depth_z / fx;
 
         GazeVector3 mid_cam(mid_cam_x, mid_cam_y, depth_z);
-        out_crops.left_eye_center_cam = mid_cam + GazeVector3(31.5, 0.0, 0.0);
-        out_crops.right_eye_center_cam = mid_cam - GazeVector3(31.5, 0.0, 0.0);
+        double half_ipd = config.ipd_mm * 0.5;
+        out_crops.left_eye_center_cam = mid_cam + GazeVector3(half_ipd, 0.0, 0.0);
+        out_crops.right_eye_center_cam = mid_cam - GazeVector3(half_ipd, 0.0, 0.0);
         out_crops.head_pose_rotation = GazeVector3(0.0, 0.0, 0.0);
         out_crops.head_pose_translation = mid_cam;
     }

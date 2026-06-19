@@ -16,6 +16,7 @@ private:
     int top_k;
 
     double camera_focal_length_px = -1.0;
+    PipelineConfig config;
 
     // Helper to perform perspective warp / crop on eye landmarks
     bool crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800]);
@@ -27,6 +28,7 @@ public:
     virtual bool initialize() override;
     virtual bool process_frame(const Frame& frame, EyeCrops& out_crops) override;
     virtual void set_camera_focal_length_px(double f) override;
+    virtual void set_config(const PipelineConfig& cfg) override { config = cfg; }
 };
 
 } // namespace Gaze

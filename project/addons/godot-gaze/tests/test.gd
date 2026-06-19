@@ -47,27 +47,22 @@ func _process(_delta):
 	center_pos = get_viewport().get_visible_rect().size / 2.0
 	
 	if tracker.is_face_detected():
-		# Unified Eye Gaze projection
-		var gaze_origin = tracker.get_gaze_origin()
-		var gaze_dir = tracker.get_gaze_direction()
-		var gaze_pixel = project_ray_to_screen_pixels(gaze_origin, gaze_dir)
-		
-		var window_pos = DisplayServer.window_get_position()
-		
-		if gaze_pixel != Vector2(-1, -1):
-			eye_gaze_pos = gaze_pixel - Vector2(window_pos)
-		else:
-			eye_gaze_pos = Vector2.ZERO
-			
-		# Head Pose / Nose Gaze projection
-		var head_transform: Transform3D = tracker.get_head_transform()
-		# Z-axis basis represents the forward direction vector in Camera Space, pointing toward screen
-		var head_forward: Vector3 = head_transform.basis.z.normalized()
-		var nose_pixel = project_ray_to_screen_pixels(head_transform.origin, head_forward)
-		if nose_pixel != Vector2(-1, -1):
-			nose_gaze_pos = nose_pixel - Vector2(window_pos)
+		# 1. Head Pose / Nose Gaze projection
+		var head_forward = tracker.get_head_forward()
+		var nose_pixel = tracker.project_gaze_ray_to_viewport(tracker.get_head_position(), head_forward)
+		if nose_pixel != Vector2.INF:
+			nose_gaze_pos = nose_pixel
 		else:
 			nose_gaze_pos = Vector2.ZERO
+			
+		# 2. Unified Eye Gaze projection
+		var gaze_origin = tracker.get_gaze_origin()
+		var gaze_dir = tracker.get_gaze_direction()
+		var gaze_pixel = tracker.project_gaze_ray_to_viewport(gaze_origin, gaze_dir)
+		if gaze_pixel != Vector2.INF:
+			eye_gaze_pos = gaze_pixel
+		else:
+			eye_gaze_pos = Vector2.ZERO
 	else:
 		eye_gaze_pos = Vector2.ZERO
 		nose_gaze_pos = Vector2.ZERO
@@ -122,17 +117,3 @@ func _input(event):
 		tracker.calibrate_3d(screen_center)
 		status_label.text = "Status: Calibrated at Screen Center"
  
-func project_ray_to_screen_pixels(origin_cam: Vector3, dir_cam: Vector3) -> Vector2:
-	var transform: Transform3D = tracker.get_camera_to_screen_transform()
-	var origin_scr = transform * origin_cam
-	var dir_scr = transform.basis * dir_cam # direction is rotated only
-	
-	if abs(dir_scr.z) < 1e-6:
-		return Vector2(-1, -1)
-		
-	var t = -origin_scr.z / dir_scr.z
-	if t < 0:
-		return Vector2(-1, -1)
-		
-	var p = origin_scr + t * dir_scr
-	return Vector2(p.x, p.y)

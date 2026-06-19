@@ -3,6 +3,7 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/display_server.hpp>
 
 #ifdef WEB_ENABLED
 #include "web_gaze_model.hpp"
@@ -29,6 +30,10 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("is_face_detected"), &GazeTracker::is_face_detected);
 
     // Properties Setters & Getters
+    ClassDB::bind_method(D_METHOD("set_pipeline_config", "res"), &GazeTracker::set_pipeline_config);
+    ClassDB::bind_method(D_METHOD("get_pipeline_config"), &GazeTracker::get_pipeline_config);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pipeline_config", PROPERTY_HINT_RESOURCE_TYPE, "GazePipelineConfig"), "set_pipeline_config", "get_pipeline_config");
+
     ClassDB::bind_method(D_METHOD("set_calibration_resource", "res"), &GazeTracker::set_calibration_resource);
     ClassDB::bind_method(D_METHOD("get_calibration_resource"), &GazeTracker::get_calibration_resource);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "calibration_resource", PROPERTY_HINT_RESOURCE_TYPE, "GazeCalibrationResource"), "set_calibration_resource", "get_calibration_resource");
@@ -87,7 +92,9 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeTracker::get_gaze_direction);
 
     ClassDB::bind_method(D_METHOD("get_raw_head_rotation"), &GazeTracker::get_raw_head_rotation);
-    ClassDB::bind_method(D_METHOD("get_raw_head_translation"), &GazeTracker::get_raw_head_translation);
+    ClassDB::bind_method(D_METHOD("get_head_position"), &GazeTracker::get_head_position);
+    ClassDB::bind_method(D_METHOD("get_head_forward"), &GazeTracker::get_head_forward);
+    ClassDB::bind_method(D_METHOD("project_gaze_ray_to_viewport", "origin", "direction"), &GazeTracker::project_gaze_ray_to_viewport);
     ClassDB::bind_method(D_METHOD("get_raw_left_eye_center"), &GazeTracker::get_raw_left_eye_center);
     ClassDB::bind_method(D_METHOD("get_raw_right_eye_center"), &GazeTracker::get_raw_right_eye_center);
     ClassDB::bind_method(D_METHOD("get_raw_gaze_direction"), &GazeTracker::get_raw_gaze_direction);
@@ -117,13 +124,18 @@ void GazeTracker::_process(double delta) {
     if (model) {
         Gaze::GazeVector2 pixel;
         if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
-            latest_projected_gaze_px = Vector2(pixel.x, pixel.y);
+            Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
+            double local_x = pixel.x - window_pos.x;
+            double local_y = pixel.y - window_pos.y;
+            latest_projected_gaze_px = Vector2(local_x, local_y);
 
-            double fx = filter_x->filter(pixel.x);
-            double fy = filter_y->filter(pixel.y);
+            double fx = filter_x->filter(local_x);
+            double fy = filter_y->filter(local_y);
             latest_filtered_gaze_px = Vector2(fx, fy);
 
             emit_signal("gaze_updated", latest_filtered_gaze_px);
+        } else {
+            emit_signal("gaze_updated", Vector2(INFINITY, INFINITY));
         }
     }
 #else
@@ -147,17 +159,22 @@ void GazeTracker::_process(double delta) {
 
                         // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
                         latest_gaze_origin = Gaze::GazeVector3(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
-                        latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, -raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
+                        latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
 
                         Gaze::GazeVector2 pixel;
                         if (projection_engine.project_gaze(latest_gaze_origin, latest_gaze_dir, pixel)) {
-                            latest_projected_gaze_px = Vector2(pixel.x, pixel.y);
+                            Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
+                            double local_x = pixel.x - window_pos.x;
+                            double local_y = pixel.y - window_pos.y;
+                            latest_projected_gaze_px = Vector2(local_x, local_y);
 
-                            double fx = filter_x->filter(pixel.x);
-                            double fy = filter_y->filter(pixel.y);
+                            double fx = filter_x->filter(local_x);
+                            double fy = filter_y->filter(local_y);
                             latest_filtered_gaze_px = Vector2(fx, fy);
 
                             emit_signal("gaze_updated", latest_filtered_gaze_px);
+                        } else {
+                            emit_signal("gaze_updated", Vector2(INFINITY, INFINITY));
                         }
                     }
                 }
@@ -211,6 +228,8 @@ bool GazeTracker::initialize_tracker() {
         stop_tracker();
         return false;
     }
+
+    update_pipeline_config();
 
     tracker_initialized = true;
     Gaze::log_info("GazeTrackerInitNativeSuccess");
@@ -486,8 +505,8 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
 
     Basis basis(
         Vector3(-scale_x, 0.0, 0.0),
-        Vector3(0.0, cos_t * scale_y, sin_t),
-        Vector3(0.0, sin_t * scale_y, -cos_t)
+        Vector3(0.0, cos_t * scale_y, sin_t * scale_y),
+        Vector3(0.0, sin_t, -cos_t)
     );
 
     // camera_offset.y is positive above screen center in both Godot and Camera Space.
@@ -498,6 +517,41 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
     Vector3 translation(Cx * scale_x + W_half, Cy * scale_y + H_half, Cz);
 
     return Transform3D(basis, translation);
+}
+
+Vector3 GazeTracker::get_head_position() const {
+    if (!is_face_tracked) {
+        return Vector3(0.0, 0.0, 0.0);
+    }
+    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
+        latest_crops.head_pose_translation,
+        latest_crops.head_pose_rotation
+    );
+    return Vector3(gt.origin.x, gt.origin.y, gt.origin.z);
+}
+
+Vector3 GazeTracker::get_head_forward() const {
+    if (!is_face_tracked) {
+        return Vector3(0.0, 0.0, 1.0); // Facing straight toward screen (+Z)
+    }
+    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
+        latest_crops.head_pose_translation,
+        latest_crops.head_pose_rotation
+    );
+    Gaze::GazeVector3 forward = gt.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+    return Vector3(forward.x, forward.y, forward.z);
+}
+
+Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction) const {
+    Gaze::GazeVector3 origin_cam(origin.x, origin.y, origin.z);
+    Gaze::GazeVector3 dir_cam(direction.x, direction.y, direction.z);
+    Gaze::GazeVector2 pixel;
+    if (projection_engine.project_gaze(origin_cam, dir_cam, pixel)) {
+        Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
+        return Vector2(pixel.x - window_pos.x, pixel.y - window_pos.y);
+    }
+    // Return unattainable infinity if the ray doesn't intersect or points away
+    return Vector2(INFINITY, INFINITY);
 }
 
 Vector3 GazeTracker::get_gaze_origin() const {
@@ -518,10 +572,6 @@ Vector3 GazeTracker::get_raw_head_rotation() const {
     return Vector3(latest_crops.head_pose_rotation.x, latest_crops.head_pose_rotation.y, latest_crops.head_pose_rotation.z);
 }
 
-Vector3 GazeTracker::get_raw_head_translation() const {
-    return Vector3(latest_crops.head_pose_translation.x, latest_crops.head_pose_translation.y, latest_crops.head_pose_translation.z);
-}
-
 Vector3 GazeTracker::get_raw_left_eye_center() const {
     return Vector3(latest_crops.left_eye_center_cam.x, latest_crops.left_eye_center_cam.y, latest_crops.left_eye_center_cam.z);
 }
@@ -532,6 +582,27 @@ Vector3 GazeTracker::get_raw_right_eye_center() const {
 
 Vector3 GazeTracker::get_raw_gaze_direction() const {
     return Vector3(latest_gaze_dir.x, latest_gaze_dir.y, latest_gaze_dir.z);
+}
+
+void GazeTracker::set_pipeline_config(const Ref<GazePipelineConfig>& res) {
+    pipeline_config = res;
+    update_pipeline_config();
+}
+
+Ref<GazePipelineConfig> GazeTracker::get_pipeline_config() const {
+    return pipeline_config;
+}
+
+void GazeTracker::update_pipeline_config() {
+    if (pipeline_config.is_valid()) {
+        Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
+        if (pipeline) {
+            pipeline->set_config(core_cfg);
+        }
+        if (model) {
+            model->set_config(core_cfg);
+        }
+    }
 }
 
 } // namespace godot

@@ -5,6 +5,11 @@
 
 namespace Gaze {
 
+static constexpr double PI = 3.14159265358979323846;
+static constexpr double TAU = 6.28318530717958647692;
+static constexpr double DEG_TO_RAD = PI / 180.0;
+static constexpr double RAD_TO_DEG = 180.0 / PI;
+
 struct GazeVector2 {
     double x = 0.0;
     double y = 0.0;
@@ -64,12 +69,12 @@ struct GazeVector3 {
         double yaw_rad = std::atan2(-n.x, -n.z);
         double rel_yaw_rad = std::atan2(-relative.x, -relative.z);
         double yaw_diff = yaw_rad - rel_yaw_rad;
-        while (yaw_diff > 3.14159265358979323846) yaw_diff -= 2.0 * 3.14159265358979323846;
-        while (yaw_diff < -3.14159265358979323846) yaw_diff += 2.0 * 3.14159265358979323846;
+        while (yaw_diff > PI) yaw_diff -= TAU;
+        while (yaw_diff < -PI) yaw_diff += TAU;
 
         return GazeVector2(
-            pitch_rad * (180.0 / 3.14159265358979323846),
-            yaw_diff * (180.0 / 3.14159265358979323846)
+            pitch_rad * RAD_TO_DEG,
+            yaw_diff * RAD_TO_DEG
         );
     }
 };
@@ -95,9 +100,9 @@ struct GazeBasis3D {
     }
 
     static GazeBasis3D from_euler_zyx(double pitch_deg, double yaw_deg, double roll_deg) {
-        double p = pitch_deg * (3.14159265358979323846 / 180.0);
-        double y = yaw_deg * (3.14159265358979323846 / 180.0);
-        double r = roll_deg * (3.14159265358979323846 / 180.0);
+        double p = pitch_deg * DEG_TO_RAD;
+        double y = yaw_deg * DEG_TO_RAD;
+        double r = roll_deg * DEG_TO_RAD;
         double cp = std::cos(p), sp = std::sin(p);
         double cy = std::cos(y), sy = std::sin(y);
         double cr = std::cos(r), sr = std::sin(r);
@@ -115,12 +120,12 @@ struct GazeBasis3D {
         if (!singular) {
             // Since the face points towards the camera, yaw is around 180 degrees.
             // This means cos(yaw) < 0. We decompose choosing the branch where cos(yaw) is negative.
-            pitch = std::atan2(-y.z, -z.z) * (180.0 / 3.14159265358979323846);
-            yaw   = std::atan2(-x.z, -sy) * (180.0 / 3.14159265358979323846);
-            roll  = std::atan2(-x.y, -x.x) * (180.0 / 3.14159265358979323846);
+            pitch = std::atan2(-y.z, -z.z) * RAD_TO_DEG;
+            yaw   = std::atan2(-x.z, -sy) * RAD_TO_DEG;
+            roll  = std::atan2(-x.y, -x.x) * RAD_TO_DEG;
         } else {
-            pitch = std::atan2(-y.y, y.x) * (180.0 / 3.14159265358979323846);
-            yaw   = std::atan2(-x.z, -sy) * (180.0 / 3.14159265358979323846);
+            pitch = std::atan2(-y.y, y.x) * RAD_TO_DEG;
+            yaw   = std::atan2(-x.z, -sy) * RAD_TO_DEG;
             roll  = 0.0;
         }
         return GazeVector3(pitch, yaw, roll);
@@ -143,9 +148,9 @@ struct GazeTransform3D {
 };
 
 inline GazeVector3 get_head_forward_in_camera_space(const GazeVector3& rotation_deg) {
-    double pitch_rad = rotation_deg.x * (3.14159265358979323846 / 180.0);
-    double yaw_rad = rotation_deg.y * (3.14159265358979323846 / 180.0);
-    double roll_rad = rotation_deg.z * (3.14159265358979323846 / 180.0);
+    double pitch_rad = rotation_deg.x * DEG_TO_RAD;
+    double yaw_rad = rotation_deg.y * DEG_TO_RAD;
+    double roll_rad = rotation_deg.z * DEG_TO_RAD;
 
     double cp = std::cos(pitch_rad), sp = std::sin(pitch_rad);
     double cy = std::cos(yaw_rad), sy = std::sin(yaw_rad);

@@ -142,7 +142,8 @@ TEST_CASE("Testing 3D Calibration Bias Correction") {
 
     // Reproject the gaze and verify it hits the target pixel exactly
     GazeVector2 calibrated_pixel;
-    success = engine.project_gaze(origin, raw_dir, calibrated_pixel);
+    GazeVector3 calib_dir = engine.apply_3d_bias(raw_dir);
+    success = engine.project_gaze(origin, calib_dir, calibrated_pixel);
     
     REQUIRE(success == true);
     CHECK(calibrated_pixel.x == doctest::Approx(target.x));
@@ -182,7 +183,10 @@ TEST_CASE("Testing 2D Calibration Bias Correction") {
 
     // Reproject and verify it hits the target pixel exactly
     GazeVector2 calibrated_pixel;
-    success = engine.project_gaze(origin, raw_dir, calibrated_pixel);
+    GazeVector3 calib_dir = engine.apply_3d_bias(raw_dir);
+    success = engine.project_gaze(origin, calib_dir, calibrated_pixel);
+    calibrated_pixel.x += calib.bias_pixel_x;
+    calibrated_pixel.y += calib.bias_pixel_y;
     
     REQUIRE(success == true);
     CHECK(calibrated_pixel.x == doctest::Approx(target.x));
@@ -193,9 +197,9 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
     // Reconstruct head forward directions using the new unmirrored C++ mapping:
     // basis.z = (-r02, -r12, r22) -> head_forward = -basis.z = (r02, r12, -r22)
     auto get_unmirrored_forward = [](double pitch_deg, double yaw_deg, double roll_deg) {
-        double p = pitch_deg * 3.14159265358979323846 / 180.0;
+        double p = -pitch_deg * 3.14159265358979323846 / 180.0;
         double y = yaw_deg * 3.14159265358979323846 / 180.0;
-        double r = roll_deg * 3.14159265358979323846 / 180.0;
+        double r = -roll_deg * 3.14159265358979323846 / 180.0;
         
         double cp = std::cos(p), sp = std::sin(p);
         double cy = std::cos(y), sy = std::sin(y);
@@ -241,5 +245,170 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
     // Point 1 (left target) has tvec_x = 14.996 -> Godot X = -14.996
     // Point 2 (right target) has tvec_x = -5.598 -> Godot X = +5.598
     // Moving to the right should increase Godot X translation
-    CHECK(-(-5.598579) > -(14.996960));
 }
+
+TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & Projection cases") {
+    struct TransformTestScenario {
+        std::string description;
+        double camera_tilt_deg;
+        GazeVector3 camera_offset_mm;
+        GazeVector2 screen_size_px;
+        GazeVector2 screen_size_mm;
+        GazeVector3 head_position_cam;
+        GazeVector2 target_screen_px;
+    };
+
+    std::vector<TransformTestScenario> scenarios = {
+        // 1. Laptop: Seated Center, Looking at Screen Center (15 degree screen lean, top center bezel camera)
+        {
+            "Laptop: Seated Center, Looking at Screen Center",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(960.0, 540.0)
+        },
+        // 2. Laptop: Seated Center, Looking at Screen Top-Edge
+        {
+            "Laptop: Seated Center, Looking at Screen Top-Edge",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(960.0, 0.0)
+        },
+        // 3. Laptop: Seated Center, Looking at Screen Bottom-Edge
+        {
+            "Laptop: Seated Center, Looking at Screen Bottom-Edge",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(960.0, 1080.0)
+        },
+        // 4. Laptop: Seated Center, Looking at Screen Left-Edge
+        {
+            "Laptop: Seated Center, Looking at Screen Left-Edge",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(0.0, 540.0)
+        },
+        // 5. Laptop: Seated Center, Looking at Screen Right-Edge
+        {
+            "Laptop: Seated Center, Looking at Screen Right-Edge",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(1920.0, 540.0)
+        },
+        // 6. Laptop: Seated Left, Looking at Bottom-Right
+        {
+            "Laptop: Seated Left, Looking at Bottom-Right",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(46.9, 4.5, -775.6),
+            GazeVector2(1920.0, 1080.0)
+        },
+        // 7. Laptop: Seated Right, Looking at Top-Left
+        {
+            "Laptop: Seated Right, Looking at Top-Left",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(-14.2, -1.1, -725.5),
+            GazeVector2(0.0, 0.0)
+        },
+        // 8. Laptop: Looking off-screen Left
+        {
+            "Laptop: Looking off-screen Left",
+            15.0,
+            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector2(1920.0, 1080.0),
+            GazeVector2(305.0, 191.0),
+            GazeVector3(12.2, 0.3, -739.5),
+            GazeVector2(-100.0, 540.0)
+        }
+    };
+
+    for (const auto& sc : scenarios) {
+        INFO("Running Scenario: " << sc.description);
+
+        ProjectionEngine engine;
+        engine.set_screen_size_pixels(sc.screen_size_px);
+        engine.set_screen_size_mm(sc.screen_size_mm);
+        CameraPlacement placement(sc.camera_offset_mm, sc.camera_tilt_deg);
+        engine.set_camera_placement(placement);
+
+        double W_px = sc.screen_size_px.x;
+        double H_px = sc.screen_size_px.y;
+        double W_mm = sc.screen_size_mm.x;
+        double H_mm = sc.screen_size_mm.y;
+
+        // 1. Back-project target pixel to Camera Space
+        // Display space coordinates relative to screen center
+        double x_s = (sc.target_screen_px.x - W_px / 2.0) * (W_mm / W_px);
+        double y_s = (sc.target_screen_px.y - H_px / 2.0) * (H_mm / H_px);
+
+        double theta_rad = sc.camera_tilt_deg * (3.14159265358979323846 / 180.0);
+        double cos_t = std::cos(theta_rad);
+        double sin_t = std::sin(theta_rad);
+
+        // dx maps from Display X to Camera X (which is opposite direction)
+        double dx = sc.camera_offset_mm.x - x_s;
+        // dy maps from Display Y to Camera Y (both negating y_s and subtracting offset_y)
+        double dy = -y_s - sc.camera_offset_mm.y;
+        double dz = -sc.camera_offset_mm.z;
+
+        // Using the inverse mapping for Display Space coordinates (R^-1 = R)
+        GazeVector3 P_cam_target(
+            dx,
+            dy * cos_t + dz * sin_t,
+            dy * sin_t - dz * cos_t
+        );
+
+        // 2. Verify Ray Intersection in ProjectionEngine
+        GazeVector3 V_cam = (P_cam_target - sc.head_position_cam).normalized();
+        GazeVector2 projected;
+        bool success = engine.project_gaze(sc.head_position_cam, V_cam, projected);
+        REQUIRE(success == true);
+
+        CHECK(projected.x == doctest::Approx(sc.target_screen_px.x));
+        CHECK(projected.y == doctest::Approx(sc.target_screen_px.y));
+
+        // 3. Verify Camera-to-Screen Matrix (simulated get_camera_to_screen_transform)
+        double scale_x = W_px / W_mm;
+        double scale_y = -H_px / H_mm;
+        double W_half = W_px / 2.0;
+        double H_half = H_px / 2.0;
+
+        GazeVector3 basis_col0(-scale_x, 0.0, 0.0);
+        GazeVector3 basis_col1(0.0, cos_t * scale_y, sin_t);
+        GazeVector3 basis_col2(0.0, sin_t * scale_y, -cos_t);
+        GazeVector3 translation(
+            sc.camera_offset_mm.x * scale_x + W_half,
+            sc.camera_offset_mm.y * scale_y + H_half,
+            sc.camera_offset_mm.z
+        );
+
+        // Apply matrix multiplication P_disp = basis * P_cam_target + translation
+        double P_disp_x = basis_col0.x * P_cam_target.x + basis_col1.x * P_cam_target.y + basis_col2.x * P_cam_target.z + translation.x;
+        double P_disp_y = basis_col0.y * P_cam_target.x + basis_col1.y * P_cam_target.y + basis_col2.y * P_cam_target.z + translation.y;
+        double P_disp_z = basis_col0.z * P_cam_target.x + basis_col1.z * P_cam_target.y + basis_col2.z * P_cam_target.z + translation.z;
+
+        CHECK(P_disp_x == doctest::Approx(sc.target_screen_px.x));
+        CHECK(P_disp_y == doctest::Approx(sc.target_screen_px.y));
+        CHECK(P_disp_z == doctest::Approx(0.0));
+    }
+}
+

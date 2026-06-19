@@ -41,8 +41,8 @@ private:
     Ref<GazePipelineConfig> pipeline_config;
     Vector3 camera_offset = Vector3(0.0, 148.0, 0.0); // mm relative to screen center (flush with bezel)
     double camera_tilt = 0.0;                           // degrees
-    Vector2i screen_size_pixels = Vector2i(1920, 1080);
-    Vector2 screen_size_mm = Vector2(527.0, 296.0);
+    Vector2i screen_size_pixels = Vector2i(-1, -1);
+    Vector2 screen_size_mm = Vector2(-1.0, -1.0);
     double camera_focal_length_px = 1000.0;
     int camera_device_id = 0;
 
@@ -140,7 +140,7 @@ public:
     Transform3D get_head_transform() const;
     Transform3D get_camera_to_screen_transform() const;
     Vector3 get_gaze_origin() const;
-    Vector3 get_gaze_direction() const;
+    Vector3 get_gaze_direction(bool apply_calibration = true) const;
 
     Vector3 get_raw_head_rotation() const;
     Vector3 get_head_position() const;

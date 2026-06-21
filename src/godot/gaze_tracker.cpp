@@ -4,6 +4,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/viewport.hpp>
 
 #ifdef WEB_ENABLED
 #include "web_gaze_model.hpp"
@@ -129,10 +130,15 @@ void GazeTracker::_process(double delta) {
             Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
             double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
             double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
-            latest_projected_gaze_px = Vector2(local_x, local_y);
+            Vector2 local_pos(local_x, local_y);
+            Viewport* vp = get_viewport();
+            if (vp) {
+                local_pos = vp->get_final_transform().affine_inverse().xform(local_pos);
+            }
+            latest_projected_gaze_px = local_pos;
 
-            double fx = filter_x->filter(local_x);
-            double fy = filter_y->filter(local_y);
+            double fx = filter_x->filter(local_pos.x);
+            double fy = filter_y->filter(local_pos.y);
             latest_filtered_gaze_px = Vector2(fx, fy);
 
             emit_signal("gaze_updated", latest_filtered_gaze_px);
@@ -169,10 +175,15 @@ void GazeTracker::_process(double delta) {
                             Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
                             double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
                             double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
-                            latest_projected_gaze_px = Vector2(local_x, local_y);
+                            Vector2 local_pos(local_x, local_y);
+                            Viewport* vp = get_viewport();
+                            if (vp) {
+                                local_pos = vp->get_final_transform().affine_inverse().xform(local_pos);
+                            }
+                            latest_projected_gaze_px = local_pos;
 
-                            double fx = filter_x->filter(local_x);
-                            double fy = filter_y->filter(local_y);
+                            double fx = filter_x->filter(local_pos.x);
+                            double fy = filter_y->filter(local_pos.y);
                             latest_filtered_gaze_px = Vector2(fx, fy);
 
                             emit_signal("gaze_updated", latest_filtered_gaze_px);
@@ -549,6 +560,26 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
     }
     Vector3 translation(Cx * scale_x + W_half - window_pos.x, Cy * scale_y + H_half - window_pos.y, Cz);
 
+    Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
+    if (vp) {
+        Transform2D final_xform = vp->get_final_transform().affine_inverse();
+        
+        Vector2 col0_xy(basis[0].x, basis[0].y);
+        col0_xy = final_xform.basis_xform(col0_xy);
+        basis[0].x = col0_xy.x;
+        basis[0].y = col0_xy.y;
+        
+        Vector2 col1_xy(basis[1].x, basis[1].y);
+        col1_xy = final_xform.basis_xform(col1_xy);
+        basis[1].x = col1_xy.x;
+        basis[1].y = col1_xy.y;
+        
+        Vector2 trans_xy(translation.x, translation.y);
+        trans_xy = final_xform.xform(trans_xy);
+        translation.x = trans_xy.x;
+        translation.y = trans_xy.y;
+    }
+
     return Transform3D(basis, translation);
 }
 
@@ -581,7 +612,12 @@ Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direct
     Gaze::GazeVector2 pixel;
     if (projection_engine.project_gaze(origin_cam, dir_cam, pixel)) {
         Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
-        return Vector2(pixel.x - window_pos.x, pixel.y - window_pos.y);
+        Vector2 local_pos(pixel.x - window_pos.x, pixel.y - window_pos.y);
+        Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
+        if (vp) {
+            local_pos = vp->get_final_transform().affine_inverse().xform(local_pos);
+        }
+        return local_pos;
     }
     // Return unattainable infinity if the ray doesn't intersect or points away
     return Vector2(INFINITY, INFINITY);

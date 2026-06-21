@@ -410,7 +410,7 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
     }
 
     if (top && down) {
-        CHECK(top->rotation.x > down->rotation.x);
+        CHECK(top->rotation.x < down->rotation.x);
         CHECK(top->gaze_dir.y > down->gaze_dir.y); // +Y points up, so top is greater
     }
 

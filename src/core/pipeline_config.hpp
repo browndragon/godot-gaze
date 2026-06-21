@@ -3,7 +3,7 @@
 namespace Gaze {
 
 struct PipelineConfig {
-    double pitch_t_gain = 0.5;
+    double pitch_t_gain = 0.0;
     double yaw_t_gain = 0.0;
     
     // Default nose_z set to a realistic average human depth (~4.5 cm)

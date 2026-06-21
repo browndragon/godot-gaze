@@ -12,6 +12,8 @@ opts.Add(BoolVariable("use_llvm", "Use LLVM/Clang compiler", False))
 opts.Add(PathVariable("opencv_dir", "Path to OpenCV SDK root", os.environ.get("OPENCV_DIR", ""), PathVariable.PathAccept))
 
 env = Environment(variables=opts)
+if "PATH" in os.environ:
+    env["ENV"]["PATH"] = os.environ["PATH"]
 
 # Set build target directory
 env.Append(CPPPATH=["src/core", "src/native", "src/web", "src/godot", "thirdparty/one_euro_filter"])
@@ -24,7 +26,16 @@ if env["platform"] == "macos":
 elif env["platform"] == "windows":
     env.Append(CCFLAGS=["/std:c++17", "/O2", "/EHsc"])
 elif env["platform"] == "javascript":
-    env.Append(CCFLAGS=["-std=c++17", "-O2", "-s", "SIDE_MODULE=1"])
+    env["CC"] = "emcc"
+    env["CXX"] = "em++"
+    env["AR"] = "emar"
+    env["RANLIB"] = "emranlib"
+    env["OBJSUFFIX"] = ".o"
+    env["SHOBJSUFFIX"] = ".o"
+    env.Replace(SHLIBSUFFIX=".wasm")
+    env.Replace(SHLIBPREFIX="")
+    env.Append(CCFLAGS=["-std=c++17", "-O2", "-sSIDE_MODULE=1", "-sSUPPORT_LONGJMP='wasm'"])
+    env.Append(LINKFLAGS=["-sSIDE_MODULE=1", "-sWASM_BIGINT", "-sSUPPORT_LONGJMP='wasm'"])
 else:  # Linux/Android/iOS
     env.Append(CCFLAGS=["-std=c++17", "-O2", "-fPIC"])
 
@@ -40,17 +51,17 @@ env.Append(CPPPATH=[
 ])
 
 # Setup platform-specific library paths
-if env["platform"] == "macos":
-    env.Append(LIBPATH=[godot_cpp_dir + "/bin"])
-    # Scan the bin folder to detect if it compiled as universal, arm64, etc.
-    lib_name = "godot-cpp.macos.template_debug.arm64" # Default fallback
-    bin_dir = godot_cpp_dir + "/bin"
-    if os.path.isdir(bin_dir):
-        for f in os.listdir(bin_dir):
-            if f.startswith("libgodot-cpp.macos.") and f.endswith(".a"):
-                lib_name = f[3:-2] # Strip 'lib' prefix and '.a' suffix
-                break
-    env.Append(LIBS=[lib_name])
+env.Append(LIBPATH=[godot_cpp_dir + "/bin"])
+
+godot_cpp_platform = "web" if env["platform"] == "javascript" else env["platform"]
+lib_name = f"godot-cpp.{godot_cpp_platform}.{env['target']}"  # Default fallback
+bin_dir = godot_cpp_dir + "/bin"
+if os.path.isdir(bin_dir):
+    for f in os.listdir(bin_dir):
+        if f.startswith(f"libgodot-cpp.{godot_cpp_platform}.{env['target']}") and f.endswith(".a"):
+            lib_name = f[3:-2] # Strip 'lib' prefix and '.a' suffix
+            break
+env.Append(LIBS=[lib_name])
 
 # Conditional Source and OpenCV dependency mapping
 sources = Glob("src/core/*.cpp") + Glob("src/godot/*.cpp")

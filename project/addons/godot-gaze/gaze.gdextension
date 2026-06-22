@@ -18,5 +18,8 @@ linux.release.x86_64 = "res://addons/godot-gaze/bin/libgaze.linux.template_relea
 android.debug.arm64 = "res://addons/godot-gaze/bin/libgaze.android.template_debug.so"
 android.release.arm64 = "res://addons/godot-gaze/bin/libgaze.android.template_release.so"
 
-web.debug.wasm = "res://addons/godot-gaze/bin/gaze.javascript.template_debug.wasm"
-web.release.wasm = "res://addons/godot-gaze/bin/gaze.javascript.template_release.wasm"
+web.debug.wasm32 = "res://addons/godot-gaze/bin/gaze.javascript.template_debug.wasm"
+web.release.wasm32 = "res://addons/godot-gaze/bin/gaze.javascript.template_release.wasm"
+web.debug.wasm32.threads = "res://addons/godot-gaze/bin/gaze.javascript.template_debug.threads.wasm"
+web.release.wasm32.threads = "res://addons/godot-gaze/bin/gaze.javascript.template_release.threads.wasm"
+

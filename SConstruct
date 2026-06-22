@@ -3,6 +3,17 @@
 
 import os
 import sys
+import subprocess
+
+# Detect and prepend emsdk bin directory if using asdf
+if any("platform=javascript" in arg for arg in sys.argv) or any("platform=web" in arg for arg in sys.argv):
+    try:
+        emsdk_path = subprocess.check_output(["asdf", "where", "emsdk"], text=True).strip()
+        emscripten_bin = os.path.join(emsdk_path, "upstream", "emscripten")
+        if os.path.isdir(emscripten_bin):
+            os.environ["PATH"] = emscripten_bin + os.pathsep + os.environ.get("PATH", "")
+    except Exception:
+        pass
 
 # Define target options
 opts = Variables()
@@ -10,6 +21,7 @@ opts.Add(EnumVariable("platform", "Target platform", sys.platform, allowed_value
 opts.Add(EnumVariable("target", "Compilation target", "template_debug", allowed_values=["template_debug", "template_release", "editor"]))
 opts.Add(BoolVariable("use_llvm", "Use LLVM/Clang compiler", False))
 opts.Add(PathVariable("opencv_dir", "Path to OpenCV SDK root", os.environ.get("OPENCV_DIR", ""), PathVariable.PathAccept))
+opts.Add(BoolVariable("threads", "Enable threading support", False))
 
 env = Environment(variables=opts)
 if "PATH" in os.environ:
@@ -36,6 +48,9 @@ elif env["platform"] == "javascript":
     env.Replace(SHLIBPREFIX="")
     env.Append(CCFLAGS=["-std=c++17", "-O2", "-sSIDE_MODULE=1", "-sSUPPORT_LONGJMP='wasm'"])
     env.Append(LINKFLAGS=["-sSIDE_MODULE=1", "-sWASM_BIGINT", "-sSUPPORT_LONGJMP='wasm'"])
+    if env["threads"]:
+        env.Append(CCFLAGS=["-sUSE_PTHREADS=1"])
+        env.Append(LINKFLAGS=["-sUSE_PTHREADS=1"])
 else:  # Linux/Android/iOS
     env.Append(CCFLAGS=["-std=c++17", "-O2", "-fPIC"])
 
@@ -59,6 +74,11 @@ bin_dir = godot_cpp_dir + "/bin"
 if os.path.isdir(bin_dir):
     for f in os.listdir(bin_dir):
         if f.startswith(f"libgodot-cpp.{godot_cpp_platform}.{env['target']}") and f.endswith(".a"):
+            if env["platform"] == "javascript":
+                if env["threads"] and ".nothreads" in f:
+                    continue
+                if not env["threads"] and ".nothreads" not in f:
+                    continue
             lib_name = f[3:-2] # Strip 'lib' prefix and '.a' suffix
             break
 env.Append(LIBS=[lib_name])
@@ -120,7 +140,8 @@ elif env["platform"] == "macos":
 elif env["platform"] == "javascript":
     lib_suffix = ".wasm"
 
-target_lib = "project/addons/godot-gaze/bin/gaze." + env["platform"] + "." + env["target"] + lib_suffix
+lib_threads_suffix = ".threads" if (env["platform"] == "javascript" and env["threads"]) else ""
+target_lib = "project/addons/godot-gaze/bin/gaze." + env["platform"] + "." + env["target"] + lib_threads_suffix + lib_suffix
 
 # Create shared library builder call
 env.SharedLibrary(target=target_lib, source=sources)

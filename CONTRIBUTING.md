@@ -74,6 +74,8 @@ This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
    asdf install python
    asdf plugin add scons
    asdf install scons
+   asdf plugin add emsdk
+   asdf install emsdk
    ```
 3. Install **OpenCV** (required for Native compilation):
    ```bash

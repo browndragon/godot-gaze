@@ -15,6 +15,10 @@ done
 echo "=== Gaze Tracker C++ Test Runner ==="
 mkdir -p "${BUILD_DIR}"
 
+# Run Web GDExtension toolchain verification check
+python3 "${BASE_DIR}/scripts/verify_web_toolchain.py"
+echo ""
+
 # 1. Detect if OpenCV SDK is available
 OPENCV_SDK=""
 for hb_path in "${BASE_DIR}/thirdparty/opencv/macos" "/opt/homebrew/opt/opencv" "/usr/local/opt/opencv"; do

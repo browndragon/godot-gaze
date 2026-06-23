@@ -49,10 +49,12 @@ var draw_report_vectors = false
 func _ready():
 	tracker.yunet_model_path = "res://models/face_detection_yunet_2023mar.onnx"
 	tracker.gaze_onnx_path = "res://models/gaze-estimation-adas-0002.xml"
-	tracker.initialize_tracker()
 	
 	setup_ui()
 	auto_estimate_geometry()
+	
+	tracker.lifecycle_changed.connect(_on_lifecycle_changed)
+	tracker.initialize_tracker()
 	
 	current_state = State.STATE_FREE_PLAY
 
@@ -594,5 +596,19 @@ func _draw():
 			draw_circle(measured_win, 6, Color.CYAN)
 			# Line from target to measured (orange)
 			draw_line(target_win, measured_win, Color.ORANGE, 2.0)
+
+func _on_lifecycle_changed(state):
+	match state:
+		0: # GazeTracker.LIFECYCLE_UNKNOWN
+			status_label.text = "Status: Stopped"
+		1: # GazeTracker.LIFECYCLE_PERM_REQ
+			status_label.text = "Status: Requesting Camera Permission..."
+		2: # GazeTracker.LIFECYCLE_INITIALIZING
+			status_label.text = "Status: Initializing..."
+		3: # GazeTracker.LIFECYCLE_RUNNING
+			status_label.text = "Status: Running"
+		4: # GazeTracker.LIFECYCLE_ERROR
+			status_label.text = "Status: Error / Permission Denied"
+
 
 

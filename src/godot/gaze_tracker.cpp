@@ -5,14 +5,19 @@
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/viewport.hpp>
+#include <godot_cpp/classes/os.hpp>
+#include <godot_cpp/variant/packed_string_array.hpp>
 
 #ifdef WEB_ENABLED
 #include "web_gaze_model.hpp"
+#include <godot_cpp/classes/java_script_bridge.hpp>
+#include <godot_cpp/classes/java_script_object.hpp>
 #else
 #include "opencv_camera.hpp"
 #include "yunet_pipeline.hpp"
 #include "opencv_gaze_model.hpp"
 #endif
+
 
 namespace godot {
 
@@ -20,6 +25,9 @@ void GazeTracker::_bind_methods() {
     // Methods
     ClassDB::bind_method(D_METHOD("initialize_tracker"), &GazeTracker::initialize_tracker);
     ClassDB::bind_method(D_METHOD("stop_tracker"), &GazeTracker::stop_tracker);
+    ClassDB::bind_method(D_METHOD("complete_initialization"), &GazeTracker::complete_initialization);
+    ClassDB::bind_method(D_METHOD("trigger_permission_request"), &GazeTracker::trigger_permission_request);
+    ClassDB::bind_method(D_METHOD("on_permission_result", "granted"), &GazeTracker::on_permission_result);
     ClassDB::bind_method(D_METHOD("calibrate_3d", "target_pixel"), &GazeTracker::calibrate_3d);
     ClassDB::bind_method(D_METHOD("calibrate_2d", "target_pixel"), &GazeTracker::calibrate_2d);
     ClassDB::bind_method(D_METHOD("clear_calibration"), &GazeTracker::clear_calibration);
@@ -31,6 +39,12 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("is_face_detected"), &GazeTracker::is_face_detected);
 
     // Properties Setters & Getters
+    ClassDB::bind_method(D_METHOD("get_lifecycle_state"), &GazeTracker::get_lifecycle_state);
+    ClassDB::bind_method(D_METHOD("set_autostart", "autostart"), &GazeTracker::set_autostart);
+    ClassDB::bind_method(D_METHOD("get_autostart"), &GazeTracker::get_autostart);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "lifecycle_state", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT), "", "get_lifecycle_state");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "autostart"), "set_autostart", "get_autostart");
+
     ClassDB::bind_method(D_METHOD("set_pipeline_config", "res"), &GazeTracker::set_pipeline_config);
     ClassDB::bind_method(D_METHOD("get_pipeline_config"), &GazeTracker::get_pipeline_config);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pipeline_config", PROPERTY_HINT_RESOURCE_TYPE, "GazePipelineConfig"), "set_pipeline_config", "get_pipeline_config");
@@ -101,9 +115,17 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_raw_right_eye_center"), &GazeTracker::get_raw_right_eye_center);
     ClassDB::bind_method(D_METHOD("get_raw_gaze_direction"), &GazeTracker::get_raw_gaze_direction);
 
+    // Enums
+    BIND_ENUM_CONSTANT(LIFECYCLE_UNKNOWN);
+    BIND_ENUM_CONSTANT(LIFECYCLE_PERM_REQ);
+    BIND_ENUM_CONSTANT(LIFECYCLE_INITIALIZING);
+    BIND_ENUM_CONSTANT(LIFECYCLE_RUNNING);
+    BIND_ENUM_CONSTANT(LIFECYCLE_ERROR);
+
     // Signals
     ADD_SIGNAL(MethodInfo("gaze_updated", PropertyInfo(Variant::VECTOR2, "screen_pixel")));
     ADD_SIGNAL(MethodInfo("face_detected", PropertyInfo(Variant::BOOL, "detected")));
+    ADD_SIGNAL(MethodInfo("lifecycle_changed", PropertyInfo(Variant::INT, "state")));
 }
 
 GazeTracker::GazeTracker() {
@@ -115,7 +137,9 @@ GazeTracker::~GazeTracker() {
 }
 
 void GazeTracker::_ready() {
-    // Defer initialization to let game set paths and properties
+    if (autostart) {
+        initialize_tracker();
+    }
 }
 
 void GazeTracker::_process(double delta) {
@@ -203,8 +227,164 @@ void GazeTracker::_process(double delta) {
 #endif
 }
 
+void GazeTracker::set_lifecycle_state(GazeLifecycle p_state) {
+    if (lifecycle_state != p_state) {
+        lifecycle_state = p_state;
+        emit_signal("lifecycle_changed", lifecycle_state);
+    }
+}
+
+int GazeTracker::get_lifecycle_state() const {
+    return (int)lifecycle_state;
+}
+
+void GazeTracker::set_autostart(bool p_autostart) {
+    autostart = p_autostart;
+}
+
+bool GazeTracker::get_autostart() const {
+    return autostart;
+}
+
+void GazeTracker::_notification(int p_what) {
+    switch (p_what) {
+        case NOTIFICATION_APPLICATION_FOCUS_IN:
+        case NOTIFICATION_APPLICATION_RESUMED: {
+            if (lifecycle_state == LIFECYCLE_PERM_REQ) {
+                // Verify Android permission
+                OS *os = OS::get_singleton();
+                if (os && os->has_feature("android")) {
+                    PackedStringArray granted_perms = os->get_granted_permissions();
+                    bool has_camera = false;
+                    for (int i = 0; i < granted_perms.size(); ++i) {
+                        if (granted_perms[i] == "android.permission.CAMERA") {
+                            has_camera = true;
+                            break;
+                        }
+                    }
+                    on_permission_result(has_camera);
+                }
+            }
+            break;
+        }
+    }
+}
+
+void GazeTracker::trigger_permission_request() {
+#ifdef WEB_ENABLED
+    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
+    if (js) {
+        Ref<JavaScriptObject> callback_js = js->create_callback(Callable(this, "on_permission_result"));
+        Ref<JavaScriptObject> window = js->get_interface("window");
+        window->set("gaze_permission_callback", callback_js);
+
+        js->eval(
+            "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {"
+            "    navigator.mediaDevices.getUserMedia({ video: true })"
+            "        .then(function(stream) {"
+            "            console.log('[GazeTracker] Camera permission granted.');"
+            "            stream.getTracks().forEach(function(track) { track.stop(); });"
+            "            if (window.gaze_permission_callback) { window.gaze_permission_callback(true); }"
+            "        })"
+            "        .catch(function(err) {"
+            "            console.warn('[GazeTracker] Camera permission denied:', err);"
+            "            if (window.gaze_permission_callback) { window.gaze_permission_callback(false); }"
+            "        });"
+            "}"
+        );
+    }
+#else
+    OS *os = OS::get_singleton();
+    if (os) {
+        if (os->has_feature("android")) {
+            os->request_permission("android.permission.CAMERA");
+        }
+    }
+#endif
+}
+
+void GazeTracker::on_permission_result(bool granted) {
+    if (!granted) {
+        Gaze::log_error("CameraPermissionDenied");
+        set_lifecycle_state(LIFECYCLE_ERROR);
+        return;
+    }
+
+#if !defined(WEB_ENABLED)
+    OS *os = OS::get_singleton();
+    if (os && os->has_feature("android")) {
+        PackedStringArray granted_perms = os->get_granted_permissions();
+        bool has_camera = false;
+        for (int i = 0; i < granted_perms.size(); ++i) {
+            if (granted_perms[i] == "android.permission.CAMERA") {
+                has_camera = true;
+                break;
+            }
+        }
+        if (!has_camera) {
+            set_lifecycle_state(LIFECYCLE_ERROR);
+            return;
+        }
+    }
+#endif
+
+    // Permission verified, transition to INITIALIZING and complete setup
+    set_lifecycle_state(LIFECYCLE_INITIALIZING);
+    complete_initialization();
+}
+
+bool GazeTracker::complete_initialization() {
+#ifdef WEB_ENABLED
+    if (!model) {
+        model = new Gaze::WebGazeModel();
+        model->initialize();
+    }
+    tracker_initialized = true;
+    set_lifecycle_state(LIFECYCLE_RUNNING);
+    Gaze::log_info("GazeTrackerInitWebSuccess");
+    return true;
+#else
+    if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
+    if (!pipeline) {
+        String global_yunet_path = ProjectSettings::get_singleton()->globalize_path(yunet_model_path);
+        pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
+        pipeline->set_camera_focal_length_px(camera_focal_length_px);
+    }
+    if (!model) {
+        String global_gaze_path = ProjectSettings::get_singleton()->globalize_path(gaze_onnx_path);
+        model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
+    }
+
+    if (!camera->initialize()) {
+        Gaze::log_error("GazeTrackerInitFailed", "reason", "camera initialization failed");
+        stop_tracker();
+        set_lifecycle_state(LIFECYCLE_ERROR);
+        return false;
+    }
+    if (!pipeline->initialize()) {
+        Gaze::log_error("GazeTrackerInitFailed", "reason", "face pipeline initialization failed");
+        stop_tracker();
+        set_lifecycle_state(LIFECYCLE_ERROR);
+        return false;
+    }
+    if (!model->initialize()) {
+        Gaze::log_error("GazeTrackerInitFailed", "reason", "gaze model initialization failed");
+        stop_tracker();
+        set_lifecycle_state(LIFECYCLE_ERROR);
+        return false;
+    }
+
+    update_pipeline_config();
+
+    tracker_initialized = true;
+    set_lifecycle_state(LIFECYCLE_RUNNING);
+    Gaze::log_info("GazeTrackerInitNativeSuccess");
+    return true;
+#endif
+}
+
 bool GazeTracker::initialize_tracker() {
-    if (tracker_initialized) return true;
+    if (lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
     DisplayServer* ds = DisplayServer::get_singleton();
     if (ds) {
@@ -229,6 +409,7 @@ bool GazeTracker::initialize_tracker() {
     if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0 ||
         screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
         Gaze::log_error("GazeTrackerInitFailed", "reason", "invalid screen geometry");
+        set_lifecycle_state(LIFECYCLE_ERROR);
         return false;
     }
 
@@ -242,40 +423,36 @@ bool GazeTracker::initialize_tracker() {
         projection_engine.set_calibration(calibration_resource->get_calibration());
     }
 
+    // Check platform camera permission
+    bool has_permission = false;
 #ifdef WEB_ENABLED
-    model = new Gaze::WebGazeModel();
-    model->initialize();
-    tracker_initialized = true;
-    Gaze::log_info("GazeTrackerInitWebSuccess");
-    return true;
+    // Web requires browser permission prompt (asynchronous)
+    has_permission = (lifecycle_state == LIFECYCLE_INITIALIZING || lifecycle_state == LIFECYCLE_RUNNING);
 #else
-    camera = new Gaze::OpenCVCamera(camera_device_id);
-    String global_yunet_path = ProjectSettings::get_singleton()->globalize_path(yunet_model_path);
-    String global_gaze_path = ProjectSettings::get_singleton()->globalize_path(gaze_onnx_path);
-    pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
-    pipeline->set_camera_focal_length_px(camera_focal_length_px);
-    model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
-
-    if (!camera->initialize()) {
-        stop_tracker();
-        return false;
+    OS *os = OS::get_singleton();
+    if (os && os->has_feature("android")) {
+        PackedStringArray granted_perms = os->get_granted_permissions();
+        for (int i = 0; i < granted_perms.size(); ++i) {
+            if (granted_perms[i] == "android.permission.CAMERA") {
+                has_permission = true;
+                break;
+            }
+        }
+    } else {
+        has_permission = true;
     }
-    if (!pipeline->initialize()) {
-        stop_tracker();
-        return false;
-    }
-    if (!model->initialize()) {
-        stop_tracker();
-        return false;
-    }
-
-    update_pipeline_config();
-
-    tracker_initialized = true;
-    Gaze::log_info("GazeTrackerInitNativeSuccess");
-    return true;
 #endif
+
+    if (!has_permission) {
+        set_lifecycle_state(LIFECYCLE_PERM_REQ);
+        trigger_permission_request();
+        return false;
+    }
+
+    set_lifecycle_state(LIFECYCLE_INITIALIZING);
+    return complete_initialization();
 }
+
 
 void GazeTracker::stop_tracker() {
     tracker_initialized = false;
@@ -301,6 +478,8 @@ void GazeTracker::stop_tracker() {
         delete filter_y;
         filter_y = nullptr;
     }
+
+    set_lifecycle_state(LIFECYCLE_UNKNOWN);
 }
 
 void GazeTracker::calibrate_3d(Vector2 target_pixel) {

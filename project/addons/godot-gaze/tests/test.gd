@@ -16,6 +16,7 @@ func _ready():
 	# Connect to GDExtension signals
 	tracker.gaze_updated.connect(_on_gaze_updated)
 	tracker.face_detected.connect(_on_face_detected)
+	tracker.lifecycle_changed.connect(_on_lifecycle_changed)
 	
 	# Create a coordinate feedback label near screen center
 	coords_label = Label.new()
@@ -26,12 +27,8 @@ func _ready():
 	tracker.yunet_model_path = "res://models/face_detection_yunet_2023mar.onnx"
 	tracker.gaze_onnx_path = "res://models/gaze-estimation-adas-0002.xml"
 	
-	# Start tracking
-	var success = tracker.initialize_tracker()
-	if success:
-		status_label.text = "Status: Tracker Initialized"
-	else:
-		status_label.text = "Status: Initialization Failed (Check OpenCV / models)"
+	# Start tracking (asynchronously requests camera permission if needed)
+	tracker.initialize_tracker()
 
 func _process(_delta):
 	if Engine.get_frames_drawn() % 60 == 0:
@@ -116,4 +113,18 @@ func _input(event):
 		var screen_center = viewport_center + Vector2(DisplayServer.window_get_position())
 		tracker.calibrate_3d(screen_center)
 		status_label.text = "Status: Calibrated at Screen Center"
+
+func _on_lifecycle_changed(state):
+	match state:
+		0: # GazeTracker.LIFECYCLE_UNKNOWN
+			status_label.text = "Status: Stopped"
+		1: # GazeTracker.LIFECYCLE_PERM_REQ
+			status_label.text = "Status: Requesting Camera Permission..."
+		2: # GazeTracker.LIFECYCLE_INITIALIZING
+			status_label.text = "Status: Initializing..."
+		3: # GazeTracker.LIFECYCLE_RUNNING
+			status_label.text = "Status: Running"
+		4: # GazeTracker.LIFECYCLE_ERROR
+			status_label.text = "Status: Error / Permission Denied"
+
  

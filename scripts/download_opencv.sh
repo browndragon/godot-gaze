@@ -84,21 +84,44 @@ setup_ios() {
     echo "iOS SDK setup completed at thirdparty/opencv/ios."
 }
 
-# Check command line arguments for mobile SDK setup
+# Function to download and extract Windows SDK
+setup_windows() {
+    local sdk_url="https://github.com/opencv/opencv/releases/download/${OPENCV_VERSION}/opencv-${OPENCV_VERSION}-windows.exe"
+    local dest_exe="${THIRDPARTY_DIR}/opencv-windows.exe"
+    local extract_dir="${THIRDPARTY_DIR}/windows_temp"
+
+    echo "Downloading OpenCV Windows SDK..."
+    curl -L -o "${dest_exe}" "${sdk_url}"
+    echo "Extracting Windows SDK..."
+    unzip -q -o "${dest_exe}" -d "${extract_dir}"
+    
+    # Move out of inner folder
+    rm -rf "${THIRDPARTY_DIR}/windows"
+    mv "${extract_dir}/opencv" "${THIRDPARTY_DIR}/windows"
+    
+    # Cleanup
+    rm -f "${dest_exe}"
+    rm -rf "${extract_dir}"
+    echo "Windows SDK setup completed at thirdparty/opencv/windows."
+}
+
+# Check command line arguments for mobile/desktop SDK setup
 if [ $# -gt 0 ]; then
     for arg in "$@"; do
         if [ "${arg}" == "--android" ]; then
             setup_android
         elif [ "${arg}" == "--ios" ]; then
             setup_ios
+        elif [ "${arg}" == "--windows" ]; then
+            setup_windows
         else
             echo "Unknown argument: ${arg}"
-            echo "Usage: $0 [--android] [--ios]"
+            echo "Usage: $0 [--android] [--ios] [--windows]"
             exit 1
         fi
     done
 else
-    echo "Run with '--android' or '--ios' if you need to fetch prebuilt mobile libraries."
+    echo "Run with '--android', '--ios', or '--windows' if you need to fetch prebuilt libraries."
 fi
 
 echo "Done!"

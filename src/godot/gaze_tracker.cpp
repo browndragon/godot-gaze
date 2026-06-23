@@ -6,6 +6,8 @@
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/viewport.hpp>
 #include <godot_cpp/classes/os.hpp>
+#include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/dir_access.hpp>
 #include <godot_cpp/variant/packed_string_array.hpp>
 
 #ifdef WEB_ENABLED
@@ -24,7 +26,7 @@ namespace godot {
 void GazeTracker::_bind_methods() {
     // Methods
     ClassDB::bind_method(D_METHOD("initialize_tracker"), &GazeTracker::initialize_tracker);
-    ClassDB::bind_method(D_METHOD("stop_tracker"), &GazeTracker::stop_tracker);
+    ClassDB::bind_method(D_METHOD("stop_tracker", "emit_signal"), &GazeTracker::stop_tracker, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("complete_initialization"), &GazeTracker::complete_initialization);
     ClassDB::bind_method(D_METHOD("trigger_permission_request"), &GazeTracker::trigger_permission_request);
     ClassDB::bind_method(D_METHOD("on_permission_result", "granted"), &GazeTracker::on_permission_result);
@@ -133,7 +135,7 @@ GazeTracker::GazeTracker() {
 }
 
 GazeTracker::~GazeTracker() {
-    stop_tracker();
+    stop_tracker(false);
 }
 
 void GazeTracker::_ready() {
@@ -248,6 +250,10 @@ bool GazeTracker::get_autostart() const {
 
 void GazeTracker::_notification(int p_what) {
     switch (p_what) {
+        case NOTIFICATION_EXIT_TREE: {
+            stop_tracker(true);
+            break;
+        }
         case NOTIFICATION_APPLICATION_FOCUS_IN:
         case NOTIFICATION_APPLICATION_RESUMED: {
             if (lifecycle_state == LIFECYCLE_PERM_REQ) {
@@ -274,9 +280,17 @@ void GazeTracker::trigger_permission_request() {
 #ifdef WEB_ENABLED
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
     if (js) {
-        Ref<JavaScriptObject> callback_js = js->create_callback(Callable(this, "on_permission_result"));
+        if (opaque) {
+            Ref<JavaScriptObject> *prev_callback = static_cast<Ref<JavaScriptObject>*>(opaque);
+            delete prev_callback;
+            opaque = nullptr;
+        }
+
+        Ref<JavaScriptObject> *callback_ref = new Ref<JavaScriptObject>(js->create_callback(Callable(this, "on_permission_result")));
+        opaque = callback_ref;
+
         Ref<JavaScriptObject> window = js->get_interface("window");
-        window->set("gaze_permission_callback", callback_js);
+        window->set("gaze_permission_callback", *callback_ref);
 
         js->eval(
             "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {"
@@ -284,11 +298,17 @@ void GazeTracker::trigger_permission_request() {
             "        .then(function(stream) {"
             "            console.log('[GazeTracker] Camera permission granted.');"
             "            stream.getTracks().forEach(function(track) { track.stop(); });"
-            "            if (window.gaze_permission_callback) { window.gaze_permission_callback(true); }"
+            "            if (window.gaze_permission_callback) {"
+            "                window.gaze_permission_callback(true);"
+            "                delete window.gaze_permission_callback;"
+            "            }"
             "        })"
             "        .catch(function(err) {"
             "            console.warn('[GazeTracker] Camera permission denied:', err);"
-            "            if (window.gaze_permission_callback) { window.gaze_permission_callback(false); }"
+            "            if (window.gaze_permission_callback) {"
+            "                window.gaze_permission_callback(false);"
+            "                delete window.gaze_permission_callback;"
+            "            }"
             "        });"
             "}"
         );
@@ -304,6 +324,14 @@ void GazeTracker::trigger_permission_request() {
 }
 
 void GazeTracker::on_permission_result(bool granted) {
+#ifdef WEB_ENABLED
+    if (opaque) {
+        Ref<JavaScriptObject> *callback_ref = static_cast<Ref<JavaScriptObject>*>(opaque);
+        delete callback_ref;
+        opaque = nullptr;
+    }
+#endif
+
     if (!granted) {
         Gaze::log_error("CameraPermissionDenied");
         set_lifecycle_state(LIFECYCLE_ERROR);
@@ -346,12 +374,14 @@ bool GazeTracker::complete_initialization() {
 #else
     if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
     if (!pipeline) {
-        String global_yunet_path = ProjectSettings::get_singleton()->globalize_path(yunet_model_path);
+        String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
+        String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
         pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
         pipeline->set_camera_focal_length_px(camera_focal_length_px);
     }
     if (!model) {
-        String global_gaze_path = ProjectSettings::get_singleton()->globalize_path(gaze_onnx_path);
+        String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
+        String global_gaze_path = copy_model_to_user_dir(resolved_gaze);
         model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
     }
 
@@ -381,6 +411,49 @@ bool GazeTracker::complete_initialization() {
     Gaze::log_info("GazeTrackerInitNativeSuccess");
     return true;
 #endif
+}
+
+String GazeTracker::copy_model_to_user_dir(const String &res_path) {
+    if (res_path.is_empty()) return "";
+    
+    // Only copy if it is a res:// virtual path
+    if (!res_path.begins_with("res://")) {
+        return ProjectSettings::get_singleton()->globalize_path(res_path);
+    }
+    
+    String file_name = res_path.get_file();
+    String user_path = "user://models/" + file_name;
+    
+    Ref<DirAccess> dir = DirAccess::open("user://");
+    if (dir.is_valid() && !dir->dir_exists("models")) {
+        dir->make_dir("models");
+    }
+    
+    copy_individual_file(res_path, user_path);
+    
+    // If it's OpenVINO XML, we also copy the companion .bin file
+    if (res_path.ends_with(".xml")) {
+        String bin_res_path = res_path.replace(".xml", ".bin");
+        String bin_user_path = user_path.replace(".xml", ".bin");
+        copy_individual_file(bin_res_path, bin_user_path);
+    }
+    
+    return ProjectSettings::get_singleton()->globalize_path(user_path);
+}
+
+void GazeTracker::copy_individual_file(const String &src, const String &dest) {
+    if (!FileAccess::file_exists(dest)) {
+        Ref<FileAccess> file_in = FileAccess::open(src, FileAccess::READ);
+        Ref<FileAccess> file_out = FileAccess::open(dest, FileAccess::WRITE);
+        if (file_in.is_valid() && file_out.is_valid()) {
+            uint64_t len = file_in->get_length();
+            PackedByteArray buffer = file_in->get_buffer(len);
+            file_out->store_buffer(buffer);
+            Gaze::log_info("GazeTrackerCopiedModel", "src", src.utf8().get_data(), "dest", dest.utf8().get_data());
+        } else {
+            Gaze::log_error("GazeTrackerCopyModelFailed", "src", src.utf8().get_data(), "dest", dest.utf8().get_data());
+        }
+    }
 }
 
 bool GazeTracker::initialize_tracker() {
@@ -454,7 +527,7 @@ bool GazeTracker::initialize_tracker() {
 }
 
 
-void GazeTracker::stop_tracker() {
+void GazeTracker::stop_tracker(bool p_emit_signal) {
     tracker_initialized = false;
     is_face_tracked = false;
 
@@ -479,7 +552,19 @@ void GazeTracker::stop_tracker() {
         filter_y = nullptr;
     }
 
-    set_lifecycle_state(LIFECYCLE_UNKNOWN);
+#ifdef WEB_ENABLED
+    if (opaque) {
+        Ref<JavaScriptObject> *callback_ref = static_cast<Ref<JavaScriptObject>*>(opaque);
+        delete callback_ref;
+        opaque = nullptr;
+    }
+#endif
+
+    if (p_emit_signal) {
+        set_lifecycle_state(LIFECYCLE_UNKNOWN);
+    } else {
+        lifecycle_state = LIFECYCLE_UNKNOWN;
+    }
 }
 
 void GazeTracker::calibrate_3d(Vector2 target_pixel) {
@@ -859,3 +944,4 @@ void GazeTracker::update_pipeline_config() {
 }
 
 } // namespace godot
+

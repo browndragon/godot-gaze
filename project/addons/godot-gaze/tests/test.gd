@@ -23,10 +23,6 @@ func _ready():
 	add_child(coords_label)
 	coords_label.text = ""
 	
-	# Set model paths (relative to project root)
-	tracker.yunet_model_path = "res://models/face_detection_yunet_2023mar.onnx"
-	tracker.gaze_onnx_path = "res://models/gaze-estimation-adas-0002.xml"
-	
 	# Start tracking (asynchronously requests camera permission if needed)
 	tracker.initialize_tracker()
 
@@ -98,13 +94,15 @@ func _on_gaze_updated(_pixel: Vector2):
 	pass
  
 func _on_face_detected(detected: bool):
+	if not is_instance_valid(cursor) or not is_instance_valid(status_label):
+		return
 	if detected:
 		cursor.color = Color.GREEN
 		status_label.text = "Status: Face Tracked"
 	else:
 		cursor.color = Color.RED
 		status_label.text = "Status: Face Lost"
- 
+
 func _input(event):
 	# Press SPACE to trigger a 3D calibration at the center of the screen
 	if event.is_action_pressed("ui_select"):
@@ -112,9 +110,12 @@ func _input(event):
 		# Map window coordinate to screen coordinate
 		var screen_center = viewport_center + Vector2(DisplayServer.window_get_position())
 		tracker.calibrate_3d(screen_center)
-		status_label.text = "Status: Calibrated at Screen Center"
+		if is_instance_valid(status_label):
+			status_label.text = "Status: Calibrated at Screen Center"
 
 func _on_lifecycle_changed(state):
+	if not is_instance_valid(status_label):
+		return
 	match state:
 		0: # GazeTracker.LIFECYCLE_UNKNOWN
 			status_label.text = "Status: Stopped"

@@ -75,9 +75,13 @@ private:
     Gaze::GazeVector3 latest_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
     Gaze::EyeCrops latest_crops;
 
+    void* opaque = nullptr;
+
     void update_projection_parameters();
     void update_filter_parameters();
     void update_pipeline_config();
+    String copy_model_to_user_dir(const String &res_path);
+    void copy_individual_file(const String &src, const String &dest);
 
 protected:
     static void _bind_methods();
@@ -93,7 +97,7 @@ public:
 
     // Tracker control
     bool initialize_tracker();
-    void stop_tracker();
+    void stop_tracker(bool p_emit_signal = true);
     bool complete_initialization();
     void trigger_permission_request();
     void on_permission_result(bool granted);

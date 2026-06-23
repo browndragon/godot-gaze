@@ -55,9 +55,11 @@ private:
 public:
     OneEuroFilter(double freq = 60.0, double mincutoff = 1.0, double beta = 0.0, double dcutoff = 1.0)
         : freq(freq), mincutoff(mincutoff), beta(beta), dcutoff(dcutoff), last_time(-1.0) {
+#ifdef __cpp_exceptions
         if (freq <= 0.0) throw std::invalid_argument("frequency must be > 0");
         if (mincutoff <= 0.0) throw std::invalid_argument("mincutoff must be > 0");
         if (dcutoff <= 0.0) throw std::invalid_argument("dcutoff must be > 0");
+#endif
     }
 
     double filter(double value, double timestamp = -1.0) {

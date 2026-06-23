@@ -47,9 +47,6 @@ var draw_target = false
 var draw_report_vectors = false
 
 func _ready():
-	tracker.yunet_model_path = "res://models/face_detection_yunet_2023mar.onnx"
-	tracker.gaze_onnx_path = "res://models/gaze-estimation-adas-0002.xml"
-	
 	setup_ui()
 	auto_estimate_geometry()
 	
@@ -598,6 +595,8 @@ func _draw():
 			draw_line(target_win, measured_win, Color.ORANGE, 2.0)
 
 func _on_lifecycle_changed(state):
+	if not is_instance_valid(status_label):
+		return
 	match state:
 		0: # GazeTracker.LIFECYCLE_UNKNOWN
 			status_label.text = "Status: Stopped"

@@ -46,3 +46,7 @@ To unit test the permission states and callback triggers in isolation:
 ### 2. Calibration State Serialization
 - **Status**: The calibration is saved dynamically in the `calibration_resource`, but it requires manual save triggers in GDScript.
 - **Roadmap**: Integrate automatic serialization and persistence of the calibrated OLS bias weights across application launches.
+
+### 3. Buffer-Based Model Loading
+- **Status**: The model loading process requires "unwrapping" (copying model files from virtual `res://` paths to `user://` physical storage) at runtime so OpenCV can read them from a physical filesystem.
+- **Roadmap**: Examine whether OpenCV's loading process has hooks (like memory buffer loading) to load models directly from Godot's virtual filesystem arrays, avoiding this copying stage entirely.

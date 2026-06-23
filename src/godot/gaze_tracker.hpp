@@ -23,6 +23,15 @@ namespace godot {
 class GazeTracker : public Node {
     GDCLASS(GazeTracker, Node);
 
+public:
+    enum GazeLifecycle {
+        LIFECYCLE_UNKNOWN = 0,
+        LIFECYCLE_PERM_REQ = 1,
+        LIFECYCLE_INITIALIZING = 2,
+        LIFECYCLE_RUNNING = 3,
+        LIFECYCLE_ERROR = 4
+    };
+
 private:
     // Pointers to the active layered pipeline implementations
     Gaze::CameraInterface* camera = nullptr;
@@ -58,6 +67,9 @@ private:
     Vector2 latest_projected_gaze_px;
     Vector2 latest_filtered_gaze_px;
     bool tracker_initialized = false;
+    GazeLifecycle lifecycle_state = LIFECYCLE_UNKNOWN;
+    bool autostart = false;
+    void set_lifecycle_state(GazeLifecycle p_state);
     bool is_face_tracked = false;
     Gaze::GazeVector3 latest_gaze_origin = Gaze::GazeVector3(0.0, 0.0, 500.0);
     Gaze::GazeVector3 latest_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
@@ -69,10 +81,12 @@ private:
 
 protected:
     static void _bind_methods();
+    void _notification(int p_what);
 
 public:
     GazeTracker();
     virtual ~GazeTracker();
+
 
     virtual void _ready() override;
     virtual void _process(double delta) override;
@@ -80,6 +94,10 @@ public:
     // Tracker control
     bool initialize_tracker();
     void stop_tracker();
+    bool complete_initialization();
+    void trigger_permission_request();
+    void on_permission_result(bool granted);
+
 
     // Calibration routines
     void calibrate_3d(Vector2 target_pixel);
@@ -91,6 +109,10 @@ public:
     void feed_expression_web(String name, double value);
 
     // Getters / Setters for properties
+    int get_lifecycle_state() const;
+    void set_autostart(bool p_autostart);
+    bool get_autostart() const;
+
     void set_pipeline_config(const Ref<GazePipelineConfig>& res);
     Ref<GazePipelineConfig> get_pipeline_config() const;
 
@@ -166,3 +188,6 @@ public:
 };
 
 } // namespace godot
+
+VARIANT_ENUM_CAST(godot::GazeTracker::GazeLifecycle);
+

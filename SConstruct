@@ -59,16 +59,17 @@ godot_cpp_dir = os.environ.get("GODOT_CPP_DIR", "godot-cpp")
 if not os.path.isdir(godot_cpp_dir) and os.path.isdir("thirdparty/godot-cpp"):
     godot_cpp_dir = "thirdparty/godot-cpp"
 
+godot_cpp_platform = "web" if env["platform"] == "javascript" else env["platform"]
+
 env.Append(CPPPATH=[
     godot_cpp_dir + "/include",
-    godot_cpp_dir + "/gen/include",
+    godot_cpp_dir + "/gen_" + godot_cpp_platform + "/gen/include",
     godot_cpp_dir + "/gdextension"
 ])
 
 # Setup platform-specific library paths
 env.Append(LIBPATH=[godot_cpp_dir + "/bin"])
 
-godot_cpp_platform = "web" if env["platform"] == "javascript" else env["platform"]
 lib_name = f"godot-cpp.{godot_cpp_platform}.{env['target']}"  # Default fallback
 bin_dir = godot_cpp_dir + "/bin"
 if os.path.isdir(bin_dir):

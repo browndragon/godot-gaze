@@ -6,8 +6,8 @@ struct PipelineConfig {
     double pitch_t_gain = 0.0;
     double yaw_t_gain = 0.0;
     
-    // Default nose_z set to a realistic average human depth (~4.5 cm)
-    double nose_z = -45.0; 
+    double nose_y = -3.5;
+    double nose_z = -13.0; 
     
     // Default IPD in millimeters
     double ipd_mm = 63.0;

@@ -176,7 +176,7 @@ GazeTransform3D ProjectionEngine::get_head_transform_in_camera_space(const GazeV
     GazeTransform3D T_cv_cam_to_ggaze_cam(r_x_180, GazeVector3(0, 0, 0));
 
     // 2. T_cv_face_to_cv_cam = Transform(R_cv, t_cv)
-    GazeBasis3D R_cv = GazeBasis3D::from_euler_zyx(opencv_rotation_deg.x, opencv_rotation_deg.y, -opencv_rotation_deg.z);
+    GazeBasis3D R_cv = rodrigues_to_basis(opencv_rotation_deg);
     GazeTransform3D T_cv_face_to_cv_cam(R_cv, opencv_translation);
 
     // 3. T_ggaze_face_to_cv_face = Transform(R_Z(180), zero)

@@ -134,11 +134,11 @@ int main() {
     double best_mouth_y = 0;
 
     // Grid search over potential values
-    // Search nose_z from -10.0 down to -65.0, nose_y from -25.0 to 0.0
-    // search mouth_z from -20.0 to 0.0, mouth_y from 20.0 to 40.0
-    for (double nose_z = -10.0; nose_z >= -65.0; nose_z -= 1.0) {
-        for (double nose_y = 0.0; nose_y >= -25.0; nose_y -= 1.0) {
-            for (double mouth_z = 0.0; mouth_z >= -20.0; mouth_z -= 2.0) {
+    // Search nose_z from 10.0 to 80.0, nose_y from -15.0 to 15.0
+    // search mouth_z from -20.0 to 20.0, mouth_y from 20.0 to 40.0
+    for (double nose_z = 10.0; nose_z <= 80.0; nose_z += 2.0) {
+        for (double nose_y = -15.0; nose_y <= 15.0; nose_y += 1.0) {
+            for (double mouth_z = -20.0; mouth_z <= 20.0; mouth_z += 2.0) {
                 for (double mouth_y = 20.0; mouth_y <= 40.0; mouth_y += 2.0) {
                     
                     std::vector<cv::Point3f> model_points = {

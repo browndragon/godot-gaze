@@ -86,7 +86,7 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     std::vector<cv::Point3f> model_points = {
         cv::Point3f(-30.0f, -28.676f, 0.0f), // Right eye
         cv::Point3f(30.0f, -28.676f, 0.0f),  // Left eye
-        cv::Point3f(0.0f, -5.000f, static_cast<float>(config.nose_z)),   // Nose tip
+        cv::Point3f(0.0f, static_cast<float>(config.nose_y), static_cast<float>(config.nose_z)),   // Nose tip
         cv::Point3f(-18.462f, 31.712f, -4.550f), // Right mouth corner
         cv::Point3f(18.462f, 31.712f, -4.550f)  // Left mouth corner
     };
@@ -110,10 +110,11 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     );
     cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, CV_64F);
 
-    cv::Mat rvec, tvec;
+    cv::Mat rvec = (cv::Mat_<double>(3, 1) << 0.0, 0.0, 0.0);
+    cv::Mat tvec = (cv::Mat_<double>(3, 1) << 0.0, 0.0, 700.0);
     bool pnp_success = false;
     try {
-        pnp_success = cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, false, cv::SOLVEPNP_SQPNP);
+        pnp_success = cv::solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, true, cv::SOLVEPNP_ITERATIVE);
     } catch (const std::exception& e) {
         log_error("YuNetPipelinePnPException", "what", e.what());
     }
@@ -123,30 +124,8 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         cv::Mat R;
         cv::Rodrigues(rvec, R);
 
-        // Extract Euler angles (Yaw, Pitch, Roll) in degrees from R
-        double sy = std::sqrt(R.at<double>(0, 0) * R.at<double>(0, 0) + R.at<double>(1, 0) * R.at<double>(1, 0));
-        bool singular = sy < 1e-6;
-
-        double pitch_deg = 0.0;
-        double yaw_deg = 0.0;
-        double roll_deg = 0.0;
-
-        if (!singular) {
-            pitch_deg = std::atan2(R.at<double>(2, 1), R.at<double>(2, 2)) * (180.0 / 3.141592653589793);
-            yaw_deg   = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
-            roll_deg  = std::atan2(R.at<double>(1, 0), R.at<double>(0, 0)) * (180.0 / 3.141592653589793);
-        } else {
-            pitch_deg = std::atan2(-R.at<double>(1, 2), R.at<double>(1, 1)) * (180.0 / 3.141592653589793);
-            yaw_deg   = std::atan2(-R.at<double>(2, 0), sy) * (180.0 / 3.141592653589793);
-            roll_deg  = 0.0;
-        }
-
-        // Correct pitch/yaw for coplanar landmark PnP translation compensation
-        pitch_deg += config.pitch_t_gain * tvec.at<double>(1);
-        yaw_deg += config.yaw_t_gain * tvec.at<double>(0);
-
-        // Output head pose rotation (Pitch, Yaw, Roll) in degrees
-        out_crops.head_pose_rotation = GazeVector3(pitch_deg, yaw_deg, roll_deg);
+        // Output head pose rotation as the raw Rodrigues rotation vector
+        out_crops.head_pose_rotation = GazeVector3(rvec.at<double>(0), rvec.at<double>(1), rvec.at<double>(2));
         out_crops.head_pose_translation = GazeVector3(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
         
         cv::Mat left_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << 30.0, -20.0, 0.0) + tvec;

@@ -12,6 +12,7 @@
 
 #ifdef WEB_ENABLED
 #include "web_gaze_model.hpp"
+#include "web_binding_state.hpp"
 #include <godot_cpp/classes/java_script_bridge.hpp>
 #include <godot_cpp/classes/java_script_object.hpp>
 #else
@@ -34,6 +35,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("calibrate_2d", "target_pixel"), &GazeTracker::calibrate_2d);
     ClassDB::bind_method(D_METHOD("clear_calibration"), &GazeTracker::clear_calibration);
     ClassDB::bind_method(D_METHOD("feed_gaze_web", "origin", "direction"), &GazeTracker::feed_gaze_web);
+    ClassDB::bind_method(D_METHOD("feed_gaze_web_raw", "ox", "oy", "oz", "dx", "dy", "dz"), &GazeTracker::feed_gaze_web_raw);
     ClassDB::bind_method(D_METHOD("feed_expression_web", "name", "value"), &GazeTracker::feed_expression_web);
 
     ClassDB::bind_method(D_METHOD("get_latest_projected_gaze"), &GazeTracker::get_latest_projected_gaze);
@@ -280,17 +282,11 @@ void GazeTracker::trigger_permission_request() {
 #ifdef WEB_ENABLED
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
     if (js) {
-        if (opaque) {
-            Ref<JavaScriptObject> *prev_callback = static_cast<Ref<JavaScriptObject>*>(opaque);
-            delete prev_callback;
-            opaque = nullptr;
+        if (!opaque) {
+            opaque = new WebBindingState();
         }
-
-        Ref<JavaScriptObject> *callback_ref = new Ref<JavaScriptObject>(js->create_callback(Callable(this, "on_permission_result")));
-        opaque = callback_ref;
-
-        Ref<JavaScriptObject> window = js->get_interface("window");
-        window->set("gaze_permission_callback", *callback_ref);
+        WebBindingState* state = static_cast<WebBindingState*>(opaque);
+        state->setup_callbacks(this);
 
         js->eval(
             "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {"
@@ -326,9 +322,8 @@ void GazeTracker::trigger_permission_request() {
 void GazeTracker::on_permission_result(bool granted) {
 #ifdef WEB_ENABLED
     if (opaque) {
-        Ref<JavaScriptObject> *callback_ref = static_cast<Ref<JavaScriptObject>*>(opaque);
-        delete callback_ref;
-        opaque = nullptr;
+        WebBindingState* state = static_cast<WebBindingState*>(opaque);
+        state->permission_callback = Ref<JavaScriptObject>();
     }
 #endif
 
@@ -363,6 +358,12 @@ void GazeTracker::on_permission_result(bool granted) {
 
 bool GazeTracker::complete_initialization() {
 #ifdef WEB_ENABLED
+    String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
+    String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
+
+    String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.onnx" : gaze_onnx_path;
+    String global_gaze_onnx_path = copy_model_to_user_dir(resolved_gaze);
+
     if (!model) {
         model = new Gaze::WebGazeModel();
         model->initialize();
@@ -370,6 +371,11 @@ bool GazeTracker::complete_initialization() {
     tracker_initialized = true;
     set_lifecycle_state(LIFECYCLE_RUNNING);
     Gaze::log_info("GazeTrackerInitWebSuccess");
+
+    if (opaque) {
+        WebBindingState* state = static_cast<WebBindingState*>(opaque);
+        state->start_tracking_loop(this, global_yunet_path, global_gaze_onnx_path);
+    }
     return true;
 #else
     if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
@@ -444,14 +450,21 @@ String GazeTracker::copy_model_to_user_dir(const String &res_path) {
 void GazeTracker::copy_individual_file(const String &src, const String &dest) {
     if (!FileAccess::file_exists(dest)) {
         Ref<FileAccess> file_in = FileAccess::open(src, FileAccess::READ);
+        Error err_in = FileAccess::get_open_error();
         Ref<FileAccess> file_out = FileAccess::open(dest, FileAccess::WRITE);
+        Error err_out = FileAccess::get_open_error();
         if (file_in.is_valid() && file_out.is_valid()) {
             uint64_t len = file_in->get_length();
             PackedByteArray buffer = file_in->get_buffer(len);
             file_out->store_buffer(buffer);
             Gaze::log_info("GazeTrackerCopiedModel", "src", src.utf8().get_data(), "dest", dest.utf8().get_data());
         } else {
-            Gaze::log_error("GazeTrackerCopyModelFailed", "src", src.utf8().get_data(), "dest", dest.utf8().get_data());
+            Gaze::log_error("GazeTrackerCopyModelFailed", 
+                            "src", src.utf8().get_data(), 
+                            "dest", dest.utf8().get_data(),
+                            "src_exists", FileAccess::file_exists(src) ? 1 : 0,
+                            "err_in", (int)err_in,
+                            "err_out", (int)err_out);
         }
     }
 }
@@ -554,8 +567,9 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
 
 #ifdef WEB_ENABLED
     if (opaque) {
-        Ref<JavaScriptObject> *callback_ref = static_cast<Ref<JavaScriptObject>*>(opaque);
-        delete callback_ref;
+        WebBindingState* state = static_cast<WebBindingState*>(opaque);
+        state->cleanup();
+        delete state;
         opaque = nullptr;
     }
 #endif
@@ -628,6 +642,10 @@ void GazeTracker::feed_gaze_web(Vector3 origin, Vector3 direction) {
         static_cast<Gaze::WebGazeModel*>(model)->feed_raw_gaze(latest_gaze_dir);
     }
 #endif
+}
+
+void GazeTracker::feed_gaze_web_raw(double ox, double oy, double oz, double dx, double dy, double dz) {
+    feed_gaze_web(Vector3(ox, oy, oz), Vector3(dx, dy, dz));
 }
 
 void GazeTracker::feed_expression_web(String name, double value) {
@@ -903,7 +921,15 @@ Vector3 GazeTracker::get_gaze_direction(bool apply_calibration) const {
 }
 
 Vector3 GazeTracker::get_raw_head_rotation() const {
-    return Vector3(latest_crops.head_pose_rotation.x, latest_crops.head_pose_rotation.y, latest_crops.head_pose_rotation.z);
+    if (!is_face_tracked) {
+        return Vector3(0.0, 0.0, 0.0);
+    }
+    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
+        latest_crops.head_pose_translation,
+        latest_crops.head_pose_rotation
+    );
+    Gaze::GazeVector3 euler = gt.basis.get_euler_deg();
+    return Vector3(euler.x, euler.y, euler.z);
 }
 
 Vector3 GazeTracker::get_raw_head_translation() const {

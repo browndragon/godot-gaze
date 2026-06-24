@@ -130,6 +130,22 @@ struct GazeBasis3D {
         }
         return GazeVector3(pitch, yaw, roll);
     }
+
+    GazeVector3 get_euler_gaze_model_deg() const {
+        double sy = std::sqrt(x.x * x.x + x.y * x.y);
+        bool singular = sy < 1e-6;
+        double pitch = 0.0, yaw = 0.0, roll = 0.0;
+        if (!singular) {
+            pitch = std::atan2(y.z, z.z) * RAD_TO_DEG;
+            yaw   = std::atan2(-x.z, sy) * RAD_TO_DEG;
+            roll  = std::atan2(x.y, x.x) * RAD_TO_DEG;
+        } else {
+            pitch = std::atan2(-y.y, y.x) * RAD_TO_DEG;
+            yaw   = std::atan2(-x.z, sy) * RAD_TO_DEG;
+            roll  = 0.0;
+        }
+        return GazeVector3(pitch, yaw, roll);
+    }
 };
 
 struct GazeTransform3D {
@@ -146,6 +162,27 @@ struct GazeTransform3D {
         );
     }
 };
+
+inline GazeBasis3D rodrigues_to_basis(const GazeVector3& r) {
+    double theta = r.length();
+    if (theta < 1e-6) {
+        return GazeBasis3D();
+    }
+    double ux = r.x / theta;
+    double uy = r.y / theta;
+    double uz = r.z / theta;
+
+    double s = std::sin(theta);
+    double c = std::cos(theta);
+    double oc = 1.0 - c;
+
+    return GazeBasis3D(
+        GazeVector3(c + oc * ux * ux,      oc * ux * uy + s * uz,  oc * ux * uz - s * uy),
+        GazeVector3(oc * ux * uy - s * uz,  c + oc * uy * uy,      oc * uy * uz + s * ux),
+        GazeVector3(oc * ux * uz + s * uy,  oc * uy * uz - s * ux,  c + oc * uz * uz)
+    );
+}
+
 
 inline GazeVector3 get_head_forward_in_camera_space(const GazeVector3& rotation_deg) {
     double pitch_rad = rotation_deg.x * DEG_TO_RAD;

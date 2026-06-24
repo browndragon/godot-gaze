@@ -54,13 +54,14 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
     cv::Mat left_blob = cv::dnn::blobFromImage(left_eye_mat, 1.0, cv::Size(60, 60), cv::Scalar(0), false);
     cv::Mat right_blob = cv::dnn::blobFromImage(right_eye_mat, 1.0, cv::Size(60, 60), cv::Scalar(0), false);
 
-    // 3. Format head pose features: Yaw, Pitch, Roll in degrees
-    // We negate yaw and roll to align SolvePnP coordinates with the gaze model's
-    // conventions (positive-left for yaw, positive-down for pitch, positive-clockwise for roll).
+    // Reconstruct head rotation and extract Euler angles (Yaw, Pitch, Roll)
+    GazeBasis3D R_basis = rodrigues_to_basis(crops.head_pose_rotation);
+    GazeVector3 euler = R_basis.get_euler_gaze_model_deg();
+
     float head_pose_data[3] = {
-        static_cast<float>(-crops.head_pose_rotation.y), // Yaw (Model expects positive yaw turning left)
-        static_cast<float>(crops.head_pose_rotation.x),  // Pitch (Model expects positive pitch looking down)
-        static_cast<float>(-crops.head_pose_rotation.z)  // Roll (Model expects positive roll tilting right)
+        static_cast<float>(-euler.y), // Yaw (Model expects positive yaw turning left)
+        static_cast<float>(euler.x),  // Pitch (Model expects positive pitch looking down)
+        static_cast<float>(-euler.z)  // Roll (Model expects positive roll tilting right)
     };
     cv::Mat head_pose_blob(1, 3, CV_32F, head_pose_data);
  

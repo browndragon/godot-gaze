@@ -41,3 +41,5 @@ project/addons/godot-gaze/models/
 project/models/
 build/
 thirdparty/opencv/
+
+exports/

@@ -12,13 +12,17 @@ void WebBindingState::setup_callbacks(GazeTracker* tracker) {
     if (!js) return;
 
     permission_callback = js->create_callback(Callable(tracker, "on_permission_result"));
-    feed_callback = js->create_callback(Callable(tracker, "feed_gaze_web_raw"));
+    feed_callback = js->create_callback(Callable(tracker, "feed_gaze"));
     ready_callback = js->create_callback(Callable(tracker, "on_sidecar_ready"));
 
     Ref<JavaScriptObject> window = js->get_interface("window");
-    window->set("gaze_permission_callback", permission_callback);
-    window->set("gaze_feed_callback", feed_callback);
-    window->set("gaze_ready_callback", ready_callback);
+    js->eval("window.godotGaze = {};");
+    Ref<JavaScriptObject> godotGaze = window->get("godotGaze");
+    if (godotGaze.is_valid()) {
+        godotGaze->set("on_permission", permission_callback);
+        godotGaze->set("feed_gaze", feed_callback);
+        godotGaze->set("on_ready", ready_callback);
+    }
 }
 
 void WebBindingState::start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path) {
@@ -46,12 +50,7 @@ void WebBindingState::cleanup() {
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
     if (js) {
         js->eval("if (window.gazeTracker) { window.gazeTracker.stopTracking(); }");
-        Ref<JavaScriptObject> window = js->get_interface("window");
-        if (window.is_valid()) {
-            window->set("gaze_permission_callback", Variant());
-            window->set("gaze_feed_callback", Variant());
-            window->set("gaze_ready_callback", Variant());
-        }
+        js->eval("delete window.godotGaze;");
     }
     permission_callback.unref();
     feed_callback.unref();

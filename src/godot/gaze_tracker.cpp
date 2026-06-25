@@ -6,6 +6,7 @@
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/viewport.hpp>
 #include <godot_cpp/classes/os.hpp>
+#include <godot_cpp/classes/time.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/dir_access.hpp>
 #include <godot_cpp/variant/packed_string_array.hpp>
@@ -34,9 +35,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("calibrate_3d", "target_pixel"), &GazeTracker::calibrate_3d);
     ClassDB::bind_method(D_METHOD("calibrate_2d", "target_pixel"), &GazeTracker::calibrate_2d);
     ClassDB::bind_method(D_METHOD("clear_calibration"), &GazeTracker::clear_calibration);
-    ClassDB::bind_method(D_METHOD("feed_gaze_web", "origin", "direction"), &GazeTracker::feed_gaze_web);
-    ClassDB::bind_method(D_METHOD("feed_gaze_web_raw", "ox", "oy", "oz", "dx", "dy", "dz"), &GazeTracker::feed_gaze_web_raw);
-    ClassDB::bind_method(D_METHOD("feed_expression_web", "name", "value"), &GazeTracker::feed_expression_web);
+    ClassDB::bind_method(D_METHOD("feed_gaze", "face_detected", "origin", "direction"), &GazeTracker::feed_gaze);
     ClassDB::bind_method(D_METHOD("on_sidecar_ready", "args"), &GazeTracker::on_sidecar_ready);
 
     ClassDB::bind_method(D_METHOD("get_latest_projected_gaze"), &GazeTracker::get_latest_projected_gaze);
@@ -127,9 +126,9 @@ void GazeTracker::_bind_methods() {
     BIND_ENUM_CONSTANT(LIFECYCLE_RUNNING);
     BIND_ENUM_CONSTANT(LIFECYCLE_ERROR);
 
-    // Signals
     ADD_SIGNAL(MethodInfo("gaze_updated", PropertyInfo(Variant::VECTOR2, "screen_pixel")));
-    ADD_SIGNAL(MethodInfo("face_detected", PropertyInfo(Variant::BOOL, "detected")));
+    ADD_SIGNAL(MethodInfo("face_detection_changed", PropertyInfo(Variant::BOOL, "detected")));
+    ADD_SIGNAL(MethodInfo("face_frame_ready"));
     ADD_SIGNAL(MethodInfo("lifecycle_changed", PropertyInfo(Variant::INT, "state")));
 }
 
@@ -150,9 +149,18 @@ void GazeTracker::_ready() {
 void GazeTracker::_process(double delta) {
     if (!tracker_initialized) return;
 
+    // Global Watchdog: check if frame updates timed out (e.g. webcam stopped, face lost without active push)
+    if (is_face_tracked) {
+        uint64_t current_time = Time::get_singleton()->get_ticks_msec();
+        if (current_time - last_frame_time > 1000) {
+            is_face_tracked = false;
+            emit_signal("face_detection_changed", false);
+        }
+    }
+
 #ifdef WEB_ENABLED
     // Web Pipeline update
-    if (model) {
+    if (is_face_tracked && model) {
         Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(latest_gaze_dir);
         Gaze::GazeVector2 pixel;
         if (projection_engine.project_gaze(latest_gaze_origin, calib_dir, pixel)) {
@@ -182,11 +190,6 @@ void GazeTracker::_process(double delta) {
         if (camera->grab_frame(frame)) {
             Gaze::EyeCrops crops;
             if (pipeline->process_frame(frame, crops)) {
-                if (crops.face_detected != is_face_tracked) {
-                    is_face_tracked = crops.face_detected;
-                    emit_signal("face_detected", is_face_tracked);
-                }
-
                 if (crops.face_detected) {
                     latest_crops = crops;
                     Gaze::GazeVector3 raw_gaze_dir_cam;
@@ -195,37 +198,16 @@ void GazeTracker::_process(double delta) {
                         Gaze::GazeVector3 gaze_origin_cv = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5;
 
                         // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
-                        latest_gaze_origin = Gaze::GazeVector3(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
-                        latest_gaze_dir = Gaze::GazeVector3(raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
+                        Gaze::GazeVector3 origin_cam(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
+                        Gaze::GazeVector3 dir_cam(raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
 
-                        Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(latest_gaze_dir);
-                        Gaze::GazeVector2 pixel;
-                        if (projection_engine.project_gaze(latest_gaze_origin, calib_dir, pixel)) {
-                            Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
-                            double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
-                            double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
-                            Vector2 local_pos(local_x, local_y);
-                            Viewport* vp = get_viewport();
-                            if (vp) {
-                                local_pos = vp->get_final_transform().affine_inverse().xform(local_pos);
-                            }
-                            latest_projected_gaze_px = local_pos;
-
-                            double fx = filter_x->filter(local_pos.x);
-                            double fy = filter_y->filter(local_pos.y);
-                            latest_filtered_gaze_px = Vector2(fx, fy);
-
-                            emit_signal("gaze_updated", latest_filtered_gaze_px);
-                        } else {
-                            emit_signal("gaze_updated", Vector2(INFINITY, INFINITY));
-                        }
+                        feed_gaze(true, Vector3(origin_cam.x, origin_cam.y, origin_cam.z), Vector3(dir_cam.x, dir_cam.y, dir_cam.z));
                     }
+                } else {
+                    feed_gaze(false, Vector3(), Vector3());
                 }
             } else {
-                if (is_face_tracked) {
-                    is_face_tracked = false;
-                    emit_signal("face_detected", false);
-                }
+                feed_gaze(false, Vector3(), Vector3());
             }
         }
     }
@@ -295,16 +277,16 @@ void GazeTracker::trigger_permission_request() {
             "        .then(function(stream) {"
             "            console.log('[GazeTracker] Camera permission granted.');"
             "            stream.getTracks().forEach(function(track) { track.stop(); });"
-            "            if (window.gaze_permission_callback) {"
-            "                window.gaze_permission_callback(true);"
-            "                delete window.gaze_permission_callback;"
+            "            if (window.godotGaze && window.godotGaze.on_permission) {"
+            "                window.godotGaze.on_permission(true);"
+            "                delete window.godotGaze.on_permission;"
             "            }"
             "        })"
             "        .catch(function(err) {"
             "            console.warn('[GazeTracker] Camera permission denied:', err);"
-            "            if (window.gaze_permission_callback) {"
-            "                window.gaze_permission_callback(false);"
-            "                delete window.gaze_permission_callback;"
+            "            if (window.godotGaze && window.godotGaze.on_permission) {"
+            "                window.godotGaze.on_permission(false);"
+            "                delete window.godotGaze.on_permission;"
             "            }"
             "        });"
             "}"
@@ -647,9 +629,17 @@ void GazeTracker::clear_calibration() {
     Gaze::log_info("CalibrationCleared");
 }
 
-void GazeTracker::feed_gaze_web(Vector3 origin, Vector3 direction) {
-#ifdef WEB_ENABLED
-    if (tracker_initialized && model) {
+void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 direction) {
+    last_frame_time = Time::get_singleton()->get_ticks_msec();
+
+    bool state_changed = (face_detected != is_face_tracked);
+    is_face_tracked = face_detected;
+
+    if (state_changed) {
+        emit_signal("face_detection_changed", is_face_tracked);
+    }
+
+    if (face_detected) {
         latest_gaze_origin = Gaze::GazeVector3(origin.x, origin.y, origin.z);
         latest_gaze_dir = Gaze::GazeVector3(direction.x, direction.y, direction.z);
 
@@ -658,19 +648,15 @@ void GazeTracker::feed_gaze_web(Vector3 origin, Vector3 direction) {
         latest_crops.right_eye_center_cam = latest_gaze_origin;
         latest_crops.head_pose_translation = latest_gaze_origin;
         latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
-        is_face_tracked = true;
 
-        static_cast<Gaze::WebGazeModel*>(model)->feed_raw_gaze(latest_gaze_dir);
-    }
+        emit_signal("face_frame_ready");
+
+#ifdef WEB_ENABLED
+        if (model) {
+            static_cast<Gaze::WebGazeModel*>(model)->feed_raw_gaze(latest_gaze_dir);
+        }
 #endif
-}
-
-void GazeTracker::feed_gaze_web_raw(double ox, double oy, double oz, double dx, double dy, double dz) {
-    feed_gaze_web(Vector3(ox, oy, oz), Vector3(dx, dy, dz));
-}
-
-void GazeTracker::feed_expression_web(String name, double value) {
-    // Stub to accept web tracked blendshape weights (Smile, Frown, Mouth Open, etc.)
+    }
 }
 
 void GazeTracker::on_sidecar_ready(const Array& args) {
@@ -707,7 +693,9 @@ void GazeTracker::on_sidecar_ready(const Array& args) {
         String hex_yunet = yunet_bytes.hex_encode();
         String hex_gaze = gaze_bytes.hex_encode();
 
-        tracker_obj->call("setModels", hex_yunet, hex_gaze);
+        int fd_w = pipeline_config.is_valid() ? pipeline_config->get_config().face_detect_width : 160;
+        int fd_h = pipeline_config.is_valid() ? pipeline_config->get_config().face_detect_height : 128;
+        tracker_obj->call("setModels", hex_yunet, hex_gaze, fd_w, fd_h);
         UtilityFunctions::print("[GazeTracker] Successfully called setModels on JS sidecar.");
     } else {
         UtilityFunctions::printerr("[GazeTracker] on_sidecar_ready: First argument is not a valid JavaScriptObject.");

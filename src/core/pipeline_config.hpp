@@ -11,6 +11,10 @@ struct PipelineConfig {
     
     // Default IPD in millimeters
     double ipd_mm = 63.0;
+
+    // Resizing dimensions for face detection
+    int face_detect_width = 160;
+    int face_detect_height = 128;
 };
 
 } // namespace Gaze

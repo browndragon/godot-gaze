@@ -80,6 +80,7 @@ elif env["platform"] == "web":
     if env["threads"]:
         env.Append(CCFLAGS=["-sUSE_PTHREADS=1"])
         env.Append(LINKFLAGS=["-sUSE_PTHREADS=1"])
+        env.Append(CPPDEFINES=["WEB_THREADS_ENABLED"])
 else:  # Linux/Android/iOS
     env.Append(CCFLAGS=["-std=c++17", "-O2", "-fPIC"])
 
@@ -128,11 +129,11 @@ else:
     opencv_sdk = env["opencv_dir"]
     if not opencv_sdk:
         # Check local thirdparty folder
-        local_opencv = "thirdparty/opencv/" + env["platform"]
+        local_opencv = "thirdparty/opencv-brew/" + env["platform"]
         if os.path.isdir(local_opencv):
             opencv_sdk = local_opencv
-        elif env["platform"] == "macos" and os.path.isdir("thirdparty/opencv/macos"):
-            opencv_sdk = "thirdparty/opencv/macos"
+        elif env["platform"] == "macos" and os.path.isdir("thirdparty/opencv-brew/macos"):
+            opencv_sdk = "thirdparty/opencv-brew/macos"
 
     if env["platform"] == "android":
         if opencv_sdk and os.path.isdir(opencv_sdk):
@@ -239,3 +240,31 @@ else:
     library = env.SharedLibrary(target=target_lib, source=sources)
 
 env.Default(library)
+
+# Copy the corresponding OpenCV.js binary for the web target build matrix
+def copy_opencv_js(env):
+    if env["platform"] != "web":
+        return
+    
+    threads_suffix = "threads" if env["threads"] else "nothreads"
+    src_path = f"build/opencv/web_{threads_suffix}/bin/opencv.js"
+    dest_path = "project/addons/godot-gaze/bin/opencv.js"
+    
+    if not os.path.exists(src_path):
+        print("*" * 80)
+        print(f"WARNING: Custom OpenCV.js binary not found at: {src_path}")
+        print("Please build it first by running:")
+        if env["threads"]:
+            print("  bash scripts/build_opencv_js.sh --threads")
+        else:
+            print("  bash scripts/build_opencv_js.sh")
+        print("*" * 80)
+        return
+        
+    print(f"[SCons] Copying custom OpenCV.js ({threads_suffix}) to {dest_path}...")
+    import shutil
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    shutil.copy2(src_path, dest_path)
+
+copy_opencv_js(env)
+

@@ -5,7 +5,7 @@ set -euo pipefail
 
 OPENCV_VERSION="4.10.0" # Target stable version
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-THIRDPARTY_DIR="${BASE_DIR}/thirdparty/opencv"
+THIRDPARTY_DIR="${BASE_DIR}/thirdparty/opencv-brew"
 
 echo "=== Gaze Tracker OpenCV Dependency Downloader ==="
 echo "Targeting OpenCV version: ${OPENCV_VERSION}"
@@ -22,7 +22,7 @@ case "${OS_NAME}" in
             OPENCV_BREW_DIR="${BREW_PREFIX}/opt/opencv"
             if [ -d "${OPENCV_BREW_DIR}" ]; then
                 echo "Found Homebrew OpenCV at: ${OPENCV_BREW_DIR}"
-                echo "Creating local symlink under thirdparty/opencv/macos..."
+                echo "Creating local symlink under thirdparty/opencv-brew/macos..."
                 rm -f "${THIRDPARTY_DIR}/macos"
                 ln -s "${OPENCV_BREW_DIR}" "${THIRDPARTY_DIR}/macos"
                 echo "macOS OpenCV setup completed."
@@ -61,7 +61,7 @@ setup_android() {
     # Cleanup
     rm -f "${dest_zip}"
     rm -rf "${extract_dir}"
-    echo "Android SDK setup completed at thirdparty/opencv/android."
+    echo "Android SDK setup completed at thirdparty/opencv-brew/android."
 }
 
 # Function to download and extract iOS Framework
@@ -81,7 +81,7 @@ setup_ios() {
     
     # Cleanup
     rm -f "${dest_zip}"
-    echo "iOS SDK setup completed at thirdparty/opencv/ios."
+    echo "iOS SDK setup completed at thirdparty/opencv-brew/ios."
 }
 
 # Function to download and extract Windows SDK
@@ -102,7 +102,7 @@ setup_windows() {
     # Cleanup
     rm -f "${dest_exe}"
     rm -rf "${extract_dir}"
-    echo "Windows SDK setup completed at thirdparty/opencv/windows."
+    echo "Windows SDK setup completed at thirdparty/opencv-brew/windows."
 }
 
 # Check command line arguments for mobile/desktop SDK setup

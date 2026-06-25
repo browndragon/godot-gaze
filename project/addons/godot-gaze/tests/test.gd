@@ -15,7 +15,7 @@ var coords_label: Label
 func _ready():
 	# Connect to GDExtension signals
 	tracker.gaze_updated.connect(_on_gaze_updated)
-	tracker.face_detected.connect(_on_face_detected)
+	tracker.face_detection_changed.connect(_on_face_detected)
 	tracker.lifecycle_changed.connect(_on_lifecycle_changed)
 	
 	# Create a coordinate feedback label near screen center

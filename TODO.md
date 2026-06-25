@@ -24,8 +24,16 @@ scons platform=javascript target=template_debug
 
 ---
 
-## 2. Web-based Automated Testing
-Since the web build relies on browser-specific Web APIs (`navigator.mediaDevices.getUserMedia`) and Javascript callbacks via `JavaScriptBridge`, automated integration testing is challenging on local native test suites.
+## 2. Web-based Automated Testing [COMPLETED]
+We have successfully established a zero-dependency headless Chrome browser integration test runner (`tools/run_gaze_offline_tests.js` and `tests/test_gaze_offline.html`) utilizing a local static node server and POST reporting. This runner verifies:
+- Loading of the custom compiled `opencv.js` binary.
+- Writing models to the VFS and initializing `cv.FaceDetectorYN`.
+- Correct face detection coordinates on `self_center.jpg`.
+- solvePnP convergence, eye cropping, and Gaze ADAS network forward pass execution.
 
-- **Objective**: Establish headless browser automation tests (e.g., using Puppeteer, Playwright, or Selenium) to verify camera request permission prompts and WebGaze pipeline stubs.
-- **Challenges**: Mocking media devices (camera feeds) inside headless Chromium, and synchronizing Godot/WASM lifecycle states with browser test runner assertions.
+---
+
+## 3. Unify Native Desktop OpenCV Build with OpenCV Submodule
+- **Objective**: Eventually replace the Homebrew-linked `thirdparty/opencv-brew` dependency with native C++ libraries compiled directly from our local `thirdparty/opencv` git submodule (matching how we build OpenCV.js for web).
+- **Benefits**: This will ensure 100% dependency self-containment, caching parity across platforms, and prevent developers from needing to install system-wide package managers (Homebrew, Apt, Chocolatey) to build the extension.
+

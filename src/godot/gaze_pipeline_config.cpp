@@ -19,6 +19,14 @@ void GazePipelineConfig::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_ipd_mm", "val"), &GazePipelineConfig::set_ipd_mm);
     ClassDB::bind_method(D_METHOD("get_ipd_mm"), &GazePipelineConfig::get_ipd_mm);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ipd_mm"), "set_ipd_mm", "get_ipd_mm");
+
+    ClassDB::bind_method(D_METHOD("set_face_detect_width", "val"), &GazePipelineConfig::set_face_detect_width);
+    ClassDB::bind_method(D_METHOD("get_face_detect_width"), &GazePipelineConfig::get_face_detect_width);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "face_detect_width"), "set_face_detect_width", "get_face_detect_width");
+
+    ClassDB::bind_method(D_METHOD("set_face_detect_height", "val"), &GazePipelineConfig::set_face_detect_height);
+    ClassDB::bind_method(D_METHOD("get_face_detect_height"), &GazePipelineConfig::get_face_detect_height);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "face_detect_height"), "set_face_detect_height", "get_face_detect_height");
 }
 
 void GazePipelineConfig::set_pitch_t_gain(double val) { config.pitch_t_gain = val; }
@@ -32,5 +40,11 @@ double GazePipelineConfig::get_nose_z() const { return config.nose_z; }
 
 void GazePipelineConfig::set_ipd_mm(double val) { config.ipd_mm = val; }
 double GazePipelineConfig::get_ipd_mm() const { return config.ipd_mm; }
+
+void GazePipelineConfig::set_face_detect_width(int val) { config.face_detect_width = val; }
+int GazePipelineConfig::get_face_detect_width() const { return config.face_detect_width; }
+
+void GazePipelineConfig::set_face_detect_height(int val) { config.face_detect_height = val; }
+int GazePipelineConfig::get_face_detect_height() const { return config.face_detect_height; }
 
 } // namespace godot

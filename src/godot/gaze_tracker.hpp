@@ -73,6 +73,7 @@ private:
     bool autostart = false;
     void set_lifecycle_state(GazeLifecycle p_state);
     bool is_face_tracked = false;
+    uint64_t last_frame_time = 0;
     Gaze::GazeVector3 latest_gaze_origin = Gaze::GazeVector3(0.0, 0.0, 500.0);
     Gaze::GazeVector3 latest_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
     Gaze::EyeCrops latest_crops;
@@ -110,10 +111,8 @@ public:
     void calibrate_2d(Vector2 target_pixel);
     void clear_calibration();
 
-    // Web/WASM sidecar feed APIs
-    void feed_gaze_web(Vector3 origin, Vector3 direction);
-    void feed_gaze_web_raw(double ox, double oy, double oz, double dx, double dy, double dz);
-    void feed_expression_web(String name, double value);
+    // Unified gaze feed API (Web/WASM sidecar & custom injectors)
+    void feed_gaze(bool face_detected, Vector3 origin, Vector3 direction);
     void on_sidecar_ready(const Array& args);
 
     // Getters / Setters for properties

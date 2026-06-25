@@ -40,6 +40,9 @@ project/addons/godot-gaze/bin/
 project/addons/godot-gaze/models/
 project/models/
 build/
-thirdparty/opencv/
+thirdparty/opencv-brew/
+thirdparty/opencv/build/
+thirdparty/opencv/build_wasm/
+thirdparty/opencv/build_js/
 
 exports/

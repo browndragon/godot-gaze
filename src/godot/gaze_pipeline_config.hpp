@@ -26,6 +26,12 @@ public:
     void set_ipd_mm(double val);
     double get_ipd_mm() const;
 
+    void set_face_detect_width(int val);
+    int get_face_detect_width() const;
+
+    void set_face_detect_height(int val);
+    int get_face_detect_height() const;
+
     Gaze::PipelineConfig get_config() const { return config; }
 };
 

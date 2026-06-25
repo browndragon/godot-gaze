@@ -1,5 +1,6 @@
 // gaze_sidecar.js
 // Standalone JavaScript code for the Godot Gaze sidecar tracking loop.
+// Design B: Uses native cv.FaceDetectorYN from custom compiled opencv.js.
 
 (function() {
     if (window.gazeTracker) return;
@@ -17,9 +18,15 @@
         yunetBytes: null,
         gazeBytes: null,
 
-        setModels: function(hexYunet, hexGaze) {
-            console.log('[GazeTracker] Received hex model bytes from Godot.');
-            
+        // Configurations sent dynamically from Godot
+        faceDetectWidth: 160,
+        faceDetectHeight: 128,
+
+        setModels: function(hexYunet, hexGaze, fdWidth, fdHeight) {
+            console.log('[GazeTracker] Received hex model bytes from Godot. Configured detection size: ' + fdWidth + 'x' + fdHeight);
+            if (fdWidth) this.faceDetectWidth = fdWidth;
+            if (fdHeight) this.faceDetectHeight = fdHeight;
+
             function hexToUint8Array(hexString) {
                 if (!hexString) return new Uint8Array(0);
                 var len = hexString.length;
@@ -97,17 +104,24 @@
             this.fetchAndInject('opencv.js', 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js', function() {
                 console.log('[GazeTracker] OpenCV.js loaded. Waiting for Runtime...');
                 var checkInitialized = setInterval(function() {
-                    if (typeof cv !== 'undefined' && cv.RuntimeError === undefined) {
+                    if (typeof cv !== 'undefined') {
                         clearInterval(checkInitialized);
-                        console.log('[GazeTracker] OpenCV.js Runtime initialized. Setting up networks...');
-                        
-                        if (window.gaze_ready_callback) {
-                            console.log('[GazeTracker] Requesting model bytes from Godot...');
-                            window.gaze_ready_callback(self);
+                        if (typeof cv.then === 'function') {
+                            cv.then(function(instance) {
+                                window.cv = instance;
+                                proceed();
+                            });
                         } else {
-                            console.warn('[GazeTracker] gaze_ready_callback not found on window object.');
+                            proceed();
                         }
+                    }
 
+                    function proceed() {
+                        console.log('[GazeTracker] OpenCV.js Runtime initialized. Setting up networks...');
+                        if (window.godotGaze && window.godotGaze.on_ready) {
+                            console.log('[GazeTracker] Requesting model bytes from Godot...');
+                            window.godotGaze.on_ready(self);
+                        }
                         self.setupPipeline(yunetPath, gazeOnnxPath);
                     }
                 }, 100);
@@ -153,9 +167,11 @@
             console.log('[GazeTracker] Cleaned up temporary model byte arrays.');
 
             try {
-                this.detector = cv.FaceDetectorYN ? cv.FaceDetectorYN.create(cvYunetPath, '', new cv.Size(320, 240), 0.6, 0.3, 5000) : cv.readNet(cvYunetPath);
+                // Design B: Use cv.FaceDetectorYN exclusively with the dynamically configured faceDetectWidth and faceDetectHeight
+                var detectSize = { width: this.faceDetectWidth, height: this.faceDetectHeight };
+                this.detector = new cv.FaceDetectorYN(cvYunetPath, '', detectSize, 0.6, 0.3, 5000);
                 this.gazeNet = cv.readNet(cvGazeOnnxPath);
-                console.log('[GazeTracker] OpenCV networks loaded successfully.');
+                console.log('[GazeTracker] OpenCV FaceDetectorYN and GazeNet loaded successfully at resolution: ' + this.faceDetectWidth + 'x' + this.faceDetectHeight);
             } catch (err) {
                 var msg = err;
                 if (typeof err === 'number' && typeof cv !== 'undefined' && cv.exceptionFromPtr) {
@@ -190,8 +206,13 @@
                 self.grayMat = new cv.Mat();
                 self.facesMat = new cv.Mat();
 
+                // Allocate reusable downscaled Mat for face detection
+                var detectMat = new cv.Mat();
+                var detectSize = { width: self.faceDetectWidth, height: self.faceDetectHeight };
+
                 function trackFrame() {
                     if (!self.active) {
+                        detectMat.delete();
                         self.cleanupPipeline();
                         return;
                     }
@@ -213,91 +234,26 @@
                     var detected = false;
                     var landmarks = [];
 
-                    // 1. Face detection step try-catch
+                    // 1. Face detection step
                     try {
-                        if (cv.FaceDetectorYN && self.detector.detect) {
-                            var sz = self.bgrMat.size();
-                            self.detector.setInputSize(sz);
-                            self.detector.detect(self.bgrMat, self.facesMat);
-                            if (self.facesMat.rows > 0) {
-                                detected = true;
-                                for (var i = 0; i < 5; i++) {
-                                    landmarks.push({ x: self.facesMat.data32F[4 + 2 * i], y: self.facesMat.data32F[5 + 2 * i] });
-                                }
+                        // Resize input image to the configured detection resolution (e.g. 160x128)
+                        cv.resize(self.bgrMat, detectMat, detectSize, 0, 0, cv.INTER_LINEAR);
+                        self.detector.setInputSize(detectSize);
+                        self.detector.detect(detectMat, self.facesMat);
+                        
+                        if (self.facesMat.rows > 0) {
+                            detected = true;
+                            // Scale landmarks back to the original 320x240 video space
+                            var scaleX = self.video.videoWidth / self.faceDetectWidth;
+                            var scaleY = self.video.videoHeight / self.faceDetectHeight;
+                            
+                            // YuNet landmarks layout: right eye (4,5), left eye (6,7), nose (8,9), right mouth (10,11), left mouth (12,13)
+                            for (var i = 0; i < 5; i++) {
+                                landmarks.push({ 
+                                    x: self.facesMat.data32F[4 + 2 * i] * scaleX, 
+                                    y: self.facesMat.data32F[5 + 2 * i] * scaleY 
+                                });
                             }
-                        } else {
-                            var size640 = new cv.Size(640, 640);
-                            var scalarZeros = new cv.Scalar(0, 0, 0, 0);
-                            var blob = cv.blobFromImage(self.bgrMat, 1.0, size640, scalarZeros, false, false);
-                            self.detector.setInput(blob);
-
-                            var names = ["cls_8", "cls_16", "cls_32", "obj_8", "obj_16", "obj_32", "bbox_8", "bbox_16", "bbox_32", "kps_8", "kps_16", "kps_32"];
-                            var outBlobs = [];
-                            for (var j = 0; j < names.length; j++) {
-                                outBlobs.push(self.detector.forward(names[j]));
-                            }
-
-                            var strides = [8, 16, 32];
-                            var padW = 640;
-                            var padH = 640;
-                            var maxScore = -1;
-                            var bestStride = 0;
-                            var bestR = 0;
-                            var bestC = 0;
-                            var bestIdx = 0;
-                            var bestI = 0;
-
-                            for (var i = 0; i < strides.length; i++) {
-                                var cols = Math.floor(padW / strides[i]);
-                                var rows = Math.floor(padH / strides[i]);
-
-                                var cls = outBlobs[i];
-                                var obj = outBlobs[i + strides.length * 1];
-
-                                var cls_v = cls.data32F;
-                                var obj_v = obj.data32F;
-
-                                for (var r = 0; r < rows; r++) {
-                                    for (var c = 0; c < cols; c++) {
-                                        var idx = r * cols + c;
-                                        var cls_score = Math.min(Math.max(cls_v[idx], 0.0), 1.0);
-                                        var obj_score = Math.min(Math.max(obj_v[idx], 0.0), 1.0);
-                                        var score = Math.sqrt(cls_score * obj_score);
-
-                                        if (score > maxScore) {
-                                            maxScore = score;
-                                            bestStride = strides[i];
-                                            bestR = r;
-                                            bestC = c;
-                                            bestIdx = idx;
-                                            bestI = i;
-                                        }
-                                    }
-                                }
-                            }
-
-                            if (maxScore >= 0.6) {
-                                detected = true;
-                                var bbox = outBlobs[bestI + strides.length * 2];
-                                var kps = outBlobs[bestI + strides.length * 3];
-
-                                var bbox_v = bbox.data32F;
-                                var kps_v = kps.data32F;
-
-                                var scaleX = 320.0 / 640.0;
-                                var scaleY = 240.0 / 640.0;
-
-                                for (var n = 0; n < 5; n++) {
-                                    var kpx = (kps_v[bestIdx * 10 + 2 * n] + bestC) * bestStride;
-                                    var kpy = (kps_v[bestIdx * 10 + 2 * n + 1] + bestR) * bestStride;
-                                    landmarks.push({ x: kpx * scaleX, y: kpy * scaleY });
-                                }
-                            }
-
-                            for (var j = 0; j < outBlobs.length; j++) {
-                                outBlobs[j].delete();
-                            }
-                            blob.delete();
                         }
                     } catch (detErr) {
                         var msg = detErr;
@@ -309,7 +265,7 @@
                         console.error('[GazeTracker] Face detection failed:', msg);
                     }
 
-                    // 2. Gaze estimation step try-catch
+                    // 2. Gaze estimation step
                     if (detected && landmarks.length >= 5) {
                         try {
                             var model_points = cv.matFromArray(5, 3, cv.CV_32F, [
@@ -362,16 +318,17 @@
 
                                 function cropEye(isLeft) {
                                     var eye_center = isLeft ? landmarks[1] : landmarks[0];
-                                    var pt = new cv.Point(eye_center.x, eye_center.y);
+                                    var pt = { x: eye_center.x, y: eye_center.y };
                                     var roll_dx = landmarks[1].x - landmarks[0].x;
                                     var roll_dy = landmarks[1].y - landmarks[0].y;
                                     var angle = Math.atan2(roll_dy, roll_dx) * (180.0 / Math.PI);
                                     var scale = 1.0;
-                                    var target_size = new cv.Size(60, 60);
+                                    var target_size = { width: 60, height: 60 };
                                     var M = cv.getRotationMatrix2D(pt, angle, scale);
                                     M.data64F[2] += (target_size.width / 2.0) - eye_center.x;
                                     M.data64F[5] += (target_size.height / 2.0) - eye_center.y;
                                     var warped = new cv.Mat();
+                                    // Note: we crop the eye from the original high-resolution grayMat (320x240)
                                     cv.warpAffine(self.grayMat, warped, M, target_size, cv.INTER_LINEAR, cv.BORDER_REPLICATE);
                                     var warped_bgr = new cv.Mat();
                                     cv.cvtColor(warped, warped_bgr, cv.COLOR_GRAY2BGR);
@@ -382,7 +339,7 @@
 
                                 var left_eye_mat = cropEye(true);
                                 var right_eye_mat = cropEye(false);
-                                var size60 = new cv.Size(60, 60);
+                                var size60 = { width: 60, height: 60 };
                                 var scalarZeros60 = new cv.Scalar(0, 0, 0, 0);
                                 var left_blob = cv.blobFromImage(left_eye_mat, 1.0, size60, scalarZeros60, false, false);
                                 var right_blob = cv.blobFromImage(right_eye_mat, 1.0, size60, scalarZeros60, false, false);
@@ -425,8 +382,8 @@
                                     var oy = (ley + rey) / 2.0;
                                     var oz = (lez + rez) / 2.0;
 
-                                    if (window.gaze_feed_callback) {
-                                        window.gaze_feed_callback(ox, oy, oz, dx, dy, dz);
+                                    if (window.godotGaze && window.godotGaze.feed_gaze) {
+                                        window.godotGaze.feed_gaze(true, ox, oy, oz, dx, dy, dz);
                                     }
                                 }
 
@@ -452,6 +409,11 @@
                                 msg = gazeErr.message;
                             }
                             console.error('[GazeTracker] Gaze estimation failed:', msg);
+                        }
+                    } else {
+                        // Push face lost explicitly to Godot
+                        if (window.godotGaze && window.godotGaze.feed_gaze) {
+                            window.godotGaze.feed_gaze(false, 0, 0, 0, 0, 0, 0);
                         }
                     }
                     requestAnimationFrame(trackFrame);

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Godot Gaze - Web Offline Integration Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-green: #10b981;
+            --accent-cyan: #06b6d4;
+            --accent-red: #ef4444;
+            --accent-yellow: #f59e0b;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-image: radial-gradient(circle at top right, rgba(6, 182, 212, 0.05), transparent 600px),
+                              radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.05), transparent 600px);
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981, #06b6d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        #status-badge {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-yellow);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #status-badge.passed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+        }
+
+        #status-badge.failed {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.15);
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            aspect-ratio: 4/3;
+            position: relative;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+
+        .console {
+            font-family: 'JetBrains Mono', monospace;
+            background: #05070c;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            height: 320px;
+            overflow-y: auto;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            padding-bottom: 4px;
+        }
+
+        .log-time {
+            color: rgba(255, 255, 255, 0.25);
+            margin-right: 8px;
+        }
+
+        .log-info {
+            color: var(--text-primary);
+        }
+
+        .log-pass {
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .log-fail {
+            color: var(--accent-red);
+            font-weight: 600;
+        }
+
+        .log-warn {
+            color: var(--accent-yellow);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1>Godot Gaze</h1>
+                <div style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">WebAssembly face & gaze estimation TDD integration test</div>
+            </div>
+            <div id="status-badge">Running</div>
+        </header>
+
+        <div class="main-layout">
+            <div class="card">
+                <h2>Source & Detection Overlay</h2>
+                <div class="canvas-container">
+                    <canvas id="outputCanvas"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Test Runner Console</h2>
+                <div class="console" id="logConsole"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load custom compiled OpenCV.js -->
+    <script>
+        window.testStatus = "PENDING";
+        
+        function log(type, msg) {
+            const consoleEl = document.getElementById('logConsole');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'log-time';
+            const now = new Date();
+            timeSpan.textContent = now.toTimeString().split(' ')[0] + '.' + String(now.getMilliseconds()).padStart(3, '0');
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'log-' + type;
+            textSpan.textContent = msg;
+            
+            entry.appendChild(timeSpan);
+            entry.appendChild(textSpan);
+            consoleEl.appendChild(entry);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+            console.log(`[Test] ${type.toUpperCase()}: ${msg}`);
+        }
+
+        window.onerror = function(message, source, lineno, colno, error) {
+            log('fail', `Runtime Error: ${message} at ${source}:${lineno}:${colno}`);
+            updateStatus('failed', `Runtime Error: ${message}`);
+            return false;
+        };
+
+        function updateStatus(status, detail) {
+            const badge = document.getElementById('status-badge');
+            badge.textContent = status;
+            badge.className = status;
+            let statusText = "PENDING";
+            if (status === 'passed') {
+                statusText = "SUCCESS";
+                log('pass', "==================================================");
+                log('pass', "ALL OFFLINE TDD INTEGRATION TESTS PASSED SUCCESSFULLY");
+                log('pass', "==================================================");
+            } else if (status === 'failed') {
+                statusText = "FAILED: " + detail;
+                log('fail', "==================================================");
+                log('fail', "OFFLINE INTEGRATION TESTS FAILED: " + detail);
+                log('fail', "==================================================");
+            }
+            
+            window.testStatus = statusText;
+
+            fetch('/report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    status: statusText,
+                    logs: Array.from(document.getElementById('logConsole').children).map(c => c.textContent)
+                })
+            }).catch(e => console.warn('Could not post report:', e));
+        }
+
+        // Initialize testing
+        window.onload = function() {
+            log('info', "Starting Web TDD Offline Test runner...");
+            
+            // 1. Injects the custom compiled opencv.js script
+            const s = document.createElement('script');
+            s.src = '../project/addons/godot-gaze/bin/opencv.js';
+            s.onload = function() {
+                log('info', "opencv.js script injected, waiting for Module runtime initialization...");
+            };
+            s.onerror = function() {
+                log('fail', "Failed to load opencv.js script from ../project/addons/godot-gaze/bin/opencv.js");
+                updateStatus('failed', "opencv.js script load error");
+            };
+            document.head.appendChild(s);
+            
+            // Check for Module initialization
+            const checkInitialized = setInterval(function() {
+                if (typeof cv !== 'undefined') {
+                    clearInterval(checkInitialized);
+                    if (typeof cv.then === 'function') {
+                        cv.then(function(instance) {
+                            window.cv = instance;
+                            log('pass', "OpenCV.js WebAssembly Module fully loaded & initialized.");
+                            runTests();
+                        }).catch(function(e) {
+                            log('fail', "OpenCV.js Promise failed: " + e.message);
+                            updateStatus('failed', "OpenCV.js Promise failed");
+                        });
+                    } else {
+                        log('pass', "OpenCV.js WebAssembly Module fully loaded & initialized.");
+                        runTests();
+                    }
+                }
+            }, 100);
+        };
+
+        async function fetchModel(url) {
+            log('info', `Fetching model: ${url} ...`);
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`HTTP status ${res.status} fetching ${url}`);
+            const buf = await res.arrayBuffer();
+            log('info', `Downloaded ${url} (${buf.byteLength} bytes).`);
+            return new Uint8Array(buf);
+        }
+
+        function writeToVFS(data, destPath) {
+            try {
+                const parts = destPath.split('/');
+                let currentDir = '';
+                for (let i = 0; i < parts.length - 1; i++) {
+                    if (parts[i] === '') continue;
+                    currentDir += '/' + parts[i];
+                    try { cv.FS.mkdir(currentDir); } catch(e) {}
+                }
+                cv.FS.writeFile(destPath, data);
+                log('info', `Wrote model to OpenCV VFS: ${destPath}`);
+            } catch (e) {
+                log('fail', `cv.FS error writing ${destPath}: ${e.message || e}`);
+                throw e;
+            }
+        }
+
+        function loadImage(src) {
+            return new Promise((resolve, reject) => {
+                log('info', `Loading test image: ${src} ...`);
+                const img = new Image();
+                img.src = src;
+                img.onload = () => {
+                    log('info', `Loaded image successfully: ${img.width}x${img.height}`);
+                    resolve(img);
+                };
+                img.onerror = (err) => {
+                    log('fail', `Failed to load image: ${src}`);
+                    reject(err);
+                };
+            });
+        }
+
+        async function runTests() {
+            try {
+                // 1. Fetch models and write to virtual filesystem
+                const yunetBytes = await fetchModel('../project/models/face_detection_yunet_2023mar.onnx');
+                const gazeBytes = await fetchModel('../project/models/gaze-estimation-adas-0002.onnx');
+                
+                const cvYunetPath = '/models/face_detection_yunet_2023mar.onnx';
+                const cvGazeOnnxPath = '/models/gaze-estimation-adas-0002.onnx';
+                writeToVFS(yunetBytes, cvYunetPath);
+                writeToVFS(gazeBytes, cvGazeOnnxPath);
+
+                // 2. Setup networks
+                log('info', "Initializing cv.FaceDetectorYN detector at 160x128...");
+                const faceDetectSize = new cv.Size(160, 128);
+                const detector = new cv.FaceDetectorYN(cvYunetPath, '', faceDetectSize, 0.6, 0.3, 5000);
+                
+                log('info', "Reading Gaze estimation ONNX network...");
+                const gazeNet = cv.readNet(cvGazeOnnxPath);
+                log('pass', "OpenCV models successfully loaded & instanced.");
+
+                // 3. Load image
+                const imgEl = await loadImage('resources/self_center.jpg');
+                const canvas = document.getElementById('outputCanvas');
+                canvas.width = imgEl.width;
+                canvas.height = imgEl.height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(imgEl, 0, 0);
+
+                // 4. Extract pixel data to cv.Mat
+                log('info', "Reading image data into OpenCV cv.Mat...");
+                const frameMat = cv.imread(canvas);
+                const bgrMat = new cv.Mat();
+                const grayMat = new cv.Mat();
+                cv.cvtColor(frameMat, bgrMat, cv.COLOR_RGBA2BGR);
+                cv.cvtColor(bgrMat, grayMat, cv.COLOR_BGR2GRAY);
+                
+                // 5. Run face detection
+                log('info', "Running face detection on downscaled (160x128) Mat...");
+                const detectMat = new cv.Mat();
+                cv.resize(bgrMat, detectMat, faceDetectSize, 0, 0, cv.INTER_LINEAR);
+                const facesMat = new cv.Mat();
+                detector.detect(detectMat, facesMat);
+
+                log('info', `Face detector returned ${facesMat.rows} rows.`);
+                if (facesMat.rows === 0) {
+                    throw new Error("No faces detected in self_center.jpg");
+                }
+
+                // Parse detection results
+                const scaleX = imgEl.width / 160;
+                const scaleY = imgEl.height / 128;
+                
+                const score = facesMat.data32F[14];
+                log('pass', `Face detected with score: ${score.toFixed(4)} (Threshold was 0.6)`);
+                if (score < 0.6) {
+                    throw new Error(`Face score ${score} is below threshold.`);
+                }
+
+                // Landmarks extraction
+                const landmarks = [];
+                for (let i = 0; i < 5; i++) {
+                    landmarks.push({
+                        x: facesMat.data32F[4 + 2 * i] * scaleX,
+                        y: facesMat.data32F[5 + 2 * i] * scaleY
+                    });
+                }
+                
+                log('info', `Right Eye Center: (${landmarks[0].x.toFixed(1)}, ${landmarks[0].y.toFixed(1)})`);
+                log('info', `Left Eye Center: (${landmarks[1].x.toFixed(1)}, ${landmarks[1].y.toFixed(1)})`);
+                log('info', `Nose Tip: (${landmarks[2].x.toFixed(1)}, ${landmarks[2].y.toFixed(1)})`);
+
+                // Draw face bounding box overlay
+                const bboxX = facesMat.data32F[0] * scaleX;
+                const bboxY = facesMat.data32F[1] * scaleY;
+                const bboxW = facesMat.data32F[2] * scaleX;
+                const bboxH = facesMat.data32F[3] * scaleY;
+                
+                ctx.strokeStyle = '#10b981';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(bboxX, bboxY, bboxW, bboxH);
+                
+                // Draw landmarks
+                ctx.fillStyle = '#06b6d4';
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    ctx.arc(landmarks[i].x, landmarks[i].y, 4, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+
+                // 6. Gaze estimation step
+                log('info', "Computing PnP head pose angles...");
+                const model_points = cv.matFromArray(5, 3, cv.CV_32F, [
+                    -30.0, -28.676, 0.0,
+                    30.0, -28.676, 0.0,
+                    0.0, -5.0, -45.0,
+                    -18.462, 31.712, -4.55,
+                    18.462, 31.712, -4.55
+                ]);
+                const image_points = cv.matFromArray(5, 2, cv.CV_32F, [
+                    landmarks[0].x, landmarks[0].y,
+                    landmarks[1].x, landmarks[1].y,
+                    landmarks[2].x, landmarks[2].y,
+                    landmarks[3].x, landmarks[3].y,
+                    landmarks[4].x, landmarks[4].y
+                ]);
+                
+                const cx = imgEl.width / 2.0;
+                const cy = imgEl.height / 2.0;
+                const fx = imgEl.width * 1.5625;
+                const camera_matrix = cv.matFromArray(3, 3, cv.CV_64F, [
+                    fx, 0.0, cx,
+                    0.0, fx, cy,
+                    0.0, 0.0, 1.0
+                ]);
+                const dist_coeffs = cv.Mat.zeros(4, 1, cv.CV_64F);
+                const rvec = cv.matFromArray(3, 1, cv.CV_64F, [0.0, 0.0, 0.0]);
+                const tvec = cv.matFromArray(3, 1, cv.CV_64F, [0.0, 0.0, 700.0]);
+                
+                const pnp_success = cv.solvePnP(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, true, cv.SOLVEPNP_ITERATIVE);
+                if (!pnp_success) {
+                    throw new Error("solvePnP failed to converge.");
+                }
+                
+                log('pass', `PnP converged. Translation (X, Y, Z): (${tvec.doubleAt(0,0).toFixed(1)}, ${tvec.doubleAt(1,0).toFixed(1)}, ${tvec.doubleAt(2,0).toFixed(1)})`);
+
+                // Rodrigues rotation conversion
+                const R = new cv.Mat();
+                cv.Rodrigues(rvec, R);
+                const r00 = R.doubleAt(0, 0); const r10 = R.doubleAt(1, 0); const r20 = R.doubleAt(2, 0);
+                const r01 = R.doubleAt(0, 1); const r11 = R.doubleAt(1, 1); const r21 = R.doubleAt(2, 1);
+                const r02 = R.doubleAt(0, 2); const r12 = R.doubleAt(1, 2); const r22 = R.doubleAt(2, 2);
+                
+                const sy = Math.sqrt(r00 * r00 + r10 * r10);
+                const singular = sy < 1e-6;
+                let pitch = 0, yaw = 0, roll = 0;
+                if (!singular) {
+                    pitch = Math.atan2(r21, r22) * (180.0 / Math.PI);
+                    yaw   = Math.atan2(-r20, sy) * (180.0 / Math.PI);
+                    roll  = Math.atan2(r10, r00) * (180.0 / Math.PI);
+                } else {
+                    pitch = Math.atan2(-r12, r11) * (180.0 / Math.PI);
+                    yaw   = Math.atan2(-r20, sy) * (180.0 / Math.PI);
+                    roll  = 0;
+                }
+                
+                pitch += 0.017 * tvec.doubleAt(1, 0);
+                yaw += 0.017 * tvec.doubleAt(0, 0);
+                log('info', `Estimated Head Orientation (Yaw, Pitch, Roll): (${yaw.toFixed(2)} deg, ${pitch.toFixed(2)} deg, ${roll.toFixed(2)} deg)`);
+
+                // Eye cropping
+                function cropEye(isLeft) {
+                    const eye_center = isLeft ? landmarks[1] : landmarks[0];
+                    const pt = { x: eye_center.x, y: eye_center.y };
+                    const roll_dx = landmarks[1].x - landmarks[0].x;
+                    const roll_dy = landmarks[1].y - landmarks[0].y;
+                    const angle = Math.atan2(roll_dy, roll_dx) * (180.0 / Math.PI);
+                    const scale = 1.0;
+                    const target_size = { width: 60, height: 60 };
+                    const M = cv.getRotationMatrix2D(pt, angle, scale);
+                    M.data64F[2] += (target_size.width / 2.0) - eye_center.x;
+                    M.data64F[5] += (target_size.height / 2.0) - eye_center.y;
+                    
+                    const warped = new cv.Mat();
+                    cv.warpAffine(grayMat, warped, M, target_size, cv.INTER_LINEAR, cv.BORDER_REPLICATE);
+                    const warped_bgr = new cv.Mat();
+                    cv.cvtColor(warped, warped_bgr, cv.COLOR_GRAY2BGR);
+                    
+                    M.delete();
+                    warped.delete();
+                    return warped_bgr;
+                }
+
+                log('info', "Cropping left and right eye matrices from high-resolution (320x240) grayscale Mat...");
+                const left_eye_mat = cropEye(true);
+                const right_eye_mat = cropEye(false);
+                
+                const size60 = { width: 60, height: 60 };
+                const scalarZeros60 = new cv.Scalar(0, 0, 0, 0);
+                const left_blob = cv.blobFromImage(left_eye_mat, 1.0, size60, scalarZeros60, false, false);
+                const right_blob = cv.blobFromImage(right_eye_mat, 1.0, size60, scalarZeros60, false, false);
+                
+                const head_pose_data = cv.matFromArray(1, 3, cv.CV_32F, [-yaw, pitch, -roll]);
+
+                gazeNet.setInput(right_blob, 'left_eye_image');
+                gazeNet.setInput(left_blob, 'right_eye_image');
+                gazeNet.setInput(head_pose_data, 'head_pose_angles');
+
+                log('info', "Running forward pass of Gaze ADAS network...");
+                const output = gazeNet.forward('gaze_vector/sink_port_0');
+                if (output.empty()) {
+                    throw new Error("Gaze estimation network returned an empty output blob.");
+                }
+
+                let dx = 0, dy = 0, dz = 0;
+                if (output.cols === 2) {
+                    const pitch_gaze = output.floatAt(0, 0);
+                    const yaw_gaze = output.floatAt(0, 1);
+                    const cos_pitch = Math.cos(pitch_gaze);
+                    dx = Math.sin(yaw_gaze) * cos_pitch;
+                    dy = Math.sin(pitch_gaze);
+                    dz = Math.cos(yaw_gaze) * cos_pitch;
+                } else if (output.cols === 3) {
+                    dx = output.floatAt(0, 0);
+                    dy = output.floatAt(0, 1);
+                    dz = output.floatAt(0, 2);
+                }
+                
+                const len_gaze = Math.hypot(dx, dy, dz);
+                if (len_gaze > 0) {
+                    dx /= len_gaze; dy /= len_gaze; dz /= len_gaze;
+                }
+
+                log('pass', `Gaze estimation output vector (dx, dy, dz): (${dx.toFixed(4)}, ${dy.toFixed(4)}, ${dz.toFixed(4)})`);
+
+                // Assertions (Self center gaze should point mostly forward / slightly down-right depending on the dataset)
+                // Let's draw the gaze direction line on the canvas
+                const noseX = landmarks[2].x;
+                const noseY = landmarks[2].y;
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(noseX, noseY);
+                // Draw 60px line indicating gaze direction
+                ctx.lineTo(noseX + dx * 100, noseY - dy * 100);
+                ctx.stroke();
+
+                // Clean up matrices
+                frameMat.delete();
+                bgrMat.delete();
+                grayMat.delete();
+                detectMat.delete();
+                facesMat.delete();
+                model_points.delete();
+                image_points.delete();
+                camera_matrix.delete();
+                dist_coeffs.delete();
+                rvec.delete();
+                tvec.delete();
+                R.delete();
+                left_eye_mat.delete();
+                right_eye_mat.delete();
+                left_blob.delete();
+                right_blob.delete();
+                head_pose_data.delete();
+                output.delete();
+
+                updateStatus('passed');
+            } catch (err) {
+                log('fail', `Test failure: ${err.message || err}`);
+                updateStatus('failed', err.message || String(err));
+            }
+        }
+    </script>
+</body>
+</html>

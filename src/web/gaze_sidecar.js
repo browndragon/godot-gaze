@@ -53,44 +53,31 @@
             console.log('[GazeTracker] Converted hex to Uint8Arrays: YuNet size = ' + this.yunetBytes.length + ', Gaze size = ' + this.gazeBytes.length);
         },
 
-        // 1. Script fetch and inject helper (bypasses CORS/CORP server issues)
-        fetchAndInject: function(localUrl, fallbackUrl, onload, onerror) {
-            console.log('[GazeTracker] Fetching local script: ' + localUrl);
-            fetch(localUrl)
-                .then(function(res) {
-                    if (!res.ok) throw new Error('HTTP status ' + res.status);
-                    return res.blob();
-                })
-                .then(function(blob) {
-                    var url = URL.createObjectURL(blob);
-                    var s = document.createElement('script');
-                    s.src = url;
-                    s.onload = function() {
-                        URL.revokeObjectURL(url);
-                        console.log('[GazeTracker] Local script loaded successfully via Blob URL: ' + localUrl);
-                        onload();
-                    };
-                    s.onerror = function(err) {
-                        console.error('[GazeTracker] Failed to load Blob URL for: ' + localUrl, err);
-                        onerror(err);
-                    };
-                    document.head.appendChild(s);
-                })
-                .catch(function(err) {
-                    console.warn('[GazeTracker] Local fetch failed for ' + localUrl + ': ' + err.message + '. Trying CDN fallback...');
-                    var sCDN = document.createElement('script');
-                    sCDN.crossOrigin = 'anonymous';
-                    sCDN.src = fallbackUrl;
-                    sCDN.onload = function() {
-                        console.log('[GazeTracker] CDN fallback script loaded successfully: ' + fallbackUrl);
-                        onload();
-                    };
-                    sCDN.onerror = function(cdnErr) {
-                        console.error('[GazeTracker] CDN fallback failed for: ' + fallbackUrl, cdnErr);
-                        onerror(cdnErr);
-                    };
-                    document.head.appendChild(sCDN);
-                });
+        // 1. Script injection helper (maintains page origin for WebAssembly pthreads workers)
+        injectScript: function(localUrl, fallbackUrl, onload, onerror) {
+            console.log('[GazeTracker] Injecting local script tag: ' + localUrl);
+            var s = document.createElement('script');
+            s.src = localUrl;
+            s.onload = function() {
+                console.log('[GazeTracker] Local script loaded successfully: ' + localUrl);
+                onload();
+            };
+            s.onerror = function(err) {
+                console.warn('[GazeTracker] Local script load failed for ' + localUrl + '. Trying CDN fallback...');
+                var sCDN = document.createElement('script');
+                sCDN.crossOrigin = 'anonymous';
+                sCDN.src = fallbackUrl;
+                sCDN.onload = function() {
+                    console.log('[GazeTracker] CDN fallback script loaded successfully: ' + fallbackUrl);
+                    onload();
+                };
+                sCDN.onerror = function(cdnErr) {
+                    console.error('[GazeTracker] CDN fallback failed for: ' + fallbackUrl, cdnErr);
+                    onerror(cdnErr);
+                };
+                document.head.appendChild(sCDN);
+            };
+            document.head.appendChild(s);
         },
 
         // 2. Main initializer and loop
@@ -101,7 +88,7 @@
             var self = this;
             console.log('[GazeTracker] Initializing sidecar tracking pipeline...');
 
-            this.fetchAndInject('opencv.js', 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js', function() {
+            this.injectScript('opencv.js', 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js', function() {
                 console.log('[GazeTracker] OpenCV.js loaded. Waiting for Runtime...');
                 var checkInitialized = setInterval(function() {
                     if (typeof cv !== 'undefined') {

@@ -646,9 +646,10 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
 
 #ifdef WEB_ENABLED
         latest_crops.face_detected = true;
-        latest_crops.left_eye_center_cam = latest_gaze_origin;
-        latest_crops.right_eye_center_cam = latest_gaze_origin;
-        latest_crops.head_pose_translation = latest_gaze_origin;
+        Gaze::GazeVector3 opencv_origin(latest_gaze_origin.x, -latest_gaze_origin.y, -latest_gaze_origin.z);
+        latest_crops.left_eye_center_cam = opencv_origin;
+        latest_crops.right_eye_center_cam = opencv_origin;
+        latest_crops.head_pose_translation = opencv_origin;
         latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
 #endif
 

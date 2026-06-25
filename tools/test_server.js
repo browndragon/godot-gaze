@@ -92,6 +92,9 @@ function startServer() {
             res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
             res.setHeader('Access-Control-Allow-Origin', '*');
             res.setHeader('Content-Type', contentType);
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+            res.setHeader('Pragma', 'no-cache');
+            res.setHeader('Expires', '0');
 
             const stream = fs.createReadStream(filePath);
             stream.on('error', (streamErr) => {

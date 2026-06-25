@@ -203,7 +203,7 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(305.0, 191.0));
-    CameraPlacement placement(GazeVector3(0.0, 95.5, 0.0), 15.0);
+    CameraPlacement placement(GazeVector3(0.0, 95.5, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
     auto project_ray_to_screen = [&engine](const GazeVector3& origin_cam, const GazeVector3& dir_cam) -> GazeVector2 {

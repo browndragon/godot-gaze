@@ -11,6 +11,7 @@ console.log('[TestRunner] Launching Google Chrome headlessly...');
 const chromeProcess = spawn(CHROME_PATH, [
     '--headless=new',
     `--remote-debugging-port=${PORT}`,
+    '--user-data-dir=/Users/acunningham/src/godot-gaze/build/chrome_profile',
     '--use-fake-ui-for-media-stream',
     '--use-fake-device-for-media-stream',
     'about:blank'

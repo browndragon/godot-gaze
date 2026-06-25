@@ -5,6 +5,19 @@ import os
 import sys
 import subprocess
 
+# Copy JavaScript sidecar file to the Godot Gaze addon bin directory
+def copy_js_sidecar():
+    js_path = "src/web/gaze_sidecar.js"
+    dest_path = "project/addons/godot-gaze/bin/gaze_sidecar.js"
+    if not os.path.exists(js_path):
+        print(f"Error: {js_path} does not exist. Cannot copy JS sidecar.")
+        return
+    print(f"[SCons] Copying {js_path} to {dest_path}...")
+    import shutil
+    shutil.copy2(js_path, dest_path)
+
+copy_js_sidecar()
+
 # Detect and prepend emsdk bin directory if using asdf
 if any("platform=javascript" in arg for arg in sys.argv) or any("platform=web" in arg for arg in sys.argv):
     try:

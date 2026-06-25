@@ -106,3 +106,22 @@ To run both the core unit tests and the native OpenCV integration tests:
    ```bash
    cp test_artifacts/gaze_benchmark_report.md test_assets/gaze_benchmark_report.md
    ```
+
+## 5. Web/JavaScript Sidecar Integration Testing
+
+We also enforce integration testing of the browser-side script injection loader using a headless Chrome environment.
+
+To run the JavaScript sidecar integration tests:
+```bash
+node tools/run_sidecar_tests.js
+```
+
+## 6. Headless CLI Godot Commands
+
+We provide a `./scripts/godot.sh` helper to run Godot from the command line regardless of host OS. On macOS, this automatically invokes the installed `/Applications/Godot.app` binary.
+
+To export the web build headlessly using this script:
+```bash
+./scripts/godot.sh --headless --export-debug "Web" project/exports/godot-gaze.html
+```
+

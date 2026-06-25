@@ -37,6 +37,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("feed_gaze_web", "origin", "direction"), &GazeTracker::feed_gaze_web);
     ClassDB::bind_method(D_METHOD("feed_gaze_web_raw", "ox", "oy", "oz", "dx", "dy", "dz"), &GazeTracker::feed_gaze_web_raw);
     ClassDB::bind_method(D_METHOD("feed_expression_web", "name", "value"), &GazeTracker::feed_expression_web);
+    ClassDB::bind_method(D_METHOD("on_sidecar_ready", "args"), &GazeTracker::on_sidecar_ready);
 
     ClassDB::bind_method(D_METHOD("get_latest_projected_gaze"), &GazeTracker::get_latest_projected_gaze);
     ClassDB::bind_method(D_METHOD("get_latest_filtered_gaze"), &GazeTracker::get_latest_filtered_gaze);
@@ -374,7 +375,7 @@ bool GazeTracker::complete_initialization() {
 
     if (opaque) {
         WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->start_tracking_loop(this, global_yunet_path, global_gaze_onnx_path);
+        state->start_tracking_loop(this, resolved_yunet, resolved_gaze);
     }
     return true;
 #else
@@ -448,22 +449,42 @@ String GazeTracker::copy_model_to_user_dir(const String &res_path) {
 }
 
 void GazeTracker::copy_individual_file(const String &src, const String &dest) {
-    if (!FileAccess::file_exists(dest)) {
-        Ref<FileAccess> file_in = FileAccess::open(src, FileAccess::READ);
+    bool dest_exists = FileAccess::file_exists(dest);
+    uint64_t src_len = 0;
+    uint64_t dest_len = 0;
+
+    if (dest_exists) {
+        Ref<FileAccess> f_dest = FileAccess::open(dest, FileAccess::READ);
+        if (f_dest.is_valid()) {
+            dest_len = f_dest->get_length();
+        }
+    }
+
+    Ref<FileAccess> file_in = FileAccess::open(src, FileAccess::READ);
+    if (file_in.is_valid()) {
+        src_len = file_in->get_length();
+    } else {
         Error err_in = FileAccess::get_open_error();
+        Gaze::log_error("GazeTrackerCopyModelFailed_SrcInvalid", 
+                        "src", src.utf8().get_data(), 
+                        "err_in", (int)err_in);
+        return;
+    }
+
+    if (!dest_exists || dest_len != src_len || dest_len == 0) {
         Ref<FileAccess> file_out = FileAccess::open(dest, FileAccess::WRITE);
         Error err_out = FileAccess::get_open_error();
-        if (file_in.is_valid() && file_out.is_valid()) {
-            uint64_t len = file_in->get_length();
-            PackedByteArray buffer = file_in->get_buffer(len);
+        if (file_out.is_valid()) {
+            PackedByteArray buffer = file_in->get_buffer(src_len);
             file_out->store_buffer(buffer);
-            Gaze::log_info("GazeTrackerCopiedModel", "src", src.utf8().get_data(), "dest", dest.utf8().get_data());
+            Gaze::log_info("GazeTrackerCopiedModel", 
+                           "src", src.utf8().get_data(), 
+                           "dest", dest.utf8().get_data(), 
+                           "size", (int)src_len);
         } else {
-            Gaze::log_error("GazeTrackerCopyModelFailed", 
+            Gaze::log_error("GazeTrackerCopyModelFailed_DestWrite", 
                             "src", src.utf8().get_data(), 
-                            "dest", dest.utf8().get_data(),
-                            "src_exists", FileAccess::file_exists(src) ? 1 : 0,
-                            "err_in", (int)err_in,
+                            "dest", dest.utf8().get_data(), 
                             "err_out", (int)err_out);
         }
     }
@@ -650,6 +671,48 @@ void GazeTracker::feed_gaze_web_raw(double ox, double oy, double oz, double dx, 
 
 void GazeTracker::feed_expression_web(String name, double value) {
     // Stub to accept web tracked blendshape weights (Smile, Frown, Mouth Open, etc.)
+}
+
+void GazeTracker::on_sidecar_ready(const Array& args) {
+#ifdef WEB_ENABLED
+    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
+    if (!js) return;
+
+    if (args.size() == 0) {
+        UtilityFunctions::printerr("[GazeTracker] on_sidecar_ready called with no arguments.");
+        return;
+    }
+
+    Ref<JavaScriptObject> tracker_obj = args[0];
+    if (tracker_obj.is_valid()) {
+        UtilityFunctions::print("[GazeTracker] on_sidecar_ready triggered. Loading and sending model bytes...");
+        String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
+        String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.onnx" : gaze_onnx_path;
+
+        PackedByteArray yunet_bytes = FileAccess::get_file_as_bytes(resolved_yunet);
+        PackedByteArray gaze_bytes = FileAccess::get_file_as_bytes(resolved_gaze);
+
+        if (yunet_bytes.is_empty()) {
+            UtilityFunctions::printerr("[GazeTracker] C++ failed to load YuNet bytes from: ", resolved_yunet);
+        } else {
+            UtilityFunctions::print("[GazeTracker] Loaded YuNet bytes, size: ", yunet_bytes.size());
+        }
+
+        if (gaze_bytes.is_empty()) {
+            UtilityFunctions::printerr("[GazeTracker] C++ failed to load Gaze ONNX bytes from: ", resolved_gaze);
+        } else {
+            UtilityFunctions::print("[GazeTracker] Loaded Gaze ONNX bytes, size: ", gaze_bytes.size());
+        }
+
+        String hex_yunet = yunet_bytes.hex_encode();
+        String hex_gaze = gaze_bytes.hex_encode();
+
+        tracker_obj->call("setModels", hex_yunet, hex_gaze);
+        UtilityFunctions::print("[GazeTracker] Successfully called setModels on JS sidecar.");
+    } else {
+        UtilityFunctions::printerr("[GazeTracker] on_sidecar_ready: First argument is not a valid JavaScriptObject.");
+    }
+#endif
 }
 
 void GazeTracker::update_projection_parameters() {

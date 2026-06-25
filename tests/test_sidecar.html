@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gaze Sidecar JS Loader Integration Test</title>
+    <!-- Include the script under test -->
+    <script src="/src/web/gaze_sidecar.js"></script>
+</head>
+<body>
+    <h1>Gaze Sidecar JS Loader Integration Test</h1>
+    <div id="status">Ready</div>
+    <script>
+        // Test suite invoked from the test runner (Puppeteer/Chrome Debugger)
+        window.runLoaderTest = function(localUrl, fallbackUrl) {
+            document.getElementById('status').innerText = 'Testing...';
+            return new Promise((resolve) => {
+                window.gazeTracker.fetchAndInject(localUrl, fallbackUrl, 
+                    function() {
+                        document.getElementById('status').innerText = 'Success';
+                        resolve({ success: true, method: window.lastLoadedMethod || 'unknown' });
+                    },
+                    function(err) {
+                        document.getElementById('status').innerText = 'Failed';
+                        resolve({ success: false, error: err ? err.toString() : 'unknown' });
+                    }
+                );
+            });
+        };
+    </script>
+</body>
+</html>

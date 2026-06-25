@@ -18,6 +18,8 @@
 #include "projection_engine.hpp"
 #include "one_euro_filter.hpp"
 
+#include <godot_cpp/variant/array.hpp>
+
 namespace godot {
 
 class GazeTracker : public Node {
@@ -112,6 +114,7 @@ public:
     void feed_gaze_web(Vector3 origin, Vector3 direction);
     void feed_gaze_web_raw(double ox, double oy, double oz, double dx, double dy, double dz);
     void feed_expression_web(String name, double value);
+    void on_sidecar_ready(const Array& args);
 
     // Getters / Setters for properties
     int get_lifecycle_state() const;

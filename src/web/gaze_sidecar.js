@@ -393,7 +393,7 @@
                                 self.gazeNet.setInput(left_blob, 'right_eye_image');
                                 self.gazeNet.setInput(head_pose_data, 'head_pose_angles');
 
-                                var output = self.gazeNet.forward('gaze_vector');
+                                var output = self.gazeNet.forward('gaze_vector/sink_port_0');
                                 if (!output.empty()) {
                                     var dx = 0, dy = 0, dz = 0;
                                     if (output.cols === 2) {

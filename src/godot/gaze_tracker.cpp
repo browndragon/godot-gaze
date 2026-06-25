@@ -36,6 +36,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("calibrate_2d", "target_pixel"), &GazeTracker::calibrate_2d);
     ClassDB::bind_method(D_METHOD("clear_calibration"), &GazeTracker::clear_calibration);
     ClassDB::bind_method(D_METHOD("feed_gaze", "face_detected", "origin", "direction"), &GazeTracker::feed_gaze);
+    ClassDB::bind_method(D_METHOD("feed_gaze_web_raw", "args"), &GazeTracker::feed_gaze_web_raw);
     ClassDB::bind_method(D_METHOD("on_sidecar_ready", "args"), &GazeTracker::on_sidecar_ready);
 
     ClassDB::bind_method(D_METHOD("get_latest_projected_gaze"), &GazeTracker::get_latest_projected_gaze);
@@ -643,11 +644,13 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
         latest_gaze_origin = Gaze::GazeVector3(origin.x, origin.y, origin.z);
         latest_gaze_dir = Gaze::GazeVector3(direction.x, direction.y, direction.z);
 
+#ifdef WEB_ENABLED
         latest_crops.face_detected = true;
         latest_crops.left_eye_center_cam = latest_gaze_origin;
         latest_crops.right_eye_center_cam = latest_gaze_origin;
         latest_crops.head_pose_translation = latest_gaze_origin;
         latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
+#endif
 
         emit_signal("face_frame_ready");
 
@@ -656,7 +659,39 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
             static_cast<Gaze::WebGazeModel*>(model)->feed_raw_gaze(latest_gaze_dir);
         }
 #endif
+    } else {
+        latest_crops.face_detected = false;
     }
+}
+
+void GazeTracker::feed_gaze_web_raw(const Array& args) {
+#ifdef WEB_ENABLED
+    if (args.size() < 7) {
+        if (args.size() >= 1) {
+            bool face_detected = args[0];
+            if (!face_detected) {
+                feed_gaze(false, Vector3(), Vector3());
+            }
+        }
+        return;
+    }
+
+    bool face_detected = args[0];
+    if (!face_detected) {
+        feed_gaze(false, Vector3(), Vector3());
+        return;
+    }
+
+    double ox = args[1];
+    double oy = args[2];
+    double oz = args[3];
+    double dx = args[4];
+    double dy = args[5];
+    double dz = args[6];
+
+    // Convert from OpenCV camera space to Godot camera space
+    feed_gaze(true, Vector3(ox, -oy, -oz), Vector3(dx, dy, -dz));
+#endif
 }
 
 void GazeTracker::on_sidecar_ready(const Array& args) {

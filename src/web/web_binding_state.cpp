@@ -12,7 +12,7 @@ void WebBindingState::setup_callbacks(GazeTracker* tracker) {
     if (!js) return;
 
     permission_callback = js->create_callback(Callable(tracker, "on_permission_result"));
-    feed_callback = js->create_callback(Callable(tracker, "feed_gaze"));
+    feed_callback = js->create_callback(Callable(tracker, "feed_gaze_web_raw"));
     ready_callback = js->create_callback(Callable(tracker, "on_sidecar_ready"));
 
     Ref<JavaScriptObject> window = js->get_interface("window");

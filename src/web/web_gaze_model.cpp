@@ -9,9 +9,9 @@ bool WebGazeModel::initialize() {
     return true;
 }
 
-bool WebGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) {
+bool WebGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) {
     // Simply returns the latest vector fed by the JavaScript sidecar
-    out_raw_gaze_dir = fed_gaze_dir;
+    out_gaze_dir_cv = fed_gaze_dir;
     return true;
 }
 

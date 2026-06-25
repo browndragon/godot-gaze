@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gaze Sidecar Coordinate Parity Test</title>
+    <!-- Include Custom OpenCV.js for testing -->
+    <script src="/project/addons/godot-gaze/bin/opencv.js"></script>
+    <script src="/src/web/gaze_sidecar.js"></script>
+</head>
+<body>
+    <h1>Gaze Sidecar Coordinate Parity Test</h1>
+    <canvas id="testCanvas" width="320" height="240" style="display:none;"></canvas>
+    <div id="status">Waiting for OpenCV...</div>
+
+    <script>
+        window.lastGazeFeed = null;
+
+        // Mock godotGaze to capture feed_gaze calls
+        window.godotGaze = {
+            feed_gaze: function(face_detected, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz) {
+                window.lastGazeFeed = {
+                    face_detected, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz
+                };
+            }
+        };
+
+        // Mock getUserMedia
+        navigator.mediaDevices.getUserMedia = function() {
+            return Promise.resolve({
+                getTracks: function() { return [{ stop: function() {} }]; }
+            });
+        };
+
+        // Helper to convert array buffer to hex
+        function arrayBufferToHex(buffer) {
+            var bytes = new Uint8Array(buffer);
+            var hex = '';
+            for (var i = 0; i < bytes.length; i++) {
+                var val = bytes[i].toString(16);
+                if (val.length < 2) val = '0' + val;
+                hex += val;
+            }
+            return hex;
+        }
+
+        // Initialize OpenCV and load models
+        function initTest() {
+            return new Promise((resolve, reject) => {
+                var checkInitialized = setInterval(async function() {
+                    if (typeof cv !== 'undefined' && cv.RuntimeError === undefined && cv.VideoCapture) {
+                        clearInterval(checkInitialized);
+                        document.getElementById('status').innerText = 'OpenCV ready. Loading models...';
+
+                        // Mock cv.VideoCapture to read from canvas
+                        var originalVideoCapture = cv.VideoCapture;
+                        cv.VideoCapture = function(videoEl) {
+                            var capObj = new originalVideoCapture(videoEl);
+                            capObj.read = function(mat) {
+                                var canvas = document.getElementById('testCanvas');
+                                var ctx = canvas.getContext('2d');
+                                var imgData = ctx.getImageData(0, 0, 320, 240);
+                                mat.data.set(imgData.data);
+                            };
+                            return capObj;
+                        };
+
+                        try {
+                            // Load model files from server
+                            var resYunet = await fetch('/project/models/face_detection_yunet_2023mar.onnx');
+                            var resGaze = await fetch('/project/models/gaze-estimation-adas-0002.onnx');
+                            var bufYunet = await resYunet.arrayBuffer();
+                            var bufGaze = await resGaze.arrayBuffer();
+
+                            var hexYunet = arrayBufferToHex(bufYunet);
+                            var hexGaze = arrayBufferToHex(bufGaze);
+
+                            window.gazeTracker.setModels(hexYunet, hexGaze, 160, 128);
+                            document.getElementById('status').innerText = 'Models loaded. Ready for test.';
+                            resolve();
+                        } catch (err) {
+                            reject(err);
+                        }
+                    }
+                }, 100);
+            });
+        }
+
+        window.runGazeTest = function(imageName) {
+            window.lastGazeFeed = null;
+            return new Promise((resolve, reject) => {
+                var img = new Image();
+                img.onload = function() {
+                    var canvas = document.getElementById('testCanvas');
+                    var ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, 320, 240);
+
+                    // Start tracking if not active
+                    if (!window.gazeTracker.active) {
+                        window.gazeTracker.startTracking('', '');
+                    }
+
+                    // Poll for feed_gaze to be called
+                    var checkFeed = setInterval(function() {
+                        if (window.lastGazeFeed) {
+                            clearInterval(checkFeed);
+                            resolve(window.lastGazeFeed);
+                        }
+                    }, 50);
+                };
+                img.onerror = function() {
+                    reject(new Error('Failed to load image: ' + imageName));
+                };
+                img.src = '/tests/resources/' + imageName;
+            });
+        };
+
+        // Start initialization
+        window.initPromise = initTest();
+    </script>
+</body>
+</html>

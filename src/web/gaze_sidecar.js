@@ -5,6 +5,17 @@
 (function() {
     if (window.gazeTracker) return;
 
+    var FaceModelGeometry = {
+        EYE_X: 30.0,
+        EYE_Y: -28.676,
+        EYE_Z: 0.0,
+        DEFAULT_NOSE_Y: -0.5,
+        DEFAULT_NOSE_Z: -52.0,
+        MOUTH_X: 18.462,
+        MOUTH_Y: 31.712,
+        MOUTH_Z: -4.550
+    };
+
     var gazeTracker = {
         active: false,
         video: null,
@@ -256,11 +267,11 @@
                     if (detected && landmarks.length >= 5) {
                         try {
                             var model_points = cv.matFromArray(5, 3, cv.CV_32F, [
-                                -30.0, -28.676, 0.0,
-                                30.0, -28.676, 0.0,
-                                0.0, -5.0, -45.0,
-                                -18.462, 31.712, -4.55,
-                                18.462, 31.712, -4.55
+                                -FaceModelGeometry.EYE_X, FaceModelGeometry.EYE_Y, FaceModelGeometry.EYE_Z,
+                                FaceModelGeometry.EYE_X, FaceModelGeometry.EYE_Y, FaceModelGeometry.EYE_Z,
+                                0.0, FaceModelGeometry.DEFAULT_NOSE_Y, FaceModelGeometry.DEFAULT_NOSE_Z,
+                                -FaceModelGeometry.MOUTH_X, FaceModelGeometry.MOUTH_Y, FaceModelGeometry.MOUTH_Z,
+                                FaceModelGeometry.MOUTH_X, FaceModelGeometry.MOUTH_Y, FaceModelGeometry.MOUTH_Z
                             ]);
                             var image_points = cv.matFromArray(5, 2, cv.CV_32F, [
                                 landmarks[0].x, landmarks[0].y,
@@ -359,18 +370,21 @@
                                     var tx = tvec.doubleAt(0, 0);
                                     var ty = tvec.doubleAt(1, 0);
                                     var tz = tvec.doubleAt(2, 0);
-                                    var lex = r00 * 30.0 + r01 * -20.0 + tx;
-                                    var ley = r10 * 30.0 + r11 * -20.0 + ty;
-                                    var lez = r20 * 30.0 + r21 * -20.0 + tz;
-                                    var rex = r00 * -30.0 + r01 * -20.0 + tx;
-                                    var rey = r10 * -30.0 + r11 * -20.0 + ty;
-                                    var rez = r20 * -30.0 + r21 * -20.0 + tz;
-                                    var ox = (lex + rex) / 2.0;
-                                    var oy = (ley + rey) / 2.0;
-                                    var oz = (lez + rez) / 2.0;
+                                    
+                                    var lex = r00 * FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
+                                    var ley = r10 * FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
+                                    var lez = r20 * FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
+                                    
+                                    var rex = r00 * -FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
+                                    var rey = r10 * -FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
+                                    var rez = r20 * -FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
+
+                                    var rx = rvec.doubleAt(0, 0);
+                                    var ry = rvec.doubleAt(1, 0);
+                                    var rz = rvec.doubleAt(2, 0);
 
                                     if (window.godotGaze && window.godotGaze.feed_gaze) {
-                                        window.godotGaze.feed_gaze(true, ox, oy, oz, dx, dy, dz);
+                                        window.godotGaze.feed_gaze(true, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz);
                                     }
                                 }
 

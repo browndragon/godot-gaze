@@ -41,7 +41,7 @@ bool OpenCVGazeModel::initialize() {
     return true;
 }
 
-bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) {
+bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) {
     if (net.empty()) {
         return false;
     }
@@ -88,16 +88,16 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
         double yaw = output.at<float>(0, 1);
         
         double cos_pitch = std::cos(pitch);
-        out_raw_gaze_dir = GazeVector3(
-            std::sin(yaw) * cos_pitch,
-            std::sin(pitch),
-            std::cos(yaw) * cos_pitch
-        ).normalized();
+        double dx = std::sin(yaw) * cos_pitch;
+        double dy = std::sin(pitch);
+        double dz = std::cos(yaw) * cos_pitch;
+        // Transform Gaze ADAS Space to OpenCV Camera Space: (dx, -dy, dz)
+        out_gaze_dir_cv = GazeVector3(dx, -dy, dz).normalized();
     } else if (output.cols == 3) {
-        // Keep Intel ADAS coordinate system output directly
-        out_raw_gaze_dir = GazeVector3(
+        // Transform Gaze ADAS Space to OpenCV Camera Space: (raw_gaze.x, -raw_gaze.y, raw_gaze.z)
+        out_gaze_dir_cv = GazeVector3(
             output.at<float>(0, 0),
-            output.at<float>(0, 1),
+            -output.at<float>(0, 1),
             output.at<float>(0, 2)
         ).normalized();
     } else {

@@ -48,16 +48,51 @@ if [ -n "${OPENCV_SDK}" ]; then
         -lopencv_core -lopencv_imgproc -lopencv_imgcodecs -lopencv_objdetect -lopencv_videoio -lopencv_dnn -lopencv_calib3d \
         -o "${BUILD_DIR}/run_tests"
         
-    echo "Compilation successful. Executing test suite..."
+    echo "Compilation successful. Executing C++ test suite..."
     cd "${BASE_DIR}"
+    
+    set +e
     "${BUILD_DIR}/run_tests" ${FORWARD_ARGS[@]+"${FORWARD_ARGS[@]}"}
+    NATIVE_EXIT_CODE=$?
+    set -e
+    
+    echo ""
+    WEB_EXIT_CODE=0
+    if command -v node >/dev/null 2>&1; then
+        echo "Executing Web Sidecar integration tests..."
+        set +e
+        node "${BASE_DIR}/tools/run_sidecar_gaze_tests.js"
+        WEB_EXIT_CODE=$?
+        set -e
+    else
+        echo "[SKIP] Web Sidecar integration tests (node is not installed)"
+    fi
     
     echo ""
     echo "=== Test Summary ==="
-    echo "[PASS] Core tests"
-    echo "[PASS] OpenCV dependency check"
-    echo "[PASS] OpenCV native integration tests"
-    exit 0
+    if [ ${NATIVE_EXIT_CODE} -eq 0 ]; then
+        echo "[PASS] Core tests"
+        echo "[PASS] OpenCV dependency check"
+        echo "[PASS] OpenCV native integration tests"
+    else
+        echo "[FAIL] C++ Native tests"
+    fi
+    
+    if command -v node >/dev/null 2>&1; then
+        if [ ${WEB_EXIT_CODE} -eq 0 ]; then
+            echo "[PASS] Web Sidecar integration tests"
+        else
+            echo "[FAIL] Web Sidecar integration tests"
+        fi
+    else
+        echo "[SKIP] Web Sidecar integration tests (missing node dependency)"
+    fi
+    
+    if [ ${NATIVE_EXIT_CODE} -eq 0 ] && [ ${WEB_EXIT_CODE} -eq 0 ]; then
+        exit 0
+    else
+        exit 1
+    fi
 else
     echo "OpenCV SDK not found. Compiling Core tests only..."
     

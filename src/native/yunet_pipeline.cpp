@@ -1,5 +1,6 @@
 #include "yunet_pipeline.hpp"
 #include "log.hpp"
+#include "face_model_geometry.hpp"
 #include <opencv2/imgproc.hpp>
 #include <opencv2/calib3d.hpp>
 
@@ -84,11 +85,11 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
 
     // Define a standard 3D facial model for PnP (eyes, nose, mouth corners)
     std::vector<cv::Point3f> model_points = {
-        cv::Point3f(-30.0f, -28.676f, 0.0f), // Right eye
-        cv::Point3f(30.0f, -28.676f, 0.0f),  // Left eye
+        cv::Point3f(static_cast<float>(-FaceModelGeometry::EYE_X), static_cast<float>(FaceModelGeometry::EYE_Y), static_cast<float>(FaceModelGeometry::EYE_Z)), // Right eye
+        cv::Point3f(static_cast<float>(FaceModelGeometry::EYE_X), static_cast<float>(FaceModelGeometry::EYE_Y), static_cast<float>(FaceModelGeometry::EYE_Z)),  // Left eye
         cv::Point3f(0.0f, static_cast<float>(config.nose_y), static_cast<float>(config.nose_z)),   // Nose tip
-        cv::Point3f(-18.462f, 31.712f, -4.550f), // Right mouth corner
-        cv::Point3f(18.462f, 31.712f, -4.550f)  // Left mouth corner
+        cv::Point3f(static_cast<float>(-FaceModelGeometry::MOUTH_X), static_cast<float>(FaceModelGeometry::MOUTH_Y), static_cast<float>(FaceModelGeometry::MOUTH_Z)), // Right mouth corner
+        cv::Point3f(static_cast<float>(FaceModelGeometry::MOUTH_X), static_cast<float>(FaceModelGeometry::MOUTH_Y), static_cast<float>(FaceModelGeometry::MOUTH_Z))  // Left mouth corner
     };
 
     std::vector<cv::Point2f> image_points = {
@@ -128,8 +129,8 @@ bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
         out_crops.head_pose_rotation = GazeVector3(rvec.at<double>(0), rvec.at<double>(1), rvec.at<double>(2));
         out_crops.head_pose_translation = GazeVector3(tvec.at<double>(0), tvec.at<double>(1), tvec.at<double>(2));
         
-        cv::Mat left_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << 30.0, -20.0, 0.0) + tvec;
-        cv::Mat right_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << -30.0, -20.0, 0.0) + tvec;
+        cv::Mat left_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z) + tvec;
+        cv::Mat right_eye_cam_mat = R * (cv::Mat_<double>(3, 1) << -FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z) + tvec;
 
         out_crops.left_eye_center_cam = GazeVector3(left_eye_cam_mat.at<double>(0), left_eye_cam_mat.at<double>(1), left_eye_cam_mat.at<double>(2));
         out_crops.right_eye_center_cam = GazeVector3(right_eye_cam_mat.at<double>(0), right_eye_cam_mat.at<double>(1), right_eye_cam_mat.at<double>(2));

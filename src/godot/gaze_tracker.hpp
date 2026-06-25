@@ -113,6 +113,7 @@ public:
 
     // Unified gaze feed API (Web/WASM sidecar & custom injectors)
     void feed_gaze(bool face_detected, Vector3 origin, Vector3 direction);
+    void feed_gaze_web_raw(const Array& args);
     void on_sidecar_ready(const Array& args);
 
     // Getters / Setters for properties

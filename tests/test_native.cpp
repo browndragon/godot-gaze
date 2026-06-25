@@ -55,13 +55,13 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference") {
     std::memset(crops.left_eye_data, 128, 10800);
     std::memset(crops.right_eye_data, 128, 10800);
 
-    GazeVector3 raw_gaze_dir;
-    bool model_success = model.estimate_raw_gaze(crops, raw_gaze_dir);
+    GazeVector3 gaze_dir_cv;
+    bool model_success = model.estimate_raw_gaze(crops, gaze_dir_cv);
     REQUIRE(model_success == true);
 
-    // Check that raw_gaze_dir is normalized and valid
-    CHECK(raw_gaze_dir.length() == doctest::Approx(1.0));
-    CHECK(std::abs(raw_gaze_dir.z) > 0.0);
+    // Check that gaze_dir_cv is normalized and valid
+    CHECK(gaze_dir_cv.length() == doctest::Approx(1.0));
+    CHECK(std::abs(gaze_dir_cv.z) > 0.0);
 }
 
 struct PrevVector {
@@ -275,20 +275,19 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
 
             sd.nose_projected = project_ray_to_screen(head_center_cam, head_forward_cam);
 
-            GazeVector3 raw_gaze_dir;
-            if (model.estimate_raw_gaze(crops, raw_gaze_dir)) {
-                // Map raw gaze direction directly to Camera Space (X=X, Y=Y, Z=-Z)
-                sd.gaze_dir = GazeVector3(raw_gaze_dir.x, raw_gaze_dir.y, -raw_gaze_dir.z);
+            GazeVector3 gaze_dir_cv;
+            if (model.estimate_raw_gaze(crops, gaze_dir_cv)) {
+                sd.gaze_dir = engine.opencv_to_camera_space(gaze_dir_cv);
 
                 GazeVector3 eye_center_cv = (sd.left_eye + sd.right_eye) * 0.5;
-                GazeVector3 eye_center_cam(eye_center_cv.x, -eye_center_cv.y, -eye_center_cv.z);
+                GazeVector3 eye_center_cam = engine.opencv_to_camera_space(eye_center_cv);
 
                 std::cout << "DEBUG for " << sd.filename << ":\n"
                           << "  sd.left_eye: (" << sd.left_eye.x << ", " << sd.left_eye.y << ", " << sd.left_eye.z << ")\n"
                           << "  sd.right_eye: (" << sd.right_eye.x << ", " << sd.right_eye.y << ", " << sd.right_eye.z << ")\n"
                           << "  eye_center_cam: (" << eye_center_cam.x << ", " << eye_center_cam.y << ", " << eye_center_cam.z << ")\n"
                           << "  crops.head_pose_rotation: (" << crops.head_pose_rotation.x << ", " << crops.head_pose_rotation.y << ", " << crops.head_pose_rotation.z << ")\n"
-                          << "  raw_gaze_dir: (" << raw_gaze_dir.x << ", " << raw_gaze_dir.y << ", " << raw_gaze_dir.z << ")\n"
+                          << "  gaze_dir_cv: (" << gaze_dir_cv.x << ", " << gaze_dir_cv.y << ", " << gaze_dir_cv.z << ")\n"
                           << "  sd.gaze_dir: (" << sd.gaze_dir.x << ", " << sd.gaze_dir.y << ", " << sd.gaze_dir.z << ")\n";
 
                 sd.gaze_projected = project_ray_to_screen(eye_center_cam, sd.gaze_dir);

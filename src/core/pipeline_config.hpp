@@ -1,4 +1,5 @@
 #pragma once
+#include "face_model_geometry.hpp"
 
 namespace Gaze {
 
@@ -6,8 +7,8 @@ struct PipelineConfig {
     double pitch_t_gain = 0.0;
     double yaw_t_gain = 0.0;
     
-    double nose_y = -5.0;
-    double nose_z = -45.0; 
+    double nose_y = FaceModelGeometry::DEFAULT_NOSE_Y;
+    double nose_z = FaceModelGeometry::DEFAULT_NOSE_Z; 
     
     // Default IPD in millimeters
     double ipd_mm = 63.0;

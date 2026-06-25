@@ -15,7 +15,7 @@ public:
     virtual ~WebGazeModel() = default;
 
     virtual bool initialize() override;
-    virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) override;
+    virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) override;
 
     // Interface method called by the JS Sidecar via Emscripten JS Bridge
     void feed_raw_gaze(const GazeVector3& raw_gaze);

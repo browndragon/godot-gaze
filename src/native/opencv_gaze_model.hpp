@@ -18,7 +18,7 @@ public:
     virtual ~OpenCVGazeModel() = default;
 
     virtual bool initialize() override;
-    virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_raw_gaze_dir) override;
+    virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) override;
     virtual void set_config(const PipelineConfig& cfg) override { config = cfg; }
 };
 

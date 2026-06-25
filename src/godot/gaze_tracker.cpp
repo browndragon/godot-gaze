@@ -645,12 +645,15 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
         latest_gaze_dir = Gaze::GazeVector3(direction.x, direction.y, direction.z);
 
 #ifdef WEB_ENABLED
-        latest_crops.face_detected = true;
-        Gaze::GazeVector3 opencv_origin(latest_gaze_origin.x, -latest_gaze_origin.y, -latest_gaze_origin.z);
-        latest_crops.left_eye_center_cam = opencv_origin;
-        latest_crops.right_eye_center_cam = opencv_origin;
-        latest_crops.head_pose_translation = opencv_origin;
-        latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
+        // Set fallback values only if they were not already populated by feed_gaze_web_raw
+        if (latest_crops.left_eye_center_cam.length() == 0) {
+            latest_crops.face_detected = true;
+            Gaze::GazeVector3 opencv_origin(latest_gaze_origin.x, -latest_gaze_origin.y, -latest_gaze_origin.z);
+            latest_crops.left_eye_center_cam = opencv_origin;
+            latest_crops.right_eye_center_cam = opencv_origin;
+            latest_crops.head_pose_translation = opencv_origin;
+            latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
+        }
 #endif
 
         emit_signal("face_frame_ready");
@@ -667,7 +670,7 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
 
 void GazeTracker::feed_gaze_web_raw(const Array& args) {
 #ifdef WEB_ENABLED
-    if (args.size() < 7) {
+    if (args.size() < 16) {
         if (args.size() >= 1) {
             bool face_detected = args[0];
             if (!face_detected) {
@@ -683,15 +686,37 @@ void GazeTracker::feed_gaze_web_raw(const Array& args) {
         return;
     }
 
-    double ox = args[1];
-    double oy = args[2];
-    double oz = args[3];
-    double dx = args[4];
-    double dy = args[5];
-    double dz = args[6];
+    double lex = args[1];
+    double ley = args[2];
+    double lez = args[3];
+    double rex = args[4];
+    double rey = args[5];
+    double rez = args[6];
+    double dx = args[7];
+    double dy = args[8];
+    double dz = args[9];
+    double tx = args[10];
+    double ty = args[11];
+    double tz = args[12];
+    double rx = args[13];
+    double ry = args[14];
+    double rz = args[15];
 
-    // Convert from OpenCV camera space to Godot camera space
-    feed_gaze(true, Vector3(ox, -oy, -oz), Vector3(dx, dy, -dz));
+    // Populate latest_crops in OpenCV space
+    latest_crops.face_detected = true;
+    latest_crops.left_eye_center_cam = Gaze::GazeVector3(lex, ley, lez);
+    latest_crops.right_eye_center_cam = Gaze::GazeVector3(rex, rey, rez);
+    latest_crops.head_pose_translation = Gaze::GazeVector3(tx, ty, tz);
+    latest_crops.head_pose_rotation = Gaze::GazeVector3(rx, ry, rz);
+
+    // Calculate midpoint of eyes as gaze origin in OpenCV camera space
+    Gaze::GazeVector3 gaze_origin_cv = (latest_crops.left_eye_center_cam + latest_crops.right_eye_center_cam) * 0.5;
+
+    // Convert eye center origin and raw gaze direction to Camera Space (Y=-Y, Z=-Z)
+    Vector3 origin(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
+    Vector3 direction(dx, dy, -dz);
+
+    feed_gaze(true, origin, direction);
 #endif
 }
 

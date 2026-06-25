@@ -164,8 +164,12 @@ bool ProjectionEngine::calibrate_2d_bias(const GazeVector3& gaze_origin_cam,
     return true;
 }
 
+GazeVector3 ProjectionEngine::opencv_to_camera_space(const GazeVector3& v_cv) const {
+    return GazeVector3(v_cv.x, -v_cv.y, -v_cv.z);
+}
+
 GazeTransform3D ProjectionEngine::get_head_transform_in_camera_space(const GazeVector3& opencv_translation,
-                                                                     const GazeVector3& opencv_rotation_deg) const {
+                                                                   const GazeVector3& opencv_rvec) const {
     // 1. T_cv_cam_to_ggaze_cam = Transform(R_X(180), zero)
     // R_X(180) = diag(1, -1, -1)
     GazeBasis3D r_x_180(
@@ -176,7 +180,7 @@ GazeTransform3D ProjectionEngine::get_head_transform_in_camera_space(const GazeV
     GazeTransform3D T_cv_cam_to_ggaze_cam(r_x_180, GazeVector3(0, 0, 0));
 
     // 2. T_cv_face_to_cv_cam = Transform(R_cv, t_cv)
-    GazeBasis3D R_cv = rodrigues_to_basis(opencv_rotation_deg);
+    GazeBasis3D R_cv = rodrigues_to_basis(opencv_rvec);
     GazeTransform3D T_cv_face_to_cv_cam(R_cv, opencv_translation);
 
     // 3. T_ggaze_face_to_cv_face = Transform(R_Z(180), zero)

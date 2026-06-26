@@ -85,6 +85,10 @@ This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
    ```bash
    ./scripts/download_opencv.sh
    ```
+5. Install **Doxygen** (required for API documentation generation):
+   ```bash
+   brew install doxygen
+   ```
 
 ---
 
@@ -124,4 +128,14 @@ To export the web build headlessly using this script:
 ```bash
 ./scripts/godot.sh --headless --export-debug "Web" project/exports/godot-gaze.html
 ```
+
+## 7. Generating API Documentation (Doxygen)
+
+We use Doxygen to document C++ header files and generate the API reference website.
+
+To compile the latest documentation:
+```bash
+./scripts/generate_docs.sh
+```
+This generates HTML output under `docs/doxygen/html/`. You can view the output by opening `docs/doxygen/html/index.html` in your browser.
 

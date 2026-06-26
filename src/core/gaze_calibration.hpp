@@ -1,4 +1,11 @@
-// Decoupled calibration data structure.
+/**
+ * @file gaze_calibration.hpp
+ * @brief Gaze Calibration parameters (Layer 4)
+ *
+ * Defines the parameters for gaze correction, including 3D angular pitch/yaw
+ * offsets (applied to the gaze vector before projection) and 2D pixel offsets
+ * (applied after projection).
+ */
 #pragma once
 
 namespace Gaze {

@@ -1,4 +1,11 @@
-// Frame ingestion interface (Layer 1).
+/**
+ * @file camera_interface.hpp
+ * @brief Frame Ingestion Interface (Layer 1)
+ *
+ * Defines the abstract interface and data structures for ingesting frames
+ * from hardware camera devices, video files, or mock frame injectors.
+ * Declares the core Frame struct which propagates raw pixel data and timestamps.
+ */
 #pragma once
 
 namespace Gaze {

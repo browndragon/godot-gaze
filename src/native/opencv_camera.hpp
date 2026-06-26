@@ -1,4 +1,11 @@
-// Captures hardware camera input and outputs gray frame buffers.
+/**
+ * @file opencv_camera.hpp
+ * @brief Hardware Camera Capture class using OpenCV (Layer 1 - Native)
+ *
+ * Implements CameraInterface using OpenCV's cv::VideoCapture to stream frames
+ * from local USB/integrated webcam hardware. Outputs raw pixel frames with
+ * millisecond timestamp metrics.
+ */
 #pragma once
 
 #include "camera_interface.hpp"

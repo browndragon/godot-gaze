@@ -1,3 +1,11 @@
+/**
+ * @file gaze_pipeline_config.hpp
+ * @brief Godot Resource for pipeline configurations
+ *
+ * Exposes core tracking parameters (pitch/yaw translation compensation gains,
+ * nose depth, IPD, and detection resolution) to Godot scripts as a serializable
+ * resource object.
+ */
 #pragma once
 #include <godot_cpp/classes/resource.hpp>
 #include "pipeline_config.hpp"

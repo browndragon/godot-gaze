@@ -1,4 +1,11 @@
-// Runs gaze estimation network ONNX models.
+/**
+ * @file opencv_gaze_model.hpp
+ * @brief ONNX Gaze Estimation Model using OpenCV DNN (Layer 3 - Native)
+ *
+ * Implements GazeModel to execute forward pass inference on gaze estimation ONNX/OpenVINO
+ * networks (e.g. gaze-estimation-adas-0002). Reconciles input crops, head pose sign
+ * conventions, and translates output raw direction vectors to GodotGaze space.
+ */
 #pragma once
 
 #include "gaze_model.hpp"

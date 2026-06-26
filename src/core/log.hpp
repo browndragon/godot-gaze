@@ -1,4 +1,11 @@
-// Structured key-value logger macro.
+/**
+ * @file log.hpp
+ * @brief Structured Key-Value Logger Utility
+ *
+ * Implements thread-safe structured logging with an atomic registry to
+ * pipe logging events back to host environments (e.g. Godot engine log console
+ * or browser console handlers).
+ */
 #pragma once
 
 #include <iostream>

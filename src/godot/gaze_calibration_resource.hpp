@@ -1,4 +1,11 @@
-// Wraps core calibration data structure into a serializable Godot Resource.
+/**
+ * @file gaze_calibration_resource.hpp
+ * @brief Serializable Godot Resource wrapping Gaze Calibration data
+ *
+ * Exposes core 3D and 2D calibration bias parameters (bias_pitch, bias_yaw,
+ * bias_pixel_x, bias_pixel_y) to the Godot engine. Allows saving, loading,
+ * and inspecting calibration matrices.
+ */
 #pragma once
 
 #include <godot_cpp/classes/resource.hpp>

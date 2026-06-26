@@ -1,4 +1,12 @@
-// Zero-dependency 3D/2D vector and matrix math structures.
+/**
+ * @file math_defs.hpp
+ * @brief Zero-Dependency 3D/2D Vector and Matrix Math structures
+ *
+ * Implements lightweight vector (GazeVector2, GazeVector3), basis (GazeBasis3D),
+ * and transform (GazeTransform3D) structs. Includes utilities for Euler angle
+ * decompositions, Rodrigues rotation conversions, and gaze-space forward vector
+ * computations.
+ */
 #pragma once
 
 #include <cmath>

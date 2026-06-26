@@ -1,4 +1,12 @@
-// 3D ray-plane intersection, focal depth calculation, and 3D/2D analytical calibration (Layer 4).
+/**
+ * @file projection_engine.hpp
+ * @brief Ray-Plane Projection Engine and Calibration Solver (Layer 4)
+ *
+ * Implements the mathematical models for projecting raw 3D gaze rays onto
+ * physical screen planes, incorporating offset, resolution, and tilt parameters.
+ * Computes analytical calibration offsets (both 3D angular biases and 2D pixel offsets)
+ * and estimates focal depth from eye distance.
+ */
 #pragma once
 
 #include "camera_placement.hpp"

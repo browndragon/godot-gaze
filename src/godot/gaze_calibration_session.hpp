@@ -1,3 +1,11 @@
+/**
+ * @file gaze_calibration_session.hpp
+ * @brief Godot Resource for tracking calibration sampling sessions
+ *
+ * Collects target pixel coordinates, gaze origins, and raw gaze direction vectors
+ * during calibration sequences. Uses collected sample points to calculate pitch/yaw
+ * and pixel biases.
+ */
 #pragma once
 
 #include <godot_cpp/classes/resource.hpp>

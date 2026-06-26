@@ -1,4 +1,13 @@
-// Exposes tracker node properties, handles platform execution branches (native vs Web), applies filtering, and emits signals.
+/**
+ * @file gaze_tracker.hpp
+ * @brief GazeTracker Godot Node GDExtension binding
+ *
+ * The primary entry point for the godot-gaze plugin. Exposes properties, methods,
+ * and signals to GDScript. Coordinates platform-specific execution targets:
+ * - Native: captures hardware camera feed, executes YuNet face landmarking, and ONNX gaze inference.
+ * - Web/WASM: interface stub model linked to the browser's JavaScript sidecar via Emscripten.
+ * Integrates 1 Euro filters for coordinate smoothing and runs calibration procedures.
+ */
 #pragma once
 
 #include <godot_cpp/classes/node.hpp>

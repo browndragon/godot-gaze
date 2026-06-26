@@ -1,4 +1,11 @@
-// Face detector and normalizer interface (Layer 2).
+/**
+ * @file face_pipeline.hpp
+ * @brief Face detection, landmarking, and normalizer interface (Layer 2)
+ *
+ * Defines the abstract interface and data structures for detecting faces,
+ * calculating facial landmarks, estimating head pose transformations, and
+ * extracting normalized roll/scale eye crop buffers.
+ */
 #pragma once
 
 #include "camera_interface.hpp"

@@ -617,13 +617,10 @@
                     }
                 } catch (e) {}
             }
-            var borderOffset = this._borderOffset;
-            var chromeOffset = this._chromeOffset;
-
             var dpr = window.devicePixelRatio || 1.0;
             return {
-                x: (winLeft + borderOffset + rect.left) * dpr,
-                y: (winTop + chromeOffset + rect.top) * dpr
+                x: (winLeft + this._borderOffset + rect.left) * dpr,
+                y: (winTop + this._chromeOffset + rect.top) * dpr
             };
         },
 

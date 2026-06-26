@@ -245,8 +245,8 @@ async function run() {
         const coords2 = await getCanvasGazeCoords();
         console.log(`  At (250, 100): canvasX=${coords2.canvasX}, canvasY=${coords2.canvasY}`);
 
-        const deltaWinLeft = 250 - 100;
-        const deltaWinTop = 100 - 200;
+        const deltaWinLeft = (250 - 100) * 2.0;
+        const deltaWinTop = (100 - 200) * 2.0;
         const deltaCanvasX = coords2.canvasX - coords1.canvasX;
         const deltaCanvasY = coords2.canvasY - coords1.canvasY;
 

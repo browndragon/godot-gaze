@@ -292,14 +292,26 @@ bool GazeTracker::initialize_tracker() {
     if (lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
     if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0) {
-        screen_size_pixels = platform_get_screen_size();
+        Gaze::GazeVector2i plat_size = platform_get_screen_size();
+        if (!plat_size) {
+            screen_size_pixels = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+            Gaze::log_warning("GazeTrackerScreenSizePixelsFallback", "width", screen_size_pixels.x, "height", screen_size_pixels.y);
+        } else {
+            screen_size_pixels = Vector2i(plat_size.x, plat_size.y);
+        }
     }
-    String pixels_src = (screen_size_pixels.x > 0) ? "platform_api" : "default_fallback";
+    String pixels_src = (screen_size_pixels.x == DEFAULT_SCREEN_SIZE_PIXELS.x && screen_size_pixels.y == DEFAULT_SCREEN_SIZE_PIXELS.y) ? "default_fallback" : "platform_api";
 
     if (screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
-        screen_size_mm = platform_get_screen_size_mm();
+        Gaze::GazeVector2 plat_size_mm = platform_get_screen_size_mm();
+        if (!plat_size_mm) {
+            screen_size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
+            Gaze::log_warning("GazeTrackerScreenSizeMmFallback", "width", screen_size_mm.x, "height", screen_size_mm.y);
+        } else {
+            screen_size_mm = Vector2(plat_size_mm.x, plat_size_mm.y);
+        }
     }
-    String mm_src = (screen_size_mm.x > 0.0) ? "platform_api" : "default_fallback";
+    String mm_src = (screen_size_mm.x == DEFAULT_SCREEN_SIZE_MM.x && screen_size_mm.y == DEFAULT_SCREEN_SIZE_MM.y) ? "default_fallback" : "platform_api";
 
     if (camera_offset.y == 148.0 && screen_size_mm.y != 296.0) {
         camera_offset.y = screen_size_mm.y * 0.5;

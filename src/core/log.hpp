@@ -52,6 +52,13 @@ void log_info(const std::string& event, const Args&... args) {
 }
 
 template<typename... Args>
+void log_warning(const std::string& event, const Args&... args) {
+    std::stringstream ss;
+    ss << "[WARNING] event=" << event;
+    log_kv_impl(false, ss, args...);
+}
+
+template<typename... Args>
 void log_error(const std::string& event, const Args&... args) {
     std::stringstream ss;
     ss << "[ERROR] event=" << event;

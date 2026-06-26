@@ -22,8 +22,24 @@ struct GazeVector2 {
     double x = 0.0;
     double y = 0.0;
 
-    GazeVector2() : x(0.0), y(0.0) {}
-    GazeVector2(double px, double py) : x(px), y(py) {}
+    constexpr GazeVector2() : x(0.0), y(0.0) {}
+    constexpr GazeVector2(double px, double py) : x(px), y(py) {}
+
+    constexpr explicit operator bool() const {
+        return x != 0.0 || y != 0.0;
+    }
+};
+
+struct GazeVector2i {
+    int x = 0;
+    int y = 0;
+
+    constexpr GazeVector2i() : x(0), y(0) {}
+    constexpr GazeVector2i(int px, int py) : x(px), y(py) {}
+
+    constexpr explicit operator bool() const {
+        return x != 0 || y != 0;
+    }
 };
 
 struct GazeVector3 {
@@ -31,8 +47,12 @@ struct GazeVector3 {
     double y = 0.0;
     double z = 0.0;
 
-    GazeVector3() : x(0.0), y(0.0), z(0.0) {}
-    GazeVector3(double px, double py, double pz) : x(px), y(py), z(pz) {}
+    constexpr GazeVector3() : x(0.0), y(0.0), z(0.0) {}
+    constexpr GazeVector3(double px, double py, double pz) : x(px), y(py), z(pz) {}
+
+    constexpr explicit operator bool() const {
+        return x != 0.0 || y != 0.0 || z != 0.0;
+    }
 
     GazeVector3 operator+(const GazeVector3& other) const {
         return GazeVector3(x + other.x, y + other.y, z + other.z);

@@ -112,25 +112,31 @@ Vector2 GazeTracker::platform_get_window_position() const {
     return Vector2(0.0, 0.0);
 }
 
-Vector2i GazeTracker::platform_get_screen_size() const {
+Gaze::GazeVector2i GazeTracker::platform_get_screen_size() const {
     DisplayServer* ds = DisplayServer::get_singleton();
     if (ds) {
-        return ds->screen_get_size(ds->window_get_current_screen());
+        Vector2i size = ds->screen_get_size(ds->window_get_current_screen());
+        return Gaze::GazeVector2i(size.x, size.y);
     }
-    return Vector2i(1920, 1080);
+    return Gaze::GazeVector2i(0, 0);
 }
 
-Vector2 GazeTracker::platform_get_screen_size_mm() const {
+Gaze::GazeVector2 GazeTracker::platform_get_screen_size_mm() const {
     DisplayServer* ds = DisplayServer::get_singleton();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         double dpi = ds->screen_get_dpi(screen_id);
-        Vector2i size_px = platform_get_screen_size();
-        if (dpi > 0.0) {
-            return Vector2((size_px.x / dpi) * 25.4, (size_px.y / dpi) * 25.4);
+        Gaze::GazeVector2i size_px = platform_get_screen_size();
+        if (dpi > 0.0 && size_px) {
+            // NOTE: We deliberately do NOT multiply size_px by ds->screen_get_scale() here.
+            // Doing so would calculate the true physical millimeter size, but would halve the 
+            // tracking sensitivity on Retina/high-DPI screens, constraining the desktop nosegaze 
+            // to only the top/center of the screen. Keeping this in logical pixels doubles the 
+            // sensitivity, which is required for smooth, full-screen nosegaze.
+            return Gaze::GazeVector2((size_px.x / dpi) * MM_PER_INCH, (size_px.y / dpi) * MM_PER_INCH);
         }
     }
-    return Vector2(345.0, 215.0); // MacBook 15" fallback
+    return Gaze::GazeVector2(0.0, 0.0);
 }
 
 bool GazeTracker::complete_initialization() {

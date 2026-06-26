@@ -35,6 +35,11 @@ class GazeTracker : public Node {
     GDCLASS(GazeTracker, Node);
 
 public:
+    static constexpr double MM_PER_INCH = 25.4;
+    static constexpr double CSS_PIXELS_PER_INCH = 96.0;
+    static constexpr Gaze::GazeVector2 DEFAULT_SCREEN_SIZE_MM = Gaze::GazeVector2(345.0, 215.0);
+    static constexpr Gaze::GazeVector2i DEFAULT_SCREEN_SIZE_PIXELS = Gaze::GazeVector2i(1920, 1080);
+
     enum GazeLifecycle {
         LIFECYCLE_UNKNOWN = 0,
         LIFECYCLE_PERM_REQ = 1,
@@ -103,8 +108,8 @@ private:
     void platform_on_permission_result(bool granted);
     void platform_trigger_permission_request();
     Vector2 platform_get_window_position() const;
-    Vector2i platform_get_screen_size() const;
-    Vector2 platform_get_screen_size_mm() const;
+    Gaze::GazeVector2i platform_get_screen_size() const;
+    Gaze::GazeVector2 platform_get_screen_size_mm() const;
 
 protected:
     static void _bind_methods();

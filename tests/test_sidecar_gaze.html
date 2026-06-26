@@ -48,6 +48,12 @@
             }
         };
 
+        // Mock devicePixelRatio to 2.0 to simulate Retina/High-DPI screens and verify coordinate logical scaling stability
+        Object.defineProperty(window, 'devicePixelRatio', {
+            get: function() { return 2.0; },
+            configurable: true
+        });
+
         // Mock getUserMedia
         navigator.mediaDevices.getUserMedia = function() {
             var stream = (typeof MediaStream !== 'undefined') ? new MediaStream() : {};

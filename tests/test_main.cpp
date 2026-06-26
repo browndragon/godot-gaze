@@ -88,6 +88,29 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)") {
     CHECK(pixel.y == doctest::Approx(0.0));
 }
 
+TEST_CASE("Testing Projection Sensitivity under Retina Dimensions") {
+    ProjectionEngine engine;
+    // Mock logical pixels and the logical millimeters (without scale multiplier)
+    engine.set_screen_size_pixels(GazeVector2(1440.0, 900.0));
+    engine.set_screen_size_mm(GazeVector2(166.0, 103.0));
+    
+    CameraPlacement placement(GazeVector3(0.0, 51.5, 0.0), 0.0);
+    engine.set_camera_placement(placement);
+
+    GazeVector3 origin(0.0, 0.0, -500.0);
+    GazeVector3 dir(0.1, 0.0, 1.0); // 5.7 degrees right rotation
+
+    GazeVector2 pixel;
+    bool success = engine.project_gaze(origin, dir, pixel);
+    REQUIRE(success == true);
+    
+    // With correct logical scale (high sensitivity), X should project to approx 286 px.
+    // If a physical scale multiplier was incorrectly applied, screen_size_mm would double,
+    // halving the sensitivity, causing X to project to approx 503 px (much closer to center).
+    // We assert that the projected X coordinate remains far enough from the center:
+    CHECK(pixel.x < 350.0);
+}
+
 TEST_CASE("Testing Projection Engine Math (With Tilt)") {
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));

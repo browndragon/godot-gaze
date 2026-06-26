@@ -47,33 +47,28 @@ Vector2 GazeTracker::platform_get_window_position() const {
     return web_canvas_pos;
 }
 
-Vector2i GazeTracker::platform_get_screen_size() const {
+Gaze::GazeVector2i GazeTracker::platform_get_screen_size() const {
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
     if (js) {
         int w = (int)js->eval("window.screen.width");
         int h = (int)js->eval("window.screen.height");
-        double dpr = (double)js->eval("window.devicePixelRatio || 1.0");
         if (w > 0 && h > 0) {
-            return Vector2i((int)(w * dpr), (int)(h * dpr));
+            return Gaze::GazeVector2i(w, h);
         }
     }
-    return Vector2i(1920, 1080);
+    return Gaze::GazeVector2i(0, 0);
 }
 
-Vector2 GazeTracker::platform_get_screen_size_mm() const {
+Gaze::GazeVector2 GazeTracker::platform_get_screen_size_mm() const {
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
-    double w_css = 1920.0;
-    double h_css = 1080.0;
     if (js) {
         double w = (double)js->eval("window.screen.width");
         double h = (double)js->eval("window.screen.height");
-        if (w > 0 && h > 0) {
-            w_css = w;
-            h_css = h;
+        if (w > 0.0 && h > 0.0) {
+            return Gaze::GazeVector2((w / CSS_PIXELS_PER_INCH) * MM_PER_INCH, (h / CSS_PIXELS_PER_INCH) * MM_PER_INCH);
         }
     }
-    double dpi = 96.0; // standard 96 DPI fallback for CSS px to physical mm conversion
-    return Vector2((w_css / dpi) * 25.4, (h_css / dpi) * 25.4);
+    return Gaze::GazeVector2(0.0, 0.0);
 }
 
 bool GazeTracker::complete_initialization() {
@@ -83,17 +78,17 @@ bool GazeTracker::complete_initialization() {
         resolved_gaze = resolved_gaze.replace(".xml", ".onnx");
     }
 
-    int cam_width = 640;
-    int cam_height = 480;
+    int desired_camera_width = 640;
+    int desired_camera_height = 480;
     if (pipeline_config.is_valid()) {
         Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
-        cam_width = core_cfg.desired_camera_width;
-        cam_height = core_cfg.desired_camera_height;
+        desired_camera_width = core_cfg.desired_camera_width;
+        desired_camera_height = core_cfg.desired_camera_height;
     }
 
     if (opaque) {
         WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->start_tracking_loop(this, resolved_yunet, resolved_gaze, cam_width, cam_height);
+        state->start_tracking_loop(this, resolved_yunet, resolved_gaze, desired_camera_width, desired_camera_height);
     }
 
     tracker_initialized = true;

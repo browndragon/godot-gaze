@@ -83,9 +83,17 @@ bool GazeTracker::complete_initialization() {
         resolved_gaze = resolved_gaze.replace(".xml", ".onnx");
     }
 
+    int cam_width = 640;
+    int cam_height = 480;
+    if (pipeline_config.is_valid()) {
+        Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
+        cam_width = core_cfg.desired_camera_width;
+        cam_height = core_cfg.desired_camera_height;
+    }
+
     if (opaque) {
         WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->start_tracking_loop(this, resolved_yunet, resolved_gaze);
+        state->start_tracking_loop(this, resolved_yunet, resolved_gaze, cam_width, cam_height);
     }
 
     tracker_initialized = true;

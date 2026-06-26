@@ -24,6 +24,10 @@ struct PipelineConfig {
     // Resizing dimensions for face detection
     int face_detect_width = 160;
     int face_detect_height = 128;
+
+    // Desired camera capture resolution (default 640x480)
+    int desired_camera_width = 640;
+    int desired_camera_height = 480;
 };
 
 } // namespace Gaze

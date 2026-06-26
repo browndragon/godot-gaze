@@ -40,6 +40,9 @@ public:
     void set_face_detect_height(int val);
     int get_face_detect_height() const;
 
+    void set_desired_camera_size(Vector2i size);
+    Vector2i get_desired_camera_size() const;
+
     Gaze::PipelineConfig get_config() const { return config; }
 };
 

@@ -2,6 +2,7 @@
 #include "gaze_tracker.hpp"
 #include <godot_cpp/classes/java_script_bridge.hpp>
 #include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
 #ifdef WEB_ENABLED
@@ -25,9 +26,14 @@ void WebBindingState::setup_callbacks(GazeTracker* tracker) {
     }
 }
 
-void WebBindingState::start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path) {
+void WebBindingState::start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path, int camera_width, int camera_height) {
     JavaScriptBridge *js = JavaScriptBridge::get_singleton();
     if (!js) return;
+
+    bool is_debug = OS::get_singleton()->is_debug_build();
+    String debug_str = is_debug ? "true" : "false";
+    String w_str = String::num_int64(camera_width);
+    String h_str = String::num_int64(camera_height);
 
     // Load the gaze_sidecar.js script dynamically
     String eval_str = String(
@@ -36,12 +42,12 @@ void WebBindingState::start_tracking_loop(GazeTracker* tracker, const String& yu
         "    s.src = 'gaze_sidecar.js';"
         "    s.onload = function() {"
         "        if (window.gazeTracker) {"
-        "            window.gazeTracker.startTracking(\"") + yunet_path + "\", \"" + gaze_onnx_path + "\");"
+        "            window.gazeTracker.startTracking(\"") + yunet_path + "\", \"" + gaze_onnx_path + "\", " + debug_str + ", " + w_str + ", " + h_str + ");"
         "        }"
         "    };"
         "    document.head.appendChild(s);"
         "} else {"
-        "    window.gazeTracker.startTracking(\"" + yunet_path + "\", \"" + gaze_onnx_path + "\");"
+        "    window.gazeTracker.startTracking(\"" + yunet_path + "\", \"" + gaze_onnx_path + "\", " + debug_str + ", " + w_str + ", " + h_str + ");"
         "}";
     js->eval(eval_str);
 }

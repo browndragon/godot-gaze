@@ -27,6 +27,10 @@ void GazePipelineConfig::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_face_detect_height", "val"), &GazePipelineConfig::set_face_detect_height);
     ClassDB::bind_method(D_METHOD("get_face_detect_height"), &GazePipelineConfig::get_face_detect_height);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "face_detect_height"), "set_face_detect_height", "get_face_detect_height");
+
+    ClassDB::bind_method(D_METHOD("set_desired_camera_size", "size"), &GazePipelineConfig::set_desired_camera_size);
+    ClassDB::bind_method(D_METHOD("get_desired_camera_size"), &GazePipelineConfig::get_desired_camera_size);
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I, "desired_camera_size"), "set_desired_camera_size", "get_desired_camera_size");
 }
 
 void GazePipelineConfig::set_pitch_t_gain(double val) { config.pitch_t_gain = val; }
@@ -46,5 +50,14 @@ int GazePipelineConfig::get_face_detect_width() const { return config.face_detec
 
 void GazePipelineConfig::set_face_detect_height(int val) { config.face_detect_height = val; }
 int GazePipelineConfig::get_face_detect_height() const { return config.face_detect_height; }
+
+void GazePipelineConfig::set_desired_camera_size(Vector2i size) {
+    config.desired_camera_width = size.x;
+    config.desired_camera_height = size.y;
+}
+
+Vector2i GazePipelineConfig::get_desired_camera_size() const {
+    return Vector2i(config.desired_camera_width, config.desired_camera_height);
+}
 
 } // namespace godot

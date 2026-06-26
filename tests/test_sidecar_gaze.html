@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Gaze Sidecar Coordinate Parity Test</h1>
-    <canvas id="testCanvas" width="320" height="240" style="display:none;"></canvas>
+    <canvas id="testCanvas" width="640" height="480" style="display:none;"></canvas>
     <div id="status">Waiting for OpenCV...</div>
 
     <script>
@@ -30,8 +30,8 @@
         document.createElement = function(tagName) {
             var el = originalCreateElement.call(document, tagName);
             if (tagName.toLowerCase() === 'video') {
-                Object.defineProperty(el, 'videoWidth', { get: function() { return 320; } });
-                Object.defineProperty(el, 'videoHeight', { get: function() { return 240; } });
+                Object.defineProperty(el, 'videoWidth', { get: function() { return 640; } });
+                Object.defineProperty(el, 'videoHeight', { get: function() { return 480; } });
                 Object.defineProperty(el, 'paused', { get: function() { return false; } });
             }
             return el;
@@ -242,7 +242,7 @@
                             capObj.read = function(mat) {
                                 var canvas = document.getElementById('testCanvas');
                                 var ctx = canvas.getContext('2d');
-                                var imgData = ctx.getImageData(0, 0, 320, 240);
+                                var imgData = ctx.getImageData(0, 0, 640, 480);
                                 mat.data.set(imgData.data);
                             };
                             return capObj;
@@ -280,11 +280,11 @@
                 img.onload = function() {
                     var canvas = document.getElementById('testCanvas');
                     var ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, 320, 240);
+                    ctx.drawImage(img, 0, 0, 640, 480);
 
                     // Start tracking if not active
                     if (!window.gazeTracker.active) {
-                        window.gazeTracker.startTracking('', '');
+                        window.gazeTracker.startTracking('', '', false);
                     }
 
                     // Poll for feed_gaze to be called

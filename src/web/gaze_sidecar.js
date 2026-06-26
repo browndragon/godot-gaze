@@ -97,7 +97,38 @@
             this.active = true;
 
             var self = this;
+            
+            // Intercept console logs for debug panel
+            if (!this.logsIntercepted) {
+                this.logsIntercepted = true;
+                this.debugLogs = [];
+                var originalLog = console.log;
+                var originalError = console.error;
+                console.log = function() {
+                    var args = Array.prototype.slice.call(arguments);
+                    originalLog.apply(console, args);
+                    var msg = args.join(' ');
+                    if (msg.includes('Gaze') || msg.includes('OpenCV')) {
+                        self.debugLogs.push({ time: new Date().toLocaleTimeString(), type: 'info', message: msg });
+                        if (self.debugLogs.length > 50) self.debugLogs.shift();
+                    }
+                };
+                console.error = function() {
+                    var args = Array.prototype.slice.call(arguments);
+                    originalError.apply(console, args);
+                    var msg = args.join(' ');
+                    self.debugLogs.push({ time: new Date().toLocaleTimeString(), type: 'error', message: msg });
+                    if (self.debugLogs.length > 50) self.debugLogs.shift();
+                };
+            }
+
             console.log('[GazeTracker] Initializing sidecar tracking pipeline...');
+            
+            try {
+                this.createDebugHUD();
+            } catch (hudErr) {
+                console.error('[GazeTracker] Failed to create debug HUD:', hudErr);
+            }
 
             this.injectScript('opencv.js', 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js', function() {
                 console.log('[GazeTracker] OpenCV.js loaded. Waiting for Runtime...');
@@ -199,13 +230,6 @@
                 self.video.play();
 
                 var cap = new cv.VideoCapture(self.video);
-                self.frameMat = new cv.Mat(self.video.height, self.video.width, cv.CV_8UC4);
-                self.bgrMat = new cv.Mat();
-                self.grayMat = new cv.Mat();
-                self.facesMat = new cv.Mat();
-
-                // Allocate reusable downscaled Mat for face detection
-                var detectMat = new cv.Mat();
                 var detectSize = { width: self.faceDetectWidth, height: self.faceDetectHeight };
 
                 function scheduleNextFrame() {
@@ -221,7 +245,6 @@
 
                 function trackFrame() {
                     if (!self.active) {
-                        detectMat.delete();
                         self.cleanupPipeline();
                         return;
                     }
@@ -230,6 +253,18 @@
                         scheduleNextFrame();
                         return;
                     }
+
+                    if (!self.frameMat) {
+                        var w = self.video.videoWidth;
+                        var h = self.video.videoHeight;
+                        console.log('[GazeTracker] Initializing Mats with actual video resolution: ' + w + 'x' + h);
+                        self.frameMat = new cv.Mat(h, w, cv.CV_8UC4);
+                        self.bgrMat = new cv.Mat();
+                        self.grayMat = new cv.Mat();
+                        self.facesMat = new cv.Mat();
+                        self.detectMat = new cv.Mat();
+                    }
+
                     try {
                         cap.read(self.frameMat);
                         cv.cvtColor(self.frameMat, self.bgrMat, cv.COLOR_RGBA2BGR);
@@ -246,15 +281,15 @@
                     // 1. Face detection step
                     try {
                         // Resize input image to the configured detection resolution (e.g. 160x128)
-                        cv.resize(self.bgrMat, detectMat, detectSize, 0, 0, cv.INTER_LINEAR);
+                        cv.resize(self.bgrMat, self.detectMat, detectSize, 0, 0, cv.INTER_LINEAR);
                         self.detector.setInputSize(detectSize);
-                        self.detector.detect(detectMat, self.facesMat);
+                        self.detector.detect(self.detectMat, self.facesMat);
                         
                         if (self.facesMat.rows > 0) {
                             detected = true;
-                            // Scale landmarks back to the original 320x240 video space
-                            var scaleX = self.video.videoWidth / self.faceDetectWidth;
-                            var scaleY = self.video.videoHeight / self.faceDetectHeight;
+                            // Scale landmarks back to the actual frame buffer space
+                            var scaleX = self.frameMat.cols / self.faceDetectWidth;
+                            var scaleY = self.frameMat.rows / self.faceDetectHeight;
                             
                             // YuNet landmarks layout: right eye (4,5), left eye (6,7), nose (8,9), right mouth (10,11), left mouth (12,13)
                             for (var i = 0; i < 5; i++) {
@@ -291,9 +326,9 @@
                                 landmarks[3].x, landmarks[3].y,
                                 landmarks[4].x, landmarks[4].y
                             ]);
-                            var cx = self.video.videoWidth / 2.0;
-                            var cy = self.video.videoHeight / 2.0;
-                            var fx = self.video.videoWidth * 1.5625;
+                            var cx = self.frameMat.cols / 2.0;
+                            var cy = self.frameMat.rows / 2.0;
+                            var fx = self.frameMat.cols * 1.5625;
                             var camera_matrix = cv.matFromArray(3, 3, cv.CV_64F, [
                                 fx, 0.0, cx,
                                 0.0, fx, cy,
@@ -359,79 +394,174 @@
                                 self.gazeNet.setInput(left_blob, 'right_eye_image');
                                 self.gazeNet.setInput(head_pose_data, 'head_pose_angles');
 
-                                var output = self.gazeNet.forward('gaze_vector/sink_port_0');
-                                if (!output.empty()) {
-                                    var dx = 0, dy = 0, dz = 0;
-                                    if (output.cols === 2) {
-                                        var pitch_gaze = output.floatAt(0, 0);
-                                        var yaw_gaze = output.floatAt(0, 1);
-                                        var cos_pitch = Math.cos(pitch_gaze);
-                                        dx = Math.sin(yaw_gaze) * cos_pitch;
-                                        dy = Math.sin(pitch_gaze);
-                                        dz = Math.cos(yaw_gaze) * cos_pitch;
-                                    } else if (output.cols === 3) {
-                                        dx = output.floatAt(0, 0);
-                                        dy = output.floatAt(0, 1);
-                                        dz = output.floatAt(0, 2);
-                                    }
-                                    var len_gaze = Math.hypot(dx, dy, dz);
-                                    if (len_gaze > 0) {
-                                        dx /= len_gaze; dy /= len_gaze; dz /= len_gaze;
-                                    }
-                                    var tx = tvec.doubleAt(0, 0);
-                                    var ty = tvec.doubleAt(1, 0);
-                                    var tz = tvec.doubleAt(2, 0);
-                                    
-                                    var lex = r00 * FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
-                                    var ley = r10 * FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
-                                    var lez = r20 * FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
-                                    
-                                    var rex = r00 * -FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
-                                    var rey = r10 * -FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
-                                    var rez = r20 * -FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
+                                 var outName = 'gaze_vector/sink_port_0';
+                                 if (self.gazeNet.getUnconnectedOutLayersNames) {
+                                     try {
+                                         var outNames = self.gazeNet.getUnconnectedOutLayersNames();
+                                         if (outNames && outNames.size() > 0) {
+                                             outName = outNames.get(0);
+                                         }
+                                         if (outNames && outNames.delete) {
+                                             outNames.delete();
+                                         }
+                                     } catch (e) {
+                                         console.warn('[GazeTracker] getUnconnectedOutLayersNames failed, falling back to default:', e);
+                                     }
+                                 }
 
-                                    var rx = rvec.doubleAt(0, 0);
-                                    var ry = rvec.doubleAt(1, 0);
-                                    var rz = rvec.doubleAt(2, 0);
+                                 var output = self.gazeNet.forward(outName);
+                                 if (!output.empty()) {
+                                     var dx = 0, dy = 0, dz = 0;
+                                     if (output.cols === 2) {
+                                         var pitch_gaze = output.floatAt(0, 0);
+                                         var yaw_gaze = output.floatAt(0, 1);
+                                         var cos_pitch = Math.cos(pitch_gaze);
+                                         dx = Math.sin(yaw_gaze) * cos_pitch;
+                                         dy = Math.sin(pitch_gaze);
+                                         dz = Math.cos(yaw_gaze) * cos_pitch;
+                                     } else if (output.cols === 3) {
+                                         dx = output.floatAt(0, 0);
+                                         dy = output.floatAt(0, 1);
+                                         dz = output.floatAt(0, 2);
+                                     }
+                                     var len_gaze = Math.hypot(dx, dy, dz);
+                                     if (len_gaze > 0) {
+                                         dx /= len_gaze; dy /= len_gaze; dz /= len_gaze;
+                                     }
 
-                                    var coords = self.getCanvasScreenCoordinates();
-                                    var canvasX = coords.x;
-                                    var canvasY = coords.y;
+                                     // Convert Gaze ADAS Space to OpenCV Camera Space: (dx, -dy, dz)
+                                     var dx_cv = dx;
+                                     var dy_cv = -dy;
+                                     var dz_cv = dz;
 
-                                    if (window.godotGaze && window.godotGaze.feed_gaze) {
-                                        window.godotGaze.feed_gaze(true, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz, canvasX, canvasY);
-                                    }
-                                }
+                                     var tx = tvec.doubleAt(0, 0);
+                                     var ty = tvec.doubleAt(1, 0);
+                                     var tz = tvec.doubleAt(2, 0);
+                                     
+                                     var lex = r00 * FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
+                                     var ley = r10 * FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
+                                     var lez = r20 * FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
+                                     
+                                     var rex = r00 * -FaceModelGeometry.EYE_X + r01 * FaceModelGeometry.EYE_Y + r02 * FaceModelGeometry.EYE_Z + tx;
+                                     var rey = r10 * -FaceModelGeometry.EYE_X + r11 * FaceModelGeometry.EYE_Y + r12 * FaceModelGeometry.EYE_Z + ty;
+                                     var rez = r20 * -FaceModelGeometry.EYE_X + r21 * FaceModelGeometry.EYE_Y + r22 * FaceModelGeometry.EYE_Z + tz;
 
-                                R.delete();
-                                left_eye_mat.delete();
-                                right_eye_mat.delete();
-                                left_blob.delete();
-                                right_blob.delete();
-                                head_pose_data.delete();
-                                output.delete();
-                            }
-                            model_points.delete();
-                            image_points.delete();
-                            camera_matrix.delete();
-                            dist_coeffs.delete();
-                            rvec.delete();
-                            tvec.delete();
-                        } catch (gazeErr) {
-                            var msg = gazeErr;
-                            if (typeof gazeErr === 'number' && typeof cv !== 'undefined' && cv.exceptionFromPtr) {
-                                try { msg = cv.exceptionFromPtr(gazeErr).msg; } catch(e) {}
-                            } else if (gazeErr && gazeErr.message) {
-                                msg = gazeErr.message;
-                            }
-                            console.error('[GazeTracker] Gaze estimation failed:', msg);
-                        }
-                    } else {
-                        // Push face lost explicitly to Godot
-                        if (window.godotGaze && window.godotGaze.feed_gaze) {
-                            window.godotGaze.feed_gaze(false, 0, 0, 0, 0, 0, 0);
-                        }
-                    }
+                                     var rx = rvec.doubleAt(0, 0);
+                                     var ry = rvec.doubleAt(1, 0);
+                                     var rz = rvec.doubleAt(2, 0);
+
+                                     var coords = self.getCanvasScreenCoordinates();
+                                     var canvasX = coords.x;
+                                     var canvasY = coords.y;
+
+                                      // Update live diagnostics HUD
+                                      var debugPanel = document.getElementById('gaze-hud-panel');
+                                      if (debugPanel && debugPanel.style.display !== 'none') {
+                                          var debugCanvas = document.getElementById('gaze-hud-canvas');
+                                          if (debugCanvas) {
+                                              var ctx = debugCanvas.getContext('2d');
+                                              ctx.drawImage(self.video, 0, 0, debugCanvas.width, debugCanvas.height);
+                                              
+                                              var hudScaleX = debugCanvas.width / self.frameMat.cols;
+                                              var hudScaleY = debugCanvas.height / self.frameMat.rows;
+                                              
+                                              // Draw face landmarks
+                                              ctx.fillStyle = '#00ffcc';
+                                              for (var i = 0; i < landmarks.length; i++) {
+                                                  ctx.beginPath();
+                                                  ctx.arc(landmarks[i].x * hudScaleX, landmarks[i].y * hudScaleY, 3, 0, 2 * Math.PI);
+                                                  ctx.fill();
+                                              }
+                                              
+                                              // Draw gaze direction vector from midpoint of eyes
+                                              var eye_mid_x = (landmarks[0].x + landmarks[1].x) / 2;
+                                              var eye_mid_y = (landmarks[0].y + landmarks[1].y) / 2;
+                                              ctx.strokeStyle = '#ff3366';
+                                              ctx.lineWidth = 2;
+                                              ctx.beginPath();
+                                              ctx.moveTo(eye_mid_x * hudScaleX, eye_mid_y * hudScaleY);
+                                              ctx.lineTo((eye_mid_x + dx_cv * 100) * hudScaleX, (eye_mid_y + dy_cv * 100) * hudScaleY);
+                                              ctx.stroke();
+                                          }
+                                          
+                                          var metricsEl = document.getElementById('gaze-hud-metrics');
+                                          if (metricsEl) {
+                                              self.lastMetrics = {
+                                                  faceDetected: true,
+                                                  gazeVector: { x: dx_cv, y: dy_cv, z: dz_cv },
+                                                  headPose: { tx: tx, ty: ty, tz: tz, rx: rx, ry: ry, rz: rz },
+                                                  canvasX: canvasX,
+                                                  canvasY: canvasY
+                                              };
+                                              metricsEl.innerHTML = 
+                                                  '<div>Face Tracked:</div><div style="color:#00ffcc">true</div>' +
+                                                  '<div>Gaze Vector:</div><div>(' + dx_cv.toFixed(3) + ', ' + dy_cv.toFixed(3) + ', ' + dz_cv.toFixed(3) + ')</div>' +
+                                                  '<div>Head Pos:</div><div>(' + tx.toFixed(1) + ', ' + ty.toFixed(1) + ', ' + tz.toFixed(1) + ')</div>' +
+                                                  '<div>Canvas Pos:</div><div>(' + canvasX + ', ' + canvasY + ')</div>' +
+                                                  '<div>Camera Res:</div><div>' + self.video.videoWidth + 'x' + self.video.videoHeight + '</div>';
+                                          }
+                                      }
+
+                                      if (window.godotGaze && window.godotGaze.feed_gaze) {
+                                          window.godotGaze.feed_gaze(true, lex, ley, lez, rex, rey, rez, dx_cv, dy_cv, dz_cv, tx, ty, tz, rx, ry, rz, canvasX, canvasY);
+                                      }
+                                 }
+
+                                 R.delete();
+                                 left_eye_mat.delete();
+                                 right_eye_mat.delete();
+                                 left_blob.delete();
+                                 right_blob.delete();
+                                 head_pose_data.delete();
+                                 output.delete();
+                             }
+                             model_points.delete();
+                             image_points.delete();
+                             camera_matrix.delete();
+                             dist_coeffs.delete();
+                             rvec.delete();
+                             tvec.delete();
+                         } catch (gazeErr) {
+                             var msg = gazeErr;
+                             if (typeof gazeErr === 'number' && typeof cv !== 'undefined' && cv.exceptionFromPtr) {
+                                 try { msg = cv.exceptionFromPtr(gazeErr).msg; } catch(e) {}
+                             } else if (gazeErr && gazeErr.message) {
+                                 msg = gazeErr.message;
+                             }
+                             console.error('[GazeTracker] Gaze estimation failed:', msg);
+                         }
+                     } else {
+                         // Push face lost explicitly to Godot
+                         if (window.godotGaze && window.godotGaze.feed_gaze) {
+                             window.godotGaze.feed_gaze(false, 0, 0, 0, 0, 0, 0);
+                         }
+
+                         // Update HUD for face lost
+                         var debugPanel = document.getElementById('gaze-hud-panel');
+                         if (debugPanel && debugPanel.style.display !== 'none') {
+                             var debugCanvas = document.getElementById('gaze-hud-canvas');
+                             if (debugCanvas) {
+                                 var ctx = debugCanvas.getContext('2d');
+                                 ctx.drawImage(self.video, 0, 0, debugCanvas.width, debugCanvas.height);
+                             }
+                             var metricsEl = document.getElementById('gaze-hud-metrics');
+                             if (metricsEl) {
+                                 self.lastMetrics = {
+                                     faceDetected: false,
+                                     gazeVector: null,
+                                     headPose: null,
+                                     canvasX: 0,
+                                     canvasY: 0
+                                 };
+                                 metricsEl.innerHTML = 
+                                     '<div>Face Tracked:</div><div style="color:#ff3366">false</div>' +
+                                     '<div>Gaze Vector:</div><div>N/A</div>' +
+                                     '<div>Head Pos:</div><div>N/A</div>' +
+                                     '<div>Canvas Pos:</div><div>N/A</div>' +
+                                     '<div>Camera Res:</div><div>' + self.video.videoWidth + 'x' + self.video.videoHeight + '</div>';
+                             }
+                         }
+                     }
                     scheduleNextFrame();
                 }
                 trackFrame();
@@ -477,9 +607,188 @@
             var borderOffset = this._borderOffset;
             var chromeOffset = this._chromeOffset;
 
+            var dpr = window.devicePixelRatio || 1.0;
             return {
-                x: winLeft + borderOffset + rect.left,
-                y: winTop + chromeOffset + rect.top
+                x: (winLeft + borderOffset + rect.left) * dpr,
+                y: (winTop + chromeOffset + rect.top) * dpr
+            };
+        },
+
+        createDebugHUD: function() {
+            if (document.getElementById('gaze-hud-trigger')) return;
+
+            var trigger = document.createElement('button');
+            trigger.id = 'gaze-hud-trigger';
+            trigger.innerHTML = '👁️ Gaze HUD';
+            Object.assign(trigger.style, {
+                position: 'fixed',
+                bottom: '20px',
+                right: '20px',
+                zIndex: '999999',
+                padding: '10px 16px',
+                background: 'rgba(18, 18, 24, 0.85)',
+                color: '#00ffcc',
+                border: '1px solid rgba(0, 255, 204, 0.3)',
+                borderRadius: '20px',
+                cursor: 'pointer',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                fontSize: '13px',
+                fontWeight: '600',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                backdropFilter: 'blur(8px)',
+                webkitBackdropFilter: 'blur(8px)',
+                transition: 'all 0.2s ease-in-out'
+            });
+
+            var panel = document.createElement('div');
+            panel.id = 'gaze-hud-panel';
+            Object.assign(panel.style, {
+                position: 'fixed',
+                bottom: '80px',
+                right: '20px',
+                width: '340px',
+                maxHeight: '520px',
+                zIndex: '999998',
+                background: 'rgba(18, 18, 24, 0.9)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '12px',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                backdropFilter: 'blur(16px)',
+                webkitBackdropFilter: 'blur(16px)',
+                display: 'none',
+                flexDirection: 'column',
+                color: '#e2e8f0',
+                fontFamily: 'system-ui, -apple-system, sans-serif',
+                overflow: 'hidden'
+            });
+
+            var header = document.createElement('div');
+            Object.assign(header.style, {
+                padding: '12px 16px',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                background: 'rgba(255, 255, 255, 0.02)'
+            });
+            header.innerHTML = '<span style="font-weight:700; font-size:12px; letter-spacing:0.5px; color:#00ffcc;">GAZE DIAGNOSTICS</span>';
+            
+            var closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '✕';
+            Object.assign(closeBtn.style, {
+                background: 'none',
+                border: 'none',
+                color: '#a0aec0',
+                cursor: 'pointer',
+                fontSize: '14px',
+                padding: '0'
+            });
+            closeBtn.onclick = function() { panel.style.display = 'none'; };
+            header.appendChild(closeBtn);
+            panel.appendChild(header);
+
+            var body = document.createElement('div');
+            Object.assign(body.style, {
+                padding: '12px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px'
+            });
+
+            var canvas = document.createElement('canvas');
+            canvas.id = 'gaze-hud-canvas';
+            canvas.width = 320;
+            canvas.height = 240;
+            Object.assign(canvas.style, {
+                width: '100%',
+                borderRadius: '6px',
+                background: '#0a0a0f',
+                border: '1px solid rgba(255, 255, 255, 0.05)'
+            });
+            body.appendChild(canvas);
+
+            var metrics = document.createElement('div');
+            metrics.id = 'gaze-hud-metrics';
+            Object.assign(metrics.style, {
+                fontSize: '11px',
+                fontFamily: 'monospace',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1.5fr',
+                gap: '4px 8px',
+                padding: '8px',
+                background: 'rgba(0,0,0,0.25)',
+                borderRadius: '6px',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                color: '#cbd5e0'
+            });
+            body.appendChild(metrics);
+
+            var copyBtn = document.createElement('button');
+            copyBtn.innerHTML = '📋 Copy Debug Logs & Info';
+            Object.assign(copyBtn.style, {
+                padding: '8px 10px',
+                background: 'rgba(0, 255, 204, 0.1)',
+                border: '1px solid rgba(0, 255, 204, 0.3)',
+                color: '#00ffcc',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '11px',
+                fontWeight: '600',
+                transition: 'all 0.2s ease'
+            });
+            copyBtn.onmouseenter = function() { copyBtn.style.background = 'rgba(0, 255, 204, 0.2)'; };
+            copyBtn.onmouseleave = function() { copyBtn.style.background = 'rgba(0, 255, 204, 0.1)'; };
+            
+            var self = this;
+            copyBtn.onclick = function() {
+                var info = {
+                    timestamp: new Date().toISOString(),
+                    active: self.active,
+                    faceDetected: self.lastMetrics ? self.lastMetrics.faceDetected : false,
+                    gazeVector: self.lastMetrics ? self.lastMetrics.gazeVector : null,
+                    headPose: self.lastMetrics ? self.lastMetrics.headPose : null,
+                    geometry: {
+                        screenLeft: window.screenLeft,
+                        screenTop: window.screenTop,
+                        outerWidth: window.outerWidth,
+                        outerHeight: window.outerHeight,
+                        innerWidth: window.innerWidth,
+                        innerHeight: window.innerHeight,
+                        canvasX: self.lastMetrics ? self.lastMetrics.canvasX : null,
+                        canvasY: self.lastMetrics ? self.lastMetrics.canvasY : null,
+                        borderOffset: self._borderOffset,
+                        chromeOffset: self._chromeOffset
+                    },
+                    userAgent: navigator.userAgent,
+                    logs: self.debugLogs || []
+                };
+                navigator.clipboard.writeText(JSON.stringify(info, null, 2)).then(function() {
+                    copyBtn.innerHTML = '✅ Copied!';
+                    setTimeout(function() { copyBtn.innerHTML = '📋 Copy Debug Logs & Info'; }, 2000);
+                });
+            };
+            body.appendChild(copyBtn);
+
+            panel.appendChild(body);
+            document.body.appendChild(trigger);
+            document.body.appendChild(panel);
+
+            trigger.onclick = function() {
+                if (panel.style.display === 'none') {
+                    panel.style.display = 'flex';
+                } else {
+                    panel.style.display = 'none';
+                }
+            };
+
+            trigger.onmouseenter = function() {
+                trigger.style.background = '#00ffcc';
+                trigger.style.color = '#121214';
+            };
+            trigger.onmouseleave = function() {
+                trigger.style.background = 'rgba(18, 18, 24, 0.85)';
+                trigger.style.color = '#00ffcc';
             };
         },
 
@@ -490,21 +799,16 @@
             if (this.video) {
                 this.video.remove();
             }
-            if (this.frameMat) this.frameMat.delete();
-            if (this.bgrMat) this.bgrMat.delete();
-            if (this.grayMat) this.grayMat.delete();
-            if (this.facesMat) this.facesMat.delete();
+            if (this.frameMat) { this.frameMat.delete(); this.frameMat = null; }
+            if (this.bgrMat) { this.bgrMat.delete(); this.bgrMat = null; }
+            if (this.grayMat) { this.grayMat.delete(); this.grayMat = null; }
+            if (this.facesMat) { this.facesMat.delete(); this.facesMat = null; }
+            if (this.detectMat) { this.detectMat.delete(); this.detectMat = null; }
             if (this.detector && this.detector.delete) this.detector.delete();
             if (this.gazeNet) this.gazeNet.delete();
 
             this.stream = null;
             this.video = null;
-            this.frameMat = null;
-            this.bgrMat = null;
-            this.grayMat = null;
-            this.facesMat = null;
-            this.detector = null;
-            this.gazeNet = null;
             console.log('[GazeTracker] Web tracking loop stopped and resources cleaned up.');
         },
 

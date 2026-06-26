@@ -52,17 +52,28 @@ Vector2i GazeTracker::platform_get_screen_size() const {
     if (js) {
         int w = (int)js->eval("window.screen.width");
         int h = (int)js->eval("window.screen.height");
+        double dpr = (double)js->eval("window.devicePixelRatio || 1.0");
         if (w > 0 && h > 0) {
-            return Vector2i(w, h);
+            return Vector2i((int)(w * dpr), (int)(h * dpr));
         }
     }
     return Vector2i(1920, 1080);
 }
 
 Vector2 GazeTracker::platform_get_screen_size_mm() const {
-    Vector2i size_px = platform_get_screen_size();
+    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
+    double w_css = 1920.0;
+    double h_css = 1080.0;
+    if (js) {
+        double w = (double)js->eval("window.screen.width");
+        double h = (double)js->eval("window.screen.height");
+        if (w > 0 && h > 0) {
+            w_css = w;
+            h_css = h;
+        }
+    }
     double dpi = 96.0; // standard 96 DPI fallback for CSS px to physical mm conversion
-    return Vector2((size_px.x / dpi) * 25.4, (size_px.y / dpi) * 25.4);
+    return Vector2((w_css / dpi) * 25.4, (h_css / dpi) * 25.4);
 }
 
 bool GazeTracker::complete_initialization() {

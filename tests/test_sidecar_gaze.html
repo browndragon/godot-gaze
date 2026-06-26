@@ -125,10 +125,10 @@
                         read: function(mat) {}
                     };
                 },
-                Mat: function() {
+                Mat: function(rows, cols, type) {
                     return {
-                        rows: 1,
-                        cols: 1,
+                        rows: rows || 1,
+                        cols: cols || 1,
                         delete: function() {},
                         doubleAt: function(r, c) { return 0.0; }
                     };

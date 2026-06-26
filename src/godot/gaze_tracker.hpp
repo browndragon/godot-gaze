@@ -87,6 +87,7 @@ private:
     Gaze::GazeVector3 latest_gaze_dir = Gaze::GazeVector3(0.0, 0.0, -1.0);
     Gaze::EyeCrops latest_crops;
 
+    Vector2 web_canvas_pos = Vector2(0.0, 0.0);
     void* opaque = nullptr;
 
     void update_projection_parameters();
@@ -94,6 +95,16 @@ private:
     void update_pipeline_config();
     String copy_model_to_user_dir(const String &res_path);
     void copy_individual_file(const String &src, const String &dest);
+
+    // Platform-specific helper methods
+    void platform_initialize();
+    void platform_terminate();
+    void platform_process(double delta);
+    void platform_on_permission_result(bool granted);
+    void platform_trigger_permission_request();
+    Vector2 platform_get_window_position() const;
+    Vector2i platform_get_screen_size() const;
+    Vector2 platform_get_screen_size_mm() const;
 
 protected:
     static void _bind_methods();

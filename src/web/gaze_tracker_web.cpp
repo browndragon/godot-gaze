@@ -52,8 +52,9 @@ Gaze::GazeVector2i GazeTracker::platform_get_screen_size() const {
     if (js) {
         int w = (int)js->eval("window.screen.width");
         int h = (int)js->eval("window.screen.height");
+        double dpr = (double)js->eval("window.devicePixelRatio || 1.0");
         if (w > 0 && h > 0) {
-            return Gaze::GazeVector2i(w, h);
+            return Gaze::GazeVector2i((int)(w * dpr), (int)(h * dpr));
         }
     }
     return Gaze::GazeVector2i(0, 0);
@@ -64,8 +65,10 @@ Gaze::GazeVector2 GazeTracker::platform_get_screen_size_mm() const {
     if (js) {
         double w = (double)js->eval("window.screen.width");
         double h = (double)js->eval("window.screen.height");
+        double dpr = (double)js->eval("window.devicePixelRatio || 1.0");
         if (w > 0.0 && h > 0.0) {
-            return Gaze::GazeVector2((w / CSS_PIXELS_PER_INCH) * MM_PER_INCH, (h / CSS_PIXELS_PER_INCH) * MM_PER_INCH);
+            double dpi = CSS_PIXELS_PER_INCH * dpr;
+            return Gaze::GazeVector2((w / dpi) * MM_PER_INCH, (h / dpi) * MM_PER_INCH);
         }
     }
     return Gaze::GazeVector2(0.0, 0.0);

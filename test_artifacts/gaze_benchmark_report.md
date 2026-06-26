@@ -1,5 +1,5 @@
 # Gaze Benchmark Report
-Generated on: 2026-06-25T21:46:00Z
+Generated on: 2026-06-26T13:55:51Z
 
 | Image File | Property | Target Value | Current Value | Error | Previous Value | Previous Error |
 | --- | --- | --- | --- | --- | --- | --- |

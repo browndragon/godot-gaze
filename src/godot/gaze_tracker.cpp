@@ -199,8 +199,8 @@ void GazeTracker::_process(double delta) {
                         Gaze::GazeVector3 gaze_origin_cv = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5;
 
                         // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
-                        Gaze::GazeVector3 origin_cam(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
-                        Gaze::GazeVector3 dir_cam(raw_gaze_dir_cam.x, raw_gaze_dir_cam.y, -raw_gaze_dir_cam.z);
+                        Gaze::GazeVector3 origin_cam = projection_engine.opencv_to_camera_space(gaze_origin_cv);
+                        Gaze::GazeVector3 dir_cam = projection_engine.opencv_to_camera_space(raw_gaze_dir_cam);
 
                         feed_gaze(true, Vector3(origin_cam.x, origin_cam.y, origin_cam.z), Vector3(dir_cam.x, dir_cam.y, dir_cam.z));
                     }

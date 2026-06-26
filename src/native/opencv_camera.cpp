@@ -20,15 +20,21 @@ bool OpenCVCamera::initialize() {
     }
 
     // Set resolution properties (optional / recommended defaults)
-    cap.set(cv::CAP_PROP_FRAME_WIDTH, 640);
-    cap.set(cv::CAP_PROP_FRAME_HEIGHT, 480);
+    cap.set(cv::CAP_PROP_FRAME_WIDTH, target_width);
+    cap.set(cv::CAP_PROP_FRAME_HEIGHT, target_height);
     cap.set(cv::CAP_PROP_FPS, 30);
 
     auto now = std::chrono::steady_clock::now();
     start_time = std::chrono::duration<double>(now.time_since_epoch()).count();
     
+    log_info("CameraInitKind", "target_width", target_width, "target_height", target_height);
     log_info("CameraInitSuccess", "width", cap.get(cv::CAP_PROP_FRAME_WIDTH), "height", cap.get(cv::CAP_PROP_FRAME_HEIGHT));
     return true;
+}
+
+void OpenCVCamera::set_resolution(int w, int h) {
+    target_width = w;
+    target_height = h;
 }
 
 bool OpenCVCamera::grab_frame(Frame& out_frame) {

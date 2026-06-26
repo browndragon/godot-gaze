@@ -20,12 +20,15 @@ private:
     cv::VideoCapture cap;
     std::vector<unsigned char> frame_buffer;
     double start_time;
+    int target_width = 640;
+    int target_height = 480;
 
 public:
     OpenCVCamera(int device = 0);
     virtual ~OpenCVCamera();
 
     virtual bool initialize() override;
+    virtual void set_resolution(int w, int h) override;
     virtual bool grab_frame(Frame& out_frame) override;
     virtual void release() override;
 };

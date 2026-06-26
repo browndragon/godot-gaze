@@ -147,6 +147,11 @@ bool GazeTracker::complete_initialization() {
         model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
     }
 
+    if (pipeline_config.is_valid()) {
+        Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
+        camera->set_resolution(core_cfg.desired_camera_width, core_cfg.desired_camera_height);
+    }
+
     if (!camera->initialize()) {
         Gaze::log_error("GazeTrackerInitFailed", "reason", "camera initialization failed");
         stop_tracker();

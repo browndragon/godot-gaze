@@ -92,14 +92,17 @@
         },
 
         // 2. Main initializer and loop
-        startTracking: function(yunetPath, gazeOnnxPath) {
+        startTracking: function(yunetPath, gazeOnnxPath, isDebug, cameraWidth, cameraHeight) {
             if (this.active) return;
             this.active = true;
+            isDebug = !!isDebug;
+            this.desiredWidth = cameraWidth || 640;
+            this.desiredHeight = cameraHeight || 480;
 
             var self = this;
             
             // Intercept console logs for debug panel
-            if (!this.logsIntercepted) {
+            if (isDebug && !this.logsIntercepted) {
                 this.logsIntercepted = true;
                 this.debugLogs = [];
                 var originalLog = console.log;
@@ -124,10 +127,12 @@
 
             console.log('[GazeTracker] Initializing sidecar tracking pipeline...');
             
-            try {
-                this.createDebugHUD();
-            } catch (hudErr) {
-                console.error('[GazeTracker] Failed to create debug HUD:', hudErr);
+            if (isDebug) {
+                try {
+                    this.createDebugHUD();
+                } catch (hudErr) {
+                    console.error('[GazeTracker] Failed to create debug HUD:', hudErr);
+                }
             }
 
             this.injectScript('opencv.js', 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js', function() {
@@ -160,6 +165,7 @@
         },
 
         setupPipeline: function(yunetPath, gazeOnnxPath) {
+            var self = this;
             console.log('[GazeTracker] Writing models directly to cv.FS...');
             if (typeof cv.FS === 'undefined') {
                 console.error('[GazeTracker] cv.FS is undefined! Cannot write to OpenCV VFS.');
@@ -213,17 +219,16 @@
             }
 
             this.video = document.createElement('video');
-            this.video.width = 320;
-            this.video.height = 240;
+            this.video.width = self.desiredWidth;
+            this.video.height = self.desiredHeight;
             this.video.autoplay = true;
             this.video.playsInline = true;
             this.video.muted = true;
             this.video.style.display = 'none';
             document.body.appendChild(this.video);
 
-            var self = this;
             navigator.mediaDevices.getUserMedia({
-                video: { width: 320, height: 240, facingMode: 'user' }
+                video: { width: self.desiredWidth, height: self.desiredHeight, facingMode: 'user' }
             }).then(function(stream) {
                 self.stream = stream;
                 self.video.srcObject = stream;
@@ -357,8 +362,6 @@
                                     yaw   = Math.atan2(-r20, sy) * (180.0 / Math.PI);
                                     roll  = 0;
                                 }
-                                pitch += 0.017 * tvec.doubleAt(1, 0);
-                                yaw += 0.017 * tvec.doubleAt(0, 0);
 
                                 function cropEye(isLeft) {
                                     var eye_center = isLeft ? landmarks[1] : landmarks[0];
@@ -366,13 +369,14 @@
                                     var roll_dx = landmarks[1].x - landmarks[0].x;
                                     var roll_dy = landmarks[1].y - landmarks[0].y;
                                     var angle = Math.atan2(roll_dy, roll_dx) * (180.0 / Math.PI);
-                                    var scale = 1.0;
+                                    var dist_px = Math.sqrt(roll_dx * roll_dx + roll_dy * roll_dy);
+                                    var scale = 70.0 / (dist_px > 1e-6 ? dist_px : 70.0);
                                     var target_size = { width: 60, height: 60 };
                                     var M = cv.getRotationMatrix2D(pt, angle, scale);
                                     M.data64F[2] += (target_size.width / 2.0) - eye_center.x;
                                     M.data64F[5] += (target_size.height / 2.0) - eye_center.y;
                                     var warped = new cv.Mat();
-                                    // Note: we crop the eye from the original high-resolution grayMat (320x240)
+                                    // Note: we crop the eye from the original high-resolution grayMat
                                     cv.warpAffine(self.grayMat, warped, M, target_size, cv.INTER_LINEAR, cv.BORDER_REPLICATE);
                                     var warped_bgr = new cv.Mat();
                                     cv.cvtColor(warped, warped_bgr, cv.COLOR_GRAY2BGR);
@@ -454,37 +458,46 @@
                                      var canvasX = coords.x;
                                      var canvasY = coords.y;
 
-                                      // Update live diagnostics HUD
-                                      var debugPanel = document.getElementById('gaze-hud-panel');
-                                      if (debugPanel && debugPanel.style.display !== 'none') {
-                                          var debugCanvas = document.getElementById('gaze-hud-canvas');
-                                          if (debugCanvas) {
-                                              var ctx = debugCanvas.getContext('2d');
-                                              ctx.drawImage(self.video, 0, 0, debugCanvas.width, debugCanvas.height);
-                                              
-                                              var hudScaleX = debugCanvas.width / self.frameMat.cols;
-                                              var hudScaleY = debugCanvas.height / self.frameMat.rows;
-                                              
-                                              // Draw face landmarks
-                                              ctx.fillStyle = '#00ffcc';
-                                              for (var i = 0; i < landmarks.length; i++) {
-                                                  ctx.beginPath();
-                                                  ctx.arc(landmarks[i].x * hudScaleX, landmarks[i].y * hudScaleY, 3, 0, 2 * Math.PI);
-                                                  ctx.fill();
-                                              }
-                                              
-                                              // Draw gaze direction vector from midpoint of eyes
-                                              var eye_mid_x = (landmarks[0].x + landmarks[1].x) / 2;
-                                              var eye_mid_y = (landmarks[0].y + landmarks[1].y) / 2;
-                                              ctx.strokeStyle = '#ff3366';
-                                              ctx.lineWidth = 2;
-                                              ctx.beginPath();
-                                              ctx.moveTo(eye_mid_x * hudScaleX, eye_mid_y * hudScaleY);
-                                              ctx.lineTo((eye_mid_x + dx_cv * 100) * hudScaleX, (eye_mid_y + dy_cv * 100) * hudScaleY);
-                                              ctx.stroke();
-                                          }
-                                          
-                                          var metricsEl = document.getElementById('gaze-hud-metrics');
+                                       // Update live diagnostics HUD
+                                       var debugPanel = document.getElementById('gaze-hud-panel');
+                                       if (debugPanel && debugPanel.style.display !== 'none') {
+                                           var debugCanvas = document.getElementById('gaze-hud-canvas');
+                                           if (debugCanvas) {
+                                               var ctx = debugCanvas.getContext('2d');
+                                               ctx.drawImage(self.video, 0, 0, debugCanvas.width, debugCanvas.height);
+                                               
+                                               var hudScaleX = debugCanvas.width / self.frameMat.cols;
+                                               var hudScaleY = debugCanvas.height / self.frameMat.rows;
+                                               
+                                               // Draw face landmarks
+                                               ctx.fillStyle = '#00ffcc';
+                                               for (var i = 0; i < landmarks.length; i++) {
+                                                   ctx.beginPath();
+                                                   ctx.arc(landmarks[i].x * hudScaleX, landmarks[i].y * hudScaleY, 3, 0, 2 * Math.PI);
+                                                   ctx.fill();
+                                               }
+                                               
+                                               // Draw gaze direction vector from midpoint of eyes
+                                               var eye_mid_x = (landmarks[0].x + landmarks[1].x) / 2;
+                                               var eye_mid_y = (landmarks[0].y + landmarks[1].y) / 2;
+                                               ctx.strokeStyle = '#ff3366';
+                                               ctx.lineWidth = 2;
+                                               ctx.beginPath();
+                                               ctx.moveTo(eye_mid_x * hudScaleX, eye_mid_y * hudScaleY);
+                                               ctx.lineTo((eye_mid_x + dx_cv * 100) * hudScaleX, (eye_mid_y + dy_cv * 100) * hudScaleY);
+                                               ctx.stroke();
+                                           }
+
+                                           var leftEyeCanvas = document.getElementById('gaze-hud-left-eye-canvas');
+                                           if (leftEyeCanvas) {
+                                               cv.imshow('gaze-hud-left-eye-canvas', left_eye_mat);
+                                           }
+                                           var rightEyeCanvas = document.getElementById('gaze-hud-right-eye-canvas');
+                                           if (rightEyeCanvas) {
+                                               cv.imshow('gaze-hud-right-eye-canvas', right_eye_mat);
+                                           }
+                                           
+                                           var metricsEl = document.getElementById('gaze-hud-metrics');
                                           if (metricsEl) {
                                               self.lastMetrics = {
                                                   faceDetected: true,
@@ -708,6 +721,60 @@
             });
             body.appendChild(canvas);
 
+            var eyesContainer = document.createElement('div');
+            Object.assign(eyesContainer.style, {
+                display: 'flex',
+                justifyContent: 'space-around',
+                gap: '10px',
+                margin: '4px 0'
+            });
+
+            var leftEyeBox = document.createElement('div');
+            Object.assign(leftEyeBox.style, {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px'
+            });
+            leftEyeBox.innerHTML = '<span style="font-size: 10px; color: #a0aec0; font-family: system-ui;">Left Eye (Img Right)</span>';
+            var leftEyeCanvas = document.createElement('canvas');
+            leftEyeCanvas.id = 'gaze-hud-left-eye-canvas';
+            leftEyeCanvas.width = 60;
+            leftEyeCanvas.height = 60;
+            Object.assign(leftEyeCanvas.style, {
+                width: '60px',
+                height: '60px',
+                borderRadius: '4px',
+                background: '#0a0a0f',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+            });
+            leftEyeBox.appendChild(leftEyeCanvas);
+
+            var rightEyeBox = document.createElement('div');
+            Object.assign(rightEyeBox.style, {
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '4px'
+            });
+            rightEyeBox.innerHTML = '<span style="font-size: 10px; color: #a0aec0; font-family: system-ui;">Right Eye (Img Left)</span>';
+            var rightEyeCanvas = document.createElement('canvas');
+            rightEyeCanvas.id = 'gaze-hud-right-eye-canvas';
+            rightEyeCanvas.width = 60;
+            rightEyeCanvas.height = 60;
+            Object.assign(rightEyeCanvas.style, {
+                width: '60px',
+                height: '60px',
+                borderRadius: '4px',
+                background: '#0a0a0f',
+                border: '1px solid rgba(255, 255, 255, 0.1)'
+            });
+            rightEyeBox.appendChild(rightEyeCanvas);
+
+            eyesContainer.appendChild(rightEyeBox);
+            eyesContainer.appendChild(leftEyeBox);
+            body.appendChild(eyesContainer);
+
             var metrics = document.createElement('div');
             metrics.id = 'gaze-hud-metrics';
             Object.assign(metrics.style, {
@@ -799,6 +866,11 @@
             if (this.video) {
                 this.video.remove();
             }
+            var trigger = document.getElementById('gaze-hud-trigger');
+            if (trigger) trigger.remove();
+            var panel = document.getElementById('gaze-hud-panel');
+            if (panel) panel.remove();
+
             if (this.frameMat) { this.frameMat.delete(); this.frameMat = null; }
             if (this.bgrMat) { this.bgrMat.delete(); this.bgrMat = null; }
             if (this.grayMat) { this.grayMat.delete(); this.grayMat = null; }

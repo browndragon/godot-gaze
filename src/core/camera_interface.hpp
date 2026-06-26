@@ -24,6 +24,9 @@ public:
     // Initializes the capture source (camera device or mock file)
     virtual bool initialize() = 0;
 
+    // Sets the desired camera capture resolution (if supported by the device)
+    virtual void set_resolution(int w, int h) {}
+
     // Grabs the next frame. Returns true if successful.
     virtual bool grab_frame(Frame& out_frame) = 0;
 

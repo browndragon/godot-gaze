@@ -170,7 +170,9 @@ bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5]
 
     // Calculate inter-pupillary distance in pixels
     double dist_px = std::sqrt(roll_dx * roll_dx + roll_dy * roll_dy);
-    double scale = 1.0;
+    
+    // Normalize eye crop scale based on eye distance in pixels to handle different resolutions/distances
+    double scale = 70.0 / (dist_px > 1e-6 ? dist_px : 70.0);
 
     // Define eye crop target dimensions (Intel ADAS model expects 60x60)
     cv::Size target_size(60, 60);

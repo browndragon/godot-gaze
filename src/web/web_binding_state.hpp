@@ -21,7 +21,7 @@ struct WebBindingState {
     Ref<JavaScriptObject> ready_callback;
 
     void setup_callbacks(GazeTracker* tracker);
-    void start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path);
+    void start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path, int camera_width, int camera_height);
     void cleanup();
 };
 

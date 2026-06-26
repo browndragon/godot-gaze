@@ -1,0 +1,66 @@
+# Doxygen Configuration File for Godot Gaze
+# Generated for C++ documentation extraction
+
+# Project Settings
+PROJECT_NAME           = "Godot Gaze"
+PROJECT_NUMBER         = "1.0.0"
+PROJECT_BRIEF          = "Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine"
+OUTPUT_DIRECTORY       = "docs/doxygen"
+CREATE_SUBDIRS         = NO
+ALLOW_UNICODE_NAMES    = NO
+OUTPUT_LANGUAGE        = English
+BRIEF_MEMBER_DESC      = YES
+REPEAT_BRIEF           = YES
+
+# Input Options
+INPUT                  = src/core src/godot src/native src/web README.md docs/gaze_math_physical_model.md
+FILE_PATTERNS          = *.hpp *.cpp *.h *.js *.md
+RECURSIVE              = YES
+EXCLUDE                = thirdparty/
+EXCLUDE_PATTERNS       = */thirdparty/*
+USE_MDFILE_AS_MAINPAGE = README.md
+
+# Parser Options
+OPTIMIZE_OUTPUT_FOR_C  = NO
+JAVADOC_AUTOBRIEF      = YES
+QT_AUTOBRIEF           = NO
+MULTILINE_CPP_IS_BRIEF = NO
+TAB_SIZE               = 4
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+
+# Warning Options
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+WARN_AS_ERRORS         = NO
+
+# Output Formats
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+
+# Disable heavy outputs by default
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_MAN           = NO
+GENERATE_XML           = NO
+
+# Diagram options (Graphviz/dot is optional; disable by default for portability)
+HAVE_DOT               = NO
+CLASS_GRAPH            = NO
+COLLABORATION_GRAPH    = NO
+GROUP_GRAPHS           = NO
+TEMPLATE_RELATIONS     = NO
+INCLUDE_GRAPH          = NO
+INCLUDED_BY_GRAPH      = NO
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+DIRECTORY_GRAPH        = NO
+GRAPHICAL_HIERARCHY    = NO
+
+# MathJax Options
+USE_MATHJAX            = YES
+MATHJAX_VERSION        = MathJax_2
+MATHJAX_CODEFILE       = docs/mathjax_config.js

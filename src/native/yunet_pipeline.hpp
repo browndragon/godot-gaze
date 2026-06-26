@@ -1,4 +1,11 @@
-// Detects faces via YuNet, normalizes roll via affine warps, crops eyes, and estimates camera space 3D eye coordinates.
+/**
+ * @file yunet_pipeline.hpp
+ * @brief Face Landmarking and Normalization Pipeline (Layer 2 - Native)
+ *
+ * Implements FacePipeline using OpenCV's FaceDetectorYN (YuNet) face landmarker.
+ * Resolves 5 facial landmarks, applies perspective affine warps to neutralize face
+ * roll/scale rotation, extracts eye crops, and estimates 3D camera coordinates via solvePnP.
+ */
 #pragma once
 
 #include "face_pipeline.hpp"

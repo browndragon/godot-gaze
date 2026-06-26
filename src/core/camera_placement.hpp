@@ -1,4 +1,11 @@
-// Position offset and tilt angle representation.
+/**
+ * @file camera_placement.hpp
+ * @brief Camera Placement configuration (Layer 4)
+ *
+ * Defines the physical position and orientation offset of the hardware camera
+ * relative to the center of the display screen. Used by the projection engine
+ * to map camera-space coordinates back to the physical screen coordinate system.
+ */
 #pragma once
 
 #include "math_defs.hpp"

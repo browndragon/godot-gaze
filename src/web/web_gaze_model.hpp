@@ -1,4 +1,11 @@
-// Receives pre-calculated gaze values from browser JavaScript.
+/**
+ * @file web_gaze_model.hpp
+ * @brief Web Gaze Model Integration interface (Layer 3 - Web)
+ *
+ * Implements GazeModel for the Web platform. In passive Web target builds,
+ * this model simply holds and returns the latest gaze vector computed by the
+ * browser's JavaScript sidecar and injected via Emscripten.
+ */
 #pragma once
 
 #include "gaze_model.hpp"

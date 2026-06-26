@@ -1,3 +1,11 @@
+/**
+ * @file face_model_geometry.hpp
+ * @brief 3D Facial Model Reference Coordinates (Layer 2)
+ *
+ * Defines static coordinate constants for the canonical 3D facial model
+ * (eyes, nose, mouth corners) used during Perspective-n-Point (solvePnP)
+ * head pose estimation.
+ */
 #pragma once
 
 namespace Gaze {

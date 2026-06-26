@@ -1,4 +1,11 @@
-// Raw model inference interface (Layer 3).
+/**
+ * @file gaze_model.hpp
+ * @brief Gaze Estimation Model interface (Layer 3)
+ *
+ * Defines the abstract interface for the gaze estimation inference stage.
+ * Receives normalized eye crops and head pose parameters, executes the
+ * underlying DNN (e.g. OpenVINO), and outputs a raw 3D gaze direction vector.
+ */
 #pragma once
 
 #include "face_pipeline.hpp"

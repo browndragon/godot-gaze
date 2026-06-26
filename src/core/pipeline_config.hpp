@@ -1,3 +1,11 @@
+/**
+ * @file pipeline_config.hpp
+ * @brief Pipeline Configurations configuration struct (Layer 2)
+ *
+ * Defines parameters for facial landmarking and crop normalization, including
+ * yaw/pitch translation compensation gains, custom nose landmarks, target IPD,
+ * and downscaled detection image dimensions.
+ */
 #pragma once
 #include "face_model_geometry.hpp"
 

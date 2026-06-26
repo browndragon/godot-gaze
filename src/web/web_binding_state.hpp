@@ -1,3 +1,10 @@
+/**
+ * @file web_binding_state.hpp
+ * @brief Web Emscripten JavaScript Bindings stub structure (Web)
+ *
+ * Declares Emscripten-specific callbacks and hooks used to communicate between
+ * C++ GDExtension and the browser page's JavaScript sidecar (gaze_sidecar.js).
+ */
 #pragma once
 
 #ifdef WEB_ENABLED

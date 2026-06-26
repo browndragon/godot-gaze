@@ -79,6 +79,17 @@ process.on('exit', () => {
     try { server.close(); } catch (e) {}
 });
 
+// Safety timeout: abort tests if they hang (e.g. due to wasm compile error)
+const safetyTimeout = setTimeout(() => {
+    console.error('[TestRunner] Error: Safety timeout reached. Headless tests took too long and were aborted.');
+    try { chromeProcess.kill(); } catch (e) {}
+    try { server.close(); } catch (e) {}
+    process.exit(1);
+}, 25000);
+if (typeof safetyTimeout.unref === 'function') {
+    safetyTimeout.unref();
+}
+
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function getWsUrl() {

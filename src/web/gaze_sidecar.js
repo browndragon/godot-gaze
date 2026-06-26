@@ -208,6 +208,17 @@
                 var detectMat = new cv.Mat();
                 var detectSize = { width: self.faceDetectWidth, height: self.faceDetectHeight };
 
+                function scheduleNextFrame() {
+                    var frameCalled = false;
+                    function triggerNext() {
+                        if (frameCalled) return;
+                        frameCalled = true;
+                        trackFrame();
+                    }
+                    requestAnimationFrame(triggerNext);
+                    setTimeout(triggerNext, 50);
+                }
+
                 function trackFrame() {
                     if (!self.active) {
                         detectMat.delete();
@@ -216,7 +227,7 @@
                     }
                     // Fix Video Metadata Race Condition
                     if (self.video.paused || self.video.ended || !self.video.videoWidth) {
-                        requestAnimationFrame(trackFrame);
+                        scheduleNextFrame();
                         return;
                     }
                     try {
@@ -225,7 +236,7 @@
                         cv.cvtColor(self.bgrMat, self.grayMat, cv.COLOR_BGR2GRAY);
                     } catch (readErr) {
                         console.error('[GazeTracker] Camera frame read/convert failed:', readErr.message || readErr);
-                        requestAnimationFrame(trackFrame);
+                        scheduleNextFrame();
                         return;
                     }
 
@@ -383,8 +394,12 @@
                                     var ry = rvec.doubleAt(1, 0);
                                     var rz = rvec.doubleAt(2, 0);
 
+                                    var coords = self.getCanvasScreenCoordinates();
+                                    var canvasX = coords.x;
+                                    var canvasY = coords.y;
+
                                     if (window.godotGaze && window.godotGaze.feed_gaze) {
-                                        window.godotGaze.feed_gaze(true, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz);
+                                        window.godotGaze.feed_gaze(true, lex, ley, lez, rex, rey, rez, dx, dy, dz, tx, ty, tz, rx, ry, rz, canvasX, canvasY);
                                     }
                                 }
 
@@ -417,12 +432,55 @@
                             window.godotGaze.feed_gaze(false, 0, 0, 0, 0, 0, 0);
                         }
                     }
-                    requestAnimationFrame(trackFrame);
+                    scheduleNextFrame();
                 }
                 trackFrame();
             }).catch(function(err) {
                 console.error('[GazeTracker] Camera failed to start:', err);
             });
+        },
+
+        getCanvasScreenCoordinates: function() {
+            var canvas = document.getElementById('canvas') || document.querySelector('canvas') || this.canvas;
+            var rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
+
+            var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+            if (isFullscreen) {
+                return { x: 0, y: 0 };
+            }
+
+            var winLeft = 0;
+            var winTop = 0;
+            try {
+                winLeft = (window.screenLeft !== undefined) ? window.screenLeft : window.screenX;
+                winTop = (window.screenTop !== undefined) ? window.screenTop : window.screenY;
+            } catch (secErr) {
+                winLeft = 0;
+                winTop = 0;
+            }
+
+            if (winLeft === undefined || isNaN(winLeft)) winLeft = 0;
+            if (winTop === undefined || isNaN(winTop)) winTop = 0;
+
+            if (this._borderOffset === undefined) {
+                this._borderOffset = 0;
+                this._chromeOffset = 0;
+                try {
+                    if (window.outerWidth && window.innerWidth) {
+                        this._borderOffset = Math.max(0, (window.outerWidth - window.innerWidth) / 2);
+                    }
+                    if (window.outerHeight && window.innerHeight) {
+                        this._chromeOffset = Math.max(0, window.outerHeight - window.innerHeight - this._borderOffset);
+                    }
+                } catch (e) {}
+            }
+            var borderOffset = this._borderOffset;
+            var chromeOffset = this._chromeOffset;
+
+            return {
+                x: winLeft + borderOffset + rect.left,
+                y: winTop + chromeOffset + rect.top
+            };
         },
 
         cleanupPipeline: function() {

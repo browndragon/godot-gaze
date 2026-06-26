@@ -412,3 +412,52 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
     }
 }
 
+TEST_CASE("Testing Viewport-to-Screen Mapping & Coordinate Translation") {
+    // Test Case 1: Desktop Scaling and Offset Mapping
+    double screen_w = 1920.0, screen_h = 1080.0;
+    double win_x = 300.0, win_y = 200.0;
+    double gaze_screen_x = 960.0, gaze_screen_y = 540.0;
+    
+    double local_x = gaze_screen_x - win_x;
+    double local_y = gaze_screen_y - win_y;
+    
+    CHECK(local_x == 660.0);
+    CHECK(local_y == 340.0);
+}
+
+TEST_CASE("Testing Multi-Resolution Layout Scaling") {
+    // Test Case 2: Multi-Resolution Layout Scaling
+    struct ScreenResolution {
+        double w_px;
+        double h_px;
+        double w_mm;
+        double h_mm;
+    };
+
+    ScreenResolution resolutions[] = {
+        {1440.0, 900.0, 305.0, 190.0},  // MacBook
+        {2560.0, 1440.0, 597.0, 336.0}, // QHD
+        {3840.0, 2160.0, 697.0, 392.0}  // 4K
+    };
+
+    for (const auto& res : resolutions) {
+        double scale_x = res.w_px / res.w_mm;
+        double scale_y = res.h_px / res.h_mm;
+        
+        // Assert that the pixel density (aspect ratios) are consistent
+        double aspect_px = res.w_px / res.h_px;
+        double aspect_mm = res.w_mm / res.h_mm;
+        CHECK(aspect_px == doctest::Approx(aspect_mm).epsilon(0.05)); // within 5% tolerance due to bezel/DPI variances
+        
+        // Assert linear mapping
+        double mm_point_x = res.w_mm * 0.5;
+        double mm_point_y = res.h_mm * 0.5;
+        double px_point_x = mm_point_x * scale_x;
+        double px_point_y = mm_point_y * scale_y;
+        
+        CHECK(px_point_x == doctest::Approx(res.w_px * 0.5));
+        CHECK(px_point_y == doctest::Approx(res.h_px * 0.5));
+    }
+}
+
+

@@ -65,6 +65,8 @@ console.log('[TestRunner] Launching Google Chrome headlessly...');
 const chromeProcess = spawn(CHROME_PATH, [
     '--headless=new',
     `--remote-debugging-port=${PORT}`,
+    '--enable-features=SharedArrayBuffer',
+    '--js-flags=--experimental-wasm-threads',
     'about:blank'
 ]);
 
@@ -198,6 +200,116 @@ async function run() {
             console.log(`  Head Rotation:    (${data.rx.toFixed(4)}, ${data.ry.toFixed(4)}, ${data.rz.toFixed(4)})`);
             console.log();
         }
+
+        // --- Web Headless Automation Tests for Window Shifting and Resizing ---
+        console.log('\n--- Running Window Relocation & Resizing Tests ---');
+
+        // First, get the windowId
+        const listRes = await fetch(`http://127.0.0.1:${PORT}/json/list`);
+        const tabsList = await listRes.json();
+        const activeTab = tabsList.find(t => t.type === 'page');
+        const targetId = activeTab.id;
+        const { windowId } = await sendCommand('Browser.getWindowForTarget', { targetId });
+        console.log(`[TestRunner] Got Browser windowId: ${windowId}`);
+
+        // Helper to run a single gaze frame projection and return canvasX, canvasY
+        async function getCanvasGazeCoords() {
+            const res = await sendCommand('Runtime.evaluate', {
+                expression: `window.runGazeTest("self_center.jpg")`,
+                awaitPromise: true,
+                returnByValue: true
+            });
+            if (res.exceptionDetails) {
+                throw new Error(`Window test frame failed: ${res.exceptionDetails.exception.description}`);
+            }
+            return {
+                canvasX: res.result.value.canvasX,
+                canvasY: res.result.value.canvasY
+            };
+        }
+
+        // Test Case 3: Window Displacement Monotonicity
+        console.log('[TestRunner] Test Case 3: Window Displacement Monotonicity');
+        
+        // Move window to (100, 200)
+        console.log('  Moving window to (100, 200)...');
+        await sendCommand('Browser.setWindowBounds', { windowId, bounds: { left: 100, top: 200, width: 800, height: 600, windowState: 'normal' } });
+        await sleep(1000); // Wait for transition
+        const coords1 = await getCanvasGazeCoords();
+        console.log(`  At (100, 200): canvasX=${coords1.canvasX}, canvasY=${coords1.canvasY}`);
+
+        // Move window to (250, 100)
+        console.log('  Moving window to (250, 100)...');
+        await sendCommand('Browser.setWindowBounds', { windowId, bounds: { left: 250, top: 100, width: 800, height: 600, windowState: 'normal' } });
+        await sleep(1000); // Wait for transition
+        const coords2 = await getCanvasGazeCoords();
+        console.log(`  At (250, 100): canvasX=${coords2.canvasX}, canvasY=${coords2.canvasY}`);
+
+        const deltaWinLeft = 250 - 100;
+        const deltaWinTop = 100 - 200;
+        const deltaCanvasX = coords2.canvasX - coords1.canvasX;
+        const deltaCanvasY = coords2.canvasY - coords1.canvasY;
+
+        console.log(`  Asserting X delta: Expected ${deltaWinLeft}, Got ${deltaCanvasX}`);
+        console.log(`  Asserting Y delta: Expected ${deltaWinTop}, Got ${deltaCanvasY}`);
+
+        if (Math.abs(deltaCanvasX - deltaWinLeft) > 2) {
+            throw new Error(`Assertion Failed: canvasX delta (${deltaCanvasX}) does not match window displacement (${deltaWinLeft})`);
+        }
+        if (Math.abs(deltaCanvasY - deltaWinTop) > 2) {
+            throw new Error(`Assertion Failed: canvasY delta (${deltaCanvasY}) does not match window displacement (${deltaWinTop})`);
+        }
+
+        // Test Case 4: Window Resizing Stability
+        console.log('[TestRunner] Test Case 4: Window Resizing Stability');
+        
+        // Resize window to 1024x768 (keeping top-left at (250, 100))
+        console.log('  Resizing window to 1024x768...');
+        await sendCommand('Browser.setWindowBounds', { windowId, bounds: { left: 250, top: 100, width: 1024, height: 768, windowState: 'normal' } });
+        await sleep(1000);
+        const coords3 = await getCanvasGazeCoords();
+        console.log(`  At 1024x768: canvasX=${coords3.canvasX}, canvasY=${coords3.canvasY}`);
+
+        if (Math.abs(coords3.canvasX - coords2.canvasX) > 2 || Math.abs(coords3.canvasY - coords2.canvasY) > 2) {
+            throw new Error(`Assertion Failed: Canvas screen coordinates shifted during window resize: coords2=(${coords2.canvasX}, ${coords2.canvasY}), coords3=(${coords3.canvasX}, ${coords3.canvasY})`);
+        }
+        console.log('  Canvas screen coordinates remained invariant to window resizing.');
+
+        // Test Case 5: Sandbox and Fullscreen Fallbacks
+        console.log('[TestRunner] Test Case 5: Sandbox and Fullscreen Fallbacks');
+
+        // Evaluate code to mock window screen access restriction (throws SecurityError)
+        console.log('  Injecting window.screenX/screenLeft security error simulation...');
+        await sendCommand('Runtime.evaluate', {
+            expression: `
+                Object.defineProperty(window, 'screenX', { get: function() { throw new DOMException("SecurityError: Permission denied", "SecurityError"); } });
+                Object.defineProperty(window, 'screenLeft', { get: function() { throw new DOMException("SecurityError: Permission denied", "SecurityError"); } });
+                Object.defineProperty(window, 'screenY', { get: function() { throw new DOMException("SecurityError: Permission denied", "SecurityError"); } });
+                Object.defineProperty(window, 'screenTop', { get: function() { throw new DOMException("SecurityError: Permission denied", "SecurityError"); } });
+            `
+        });
+
+        // Run tracking on center image
+        const sandboxCoords = await getCanvasGazeCoords();
+        console.log(`  Simulated sandbox windowed coordinates: canvasX=${sandboxCoords.canvasX}, canvasY=${sandboxCoords.canvasY}`);
+        if (isNaN(sandboxCoords.canvasX) || isNaN(sandboxCoords.canvasY)) {
+            throw new Error(`Assertion Failed: Sandbox coordinates are NaN`);
+        }
+
+        // Simulate Fullscreen mode
+        console.log('  Simulating Fullscreen mode...');
+        await sendCommand('Runtime.evaluate', {
+            expression: `
+                Object.defineProperty(document, 'fullscreenElement', { get: function() { return document.getElementById('testCanvas') || true; }, configurable: true });
+            `
+        });
+        const fullscreenCoords = await getCanvasGazeCoords();
+        console.log(`  Simulated sandbox fullscreen coordinates: canvasX=${fullscreenCoords.canvasX}, canvasY=${fullscreenCoords.canvasY}`);
+        if (isNaN(fullscreenCoords.canvasX) || isNaN(fullscreenCoords.canvasY)) {
+            throw new Error(`Assertion Failed: Fullscreen coordinates are NaN`);
+        }
+
+        console.log('[TestRunner] Window relocation, resizing, and sandbox tests passed!');
 
         // 3. Verification Assertions
         console.log('--- Running Assertions on Sidecar Results ---');

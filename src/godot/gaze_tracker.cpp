@@ -11,16 +11,7 @@
 #include <godot_cpp/classes/dir_access.hpp>
 #include <godot_cpp/variant/packed_string_array.hpp>
 
-#ifdef WEB_ENABLED
-#include "web_gaze_model.hpp"
-#include "web_binding_state.hpp"
-#include <godot_cpp/classes/java_script_bridge.hpp>
-#include <godot_cpp/classes/java_script_object.hpp>
-#else
-#include "opencv_camera.hpp"
-#include "yunet_pipeline.hpp"
-#include "opencv_gaze_model.hpp"
-#endif
+// Platform-specific headers are included in gaze_tracker_native.cpp and gaze_tracker_web.cpp
 
 
 namespace godot {
@@ -159,60 +150,7 @@ void GazeTracker::_process(double delta) {
         }
     }
 
-#ifdef WEB_ENABLED
-    // Web Pipeline update
-    if (is_face_tracked && model) {
-        Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(latest_gaze_dir);
-        Gaze::GazeVector2 pixel;
-        if (projection_engine.project_gaze(latest_gaze_origin, calib_dir, pixel)) {
-            Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
-            double local_x = pixel.x - window_pos.x + projection_engine.get_calibration().bias_pixel_x;
-            double local_y = pixel.y - window_pos.y + projection_engine.get_calibration().bias_pixel_y;
-            Vector2 local_pos(local_x, local_y);
-            Viewport* vp = get_viewport();
-            if (vp) {
-                local_pos = vp->get_final_transform().affine_inverse().xform(local_pos);
-            }
-            latest_projected_gaze_px = local_pos;
-
-            double fx = filter_x->filter(local_pos.x);
-            double fy = filter_y->filter(local_pos.y);
-            latest_filtered_gaze_px = Vector2(fx, fy);
-
-            emit_signal("gaze_updated", latest_filtered_gaze_px);
-        } else {
-            emit_signal("gaze_updated", Vector2(INFINITY, INFINITY));
-        }
-    }
-#else
-    // Native Pipeline update
-    if (camera && pipeline && model) {
-        Gaze::Frame frame;
-        if (camera->grab_frame(frame)) {
-            Gaze::EyeCrops crops;
-            if (pipeline->process_frame(frame, crops)) {
-                if (crops.face_detected) {
-                    latest_crops = crops;
-                    Gaze::GazeVector3 raw_gaze_dir_cam;
-                    if (model->estimate_raw_gaze(crops, raw_gaze_dir_cam)) {
-                        // Calculate midpoint of eyes as gaze origin in OpenCV camera space
-                        Gaze::GazeVector3 gaze_origin_cv = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5;
-
-                        // Convert eye center origin and raw gaze direction to Camera Space (180 deg rotation about X: X=X, Y=-Y, Z=-Z)
-                        Gaze::GazeVector3 origin_cam = projection_engine.opencv_to_camera_space(gaze_origin_cv);
-                        Gaze::GazeVector3 dir_cam = projection_engine.opencv_to_camera_space(raw_gaze_dir_cam);
-
-                        feed_gaze(true, Vector3(origin_cam.x, origin_cam.y, origin_cam.z), Vector3(dir_cam.x, dir_cam.y, dir_cam.z));
-                    }
-                } else {
-                    feed_gaze(false, Vector3(), Vector3());
-                }
-            } else {
-                feed_gaze(false, Vector3(), Vector3());
-            }
-        }
-    }
-#endif
+    platform_process(delta);
 }
 
 void GazeTracker::set_lifecycle_state(GazeLifecycle p_state) {
@@ -263,53 +201,11 @@ void GazeTracker::_notification(int p_what) {
 }
 
 void GazeTracker::trigger_permission_request() {
-#ifdef WEB_ENABLED
-    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
-    if (js) {
-        if (!opaque) {
-            opaque = new WebBindingState();
-        }
-        WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->setup_callbacks(this);
-
-        js->eval(
-            "if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {"
-            "    navigator.mediaDevices.getUserMedia({ video: true })"
-            "        .then(function(stream) {"
-            "            console.log('[GazeTracker] Camera permission granted.');"
-            "            stream.getTracks().forEach(function(track) { track.stop(); });"
-            "            if (window.godotGaze && window.godotGaze.on_permission) {"
-            "                window.godotGaze.on_permission(true);"
-            "                delete window.godotGaze.on_permission;"
-            "            }"
-            "        })"
-            "        .catch(function(err) {"
-            "            console.warn('[GazeTracker] Camera permission denied:', err);"
-            "            if (window.godotGaze && window.godotGaze.on_permission) {"
-            "                window.godotGaze.on_permission(false);"
-            "                delete window.godotGaze.on_permission;"
-            "            }"
-            "        });"
-            "}"
-        );
-    }
-#else
-    OS *os = OS::get_singleton();
-    if (os) {
-        if (os->has_feature("android")) {
-            os->request_permission("android.permission.CAMERA");
-        }
-    }
-#endif
+    platform_trigger_permission_request();
 }
 
 void GazeTracker::on_permission_result(bool granted) {
-#ifdef WEB_ENABLED
-    if (opaque) {
-        WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->permission_callback = Ref<JavaScriptObject>();
-    }
-#endif
+    platform_on_permission_result(granted);
 
     if (!granted) {
         Gaze::log_error("CameraPermissionDenied");
@@ -317,90 +213,9 @@ void GazeTracker::on_permission_result(bool granted) {
         return;
     }
 
-#if !defined(WEB_ENABLED)
-    OS *os = OS::get_singleton();
-    if (os && os->has_feature("android")) {
-        PackedStringArray granted_perms = os->get_granted_permissions();
-        bool has_camera = false;
-        for (int i = 0; i < granted_perms.size(); ++i) {
-            if (granted_perms[i] == "android.permission.CAMERA") {
-                has_camera = true;
-                break;
-            }
-        }
-        if (!has_camera) {
-            set_lifecycle_state(LIFECYCLE_ERROR);
-            return;
-        }
-    }
-#endif
-
     // Permission verified, transition to INITIALIZING and complete setup
     set_lifecycle_state(LIFECYCLE_INITIALIZING);
     complete_initialization();
-}
-
-bool GazeTracker::complete_initialization() {
-#ifdef WEB_ENABLED
-    String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
-    String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
-
-    String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.onnx" : gaze_onnx_path;
-    String global_gaze_onnx_path = copy_model_to_user_dir(resolved_gaze);
-
-    if (!model) {
-        model = new Gaze::WebGazeModel();
-        model->initialize();
-    }
-    tracker_initialized = true;
-    set_lifecycle_state(LIFECYCLE_RUNNING);
-    Gaze::log_info("GazeTrackerInitWebSuccess");
-
-    if (opaque) {
-        WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->start_tracking_loop(this, resolved_yunet, resolved_gaze);
-    }
-    return true;
-#else
-    if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
-    if (!pipeline) {
-        String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
-        String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
-        pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
-        pipeline->set_camera_focal_length_px(camera_focal_length_px);
-    }
-    if (!model) {
-        String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
-        String global_gaze_path = copy_model_to_user_dir(resolved_gaze);
-        model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
-    }
-
-    if (!camera->initialize()) {
-        Gaze::log_error("GazeTrackerInitFailed", "reason", "camera initialization failed");
-        stop_tracker();
-        set_lifecycle_state(LIFECYCLE_ERROR);
-        return false;
-    }
-    if (!pipeline->initialize()) {
-        Gaze::log_error("GazeTrackerInitFailed", "reason", "face pipeline initialization failed");
-        stop_tracker();
-        set_lifecycle_state(LIFECYCLE_ERROR);
-        return false;
-    }
-    if (!model->initialize()) {
-        Gaze::log_error("GazeTrackerInitFailed", "reason", "gaze model initialization failed");
-        stop_tracker();
-        set_lifecycle_state(LIFECYCLE_ERROR);
-        return false;
-    }
-
-    update_pipeline_config();
-
-    tracker_initialized = true;
-    set_lifecycle_state(LIFECYCLE_RUNNING);
-    Gaze::log_info("GazeTrackerInitNativeSuccess");
-    return true;
-#endif
 }
 
 String GazeTracker::copy_model_to_user_dir(const String &res_path) {
@@ -476,24 +291,18 @@ void GazeTracker::copy_individual_file(const String &src, const String &dest) {
 bool GazeTracker::initialize_tracker() {
     if (lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
-    DisplayServer* ds = DisplayServer::get_singleton();
-    if (ds) {
-        int screen_id = ds->window_get_current_screen();
-        if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0) {
-            screen_size_pixels = ds->screen_get_size(screen_id);
-        }
-        if (screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
-            double dpi = ds->screen_get_dpi(screen_id);
-            if (dpi > 0.0) {
-                screen_size_mm.x = (screen_size_pixels.x / dpi) * 25.4;
-                screen_size_mm.y = (screen_size_pixels.y / dpi) * 25.4;
-            } else {
-                screen_size_mm = Vector2(345.0, 215.0); // MacBook 15" fallback
-            }
-        }
-        if (camera_offset.y == 148.0 && screen_size_mm.y != 296.0) {
-            camera_offset.y = screen_size_mm.y * 0.5;
-        }
+    if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0) {
+        screen_size_pixels = platform_get_screen_size();
+    }
+    String pixels_src = (screen_size_pixels.x > 0) ? "platform_api" : "default_fallback";
+
+    if (screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0) {
+        screen_size_mm = platform_get_screen_size_mm();
+    }
+    String mm_src = (screen_size_mm.x > 0.0) ? "platform_api" : "default_fallback";
+
+    if (camera_offset.y == 148.0 && screen_size_mm.y != 296.0) {
+        camera_offset.y = screen_size_mm.y * 0.5;
     }
 
     if (screen_size_pixels.x <= 0 || screen_size_pixels.y <= 0 ||
@@ -502,6 +311,14 @@ bool GazeTracker::initialize_tracker() {
         set_lifecycle_state(LIFECYCLE_ERROR);
         return false;
     }
+
+    Gaze::log_info("GazeTrackerGeometryInitialized",
+                   "pixels_x", screen_size_pixels.x,
+                   "pixels_y", screen_size_pixels.y,
+                   "mm_x", screen_size_mm.x,
+                   "mm_y", screen_size_mm.y,
+                   "pixels_source", pixels_src.utf8().get_data(),
+                   "mm_source", mm_src.utf8().get_data());
 
     update_projection_parameters();
     update_filter_parameters();
@@ -513,34 +330,8 @@ bool GazeTracker::initialize_tracker() {
         projection_engine.set_calibration(calibration_resource->get_calibration());
     }
 
-    // Check platform camera permission
-    bool has_permission = false;
-#ifdef WEB_ENABLED
-    // Web requires browser permission prompt (asynchronous)
-    has_permission = (lifecycle_state == LIFECYCLE_INITIALIZING || lifecycle_state == LIFECYCLE_RUNNING);
-#else
-    OS *os = OS::get_singleton();
-    if (os && os->has_feature("android")) {
-        PackedStringArray granted_perms = os->get_granted_permissions();
-        for (int i = 0; i < granted_perms.size(); ++i) {
-            if (granted_perms[i] == "android.permission.CAMERA") {
-                has_permission = true;
-                break;
-            }
-        }
-    } else {
-        has_permission = true;
-    }
-#endif
-
-    if (!has_permission) {
-        set_lifecycle_state(LIFECYCLE_PERM_REQ);
-        trigger_permission_request();
-        return false;
-    }
-
-    set_lifecycle_state(LIFECYCLE_INITIALIZING);
-    return complete_initialization();
+    platform_initialize();
+    return true;
 }
 
 
@@ -548,18 +339,8 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
     tracker_initialized = false;
     is_face_tracked = false;
 
-    if (camera) {
-        delete camera;
-        camera = nullptr;
-    }
-    if (pipeline) {
-        delete pipeline;
-        pipeline = nullptr;
-    }
-    if (model) {
-        delete model;
-        model = nullptr;
-    }
+    platform_terminate();
+
     if (filter_x) {
         delete filter_x;
         filter_x = nullptr;
@@ -568,15 +349,6 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
         delete filter_y;
         filter_y = nullptr;
     }
-
-#ifdef WEB_ENABLED
-    if (opaque) {
-        WebBindingState* state = static_cast<WebBindingState*>(opaque);
-        state->cleanup();
-        delete state;
-        opaque = nullptr;
-    }
-#endif
 
     if (p_emit_signal) {
         set_lifecycle_state(LIFECYCLE_UNKNOWN);
@@ -588,11 +360,13 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
 void GazeTracker::calibrate_3d(Vector2 target_pixel) {
     if (!tracker_initialized) return;
 
+    Vector2 target_scr = target_pixel + platform_get_window_position();
+
     Gaze::GazeCalibration new_calib = projection_engine.get_calibration();
     if (projection_engine.calibrate_3d_bias(
             latest_gaze_origin,
             latest_gaze_dir,
-            Gaze::GazeVector2(target_pixel.x, target_pixel.y),
+            Gaze::GazeVector2(target_scr.x, target_scr.y),
             new_calib)) {
         
         projection_engine.set_calibration(new_calib);
@@ -606,11 +380,13 @@ void GazeTracker::calibrate_3d(Vector2 target_pixel) {
 void GazeTracker::calibrate_2d(Vector2 target_pixel) {
     if (!tracker_initialized) return;
 
+    Vector2 target_scr = target_pixel + platform_get_window_position();
+
     Gaze::GazeCalibration new_calib = projection_engine.get_calibration();
     if (projection_engine.calibrate_2d_bias(
             latest_gaze_origin,
             latest_gaze_dir,
-            Gaze::GazeVector2(target_pixel.x, target_pixel.y),
+            Gaze::GazeVector2(target_scr.x, target_scr.y),
             new_calib)) {
         
         projection_engine.set_calibration(new_calib);
@@ -643,125 +419,10 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
     if (face_detected) {
         latest_gaze_origin = Gaze::GazeVector3(origin.x, origin.y, origin.z);
         latest_gaze_dir = Gaze::GazeVector3(direction.x, direction.y, direction.z);
-
-#ifdef WEB_ENABLED
-        // Set fallback values only if they were not already populated by feed_gaze_web_raw
-        if (latest_crops.left_eye_center_cam.length() == 0) {
-            latest_crops.face_detected = true;
-            Gaze::GazeVector3 opencv_origin(latest_gaze_origin.x, -latest_gaze_origin.y, -latest_gaze_origin.z);
-            latest_crops.left_eye_center_cam = opencv_origin;
-            latest_crops.right_eye_center_cam = opencv_origin;
-            latest_crops.head_pose_translation = opencv_origin;
-            latest_crops.head_pose_rotation = Gaze::GazeVector3(0.0, 0.0, 0.0);
-        }
-#endif
-
         emit_signal("face_frame_ready");
-
-#ifdef WEB_ENABLED
-        if (model) {
-            static_cast<Gaze::WebGazeModel*>(model)->feed_raw_gaze(latest_gaze_dir);
-        }
-#endif
     } else {
         latest_crops.face_detected = false;
     }
-}
-
-void GazeTracker::feed_gaze_web_raw(const Array& args) {
-#ifdef WEB_ENABLED
-    if (args.size() < 16) {
-        if (args.size() >= 1) {
-            bool face_detected = args[0];
-            if (!face_detected) {
-                feed_gaze(false, Vector3(), Vector3());
-            }
-        }
-        return;
-    }
-
-    bool face_detected = args[0];
-    if (!face_detected) {
-        feed_gaze(false, Vector3(), Vector3());
-        return;
-    }
-
-    double lex = args[1];
-    double ley = args[2];
-    double lez = args[3];
-    double rex = args[4];
-    double rey = args[5];
-    double rez = args[6];
-    double dx = args[7];
-    double dy = args[8];
-    double dz = args[9];
-    double tx = args[10];
-    double ty = args[11];
-    double tz = args[12];
-    double rx = args[13];
-    double ry = args[14];
-    double rz = args[15];
-
-    // Populate latest_crops in OpenCV space
-    latest_crops.face_detected = true;
-    latest_crops.left_eye_center_cam = Gaze::GazeVector3(lex, ley, lez);
-    latest_crops.right_eye_center_cam = Gaze::GazeVector3(rex, rey, rez);
-    latest_crops.head_pose_translation = Gaze::GazeVector3(tx, ty, tz);
-    latest_crops.head_pose_rotation = Gaze::GazeVector3(rx, ry, rz);
-
-    // Calculate midpoint of eyes as gaze origin in OpenCV camera space
-    Gaze::GazeVector3 gaze_origin_cv = (latest_crops.left_eye_center_cam + latest_crops.right_eye_center_cam) * 0.5;
-
-    // Convert eye center origin and raw gaze direction to Camera Space (Y=-Y, Z=-Z)
-    Vector3 origin(gaze_origin_cv.x, -gaze_origin_cv.y, -gaze_origin_cv.z);
-    Vector3 direction(dx, dy, -dz);
-
-    feed_gaze(true, origin, direction);
-#endif
-}
-
-void GazeTracker::on_sidecar_ready(const Array& args) {
-#ifdef WEB_ENABLED
-    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
-    if (!js) return;
-
-    if (args.size() == 0) {
-        UtilityFunctions::printerr("[GazeTracker] on_sidecar_ready called with no arguments.");
-        return;
-    }
-
-    Ref<JavaScriptObject> tracker_obj = args[0];
-    if (tracker_obj.is_valid()) {
-        UtilityFunctions::print("[GazeTracker] on_sidecar_ready triggered. Loading and sending model bytes...");
-        String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
-        String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.onnx" : gaze_onnx_path;
-
-        PackedByteArray yunet_bytes = FileAccess::get_file_as_bytes(resolved_yunet);
-        PackedByteArray gaze_bytes = FileAccess::get_file_as_bytes(resolved_gaze);
-
-        if (yunet_bytes.is_empty()) {
-            UtilityFunctions::printerr("[GazeTracker] C++ failed to load YuNet bytes from: ", resolved_yunet);
-        } else {
-            UtilityFunctions::print("[GazeTracker] Loaded YuNet bytes, size: ", yunet_bytes.size());
-        }
-
-        if (gaze_bytes.is_empty()) {
-            UtilityFunctions::printerr("[GazeTracker] C++ failed to load Gaze ONNX bytes from: ", resolved_gaze);
-        } else {
-            UtilityFunctions::print("[GazeTracker] Loaded Gaze ONNX bytes, size: ", gaze_bytes.size());
-        }
-
-        String hex_yunet = yunet_bytes.hex_encode();
-        String hex_gaze = gaze_bytes.hex_encode();
-
-        int fd_w = pipeline_config.is_valid() ? pipeline_config->get_config().face_detect_width : 160;
-        int fd_h = pipeline_config.is_valid() ? pipeline_config->get_config().face_detect_height : 128;
-        tracker_obj->call("setModels", hex_yunet, hex_gaze, fd_w, fd_h);
-        UtilityFunctions::print("[GazeTracker] Successfully called setModels on JS sidecar.");
-    } else {
-        UtilityFunctions::printerr("[GazeTracker] on_sidecar_ready: First argument is not a valid JavaScriptObject.");
-    }
-#endif
 }
 
 void GazeTracker::update_projection_parameters() {
@@ -947,11 +608,7 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
     double Cy = camera_offset.y;
     double Cz = camera_offset.z;
 
-    Vector2i window_pos(0, 0);
-    DisplayServer* ds = DisplayServer::get_singleton();
-    if (ds) {
-        window_pos = ds->window_get_position();
-    }
+    Vector2 window_pos = platform_get_window_position();
     Vector3 translation(Cx * scale_x + W_half - window_pos.x, Cy * scale_y + H_half - window_pos.y, Cz);
 
     Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
@@ -1005,7 +662,7 @@ Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direct
     Gaze::GazeVector3 dir_cam(direction.x, direction.y, direction.z);
     Gaze::GazeVector2 pixel;
     if (projection_engine.project_gaze(origin_cam, dir_cam, pixel)) {
-        Vector2i window_pos = DisplayServer::get_singleton()->window_get_position();
+        Vector2 window_pos = platform_get_window_position();
         Vector2 local_pos(pixel.x - window_pos.x, pixel.y - window_pos.y);
         Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
         if (vp) {

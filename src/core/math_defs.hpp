@@ -70,6 +70,14 @@ struct GazeVector3 {
         return GazeVector3(0.0, 0.0, 0.0);
     }
 
+    /**
+     * @brief Computes the pitch and yaw (in degrees) of this direction vector.
+     * 
+     * Unlike standard spherical coordinates, this computes the yaw relative to a 
+     * customizable reference direction (defaulting to the forward/negative-Z direction 
+     * - GazeVector3(0, 0, -1) in OpenCV space) and normalizes the yaw 
+     * difference into [-180, 180] degrees.
+     */
     GazeVector2 get_pitch_yaw(const GazeVector3& relative = GazeVector3(0, 0, -1)) const {
         GazeVector3 n = normalized();
         double pitch_rad = std::asin(n.y);
@@ -121,6 +129,16 @@ struct GazeBasis3D {
         );
     }
 
+    /**
+     * @brief Decomposes the basis into ZYX Euler angles (pitch, yaw, roll in degrees).
+     * 
+     * NON-STANDARD BEHAVIOR:
+     * Choosing a standard Euler decomposition for a face pointing towards the camera results 
+     * in yaw being close to 180 degrees. At this boundary, standard ZYX decompositions (which 
+     * restrict yaw to [-90, 90] degrees) experience severe gimbal-lock/sign-flipping discontinuities.
+     * This function is specialized to force the decomposition to select the branch where 
+     * cos(yaw) < 0 (yaw centered around 180 degrees), ensuring smooth angles during direct-to-camera tracking.
+     */
     GazeVector3 get_euler_deg() const {
         double sy = std::sqrt(x.x * x.x + x.y * x.y);
         bool singular = sy < 1e-6;
@@ -139,6 +157,13 @@ struct GazeBasis3D {
         return GazeVector3(pitch, yaw, roll);
     }
 
+    /**
+     * @brief Decomposes the basis into standard ZYX Euler angles (pitch, yaw, roll in degrees).
+     * 
+     * Standard ZYX decomposition that restricts the yaw to [-90, 90] degrees (choosing the 
+     * branch where cos(yaw) > 0). Used specifically for feeding inputs to the ONNX gaze model 
+     * which expects a standard coordinate convention (yaw centered around 0 degrees).
+     */
     GazeVector3 get_euler_gaze_model_deg() const {
         double sy = std::sqrt(x.x * x.x + x.y * x.y);
         bool singular = sy < 1e-6;
@@ -171,6 +196,14 @@ struct GazeTransform3D {
     }
 };
 
+/**
+ * @brief Converts a 3D rotation vector (Rodrigues vector) to a 3x3 rotation basis.
+ * 
+ * Commonly known in graphics/game math as the Axis-Angle to Matrix conversion (where the 
+ * vector's direction is the axis of rotation and its magnitude is the angle in radians). 
+ * Named "rodrigues" to match the OpenCV cv::Rodrigues convention since it is used to parse 
+ * head pose rotations returned by OpenCV's estimator.
+ */
 inline GazeBasis3D rodrigues_to_basis(const GazeVector3& r) {
     double theta = r.length();
     if (theta < 1e-6) {

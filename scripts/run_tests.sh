@@ -36,6 +36,8 @@ if [ -n "${OPENCV_SDK}" ]; then
         "${BASE_DIR}/tests/test_main.cpp" \
         "${BASE_DIR}/tests/test_native.cpp" \
         "${BASE_DIR}/src/core/projection_engine.cpp" \
+        "${BASE_DIR}/src/core/screen_projector.cpp" \
+        "${BASE_DIR}/src/core/gaze_calibration_estimator.cpp" \
         "${BASE_DIR}/src/native/yunet_pipeline.cpp" \
         "${BASE_DIR}/src/native/opencv_gaze_model.cpp" \
         -I"${BASE_DIR}/src/core" \
@@ -99,6 +101,8 @@ else
     g++ -std=c++17 \
         "${BASE_DIR}/tests/test_main.cpp" \
         "${BASE_DIR}/src/core/projection_engine.cpp" \
+        "${BASE_DIR}/src/core/screen_projector.cpp" \
+        "${BASE_DIR}/src/core/gaze_calibration_estimator.cpp" \
         -I"${BASE_DIR}/src/core" \
         -I"${BASE_DIR}/thirdparty/doctest" \
         -I"${BASE_DIR}/thirdparty/one_euro_filter" \

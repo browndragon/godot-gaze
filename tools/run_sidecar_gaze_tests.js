@@ -153,6 +153,8 @@ async function run() {
             } else if (msg.method === 'Runtime.consoleAPICalled') {
                 const args = msg.params.args.map(arg => arg.value || arg.description || '').join(' ');
                 console.log(`[BROWSER CONSOLE] ${args}`);
+            } else if (msg.method === 'Runtime.exceptionThrown') {
+                console.error(`[BROWSER EXCEPTION]`, msg.params.exceptionDetails.exception.description || msg.params.exceptionDetails.text);
             }
         };
 
@@ -198,7 +200,39 @@ async function run() {
             console.log(`  Gaze Dir:         (${data.dx.toFixed(4)}, ${data.dy.toFixed(4)}, ${data.dz.toFixed(4)})`);
             console.log(`  Head Translation: (${data.tx.toFixed(2)}, ${data.ty.toFixed(2)}, ${data.tz.toFixed(2)})`);
             console.log(`  Head Rotation:    (${data.rx.toFixed(4)}, ${data.ry.toFixed(4)}, ${data.rz.toFixed(4)})`);
+
+            // Math Parity Validation: Compare with C++ expected values (precomputed from native logs)
+            const expected = await sendCommand('Runtime.evaluate', {
+                expression: `window.cppTestData["${imgName}"]`,
+                returnByValue: true
+            });
+            const exp = expected.result.value;
+            
+            // Check that left/right eye centers and gaze direction match to within 0.05
+            const tol = 0.05;
+            
+            const diffLex = Math.abs(data.lex - exp.lex);
+            const diffLey = Math.abs(data.ley - exp.ley);
+            const diffLez = Math.abs(data.lez - exp.lez);
+            
+            const diffRex = Math.abs(data.rex - exp.rex);
+            const diffRey = Math.abs(data.rey - exp.rey);
+            const diffRez = Math.abs(data.rez - exp.rez);
+            
+            const diffDx = Math.abs(data.dx - exp.gx);
+            const diffDy = Math.abs(data.dy - (-exp.gy)); // dy in Godot feed is dy_cv, which is -gy
+            const diffDz = Math.abs(data.dz - exp.gz);
+
+            console.log(`  [Parity Check] Left Eye Diff:  (${diffLex.toFixed(4)}, ${diffLey.toFixed(4)}, ${diffLez.toFixed(4)})`);
+            console.log(`  [Parity Check] Right Eye Diff: (${diffRex.toFixed(4)}, ${diffRey.toFixed(4)}, ${diffRez.toFixed(4)})`);
+            console.log(`  [Parity Check] Gaze Dir Diff:  (${diffDx.toFixed(4)}, ${diffDy.toFixed(4)}, ${diffDz.toFixed(4)})`);
             console.log();
+
+            if (diffLex > tol || diffLey > tol || diffLez > tol ||
+                diffRex > tol || diffRey > tol || diffRez > tol ||
+                diffDx > tol || diffDy > tol || diffDz > tol) {
+                throw new Error(`Math Parity Assertion Failed for ${imgName}! Diff exceeded tolerance of ${tol}.`);
+            }
         }
 
         // --- Web Headless Automation Tests for Window Shifting and Resizing ---
@@ -275,6 +309,47 @@ async function run() {
         }
         console.log('  Canvas screen coordinates remained invariant to window resizing.');
 
+        // Test Case 6: Dynamic Device Pixel Ratio (DPR) Scaling Stability
+        console.log('\n--- Running Dynamic DPR Coordinate Scaling Tests ---');
+        console.log('[TestRunner] Test Case 6: Dynamic Device Pixel Ratio (DPR) Scaling Stability');
+        
+        const dprValues = [1.0, 2.0, 3.0];
+        // At DPR=2.0, logical coordinates are: logicalX = 250, logicalY = 187 (using coords2 which is at (250,100))
+        const logicalX = 250;
+        const logicalY = 187;
+
+        for (const dprVal of dprValues) {
+            console.log(`  Testing with window.devicePixelRatio = ${dprVal}...`);
+            await sendCommand('Runtime.evaluate', {
+                expression: `
+                    Object.defineProperty(window, 'devicePixelRatio', {
+                        get: function() { return ${dprVal}; },
+                        configurable: true
+                    });
+                `
+            });
+            const coords = await getCanvasGazeCoords();
+            console.log(`    At DPR=${dprVal}: canvasX=${coords.canvasX}, canvasY=${coords.canvasY}`);
+            
+            const expectedX = logicalX * dprVal;
+            const expectedY = logicalY * dprVal;
+
+            if (Math.abs(coords.canvasX - expectedX) > 2 || Math.abs(coords.canvasY - expectedY) > 2) {
+                throw new Error(`Assertion Failed: Coordinates at DPR=${dprVal} (${coords.canvasX}, ${coords.canvasY}) do not match expected scaling (${expectedX}, ${expectedY})`);
+            }
+        }
+        console.log('  Canvas screen coordinates scaled linearly and correctly with changing devicePixelRatio.');
+
+        // Clean up: Restore DPR to 2.0
+        await sendCommand('Runtime.evaluate', {
+            expression: `
+                Object.defineProperty(window, 'devicePixelRatio', {
+                    get: function() { return 2.0; },
+                    configurable: true
+                });
+            `
+        });
+
         // Test Case 5: Sandbox and Fullscreen Fallbacks
         console.log('[TestRunner] Test Case 5: Sandbox and Fullscreen Fallbacks');
 
@@ -310,6 +385,8 @@ async function run() {
         }
 
         console.log('[TestRunner] Window relocation, resizing, and sandbox tests passed!');
+
+
 
         // 3. Verification Assertions
         console.log('--- Running Assertions on Sidecar Results ---');

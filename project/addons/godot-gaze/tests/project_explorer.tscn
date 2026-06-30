@@ -1,0 +1,82 @@
+[gd_scene format=3 uid="uid://xb3475hljvun"]
+
+[sub_resource type="GDScript" id="GDScript_7a0ga"]
+resource_name = "ProjectExplorer"
+script/source = "@tool
+extends Control
+
+@onready var container: GridContainer = %ButtonsContainer
+
+# Add folders here that you don't want to show in your launcher menu
+const EXCLUDED_FOLDERS = [\"res://.godot/\", \"res://android/build\"]
+func _ready() -> void:
+	for child in container.get_children():
+		child.queue_free()
+		
+	scan_directory(\"res://\")
+
+func scan_directory(path: String) -> void:
+	if path in EXCLUDED_FOLDERS:
+		return
+		
+	# ResourceLoader.list_directory returns clean, original filenames even when packed!
+	var files = ResourceLoader.list_directory(path)
+	
+	for item in files:
+		if item.ends_with(\"/\"):
+			# ResourceLoader appends a \"/\" to subdirectories
+			scan_directory(path + item)
+		elif item.ends_with(\".tscn\") and item != \"project_explorer.tscn\":
+			create_scene_button(path + item)
+
+func create_scene_button(scene_path: String) -> void:
+	var btn = Button.new()
+	btn.text = scene_path.replace(\"res://\", \"\")
+	btn.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	
+	btn.pressed.connect(func(): 
+		get_tree().change_scene_to_file(scene_path)
+	)
+	
+	container.add_child(btn)
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_7a0ga"]
+font_size = 64
+
+[node name="ProjectExplorer" type="Control" unique_id=1344781843]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_7a0ga")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1736631634]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = 16.0
+offset_right = -64.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" unique_id=1985702910]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="ScrollContainer/VBoxContainer" unique_id=1243468727]
+layout_mode = 2
+text = "Scenes"
+label_settings = SubResource("LabelSettings_7a0ga")
+horizontal_alignment = 1
+
+[node name="ButtonsContainer" type="GridContainer" parent="ScrollContainer/VBoxContainer" unique_id=744209737]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2

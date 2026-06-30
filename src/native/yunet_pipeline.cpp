@@ -163,7 +163,7 @@ bool YuNetPipeline::crop_eye(const cv::Mat& gray, const cv::Point2f landmarks[5]
     // Select primary eye landmark (landmarks[1] is left eye, landmarks[0] is right eye)
     cv::Point2f eye_center = is_left ? landmarks[1] : landmarks[0];
 
-    // Compute face roll angle from the eye-to-eye vector (right eye landmarks[0] to left eye landmarks[1])
+    // Compute face roll angle from the eye-to-eye vector (image-left landmarks[0] to image-right landmarks[1])
     double roll_dx = landmarks[1].x - landmarks[0].x;
     double roll_dy = landmarks[1].y - landmarks[0].y;
     double angle = std::atan2(roll_dy, roll_dx) * (180.0 / 3.141592653589793);

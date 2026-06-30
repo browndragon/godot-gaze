@@ -28,6 +28,22 @@ struct GazeVector2 {
     constexpr explicit operator bool() const {
         return x != 0.0 || y != 0.0;
     }
+
+    GazeVector2 operator+(const GazeVector2& other) const {
+        return GazeVector2(x + other.x, y + other.y);
+    }
+
+    GazeVector2 operator-(const GazeVector2& other) const {
+        return GazeVector2(x - other.x, y - other.y);
+    }
+
+    GazeVector2 operator*(double scalar) const {
+        return GazeVector2(x * scalar, y * scalar);
+    }
+
+    double length() const {
+        return std::sqrt(x * x + y * y);
+    }
 };
 
 struct GazeVector2i {
@@ -259,6 +275,27 @@ inline GazeVector3 get_head_forward_in_camera_space(const GazeVector3& rotation_
     double r22 = cy * cp;
 
     return GazeVector3(-r02, r12, r22);
+}
+
+/**
+ * @brief Intersects a 3D ray with a plane in 3D space.
+ * 
+ * Solve for parameter t: plane_normal.dot(ray_origin + t * ray_dir) = plane_d
+ * => t = (plane_d - plane_normal.dot(ray_origin)) / plane_normal.dot(ray_dir)
+ */
+inline bool intersect_ray_plane(
+    const GazeVector3& ray_origin,
+    const GazeVector3& ray_dir,
+    const GazeVector3& plane_normal,
+    double plane_d,
+    double& out_t
+) {
+    double denom = plane_normal.dot(ray_dir);
+    if (std::abs(denom) < 1e-6) {
+        return false;
+    }
+    out_t = (plane_d - plane_normal.dot(ray_origin)) / denom;
+    return out_t >= 0.0;
 }
 
 } // namespace Gaze

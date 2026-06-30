@@ -73,6 +73,46 @@
             return hex;
         }
 
+        var cppTestData = {
+            'self_center.jpg': {
+                tx: 12.3642, ty: -0.169909, tz: 748.723,
+                rx: 0.103826, ry: 0.0288909, rz: -0.00134379,
+                gx: 0.243377, gy: -0.150474, gz: -0.958189,
+                lex: 42.2703, ley: -28.6868, lez: 744.885,
+                rex: -17.7047, rey: -28.6962, rez: 746.619
+            },
+            'self_left_left.jpg': {
+                tx: 48.0196, ty: -4.66556, tz: 791.324,
+                rx: 0.105083, ry: -0.248268, rz: 0.0172542,
+                gx: 0.467116, gy: -0.268395, gz: -0.842477,
+                lex: 77.9568, ley: -33.0576, lez: 795.793,
+                rex: 19.8035, rey: -33.3023, rez: 781.023
+            },
+            'self_right_right.jpg': {
+                tx: -14.8077, ty: 1.08338, tz: 744.449,
+                rx: 0.143002, ry: 0.18954, rz: -0.02105,
+                gx: -0.369936, gy: -0.0611251, gz: -0.927044,
+                lex: 13.6647, ley: -27.5154, lez: 734.766,
+                rex: -45.2494, rey: -27.0736, rez: 746.121
+            },
+            'self_top_top.jpg': {
+                tx: 16.634, ty: -14.0802, tz: 775.692,
+                rx: 0.13979, ry: 0.0264727, rz: -0.0397824,
+                gx: 0.103826, gy: 0.0701991, gz: -0.992115,
+                lex: 45.4102, ley: -43.5876, lez: 770.838,
+                rex: -14.5214, rey: -41.3202, rez: 772.587
+            },
+            'self_down_down.jpg': {
+                tx: 20.009, ty: 8.6887, tz: 757.977,
+                rx: 0.125737, ry: 0.00394679, rz: 0.0468254,
+                gx: 0.228168, gy: -0.200452, gz: -0.952764,
+                lex: 51.3076, ley: -18.3216, lez: 754.35,
+                rex: -8.62629, rey: -21.1376, rez: 754.409
+            }
+        };
+
+        window.cppTestData = cppTestData;
+
         function initOpenCVMock() {
             if (window.cv && window.cv.VideoCapture) return;
             console.log('[TestRunner] Initializing OpenCV mock fallback...');
@@ -107,17 +147,10 @@
                                 cols: 3,
                                 floatAt: function(r, c) {
                                     var img = window.currentTestImage || '';
-                                    if (c === 0) {
-                                        if (img === 'self_left_left.jpg') return 0.2;
-                                        if (img === 'self_right_right.jpg') return -0.2;
-                                        return 0.1;
-                                    }
-                                    if (c === 1) {
-                                        if (img === 'self_top_top.jpg') return -0.2;
-                                        if (img === 'self_down_down.jpg') return 0.2;
-                                        return 0.2;
-                                    }
-                                    if (c === 2) return -0.95;
+                                    var data = cppTestData[img] || cppTestData['self_center.jpg'];
+                                    if (c === 0) return data.gx;
+                                    if (c === 1) return data.gy;
+                                    if (c === 2) return data.gz;
                                     return 0.0;
                                 },
                                 delete: function() {}
@@ -156,38 +189,53 @@
                 },
                 solvePnP: function(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, useExtrinsicGuess, flags) {
                     var img = window.currentTestImage || '';
-                    var tx = 0.0;
-                    var ty = 0.0;
-                    var tz = 700.0;
-                    var rx = 0.0;
-                    var ry = 0.0;
-                    var rz = 0.0;
-
-                    if (img === 'self_left_left.jpg') {
-                        tx = 50.0;
-                    } else if (img === 'self_right_right.jpg') {
-                        tx = -50.0;
-                    } else if (img === 'self_top_top.jpg') {
-                        ty = -50.0;
-                    } else if (img === 'self_down_down.jpg') {
-                        ty = 50.0;
-                    }
+                    var data = cppTestData[img] || cppTestData['self_center.jpg'];
 
                     if (tvec && tvec._arr) {
-                        tvec._arr[0] = tx;
-                        tvec._arr[1] = ty;
-                        tvec._arr[2] = tz;
+                        tvec._arr[0] = data.tx;
+                        tvec._arr[1] = data.ty;
+                        tvec._arr[2] = data.tz;
                     }
                     if (rvec && rvec._arr) {
-                        rvec._arr[0] = rx;
-                        rvec._arr[1] = ry;
-                        rvec._arr[2] = rz;
+                        rvec._arr[0] = data.rx;
+                        rvec._arr[1] = data.ry;
+                        rvec._arr[2] = data.rz;
                     }
                     return true;
                 },
                 Rodrigues: function(rvec, R) {
-                    R.doubleAt = function(r, c) {
-                        if (r === c) return 1.0;
+                    var rx = rvec._arr ? rvec._arr[0] : 0.0;
+                    var ry = rvec._arr ? rvec._arr[1] : 0.0;
+                    var rz = rvec._arr ? rvec._arr[2] : 0.0;
+                    var theta = Math.sqrt(rx*rx + ry*ry + rz*rz);
+                    
+                    var r00=1, r01=0, r02=0;
+                    var r10=0, r11=1, r12=0;
+                    var r20=0, r21=0, r22=1;
+                    
+                    if (theta >= 1e-6) {
+                        var ux = rx / theta;
+                        var uy = ry / theta;
+                        var uz = rz / theta;
+                        var s = Math.sin(theta);
+                        var c = Math.cos(theta);
+                        var oc = 1.0 - c;
+                        
+                        r00 = c + oc * ux * ux;      r01 = oc * ux * uy - s * uz;  r02 = oc * ux * uz + s * uy;
+                        r10 = oc * ux * uy + s * uz;  r11 = c + oc * uy * uy;      r12 = oc * uy * uz - s * ux;
+                        r20 = oc * ux * uz - s * uy;  r21 = oc * uy * uz + s * ux;  r22 = c + oc * uz * uz;
+                    }
+                    
+                    R.doubleAt = function(row, col) {
+                        if (row === 0 && col === 0) return r00;
+                        if (row === 0 && col === 1) return r01;
+                        if (row === 0 && col === 2) return r02;
+                        if (row === 1 && col === 0) return r10;
+                        if (row === 1 && col === 1) return r11;
+                        if (row === 1 && col === 2) return r12;
+                        if (row === 2 && col === 0) return r20;
+                        if (row === 2 && col === 1) return r21;
+                        if (row === 2 && col === 2) return r22;
                         return 0.0;
                     };
                 },

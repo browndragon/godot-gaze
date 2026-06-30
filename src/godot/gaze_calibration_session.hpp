@@ -1,10 +1,6 @@
 /**
  * @file gaze_calibration_session.hpp
  * @brief Godot Resource for tracking calibration sampling sessions
- *
- * Collects target pixel coordinates, gaze origins, and raw gaze direction vectors
- * during calibration sequences. Uses collected sample points to calculate pitch/yaw
- * and pixel biases.
  */
 #pragma once
 
@@ -17,13 +13,13 @@
 namespace godot {
 
 class GazeTracker;
-class GazeCalibrationResource;
+class GazeCalibration;
 
 class GazeCalibrationSession : public Resource {
     GDCLASS(GazeCalibrationSession, Resource);
 
 private:
-    Array target_pixels;
+    Array target_pixels_ppix;
     Array gaze_origins;
     Array gaze_directions;
 
@@ -34,15 +30,15 @@ public:
     GazeCalibrationSession() = default;
     virtual ~GazeCalibrationSession() = default;
 
-    void add_sample(Vector2 target_pixel, Vector3 gaze_origin, Vector3 gaze_direction);
+    void add_sample(Vector2 target_pixel_ppix, Vector3 gaze_origin, Vector3 gaze_direction);
     void clear();
     int get_sample_count() const;
 
-    Ref<GazeCalibrationResource> calculate_calibration(GazeTracker *tracker, bool use_3d);
+    Ref<GazeCalibration> calculate_calibration(GazeTracker *tracker);
 
     // Getters and setters for properties to allow serialization
-    void set_target_pixels(const Array& arr) { target_pixels = arr; }
-    Array get_target_pixels() const { return target_pixels; }
+    void set_target_pixels_ppix(const Array& arr) { target_pixels_ppix = arr; }
+    Array get_target_pixels_ppix() const { return target_pixels_ppix; }
 
     void set_gaze_origins(const Array& arr) { gaze_origins = arr; }
     Array get_gaze_origins() const { return gaze_origins; }

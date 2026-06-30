@@ -29,14 +29,13 @@
         yunetBytes: null,
         gazeBytes: null,
 
-        // Configurations sent dynamically from Godot
-        faceDetectWidth: 160,
-        faceDetectHeight: 128,
+        cameraFocalLength: -1.0,
 
-        setModels: function(hexYunet, hexGaze, fdWidth, fdHeight) {
-            console.log('[GazeTracker] Received hex model bytes from Godot. Configured detection size: ' + fdWidth + 'x' + fdHeight);
+        setModels: function(hexYunet, hexGaze, fdWidth, fdHeight, focalLength) {
+            console.log('[GazeTracker] Received hex model bytes from Godot. Configured detection size: ' + fdWidth + 'x' + fdHeight + ' | Focal: ' + focalLength);
             if (fdWidth) this.faceDetectWidth = fdWidth;
             if (fdHeight) this.faceDetectHeight = fdHeight;
+            if (focalLength) this.cameraFocalLength = focalLength;
 
             function hexToUint8Array(hexString) {
                 if (!hexString) return new Uint8Array(0);
@@ -333,7 +332,7 @@
                             ]);
                             var cx = self.frameMat.cols / 2.0;
                             var cy = self.frameMat.rows / 2.0;
-                            var fx = self.frameMat.cols * 1.5625;
+                            var fx = (self.cameraFocalLength > 0.0) ? self.cameraFocalLength : (self.frameMat.cols * 1.5625);
                             var camera_matrix = cv.matFromArray(3, 3, cv.CV_64F, [
                                 fx, 0.0, cx,
                                 0.0, fx, cy,
@@ -392,11 +391,15 @@
                                 var left_blob = cv.blobFromImage(left_eye_mat, 1.0, size60, scalarZeros60, false, false);
                                 var right_blob = cv.blobFromImage(right_eye_mat, 1.0, size60, scalarZeros60, false, false);
 
-                                var head_pose_data = cv.matFromArray(1, 3, cv.CV_32F, [-yaw, pitch, -roll]);
+                                // Coordinate/Sign Conventions (see docs/gaze_math_physical_model.md Section 7):
+                                // 1. Yaw (-yaw): Negated because physical rotation around Y-down is negative left, but ADAS expects positive left.
+                                // 2. Pitch (pitch): Direct.
+                                // 3. Roll (-roll): Negated.
+                                 var head_pose_data = cv.matFromArray(1, 3, cv.CV_32F, [-yaw, pitch, -roll]);
 
-                                self.gazeNet.setInput(right_blob, 'left_eye_image');
-                                self.gazeNet.setInput(left_blob, 'right_eye_image');
-                                self.gazeNet.setInput(head_pose_data, 'head_pose_angles');
+                                 self.gazeNet.setInput(right_blob, 'left_eye_image');
+                                 self.gazeNet.setInput(left_blob, 'right_eye_image');
+                                 self.gazeNet.setInput(head_pose_data, 'head_pose_angles');
 
                                  var outName = 'gaze_vector/sink_port_0';
                                  if (self.gazeNet.getUnconnectedOutLayersNames) {
@@ -463,8 +466,8 @@
                                        if (debugPanel && debugPanel.style.display !== 'none') {
                                            var debugCanvas = document.getElementById('gaze-hud-canvas');
                                            if (debugCanvas) {
+                                               cv.imshow('gaze-hud-canvas', self.frameMat);
                                                var ctx = debugCanvas.getContext('2d');
-                                               ctx.drawImage(self.video, 0, 0, debugCanvas.width, debugCanvas.height);
                                                
                                                var hudScaleX = debugCanvas.width / self.frameMat.cols;
                                                var hudScaleY = debugCanvas.height / self.frameMat.rows;
@@ -587,7 +590,13 @@
             var canvas = document.getElementById('canvas') || document.querySelector('canvas') || this.canvas;
             var rect = canvas ? canvas.getBoundingClientRect() : { left: 0, top: 0 };
 
-            var isFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+            var isFullscreen = !!(
+                document.fullscreenElement || 
+                document.webkitFullscreenElement || 
+                document.mozFullScreenElement || 
+                document.msFullscreenElement ||
+                (window.innerWidth && window.screen && window.innerWidth === window.screen.width && window.innerHeight === window.screen.height)
+            );
             if (isFullscreen) {
                 return { x: 0, y: 0 };
             }

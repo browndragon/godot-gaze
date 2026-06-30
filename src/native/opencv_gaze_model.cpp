@@ -58,17 +58,22 @@ bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_
     GazeBasis3D R_basis = rodrigues_to_basis(crops.head_pose_rotation);
     GazeVector3 euler = R_basis.get_euler_gaze_model_deg();
 
+    // Coordinate/Sign Conventions (see docs/gaze_math_physical_model.md Section 7):
+    // 1. Yaw (-euler.y): In our Y-down camera space, physical rotation when turning left is negative.
+    //    However, the ADAS network expects a positive yaw when turning left. Thus we negate it.
+    // 2. Pitch (euler.x): Physical pitch when looking down is positive in both spaces.
+    // 3. Roll (-euler.z): Align roll coordinate signs by negating.
     float head_pose_data[3] = {
-        static_cast<float>(-euler.y), // Yaw (Model expects positive yaw turning left)
-        static_cast<float>(euler.x),  // Pitch (Model expects positive pitch looking down)
-        static_cast<float>(-euler.z)  // Roll (Model expects positive roll tilting right)
+        static_cast<float>(-euler.y), // Yaw (Model positive yaw turning left)
+        static_cast<float>(euler.x),  // Pitch (Model positive pitch looking down)
+        static_cast<float>(-euler.z)  // Roll (Model positive roll tilting right)
     };
     cv::Mat head_pose_blob(1, 3, CV_32F, head_pose_data);
  
     // 4. Set inputs into their corresponding ONNX tensor nodes (Intel ADAS names)
-    // Note: The model's inputs are named from the viewer's (camera's) perspective.
-    // Therefore, "left_eye_image" receives the image-left eye crop (anatomical right eye)
-    // and "right_eye_image" receives the image-right eye crop (anatomical left eye).
+    // Note: The model's inputs are named from the viewer's (camera's) perspective:
+    // "left_eye_image" receives the image-left eye crop (anatomical right eye, right_blob)
+    // and "right_eye_image" receives the image-right eye crop (anatomical left eye, left_blob).
     net.setInput(right_blob, "left_eye_image");
     net.setInput(left_blob, "right_eye_image");
     net.setInput(head_pose_blob, "head_pose_angles");

@@ -21,8 +21,8 @@ GazeVector3 ProjectionEngine::apply_3d_bias(const GazeVector3& raw_gaze_dir) con
     double yaw = std::atan2(v.x, v.z);
     double pitch = std::asin(vy);
 
-    double calib_yaw = yaw + calibration.bias_yaw;
-    double calib_pitch = pitch + calibration.bias_pitch;
+    double calib_yaw = yaw * calibration.scale_yaw + calibration.bias_yaw;
+    double calib_pitch = pitch * calibration.scale_pitch + calibration.bias_pitch;
 
     double cos_pitch = std::cos(calib_pitch);
     return GazeVector3(
@@ -62,13 +62,14 @@ bool ProjectionEngine::project_gaze(const GazeVector3& gaze_origin_cam,
     double v_disp_z = sin_t * v.y - cos_t * v.z;
 
     // Solve for ray-plane intersection parameter t at Z = 0 screen plane
-    if (std::abs(v_disp_z) < 1e-6) {
-        return false; // Ray is parallel to screen plane
-    }
-
-    double t = -O_disp_z / v_disp_z;
-    if (t < 0.0) {
-        return false; // Ray points away from the screen
+    double t = 0.0;
+    if (!intersect_ray_plane(
+            GazeVector3(0, 0, O_disp_z),
+            GazeVector3(0, 0, v_disp_z),
+            GazeVector3(0, 0, 1),
+            0.0,
+            t)) {
+        return false;
     }
 
     // Compute screen pixels without 2D pixel bias (pure projection)

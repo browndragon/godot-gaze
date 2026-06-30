@@ -1,7 +1,7 @@
 # Helper script to test the GazeTracker GDExtension module integration.
 extends Node2D
 
-@onready var tracker = $GazeTracker
+var tracker: GazeTracker = null
 @onready var cursor = $Cursor
 @onready var status_label = $StatusLabel
 
@@ -13,18 +13,33 @@ var center_pos: Vector2 = Vector2.ZERO
 var coords_label: Label
 
 func _ready():
+	# Center the window on start
+	var screen_id = DisplayServer.window_get_current_screen()
+	var screen_size = DisplayServer.screen_get_size(screen_id)
+	var window_size = DisplayServer.window_get_size()
+	DisplayServer.window_set_position((screen_size - window_size) / 2)
+
+	if not tracker:
+		tracker = get_node_or_null("GazeTracker")
+		if not tracker:
+			tracker = GazeTracker.new()
+			add_child(tracker)
+			tracker.initialize_tracker()
+
 	# Connect to GDExtension signals
 	tracker.gaze_updated.connect(_on_gaze_updated)
 	tracker.face_detection_changed.connect(_on_face_detected)
 	tracker.lifecycle_changed.connect(_on_lifecycle_changed)
 	
+	# Sync status with current state (since tracker is persistent and might already be running)
+	_on_lifecycle_changed(tracker.get_lifecycle_state())
+	if tracker.is_face_detected():
+		_on_face_detected(true)
+	
 	# Create a coordinate feedback label near screen center
 	coords_label = Label.new()
 	add_child(coords_label)
 	coords_label.text = ""
-	
-	# Start tracking (asynchronously requests camera permission if needed)
-	tracker.initialize_tracker()
 
 func _process(_delta):
 	if Engine.get_frames_drawn() % 60 == 0:
@@ -37,11 +52,17 @@ func _process(_delta):
 			print("Camera-to-Screen Transform:\n", tracker.get_camera_to_screen_transform())
 		print("====================================================")
 		
+	if Input.is_key_pressed(KEY_SPACE) and tracker.debug_logging_frames <= 0:
+		print("[GDScript] Spacebar pressed, requesting 5-frame telemetry burst...")
+		tracker.debug_logging_frames = 5
+
 	center_pos = get_viewport().get_visible_rect().size / 2.0
 	
 	if tracker.is_face_detected():
 		# 1. Head Pose / Nose Gaze projection
 		var head_forward = tracker.get_head_forward()
+		if tracker.debug_logging_frames != 0:
+			print("[GazeTracker Debug] -- Starting Nose Pose --")
 		var nose_pixel = tracker.project_gaze_ray_to_viewport(tracker.get_head_position(), head_forward)
 		if nose_pixel != Vector2.INF:
 			nose_gaze_pos = nose_pixel
@@ -51,9 +72,14 @@ func _process(_delta):
 		# 2. Unified Eye Gaze projection
 		var gaze_origin = tracker.get_gaze_origin()
 		var gaze_dir = tracker.get_gaze_direction()
+		if tracker.debug_logging_frames != 0:
+			print("[GazeTracker Debug] -- Starting Eye Gaze --")
 		var gaze_pixel = tracker.project_gaze_ray_to_viewport(gaze_origin, gaze_dir)
 		if gaze_pixel != Vector2.INF:
-			eye_gaze_pos = gaze_pixel
+			# TODO: Refactor tracking loop into a multi-component architecture so that 
+			# GDScript authors get filtered coordinates by default without manually calling 
+			# filter_gaze_coordinate (see project/addons/godot-gaze/TODO.md ## Multi-Component Architecture Redesign)
+			eye_gaze_pos = tracker.filter_gaze_coordinate(gaze_pixel)
 		else:
 			eye_gaze_pos = Vector2.ZERO
 	else:
@@ -104,14 +130,17 @@ func _on_face_detected(detected: bool):
 		status_label.text = "Status: Face Lost"
 
 func _input(event):
-	# Press SPACE to trigger a 3D calibration at the center of the screen
-	if event.is_action_pressed("ui_select"):
-		var viewport_center = get_viewport().get_visible_rect().size / 2.0
-		# Map window coordinate to screen coordinate
-		var screen_center = viewport_center + Vector2(DisplayServer.window_get_position())
-		tracker.calibrate_3d(screen_center)
-		if is_instance_valid(status_label):
-			status_label.text = "Status: Calibrated at Screen Center"
+	# Press 'F' to toggle Fullscreen mode
+	if event is InputEventKey and event.keycode == KEY_F and event.pressed:
+		var mode = DisplayServer.window_get_mode()
+		if mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			if is_instance_valid(status_label):
+				status_label.text = "Status: Windowed Mode"
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			if is_instance_valid(status_label):
+				status_label.text = "Status: Fullscreen Mode"
 
 func _on_lifecycle_changed(state):
 	if not is_instance_valid(status_label):

@@ -8,9 +8,12 @@
 #include <godot_cpp/core/defs.hpp>
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include "log.hpp"
 
 namespace godot {
+
+static GazeDeviceEstimatedCalibration* default_calib = nullptr;
 
 void initialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
@@ -18,10 +21,16 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     }
 
     // Register GDExtension classes so they are exposed to GDScript/Editor
-    ClassDB::register_class<GazeCalibrationResource>();
+    ClassDB::register_class<GazeCalibration>();
+    ClassDB::register_class<GazeDeviceCalibration>();
     ClassDB::register_class<GazeCalibrationSession>();
     ClassDB::register_class<GazePipelineConfig>();
     ClassDB::register_class<GazeTracker>();
+    ClassDB::register_class<GazeDeviceEstimatedCalibration>();
+
+    // Register GazeDeviceEstimatedCalibration engine singleton
+    default_calib = memnew(GazeDeviceEstimatedCalibration);
+    Engine::get_singleton()->register_singleton("GazeDeviceEstimatedCalibration", default_calib);
 
     // Redirect gaze library logging messages to Godot output console
     Gaze::register_log_handler([](bool is_error, const char* msg) {
@@ -38,6 +47,13 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
+
+    if (default_calib) {
+        Engine::get_singleton()->unregister_singleton("GazeDeviceEstimatedCalibration");
+        memdelete(default_calib);
+        default_calib = nullptr;
+    }
+
     // Clean up registry
     Gaze::register_log_handler(nullptr);
 }

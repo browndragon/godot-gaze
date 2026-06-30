@@ -262,15 +262,41 @@ bool GazeTracker::complete_initialization() {
     if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
     if (!pipeline) {
         String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
-        String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
-        pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
+        if (resolved_yunet.begins_with("res://") || resolved_yunet.begins_with("user://")) {
+            std::vector<uint8_t> buffer = load_file_buffer(resolved_yunet);
+            if (!buffer.empty()) {
+                pipeline = new Gaze::YuNetPipeline(buffer);
+            }
+        }
+        if (!pipeline) {
+            String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
+            pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
+        }
         pipeline->set_camera_focal_length_px(camera_focal_length_px);
     }
     if (!model) {
         String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
-        String global_gaze_path = copy_model_to_user_dir(resolved_gaze);
-        model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
+        if (resolved_gaze.begins_with("res://") || resolved_gaze.begins_with("user://")) {
+            if (resolved_gaze.ends_with(".xml")) {
+                std::vector<uint8_t> xml_buf = load_file_buffer(resolved_gaze);
+                String bin_res_path = resolved_gaze.replace(".xml", ".bin");
+                std::vector<uint8_t> bin_buf = load_file_buffer(bin_res_path);
+                if (!xml_buf.empty() && !bin_buf.empty()) {
+                    model = new Gaze::OpenCVGazeModel(xml_buf, bin_buf);
+                }
+            } else {
+                std::vector<uint8_t> onnx_buf = load_file_buffer(resolved_gaze);
+                if (!onnx_buf.empty()) {
+                    model = new Gaze::OpenCVGazeModel(onnx_buf);
+                }
+            }
+        }
+        if (!model) {
+            String global_gaze_path = copy_model_to_user_dir(resolved_gaze);
+            model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
+        }
     }
+
 
     if (pipeline_config.is_valid()) {
         Gaze::PipelineConfig core_cfg = pipeline_config->get_config();

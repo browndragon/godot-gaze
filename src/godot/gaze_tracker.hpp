@@ -29,6 +29,7 @@
 #include "one_euro_filter.hpp"
 
 #include <godot_cpp/variant/array.hpp>
+#include <vector>
 
 namespace godot {
 
@@ -137,6 +138,7 @@ private:
     void update_pipeline_config();
     String copy_model_to_user_dir(const String &res_path);
     void copy_individual_file(const String &src, const String &dest);
+    std::vector<uint8_t> load_file_buffer(const String &path);
     Transform2D get_adjusted_viewport_transform() const;
 
     // Platform-specific helper methods returning coordinates in physical spaces

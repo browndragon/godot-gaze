@@ -11,20 +11,29 @@
 #include "gaze_model.hpp"
 #include <opencv2/dnn.hpp>
 #include <string>
+#include <vector>
 
 namespace Gaze {
 
 class OpenCVGazeModel : public GazeModel {
 private:
     std::string model_path;
+    std::vector<uint8_t> model_buffer;
+    std::vector<uint8_t> bin_buffer;
+    bool load_from_buffer = false;
+    bool is_openvino = false;
+
     cv::dnn::Net net;
     PipelineConfig config;
 
 public:
     OpenCVGazeModel(const std::string& gaze_onnx_path);
+    OpenCVGazeModel(const std::vector<uint8_t>& onnx_buffer);
+    OpenCVGazeModel(const std::vector<uint8_t>& xml_buffer, const std::vector<uint8_t>& bin_buffer);
     virtual ~OpenCVGazeModel() = default;
 
     virtual bool initialize() override;
+
     virtual bool estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) override;
     virtual void set_config(const PipelineConfig& cfg) override { config = cfg; }
 };

@@ -9,18 +9,34 @@ namespace Gaze {
 YuNetPipeline::YuNetPipeline(const std::string& yunet_model_path, float score_thresh, float nms_thresh, int k)
     : model_path(yunet_model_path), score_threshold(score_thresh), nms_threshold(nms_thresh), top_k(k) {}
 
+YuNetPipeline::YuNetPipeline(const std::vector<uint8_t>& buffer, float score_thresh, float nms_thresh, int k)
+    : model_buffer(buffer), load_from_buffer(true), score_threshold(score_thresh), nms_threshold(nms_thresh), top_k(k) {}
+
 bool YuNetPipeline::initialize() {
-    log_info("YuNetPipelineInitAttempt", "model_path", model_path);
     try {
-        // YuNet expects size configuration input during creation; we use a standard 320x320 initial estimate
-        detector = cv::FaceDetectorYN::create(
-            model_path, 
-            "", 
-            cv::Size(320, 320), 
-            score_threshold, 
-            nms_threshold, 
-            top_k
-        );
+        if (load_from_buffer) {
+            log_info("YuNetPipelineInitAttemptBuffer", "buffer_size", (int)model_buffer.size());
+            // YuNet expects size configuration input during creation; we use a standard 320x320 initial estimate
+            detector = cv::FaceDetectorYN::create(
+                "onnx",
+                model_buffer,
+                std::vector<uchar>(),
+                cv::Size(320, 320),
+                score_threshold,
+                nms_threshold,
+                top_k
+            );
+        } else {
+            log_info("YuNetPipelineInitAttempt", "model_path", model_path);
+            detector = cv::FaceDetectorYN::create(
+                model_path, 
+                "", 
+                cv::Size(320, 320), 
+                score_threshold, 
+                nms_threshold, 
+                top_k
+            );
+        }
         if (detector.empty()) {
             log_error("YuNetPipelineInitFailed", "reason", "detector creation returned null");
             return false;
@@ -32,6 +48,7 @@ bool YuNetPipeline::initialize() {
     log_info("YuNetPipelineInitSuccess");
     return true;
 }
+
 
 bool YuNetPipeline::process_frame(const Frame& frame, EyeCrops& out_crops) {
     if (detector.empty() || frame.data == nullptr) {

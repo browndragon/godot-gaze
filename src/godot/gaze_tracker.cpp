@@ -246,7 +246,29 @@ void GazeTracker::on_permission_result(bool granted) {
     complete_initialization();
 }
 
+std::vector<uint8_t> GazeTracker::load_file_buffer(const String &path) {
+    std::vector<uint8_t> buffer;
+    if (path.is_empty()) {
+        return buffer;
+    }
+    Ref<FileAccess> file = FileAccess::open(path, FileAccess::READ);
+    if (file.is_null()) {
+        Gaze::log_error("GazeTrackerLoadFileBufferFailed_Open", "path", path.utf8().get_data());
+        return buffer;
+    }
+    uint64_t length = file->get_length();
+    if (length == 0) {
+        Gaze::log_error("GazeTrackerLoadFileBufferFailed_Empty", "path", path.utf8().get_data());
+        return buffer;
+    }
+    PackedByteArray godot_buffer = file->get_buffer(length);
+    buffer.resize(length);
+    std::memcpy(buffer.data(), godot_buffer.ptr(), length);
+    return buffer;
+}
+
 String GazeTracker::copy_model_to_user_dir(const String &res_path) {
+
     if (res_path.is_empty()) return "";
     
     // Only copy if it is a res:// virtual path

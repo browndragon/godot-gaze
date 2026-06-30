@@ -5,19 +5,39 @@ namespace Gaze {
 
 OpenCVGazeModel::OpenCVGazeModel(const std::string& gaze_onnx_path) : model_path(gaze_onnx_path) {}
 
+OpenCVGazeModel::OpenCVGazeModel(const std::vector<uint8_t>& onnx_buffer)
+    : model_buffer(onnx_buffer), load_from_buffer(true), is_openvino(false) {}
+
+OpenCVGazeModel::OpenCVGazeModel(const std::vector<uint8_t>& xml_buffer, const std::vector<uint8_t>& bin_buffer)
+    : model_buffer(xml_buffer), bin_buffer(bin_buffer), load_from_buffer(true), is_openvino(true) {}
+
 bool OpenCVGazeModel::initialize() {
-    log_info("OpenCVGazeModelInitAttempt", "model_path", model_path);
     try {
-        if (model_path.rfind(".xml") != std::string::npos) {
-            std::string bin_path = model_path;
-            size_t ext_pos = bin_path.rfind(".xml");
-            if (ext_pos != std::string::npos) {
-                bin_path.replace(ext_pos, 4, ".bin");
+        if (load_from_buffer) {
+            log_info("OpenCVGazeModelInitAttemptBuffer", "is_openvino", is_openvino);
+            if (is_openvino) {
+                net = cv::dnn::readNetFromModelOptimizer(
+                    reinterpret_cast<const unsigned char*>(model_buffer.data()), model_buffer.size(),
+                    reinterpret_cast<const unsigned char*>(bin_buffer.data()), bin_buffer.size()
+                );
+            } else {
+                net = cv::dnn::readNetFromONNX(
+                    reinterpret_cast<const char*>(model_buffer.data()), model_buffer.size()
+                );
             }
-            log_info("OpenCVGazeModelLoadOpenVINO", "xml", model_path, "bin", bin_path);
-            net = cv::dnn::readNet(model_path, bin_path);
         } else {
-            net = cv::dnn::readNetFromONNX(model_path);
+            log_info("OpenCVGazeModelInitAttempt", "model_path", model_path);
+            if (model_path.rfind(".xml") != std::string::npos) {
+                std::string bin_path = model_path;
+                size_t ext_pos = bin_path.rfind(".xml");
+                if (ext_pos != std::string::npos) {
+                    bin_path.replace(ext_pos, 4, ".bin");
+                }
+                log_info("OpenCVGazeModelLoadOpenVINO", "xml", model_path, "bin", bin_path);
+                net = cv::dnn::readNet(model_path, bin_path);
+            } else {
+                net = cv::dnn::readNetFromONNX(model_path);
+            }
         }
         
         if (net.empty()) {
@@ -40,6 +60,7 @@ bool OpenCVGazeModel::initialize() {
     log_info("OpenCVGazeModelInitSuccess");
     return true;
 }
+
 
 bool OpenCVGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) {
     if (net.empty()) {

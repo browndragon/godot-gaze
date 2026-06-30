@@ -28,7 +28,3 @@ This document tracks the prioritized outstanding tasks, design decisions, and fu
 ## 4. Unify Native Desktop OpenCV Build with OpenCV Submodule
 * **Objective**: Replace the Homebrew-linked `thirdparty/opencv-brew` dependency with native C++ libraries compiled directly from our local `thirdparty/opencv` git submodule (matching the Web/OpenCV.js build setup).
 * **Benefits**: Ensures 100% dependency self-containment and build reproducibility across developer machines without system-wide package manager dependencies.
-
-## 5. Buffer-Based Model Loading
-* **Objective**: Examine OpenCV loading mechanisms to load the face detector (YuNet) and gaze network (GazeNet) directly from Godot's virtual filesystem arrays in-memory.
-* **Benefits**: Avoids the need to "unwrap" and copy model files from virtual `res://` paths to physical `user://` storage at runtime.

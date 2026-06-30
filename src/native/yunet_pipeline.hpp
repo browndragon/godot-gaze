@@ -11,12 +11,16 @@
 #include "face_pipeline.hpp"
 #include <opencv2/objdetect.hpp>
 #include <string>
+#include <vector>
 
 namespace Gaze {
 
 class YuNetPipeline : public FacePipeline {
 private:
     std::string model_path;
+    std::vector<uint8_t> model_buffer;
+    bool load_from_buffer = false;
+
     cv::Ptr<cv::FaceDetectorYN> detector;
     float score_threshold;
     float nms_threshold;
@@ -30,9 +34,11 @@ private:
 
 public:
     YuNetPipeline(const std::string& yunet_model_path, float score_thresh = 0.6f, float nms_thresh = 0.3f, int k = 5000);
+    YuNetPipeline(const std::vector<uint8_t>& buffer, float score_thresh = 0.6f, float nms_thresh = 0.3f, int k = 5000);
     virtual ~YuNetPipeline() = default;
 
     virtual bool initialize() override;
+
     virtual bool process_frame(const Frame& frame, EyeCrops& out_crops) override;
     virtual void set_camera_focal_length_px(double f) override;
     virtual void set_config(const PipelineConfig& cfg) override { config = cfg; }

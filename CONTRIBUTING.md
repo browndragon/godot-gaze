@@ -1,39 +1,50 @@
 # Contributing to godot-gaze
 
-Thank you for your interest in the Godot Gaze & Expression Tracking GDExtension plugin! Please adhere to the following guidelines to maintain library quality, testability, and clean code separation.
+Thank you for your interest in the Godot Gaze & Expression Tracking GDExtension plugin!
+Please adhere to the following guidelines to maintain library quality, testability, and clean code separation.
 
-# Project layout & rules
+---
+
+# Project Layout & Rules
 
 ## 1. Directory Layout & Architecture Layers
 
-To ensure complete testability and cross-platform flexibility, the code is separated into strict directories:
+The codebase is organized as a layered architecture to ensure complete testability and platform separation:
 
-- `src/core/`: Zero-dependency, pure C++ math, filters, and layer interfaces. **Must not depend on Godot-cpp or OpenCV.**
-- `src/native/`: Native C++ wrappers utilizing OpenCV and cv::dnn.
-- `src/web/`: Web/HTML5 stubs interfacing with the browser Emscripten sidecar.
+- `src/core/`: Zero-dependency, pure C++ structures, math, filters, and projection algorithms. **Must not depend on Godot-cpp or ONNX Runtime.**
+- `src/native/`: Platform-independent ML inference pipelines utilizing ONNX Runtime (CPU/XNNPACK).
+- `src/windows/`: Windows-specific C++ platform implementations (e.g., path mapping/conversions).
+- `src/android/`: Android-specific C++ platform implementations (e.g., NNAPI execution provider setup).
+- `src/web/`: Web/HTML5 stubs and stubs interfacing with the browser Emscripten sidecar.
 - `src/godot/`: GDExtension bindings and lifecycle orchestrations.
-- `tests/`: Standalone unit tests executing core logic without spinning up Godot.
-- `thirdparty/`: External vendored packages (e.g. `doctest`, `one_euro_filter`).
+- `project/`: The Godot project containing the editor addon (`addons/godot-gaze/`).
+- `tests/`: Standalone C++ and python unit tests, regression benchmarks, and Godot headless/windowed integration tests.
+- `docs/`: Physical/calibration mathematical guides and documentation.
+- `thirdparty/`: External vendored packages (e.g. `doctest`, `one_euro_filter`, `godot-cpp`).
 
-This **6-Layer Decoupled Architecture**: Modular interfaces (Camera Capture, Image Pipeline, ONNX Model Inference, Screen Projection, Filtering, and Godot wrappers) allow testing and compiling layers independently.
+---
 
-## 2. Test-Driven Development (TDD) Practice
+## 2. Coding Style & Safety Standards
 
-Any modifications or additions to the mathematical projection formulas, calibration logic, or smoothing filters **must be written in `src/core/` and validated using the C++ unit test suite**.
+To maintain a clean and safe C++ codebase, we enforce the following rules:
+- **No Mutable Reference Parameters for Output**: Output parameters must be passed as pointers (e.g., `T*`) rather than mutable references (e.g., `T&`). Read-only inputs should be passed as const references (e.g., `const T&`).
+- **Memory Safety**: Prefer smart pointers (`std::unique_ptr`, `std::shared_ptr`) over raw resource allocations.
+- **Layer Isolation**: Ensure that core classes (`src/core/`) never reference GDExtension or ONNX headers directly.
 
-### Running Standalone C++ Tests
+---
 
-To verify changes instantly without compiling Godot bindings:
+## 3. Test-Driven Development (TDD) Practice
 
-```bash
-g++ -std=c++17 tests/test_main.cpp src/core/projection_engine.cpp \
-    -Isrc/core -Ithirdparty/doctest -Ithirdparty/one_euro_filter -o run_tests
-./run_tests
-```
+Any modifications or additions to the mathematical projection formulas, calibration logic, or smoothing filters must be written in `src/core/` and validated using the unit test suite.
 
-Ensure all assertions pass before submitting code changes.
+Our testing strategy follows these core principles:
+1. **Test-First Diagnostics**: When diagnosing an issue, first duplicate the issue with a failing test before writing any solution. If the issue cannot be reproduced with a test, reconsider your theory of action.
+2. **Test Real Code**: Tests should invoke the actual production code under test, rather than mocking or duplicating the production environment.
+3. **Justify Baseline Updates**: When updating the regression test benchmark report, you must provide a detailed justification in your commit message explaining why the changes are mathematically correct and overall beneficial.
 
-## 3. Structured Logging Standards
+---
+
+## 4. Structured Logging Standards
 
 To maintain ease of diagnostics across different platforms (especially on mobile and headless servers), we enforce key-value structured console output.
 
@@ -48,17 +59,11 @@ To maintain ease of diagnostics across different platforms (especially on mobile
   Gaze::log_error("ModelLoadFailed", "path", model_path, "error_code", -3);
   ```
 
-  Structured logs are easy to parse and automatically output in `event_name key1=val1 key2=val2` formats.
-
 ---
 
-# Developer workflow
+# Developer Workflow
 
-## 1. Bug Reports, feedback, funny memes
-
-Make them on [github issue tracker](https://github.com/browndragon/godot-gaze/issues).
-
-## 2. Development Environment Setup
+## 1. Development Environment Setup
 
 This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
 
@@ -70,72 +75,75 @@ This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
    ```
 2. Install tools defined in `.tool-versions`:
    ```bash
-   asdf plugin add python
    asdf install python
-   asdf plugin add scons
    asdf install scons
-   asdf plugin add emsdk
    asdf install emsdk
    ```
-3. Install **OpenCV** (required for Native compilation):
+3. Install **Node.js** and **npm** (required for Web testing):
    ```bash
-   brew install opencv
+   brew install node
    ```
-4. Run the OpenCV downloader helper to symlink the library:
-   ```bash
-   ./scripts/download_opencv.sh
-   ```
-5. Install **Doxygen** (required for API documentation generation):
+4. Install **Doxygen** (required for API documentation generation):
    ```bash
    brew install doxygen
    ```
 
 ---
 
-## 4. Gaze Pipeline Regression Benchmarking
+## 2. Compiling the GDExtension Binary
 
-We enforce automated regression testing against 9 real-image cases (`self_*.jpg`) representing various head poses and gaze targets.
+SCons is used to compile the GDExtension libraries for different target platforms:
 
-### Running Regression Tests
-To run both the core unit tests and the native OpenCV integration tests:
 ```bash
-./scripts/run_tests.sh
+# Compile for macOS
+scons platform=macos target=template_debug
+
+# Compile for Windows
+scons platform=windows target=template_debug
+
+# Compile for WebAssembly
+scons platform=web target=template_debug
+
+# Compile for Android (ARM64)
+scons platform=android target=template_debug arch=arm64
+
+# Compile for iOS (Simulator)
+scons platform=ios target=template_debug ios_simulator=yes arch=arm64
 ```
 
-### Benchmarking and Promotion
-1. Every run generates a report at `test_artifacts/gaze_benchmark_report.md`.
-2. The report is verified against the baseline in `test_assets/gaze_benchmark_report.md`.
-3. If errors regress relative to the baseline (beyond a small tolerance), the test suite will fail.
-4. If a change is correct and accepted, promote the new benchmark to update the baseline:
-   ```bash
-   cp test_artifacts/gaze_benchmark_report.md test_assets/gaze_benchmark_report.md
-   ```
+*Note: On macOS, SCons automatically performs ad-hoc codesigning (`codesign -s - --force`) on compiled libraries and test binaries.*
 
-## 5. Web/JavaScript Sidecar Integration Testing
+---
 
-We also enforce integration testing of the browser-side script injection loader using a headless Chrome environment.
+## 3. Running Automated Tests via SCons
 
-To run the JavaScript sidecar integration tests:
+All tests are integrated into SCons and should be run using the following targets:
+
 ```bash
-node tools/run_sidecar_tests.js
+# Run the fast unit test suite (Native C++ + Python + Headless Godot)
+scons tests
+
+# Run specific test suites:
+scons tests/native           # Native C++ unit tests & regression benchmark
+scons tests/python           # Pytest unit tests (verifies models & coords)
+scons tests/godot/headless   # Headless GDScript tests
+scons tests/godot/windowed   # Windowed GPU/Compute GDScript tests
+scons tests/web              # Web E2E browser automated tests
+scons tests/android          # Android emulator/device E2E tests
 ```
 
-## 6. Headless CLI Godot Commands
+- Running a test target redirects its output to `build/tests/logs/tests.<target>.log` and mirrors it to the terminal.
+- Benchmark reports comparing execution to checked-in baselines are written to `build/tests/artifacts/gaze_benchmark_report.md`.
+- SCons fails the build if error tolerances shift beyond established limits.
 
-We provide a `./scripts/godot.sh` helper to run Godot from the command line regardless of host OS. On macOS, this automatically invokes the installed `/Applications/Godot.app` binary.
+---
 
-To export the web build headlessly using this script:
-```bash
-./scripts/godot.sh --headless --export-debug "Web" project/exports/godot-gaze.html
-```
+## 4. API Documentation
 
-## 7. Generating API Documentation (Doxygen)
+To generate and view the API documentation locally:
 
-We use Doxygen to document C++ header files and generate the API reference website.
-
-To compile the latest documentation:
 ```bash
 ./scripts/generate_docs.sh
 ```
-This generates HTML output under `docs/doxygen/html/`. You can view the output by opening `docs/doxygen/html/index.html` in your browser.
 
+The documentation will be generated in `docs/doxygen/html/index.html`.

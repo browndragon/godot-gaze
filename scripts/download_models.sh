@@ -5,7 +5,7 @@
 set -euo pipefail
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-MODELS_DIR="${BASE_DIR}/project/models"
+MODELS_DIR="${BASE_DIR}/project/addons/godot-gaze/models"
 
 echo "=== Gaze Tracker Pre-trained Models Setup ==="
 mkdir -p "${MODELS_DIR}"
@@ -30,8 +30,10 @@ fi
 XML_URL="https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/1/gaze-estimation-adas-0002/FP16/gaze-estimation-adas-0002.xml"
 BIN_URL="https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/1/gaze-estimation-adas-0002/FP16/gaze-estimation-adas-0002.bin"
 
-XML_FILE="${MODELS_DIR}/gaze-estimation-adas-0002.xml"
-BIN_FILE="${MODELS_DIR}/gaze-estimation-adas-0002.bin"
+OPENVINO_DIR="${BASE_DIR}/test_assets/models"
+mkdir -p "${OPENVINO_DIR}"
+XML_FILE="${OPENVINO_DIR}/gaze-estimation-adas-0002.xml"
+BIN_FILE="${OPENVINO_DIR}/gaze-estimation-adas-0002.bin"
 
 if [ -f "${XML_FILE}" ] && [ -f "${BIN_FILE}" ]; then
     echo "Intel ADAS Gaze model already exists at: ${XML_FILE}"

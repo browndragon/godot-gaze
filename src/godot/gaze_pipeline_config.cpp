@@ -20,17 +20,15 @@ void GazePipelineConfig::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_ipd_mm"), &GazePipelineConfig::get_ipd_mm);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ipd_mm"), "set_ipd_mm", "get_ipd_mm");
 
-    ClassDB::bind_method(D_METHOD("set_face_detect_width", "val"), &GazePipelineConfig::set_face_detect_width);
-    ClassDB::bind_method(D_METHOD("get_face_detect_width"), &GazePipelineConfig::get_face_detect_width);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "face_detect_width"), "set_face_detect_width", "get_face_detect_width");
 
-    ClassDB::bind_method(D_METHOD("set_face_detect_height", "val"), &GazePipelineConfig::set_face_detect_height);
-    ClassDB::bind_method(D_METHOD("get_face_detect_height"), &GazePipelineConfig::get_face_detect_height);
-    ADD_PROPERTY(PropertyInfo(Variant::INT, "face_detect_height"), "set_face_detect_height", "get_face_detect_height");
 
     ClassDB::bind_method(D_METHOD("set_desired_camera_size", "size"), &GazePipelineConfig::set_desired_camera_size);
     ClassDB::bind_method(D_METHOD("get_desired_camera_size"), &GazePipelineConfig::get_desired_camera_size);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I, "desired_camera_size"), "set_desired_camera_size", "get_desired_camera_size");
+
+    ClassDB::bind_method(D_METHOD("set_debug_image_throttle_interval", "val"), &GazePipelineConfig::set_debug_image_throttle_interval);
+    ClassDB::bind_method(D_METHOD("get_debug_image_throttle_interval"), &GazePipelineConfig::get_debug_image_throttle_interval);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "debug_image_throttle_interval"), "set_debug_image_throttle_interval", "get_debug_image_throttle_interval");
 }
 
 void GazePipelineConfig::set_pitch_t_gain(double val) { config.pitch_t_gain = val; }
@@ -45,11 +43,7 @@ double GazePipelineConfig::get_nose_z() const { return config.nose_z; }
 void GazePipelineConfig::set_ipd_mm(double val) { config.ipd_mm = val; }
 double GazePipelineConfig::get_ipd_mm() const { return config.ipd_mm; }
 
-void GazePipelineConfig::set_face_detect_width(int val) { config.face_detect_width = val; }
-int GazePipelineConfig::get_face_detect_width() const { return config.face_detect_width; }
 
-void GazePipelineConfig::set_face_detect_height(int val) { config.face_detect_height = val; }
-int GazePipelineConfig::get_face_detect_height() const { return config.face_detect_height; }
 
 void GazePipelineConfig::set_desired_camera_size(Vector2i size) {
     config.desired_camera_width = size.x;
@@ -59,5 +53,8 @@ void GazePipelineConfig::set_desired_camera_size(Vector2i size) {
 Vector2i GazePipelineConfig::get_desired_camera_size() const {
     return Vector2i(config.desired_camera_width, config.desired_camera_height);
 }
+
+void GazePipelineConfig::set_debug_image_throttle_interval(int val) { config.debug_image_throttle_interval = val; }
+int GazePipelineConfig::get_debug_image_throttle_interval() const { return config.debug_image_throttle_interval; }
 
 } // namespace godot

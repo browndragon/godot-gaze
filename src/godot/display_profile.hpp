@@ -36,6 +36,9 @@ public:
     Vector2 get_dpi() const;
 
     static Ref<DisplayProfile> estimate_from_os();
+    static Vector2 get_screen_scale();
+    static Vector2 get_screen_size_logical();
+    static Vector2 get_window_size_logical();
 };
 
 } // namespace godot

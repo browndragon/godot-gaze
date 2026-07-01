@@ -1,272 +1,313 @@
-/**
- * @file gaze_calibration_resource.cpp
- * @brief Implement Godot wrapper classes GazeCalibration and GazeDeviceCalibration
- */
 #include "gaze_calibration_resource.hpp"
 #include "gaze_tracker.hpp"
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
+#include <godot_cpp/classes/file_access.hpp>
+#include <godot_cpp/classes/display_server.hpp>
+#include "display_profile.hpp"
+#include "../core/math_defs.hpp"
+
+#include <godot_cpp/variant/callable.hpp>
 
 namespace godot {
 
-// ==================== GazeCalibration ====================
+// ==================== DeviceCalibration ====================
 
-GazeCalibration::GazeCalibration() {
-    impl = std::make_shared<Gaze::FixedCalibration>();
-}
-
-GazeCalibration::GazeCalibration(std::shared_ptr<Gaze::Calibration> p_impl) : impl(p_impl) {}
-
-void GazeCalibration::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_pixel_size_mm", "val"), &GazeCalibration::set_pixel_size_mm);
-    ClassDB::bind_method(D_METHOD("get_pixel_size_mm", "tracker"), &GazeCalibration::get_pixel_size_mm, DEFVAL(nullptr));
-    ClassDB::bind_method(D_METHOD("get_pixel_size_mm_bind"), &GazeCalibration::get_pixel_size_mm_bind);
+void DeviceCalibration::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_pixel_size_mm", "val"), &DeviceCalibration::set_pixel_size_mm);
+    ClassDB::bind_method(D_METHOD("get_pixel_size_mm", "tracker"), &DeviceCalibration::get_pixel_size_mm, DEFVAL(nullptr));
+    ClassDB::bind_method(D_METHOD("get_pixel_size_mm_bind"), &DeviceCalibration::get_pixel_size_mm_bind);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "pixel_size_mm"), "set_pixel_size_mm", "get_pixel_size_mm_bind");
 
-    ClassDB::bind_method(D_METHOD("set_camera_offset", "val"), &GazeCalibration::set_camera_offset);
-    ClassDB::bind_method(D_METHOD("get_camera_offset", "tracker"), &GazeCalibration::get_camera_offset, DEFVAL(nullptr));
-    ClassDB::bind_method(D_METHOD("get_camera_offset_bind"), &GazeCalibration::get_camera_offset_bind);
+    ClassDB::bind_method(D_METHOD("set_camera_offset", "val"), &DeviceCalibration::set_camera_offset);
+    ClassDB::bind_method(D_METHOD("get_camera_offset", "tracker"), &DeviceCalibration::get_camera_offset, DEFVAL(nullptr));
+    ClassDB::bind_method(D_METHOD("get_camera_offset_bind"), &DeviceCalibration::get_camera_offset_bind);
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "camera_offset"), "set_camera_offset", "get_camera_offset_bind");
 
-    ClassDB::bind_method(D_METHOD("set_camera_tilt", "val"), &GazeCalibration::set_camera_tilt);
-    ClassDB::bind_method(D_METHOD("get_camera_tilt", "tracker"), &GazeCalibration::get_camera_tilt, DEFVAL(nullptr));
-    ClassDB::bind_method(D_METHOD("get_camera_tilt_bind"), &GazeCalibration::get_camera_tilt_bind);
+    ClassDB::bind_method(D_METHOD("set_camera_tilt", "val"), &DeviceCalibration::set_camera_tilt);
+    ClassDB::bind_method(D_METHOD("get_camera_tilt", "tracker"), &DeviceCalibration::get_camera_tilt, DEFVAL(nullptr));
+    ClassDB::bind_method(D_METHOD("get_camera_tilt_bind"), &DeviceCalibration::get_camera_tilt_bind);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_tilt"), "set_camera_tilt", "get_camera_tilt_bind");
 
-    ClassDB::bind_method(D_METHOD("set_bias_pitch", "val"), &GazeCalibration::set_bias_pitch);
-    ClassDB::bind_method(D_METHOD("get_bias_pitch"), &GazeCalibration::get_bias_pitch);
+    ClassDB::bind_static_method("DeviceCalibration", D_METHOD("get_focal_length_under_scaling", "f_original", "original_dim", "new_dim"), &DeviceCalibration::get_focal_length_under_scaling_static);
+    ClassDB::bind_static_method("DeviceCalibration", D_METHOD("get_card_width_px", "fov_degrees", "card_distance_mm", "frame_width", "card_width_mm"), &DeviceCalibration::get_card_width_px_static, DEFVAL(85.603));
+    ClassDB::bind_static_method("DeviceCalibration", D_METHOD("diagonal_to_horizontal_fov", "diagonal_fov_degrees", "width", "height"), &DeviceCalibration::diagonal_to_horizontal_fov_static);
+}
+
+Vector2 DeviceCalibration::get_pixel_size_mm(Object* tracker) const {
+    return pixel_size_mm;
+}
+
+Vector3 DeviceCalibration::get_camera_offset(Object* tracker) const {
+    return camera_offset;
+}
+
+double DeviceCalibration::get_camera_tilt(Object* tracker) const {
+    return camera_tilt;
+}
+
+double DeviceCalibration::get_focal_length_under_scaling_static(double f_original, double original_dim, double new_dim) {
+    return Gaze::get_focal_length_under_scaling(f_original, original_dim, new_dim);
+}
+
+double DeviceCalibration::get_card_width_px_static(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm) {
+    return Gaze::get_card_width_px(fov_degrees, card_distance_mm, frame_width, card_width_mm);
+}
+
+double DeviceCalibration::diagonal_to_horizontal_fov_static(double diagonal_fov_degrees, double width, double height) {
+    return Gaze::diagonal_to_horizontal_fov(diagonal_fov_degrees, width, height);
+}
+
+// ==================== GuessDeviceCalibration ====================
+
+Vector2 GuessDeviceCalibration::get_pixel_size_mm(Object* tracker) const {
+    if (pixel_size_mm.x > 0.0 && pixel_size_mm.y > 0.0) {
+        return pixel_size_mm;
+    }
+    if (tracker) {
+        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
+        if (gt) {
+            Ref<DisplayProfile> dp = gt->get_display_profile();
+            if (dp.is_valid()) {
+                Vector2i size_px = dp->get_logical_size_px();
+                Vector2 size_mm = dp->get_physical_size_mm();
+                if (size_px.x > 0 && size_px.y > 0 && size_mm.x > 0.0 && size_mm.y > 0.0) {
+                    return Vector2(size_mm.x / size_px.x, size_mm.y / size_px.y);
+                }
+            }
+            return gt->get_pixel_size_mm();
+        }
+    }
+    DisplayServer* ds = DisplayServer::get_singleton();
+    if (ds) {
+        int screen_id = ds->window_get_current_screen();
+        double scale = ds->screen_get_scale(screen_id);
+        Vector2i size_ppix = ds->screen_get_size(screen_id);
+        if (size_ppix.x > 0 && size_ppix.y > 0) {
+            Vector2i size_lpix = Vector2i((int)(size_ppix.x / scale), (int)(size_ppix.y / scale));
+            double dpi = ds->screen_get_dpi(screen_id);
+            if (dpi < 120.0 || dpi <= 0.0) {
+                double w_lpix = size_lpix.x;
+                double dpi_lpix = 172.0 - 0.03 * w_lpix;
+                if (dpi_lpix < 96.0) {
+                    dpi_lpix = 96.0;
+                }
+                dpi = dpi_lpix * scale;
+            }
+            if (dpi > 0.0) {
+                Vector2 size_mm = Vector2((size_ppix.x / dpi) * 25.4, (size_ppix.y / dpi) * 25.4);
+                return Vector2(size_mm.x / size_lpix.x, size_mm.y / size_lpix.y);
+            }
+        }
+    }
+    return Vector2(0.25, 0.25);
+}
+
+Vector3 GuessDeviceCalibration::get_camera_offset(Object* tracker) const {
+    if (camera_offset.x > -999.0 && camera_offset.y > -999.0 && camera_offset.z > -999.0) {
+        return camera_offset;
+    }
+    if (tracker) {
+        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
+        if (gt) {
+            return gt->get_derived_camera_offset();
+        }
+    }
+    return Vector3(0.0, 148.0, 0.0);
+}
+
+double GuessDeviceCalibration::get_camera_tilt(Object* tracker) const {
+    if (camera_tilt > -999.0) {
+        return camera_tilt;
+    }
+    if (tracker) {
+        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
+        if (gt) {
+            return gt->get_derived_camera_tilt();
+        }
+    }
+    return 0.0;
+}
+
+// ==================== StoredDeviceCalibration ====================
+
+StoredDeviceCalibration::StoredDeviceCalibration() {
+    pixel_size_mm = Vector2(0.25, 0.25);
+    camera_offset = Vector3(0.0, 148.0, 0.0);
+    camera_tilt = 0.0;
+}
+
+// ==================== DefaultDeviceCalibration ====================
+
+void DefaultDeviceCalibration::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("clear_cache"), &DefaultDeviceCalibration::clear_cache);
+}
+
+Ref<DeviceCalibration> DefaultDeviceCalibration::get_actual_calibration() const {
+    if (cached_calibration.is_valid()) {
+        return cached_calibration;
+    }
+    ProjectSettings* ps = ProjectSettings::get_singleton();
+    if (ps) {
+        String path = ps->get_setting("gaze/calibration/device_calibration_path");
+        if (!path.is_empty() && FileAccess::file_exists(path)) {
+            Ref<Resource> res = ResourceLoader::get_singleton()->load(path);
+            Ref<StoredDeviceCalibration> stored = res;
+            if (stored.is_valid()) {
+                cached_calibration = stored;
+                if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"))) {
+                    cached_calibration->connect("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"));
+                }
+                return cached_calibration;
+            }
+        }
+    }
+    Ref<GuessDeviceCalibration> guess;
+    guess.instantiate();
+    cached_calibration = guess;
+    if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"))) {
+        cached_calibration->connect("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"));
+    }
+    return cached_calibration;
+}
+
+void DefaultDeviceCalibration::clear_cache() {
+    if (cached_calibration.is_valid()) {
+        if (cached_calibration->is_connected("changed", Callable(this, "emit_changed"))) {
+            cached_calibration->disconnect("changed", Callable(this, "emit_changed"));
+        }
+        cached_calibration.unref();
+    }
+    emit_changed();
+}
+
+Vector2 DefaultDeviceCalibration::get_pixel_size_mm(Object* tracker) const {
+    return get_actual_calibration()->get_pixel_size_mm(tracker);
+}
+
+Vector3 DefaultDeviceCalibration::get_camera_offset(Object* tracker) const {
+    return get_actual_calibration()->get_camera_offset(tracker);
+}
+
+double DefaultDeviceCalibration::get_camera_tilt(Object* tracker) const {
+    return get_actual_calibration()->get_camera_tilt(tracker);
+}
+
+void DefaultDeviceCalibration::set_pixel_size_mm(Vector2 val) {
+    get_actual_calibration()->set_pixel_size_mm(val);
+}
+
+void DefaultDeviceCalibration::set_camera_offset(Vector3 val) {
+    get_actual_calibration()->set_camera_offset(val);
+}
+
+void DefaultDeviceCalibration::set_camera_tilt(double val) {
+    get_actual_calibration()->set_camera_tilt(val);
+}
+
+// ==================== BioCalibration ====================
+
+void BioCalibration::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("set_bias_pitch", "val"), &BioCalibration::set_bias_pitch);
+    ClassDB::bind_method(D_METHOD("get_bias_pitch"), &BioCalibration::get_bias_pitch);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bias_pitch"), "set_bias_pitch", "get_bias_pitch");
 
-    ClassDB::bind_method(D_METHOD("set_bias_yaw", "val"), &GazeCalibration::set_bias_yaw);
-    ClassDB::bind_method(D_METHOD("get_bias_yaw"), &GazeCalibration::get_bias_yaw);
+    ClassDB::bind_method(D_METHOD("set_bias_yaw", "val"), &BioCalibration::set_bias_yaw);
+    ClassDB::bind_method(D_METHOD("get_bias_yaw"), &BioCalibration::get_bias_yaw);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bias_yaw"), "set_bias_yaw", "get_bias_yaw");
 
-    ClassDB::bind_method(D_METHOD("set_bias_pixel_x", "val"), &GazeCalibration::set_bias_pixel_x);
-    ClassDB::bind_method(D_METHOD("get_bias_pixel_x"), &GazeCalibration::get_bias_pixel_x);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bias_pixel_x"), "set_bias_pixel_x", "get_bias_pixel_x");
+    ClassDB::bind_method(D_METHOD("set_scale_pitch", "val"), &BioCalibration::set_scale_pitch);
+    ClassDB::bind_method(D_METHOD("get_scale_pitch"), &BioCalibration::get_scale_pitch);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "scale_pitch"), "set_scale_pitch", "get_scale_pitch");
 
-    ClassDB::bind_method(D_METHOD("set_bias_pixel_y", "val"), &GazeCalibration::set_bias_pixel_y);
-    ClassDB::bind_method(D_METHOD("get_bias_pixel_y"), &GazeCalibration::get_bias_pixel_y);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "bias_pixel_y"), "set_bias_pixel_y", "get_bias_pixel_y");
+    ClassDB::bind_method(D_METHOD("set_scale_yaw", "val"), &BioCalibration::set_scale_yaw);
+    ClassDB::bind_method(D_METHOD("get_scale_yaw"), &BioCalibration::get_scale_yaw);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "scale_yaw"), "set_scale_yaw", "get_scale_yaw");
 }
 
-void GazeCalibration::set_pixel_size_mm(Vector2 val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.pixel_size_mm = Gaze::GazeVector2(val.x, val.y);
-        fixed->set_data(data);
-        emit_changed();
+// ==================== DefaultBioCalibration ====================
+
+void DefaultBioCalibration::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("clear_cache"), &DefaultBioCalibration::clear_cache);
+}
+
+Ref<BioCalibration> DefaultBioCalibration::get_actual_calibration() const {
+    if (cached_calibration.is_valid()) {
+        return cached_calibration;
     }
-}
-
-Vector2 GazeCalibration::get_pixel_size_mm(Object* tracker) const {
-    Gaze::GazeVector2 default_val(0.25, 0.25);
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            Vector2 dev_sz = gt->get_pixel_size_mm();
-            default_val = Gaze::GazeVector2(dev_sz.x, dev_sz.y);
+    ProjectSettings* ps = ProjectSettings::get_singleton();
+    if (ps) {
+        String path = ps->get_setting("gaze/calibration/bio_calibration_path");
+        if (!path.is_empty() && FileAccess::file_exists(path)) {
+            Ref<Resource> res = ResourceLoader::get_singleton()->load(path);
+            Ref<StoredBioCalibration> stored = res;
+            if (stored.is_valid()) {
+                cached_calibration = stored;
+                if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultBioCalibration*>(this), "emit_changed"))) {
+                    cached_calibration->connect("changed", Callable(const_cast<DefaultBioCalibration*>(this), "emit_changed"));
+                }
+                return cached_calibration;
+            }
         }
     }
-    Gaze::GazeVector2 res = impl->get_pixel_size_mm(default_val);
-    return Vector2(res.x, res.y);
-}
-
-void GazeCalibration::set_camera_offset(Vector3 val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.camera_offset = Gaze::GazeVector3(val.x, val.y, val.z);
-        fixed->set_data(data);
-        emit_changed();
+    Ref<GuessBioCalibration> guess;
+    guess.instantiate();
+    cached_calibration = guess;
+    if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultBioCalibration*>(this), "emit_changed"))) {
+        cached_calibration->connect("changed", Callable(const_cast<DefaultBioCalibration*>(this), "emit_changed"));
     }
+    return cached_calibration;
 }
 
-Vector3 GazeCalibration::get_camera_offset(Object* tracker) const {
-    Gaze::GazeVector3 default_val(0.0, 148.0, 0.0);
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            Vector3 dev_off = gt->get_derived_camera_offset();
-            default_val = Gaze::GazeVector3(dev_off.x, dev_off.y, dev_off.z);
+void DefaultBioCalibration::clear_cache() {
+    if (cached_calibration.is_valid()) {
+        if (cached_calibration->is_connected("changed", Callable(this, "emit_changed"))) {
+            cached_calibration->disconnect("changed", Callable(this, "emit_changed"));
         }
-    }
-    Gaze::GazeVector3 res = impl->get_camera_offset(default_val);
-    return Vector3(res.x, res.y, res.z);
-}
-
-void GazeCalibration::set_camera_tilt(double val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.camera_tilt = val;
-        fixed->set_data(data);
-        emit_changed();
-    }
-}
-
-double GazeCalibration::get_camera_tilt(Object* tracker) const {
-    double default_val = 0.0;
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            default_val = gt->get_derived_camera_tilt();
-        }
-    }
-    return impl->get_camera_tilt(default_val);
-}
-
-void GazeCalibration::set_bias_pitch(double val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.bias_pitch = val;
-        fixed->set_data(data);
-    } else {
-        auto dev = std::dynamic_pointer_cast<Gaze::DeviceCalibration>(impl);
-        if (dev) {
-            dev->set_bias_pitch(val);
-        }
+        cached_calibration.unref();
     }
     emit_changed();
 }
 
-double GazeCalibration::get_bias_pitch() const {
-    return impl->get_bias_pitch();
+double DefaultBioCalibration::get_bias_pitch() const {
+    return get_actual_calibration()->get_bias_pitch();
 }
 
-void GazeCalibration::set_bias_yaw(double val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.bias_yaw = val;
-        fixed->set_data(data);
-    } else {
-        auto dev = std::dynamic_pointer_cast<Gaze::DeviceCalibration>(impl);
-        if (dev) {
-            dev->set_bias_yaw(val);
-        }
-    }
-    emit_changed();
+double DefaultBioCalibration::get_bias_yaw() const {
+    return get_actual_calibration()->get_bias_yaw();
 }
 
-double GazeCalibration::get_bias_yaw() const {
-    return impl->get_bias_yaw();
+double DefaultBioCalibration::get_scale_pitch() const {
+    return get_actual_calibration()->get_scale_pitch();
 }
 
-void GazeCalibration::set_bias_pixel_x(double val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.bias_pixel_x = val;
-        fixed->set_data(data);
-    } else {
-        auto dev = std::dynamic_pointer_cast<Gaze::DeviceCalibration>(impl);
-        if (dev) {
-            dev->set_bias_pixel_x(val);
-        }
-    }
-    emit_changed();
+double DefaultBioCalibration::get_scale_yaw() const {
+    return get_actual_calibration()->get_scale_yaw();
 }
 
-double GazeCalibration::get_bias_pixel_x() const {
-    return impl->get_bias_pixel_x();
+void DefaultBioCalibration::set_bias_pitch(double val) {
+    get_actual_calibration()->set_bias_pitch(val);
 }
 
-void GazeCalibration::set_bias_pixel_y(double val) {
-    auto fixed = std::dynamic_pointer_cast<Gaze::FixedCalibration>(impl);
-    if (fixed) {
-        Gaze::GazeCalibration data = fixed->get_data();
-        data.bias_pixel_y = val;
-        fixed->set_data(data);
-    } else {
-        auto dev = std::dynamic_pointer_cast<Gaze::DeviceCalibration>(impl);
-        if (dev) {
-            dev->set_bias_pixel_y(val);
-        }
-    }
-    emit_changed();
+void DefaultBioCalibration::set_bias_yaw(double val) {
+    get_actual_calibration()->set_bias_yaw(val);
 }
 
-double GazeCalibration::get_bias_pixel_y() const {
-    return impl->get_bias_pixel_y();
+void DefaultBioCalibration::set_scale_pitch(double val) {
+    get_actual_calibration()->set_scale_pitch(val);
 }
 
-
-// ==================== GazeDeviceCalibration ====================
-
-GazeDeviceCalibration::GazeDeviceCalibration() {
-    impl = std::make_shared<Gaze::DeviceCalibration>();
-}
-
-void GazeDeviceCalibration::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_pixel_size_mm_override", "val"), &GazeDeviceCalibration::set_pixel_size_mm_override);
-    ClassDB::bind_method(D_METHOD("get_pixel_size_mm_override"), &GazeDeviceCalibration::get_pixel_size_mm_override);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "pixel_size_mm_override"), "set_pixel_size_mm_override", "get_pixel_size_mm_override");
-
-    ClassDB::bind_method(D_METHOD("set_camera_offset_override", "val"), &GazeDeviceCalibration::set_camera_offset_override);
-    ClassDB::bind_method(D_METHOD("get_camera_offset_override"), &GazeDeviceCalibration::get_camera_offset_override);
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "camera_offset_override"), "set_camera_offset_override", "get_camera_offset_override");
-
-    ClassDB::bind_method(D_METHOD("set_camera_tilt_override", "val"), &GazeDeviceCalibration::set_camera_tilt_override);
-    ClassDB::bind_method(D_METHOD("get_camera_tilt_override"), &GazeDeviceCalibration::get_camera_tilt_override);
-    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_tilt_override"), "set_camera_tilt_override", "get_camera_tilt_override");
-}
-
-void GazeDeviceCalibration::set_pixel_size_mm_override(Vector2 val) {
-    auto dev = get_device_impl();
-    if (dev) {
-        dev->set_pixel_size_mm_override(Gaze::GazeVector2(val.x, val.y));
-        emit_changed();
-    }
-}
-
-Vector2 GazeDeviceCalibration::get_pixel_size_mm_override() const {
-    auto dev = get_device_impl();
-    if (dev) {
-        Gaze::GazeVector2 res = dev->get_pixel_size_mm_override();
-        return Vector2(res.x, res.y);
-    }
-    return Vector2(-1.0, -1.0);
-}
-
-void GazeDeviceCalibration::set_camera_offset_override(Vector3 val) {
-    auto dev = get_device_impl();
-    if (dev) {
-        dev->set_camera_offset_override(Gaze::GazeVector3(val.x, val.y, val.z));
-        emit_changed();
-    }
-}
-
-Vector3 GazeDeviceCalibration::get_camera_offset_override() const {
-    auto dev = get_device_impl();
-    if (dev) {
-        Gaze::GazeVector3 res = dev->get_camera_offset_override();
-        return Vector3(res.x, res.y, res.z);
-    }
-    return Vector3(-1000.0, -1000.0, -1000.0);
-}
-
-void GazeDeviceCalibration::set_camera_tilt_override(double val) {
-    auto dev = get_device_impl();
-    if (dev) {
-        dev->set_camera_tilt_override(val);
-        emit_changed();
-    }
-}
-
-double GazeDeviceCalibration::get_camera_tilt_override() const {
-    auto dev = get_device_impl();
-    if (dev) {
-        return dev->get_camera_tilt_override();
-    }
-    return -1000.0;
+void DefaultBioCalibration::set_scale_yaw(double val) {
+    get_actual_calibration()->set_scale_yaw(val);
 }
 
 // ==================== GazeDeviceEstimatedCalibration ====================
 
 GazeDeviceEstimatedCalibration::GazeDeviceEstimatedCalibration() {
-    calibration.instantiate();
+    Ref<GuessDeviceCalibration> guess;
+    guess.instantiate();
+    calibration = guess;
 }
 
 void GazeDeviceEstimatedCalibration::_bind_methods() {

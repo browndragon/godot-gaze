@@ -19,7 +19,6 @@
 #include <godot_cpp/variant/basis.hpp>
 #include <godot_cpp/classes/ref.hpp>
 #include "gaze_calibration_resource.hpp"
-#include "gaze_pipeline_config.hpp"
 
 // Core interfaces (included in both Web and Native)
 #include "camera_interface.hpp"
@@ -51,6 +50,11 @@ struct PlatformGeometry {
  * GazeTracker handles camera acquisition (via CameraSensor), pipelines inputs through YuNet face detection
  * and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates
  * from camera space (millimeters) to viewport space (logical screen pixels).
+ *
+ * NOTE: The implementation of GazeTracker is split across three platform layers:
+ * - src/godot/gaze_tracker.cpp : Handles generic ClassDB binding, properties, signal routing, lifecycle, and projection math.
+ * - src/native/gaze_tracker_native.cpp : Implements native camera/model initialization and tracking loop via GazeServer thread.
+ * - src/web/gaze_tracker_web.cpp   : Implements Web HTML5 JS/Emscripten tracking loop integration and sidecar message polling.
  */
 class GazeTracker : public Node3D {
     GDCLASS(GazeTracker, Node3D);
@@ -81,8 +85,8 @@ private:
     Gaze::ProjectionEngine projection_engine;
 
     // Configurable Properties
-    Ref<GazeCalibration> calibration_resource;
-    Ref<GazePipelineConfig> pipeline_config;
+    Ref<DeviceCalibration> device_calibration;
+    Ref<BioCalibration> bio_calibration;
     Ref<DisplayProfile> display_profile;
     int camera_device_id = 0;
     int debug_logging_frames = 0;
@@ -105,13 +109,14 @@ private:
 
     Vector2 web_canvas_pos = Vector2(0.0, 0.0);
     void* opaque = nullptr;
+    RID display_rid;
+    RID camera_gaze_rid;
+    RID face_gaze_rid;
+    RID eye_gaze_rid;
 
-    void update_projection_parameters();
+    void _on_gaze_data_ready(RID p_rid);
+
     void update_filter_parameters();
-    void update_pipeline_config();
-    String copy_model_to_user_dir(const String &res_path);
-    void copy_individual_file(const String &src, const String &dest);
-    std::vector<uint8_t> load_file_buffer(const String &path);
     Transform2D get_adjusted_viewport_transform() const;
 
     // Platform-specific helper methods returning coordinates in physical spaces
@@ -130,6 +135,8 @@ protected:
 public:
     GazeTracker();
     virtual ~GazeTracker();
+
+    void update_projection_parameters();
 
 
     virtual void _ready() override;
@@ -177,8 +184,9 @@ public:
      * @param direction Gaze direction unit vector in camera-space.
      */
     void feed_gaze(bool face_detected, Vector3 origin, Vector3 direction);
-    void feed_gaze_web_raw(const Array& args);
+#ifdef WEB_ENABLED
     void on_sidecar_ready(const Array& args);
+#endif
 
     CameraSensor* get_camera_sensor() const;
     FaceEstimator* get_face_estimator() const;
@@ -192,11 +200,13 @@ public:
     void set_autostart(bool p_autostart);
     bool get_autostart() const;
 
-    void set_pipeline_config(const Ref<GazePipelineConfig>& res);
-    Ref<GazePipelineConfig> get_pipeline_config() const;
 
-    void set_calibration_resource(const Ref<GazeCalibration>& res);
-    Ref<GazeCalibration> get_calibration_resource() const;
+
+    void set_device_calibration(const Ref<DeviceCalibration>& res);
+    Ref<DeviceCalibration> get_device_calibration() const;
+
+    void set_bio_calibration(const Ref<BioCalibration>& res);
+    Ref<BioCalibration> get_bio_calibration() const;
 
     void set_display_profile(const Ref<DisplayProfile>& profile);
     Ref<DisplayProfile> get_display_profile() const;
@@ -225,14 +235,14 @@ public:
     Vector3 get_gaze_direction(bool apply_calibration = true) const;
 
     /**
-     * @brief Gets the current head rotation in OpenCV Camera Space (Euler angles in degrees).
+     * @brief Gets the current head rotation in Inference Camera Space (Euler angles in degrees).
      */
-    Vector3 get_head_rotation_opencv_space() const;
+    Vector3 get_head_rotation_inference_space() const;
 
     /**
-     * @brief Gets the current head translation in OpenCV Camera Space (in millimeters).
+     * @brief Gets the current head translation in Inference Camera Space (in millimeters).
      */
-    Vector3 get_head_translation_opencv_space() const;
+    Vector3 get_head_translation_inference_space() const;
     Vector3 get_head_position() const;
     Vector3 get_head_forward() const;
 
@@ -249,19 +259,19 @@ public:
     Vector2 project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration = true) const;
 
     /**
-     * @brief Gets the left eye center position in OpenCV Camera Space (in millimeters).
+     * @brief Gets the left eye center position in Inference Camera Space (in millimeters).
      */
-    Vector3 get_left_eye_center_opencv_space() const;
+    Vector3 get_left_eye_center_inference_space() const;
 
     /**
-     * @brief Gets the right eye center position in OpenCV Camera Space (in millimeters).
+     * @brief Gets the right eye center position in Inference Camera Space (in millimeters).
      */
-    Vector3 get_right_eye_center_opencv_space() const;
+    Vector3 get_right_eye_center_inference_space() const;
 
     /**
-     * @brief Gets the gaze direction unit vector in OpenCV Camera Space.
+     * @brief Gets the gaze direction unit vector in Inference Camera Space.
      */
-    Vector3 get_gaze_direction_opencv_space() const;
+    Vector3 get_gaze_direction_inference_space() const;
 
     const Gaze::ProjectionEngine& get_projection_engine() const { return projection_engine; }
 };

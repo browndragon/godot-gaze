@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # scripts/generate_gaze_model.py
 # Generates a dummy appearance-based gaze estimation ONNX model with the exact input/output nodes required by godot-gaze.
+# TODO: I don't understand this, and I think we shouldn't have it. "dummy" seems VERY wrong to post.
 
 import os
 import sys

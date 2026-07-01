@@ -64,51 +64,26 @@ static double compute_loss(
     double H_half = screen_size_mm.y * 0.5;
 
     for (const auto& sample : samples) {
-        GazeVector3 v = sample.gaze_direction.normalized();
+        GazeVector3 biased_dir = apply_3d_bias_vector(
+            sample.gaze_direction,
+            GazeVector2(bias_pitch, bias_yaw)
+        );
 
-        double vy = v.y;
-        if (vy > 1.0) vy = 1.0;
-        else if (vy < -1.0) vy = -1.0;
-
-        double yaw = std::atan2(v.x, v.z);
-        double pitch = std::asin(vy);
-
-        double calib_yaw = yaw + bias_yaw;
-        double calib_pitch = pitch + bias_pitch;
-
-        double cos_pitch = std::cos(calib_pitch);
-        GazeVector3 biased_dir = GazeVector3(
-            std::sin(calib_yaw) * cos_pitch,
-            std::sin(calib_pitch),
-            std::cos(calib_yaw) * cos_pitch
-        ).normalized();
-
-        // Project ray onto tilted screen plane (Display Space Z = 0)
-        double O_disp_z = sin_t * sample.gaze_origin.y - cos_t * sample.gaze_origin.z + camera_offset.z;
-        double v_disp_z = sin_t * biased_dir.y - cos_t * biased_dir.z;
-
-        if (std::abs(v_disp_z) < 1e-6) {
+        GazeVector2 pos_mm;
+        if (!project_ray_to_screen_mm(
+                sample.gaze_origin,
+                biased_dir,
+                camera_offset,
+                camera_tilt,
+                screen_size_mm,
+                pos_mm
+            )) {
             total_err_sq += weights.penalty_multiplier;
             continue;
         }
 
-        double t = -O_disp_z / v_disp_z;
-        if (t < 0.0) {
-            total_err_sq += weights.penalty_multiplier;
-            continue;
-        }
-
-        double O_disp_x = -sample.gaze_origin.x + camera_offset.x + W_half;
-        double O_disp_y = -(cos_t * sample.gaze_origin.y + sin_t * sample.gaze_origin.z + camera_offset.y) + H_half;
-
-        double v_disp_x = -biased_dir.x;
-        double v_disp_y = -(cos_t * biased_dir.y + sin_t * biased_dir.z);
-
-        double projected_x = O_disp_x + v_disp_x * t;
-        double projected_y = O_disp_y + v_disp_y * t;
-
-        double dx = projected_x - sample.target_pos_mm.x;
-        double dy = projected_y - sample.target_pos_mm.y;
+        double dx = pos_mm.x - sample.target_pos_mm.x;
+        double dy = pos_mm.y - sample.target_pos_mm.y;
         total_err_sq += dx * dx + dy * dy;
     }
 

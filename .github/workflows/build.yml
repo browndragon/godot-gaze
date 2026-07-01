@@ -1,0 +1,239 @@
+name: Compile GDExtension and Package Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }} (${{ matrix.target }}${{ matrix.threads && format(', threads={0}', matrix.threads) || '' }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos
+            os: macos-latest
+            target: template_debug
+            scons_flags: ""
+          - platform: macos
+            os: macos-latest
+            target: template_release
+            scons_flags: ""
+
+          - platform: windows
+            os: windows-latest
+            target: template_debug
+            scons_flags: ""
+          - platform: windows
+            os: windows-latest
+            target: template_release
+            scons_flags: ""
+
+          - platform: linux
+            os: ubuntu-latest
+            target: template_debug
+            scons_flags: ""
+          - platform: linux
+            os: ubuntu-latest
+            target: template_release
+            scons_flags: ""
+
+          - platform: android
+            os: ubuntu-latest
+            target: template_debug
+            scons_flags: "arch=arm64"
+          - platform: android
+            os: ubuntu-latest
+            target: template_release
+            scons_flags: "arch=arm64"
+          - platform: android
+            os: ubuntu-latest
+            target: template_debug
+            scons_flags: "arch=x86_64"
+          - platform: android
+            os: ubuntu-latest
+            target: template_release
+            scons_flags: "arch=x86_64"
+
+          - platform: ios
+            os: macos-latest
+            target: template_debug
+            scons_flags: "ios_simulator=no arch=arm64"
+          - platform: ios
+            os: macos-latest
+            target: template_release
+            scons_flags: "ios_simulator=no arch=arm64"
+          - platform: ios
+            os: macos-latest
+            target: template_debug
+            scons_flags: "ios_simulator=yes arch=arm64"
+          - platform: ios
+            os: macos-latest
+            target: template_release
+            scons_flags: "ios_simulator=yes arch=arm64"
+
+          - platform: web
+            os: ubuntu-latest
+            target: template_debug
+            threads: "no"
+            scons_flags: "threads=no"
+          - platform: web
+            os: ubuntu-latest
+            target: template_release
+            threads: "no"
+            scons_flags: "threads=no"
+          - platform: web
+            os: ubuntu-latest
+            target: template_debug
+            threads: "yes"
+            scons_flags: "threads=yes"
+          - platform: web
+            os: ubuntu-latest
+            target: template_release
+            threads: "yes"
+            scons_flags: "threads=yes"
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install SCons
+        run: pip install scons
+
+      - name: Checkout godot-cpp submodule
+        run: git submodule update --init --recursive --depth 1 thirdparty/godot-cpp
+
+      - name: Cache godot-cpp
+        uses: actions/cache@v4
+        with:
+          path: build/godot-cpp
+          key: godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.threads || 'nothreads' }}-${{ hashFiles('.gitmodules', 'SConstruct') }}
+          restore-keys: |
+            godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.threads || 'nothreads' }}-
+
+      - name: Clean pre-existing binaries
+        shell: bash
+        run: |
+          rm -f project/addons/godot-gaze/bin/*.dylib
+          rm -f project/addons/godot-gaze/bin/*.dll
+          rm -f project/addons/godot-gaze/bin/*.so
+          rm -f project/addons/godot-gaze/bin/*.a
+          rm -f project/addons/godot-gaze/bin/*.wasm
+
+      # Platform-specific dependency steps
+
+
+      - name: Cache Android NDK
+        if: matrix.platform == 'android'
+        id: cache-ndk
+        uses: actions/cache@v4
+        with:
+          path: /usr/local/lib/android/sdk/ndk/28.1.13356709
+          key: ndk-28.1.13356709
+          restore-keys: |
+            ndk-
+
+      - name: Setup dependencies (Android NDK)
+        if: matrix.platform == 'android' && steps.cache-ndk.outputs.cache-hit != 'true'
+        run: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.1.13356709"
+
+
+
+      - name: Setup dependencies (Web Emscripten)
+        if: matrix.platform == 'web'
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: '4.0.20'
+
+
+
+      # Compilation step
+      - name: Build GDExtension
+        shell: bash
+        run: |
+          scons platform=${{ matrix.platform }} target=${{ matrix.target }} ${{ matrix.scons_flags }}
+        env:
+          ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/28.1.13356709
+
+
+
+      - name: Upload Binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: bin-${{ matrix.platform }}-${{ matrix.target }}${{ matrix.threads && format('-threads-{0}', matrix.threads) || '' }}
+          path: |
+            project/addons/godot-gaze/bin/*.dylib
+            project/addons/godot-gaze/bin/*.dll
+            project/addons/godot-gaze/bin/*.so
+            project/addons/godot-gaze/bin/*.a
+            project/addons/godot-gaze/bin/*.wasm
+            project/addons/godot-gaze/bin/*.js
+          if-no-files-found: warn
+
+  package:
+    name: Package Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Clean pre-existing binaries from repo
+        run: |
+          rm -f project/addons/godot-gaze/bin/*.dylib
+          rm -f project/addons/godot-gaze/bin/*.dll
+          rm -f project/addons/godot-gaze/bin/*.so
+          rm -f project/addons/godot-gaze/bin/*.a
+          rm -f project/addons/godot-gaze/bin/*.wasm
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download Models
+        shell: bash
+        run: bash scripts/download_models.sh
+
+      - name: Install dependencies for model conversion
+        run: |
+          pip install numpy openvino2onnx
+
+      - name: Convert Gaze Model to ONNX
+        shell: bash
+        run: python3 scripts/convert_model.py
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: temp-binaries
+
+      - name: Copy binaries to addon folder
+        run: |
+          mkdir -p project/addons/godot-gaze/bin
+          cp -rp temp-binaries/bin-*/* project/addons/godot-gaze/bin/
+
+      - name: Display package structure
+        run: |
+          ls -la project/addons/godot-gaze/bin/
+          ls -la project/addons/godot-gaze/models/
+
+      - name: Zip Release Artifact
+        run: |
+          cd project
+          zip -r ../godot-gaze.zip addons/godot-gaze/
+
+      - name: Upload Final Release ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-gaze-release
+          path: godot-gaze.zip

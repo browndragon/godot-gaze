@@ -32,6 +32,9 @@
 *.out
 *.app
 
+# Python
+*.pyc
+
 # SCons
 .sconsign.dblite
 

@@ -1,0 +1,331 @@
+# tests/SConscript
+# Child SConscript defining all test compilation and execution targets.
+
+Import("core_env env library target_lib gaze_variant_dir")
+
+platform_str = env["platform"]
+if env["platform"] == "ios" and env.get("ios_simulator", False):
+    platform_str = "ios.simulator"
+
+import os
+import sys
+import atexit
+
+# Ensure output directories exist
+os.makedirs("build/tests/logs", exist_ok=True)
+os.makedirs("build/tests/artifacts", exist_ok=True)
+
+# Track executed tests for the final summary printout
+executed_tests = []
+
+def exit_summary():
+    if not executed_tests:
+        return
+        
+    print("\n" + "="*50)
+    print("               TEST SUITE SUMMARY")
+    print("="*50)
+    
+    any_failed = False
+    is_tty = sys.stdout.isatty()
+    
+    for log_path in executed_tests:
+        status_path = log_path + ".status"
+        
+        # e.g., build/tests/logs/tests.native.log -> tests/native
+        base = os.path.basename(log_path)
+        parts = base.replace("tests.", "").replace(".log", "").split(".")
+        alias_name = "tests/" + "/".join(parts)
+        
+        status_str = "PENDING"
+        if os.path.exists(status_path):
+            with open(status_path, "r") as sf:
+                exit_code = sf.read().strip()
+            if exit_code == "0":
+                status_str = "\033[92mPASSED\033[0m" if is_tty else "PASSED"
+            else:
+                status_str = "\033[91mFAILED\033[0m" if is_tty else "FAILED"
+                any_failed = True
+        else:
+            any_failed = True
+            
+        print(f" {alias_name:<25} : {status_str}")
+        
+    print("="*50 + "\n")
+
+atexit.register(exit_summary)
+
+# Helper function to run process, log to file, and mirror to terminal in real-time
+def run_command_and_log(target, source, env):
+    import subprocess
+    import sys
+    
+    log_path = str(target[0])
+    executed_tests.append(log_path)
+    
+    cmd = env.get("TEST_CMD")
+    if not cmd:
+        print("Error: TEST_CMD is missing in SCons command environment.")
+        return 1
+        
+    print(f"\n[SCons Test] Executing: {' '.join(cmd)}")
+    
+    # Configure platform-specific library loading paths
+    run_env = os.environ.copy()
+    bin_dir = os.path.abspath("project/addons/godot-gaze/bin")
+    if sys.platform == "darwin":
+        run_env["DYLD_LIBRARY_PATH"] = bin_dir
+    elif sys.platform == "win32":
+        run_env["PATH"] = bin_dir + os.pathsep + run_env.get("PATH", "")
+    else:
+        run_env["LD_LIBRARY_PATH"] = bin_dir
+        
+    try:
+        process = subprocess.Popen(
+            cmd,
+            env=run_env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True
+        )
+        
+        with open(log_path, "w") as log_file:
+            for line in process.stdout:
+                sys.stdout.write(line)
+                log_file.write(line)
+                
+        process.wait()
+        
+        # Save exit code to status file
+        with open(log_path + ".status", "w") as sf:
+            sf.write(str(process.returncode))
+            
+        if process.returncode != 0:
+            print(f"[SCons Test] Failure: Command exited with code {process.returncode}")
+            return process.returncode
+    except Exception as e:
+        error_msg = f"Failed to execute test subprocess: {e}\n"
+        sys.stderr.write(error_msg)
+        with open(log_path, "w") as log_file:
+            log_file.write(error_msg)
+        with open(log_path + ".status", "w") as sf:
+            sf.write("1")
+        return 1
+        
+    return 0
+
+# Setup test variant directory
+VariantDir(gaze_variant_dir + "/tests", "tests", duplicate=0)
+
+# Add doctest and stb include path to core_env
+core_env.Append(CPPPATH=["#thirdparty/doctest", "#thirdparty/stb"])
+
+# Configure native test target binaries (only on non-web/non-javascript platforms)
+if env["platform"] != "javascript":
+    test_objs = []
+    
+    # 1. Compile core sources using core_env
+    for f in Glob("#src/core/*.cpp"):
+        rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+        obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+        test_objs.append(core_env.Object(target=obj_file, source=f))
+        
+    # 2. Compile tests/test_main.cpp using core_env
+    test_main_obj = core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_main" + core_env["OBJSUFFIX"]),
+        source="#tests/test_main.cpp"
+    )
+    test_objs.append(test_main_obj)
+    
+    # 3. Include native tests on non-web platforms
+    native_excludes = [
+        "godot_camera.cpp",
+        "gaze_processors.cpp",
+        "gaze_tracker_native.cpp",
+        "vision_server.cpp",
+        "wmf_camera.cpp"
+    ]
+    for f in Glob("#src/native/*.cpp"):
+        filename = os.path.basename(str(f))
+        if filename in native_excludes:
+            continue
+        if filename.endswith(".fallback.cpp"):
+            continue
+        rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+        obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+        test_objs.append(core_env.Object(target=obj_file, source=f))
+        
+    if env["platform"] != "windows":
+        for f in Glob("#src/native/*.fallback.cpp"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".fallback.cpp", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+
+    if env["platform"] == "windows":
+        for f in Glob("#src/windows/*.cpp"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+            
+    if env["platform"] in ["macos", "ios"]:
+        for f in Glob("#src/native/*.mm"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+            
+        test_objs.append(core_env.Object(source="#" + os.path.join(gaze_variant_dir, "thirdparty_objc/ort_value.mm")))
+        test_objs.append(core_env.Object(source="#" + os.path.join(gaze_variant_dir, "thirdparty_objc/ort_enums.mm")))
+        test_objs.append(core_env.Object(source="#" + os.path.join(gaze_variant_dir, "thirdparty_objc/error_utils.mm")))
+        
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_native" + core_env["OBJSUFFIX"]),
+        source="#tests/test_native.cpp"
+    ))
+    
+    target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}"
+    test_program = core_env.Program(target=target_test_bin, source=test_objs)
+
+    # Build benchmark test executable
+    benchmark_objs = [obj for obj in test_objs if "test_native" not in str(obj)]
+    benchmark_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_benchmark" + core_env["OBJSUFFIX"]),
+        source="#tests/test_benchmark.cpp"
+    ))
+    
+    target_benchmark_bin = "#" + f"build/tests/test_benchmark.{platform_str}.{env['arch']}"
+    benchmark_program = core_env.Program(target=target_benchmark_bin, source=benchmark_objs)
+    
+    # Build stress test cast
+    stress_test_objs = [
+        env.Object(target="#" + os.path.join(gaze_variant_dir, "tests/stress_test_cast" + env["OBJSUFFIX"]), source="#tests/stress_test_cast.cpp")
+    ]
+    stress_target_test_bin = "#" + f"build/tests/stress_test_cast.{platform_str}.{env['arch']}"
+    stress_test_program = env.Program(target=stress_target_test_bin, source=stress_test_objs)
+
+    # Codesigning on macOS
+    if env["platform"] == "macos":
+        core_env.AddPostAction(test_program, "codesign -s - --force $TARGET")
+        core_env.AddPostAction(benchmark_program, "codesign -s - --force $TARGET")
+        env.AddPostAction(stress_test_program, "codesign -s - --force $TARGET")
+
+    # Native test runner target
+    native_run = env.Command(
+        "build/tests/logs/tests.native.log",
+        [test_program],
+        Action(run_command_and_log, varlist=["TEST_CMD"]),
+        TEST_CMD=[test_program[0].abspath]
+    )
+    env.AlwaysBuild(native_run)
+    env.Alias("tests/native", native_run)
+
+    # Benchmark test runner target
+    benchmark_run = env.Command(
+        "build/tests/logs/tests.benchmark.log",
+        [benchmark_program],
+        Action(run_command_and_log, varlist=["TEST_CMD"]),
+        TEST_CMD=[benchmark_program[0].abspath]
+    )
+    env.AlwaysBuild(benchmark_run)
+    env.Alias("tests/benchmark", benchmark_run)
+
+    # Native stress test runner target
+    stress_run = env.Command(
+        "build/tests/logs/tests.native.stress.log",
+        [stress_test_program],
+        Action(run_command_and_log, varlist=["TEST_CMD"]),
+        TEST_CMD=[stress_test_program[0].abspath]
+    )
+    env.AlwaysBuild(stress_run)
+    env.Alias("tests/native/stress", stress_run)
+
+# Python unit test target
+python_run = env.Command(
+    "build/tests/logs/tests.python.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["pytest", "tests/gaze_test.py", "--junitxml=build/tests/artifacts/python_report.xml"]
+)
+env.AlwaysBuild(python_run)
+env.Alias("tests/python", python_run)
+
+# Godot headless E2E test target
+godot_headless_run = env.Command(
+    "build/tests/logs/tests.godot.headless.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--headless", "addons/godot-gaze/tests/headless_test.tscn"]
+)
+env.AlwaysBuild(godot_headless_run)
+env.Alias("tests/godot/headless", godot_headless_run)
+
+# Godot windowed E2E test target
+godot_windowed_run = env.Command(
+    "build/tests/logs/tests.godot.windowed.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd"]
+)
+env.AlwaysBuild(godot_windowed_run)
+env.Alias("tests/godot/windowed", godot_windowed_run)
+
+# Godot camera exit E2E test target
+godot_camera_exit_run = env.Command(
+    "build/tests/logs/tests.godot.camera_exit.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/camera_exit_test.gd"]
+)
+env.AlwaysBuild(godot_camera_exit_run)
+env.Alias("tests/godot/camera_exit", godot_camera_exit_run)
+
+# Godot scene exit E2E test target
+godot_scene_exit_run = env.Command(
+    "build/tests/logs/tests.godot.scene_exit.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "addons/godot-gaze/tests/test.tscn", "--run-automated-toggles"]
+)
+env.AlwaysBuild(godot_scene_exit_run)
+env.Alias("tests/godot/scene_exit", godot_scene_exit_run)
+
+# Web E2E test target
+web_run = env.Command(
+    "build/tests/logs/tests.web.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["node", "tools/run_web_tests.js"]
+)
+env.AlwaysBuild(web_run)
+
+web_sidecar_run = env.Command(
+    "build/tests/logs/tests.web.sidecar.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["node", "tools/run_sidecar_gaze_tests.js"]
+)
+env.AlwaysBuild(web_sidecar_run)
+
+env.Alias("tests/web", [web_run, web_sidecar_run])
+
+# Android E2E test target
+android_run = env.Command(
+    "build/tests/logs/tests.android.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["/usr/bin/env", "bash", "scripts/run_android_tests.sh"]
+)
+env.AlwaysBuild(android_run)
+env.Alias("tests/android", android_run)
+
+# Standard local quick tests run (native + python + headless)
+local_tests = ["tests/python"]
+if env["platform"] != "javascript":
+    local_tests.extend(["tests/native", "tests/godot/headless"])
+
+env.Alias("tests", local_tests)
+
+# Run all E2E targets
+all_tests = ["tests/python", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android"]
+if env["platform"] != "javascript":
+    all_tests.append("tests/native")
+env.Alias("tests/all", all_tests)

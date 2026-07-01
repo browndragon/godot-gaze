@@ -14,7 +14,6 @@ func _export_begin(features: PackedStringArray, is_debug: bool, path: String, fl
 			return
 
 		var files_to_copy = {
-			"res://addons/godot-gaze/bin/opencv.js": export_dir.path_join("opencv.js"),
 			"res://addons/godot-gaze/bin/gaze_sidecar.js": export_dir.path_join("gaze_sidecar.js")
 		}
 

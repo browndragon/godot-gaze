@@ -21,13 +21,14 @@ struct PipelineConfig {
     // Default IPD in millimeters
     double ipd_mm = 63.0;
 
-    // Resizing dimensions for face detection
-    int face_detect_width = 160;
-    int face_detect_height = 128;
+
 
     // Desired camera capture resolution (default 640x480)
     int desired_camera_width = 640;
     int desired_camera_height = 480;
+
+    // Throttling interval for sending debug image/crop data (currently utilized by the web sidecar)
+    int debug_image_throttle_interval = 1;
 };
 
 } // namespace Gaze

@@ -228,13 +228,13 @@ Gaze direction unit vector in camera-space.</description>
 			<param index="0" name="apply_calibration" type="bool"></param>
 			<description></description>
 		</method>
-		<method name="get_head_rotation_opencv_space">
+		<method name="get_head_rotation_inference_space">
 			<return type="Vector3"></return>
-			<description>Gets the current head rotation in OpenCV Camera Space (Euler angles in degrees).</description>
+			<description>Gets the current head rotation in Inference Camera Space (Euler angles in degrees).</description>
 		</method>
-		<method name="get_head_translation_opencv_space">
+		<method name="get_head_translation_inference_space">
 			<return type="Vector3"></return>
-			<description>Gets the current head translation in OpenCV Camera Space (in millimeters).</description>
+			<description>Gets the current head translation in Inference Camera Space (in millimeters).</description>
 		</method>
 		<method name="get_head_position">
 			<return type="Vector3"></return>
@@ -263,17 +263,17 @@ The 3D direction vector of the ray in Camera Space.
 
 The 2D viewport-local pixel coordinates of the intersection point, or Vector2(INFINITY, INFINITY) (resolving to Vector2.INF in Godot) if the ray is parallel to or points away from the screen.</description>
 		</method>
-		<method name="get_left_eye_center_opencv_space">
+		<method name="get_left_eye_center_inference_space">
 			<return type="Vector3"></return>
-			<description>Gets the left eye center position in OpenCV Camera Space (in millimeters).</description>
+			<description>Gets the left eye center position in Inference Camera Space (in millimeters).</description>
 		</method>
-		<method name="get_right_eye_center_opencv_space">
+		<method name="get_right_eye_center_inference_space">
 			<return type="Vector3"></return>
-			<description>Gets the right eye center position in OpenCV Camera Space (in millimeters).</description>
+			<description>Gets the right eye center position in Inference Camera Space (in millimeters).</description>
 		</method>
-		<method name="get_gaze_direction_opencv_space">
+		<method name="get_gaze_direction_inference_space">
 			<return type="Vector3"></return>
-			<description>Gets the gaze direction unit vector in OpenCV Camera Space.</description>
+			<description>Gets the gaze direction unit vector in Inference Camera Space.</description>
 		</method>
 		<method name="get_projection_engine">
 			<return type="const Gaze::ProjectionEngine &amp;"></return>

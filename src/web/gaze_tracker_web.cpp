@@ -1,6 +1,11 @@
 #include "gaze_tracker.hpp"
 #include "log.hpp"
 #include "math_defs.hpp"
+#include "camera_sensor.hpp"
+#include "face_estimator.hpp"
+#include "eye_estimator.hpp"
+#include "smoother.hpp"
+#include "one_euro_smoother.hpp"
 
 #ifdef WEB_ENABLED
 #include "web_binding_state.hpp"
@@ -48,102 +53,14 @@ void GazeTracker::platform_trigger_permission_request() {
 
 PlatformGeometry GazeTracker::platform_get_geometry() const {
     PlatformGeometry geom;
-    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
-    if (js) {
-        // Retrieve physical backing store width
-        double window_physical_w = 0.0;
-        DisplayServer* ds = DisplayServer::get_singleton();
-        Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
-        
-        double vp_rect_w = 0.0;
-        double vp_scale_x = 0.0;
-        if (vp) {
-            vp_rect_w = vp->get_visible_rect().size.x;
-            vp_scale_x = vp->get_final_transform().get_scale().x;
-            window_physical_w = vp_rect_w * vp_scale_x;
-        } else if (ds) {
-            window_physical_w = ds->window_get_size().x;
-        }
+    geom.window_position_px = web_canvas_pos;
 
-        // Retrieve logical CSS layout width
-        double canvas_css_w = (double)js->eval("var c = document.getElementById('canvas') || document.querySelector('canvas'); c ? c.getBoundingClientRect().width : 0;");
-        double canvas_css_h = (double)js->eval("var c = document.getElementById('canvas') || document.querySelector('canvas'); c ? c.getBoundingClientRect().height : 0;");
-        if (canvas_css_w <= 0.0) canvas_css_w = 1.0;
-        if (canvas_css_h <= 0.0) canvas_css_h = 1.0;
-
-        // Query device pixel ratio (DPR) directly from window.devicePixelRatio
-        double dpr = 1.0;
-        if (js) {
-            dpr = js->eval("window.devicePixelRatio").stringify().to_float();
-            if (dpr <= 0.0) {
-                dpr = 1.0;
-            }
-        }
-        if (log_this_frame) {
-            UtilityFunctions::print("[GazeTracker Web Debug] vp: ", (vp != nullptr),
-                                    " | vp_rect_w: ", vp_rect_w,
-                                    " | vp_scale_x: ", vp_scale_x,
-                                    " | ds_win_w: ", (ds ? ds->window_get_size().x : 0),
-                                    " | canvas_css_w: ", canvas_css_w,
-                                    " | window.devicePixelRatio: ", dpr);
-        }
-
-        geom.logical_to_physical_pixel_ratio = dpr;
-
-        double w_lpix = js->eval("window.screen.width").stringify().to_float();
-        double h_lpix = js->eval("window.screen.height").stringify().to_float();
-
-        geom.screen_size_lpix = Vector2i((int)w_lpix, (int)h_lpix);
-        geom.screen_size_ppix = Vector2i((int)(w_lpix * dpr), (int)(h_lpix * dpr));
-
-        // Heuristic: Estimate the real physical density using a continuous linear function of logical width:
-        // dpi_logical = max(96.0, 172.0 - 0.03 * width_points).
-        double dpi_lpix = 172.0 - 0.03 * w_lpix;
-        if (dpi_lpix < 96.0) {
-            dpi_lpix = 96.0;
-        }
-        double dpi = dpi_lpix * dpr;
-        geom.screen_size_mm = Vector2((geom.screen_size_ppix.x / dpi) * MM_PER_INCH, (geom.screen_size_ppix.y / dpi) * MM_PER_INCH);
-
-        geom.window_position_ppix = web_canvas_pos;
-
-        // Calculate Web-specific canvas-to-screen scale ratio
-        if (dpr > 0.0) {
-            double godot_scale = window_physical_w / canvas_css_w;
-            if (godot_scale <= 0.0) {
-                godot_scale = 1.0;
-            }
-            geom.window_to_screen_scale_ratio = godot_scale;
-        }
-    } else {
-        geom.window_position_ppix = web_canvas_pos;
+    if (window_position_override.x >= 0.0 && window_position_override.y >= 0.0) {
+        geom.window_position_px = window_position_override;
     }
-
-    // Merge user overrides
-    geom.merge_overrides(overrides);
-
-    // Enforce sensible logical fallbacks if platform queries returned invalid data
-    if (geom.screen_size_lpix.x <= 0 || geom.screen_size_lpix.y <= 0) {
-        geom.screen_size_lpix = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
-    }
-    if (geom.logical_to_physical_pixel_ratio <= 0.0) {
-        geom.logical_to_physical_pixel_ratio = 1.0;
-    }
-
-    if (geom.screen_size_mm.x <= 0.0 || geom.screen_size_mm.y <= 0.0) {
-        geom.screen_size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
-    }
-
-    // Compute final effective physical screen size
-    geom.screen_size_ppix = Vector2i(
-        (int)(geom.screen_size_lpix.x * geom.logical_to_physical_pixel_ratio),
-        (int)(geom.screen_size_lpix.y * geom.logical_to_physical_pixel_ratio)
-    );
 
     if (log_this_frame) {
-        UtilityFunctions::print("[GazeTracker Web Debug] platform_get_geometry return: screen_size_lpix: ", geom.screen_size_lpix,
-                                " | screen_size_ppix: ", geom.screen_size_ppix,
-                                " | ratio: ", geom.logical_to_physical_pixel_ratio);
+        UtilityFunctions::print("[GazeTracker Web Debug] platform_get_geometry return: window_pos_lpix: ", geom.window_position_px);
     }
 
     return geom;
@@ -151,6 +68,27 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
 
 
 bool GazeTracker::complete_initialization() {
+    if (!camera_sensor) {
+        camera_sensor = memnew(CameraSensor);
+        camera_sensor->set_name("CameraSensor");
+        add_child(camera_sensor);
+    }
+    if (!face_estimator) {
+        face_estimator = memnew(FaceEstimator);
+        face_estimator->set_name("FaceEstimator");
+        camera_sensor->add_child(face_estimator);
+    }
+    if (!eye_estimator) {
+        eye_estimator = memnew(EyeEstimator);
+        eye_estimator->set_name("EyeEstimator");
+        face_estimator->add_child(eye_estimator);
+    }
+
+    camera_sensor->set_camera_device_id(camera_device_id);
+    face_estimator->set_yunet_model_path(yunet_model_path);
+    face_estimator->set_focal_length(camera_focal_length_px);
+    eye_estimator->set_gaze_model_path(gaze_onnx_path);
+
     String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
     String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
     if (resolved_gaze.ends_with(".xml")) {
@@ -163,6 +101,9 @@ bool GazeTracker::complete_initialization() {
         Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
         desired_camera_width = core_cfg.desired_camera_width;
         desired_camera_height = core_cfg.desired_camera_height;
+        camera_sensor->set_resolution(desired_camera_width, desired_camera_height);
+        face_estimator->set_pipeline_config(core_cfg);
+        eye_estimator->set_pipeline_config(core_cfg);
     }
 
     if (opaque) {
@@ -198,6 +139,9 @@ void GazeTracker::feed_gaze_web_raw(const Array& args) {
             UtilityFunctions::print("[GazeTracker Telemetry] Face Detected: FALSE");
             UtilityFunctions::print("[GazeTracker Telemetry] ========================================");
         }
+        if (face_estimator) {
+            face_estimator->feed_pose_web(false, Vector3(), Vector3());
+        }
         feed_gaze(false, Vector3(), Vector3());
         return;
     }
@@ -227,6 +171,15 @@ void GazeTracker::feed_gaze_web_raw(const Array& args) {
         // Extract canvas screen coordinates (displacement offset)
         web_canvas_pos = Vector2(args[16], args[17]);
 
+        if (face_estimator) {
+            face_estimator->feed_pose_web(true, 
+                Vector3(latest_crops.head_pose_translation.x, latest_crops.head_pose_translation.y, latest_crops.head_pose_translation.z), 
+                Vector3(latest_crops.head_pose_rotation.x, latest_crops.head_pose_rotation.y, latest_crops.head_pose_rotation.z));
+        }
+        if (eye_estimator) {
+            eye_estimator->feed_gaze_web(Vector3(dir_cv.x, dir_cv.y, dir_cv.z));
+        }
+
         if (log_this_frame) {
             UtilityFunctions::print("[GazeTracker Telemetry] ========================================");
             UtilityFunctions::print("[GazeTracker Telemetry] [Web Target] Frame Received");
@@ -246,11 +199,18 @@ void GazeTracker::feed_gaze_web_raw(const Array& args) {
             PlatformGeometry geom = platform_get_geometry();
             Transform2D vp_xform = get_adjusted_viewport_transform();
             
-            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size pixels: (", geom.screen_size_ppix.x, ", ", geom.screen_size_ppix.y, ")");
-            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size mm: (", geom.screen_size_mm.x, ", ", geom.screen_size_mm.y, ")");
+            Vector2i display_size_px = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+            Vector2 display_size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
+            if (display_profile.is_valid()) {
+                display_size_px = display_profile->get_logical_size_px();
+                display_size_mm = display_profile->get_physical_size_mm();
+            }
+            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size pixels: (", display_size_px.x, ", ", display_size_px.y, ")");
+            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size mm: (", display_size_mm.x, ", ", display_size_mm.y, ")");
             double calculated_dpi = 0.0;
-            if (geom.screen_size_mm.x > 0.0) {
-                calculated_dpi = (geom.screen_size_ppix.x / geom.screen_size_mm.x) * MM_PER_INCH;
+            if (display_profile.is_valid()) {
+                Vector2 dpi_v = display_profile->get_dpi();
+                calculated_dpi = dpi_v.x;
             }
             UtilityFunctions::print("[GazeTracker Telemetry] Screen derived DPI: ", calculated_dpi);
             UtilityFunctions::print("[GazeTracker Telemetry] Viewport Scale: (", vp_xform.get_scale().x, ", ", vp_xform.get_scale().y, ") Origin: (", vp_xform.get_origin().x, ", ", vp_xform.get_origin().y, ")");
@@ -267,7 +227,10 @@ void GazeTracker::on_sidecar_ready(const Array& args) {
     if (sidecar.is_null() || !sidecar.is_valid()) return;
 
     // Load yunet bytes
-    String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
+    String resolved_yunet = face_estimator ? face_estimator->get_yunet_model_path() : "";
+    if (resolved_yunet.is_empty()) {
+        resolved_yunet = "res://models/face_detection_yunet_2023mar.onnx";
+    }
     Ref<FileAccess> f_yunet = FileAccess::open(resolved_yunet, FileAccess::READ);
     PackedByteArray yunet_bytes;
     if (f_yunet.is_valid()) {
@@ -277,7 +240,10 @@ void GazeTracker::on_sidecar_ready(const Array& args) {
     }
 
     // Load gaze bytes (web target requires ONNX format, converting .xml suffix to .onnx)
-    String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
+    String resolved_gaze = eye_estimator ? eye_estimator->get_gaze_model_path() : "";
+    if (resolved_gaze.is_empty()) {
+        resolved_gaze = "res://models/gaze-estimation-adas-0002.xml";
+    }
     if (resolved_gaze.ends_with(".xml")) {
         resolved_gaze = resolved_gaze.replace(".xml", ".onnx");
     }
@@ -300,8 +266,10 @@ void GazeTracker::on_sidecar_ready(const Array& args) {
         fd_height = core_cfg.face_detect_height;
     }
 
+    double focal = camera_sensor ? camera_sensor->get_focal_length() : 1000.0;
+
     // Call setModels on the sidecar JavaScriptObject
-    sidecar->call("setModels", hex_yunet, hex_gaze, fd_width, fd_height, camera_focal_length_px);
+    sidecar->call("setModels", hex_yunet, hex_gaze, fd_width, fd_height, focal);
 }
 
 } // namespace godot

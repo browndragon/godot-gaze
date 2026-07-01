@@ -45,7 +45,7 @@ HTML_FILE_EXTENSION    = .html
 GENERATE_LATEX         = NO
 GENERATE_RTF           = NO
 GENERATE_MAN           = NO
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 # Diagram options (Graphviz/dot is optional; disable by default for portability)
 HAVE_DOT               = NO

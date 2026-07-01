@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeTracker" inherits="Node3D">
+	<brief_description>Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.</brief_description>
+	<description>GazeTracker handles camera acquisition (via CameraSensor), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels).</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="initialize_tracker">
+			<return type="bool"></return>
+			<description>Initializes the gaze tracker, setting up camera and models.
+
+True if initialized successfully, false otherwise.
+
+True if initialized successfully, false otherwise.</description>
+		</method>
+		<method name="stop_tracker">
+			<return type="void"></return>
+			<param index="0" name="p_emit_signal" type="bool"></param>
+			<description>Stops camera acquisition and model inference pipelines.
+
+p_emit_signal
+Whether to emit lifecycle status change signals.
+
+Whether to emit lifecycle status change signals.</description>
+		</method>
+		<method name="complete_initialization">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="trigger_permission_request">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="on_permission_result">
+			<return type="void"></return>
+			<param index="0" name="granted" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="clear_calibration">
+			<return type="void"></return>
+			<description>Clears active calibration, reverting to uncalibrated geometric projection.</description>
+		</method>
+		<method name="map_viewport_to_screen">
+			<return type="Vector2"></return>
+			<param index="0" name="logical_pixel" type="Vector2"></param>
+			<description>Maps logical viewport coordinates to primary screen logical coordinates.
+
+logical_pixel
+Viewport-relative coordinates.
+Screen-relative logical coordinates.
+
+Viewport-relative coordinates.
+
+Screen-relative logical coordinates.</description>
+		</method>
+		<method name="filter_gaze_coordinate">
+			<return type="Vector2"></return>
+			<param index="0" name="raw" type="Vector2"></param>
+			<description>Filters raw gaze coordinates using configured smoothing algorithms.
+
+raw
+Raw projected coordinate.
+Filtered smoothed coordinate.
+
+Raw projected coordinate.
+
+Filtered smoothed coordinate.</description>
+		</method>
+		<method name="feed_gaze">
+			<return type="void"></return>
+			<param index="0" name="face_detected" type="bool"></param>
+			<param index="1" name="origin" type="Vector3"></param>
+			<param index="2" name="direction" type="Vector3"></param>
+			<description>Manually injects raw gaze origin and direction coordinates.
+
+face_detected
+True if face landmarking succeeded.
+origin
+Gaze origin 3D camera-space vector (mm).
+direction
+Gaze direction unit vector in camera-space.
+
+True if face landmarking succeeded.
+
+Gaze origin 3D camera-space vector (mm).
+
+Gaze direction unit vector in camera-space.</description>
+		</method>
+		<method name="feed_gaze_web_raw">
+			<return type="void"></return>
+			<param index="0" name="args" type="const Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="on_sidecar_ready">
+			<return type="void"></return>
+			<param index="0" name="args" type="const Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_sensor">
+			<return type="CameraSensor *"></return>
+			<description></description>
+		</method>
+		<method name="get_face_estimator">
+			<return type="FaceEstimator *"></return>
+			<description></description>
+		</method>
+		<method name="get_eye_estimator">
+			<return type="EyeEstimator *"></return>
+			<description></description>
+		</method>
+		<method name="set_screen_smooth">
+			<return type="void"></return>
+			<param index="0" name="smoother" type="const Ref&lt; Smoother &gt; &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_screen_smooth">
+			<return type="Ref&lt; Smoother &gt;"></return>
+			<description></description>
+		</method>
+		<method name="get_lifecycle_state">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_autostart">
+			<return type="void"></return>
+			<param index="0" name="p_autostart" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_autostart">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_pipeline_config">
+			<return type="void"></return>
+			<param index="0" name="res" type="const Ref&lt; GazePipelineConfig &gt; &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_pipeline_config">
+			<return type="Ref&lt; GazePipelineConfig &gt;"></return>
+			<description></description>
+		</method>
+		<method name="set_calibration_resource">
+			<return type="void"></return>
+			<param index="0" name="res" type="const Ref&lt; GazeCalibration &gt; &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_calibration_resource">
+			<return type="Ref&lt; GazeCalibration &gt;"></return>
+			<description></description>
+		</method>
+		<method name="set_display_profile">
+			<return type="void"></return>
+			<param index="0" name="profile" type="const Ref&lt; DisplayProfile &gt; &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_display_profile">
+			<return type="Ref&lt; DisplayProfile &gt;"></return>
+			<description></description>
+		</method>
+		<method name="platform_get_geometry">
+			<return type="PlatformGeometry"></return>
+			<description></description>
+		</method>
+		<method name="set_debug_logging_frames">
+			<return type="void"></return>
+			<param index="0" name="frames" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_debug_logging_frames">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_device_id">
+			<return type="void"></return>
+			<param index="0" name="id" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_device_id">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_window_position_override">
+			<return type="void"></return>
+			<param index="0" name="pos" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="get_window_position_override">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_latest_projected_gaze">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_latest_filtered_gaze">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="is_face_detected">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="get_head_transform">
+			<return type="Transform3D"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_to_screen_transform">
+			<return type="Transform3D"></return>
+			<description></description>
+		</method>
+		<method name="get_derived_camera_offset">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="get_derived_camera_tilt">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_gaze_origin">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="get_gaze_direction">
+			<return type="Vector3"></return>
+			<param index="0" name="apply_calibration" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_head_rotation_opencv_space">
+			<return type="Vector3"></return>
+			<description>Gets the current head rotation in OpenCV Camera Space (Euler angles in degrees).</description>
+		</method>
+		<method name="get_head_translation_opencv_space">
+			<return type="Vector3"></return>
+			<description>Gets the current head translation in OpenCV Camera Space (in millimeters).</description>
+		</method>
+		<method name="get_head_position">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="get_head_forward">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="project_gaze_ray_to_viewport">
+			<return type="Vector2"></return>
+			<param index="0" name="origin" type="Vector3"></param>
+			<param index="1" name="direction" type="Vector3"></param>
+			<param index="2" name="apply_calibration" type="bool"></param>
+			<description>Projects a 3D ray in Camera Space (in millimeters) onto the physical screen plane, and maps it to viewport/window-local pixel coordinates by subtracting the window position.
+
+origin
+The 3D start point of the ray in Camera Space.
+direction
+The 3D direction vector of the ray in Camera Space.
+The 2D viewport-local pixel coordinates of the intersection point, or Vector2(INFINITY, INFINITY) (resolving to Vector2.INF in Godot) if the ray is parallel to or points away from the screen.
+
+The 3D start point of the ray in Camera Space.
+
+The 3D direction vector of the ray in Camera Space.
+
+The 2D viewport-local pixel coordinates of the intersection point, or Vector2(INFINITY, INFINITY) (resolving to Vector2.INF in Godot) if the ray is parallel to or points away from the screen.</description>
+		</method>
+		<method name="get_left_eye_center_opencv_space">
+			<return type="Vector3"></return>
+			<description>Gets the left eye center position in OpenCV Camera Space (in millimeters).</description>
+		</method>
+		<method name="get_right_eye_center_opencv_space">
+			<return type="Vector3"></return>
+			<description>Gets the right eye center position in OpenCV Camera Space (in millimeters).</description>
+		</method>
+		<method name="get_gaze_direction_opencv_space">
+			<return type="Vector3"></return>
+			<description>Gets the gaze direction unit vector in OpenCV Camera Space.</description>
+		</method>
+		<method name="get_projection_engine">
+			<return type="const Gaze::ProjectionEngine &amp;"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members>
+		<member name="MM_PER_INCH" type="double" default="25.4"></member>
+		<member name="CSS_PIXELS_PER_INCH" type="double" default="96.0"></member>
+		<member name="DEFAULT_SCREEN_SIZE_MM" type="Gaze::GazeVector2" default="Gaze::GazeVector2(345.0, 215.0)"></member>
+		<member name="DEFAULT_SCREEN_SIZE_PIXELS" type="Gaze::GazeVector2i" default="Gaze::GazeVector2i(1920, 1080)"></member>
+	</members>
+	<signals></signals>
+</class>

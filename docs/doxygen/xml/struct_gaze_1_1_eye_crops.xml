@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_eye_crops" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::EyeCrops</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a62e865f186f915cd5106b0ea72fef51f" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::EyeCrops::face_detected</definition>
+        <argsstring></argsstring>
+        <name>face_detected</name>
+        <qualifiedname>Gaze::EyeCrops::face_detected</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="18" column="10" bodyfile="src/core/face_pipeline.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1aa6f78453b65a3586a524588ef3c64f9b" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::EyeCrops::head_pose_rotation</definition>
+        <argsstring></argsstring>
+        <name>head_pose_rotation</name>
+        <qualifiedname>Gaze::EyeCrops::head_pose_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="21" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a3cd9d347992ec92e80870a18c521fd20" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::EyeCrops::head_pose_translation</definition>
+        <argsstring></argsstring>
+        <name>head_pose_translation</name>
+        <qualifiedname>Gaze::EyeCrops::head_pose_translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="22" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a565d4aa2fdc4d1e4a6383103df3dd5a8" prot="public" static="no" mutable="no">
+        <type>unsigned char</type>
+        <definition>unsigned char Gaze::EyeCrops::left_eye_data[10800]</definition>
+        <argsstring>[10800]</argsstring>
+        <name>left_eye_data</name>
+        <qualifiedname>Gaze::EyeCrops::left_eye_data</qualifiedname>
+        <initializer>= {0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="26" column="19" bodyfile="src/core/face_pipeline.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a37bb9aa12182f32ad3714837fadbbc0b" prot="public" static="no" mutable="no">
+        <type>unsigned char</type>
+        <definition>unsigned char Gaze::EyeCrops::right_eye_data[10800]</definition>
+        <argsstring>[10800]</argsstring>
+        <name>right_eye_data</name>
+        <qualifiedname>Gaze::EyeCrops::right_eye_data</qualifiedname>
+        <initializer>= {0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="27" column="19" bodyfile="src/core/face_pipeline.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1aee031d2b7b1f68e441d09a701b0702b2" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::EyeCrops::left_eye_center_cam</definition>
+        <argsstring></argsstring>
+        <name>left_eye_center_cam</name>
+        <qualifiedname>Gaze::EyeCrops::left_eye_center_cam</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="31" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a66f11e32929fe39de911bf3c1830072a" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::EyeCrops::right_eye_center_cam</definition>
+        <argsstring></argsstring>
+        <name>right_eye_center_cam</name>
+        <qualifiedname>Gaze::EyeCrops::right_eye_center_cam</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="32" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::EyeCrops</label>
+        <link refid="struct_gaze_1_1_eye_crops"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>head_pose_rotation</edgelabel>
+          <edgelabel>head_pose_translation</edgelabel>
+          <edgelabel>left_eye_center_cam</edgelabel>
+          <edgelabel>right_eye_center_cam</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/face_pipeline.hpp" line="17" column="1" bodyfile="src/core/face_pipeline.hpp" bodystart="17" bodyend="33"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_eye_crops_1a62e865f186f915cd5106b0ea72fef51f" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>face_detected</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1aa6f78453b65a3586a524588ef3c64f9b" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>head_pose_rotation</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a3cd9d347992ec92e80870a18c521fd20" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>head_pose_translation</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1aee031d2b7b1f68e441d09a701b0702b2" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_center_cam</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a565d4aa2fdc4d1e4a6383103df3dd5a8" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_data</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a66f11e32929fe39de911bf3c1830072a" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_center_cam</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a37bb9aa12182f32ad3714837fadbbc0b" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

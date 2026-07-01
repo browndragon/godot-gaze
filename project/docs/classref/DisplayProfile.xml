@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="DisplayProfile" inherits="Resource">
+	<brief_description>Resource representing the physical and logical geometry settings of the display panel.</brief_description>
+	<description>Exposes logical panel dimensions (pixels/points) and physical dimensions (millimeters), and computes the derived DPI ratio (pixels per inch) dynamically.</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_logical_size_px">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2i"></param>
+			<description></description>
+		</method>
+		<method name="get_logical_size_px">
+			<return type="Vector2i"></return>
+			<description></description>
+		</method>
+		<method name="set_physical_size_mm">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="get_physical_size_mm">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_dpi">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

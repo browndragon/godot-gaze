@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_camera_placement" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::CameraPlacement</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_camera_placement_1a8679a208ba8082dfdcabc020314b6c8e" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::CameraPlacement::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>Gaze::CameraPlacement::offset</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0, 0.0, 0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_placement.hpp" line="18" column="17" bodyfile="src/core/camera_placement.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_camera_placement_1a7e8aa4b3028c3b0d7e5edc3aab628b04" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CameraPlacement::tilt_degrees</definition>
+        <argsstring></argsstring>
+        <name>tilt_degrees</name>
+        <qualifiedname>Gaze::CameraPlacement::tilt_degrees</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_placement.hpp" line="22" column="12" bodyfile="src/core/camera_placement.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_camera_placement_1a2598f3827495d55bedb9a5b7107397d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::CameraPlacement::CameraPlacement</definition>
+        <argsstring>()=default</argsstring>
+        <name>CameraPlacement</name>
+        <qualifiedname>Gaze::CameraPlacement::CameraPlacement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_placement.hpp" line="24" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_camera_placement_1ae6aa9cbb7a28a8df6ac938b16e9a1be1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::CameraPlacement::CameraPlacement</definition>
+        <argsstring>(const GazeVector3 &amp;off, double tilt)</argsstring>
+        <name>CameraPlacement</name>
+        <qualifiedname>Gaze::CameraPlacement::CameraPlacement</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>off</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tilt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_placement.hpp" line="25" column="5" bodyfile="src/core/camera_placement.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::CameraPlacement</label>
+        <link refid="struct_gaze_1_1_camera_placement"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>offset</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/camera_placement.hpp" line="15" column="1" bodyfile="src/core/camera_placement.hpp" bodystart="15" bodyend="26"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_camera_placement_1a2598f3827495d55bedb9a5b7107397d3" prot="public" virt="non-virtual"><scope>Gaze::CameraPlacement</scope><name>CameraPlacement</name></member>
+      <member refid="struct_gaze_1_1_camera_placement_1ae6aa9cbb7a28a8df6ac938b16e9a1be1" prot="public" virt="non-virtual"><scope>Gaze::CameraPlacement</scope><name>CameraPlacement</name></member>
+      <member refid="struct_gaze_1_1_camera_placement_1a8679a208ba8082dfdcabc020314b6c8e" prot="public" virt="non-virtual"><scope>Gaze::CameraPlacement</scope><name>offset</name></member>
+      <member refid="struct_gaze_1_1_camera_placement_1a7e8aa4b3028c3b0d7e5edc3aab628b04" prot="public" virt="non-virtual"><scope>Gaze::CameraPlacement</scope><name>tilt_degrees</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

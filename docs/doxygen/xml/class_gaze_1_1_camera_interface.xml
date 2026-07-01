@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_camera_interface" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>Gaze::CameraInterface</compoundname>
+    <derivedcompoundref refid="class_gaze_1_1_open_c_v_camera" prot="public" virt="non-virtual">Gaze::OpenCVCamera</derivedcompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_camera_interface_1a8592a72f65f30714be103525af7fa010" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::CameraInterface::~CameraInterface</definition>
+        <argsstring>()=default</argsstring>
+        <name>~CameraInterface</name>
+        <qualifiedname>Gaze::CameraInterface::~CameraInterface</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="22" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_camera_interface_1ae668e7320344cb3019ce9e76611021b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::CameraInterface::initialize</definition>
+        <argsstring>()=0</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::CameraInterface::initialize</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_camera_1ae8d28a6603230f101f15fa0378110587">initialize</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="25" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_camera_interface_1a45223e7aff6836dccd70cab88d3629e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::CameraInterface::set_resolution</definition>
+        <argsstring>(int w, int h)</argsstring>
+        <name>set_resolution</name>
+        <qualifiedname>Gaze::CameraInterface::set_resolution</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_camera_1a0254ade90dbdf3e9fe64dd17e1571493">set_resolution</reimplementedby>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="28" column="18" bodyfile="src/core/camera_interface.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_camera_interface_1a1e579ab093b72058590d7be0dbefea3b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::CameraInterface::grab_frame</definition>
+        <argsstring>(Frame &amp;out_frame)=0</argsstring>
+        <name>grab_frame</name>
+        <qualifiedname>Gaze::CameraInterface::grab_frame</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_camera_1a883d918d25c0ec41d02270ae2cb39d09">grab_frame</reimplementedby>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>out_frame</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="31" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_camera_interface_1ac4817a801844e75ed43e1550b6eb0e57" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::CameraInterface::release</definition>
+        <argsstring>()=0</argsstring>
+        <name>release</name>
+        <qualifiedname>Gaze::CameraInterface::release</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_camera_1acf63cac11c333d09693f9e531611fc83">release</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="34" column="18"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Gaze::CameraInterface</label>
+        <link refid="class_gaze_1_1_camera_interface"/>
+      </node>
+      <node id="2">
+        <label>Gaze::OpenCVCamera</label>
+        <link refid="class_gaze_1_1_open_c_v_camera"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="src/core/camera_interface.hpp" line="20" column="1" bodyfile="src/core/camera_interface.hpp" bodystart="20" bodyend="35"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_camera_interface_1a1e579ab093b72058590d7be0dbefea3b" prot="public" virt="pure-virtual"><scope>Gaze::CameraInterface</scope><name>grab_frame</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1ae668e7320344cb3019ce9e76611021b2" prot="public" virt="pure-virtual"><scope>Gaze::CameraInterface</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1ac4817a801844e75ed43e1550b6eb0e57" prot="public" virt="pure-virtual"><scope>Gaze::CameraInterface</scope><name>release</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1a45223e7aff6836dccd70cab88d3629e3" prot="public" virt="virtual"><scope>Gaze::CameraInterface</scope><name>set_resolution</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1a8592a72f65f30714be103525af7fa010" prot="public" virt="virtual"><scope>Gaze::CameraInterface</scope><name>~CameraInterface</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -19,7 +19,8 @@ class GazeCalibrationSession : public Resource {
     GDCLASS(GazeCalibrationSession, Resource);
 
 private:
-    Array target_pixels_ppix;
+    bool freeze_camera_params = true;
+    Array target_pixels_px;
     Array gaze_origins;
     Array gaze_directions;
 
@@ -30,15 +31,18 @@ public:
     GazeCalibrationSession() = default;
     virtual ~GazeCalibrationSession() = default;
 
-    void add_sample(Vector2 target_pixel_ppix, Vector3 gaze_origin, Vector3 gaze_direction);
+    void add_sample(Vector2 target_pixel_px, Vector3 gaze_origin, Vector3 gaze_direction);
     void clear();
     int get_sample_count() const;
 
     Ref<GazeCalibration> calculate_calibration(GazeTracker *tracker);
 
     // Getters and setters for properties to allow serialization
-    void set_target_pixels_ppix(const Array& arr) { target_pixels_ppix = arr; }
-    Array get_target_pixels_ppix() const { return target_pixels_ppix; }
+    void set_freeze_camera_params(bool p_freeze) { freeze_camera_params = p_freeze; }
+    bool get_freeze_camera_params() const { return freeze_camera_params; }
+
+    void set_target_pixels_px(const Array& arr) { target_pixels_px = arr; }
+    Array get_target_pixels_px() const { return target_pixels_px; }
 
     void set_gaze_origins(const Array& arr) { gaze_origins = arr; }
     Array get_gaze_origins() const { return gaze_origins; }

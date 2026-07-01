@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="CameraSensor" inherits="Node3D">
+	<brief_description>Node3D managing camera capture, resolution settings, and focal length configurations.</brief_description>
+	<description>CameraSensor handles platform-specific camera inputs, fetches raw image frames, and manages spatial properties (position/rotation) representing the camera's physical alignment on the display bezel.</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="initialize_sensor">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="stop_sensor">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="grab_frame">
+			<return type="bool"></return>
+			<param index="0" name="out_frame" type="Gaze::Frame &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_last_frame">
+			<return type="Ref&lt; Image &gt;"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_device_id">
+			<return type="void"></return>
+			<param index="0" name="id" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_device_id">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_resolution">
+			<return type="void"></return>
+			<param index="0" name="w" type="int"></param>
+			<param index="1" name="h" type="int"></param>
+			<description></description>
+		</method>
+		<method name="set_focal_length">
+			<return type="void"></return>
+			<param index="0" name="focal" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_focal_length">
+			<return type="double"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

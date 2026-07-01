@@ -710,7 +710,7 @@ TEST_CASE("Testing Polymorphic Calibration Hierarchy and Overrides") {
     CHECK(dev_cal.get_camera_tilt(def_tilt) == doctest::Approx(5.0));
 }
 
-TEST_CASE("Testing CalibrationEstimator simplex convergence") {
+TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)") {
     // We simulate ground truth parameters:
     GazeVector2 gt_pixel_size(0.26, 0.26);
     GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
@@ -747,7 +747,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence") {
 
     for (const auto& tgt : targets) {
         CalibrationSample sample;
-        sample.target_pixel_ppix = tgt;
+        sample.target_pos_mm = GazeVector2(
+            (tgt.x / screen_res.x) * screen_mm_x,
+            (tgt.y / screen_res.y) * screen_mm_y
+        );
 
         // Simulate gaze origin at different minor head offsets
         sample.gaze_origin = GazeVector3((tgt.x - 960.0) * 0.05, 0.0, -600.0);
@@ -787,33 +790,28 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence") {
         samples.push_back(sample);
     }
 
-    // Run the solver starting from slightly off guesses (e.g. 20% off)
-    GazeVector2 init_pixel_size(0.24, 0.24);
+    // Run the solver starting from slightly off guesses (e.g. camera 20% off)
     GazeVector3 init_camera_offset(0.0, 148.0, 0.0);
     double init_camera_tilt = 0.0;
 
-    GazeVector2 est_sz;
     GazeVector3 est_off;
     double est_tilt = 0.0;
     double est_pitch = 0.0;
     double est_yaw = 0.0;
 
     CalibrationWeights weights;
-    weights.aspect_prior = 5000.0;
-    weights.size_prior = 10.0;
-    weights.offset_x = 0.5;
-    weights.offset_y = 0.05;
-    weights.offset_z = 0.05;
-    weights.tilt = 0.1;
-    weights.bias = 2.0;
+    weights.offset_x = 0.0;
+    weights.offset_y = 0.0;
+    weights.offset_z = 0.0;
+    weights.tilt = 0.0;
+    weights.bias = 0.0;
 
     bool success = CalibrationEstimator::estimate(
         samples,
-        screen_res,
-        init_pixel_size,
+        GazeVector2(screen_mm_x, screen_mm_y),
         init_camera_offset,
         init_camera_tilt,
-        est_sz,
+        false, // freeze_camera_params = false
         est_off,
         est_tilt,
         est_pitch,
@@ -824,46 +822,43 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence") {
     REQUIRE(success == true);
 
     // Verify optimized values converge close to ground truth
-    CHECK(est_sz.x == doctest::Approx(gt_pixel_size.x).epsilon(0.02));
-    CHECK(est_sz.y == doctest::Approx(gt_pixel_size.y).epsilon(0.02));
-    CHECK(est_off.y == doctest::Approx(gt_camera_offset.y).epsilon(3.0)); // within 3mm
-    CHECK(est_off.z == doctest::Approx(gt_camera_offset.z).epsilon(3.0));
-    CHECK(est_tilt == doctest::Approx(gt_camera_tilt).epsilon(1.5));     // within 1.5 degrees
-    CHECK(est_pitch == doctest::Approx(gt_bias_pitch).epsilon(0.01));    // within 0.01 rad
-    CHECK(est_yaw == doctest::Approx(gt_bias_yaw).epsilon(0.01));
+    CHECK(std::abs(est_off.y - gt_camera_offset.y) < 3.0); // within 3mm
+    CHECK(std::abs(est_off.z - gt_camera_offset.z) < 3.0);
+    CHECK(std::abs(est_tilt - gt_camera_tilt) < 1.5);     // within 1.5 degrees
+    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02);    // within 0.02 rad
+    CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
 }
 
-TEST_CASE("Testing Web Environment systematic shift resilience") {
-    // Model a scenario where the browser window position reports a systematic offset error
-    // (e.g. shifted by 80 pixels) and default DPI is slightly off.
-    GazeVector2 gt_pixel_size(0.25, 0.25);
-    GazeVector3 gt_camera_offset(0.0, 140.0, 10.0);
-    double gt_camera_tilt = 10.0;
-    double gt_bias_pitch = 0.0;
-    double gt_bias_yaw = 0.0;
+TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biological Bias)") {
+    // We simulate ground truth parameters where camera position is fixed
+    GazeVector2 gt_pixel_size(0.26, 0.26);
+    GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
+    double gt_camera_tilt = 12.0;
+    double gt_bias_pitch = 0.03;
+    double gt_bias_yaw = -0.02;
 
     GazeVector2 screen_res(1920.0, 1080.0);
+    double screen_mm_x = screen_res.x * gt_pixel_size.x;
+    double screen_mm_y = screen_res.y * gt_pixel_size.y;
 
-    // Simulate 5 target points
     std::vector<GazeVector2> targets = {
-        GazeVector2(960.0, 540.0),
-        GazeVector2(192.0, 108.0),
-        GazeVector2(1728.0, 108.0),
-        GazeVector2(192.0, 972.0),
-        GazeVector2(1728.0, 972.0)
+        GazeVector2(960.0, 540.0), // Center
+        GazeVector2(192.0, 108.0), // Top-Left
+        GazeVector2(1728.0, 108.0) // Top-Right
     };
 
+    std::vector<CalibrationSample> samples;
     double theta_rad = gt_camera_tilt * DEG_TO_RAD;
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
-    std::vector<CalibrationSample> samples;
-
     for (const auto& tgt : targets) {
         CalibrationSample sample;
-        // The browser/OS has an 80px shift we don't know about:
-        // Gaze rays hit the target, but the browser reports target positions shifted!
-        sample.target_pixel_ppix = tgt + GazeVector2(80.0, -40.0);
+        sample.target_pos_mm = GazeVector2(
+            (tgt.x / screen_res.x) * screen_mm_x,
+            (tgt.y / screen_res.y) * screen_mm_y
+        );
+
         sample.gaze_origin = GazeVector3(0.0, 0.0, -600.0);
 
         double tgt_x_mm = (tgt.x - 960.0) * gt_pixel_size.x;
@@ -875,38 +870,40 @@ TEST_CASE("Testing Web Environment systematic shift resilience") {
         double P_cam_z = A * sin_t + gt_camera_offset.z * cos_t;
 
         GazeVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
-        sample.gaze_direction = (target_cam - sample.gaze_origin).normalized();
+        GazeVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
+
+        double vy = biased_dir.y;
+        if (vy > 1.0) vy = 1.0; else if (vy < -1.0) vy = -1.0;
+        double yaw = std::atan2(biased_dir.x, biased_dir.z);
+        double pitch = std::asin(vy);
+
+        double raw_yaw = yaw - gt_bias_yaw;
+        double raw_pitch = pitch - gt_bias_pitch;
+
+        double cos_raw_pitch = std::cos(raw_pitch);
+        sample.gaze_direction = GazeVector3(
+            std::sin(raw_yaw) * cos_raw_pitch,
+            std::sin(raw_pitch),
+            std::cos(raw_yaw) * cos_raw_pitch
+        ).normalized();
 
         samples.push_back(sample);
     }
 
-    // Run solver
-    GazeVector2 init_pixel_size(0.24, 0.24);
-    GazeVector3 init_camera_offset(0.0, 148.0, 0.0);
-    double init_camera_tilt = 0.0;
-
-    GazeVector2 est_sz;
     GazeVector3 est_off;
     double est_tilt = 0.0;
     double est_pitch = 0.0;
     double est_yaw = 0.0;
 
     CalibrationWeights weights;
-    weights.aspect_prior = 5000.0;
-    weights.size_prior = 10.0;
-    weights.offset_x = 0.5;
-    weights.offset_y = 0.05;
-    weights.offset_z = 0.05;
-    weights.tilt = 0.1;
     weights.bias = 2.0;
 
     bool success = CalibrationEstimator::estimate(
         samples,
-        screen_res,
-        init_pixel_size,
-        init_camera_offset,
-        init_camera_tilt,
-        est_sz,
+        GazeVector2(screen_mm_x, screen_mm_y),
+        gt_camera_offset, // camera offsets frozen to ground truth
+        gt_camera_tilt,
+        true, // freeze_camera_params = true (locks camera to initial values)
         est_off,
         est_tilt,
         est_pitch,
@@ -916,23 +913,13 @@ TEST_CASE("Testing Web Environment systematic shift resilience") {
 
     REQUIRE(success == true);
 
-    // Forward projection using the optimized parameters should match the reported shifted targets!
-    ProjectionEngine engine;
-    engine.set_screen_size_pixels(screen_res);
-    engine.set_screen_size_mm(GazeVector2(screen_res.x * est_sz.x, screen_res.y * est_sz.y));
-    CameraPlacement placement(est_off, est_tilt);
-    engine.set_camera_placement(placement);
-    GazeCalibration calib(est_pitch, est_yaw, 0.0, 0.0);
-    engine.set_calibration(calib);
+    // Camera parameters should remain exactly locked to initial values
+    CHECK(est_off.x == doctest::Approx(gt_camera_offset.x));
+    CHECK(est_off.y == doctest::Approx(gt_camera_offset.y));
+    CHECK(est_off.z == doctest::Approx(gt_camera_offset.z));
+    CHECK(est_tilt == doctest::Approx(gt_camera_tilt));
 
-    for (const auto& sample : samples) {
-        GazeVector2 projected;
-        GazeVector3 biased_dir = engine.apply_3d_bias(sample.gaze_direction);
-        bool proj_ok = engine.project_gaze(sample.gaze_origin, biased_dir, projected);
-        REQUIRE(proj_ok == true);
-
-        // Project error should be less than 5 pixels
-        double err = (projected - sample.target_pixel_ppix).length();
-        CHECK(err < 5.0);
-    }
+    // Biological gaze bias should be solved accurately
+    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02);
+    CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
 }

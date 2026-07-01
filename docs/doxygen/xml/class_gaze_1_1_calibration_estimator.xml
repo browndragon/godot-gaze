@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_calibration_estimator" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::CalibrationEstimator</compoundname>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_calibration_estimator_1a2ee9e217843e6d14b7d660554dd7577b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::CalibrationEstimator::estimate</definition>
+        <argsstring>(const std::vector&lt; CalibrationSample &gt; &amp;samples, const GazeVector2 &amp;screen_size_mm, const GazeVector3 &amp;initial_camera_offset, double initial_camera_tilt_deg, bool freeze_camera_params, GazeVector3 &amp;out_camera_offset, double &amp;out_camera_tilt_deg, double &amp;out_bias_pitch, double &amp;out_bias_yaw, const CalibrationWeights &amp;weights=CalibrationWeights())</argsstring>
+        <name>estimate</name>
+        <qualifiedname>Gaze::CalibrationEstimator::estimate</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_calibration_sample" kindref="compound">CalibrationSample</ref> &gt; &amp;</type>
+          <declname>samples</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>screen_size_mm</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>initial_camera_offset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>initial_camera_tilt_deg</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>freeze_camera_params</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>out_camera_offset</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>out_camera_tilt_deg</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>out_bias_pitch</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>out_bias_yaw</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_calibration_weights" kindref="compound">CalibrationWeights</ref> &amp;</type>
+          <declname>weights</declname>
+          <defval><ref refid="struct_gaze_1_1_calibration_weights" kindref="compound">CalibrationWeights</ref>()</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="49" column="17" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="135" bodyend="289"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/gaze_calibration_estimator.hpp" line="47" column="1" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="47" bodyend="61"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_calibration_estimator_1a2ee9e217843e6d14b7d660554dd7577b" prot="public" virt="non-virtual"><scope>Gaze::CalibrationEstimator</scope><name>estimate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

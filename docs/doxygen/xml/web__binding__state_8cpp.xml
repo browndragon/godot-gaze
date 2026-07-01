@@ -1,0 +1,279 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="web__binding__state_8cpp" kind="file" language="C++">
+    <compoundname>web_binding_state.cpp</compoundname>
+    <includes refid="web__binding__state_8hpp" local="yes">web_binding_state.hpp</includes>
+    <includes refid="gaze__tracker_8hpp" local="yes">gaze_tracker.hpp</includes>
+    <includes local="no">godot_cpp/classes/java_script_bridge.hpp</includes>
+    <includes local="no">godot_cpp/classes/file_access.hpp</includes>
+    <includes local="no">godot_cpp/classes/os.hpp</includes>
+    <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
+    <incdepgraph>
+      <node id="21">
+        <label>camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+      </node>
+      <node id="25">
+        <label>camera_placement.hpp</label>
+        <link refid="camera__placement_8hpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="22">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>gaze_calibration.hpp</label>
+        <link refid="gaze__calibration_8hpp"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>gaze_calibration_resource.hpp</label>
+        <link refid="gaze__calibration__resource_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gaze_tracker.hpp</label>
+        <link refid="gaze__tracker_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/web/web_binding_state.cpp</label>
+        <link refid="web__binding__state_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>web_binding_state.hpp</label>
+        <link refid="web__binding__state_8hpp"/>
+      </node>
+      <node id="17">
+        <label>cmath</label>
+      </node>
+      <node id="29">
+        <label>godot_cpp/classes/file_access.hpp</label>
+      </node>
+      <node id="28">
+        <label>godot_cpp/classes/java_script_bridge.hpp</label>
+      </node>
+      <node id="4">
+        <label>godot_cpp/classes/node3d.hpp</label>
+      </node>
+      <node id="30">
+        <label>godot_cpp/classes/os.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/ref.hpp</label>
+      </node>
+      <node id="13">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="26">
+        <label>godot_cpp/variant/array.hpp</label>
+      </node>
+      <node id="10">
+        <label>godot_cpp/variant/basis.hpp</label>
+      </node>
+      <node id="9">
+        <label>godot_cpp/variant/transform2d.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/variant/transform3d.hpp</label>
+      </node>
+      <node id="31">
+        <label>godot_cpp/variant/utility_functions.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/variant/vector2.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+      <node id="14">
+        <label>memory</label>
+      </node>
+      <node id="27">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="web__binding__state_8hpp" kindref="compound">web_binding_state.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gaze__tracker_8hpp" kindref="compound">gaze_tracker.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/java_script_bridge.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/file_access.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/os.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>WebBindingState::setup_callbacks(<ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref>*<sp/>tracker)<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>JavaScriptBridge<sp/>*js<sp/>=<sp/>JavaScriptBridge::get_singleton();</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!js)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>permission_callback<sp/>=<sp/>js-&gt;create_callback(Callable(tracker,<sp/></highlight><highlight class="stringliteral">&quot;on_permission_result&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>feed_callback<sp/>=<sp/>js-&gt;create_callback(Callable(tracker,<sp/></highlight><highlight class="stringliteral">&quot;feed_gaze_web_raw&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>ready_callback<sp/>=<sp/>js-&gt;create_callback(Callable(tracker,<sp/></highlight><highlight class="stringliteral">&quot;on_sidecar_ready&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;JavaScriptObject&gt;<sp/>window<sp/>=<sp/>js-&gt;get_interface(</highlight><highlight class="stringliteral">&quot;window&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>js-&gt;eval(</highlight><highlight class="stringliteral">&quot;window.godotGaze<sp/>=<sp/>{};&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;JavaScriptObject&gt;<sp/>godotGaze<sp/>=<sp/>window-&gt;get(</highlight><highlight class="stringliteral">&quot;godotGaze&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(godotGaze.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>godotGaze-&gt;set(</highlight><highlight class="stringliteral">&quot;on_permission&quot;</highlight><highlight class="normal">,<sp/>permission_callback);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>godotGaze-&gt;set(</highlight><highlight class="stringliteral">&quot;feed_gaze&quot;</highlight><highlight class="normal">,<sp/>feed_callback);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>godotGaze-&gt;set(</highlight><highlight class="stringliteral">&quot;on_ready&quot;</highlight><highlight class="normal">,<sp/>ready_callback);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>WebBindingState::start_tracking_loop(<ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref>*<sp/>tracker,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String&amp;<sp/>yunet_path,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String&amp;<sp/>gaze_onnx_path,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>camera_width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>camera_height)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>JavaScriptBridge<sp/>*js<sp/>=<sp/>JavaScriptBridge::get_singleton();</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!js)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_debug<sp/>=<sp/>OS::get_singleton()-&gt;is_debug_build();</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>debug_str<sp/>=<sp/>is_debug<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;true&quot;</highlight><highlight class="normal"><sp/>:<sp/></highlight><highlight class="stringliteral">&quot;false&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>w_str<sp/>=<sp/>String::num_int64(camera_width);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>h_str<sp/>=<sp/>String::num_int64(camera_height);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Load<sp/>the<sp/>gaze_sidecar.js<sp/>script<sp/>dynamically</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>eval_str<sp/>=<sp/>String(</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;if<sp/>(!window.gazeTracker)<sp/>{&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>var<sp/>s<sp/>=<sp/>document.createElement(&apos;script&apos;);&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>s.src<sp/>=<sp/>&apos;gaze_sidecar.js&apos;;&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>s.onload<sp/>=<sp/>function()<sp/>{&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>(window.gazeTracker)<sp/>{&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>window.gazeTracker.startTracking(\&quot;&quot;</highlight><highlight class="normal">)<sp/>+<sp/>yunet_path<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;\&quot;,<sp/>\&quot;&quot;</highlight><highlight class="normal"><sp/>+<sp/>gaze_onnx_path<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;\&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>debug_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>w_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>h_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;);&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>};&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>document.head.appendChild(s);&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;}<sp/>else<sp/>{&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/><sp/><sp/><sp/>window.gazeTracker.startTracking(\&quot;&quot;</highlight><highlight class="normal"><sp/>+<sp/>yunet_path<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;\&quot;,<sp/>\&quot;&quot;</highlight><highlight class="normal"><sp/>+<sp/>gaze_onnx_path<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;\&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>debug_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>w_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>h_str<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;);&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;}&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>js-&gt;eval(eval_str);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>WebBindingState::cleanup()<sp/>{</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>JavaScriptBridge<sp/>*js<sp/>=<sp/>JavaScriptBridge::get_singleton();</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(js)<sp/>{</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>js-&gt;eval(</highlight><highlight class="stringliteral">&quot;if<sp/>(window.gazeTracker)<sp/>{<sp/>window.gazeTracker.stopTracking();<sp/>}&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>js-&gt;eval(</highlight><highlight class="stringliteral">&quot;delete<sp/>window.godotGaze;&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>permission_callback.unref();</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>feed_callback.unref();</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>ready_callback.unref();</highlight></codeline>
+<codeline lineno="64"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="src/web/web_binding_state.cpp"/>
+  </compounddef>
+</doxygen>

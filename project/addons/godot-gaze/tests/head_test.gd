@@ -1,4 +1,4 @@
-# project/addons/godot-gaze/tests/head_test.gd
+# A specific live-camera debug test to capture a few interesting states with user interaction.
 extends Control
 
 @onready var instruction_label = $InstructionLabel

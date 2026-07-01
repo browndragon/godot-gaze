@@ -1,0 +1,423 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespace_gaze" kind="namespace" language="C++">
+    <compoundname>Gaze</compoundname>
+    <innerclass refid="class_gaze_1_1_calibration" prot="public">Gaze::Calibration</innerclass>
+    <innerclass refid="class_gaze_1_1_calibration_estimator" prot="public">Gaze::CalibrationEstimator</innerclass>
+    <innerclass refid="struct_gaze_1_1_calibration_sample" prot="public">Gaze::CalibrationSample</innerclass>
+    <innerclass refid="struct_gaze_1_1_calibration_weights" prot="public">Gaze::CalibrationWeights</innerclass>
+    <innerclass refid="class_gaze_1_1_camera_interface" prot="public">Gaze::CameraInterface</innerclass>
+    <innerclass refid="struct_gaze_1_1_camera_placement" prot="public">Gaze::CameraPlacement</innerclass>
+    <innerclass refid="class_gaze_1_1_device_calibration" prot="public">Gaze::DeviceCalibration</innerclass>
+    <innerclass refid="struct_gaze_1_1_eye_crops" prot="public">Gaze::EyeCrops</innerclass>
+    <innerclass refid="struct_gaze_1_1_face_model_geometry" prot="public">Gaze::FaceModelGeometry</innerclass>
+    <innerclass refid="class_gaze_1_1_face_pipeline" prot="public">Gaze::FacePipeline</innerclass>
+    <innerclass refid="class_gaze_1_1_fixed_calibration" prot="public">Gaze::FixedCalibration</innerclass>
+    <innerclass refid="struct_gaze_1_1_frame" prot="public">Gaze::Frame</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_basis3_d" prot="public">Gaze::GazeBasis3D</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_calibration" prot="public">Gaze::GazeCalibration</innerclass>
+    <innerclass refid="class_gaze_1_1_gaze_model" prot="public">Gaze::GazeModel</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_transform3_d" prot="public">Gaze::GazeTransform3D</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_vector2" prot="public">Gaze::GazeVector2</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_vector2i" prot="public">Gaze::GazeVector2i</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_vector3" prot="public">Gaze::GazeVector3</innerclass>
+    <innerclass refid="class_gaze_1_1_open_c_v_camera" prot="public">Gaze::OpenCVCamera</innerclass>
+    <innerclass refid="class_gaze_1_1_open_c_v_gaze_model" prot="public">Gaze::OpenCVGazeModel</innerclass>
+    <innerclass refid="struct_gaze_1_1_pipeline_config" prot="public">Gaze::PipelineConfig</innerclass>
+    <innerclass refid="class_gaze_1_1_projection_engine" prot="public">Gaze::ProjectionEngine</innerclass>
+    <innerclass refid="class_gaze_1_1_screen_projector" prot="public">Gaze::ScreenProjector</innerclass>
+    <innerclass refid="struct_gaze_1_1_vertex" prot="public">Gaze::Vertex</innerclass>
+    <innerclass refid="class_gaze_1_1_web_gaze_model" prot="public">Gaze::WebGazeModel</innerclass>
+    <innerclass refid="class_gaze_1_1_yu_net_pipeline" prot="public">Gaze::YuNetPipeline</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="log_8hpp_1aef7bed9f33c120fec062934ecc6e1fb8" prot="public" static="no">
+        <type>void(*)(bool, const char *)</type>
+        <definition>using Gaze::LogHandler = void(*)(bool, const char*)</definition>
+        <argsstring></argsstring>
+        <name>LogHandler</name>
+        <qualifiedname>Gaze::LogHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="19" column="1" bodyfile="src/core/log.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="math__defs_8hpp_1aaabd53b70275dd09f6134c0371ed887a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PI</definition>
+        <argsstring></argsstring>
+        <name>PI</name>
+        <qualifiedname>Gaze::PI</qualifiedname>
+        <initializer>= 3.14159265358979323846</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="16" column="25" bodyfile="src/core/math_defs.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1ab1d00d4a9145ef3d69320fbc645e1f31" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::TAU</definition>
+        <argsstring></argsstring>
+        <name>TAU</name>
+        <qualifiedname>Gaze::TAU</qualifiedname>
+        <initializer>= 6.28318530717958647692</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="17" column="25" bodyfile="src/core/math_defs.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a97438f8805f1361b33a9fa6ddd07c253" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEG_TO_RAD</definition>
+        <argsstring></argsstring>
+        <name>DEG_TO_RAD</name>
+        <qualifiedname>Gaze::DEG_TO_RAD</qualifiedname>
+        <initializer>= PI / 180.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="18" column="25" bodyfile="src/core/math_defs.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a4ac56bd607c627828ef9c833eb11dcc5" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::RAD_TO_DEG</definition>
+        <argsstring></argsstring>
+        <name>RAD_TO_DEG</name>
+        <qualifiedname>Gaze::RAD_TO_DEG</qualifiedname>
+        <initializer>= 180.0 / PI</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="19" column="25" bodyfile="src/core/math_defs.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="gaze__calibration__estimator_8cpp_1a076f81e88a42311446147127c9f9d291" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>static double Gaze::compute_loss</definition>
+        <argsstring>(const std::vector&lt; CalibrationSample &gt; &amp;samples, const GazeVector2 &amp;screen_size_mm, const GazeVector3 &amp;initial_camera_offset, double initial_camera_tilt_deg, bool freeze_camera_params, const double params[6], const CalibrationWeights &amp;weights)</argsstring>
+        <name>compute_loss</name>
+        <qualifiedname>Gaze::compute_loss</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_calibration_sample" kindref="compound">CalibrationSample</ref> &gt; &amp;</type>
+          <declname>samples</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>screen_size_mm</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>initial_camera_offset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>initial_camera_tilt_deg</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>freeze_camera_params</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>params</declname>
+          <array>[6]</array>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_calibration_weights" kindref="compound">CalibrationWeights</ref> &amp;</type>
+          <declname>weights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.cpp" line="16" column="15" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="16" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a4e8b4a47826f4c164d7d60f397016f4b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::atomic&lt; LogHandler &gt; &amp;</type>
+        <definition>std::atomic&lt; LogHandler &gt; &amp; Gaze::get_log_handler</definition>
+        <argsstring>()</argsstring>
+        <name>get_log_handler</name>
+        <qualifiedname>Gaze::get_log_handler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="21" column="20" bodyfile="src/core/log.hpp" bodystart="21" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ab0a1a866820926f27fe9db889c06c50f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::register_log_handler</definition>
+        <argsstring>(LogHandler handler)</argsstring>
+        <name>register_log_handler</name>
+        <qualifiedname>Gaze::register_log_handler</qualifiedname>
+        <param>
+          <type>LogHandler</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="26" column="13" bodyfile="src/core/log.hpp" bodystart="26" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a366b0861e58dddd38558309cc9cff88b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::log_kv_impl</definition>
+        <argsstring>(bool is_error, std::stringstream &amp;ss)</argsstring>
+        <name>log_kv_impl</name>
+        <qualifiedname>Gaze::log_kv_impl</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>is_error</declname>
+        </param>
+        <param>
+          <type>std::stringstream &amp;</type>
+          <declname>ss</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="30" column="13" bodyfile="src/core/log.hpp" bodystart="30" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a2e36db24f9e481a634d88e3703dfca3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename K</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_kv_impl</definition>
+        <argsstring>(bool is_error, std::stringstream &amp;ss, const K &amp;key, const V &amp;val, const Args &amp;... args)</argsstring>
+        <name>log_kv_impl</name>
+        <qualifiedname>Gaze::log_kv_impl</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>is_error</declname>
+        </param>
+        <param>
+          <type>std::stringstream &amp;</type>
+          <declname>ss</declname>
+        </param>
+        <param>
+          <type>const K &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>const V &amp;</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="42" column="6" bodyfile="src/core/log.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1abafa3f20c1fb6e3234e6d56d38131659" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_info</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_info</name>
+        <qualifiedname>Gaze::log_info</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="48" column="6" bodyfile="src/core/log.hpp" bodystart="48" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ae5957a715620ce492f7f80c8cd77fc5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_warning</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_warning</name>
+        <qualifiedname>Gaze::log_warning</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="55" column="6" bodyfile="src/core/log.hpp" bodystart="55" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1abcd6f53a7312a1fae64a14c3bd8d2989" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_error</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_error</name>
+        <qualifiedname>Gaze::log_error</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="62" column="6" bodyfile="src/core/log.hpp" bodystart="62" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a956327787e5b5bf19a5c91d0ec705d3e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref></type>
+        <definition>GazeBasis3D Gaze::rodrigues_to_basis</definition>
+        <argsstring>(const GazeVector3 &amp;r)</argsstring>
+        <name>rodrigues_to_basis</name>
+        <qualifiedname>Gaze::rodrigues_to_basis</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+<para>Converts a 3D rotation vector (Rodrigues vector) to a 3x3 rotation basis. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Commonly known in graphics/game math as the Axis-Angle to Matrix conversion (where the vector&apos;s direction is the axis of rotation and its magnitude is the angle in radians). Named &quot;rodrigues&quot; to match the OpenCV cv::Rodrigues convention since it is used to parse head pose rotations returned by OpenCV&apos;s estimator. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="243" column="20" bodyfile="src/core/math_defs.hpp" bodystart="243" bodyend="261"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a91a0aaace63d1f6598a11964186621a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::get_head_forward_in_camera_space</definition>
+        <argsstring>(const GazeVector3 &amp;rotation_deg)</argsstring>
+        <name>get_head_forward_in_camera_space</name>
+        <qualifiedname>Gaze::get_head_forward_in_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>rotation_deg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="264" column="20" bodyfile="src/core/math_defs.hpp" bodystart="264" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a7f79b5b50d0012fbba68f3bd6f4b5eaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::intersect_ray_plane</definition>
+        <argsstring>(const GazeVector3 &amp;ray_origin, const GazeVector3 &amp;ray_dir, const GazeVector3 &amp;plane_normal, double plane_d, double &amp;out_t)</argsstring>
+        <name>intersect_ray_plane</name>
+        <qualifiedname>Gaze::intersect_ray_plane</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>ray_origin</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>ray_dir</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>plane_normal</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>plane_d</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>out_t</declname>
+        </param>
+        <briefdescription>
+<para>Intersects a 3D ray with a plane in 3D space. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Solve for parameter t: plane_normal.dot(ray_origin + t * ray_dir) = plane_d =&gt; t = (plane_d - plane_normal.dot(ray_origin)) / plane_normal.dot(ray_dir) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="286" column="13" bodyfile="src/core/math_defs.hpp" bodystart="286" bodyend="299"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/camera_interface.hpp" line="11" column="1"/>
+  </compounddef>
+</doxygen>

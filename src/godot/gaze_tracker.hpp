@@ -10,7 +10,7 @@
  */
 #pragma once
 
-#include <godot_cpp/classes/node.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/variant/vector2i.hpp>
 #include <godot_cpp/variant/vector3.hpp>
@@ -26,49 +26,34 @@
 #include "face_pipeline.hpp"
 #include "gaze_model.hpp"
 #include "projection_engine.hpp"
-#include "one_euro_filter.hpp"
 
 #include <godot_cpp/variant/array.hpp>
 #include <vector>
 
 namespace godot {
 
+class CameraSensor;
+class FaceEstimator;
+class EyeEstimator;
+class Smoother;
+class DisplayProfile;
+class OneEuroFilter;
+
 struct PlatformGeometry {
-    // Logical dimensions of the primary screen (in points/CSS pixels)
-    Vector2i screen_size_lpix = Vector2i(-1, -1);
-
-    // Physical dimensions of the primary screen (in hardware panel pixels)
-    // MUST always represent the raw hardware pixels to align with 3D projection boundaries.
-    Vector2i screen_size_ppix = Vector2i(-1, -1);
-
-    // Physical size of the primary screen in millimeters
-    Vector2 screen_size_mm = Vector2(-1.0, -1.0);
-
-    // Window position relative to the primary screen top-left corner, in PHYSICAL screen pixels
-    Vector2 window_position_ppix = Vector2(0.0, 0.0);
-
-    // Active scale factor of the screen (e.g. 2.0 for Retina/high-DPI)
-    double logical_to_physical_pixel_ratio = -1.0;
-
-    // Mapping ratio to convert physical screen coordinates down to Godot window backing store coordinates.
-    // Derived as: (Godot Backing Store Scale) / (OS Screen Scale)
-    double window_to_screen_scale_ratio = 1.0;
-
-    void merge_overrides(const PlatformGeometry& overrides) {
-        if (overrides.screen_size_lpix.x > 0 && overrides.screen_size_lpix.y > 0) {
-            screen_size_lpix = overrides.screen_size_lpix;
-        }
-        if (overrides.screen_size_mm.x > 0.0 && overrides.screen_size_mm.y > 0.0) {
-            screen_size_mm = overrides.screen_size_mm;
-        }
-        if (overrides.logical_to_physical_pixel_ratio > 0.0) {
-            logical_to_physical_pixel_ratio = overrides.logical_to_physical_pixel_ratio;
-        }
-    }
+    // Window position relative to the primary screen top-left corner, in LOGICAL screen pixels
+    Vector2 window_position_px = Vector2(0.0, 0.0);
 };
 
-class GazeTracker : public Node {
-    GDCLASS(GazeTracker, Node);
+/**
+ * @class GazeTracker
+ * @brief Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.
+ *
+ * GazeTracker handles camera acquisition (via CameraSensor), pipelines inputs through YuNet face detection
+ * and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates
+ * from camera space (millimeters) to viewport space (logical screen pixels).
+ */
+class GazeTracker : public Node3D {
+    GDCLASS(GazeTracker, Node3D);
 
 public:
     static constexpr double MM_PER_INCH = 25.4;
@@ -85,37 +70,25 @@ public:
     };
 
 private:
-    // Pointers to the active layered pipeline implementations
-    Gaze::CameraInterface* camera = nullptr;
-    Gaze::FacePipeline* pipeline = nullptr;
-    Gaze::GazeModel* model = nullptr;
+    CameraSensor* camera_sensor = nullptr;
+    FaceEstimator* face_estimator = nullptr;
+    EyeEstimator* eye_estimator = nullptr;
+
+    Ref<Smoother> screen_smooth;
+    Array smoother_state;
 
     // Mathematical projection engine
     Gaze::ProjectionEngine projection_engine;
 
-    // 1 Euro Filters for coordinates (horizontal and vertical)
-    OneEuroFilter* filter_x = nullptr;
-    OneEuroFilter* filter_y = nullptr;
-
     // Configurable Properties
     Ref<GazeCalibration> calibration_resource;
     Ref<GazePipelineConfig> pipeline_config;
-    Vector3 camera_offset = Vector3(0.0, 148.0, 0.0); // mm relative to screen center (flush with bezel)
-    double camera_tilt = 0.0;                           // degrees
-    PlatformGeometry overrides;
-    double camera_focal_length_px = -1.0;
+    Ref<DisplayProfile> display_profile;
     int camera_device_id = 0;
-
-    double filter_min_cutoff = 1.0;
-    double filter_beta = 0.01;
-    double filter_d_cutoff = 1.0;
-
-    String yunet_model_path;
-    String gaze_onnx_path;
-    bool expression_tracking_enabled = false;
     int debug_logging_frames = 0;
     int debug_log_frame_counter = 0;
     bool log_this_frame = false;
+    Vector2 window_position_override = Vector2(-1.0, -1.0);
 
     // Runtime state (latest estimations)
     Vector2 latest_projected_gaze_px;
@@ -163,7 +136,15 @@ public:
     virtual void _process(double delta) override;
 
     // Tracker control
+    /**
+     * @brief Initializes the gaze tracker, setting up camera and models.
+     * @return True if initialized successfully, false otherwise.
+     */
     bool initialize_tracker();
+    /**
+     * @brief Stops camera acquisition and model inference pipelines.
+     * @param p_emit_signal Whether to emit lifecycle status change signals.
+     */
     void stop_tracker(bool p_emit_signal = true);
     bool complete_initialization();
     void trigger_permission_request();
@@ -171,14 +152,40 @@ public:
 
 
     // Calibration routines
+    /**
+     * @brief Clears active calibration, reverting to uncalibrated geometric projection.
+     */
     void clear_calibration();
-    Vector2 map_logical_to_physical_screen(Vector2 logical_pixel) const;
+    /**
+     * @brief Maps logical viewport coordinates to primary screen logical coordinates.
+     * @param logical_pixel Viewport-relative coordinates.
+     * @return Screen-relative logical coordinates.
+     */
+    Vector2 map_viewport_to_screen(Vector2 logical_pixel) const;
+    /**
+     * @brief Filters raw gaze coordinates using configured smoothing algorithms.
+     * @param raw Raw projected coordinate.
+     * @return Filtered smoothed coordinate.
+     */
     Vector2 filter_gaze_coordinate(Vector2 raw);
 
     // Unified gaze feed API (Web/WASM sidecar & custom injectors)
+    /**
+     * @brief Manually injects raw gaze origin and direction coordinates.
+     * @param face_detected True if face landmarking succeeded.
+     * @param origin Gaze origin 3D camera-space vector (mm).
+     * @param direction Gaze direction unit vector in camera-space.
+     */
     void feed_gaze(bool face_detected, Vector3 origin, Vector3 direction);
     void feed_gaze_web_raw(const Array& args);
     void on_sidecar_ready(const Array& args);
+
+    CameraSensor* get_camera_sensor() const;
+    FaceEstimator* get_face_estimator() const;
+    EyeEstimator* get_eye_estimator() const;
+
+    void set_screen_smooth(const Ref<Smoother>& smoother);
+    Ref<Smoother> get_screen_smooth() const;
 
     // Getters / Setters for properties
     int get_lifecycle_state() const;
@@ -191,87 +198,19 @@ public:
     void set_calibration_resource(const Ref<GazeCalibration>& res);
     Ref<GazeCalibration> get_calibration_resource() const;
 
-    void set_camera_offset(Vector3 offset);
-    Vector3 get_camera_offset() const;
+    void set_display_profile(const Ref<DisplayProfile>& profile);
+    Ref<DisplayProfile> get_display_profile() const;
 
-    void set_camera_tilt(double tilt);
-    double get_camera_tilt() const;
+    PlatformGeometry platform_get_geometry() const;
 
     void set_debug_logging_frames(int frames);
     int get_debug_logging_frames() const;
 
-    Vector2 get_derived_pixel_size_mm() const;
-    Vector3 get_derived_camera_offset() const;
-    double get_derived_camera_tilt() const;
-    Vector2 get_pixel_size_mm() const;
-
-    /**
-     * @brief Gets the resolved display, screen, and window layout coordinates.
-     */
-    PlatformGeometry platform_get_geometry() const;
-
-    /**
-     * @brief Sets the screen size in logical pixels (CSS pixels on Web).
-     *
-     * Used to map coordinates across high-DPI displays consistently.
-     * By default, this is automatically queried from the platform windowing/display APIs.
-     * In most cases, the default is fine and this property does not need to be set manually.
-     *
-     * @param size The screen resolution in logical pixels.
-     */
-    void set_screen_size_lpix(Vector2i size);
-
-    /**
-     * @brief Gets the screen size in logical pixels.
-     * @return The screen size in logical pixels.
-     */
-    Vector2i get_screen_size_lpix() const;
-
-    /**
-     * @brief Sets the scale factor of the window's backing store relative to logical screen space.
-     *
-     * @param ratio The logical-to-physical pixel ratio.
-     */
-    void set_logical_to_physical_pixel_ratio(double ratio);
-
-    /**
-     * @brief Gets the scale factor of the window's backing store relative to logical screen space.
-     * @return The logical-to-physical pixel ratio.
-     */
-    double get_logical_to_physical_pixel_ratio() const;
-
-    /**
-     * @brief Sets the physical screen size in millimeters. If left unset, GazeTracker will query platform EDID.
-     */
-    void set_screen_size_mm(Vector2 size);
-    Vector2 get_screen_size_mm() const;
-
-    /**
-     * @brief Sets the camera focal length in pixels.
-     */
-    void set_camera_focal_length_px(double f);
-    double get_camera_focal_length_px() const;
-
     void set_camera_device_id(int id);
     int get_camera_device_id() const;
 
-    void set_filter_min_cutoff(double val);
-    double get_filter_min_cutoff() const;
-
-    void set_filter_beta(double val);
-    double get_filter_beta() const;
-
-    void set_filter_d_cutoff(double val);
-    double get_filter_d_cutoff() const;
-
-    void set_yunet_model_path(String path);
-    String get_yunet_model_path() const;
-
-    void set_gaze_onnx_path(String path);
-    String get_gaze_onnx_path() const;
-
-    void set_expression_tracking_enabled(bool enabled);
-    bool get_expression_tracking_enabled() const;
+    void set_window_position_override(Vector2 pos);
+    Vector2 get_window_position_override() const;
 
     Vector2 get_latest_projected_gaze() const { return latest_projected_gaze_px; }
     Vector2 get_latest_filtered_gaze() const { return latest_filtered_gaze_px; }
@@ -279,6 +218,9 @@ public:
 
     Transform3D get_head_transform() const;
     Transform3D get_camera_to_screen_transform() const;
+    Vector3 get_derived_camera_offset() const;
+    double get_derived_camera_tilt() const;
+    Vector2 get_pixel_size_mm() const;
     Vector3 get_gaze_origin() const;
     Vector3 get_gaze_direction(bool apply_calibration = true) const;
 
@@ -304,7 +246,7 @@ public:
      *         or Vector2(INFINITY, INFINITY) (resolving to Vector2.INF in Godot) if the ray
      *         is parallel to or points away from the screen.
      */
-    Vector2 project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction) const;
+    Vector2 project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration = true) const;
 
     /**
      * @brief Gets the left eye center position in OpenCV Camera Space (in millimeters).

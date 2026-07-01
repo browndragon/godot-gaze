@@ -1,0 +1,383 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_calibration_session" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeCalibrationSession</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Resource</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1a5e11fe691bd05bcbc2232e0c29949918" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeCalibrationSession::freeze_camera_params</definition>
+        <argsstring></argsstring>
+        <name>freeze_camera_params</name>
+        <qualifiedname>godot::GazeCalibrationSession::freeze_camera_params</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="22" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1a033d4f4eb7b162575b17fb0b0685d560" prot="private" static="no" mutable="no">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::target_pixels_px</definition>
+        <argsstring></argsstring>
+        <name>target_pixels_px</name>
+        <qualifiedname>godot::GazeCalibrationSession::target_pixels_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="23" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1aa4d9d69570daa5e1145b6947a77947e6" prot="private" static="no" mutable="no">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::gaze_origins</definition>
+        <argsstring></argsstring>
+        <name>gaze_origins</name>
+        <qualifiedname>godot::GazeCalibrationSession::gaze_origins</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="24" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1af5013ef92a1badbe0d80b2eea703cdb1" prot="private" static="no" mutable="no">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::gaze_directions</definition>
+        <argsstring></argsstring>
+        <name>gaze_directions</name>
+        <qualifiedname>godot::GazeCalibrationSession::gaze_directions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="25" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a343adcdef2c886d54af24ecf0b7eee4c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeCalibrationSession::GDCLASS</definition>
+        <argsstring>(GazeCalibrationSession, Resource)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeCalibrationSession::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeCalibrationSession</type>
+        </param>
+        <param>
+          <type>Resource</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="19" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a75b96d8e7992cdf9f973bff72fdc2789" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeCalibrationSession::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="28" column="17" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="14" bodyend="35"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1aa0c7b530bec6ade10e24a4323ed7f9a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeCalibrationSession::GazeCalibrationSession</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeCalibrationSession</name>
+        <qualifiedname>godot::GazeCalibrationSession::GazeCalibrationSession</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="31" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ad998acb9a5b1daee1cda0162a8661659" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::GazeCalibrationSession::~GazeCalibrationSession</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeCalibrationSession</name>
+        <qualifiedname>godot::GazeCalibrationSession::~GazeCalibrationSession</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="32" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a6f47175da99f04eb166cb76e21f5544a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::add_sample</definition>
+        <argsstring>(Vector2 target_pixel_px, Vector3 gaze_origin, Vector3 gaze_direction)</argsstring>
+        <name>add_sample</name>
+        <qualifiedname>godot::GazeCalibrationSession::add_sample</qualifiedname>
+        <param>
+          <type>Vector2</type>
+          <declname>target_pixel_px</declname>
+        </param>
+        <param>
+          <type>Vector3</type>
+          <declname>gaze_origin</declname>
+        </param>
+        <param>
+          <type>Vector3</type>
+          <declname>gaze_direction</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="34" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="37" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a4485e16b76a3eb95b0f7aa17361a09cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>godot::GazeCalibrationSession::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="35" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="43" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a36a2c3186d93d2d379a12a3702e38c68" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::GazeCalibrationSession::get_sample_count</definition>
+        <argsstring>() const</argsstring>
+        <name>get_sample_count</name>
+        <qualifiedname>godot::GazeCalibrationSession::get_sample_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="36" column="9" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="49" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1af64be64aada8da958b9f9f08211313fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt;</type>
+        <definition>Ref&lt; GazeCalibration &gt; godot::GazeCalibrationSession::calculate_calibration</definition>
+        <argsstring>(GazeTracker *tracker)</argsstring>
+        <name>calculate_calibration</name>
+        <qualifiedname>godot::GazeCalibrationSession::calculate_calibration</qualifiedname>
+        <param>
+          <type><ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> *</type>
+          <declname>tracker</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="38" column="9" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="53" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1aced309cd7980c5cb7fb30d50b3731bf1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::set_freeze_camera_params</definition>
+        <argsstring>(bool p_freeze)</argsstring>
+        <name>set_freeze_camera_params</name>
+        <qualifiedname>godot::GazeCalibrationSession::set_freeze_camera_params</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_freeze</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="41" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae1881b09b07a5011f03dca72dfd022c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeCalibrationSession::get_freeze_camera_params</definition>
+        <argsstring>() const</argsstring>
+        <name>get_freeze_camera_params</name>
+        <qualifiedname>godot::GazeCalibrationSession::get_freeze_camera_params</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="42" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ab608393162510b89991524bd10dbac1f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::set_target_pixels_px</definition>
+        <argsstring>(const Array &amp;arr)</argsstring>
+        <name>set_target_pixels_px</name>
+        <qualifiedname>godot::GazeCalibrationSession::set_target_pixels_px</qualifiedname>
+        <param>
+          <type>const Array &amp;</type>
+          <declname>arr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="44" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae8af9f0795f6a1e50b25d4dd178bc38d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::get_target_pixels_px</definition>
+        <argsstring>() const</argsstring>
+        <name>get_target_pixels_px</name>
+        <qualifiedname>godot::GazeCalibrationSession::get_target_pixels_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="45" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ab2c792cb233bcc60b2f26d725037ac8c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::set_gaze_origins</definition>
+        <argsstring>(const Array &amp;arr)</argsstring>
+        <name>set_gaze_origins</name>
+        <qualifiedname>godot::GazeCalibrationSession::set_gaze_origins</qualifiedname>
+        <param>
+          <type>const Array &amp;</type>
+          <declname>arr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="47" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae0a5e490a391f5ed4768368f7d2b9c22" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::get_gaze_origins</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_origins</name>
+        <qualifiedname>godot::GazeCalibrationSession::get_gaze_origins</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="48" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a36f65f1f793b9148e350baf7e8f54702" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeCalibrationSession::set_gaze_directions</definition>
+        <argsstring>(const Array &amp;arr)</argsstring>
+        <name>set_gaze_directions</name>
+        <qualifiedname>godot::GazeCalibrationSession::set_gaze_directions</qualifiedname>
+        <param>
+          <type>const Array &amp;</type>
+          <declname>arr</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="50" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1abe4883669c53878d0a0c6a7d543c839d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Array</type>
+        <definition>Array godot::GazeCalibrationSession::get_gaze_directions</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_directions</name>
+        <qualifiedname>godot::GazeCalibrationSession::get_gaze_directions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_session.hpp" line="51" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeCalibrationSession</label>
+        <link refid="classgodot_1_1_gaze_calibration_session"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeCalibrationSession</label>
+        <link refid="classgodot_1_1_gaze_calibration_session"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_calibration_session.hpp" line="18" column="1" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="18" bodyend="52"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a75b96d8e7992cdf9f973bff72fdc2789" prot="protected" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a6f47175da99f04eb166cb76e21f5544a" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>add_sample</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1af64be64aada8da958b9f9f08211313fc" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>calculate_calibration</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a4485e16b76a3eb95b0f7aa17361a09cd" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>clear</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a5e11fe691bd05bcbc2232e0c29949918" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>freeze_camera_params</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1af5013ef92a1badbe0d80b2eea703cdb1" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>gaze_directions</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1aa4d9d69570daa5e1145b6947a77947e6" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>gaze_origins</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1aa0c7b530bec6ade10e24a4323ed7f9a5" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>GazeCalibrationSession</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a343adcdef2c886d54af24ecf0b7eee4c" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ae1881b09b07a5011f03dca72dfd022c3" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>get_freeze_camera_params</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1abe4883669c53878d0a0c6a7d543c839d" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>get_gaze_directions</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ae0a5e490a391f5ed4768368f7d2b9c22" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>get_gaze_origins</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a36a2c3186d93d2d379a12a3702e38c68" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>get_sample_count</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ae8af9f0795f6a1e50b25d4dd178bc38d" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>get_target_pixels_px</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1aced309cd7980c5cb7fb30d50b3731bf1" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>set_freeze_camera_params</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a36f65f1f793b9148e350baf7e8f54702" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>set_gaze_directions</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ab2c792cb233bcc60b2f26d725037ac8c" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>set_gaze_origins</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ab608393162510b89991524bd10dbac1f" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>set_target_pixels_px</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a033d4f4eb7b162575b17fb0b0685d560" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>target_pixels_px</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1ad998acb9a5b1daee1cda0162a8661659" prot="public" virt="virtual"><scope>godot::GazeCalibrationSession</scope><name>~GazeCalibrationSession</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -138,20 +138,24 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__calibrat
 </div><!--header-->
 <div class="contents">
 
-<p>Serializable Godot Resource wrapping Gaze Calibration data.  
+<p>Serializable Godot Resource wrapping polymorphic Gaze Calibration data.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;godot_cpp/classes/resource.hpp&gt;</code><br />
+<code>#include &lt;godot_cpp/variant/vector2.hpp&gt;</code><br />
+<code>#include &lt;godot_cpp/variant/vector3.hpp&gt;</code><br />
+<code>#include &lt;memory&gt;</code><br />
 <code>#include &quot;<a class="el" href="gaze__calibration_8hpp_source.html">gaze_calibration.hpp</a>&quot;</code><br />
 </div>
 <p><a href="gaze__calibration__resource_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:godot_3A_3AGazeCalibrationResource" id="r_godot_3A_3AGazeCalibrationResource"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_calibration_resource.html">godot::GazeCalibrationResource</a></td></tr>
+<tr class="memitem:godot_3A_3AGazeCalibration" id="r_godot_3A_3AGazeCalibration"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_calibration.html">godot::GazeCalibration</a></td></tr>
+<tr class="memitem:godot_3A_3AGazeDeviceCalibration" id="r_godot_3A_3AGazeDeviceCalibration"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_device_calibration.html">godot::GazeDeviceCalibration</a></td></tr>
+<tr class="memitem:godot_3A_3AGazeDeviceEstimatedCalibration" id="r_godot_3A_3AGazeDeviceEstimatedCalibration"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_device_estimated_calibration.html">godot::GazeDeviceEstimatedCalibration</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Serializable Godot Resource wrapping Gaze Calibration data. </p>
-<p>Exposes core 3D and 2D calibration bias parameters (bias_pitch, bias_yaw, bias_pixel_x, bias_pixel_y) to the Godot engine. Allows saving, loading, and inspecting calibration matrices. </p>
+<div class="textblock"><p>Serializable Godot Resource wrapping polymorphic Gaze Calibration data. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">

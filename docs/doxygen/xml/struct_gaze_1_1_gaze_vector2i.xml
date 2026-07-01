@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_vector2i" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeVector2i</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_vector2i_1a4a12934bf203d01a8a600574ca61ed79" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeVector2i::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeVector2i::x</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="50" column="9" bodyfile="src/core/math_defs.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_vector2i_1a67f384a3e50e0e7fe905cd051cbbbf22" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeVector2i::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeVector2i::y</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="51" column="9" bodyfile="src/core/math_defs.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2i_1a0b1a4e9306ab546ee379118029eeb2b5" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::GazeVector2i::GazeVector2i</definition>
+        <argsstring>()</argsstring>
+        <name>GazeVector2i</name>
+        <qualifiedname>Gaze::GazeVector2i::GazeVector2i</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="53" column="15" bodyfile="src/core/math_defs.hpp" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2i_1a963de84a0ea856741a33dfc3ae30794f" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::GazeVector2i::GazeVector2i</definition>
+        <argsstring>(int px, int py)</argsstring>
+        <name>GazeVector2i</name>
+        <qualifiedname>Gaze::GazeVector2i::GazeVector2i</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>py</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="54" column="15" bodyfile="src/core/math_defs.hpp" bodystart="54" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2i_1ac580e00c6beb4d6c722370109b2bd927" prot="public" static="no" constexpr="yes" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::GazeVector2i::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>Gaze::GazeVector2i::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="56" column="24" bodyfile="src/core/math_defs.hpp" bodystart="56" bodyend="58"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/math_defs.hpp" line="49" column="1" bodyfile="src/core/math_defs.hpp" bodystart="49" bodyend="59"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_vector2i_1a0b1a4e9306ab546ee379118029eeb2b5" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2i</scope><name>GazeVector2i</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2i_1a963de84a0ea856741a33dfc3ae30794f" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2i</scope><name>GazeVector2i</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2i_1ac580e00c6beb4d6c722370109b2bd927" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2i</scope><name>operator bool</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2i_1a4a12934bf203d01a8a600574ca61ed79" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2i</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2i_1a67f384a3e50e0e7fe905cd051cbbbf22" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2i</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

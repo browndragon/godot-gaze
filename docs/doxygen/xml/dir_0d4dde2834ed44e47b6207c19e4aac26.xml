@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_0d4dde2834ed44e47b6207c19e4aac26" kind="dir">
+    <compoundname>src/web</compoundname>
+    <innerfile refid="gaze__sidecar_8js">gaze_sidecar.js</innerfile>
+    <innerfile refid="gaze__tracker__web_8cpp">gaze_tracker_web.cpp</innerfile>
+    <innerfile refid="web__binding__state_8cpp">web_binding_state.cpp</innerfile>
+    <innerfile refid="web__binding__state_8hpp">web_binding_state.hpp</innerfile>
+    <innerfile refid="web__gaze__model_8cpp">web_gaze_model.cpp</innerfile>
+    <innerfile refid="web__gaze__model_8hpp">web_gaze_model.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/web/"/>
+  </compounddef>
+</doxygen>

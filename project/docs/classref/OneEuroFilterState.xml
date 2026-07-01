@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OneEuroFilterState" inherits="RefCounted">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods></methods>
+	<members>
+		<member name="impl" type="OneEuroFilter *" default="nullptr"></member>
+	</members>
+	<signals></signals>
+</class>

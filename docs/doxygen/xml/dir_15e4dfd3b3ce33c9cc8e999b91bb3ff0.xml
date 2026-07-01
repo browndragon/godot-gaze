@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0" kind="dir">
+    <compoundname>src/godot</compoundname>
+    <innerfile refid="camera__sensor_8cpp">camera_sensor.cpp</innerfile>
+    <innerfile refid="camera__sensor_8hpp">camera_sensor.hpp</innerfile>
+    <innerfile refid="display__profile_8cpp">display_profile.cpp</innerfile>
+    <innerfile refid="display__profile_8hpp">display_profile.hpp</innerfile>
+    <innerfile refid="eye__estimator_8cpp">eye_estimator.cpp</innerfile>
+    <innerfile refid="eye__estimator_8hpp">eye_estimator.hpp</innerfile>
+    <innerfile refid="face__estimator_8cpp">face_estimator.cpp</innerfile>
+    <innerfile refid="face__estimator_8hpp">face_estimator.hpp</innerfile>
+    <innerfile refid="gaze__calibration__resource_8cpp">gaze_calibration_resource.cpp</innerfile>
+    <innerfile refid="gaze__calibration__resource_8hpp">gaze_calibration_resource.hpp</innerfile>
+    <innerfile refid="gaze__calibration__session_8cpp">gaze_calibration_session.cpp</innerfile>
+    <innerfile refid="gaze__calibration__session_8hpp">gaze_calibration_session.hpp</innerfile>
+    <innerfile refid="gaze__pipeline__config_8cpp">gaze_pipeline_config.cpp</innerfile>
+    <innerfile refid="gaze__pipeline__config_8hpp">gaze_pipeline_config.hpp</innerfile>
+    <innerfile refid="gaze__tracker_8cpp">gaze_tracker.cpp</innerfile>
+    <innerfile refid="gaze__tracker_8hpp">gaze_tracker.hpp</innerfile>
+    <innerfile refid="one__euro__smoother_8cpp">one_euro_smoother.cpp</innerfile>
+    <innerfile refid="one__euro__smoother_8hpp">one_euro_smoother.hpp</innerfile>
+    <innerfile refid="register__types_8cpp">register_types.cpp</innerfile>
+    <innerfile refid="register__types_8hpp">register_types.hpp</innerfile>
+    <innerfile refid="smoother_8cpp">smoother.cpp</innerfile>
+    <innerfile refid="smoother_8hpp">smoother.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/"/>
+  </compounddef>
+</doxygen>

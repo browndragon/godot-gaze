@@ -147,6 +147,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('math__defs_8hp
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeVector2" id="r_Gaze_3A_3AGazeVector2"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2.html">Gaze::GazeVector2</a></td></tr>
+<tr class="memitem:Gaze_3A_3AGazeVector2i" id="r_Gaze_3A_3AGazeVector2i"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2i.html">Gaze::GazeVector2i</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeVector3" id="r_Gaze_3A_3AGazeVector3"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeBasis3D" id="r_Gaze_3A_3AGazeBasis3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">Gaze::GazeBasis3D</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeTransform3D" id="r_Gaze_3A_3AGazeTransform3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_transform3_d.html">Gaze::GazeTransform3D</a></td></tr>
@@ -157,11 +158,60 @@ Functions</h2></td></tr>
 <tr class="memdesc:a956327787e5b5bf19a5c91d0ec705d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a 3D rotation vector (Rodrigues vector) to a 3x3 rotation basis.  <br /></td></tr>
 <tr class="memitem:a91a0aaace63d1f6598a11964186621a4" id="r_a91a0aaace63d1f6598a11964186621a4"><td class="memItemLeft"><a id="a91a0aaace63d1f6598a11964186621a4" name="a91a0aaace63d1f6598a11964186621a4"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::get_head_forward_in_camera_space</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;rotation_deg)</td></tr>
+<tr class="memitem:a7f79b5b50d0012fbba68f3bd6f4b5eaa" id="r_a7f79b5b50d0012fbba68f3bd6f4b5eaa"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7f79b5b50d0012fbba68f3bd6f4b5eaa">Gaze::intersect_ray_plane</a> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;ray_origin, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;ray_dir, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;plane_normal, double plane_d, double &amp;out_t)</td></tr>
+<tr class="memdesc:a7f79b5b50d0012fbba68f3bd6f4b5eaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects a 3D ray with a plane in 3D space.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Zero-Dependency 3D/2D Vector and Matrix Math structures. </p>
 <p>Implements lightweight vector (GazeVector2, GazeVector3), basis (GazeBasis3D), and transform (GazeTransform3D) structs. Includes utilities for Euler angle decompositions, Rodrigues rotation conversions, and gaze-space forward vector computations. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a7f79b5b50d0012fbba68f3bd6f4b5eaa" name="a7f79b5b50d0012fbba68f3bd6f4b5eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f79b5b50d0012fbba68f3bd6f4b5eaa">&#9670;&#160;</a></span>intersect_ray_plane()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Gaze::intersect_ray_plane </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ray_origin</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>ray_dir</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>plane_normal</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>plane_d</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;</td>          <td class="paramname"><span class="paramname"><em>out_t</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Intersects a 3D ray with a plane in 3D space. </p>
+<p>Solve for parameter t: plane_normal.dot(ray_origin + t * ray_dir) = plane_d =&gt; t = (plane_d - plane_normal.dot(ray_origin)) / plane_normal.dot(ray_dir) </p>
+
+</div>
+</div>
 <a id="a956327787e5b5bf19a5c91d0ec705d3e" name="a956327787e5b5bf19a5c91d0ec705d3e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a956327787e5b5bf19a5c91d0ec705d3e">&#9670;&#160;</a></span>rodrigues_to_basis()</h2>
 

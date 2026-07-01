@@ -58,7 +58,7 @@ func _process(delta):
 	var target_norm = calib_points[current_target_idx]
 	var target_window_pos = target_norm * viewport_size
 	
-	current_target_screen_pos = tracker.map_logical_to_physical_screen(target_window_pos)
+	current_target_screen_pos = tracker.map_viewport_to_screen(target_window_pos)
 	
 	if target_timer >= target_hold_time:
 		if tracker.is_face_detected():

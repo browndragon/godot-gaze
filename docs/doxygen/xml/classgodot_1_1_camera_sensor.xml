@@ -1,0 +1,363 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_camera_sensor" kind="class" language="C++" prot="public">
+    <compoundname>godot::CameraSensor</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Node3D</basecompoundref>
+    <includes refid="camera__sensor_8hpp" local="no">camera_sensor.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1adae6a7399276ae6b33455a39b4066577" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int godot::CameraSensor::camera_device_id</definition>
+        <argsstring></argsstring>
+        <name>camera_device_id</name>
+        <qualifiedname>godot::CameraSensor::camera_device_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="20" column="9" bodyfile="src/godot/camera_sensor.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1afd38029f35c6e3903361012c86373a15" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int godot::CameraSensor::desired_width</definition>
+        <argsstring></argsstring>
+        <name>desired_width</name>
+        <qualifiedname>godot::CameraSensor::desired_width</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="21" column="9" bodyfile="src/godot/camera_sensor.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1ab4860bfe1012581786a08bc9e74d4a6b" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int godot::CameraSensor::desired_height</definition>
+        <argsstring></argsstring>
+        <name>desired_height</name>
+        <qualifiedname>godot::CameraSensor::desired_height</qualifiedname>
+        <initializer>= 480</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="22" column="9" bodyfile="src/godot/camera_sensor.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1a2b4e32f6c144cf9bacbc5fca4de96751" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::CameraSensor::focal_length</definition>
+        <argsstring></argsstring>
+        <name>focal_length</name>
+        <qualifiedname>godot::CameraSensor::focal_length</qualifiedname>
+        <initializer>= 1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="23" column="12" bodyfile="src/godot/camera_sensor.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1a81ccde0774be9c07c14197ac2dd001fc" prot="private" static="no" mutable="no">
+        <type><ref refid="class_gaze_1_1_camera_interface" kindref="compound">Gaze::CameraInterface</ref> *</type>
+        <definition>Gaze::CameraInterface* godot::CameraSensor::camera</definition>
+        <argsstring></argsstring>
+        <name>camera</name>
+        <qualifiedname>godot::CameraSensor::camera</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="24" column="27" bodyfile="src/godot/camera_sensor.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_camera_sensor_1a833ccaff9bcfbd8542c10d9e2f880f01" prot="private" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::CameraSensor::last_frame</definition>
+        <argsstring></argsstring>
+        <name>last_frame</name>
+        <qualifiedname>godot::CameraSensor::last_frame</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="25" column="9" bodyfile="src/godot/camera_sensor.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1aca7cb0659d672cc99a6bf5e008267353" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::CameraSensor::GDCLASS</definition>
+        <argsstring>(CameraSensor, Node3D)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::CameraSensor::GDCLASS</qualifiedname>
+        <param>
+          <type>CameraSensor</type>
+        </param>
+        <param>
+          <type>Node3D</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="17" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a420514af979256310f3c641ec1f88368" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::CameraSensor::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::CameraSensor::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="28" column="17" bodyfile="src/godot/camera_sensor.cpp" bodystart="13" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a4d991e65e51bea10d2b75897855a4d68" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::CameraSensor::CameraSensor</definition>
+        <argsstring>()</argsstring>
+        <name>CameraSensor</name>
+        <qualifiedname>godot::CameraSensor::CameraSensor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="31" column="5" bodyfile="src/godot/camera_sensor.cpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1af4bec74f633ca1c268b28e10f06cb935" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::CameraSensor::~CameraSensor</definition>
+        <argsstring>()</argsstring>
+        <name>~CameraSensor</name>
+        <qualifiedname>godot::CameraSensor::~CameraSensor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="32" column="13" bodyfile="src/godot/camera_sensor.cpp" bodystart="31" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a127bf5dcbf4eb769c580d75a1f330d41" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::CameraSensor::initialize_sensor</definition>
+        <argsstring>()</argsstring>
+        <name>initialize_sensor</name>
+        <qualifiedname>godot::CameraSensor::initialize_sensor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="34" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="35" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a299fec74d7bf886b55291e30b3c511b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::CameraSensor::stop_sensor</definition>
+        <argsstring>()</argsstring>
+        <name>stop_sensor</name>
+        <qualifiedname>godot::CameraSensor::stop_sensor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="35" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="47" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1ad54c99fbaea501ededd1401ee0544dc1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::CameraSensor::grab_frame</definition>
+        <argsstring>(Gaze::Frame &amp;out_frame)</argsstring>
+        <name>grab_frame</name>
+        <qualifiedname>godot::CameraSensor::grab_frame</qualifiedname>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref> &amp;</type>
+          <declname>out_frame</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="36" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="56" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1af342672e7ad9b4830d222da0f7eb630a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::CameraSensor::get_last_frame</definition>
+        <argsstring>() const</argsstring>
+        <name>get_last_frame</name>
+        <qualifiedname>godot::CameraSensor::get_last_frame</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="37" column="9" bodyfile="src/godot/camera_sensor.cpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a19858460bdc76b5aed61adb48e421e46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::CameraSensor::set_camera_device_id</definition>
+        <argsstring>(int id)</argsstring>
+        <name>set_camera_device_id</name>
+        <qualifiedname>godot::CameraSensor::set_camera_device_id</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="39" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="79" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a9f449e91e2a7452f80283ce626aa7add" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::CameraSensor::get_camera_device_id</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_device_id</name>
+        <qualifiedname>godot::CameraSensor::get_camera_device_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="40" column="9" bodyfile="src/godot/camera_sensor.cpp" bodystart="83" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a728b298c3ee4d64ac2c96be265c79022" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::CameraSensor::set_resolution</definition>
+        <argsstring>(int w, int h)</argsstring>
+        <name>set_resolution</name>
+        <qualifiedname>godot::CameraSensor::set_resolution</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="42" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="87" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a7669bc7ab1f7e766c3e74f8550f3a3ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::CameraSensor::set_focal_length</definition>
+        <argsstring>(double focal)</argsstring>
+        <name>set_focal_length</name>
+        <qualifiedname>godot::CameraSensor::set_focal_length</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>focal</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="44" column="10" bodyfile="src/godot/camera_sensor.cpp" bodystart="95" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_camera_sensor_1a259154325db0e6ec3ce0a6fc7bb37d2b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::CameraSensor::get_focal_length</definition>
+        <argsstring>() const</argsstring>
+        <name>get_focal_length</name>
+        <qualifiedname>godot::CameraSensor::get_focal_length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/camera_sensor.hpp" line="45" column="12" bodyfile="src/godot/camera_sensor.cpp" bodystart="99" bodyend="101"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Node3D managing camera capture, resolution settings, and focal length configurations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classgodot_1_1_camera_sensor" kindref="compound">CameraSensor</ref> handles platform-specific camera inputs, fetches raw image frames, and manages spatial properties (position/rotation) representing the camera&apos;s physical alignment on the display bezel. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Node3D</label>
+      </node>
+      <node id="1">
+        <label>godot::CameraSensor</label>
+        <link refid="classgodot_1_1_camera_sensor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Node3D</label>
+      </node>
+      <node id="1">
+        <label>godot::CameraSensor</label>
+        <link refid="classgodot_1_1_camera_sensor"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/camera_sensor.hpp" line="16" column="1" bodyfile="src/godot/camera_sensor.hpp" bodystart="16" bodyend="46"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_camera_sensor_1a420514af979256310f3c641ec1f88368" prot="protected" virt="non-virtual"><scope>godot::CameraSensor</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a81ccde0774be9c07c14197ac2dd001fc" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>camera</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1adae6a7399276ae6b33455a39b4066577" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>camera_device_id</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a4d991e65e51bea10d2b75897855a4d68" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>CameraSensor</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1ab4860bfe1012581786a08bc9e74d4a6b" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>desired_height</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1afd38029f35c6e3903361012c86373a15" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>desired_width</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a2b4e32f6c144cf9bacbc5fca4de96751" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>focal_length</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1aca7cb0659d672cc99a6bf5e008267353" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a9f449e91e2a7452f80283ce626aa7add" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>get_camera_device_id</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a259154325db0e6ec3ce0a6fc7bb37d2b" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>get_focal_length</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1af342672e7ad9b4830d222da0f7eb630a" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>get_last_frame</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1ad54c99fbaea501ededd1401ee0544dc1" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>grab_frame</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a127bf5dcbf4eb769c580d75a1f330d41" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>initialize_sensor</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a833ccaff9bcfbd8542c10d9e2f880f01" prot="private" virt="non-virtual"><scope>godot::CameraSensor</scope><name>last_frame</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a19858460bdc76b5aed61adb48e421e46" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>set_camera_device_id</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a7669bc7ab1f7e766c3e74f8550f3a3ff" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>set_focal_length</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a728b298c3ee4d64ac2c96be265c79022" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>set_resolution</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1a299fec74d7bf886b55291e30b3c511b8" prot="public" virt="non-virtual"><scope>godot::CameraSensor</scope><name>stop_sensor</name></member>
+      <member refid="classgodot_1_1_camera_sensor_1af4bec74f633ca1c268b28e10f06cb935" prot="public" virt="virtual"><scope>godot::CameraSensor</scope><name>~CameraSensor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -11,26 +11,24 @@ namespace Gaze {
 
 class ScreenProjector {
 public:
-    GazeVector2 window_position_pixels; // Physical screen pixels
-    GazeVector2 viewport_scale;         // Maps logical viewport units to window physical pixels
-    GazeVector2 viewport_offset;        // Viewport offset (origin) in window physical pixels
+    GazeVector2 window_position_px;   // Logical screen pixels
+    GazeVector2 viewport_scale;       // Maps logical viewport units to window logical pixels
+    GazeVector2 viewport_offset_px;   // Viewport offset (origin) in window logical pixels
 
     ScreenProjector() = default;
-    ScreenProjector(const GazeVector2& win_pos, const GazeVector2& vp_scale, const GazeVector2& vp_offset)
-        : window_position_pixels(win_pos), viewport_scale(vp_scale), viewport_offset(vp_offset) {}
+    ScreenProjector(const GazeVector2& win_pos_px, const GazeVector2& vp_scale, const GazeVector2& vp_offset_px)
+        : window_position_px(win_pos_px), viewport_scale(vp_scale), viewport_offset_px(vp_offset_px) {}
 
     static ScreenProjector derive_configuration(
-        const GazeVector2& win_pos_ppix,
+        const GazeVector2& win_pos_px,
         const GazeVector2& vp_scale,
         const GazeVector2& vp_origin
     );
 
     static ScreenProjector from_godot_geometry(
-        const GazeVector2& window_pos_physical,
+        const GazeVector2& window_pos_logical,
         const GazeVector2& viewport_scale_logical,
-        const GazeVector2& viewport_offset_logical,
-        double device_pixel_ratio,
-        double window_to_screen_scale_ratio = 1.0
+        const GazeVector2& viewport_offset_logical
     );
 
     bool project_to_viewport(
@@ -40,7 +38,7 @@ public:
         GazeVector2& out_viewport_pixel
     ) const;
 
-    GazeVector2 map_logical_to_physical(const GazeVector2& logical_pixel) const;
+    GazeVector2 map_viewport_to_screen_px(const GazeVector2& logical_pixel) const;
 };
 
 } // namespace Gaze

@@ -1,8 +1,14 @@
 #include "gaze_tracker.hpp"
 #include "log.hpp"
+#include "camera_sensor.hpp"
+#include "face_estimator.hpp"
+#include "eye_estimator.hpp"
+#include "smoother.hpp"
+#include "one_euro_smoother.hpp"
 #include "opencv_camera.hpp"
 #include "yunet_pipeline.hpp"
 #include "opencv_gaze_model.hpp"
+#include "display_profile.hpp"
 #include "math_defs.hpp"
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/os.hpp>
@@ -39,25 +45,13 @@ void GazeTracker::platform_initialize() {
 }
 
 void GazeTracker::platform_terminate() {
-    if (camera) {
-        delete camera;
-        camera = nullptr;
-    }
-    if (pipeline) {
-        delete pipeline;
-        pipeline = nullptr;
-    }
-    if (model) {
-        delete model;
-        model = nullptr;
-    }
 }
 
 void GazeTracker::platform_process(double delta) {
     log_this_frame = false;
-    if (camera && pipeline && model) {
+    if (camera_sensor && face_estimator && eye_estimator) {
         Gaze::Frame frame;
-        if (camera->grab_frame(frame)) {
+        if (camera_sensor->grab_frame(frame)) {
             if (debug_logging_frames > 0) {
                 log_this_frame = true;
                 debug_logging_frames--;
@@ -75,7 +69,7 @@ void GazeTracker::platform_process(double delta) {
             }
 
             Gaze::EyeCrops crops;
-            if (pipeline->process_frame(frame, crops)) {
+            if (face_estimator->process_frame(frame, crops)) {
                 if (crops.face_detected) {
                     latest_crops = crops;
                     if (log_this_frame) {
@@ -91,7 +85,7 @@ void GazeTracker::platform_process(double delta) {
                     }
 
                     Gaze::GazeVector3 raw_gaze_dir_cam;
-                    if (model->estimate_raw_gaze(crops, raw_gaze_dir_cam)) {
+                    if (eye_estimator->opencv_gaze(crops, raw_gaze_dir_cam)) {
                         if (log_this_frame) {
                             UtilityFunctions::print("[GazeTracker Telemetry] Gaze Model raw_gaze_dir_cv: (", raw_gaze_dir_cam.x, ", ", raw_gaze_dir_cam.y, ", ", raw_gaze_dir_cam.z, ")");
                         }
@@ -110,11 +104,18 @@ void GazeTracker::platform_process(double delta) {
                             PlatformGeometry geom = platform_get_geometry();
                             Transform2D vp_xform = get_adjusted_viewport_transform();
                             
-                            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size pixels: (", geom.screen_size_ppix.x, ", ", geom.screen_size_ppix.y, ")");
-                            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size mm: (", geom.screen_size_mm.x, ", ", geom.screen_size_mm.y, ")");
+                            Vector2i display_size_px = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+                            Vector2 display_size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
+                            if (display_profile.is_valid()) {
+                                display_size_px = display_profile->get_logical_size_px();
+                                display_size_mm = display_profile->get_physical_size_mm();
+                            }
+                            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size pixels: (", display_size_px.x, ", ", display_size_px.y, ")");
+                            UtilityFunctions::print("[GazeTracker Telemetry] Screen Size mm: (", display_size_mm.x, ", ", display_size_mm.y, ")");
                             double calculated_dpi = 0.0;
-                            if (geom.screen_size_mm.x > 0.0) {
-                                calculated_dpi = (geom.screen_size_ppix.x / geom.screen_size_mm.x) * MM_PER_INCH;
+                            if (display_profile.is_valid()) {
+                                Vector2 dpi_v = display_profile->get_dpi();
+                                calculated_dpi = dpi_v.x;
                             }
                             UtilityFunctions::print("[GazeTracker Telemetry] Screen derived DPI: ", calculated_dpi);
                             UtilityFunctions::print("[GazeTracker Telemetry] Viewport Scale: (", vp_xform.get_scale().x, ", ", vp_xform.get_scale().y, ") Origin: (", vp_xform.get_origin().x, ", ", vp_xform.get_origin().y, ")");
@@ -172,13 +173,7 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
     DisplayServer* ds = DisplayServer::get_singleton();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
-        
         double scale = ds->screen_get_scale(screen_id);
-        geom.logical_to_physical_pixel_ratio = scale;
-
-        Vector2i size_ppix = ds->screen_get_size(screen_id);
-        geom.screen_size_ppix = size_ppix;
-        geom.screen_size_lpix = Vector2i((int)(size_ppix.x / scale), (int)(size_ppix.y / scale));
 
         OS* os = OS::get_singleton();
         Vector2i window_pos_ppix = ds->window_get_position();
@@ -195,127 +190,56 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
             window_pos_ppix = (screen_size_ppix - window_size_ppix) / 2;
         }
 
-        geom.window_position_ppix = window_pos_ppix;
-
-        // Query the ProjectSettings display/window/dpi/allow_hidpi setting to determine Godot's window backing scale
-        double godot_window_scale = 1.0;
-        bool allow_hidpi = true; // Godot 4 default
-        ProjectSettings* ps = ProjectSettings::get_singleton();
-        if (ps && ps->has_setting("display/window/dpi/allow_hidpi")) {
-            allow_hidpi = ps->get_setting("display/window/dpi/allow_hidpi");
-        }
-
-        if (allow_hidpi) {
-            godot_window_scale = scale;
-        } else {
-            godot_window_scale = 1.0;
-        }
-
-        double dpi = ds->screen_get_dpi(screen_id);
-        // Heuristic: If DisplayServer reports logical layout DPI (72/96) on a high-DPI display,
-        // estimate the real physical density using a continuous linear function of logical width:
-        // dpi_logical = max(96.0, 172.0 - 0.03 * width_points).
-        if (dpi < 120.0 || dpi <= 0.0) {
-            double w_lpix = geom.screen_size_lpix.x;
-            double dpi_lpix = 172.0 - 0.03 * w_lpix;
-            if (dpi_lpix < 96.0) {
-                dpi_lpix = 96.0;
-            }
-            dpi = dpi_lpix * scale; // Convert logical DPI to physical DPI
-        }
-
-        if (dpi > 0.0) {
-            geom.screen_size_mm = Vector2((size_ppix.x / dpi) * MM_PER_INCH, (size_ppix.y / dpi) * MM_PER_INCH);
-        }
-
-        if (scale > 0.0) {
-            geom.window_to_screen_scale_ratio = godot_window_scale / scale;
-        }
+        geom.window_position_px = Vector2(window_pos_ppix.x / scale, window_pos_ppix.y / scale);
     }
 
-    // Merge user overrides
-    geom.merge_overrides(overrides);
-
-    // Enforce sensible logical fallbacks if platform queries returned invalid data
-    if (geom.screen_size_lpix.x <= 0 || geom.screen_size_lpix.y <= 0) {
-        geom.screen_size_lpix = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+    if (window_position_override.x >= 0.0 && window_position_override.y >= 0.0) {
+        geom.window_position_px = window_position_override;
     }
-    if (geom.logical_to_physical_pixel_ratio <= 0.0) {
-        geom.logical_to_physical_pixel_ratio = 1.0;
-    }
-
-    // Enforce sensible millimeter defaults if platform queries returned invalid data
-    if (geom.screen_size_mm.x <= 0.0 || geom.screen_size_mm.y <= 0.0) {
-        geom.screen_size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
-    }
-
-    // Compute final effective physical screen size
-    geom.screen_size_ppix = Vector2i(
-        (int)(geom.screen_size_lpix.x * geom.logical_to_physical_pixel_ratio),
-        (int)(geom.screen_size_lpix.y * geom.logical_to_physical_pixel_ratio)
-    );
 
     return geom;
 }
 
 bool GazeTracker::complete_initialization() {
-    if (!camera) camera = new Gaze::OpenCVCamera(camera_device_id);
-    if (!pipeline) {
-        String resolved_yunet = yunet_model_path.is_empty() ? "res://models/face_detection_yunet_2023mar.onnx" : yunet_model_path;
-        if (resolved_yunet.begins_with("res://") || resolved_yunet.begins_with("user://")) {
-            std::vector<uint8_t> buffer = load_file_buffer(resolved_yunet);
-            if (!buffer.empty()) {
-                pipeline = new Gaze::YuNetPipeline(buffer);
-            }
-        }
-        if (!pipeline) {
-            String global_yunet_path = copy_model_to_user_dir(resolved_yunet);
-            pipeline = new Gaze::YuNetPipeline(global_yunet_path.utf8().get_data());
-        }
-        pipeline->set_camera_focal_length_px(camera_focal_length_px);
+    if (!camera_sensor) {
+        camera_sensor = memnew(CameraSensor);
+        camera_sensor->set_name("CameraSensor");
+        add_child(camera_sensor);
     }
-    if (!model) {
-        String resolved_gaze = gaze_onnx_path.is_empty() ? "res://models/gaze-estimation-adas-0002.xml" : gaze_onnx_path;
-        if (resolved_gaze.begins_with("res://") || resolved_gaze.begins_with("user://")) {
-            if (resolved_gaze.ends_with(".xml")) {
-                std::vector<uint8_t> xml_buf = load_file_buffer(resolved_gaze);
-                String bin_res_path = resolved_gaze.replace(".xml", ".bin");
-                std::vector<uint8_t> bin_buf = load_file_buffer(bin_res_path);
-                if (!xml_buf.empty() && !bin_buf.empty()) {
-                    model = new Gaze::OpenCVGazeModel(xml_buf, bin_buf);
-                }
-            } else {
-                std::vector<uint8_t> onnx_buf = load_file_buffer(resolved_gaze);
-                if (!onnx_buf.empty()) {
-                    model = new Gaze::OpenCVGazeModel(onnx_buf);
-                }
-            }
-        }
-        if (!model) {
-            String global_gaze_path = copy_model_to_user_dir(resolved_gaze);
-            model = new Gaze::OpenCVGazeModel(global_gaze_path.utf8().get_data());
-        }
+    if (!face_estimator) {
+        face_estimator = memnew(FaceEstimator);
+        face_estimator->set_name("FaceEstimator");
+        camera_sensor->add_child(face_estimator);
+    }
+    if (!eye_estimator) {
+        eye_estimator = memnew(EyeEstimator);
+        eye_estimator->set_name("EyeEstimator");
+        face_estimator->add_child(eye_estimator);
     }
 
+    camera_sensor->set_camera_device_id(camera_device_id);
+    face_estimator->set_focal_length(camera_sensor->get_focal_length());
 
     if (pipeline_config.is_valid()) {
         Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
-        camera->set_resolution(core_cfg.desired_camera_width, core_cfg.desired_camera_height);
+        camera_sensor->set_resolution(core_cfg.desired_camera_width, core_cfg.desired_camera_height);
+        face_estimator->set_pipeline_config(core_cfg);
+        eye_estimator->set_pipeline_config(core_cfg);
     }
 
-    if (!camera->initialize()) {
+    if (!camera_sensor->initialize_sensor()) {
         Gaze::log_error("GazeTrackerInitFailed", "reason", "camera initialization failed");
         stop_tracker();
         set_lifecycle_state(LIFECYCLE_ERROR);
         return false;
     }
-    if (!pipeline->initialize()) {
+    if (!face_estimator->initialize_estimator()) {
         Gaze::log_error("GazeTrackerInitFailed", "reason", "face pipeline initialization failed");
         stop_tracker();
         set_lifecycle_state(LIFECYCLE_ERROR);
         return false;
     }
-    if (!model->initialize()) {
+    if (!eye_estimator->initialize_estimator()) {
         Gaze::log_error("GazeTrackerInitFailed", "reason", "gaze model initialization failed");
         stop_tracker();
         set_lifecycle_state(LIFECYCLE_ERROR);

@@ -1,0 +1,378 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_yu_net_pipeline" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::YuNetPipeline</compoundname>
+    <basecompoundref refid="class_gaze_1_1_face_pipeline" prot="public" virt="non-virtual">Gaze::FacePipeline</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1ab1a9c2e3e2ffff40d69aee52e78b0419" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Gaze::YuNetPipeline::model_path</definition>
+        <argsstring></argsstring>
+        <name>model_path</name>
+        <qualifiedname>Gaze::YuNetPipeline::model_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="20" column="17" bodyfile="src/native/yunet_pipeline.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1a7efc23ba55af5d9e3cd9f0d5852c67c5" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; Gaze::YuNetPipeline::model_buffer</definition>
+        <argsstring></argsstring>
+        <name>model_buffer</name>
+        <qualifiedname>Gaze::YuNetPipeline::model_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="21" column="17" bodyfile="src/native/yunet_pipeline.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1a7078824a10c14926b7246228f366e81a" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::YuNetPipeline::load_from_buffer</definition>
+        <argsstring></argsstring>
+        <name>load_from_buffer</name>
+        <qualifiedname>Gaze::YuNetPipeline::load_from_buffer</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="22" column="10" bodyfile="src/native/yunet_pipeline.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1aeb51579849728a372914ab452cdf1bbf" prot="private" static="no" mutable="no">
+        <type>cv::Ptr&lt; cv::FaceDetectorYN &gt;</type>
+        <definition>cv::Ptr&lt;cv::FaceDetectorYN&gt; Gaze::YuNetPipeline::detector</definition>
+        <argsstring></argsstring>
+        <name>detector</name>
+        <qualifiedname>Gaze::YuNetPipeline::detector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="24" column="13" bodyfile="src/native/yunet_pipeline.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1ad7fdab08423a345cbf67f1706a8bab9d" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetPipeline::score_threshold</definition>
+        <argsstring></argsstring>
+        <name>score_threshold</name>
+        <qualifiedname>Gaze::YuNetPipeline::score_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="25" column="11" bodyfile="src/native/yunet_pipeline.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1a3cee1caf627b14571610601f3c0aa163" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetPipeline::nms_threshold</definition>
+        <argsstring></argsstring>
+        <name>nms_threshold</name>
+        <qualifiedname>Gaze::YuNetPipeline::nms_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="26" column="11" bodyfile="src/native/yunet_pipeline.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1a13dc4907c69402eb1e9e652e09856173" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::YuNetPipeline::top_k</definition>
+        <argsstring></argsstring>
+        <name>top_k</name>
+        <qualifiedname>Gaze::YuNetPipeline::top_k</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="27" column="9" bodyfile="src/native/yunet_pipeline.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1ae199be3eb1627cd65fe536c3270babae" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::YuNetPipeline::camera_focal_length_px</definition>
+        <argsstring></argsstring>
+        <name>camera_focal_length_px</name>
+        <qualifiedname>Gaze::YuNetPipeline::camera_focal_length_px</qualifiedname>
+        <initializer>= -1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="29" column="12" bodyfile="src/native/yunet_pipeline.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_yu_net_pipeline_1acb1a739e69b575d76769dd432f7c23ed" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref></type>
+        <definition>PipelineConfig Gaze::YuNetPipeline::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>Gaze::YuNetPipeline::config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="30" column="20" bodyfile="src/native/yunet_pipeline.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1ae0d4d36784e953315df30e21ac4873a5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::YuNetPipeline::crop_eye</definition>
+        <argsstring>(const cv::Mat &amp;gray, const cv::Point2f landmarks[5], bool is_left, unsigned char out_buffer[10800])</argsstring>
+        <name>crop_eye</name>
+        <qualifiedname>Gaze::YuNetPipeline::crop_eye</qualifiedname>
+        <param>
+          <type>const cv::Mat &amp;</type>
+          <declname>gray</declname>
+        </param>
+        <param>
+          <type>const cv::Point2f</type>
+          <declname>landmarks</declname>
+          <array>[5]</array>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>is_left</declname>
+        </param>
+        <param>
+          <type>unsigned char</type>
+          <declname>out_buffer</declname>
+          <array>[10800]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="33" column="10" bodyfile="src/native/yunet_pipeline.cpp" bodystart="179" bodyend="215"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1a3ff9f6a642f9eb6c0d793beede89286c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::YuNetPipeline::YuNetPipeline</definition>
+        <argsstring>(const std::string &amp;yunet_model_path, float score_thresh=0.6f, float nms_thresh=0.3f, int k=5000)</argsstring>
+        <name>YuNetPipeline</name>
+        <qualifiedname>Gaze::YuNetPipeline::YuNetPipeline</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>yunet_model_path</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>score_thresh</declname>
+          <defval>0.6f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nms_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>k</declname>
+          <defval>5000</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="36" column="5" bodyfile="src/native/yunet_pipeline.cpp" bodystart="9" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1ad4bf9b22d1ad2598d3e8550be77b7bab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::YuNetPipeline::YuNetPipeline</definition>
+        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;buffer, float score_thresh=0.6f, float nms_thresh=0.3f, int k=5000)</argsstring>
+        <name>YuNetPipeline</name>
+        <qualifiedname>Gaze::YuNetPipeline::YuNetPipeline</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>score_thresh</declname>
+          <defval>0.6f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nms_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>k</declname>
+          <defval>5000</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="37" column="5" bodyfile="src/native/yunet_pipeline.cpp" bodystart="12" bodyend="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1a23130db1b471e9ee973474d718972383" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::YuNetPipeline::~YuNetPipeline</definition>
+        <argsstring>()=default</argsstring>
+        <name>~YuNetPipeline</name>
+        <qualifiedname>Gaze::YuNetPipeline::~YuNetPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="38" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1a028337b1ad662a6ef97ec2c8124c42b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::YuNetPipeline::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::YuNetPipeline::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1abe41495e228f095470c1d533cb06fbfa">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="40" column="18" bodyfile="src/native/yunet_pipeline.cpp" bodystart="15" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1a1e392fb8ad404f5e7bdd9fefd041a1f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::YuNetPipeline::process_frame</definition>
+        <argsstring>(const Frame &amp;frame, EyeCrops &amp;out_crops) override</argsstring>
+        <name>process_frame</name>
+        <qualifiedname>Gaze::YuNetPipeline::process_frame</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1adf405bee12088858888b8af793b1d70a">process_frame</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>frame</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
+          <declname>out_crops</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="42" column="18" bodyfile="src/native/yunet_pipeline.cpp" bodystart="53" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1ac1978ac77496506e474acfed32176dc5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::YuNetPipeline::set_camera_focal_length_px</definition>
+        <argsstring>(double f) override</argsstring>
+        <name>set_camera_focal_length_px</name>
+        <qualifiedname>Gaze::YuNetPipeline::set_camera_focal_length_px</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1ae3ec72e95ecbe68f9318e1062df15bc9">set_camera_focal_length_px</reimplements>
+        <param>
+          <type>double</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="43" column="18" bodyfile="src/native/yunet_pipeline.cpp" bodystart="217" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_yu_net_pipeline_1afb97ff41ad5267fcd32ab01f1ca7339b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::YuNetPipeline::set_config</definition>
+        <argsstring>(const PipelineConfig &amp;cfg) override</argsstring>
+        <name>set_config</name>
+        <qualifiedname>Gaze::YuNetPipeline::set_config</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1a1049cdc1bace7ad121cbfd2cde0b2f99">set_config</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
+          <declname>cfg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/yunet_pipeline.hpp" line="44" column="18" bodyfile="src/native/yunet_pipeline.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::FacePipeline</label>
+        <link refid="class_gaze_1_1_face_pipeline"/>
+      </node>
+      <node id="1">
+        <label>Gaze::YuNetPipeline</label>
+        <link refid="class_gaze_1_1_yu_net_pipeline"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::FacePipeline</label>
+        <link refid="class_gaze_1_1_face_pipeline"/>
+      </node>
+      <node id="1">
+        <label>Gaze::YuNetPipeline</label>
+        <link refid="class_gaze_1_1_yu_net_pipeline"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/native/yunet_pipeline.hpp" line="18" column="1" bodyfile="src/native/yunet_pipeline.hpp" bodystart="18" bodyend="45"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ae199be3eb1627cd65fe536c3270babae" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1acb1a739e69b575d76769dd432f7c23ed" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>config</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ae0d4d36784e953315df30e21ac4873a5" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>crop_eye</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1aeb51579849728a372914ab452cdf1bbf" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>detector</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a028337b1ad662a6ef97ec2c8124c42b7" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a7078824a10c14926b7246228f366e81a" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>load_from_buffer</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a7efc23ba55af5d9e3cd9f0d5852c67c5" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>model_buffer</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ab1a9c2e3e2ffff40d69aee52e78b0419" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>model_path</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a3cee1caf627b14571610601f3c0aa163" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>nms_threshold</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a1e392fb8ad404f5e7bdd9fefd041a1f7" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>process_frame</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ad7fdab08423a345cbf67f1706a8bab9d" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>score_threshold</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ac1978ac77496506e474acfed32176dc5" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>set_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1afb97ff41ad5267fcd32ab01f1ca7339b" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a13dc4907c69402eb1e9e652e09856173" prot="private" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>top_k</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a3ff9f6a642f9eb6c0d793beede89286c" prot="public" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>YuNetPipeline</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1ad4bf9b22d1ad2598d3e8550be77b7bab" prot="public" virt="non-virtual"><scope>Gaze::YuNetPipeline</scope><name>YuNetPipeline</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1afe4c907abf282e5a1084fdf6632af332" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>~FacePipeline</name></member>
+      <member refid="class_gaze_1_1_yu_net_pipeline_1a23130db1b471e9ee973474d718972383" prot="public" virt="virtual"><scope>Gaze::YuNetPipeline</scope><name>~YuNetPipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

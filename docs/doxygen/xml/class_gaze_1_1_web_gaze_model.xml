@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_web_gaze_model" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::WebGazeModel</compoundname>
+    <basecompoundref refid="class_gaze_1_1_gaze_model" prot="public" virt="non-virtual">Gaze::GazeModel</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_web_gaze_model_1afc4f36d4296d3ce6a6bce6a007f57309" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::WebGazeModel::fed_gaze_dir</definition>
+        <argsstring></argsstring>
+        <name>fed_gaze_dir</name>
+        <qualifiedname>Gaze::WebGazeModel::fed_gaze_dir</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="17" column="17" bodyfile="src/web/web_gaze_model.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_web_gaze_model_1aec2d68d5d7176717ff0059f16fea1f4c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::WebGazeModel::has_new_data</definition>
+        <argsstring></argsstring>
+        <name>has_new_data</name>
+        <qualifiedname>Gaze::WebGazeModel::has_new_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="18" column="10" bodyfile="src/web/web_gaze_model.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_web_gaze_model_1a9fa42bb43b2b37a5a0a302b6846bd2a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::WebGazeModel::WebGazeModel</definition>
+        <argsstring>()</argsstring>
+        <name>WebGazeModel</name>
+        <qualifiedname>Gaze::WebGazeModel::WebGazeModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="21" column="5" bodyfile="src/web/web_gaze_model.cpp" bodystart="5" bodyend="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_web_gaze_model_1a411c27a1e02ed3491dda11a2f98bde01" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::WebGazeModel::~WebGazeModel</definition>
+        <argsstring>()=default</argsstring>
+        <name>~WebGazeModel</name>
+        <qualifiedname>Gaze::WebGazeModel::~WebGazeModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="22" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_web_gaze_model_1a6f63c37e461cd6a18e641a80d080cd9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::WebGazeModel::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::WebGazeModel::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_gaze_model_1a10bedfd9295068dc8671cc4d65c41c77">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="24" column="18" bodyfile="src/web/web_gaze_model.cpp" bodystart="7" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_web_gaze_model_1a0ca18aaad8a0c8edc021693040c48496" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::WebGazeModel::estimate_raw_gaze</definition>
+        <argsstring>(const EyeCrops &amp;crops, GazeVector3 &amp;out_gaze_dir_cv) override</argsstring>
+        <name>estimate_raw_gaze</name>
+        <qualifiedname>Gaze::WebGazeModel::estimate_raw_gaze</qualifiedname>
+        <reimplements refid="class_gaze_1_1_gaze_model_1a6ea251526afb477d2e78ae4a0646673d">estimate_raw_gaze</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
+          <declname>crops</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>out_gaze_dir_cv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="25" column="18" bodyfile="src/web/web_gaze_model.cpp" bodystart="12" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_web_gaze_model_1aee25f6fba6148dcd6edf048dcc3de940" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::WebGazeModel::feed_raw_gaze</definition>
+        <argsstring>(const GazeVector3 &amp;raw_gaze)</argsstring>
+        <name>feed_raw_gaze</name>
+        <qualifiedname>Gaze::WebGazeModel::feed_raw_gaze</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/web_gaze_model.hpp" line="28" column="10" bodyfile="src/web/web_gaze_model.cpp" bodystart="18" bodyend="21"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::GazeModel</label>
+        <link refid="class_gaze_1_1_gaze_model"/>
+      </node>
+      <node id="1">
+        <label>Gaze::WebGazeModel</label>
+        <link refid="class_gaze_1_1_web_gaze_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::GazeModel</label>
+        <link refid="class_gaze_1_1_gaze_model"/>
+      </node>
+      <node id="1">
+        <label>Gaze::WebGazeModel</label>
+        <link refid="class_gaze_1_1_web_gaze_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/web/web_gaze_model.hpp" line="15" column="1" bodyfile="src/web/web_gaze_model.hpp" bodystart="15" bodyend="29"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_web_gaze_model_1a0ca18aaad8a0c8edc021693040c48496" prot="public" virt="virtual"><scope>Gaze::WebGazeModel</scope><name>estimate_raw_gaze</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1afc4f36d4296d3ce6a6bce6a007f57309" prot="private" virt="non-virtual"><scope>Gaze::WebGazeModel</scope><name>fed_gaze_dir</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1aee25f6fba6148dcd6edf048dcc3de940" prot="public" virt="non-virtual"><scope>Gaze::WebGazeModel</scope><name>feed_raw_gaze</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1aec2d68d5d7176717ff0059f16fea1f4c" prot="private" virt="non-virtual"><scope>Gaze::WebGazeModel</scope><name>has_new_data</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1a6f63c37e461cd6a18e641a80d080cd9f" prot="public" virt="virtual"><scope>Gaze::WebGazeModel</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a128e54ad723e438c2840b18d83e5b902" prot="public" virt="virtual"><scope>Gaze::WebGazeModel</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1a9fa42bb43b2b37a5a0a302b6846bd2a0" prot="public" virt="non-virtual"><scope>Gaze::WebGazeModel</scope><name>WebGazeModel</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" prot="public" virt="virtual"><scope>Gaze::WebGazeModel</scope><name>~GazeModel</name></member>
+      <member refid="class_gaze_1_1_web_gaze_model_1a411c27a1e02ed3491dda11a2f98bde01" prot="public" virt="virtual"><scope>Gaze::WebGazeModel</scope><name>~WebGazeModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

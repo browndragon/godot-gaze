@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['yunetpipeline_0',['YuNetPipeline',['../class_gaze_1_1_yu_net_pipeline.html',1,'Gaze']]]
+  ['screenprojector_0',['ScreenProjector',['../class_gaze_1_1_screen_projector.html',1,'Gaze']]],
+  ['smoother_1',['Smoother',['../classgodot_1_1_smoother.html',1,'godot']]]
 ];

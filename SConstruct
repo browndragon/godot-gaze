@@ -115,6 +115,10 @@ env.Append(CPPPATH=[
 # Conditional Source and OpenCV dependency mapping
 sources = Glob("src/core/*.cpp") + Glob("src/godot/*.cpp")
 
+# Generate in-editor GDExtension class reference documentation
+doc_data = env.GodotCPPDocData("src/gen/doc_data.gen.cpp", source=Glob("project/docs/classref/*.xml"))
+sources.append(doc_data)
+
 if env["platform"] == "web":
     # Web target: exclude OpenCV native, include web stub
     print("Building for Web/WASM target. Excluding native OpenCV and compiling web sidecar bridge.")

@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_open_c_v_camera" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::OpenCVCamera</compoundname>
+    <basecompoundref refid="class_gaze_1_1_camera_interface" prot="public" virt="non-virtual">Gaze::CameraInterface</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1a5fc210cfd9e402f4d975ce53a55bf3b9" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::OpenCVCamera::device_id</definition>
+        <argsstring></argsstring>
+        <name>device_id</name>
+        <qualifiedname>Gaze::OpenCVCamera::device_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="19" column="9" bodyfile="src/native/opencv_camera.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1aba76416ade9dea0d42e8c1933526efc8" prot="private" static="no" mutable="no">
+        <type>cv::VideoCapture</type>
+        <definition>cv::VideoCapture Gaze::OpenCVCamera::cap</definition>
+        <argsstring></argsstring>
+        <name>cap</name>
+        <qualifiedname>Gaze::OpenCVCamera::cap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="20" column="22" bodyfile="src/native/opencv_camera.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1a1ee04c4e9f94df103404a902160921bd" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; unsigned char &gt;</type>
+        <definition>std::vector&lt;unsigned char&gt; Gaze::OpenCVCamera::frame_buffer</definition>
+        <argsstring></argsstring>
+        <name>frame_buffer</name>
+        <qualifiedname>Gaze::OpenCVCamera::frame_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="21" column="17" bodyfile="src/native/opencv_camera.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1a2bcb54fdcc1c9ece63376efcca39b299" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::OpenCVCamera::start_time</definition>
+        <argsstring></argsstring>
+        <name>start_time</name>
+        <qualifiedname>Gaze::OpenCVCamera::start_time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="22" column="12" bodyfile="src/native/opencv_camera.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1a4147c4295b4db468e4176dffe49f65cb" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::OpenCVCamera::target_width</definition>
+        <argsstring></argsstring>
+        <name>target_width</name>
+        <qualifiedname>Gaze::OpenCVCamera::target_width</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="23" column="9" bodyfile="src/native/opencv_camera.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_open_c_v_camera_1a0a21b7d0cb2e2a2e648808529847afdb" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::OpenCVCamera::target_height</definition>
+        <argsstring></argsstring>
+        <name>target_height</name>
+        <qualifiedname>Gaze::OpenCVCamera::target_height</qualifiedname>
+        <initializer>= 480</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="24" column="9" bodyfile="src/native/opencv_camera.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1a0a4eefbcd80d292442d2c868bb5f89a5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::OpenCVCamera::OpenCVCamera</definition>
+        <argsstring>(int device=0)</argsstring>
+        <name>OpenCVCamera</name>
+        <qualifiedname>Gaze::OpenCVCamera::OpenCVCamera</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>device</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="27" column="5" bodyfile="src/native/opencv_camera.cpp" bodystart="8" bodyend="8"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1a5518f4563a8374c81724dd14e6dbe643" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>Gaze::OpenCVCamera::~OpenCVCamera</definition>
+        <argsstring>()</argsstring>
+        <name>~OpenCVCamera</name>
+        <qualifiedname>Gaze::OpenCVCamera::~OpenCVCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="28" column="13" bodyfile="src/native/opencv_camera.cpp" bodystart="10" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1ae8d28a6603230f101f15fa0378110587" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::OpenCVCamera::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::OpenCVCamera::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1ae668e7320344cb3019ce9e76611021b2">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="30" column="18" bodyfile="src/native/opencv_camera.cpp" bodystart="14" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1a0254ade90dbdf3e9fe64dd17e1571493" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::OpenCVCamera::set_resolution</definition>
+        <argsstring>(int w, int h) override</argsstring>
+        <name>set_resolution</name>
+        <qualifiedname>Gaze::OpenCVCamera::set_resolution</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1a45223e7aff6836dccd70cab88d3629e3">set_resolution</reimplements>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="31" column="18" bodyfile="src/native/opencv_camera.cpp" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1a883d918d25c0ec41d02270ae2cb39d09" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::OpenCVCamera::grab_frame</definition>
+        <argsstring>(Frame &amp;out_frame) override</argsstring>
+        <name>grab_frame</name>
+        <qualifiedname>Gaze::OpenCVCamera::grab_frame</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1a1e579ab093b72058590d7be0dbefea3b">grab_frame</reimplements>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>out_frame</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="32" column="18" bodyfile="src/native/opencv_camera.cpp" bodystart="40" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_open_c_v_camera_1acf63cac11c333d09693f9e531611fc83" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::OpenCVCamera::release</definition>
+        <argsstring>() override</argsstring>
+        <name>release</name>
+        <qualifiedname>Gaze::OpenCVCamera::release</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1ac4817a801844e75ed43e1550b6eb0e57">release</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/opencv_camera.hpp" line="33" column="18" bodyfile="src/native/opencv_camera.cpp" bodystart="73" bodyend="78"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::CameraInterface</label>
+        <link refid="class_gaze_1_1_camera_interface"/>
+      </node>
+      <node id="1">
+        <label>Gaze::OpenCVCamera</label>
+        <link refid="class_gaze_1_1_open_c_v_camera"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::CameraInterface</label>
+        <link refid="class_gaze_1_1_camera_interface"/>
+      </node>
+      <node id="1">
+        <label>Gaze::OpenCVCamera</label>
+        <link refid="class_gaze_1_1_open_c_v_camera"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/native/opencv_camera.hpp" line="17" column="1" bodyfile="src/native/opencv_camera.hpp" bodystart="17" bodyend="34"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_open_c_v_camera_1aba76416ade9dea0d42e8c1933526efc8" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>cap</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a5fc210cfd9e402f4d975ce53a55bf3b9" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>device_id</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a1ee04c4e9f94df103404a902160921bd" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>frame_buffer</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a883d918d25c0ec41d02270ae2cb39d09" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>grab_frame</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1ae8d28a6603230f101f15fa0378110587" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a0a4eefbcd80d292442d2c868bb5f89a5" prot="public" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>OpenCVCamera</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1acf63cac11c333d09693f9e531611fc83" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>release</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a0254ade90dbdf3e9fe64dd17e1571493" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>set_resolution</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a2bcb54fdcc1c9ece63376efcca39b299" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>start_time</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a0a21b7d0cb2e2a2e648808529847afdb" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>target_height</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a4147c4295b4db468e4176dffe49f65cb" prot="private" virt="non-virtual"><scope>Gaze::OpenCVCamera</scope><name>target_width</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1a8592a72f65f30714be103525af7fa010" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>~CameraInterface</name></member>
+      <member refid="class_gaze_1_1_open_c_v_camera_1a5518f4563a8374c81724dd14e6dbe643" prot="public" virt="virtual"><scope>Gaze::OpenCVCamera</scope><name>~OpenCVCamera</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

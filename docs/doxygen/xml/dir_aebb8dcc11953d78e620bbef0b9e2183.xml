@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir">
+    <compoundname>src/core</compoundname>
+    <innerfile refid="camera__interface_8hpp">camera_interface.hpp</innerfile>
+    <innerfile refid="camera__placement_8hpp">camera_placement.hpp</innerfile>
+    <innerfile refid="face__model__geometry_8hpp">face_model_geometry.hpp</innerfile>
+    <innerfile refid="face__pipeline_8hpp">face_pipeline.hpp</innerfile>
+    <innerfile refid="gaze__calibration_8hpp">gaze_calibration.hpp</innerfile>
+    <innerfile refid="gaze__calibration__estimator_8cpp">gaze_calibration_estimator.cpp</innerfile>
+    <innerfile refid="gaze__calibration__estimator_8hpp">gaze_calibration_estimator.hpp</innerfile>
+    <innerfile refid="gaze__model_8hpp">gaze_model.hpp</innerfile>
+    <innerfile refid="log_8hpp">log.hpp</innerfile>
+    <innerfile refid="math__defs_8hpp">math_defs.hpp</innerfile>
+    <innerfile refid="pipeline__config_8hpp">pipeline_config.hpp</innerfile>
+    <innerfile refid="projection__engine_8cpp">projection_engine.cpp</innerfile>
+    <innerfile refid="projection__engine_8hpp">projection_engine.hpp</innerfile>
+    <innerfile refid="screen__projector_8cpp">screen_projector.cpp</innerfile>
+    <innerfile refid="screen__projector_8hpp">screen_projector.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/"/>
+  </compounddef>
+</doxygen>

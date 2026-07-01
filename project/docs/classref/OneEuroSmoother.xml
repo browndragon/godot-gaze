@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="OneEuroSmoother" inherits="godot::Smoother">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_min_cutoff">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_min_cutoff">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_beta">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_beta">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_d_cutoff">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_d_cutoff">
+			<return type="double"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

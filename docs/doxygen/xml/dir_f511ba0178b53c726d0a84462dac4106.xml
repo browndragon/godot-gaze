@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_f511ba0178b53c726d0a84462dac4106" kind="dir">
+    <compoundname>src/native</compoundname>
+    <innerfile refid="gaze__tracker__native_8cpp">gaze_tracker_native.cpp</innerfile>
+    <innerfile refid="opencv__camera_8cpp">opencv_camera.cpp</innerfile>
+    <innerfile refid="opencv__camera_8hpp">opencv_camera.hpp</innerfile>
+    <innerfile refid="opencv__gaze__model_8cpp">opencv_gaze_model.cpp</innerfile>
+    <innerfile refid="opencv__gaze__model_8hpp">opencv_gaze_model.hpp</innerfile>
+    <innerfile refid="yunet__pipeline_8cpp">yunet_pipeline.cpp</innerfile>
+    <innerfile refid="yunet__pipeline_8hpp">yunet_pipeline.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/native/"/>
+  </compounddef>
+</doxygen>

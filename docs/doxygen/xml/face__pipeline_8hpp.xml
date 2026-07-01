@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="face__pipeline_8hpp" kind="file" language="C++">
+    <compoundname>face_pipeline.hpp</compoundname>
+    <includes refid="camera__interface_8hpp" local="yes">camera_interface.hpp</includes>
+    <includes refid="math__defs_8hpp" local="yes">math_defs.hpp</includes>
+    <includes refid="pipeline__config_8hpp" local="yes">pipeline_config.hpp</includes>
+    <includedby refid="gaze__model_8hpp" local="yes">src/core/gaze_model.hpp</includedby>
+    <includedby refid="face__estimator_8hpp" local="yes">src/godot/face_estimator.hpp</includedby>
+    <includedby refid="gaze__tracker_8hpp" local="yes">src/godot/gaze_tracker.hpp</includedby>
+    <includedby refid="yunet__pipeline_8hpp" local="yes">src/native/yunet_pipeline.hpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+      </node>
+      <node id="6">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="1">
+        <label>src/core/face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>cmath</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/core/face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/core/gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/godot/eye_estimator.hpp</label>
+        <link refid="eye__estimator_8hpp_source"/>
+      </node>
+      <node id="9">
+        <label>src/godot/face_estimator.hpp</label>
+        <link refid="face__estimator_8hpp_source"/>
+      </node>
+      <node id="5">
+        <label>src/godot/gaze_calibration_resource.cpp</label>
+        <link refid="gaze__calibration__resource_8cpp"/>
+      </node>
+      <node id="6">
+        <label>src/godot/gaze_calibration_session.cpp</label>
+        <link refid="gaze__calibration__session_8cpp"/>
+      </node>
+      <node id="4">
+        <label>src/godot/gaze_tracker.hpp</label>
+        <link refid="gaze__tracker_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>src/native/opencv_gaze_model.hpp</label>
+        <link refid="opencv__gaze__model_8hpp"/>
+      </node>
+      <node id="10">
+        <label>src/native/yunet_pipeline.hpp</label>
+        <link refid="yunet__pipeline_8hpp"/>
+      </node>
+      <node id="8">
+        <label>src/web/web_gaze_model.hpp</label>
+        <link refid="web__gaze__model_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="struct_gaze_1_1_eye_crops" prot="public">Gaze::EyeCrops</innerclass>
+    <innerclass refid="class_gaze_1_1_face_pipeline" prot="public">Gaze::FacePipeline</innerclass>
+    <innernamespace refid="namespace_gaze">Gaze</innernamespace>
+    <briefdescription>
+<para>Face detection, landmarking, and normalizer interface (Layer 2). </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Defines the abstract interface and data structures for detecting faces, calculating facial landmarks, estimating head pose transformations, and extracting normalized roll/scale eye crop buffers. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="camera__interface_8hpp" kindref="compound">camera_interface.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="math__defs_8hpp" kindref="compound">math_defs.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="pipeline__config_8hpp" kindref="compound">pipeline_config.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17" refid="struct_gaze_1_1_eye_crops" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref><sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>face_detected<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Estimated<sp/>head<sp/>pose<sp/>vectors<sp/>relative<sp/>to<sp/>camera<sp/>(in<sp/>mm<sp/>and<sp/>radians)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>head_pose_rotation;<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Rotational<sp/>angles<sp/>(pitch,<sp/>yaw,<sp/>roll)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>head_pose_translation;<sp/></highlight><highlight class="comment">//<sp/>Position<sp/>of<sp/>the<sp/>head</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Left<sp/>and<sp/>right<sp/>eye<sp/>crops<sp/>(standardized<sp/>to<sp/>60x60<sp/>px,<sp/>3-channel<sp/>BGR)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>BGR<sp/>buffer<sp/>(60<sp/>*<sp/>60<sp/>*<sp/>3<sp/>=<sp/>10800<sp/>bytes)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>left_eye_data[10800]<sp/>=<sp/>{0};</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>right_eye_data[10800]<sp/>=<sp/>{0};</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>3D<sp/>coordinates<sp/>of<sp/>left<sp/>and<sp/>right<sp/>eye<sp/>centers<sp/>in<sp/>camera<sp/>space<sp/>(in<sp/>mm)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Used<sp/>to<sp/>calculate<sp/>Z<sp/>distance<sp/>based<sp/>on<sp/>IPD<sp/>(Interpupillary<sp/>Distance)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>left_eye_center_cam;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>right_eye_center_cam;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35" refid="class_gaze_1_1_face_pipeline" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_gaze_1_1_face_pipeline" kindref="compound">FacePipeline</ref><sp/>{</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_face_pipeline" kindref="compound">~FacePipeline</ref>()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Load<sp/>models<sp/>(e.g.<sp/>YuNet<sp/>face<sp/>detector)<sp/>and<sp/>initialize<sp/>pipeline</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>initialize()<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Process<sp/>frame,<sp/>detect<sp/>faces,<sp/>estimate<sp/>head<sp/>pose,<sp/>and<sp/>crop<sp/>eyes</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>process_frame(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref>&amp;<sp/>frame,<sp/><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref>&amp;<sp/>out_crops)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Configure<sp/>camera<sp/>focal<sp/>length</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_camera_focal_length_px(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>f)<sp/>{}</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Configure<sp/>pipeline<sp/>settings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_config(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref>&amp;<sp/>config)<sp/>{}</highlight></codeline>
+<codeline lineno="50"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/core/face_pipeline.hpp"/>
+  </compounddef>
+</doxygen>

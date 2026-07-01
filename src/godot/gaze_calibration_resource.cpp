@@ -64,7 +64,7 @@ Vector2 GazeCalibration::get_pixel_size_mm(Object* tracker) const {
     if (tracker) {
         GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
         if (gt) {
-            Vector2 dev_sz = gt->get_derived_pixel_size_mm();
+            Vector2 dev_sz = gt->get_pixel_size_mm();
             default_val = Gaze::GazeVector2(dev_sz.x, dev_sz.y);
         }
     }

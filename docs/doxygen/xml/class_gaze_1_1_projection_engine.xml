@@ -1,0 +1,492 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_projection_engine" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::ProjectionEngine</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a7bf651918a4b21f13e06e2fc401f86f8" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref></type>
+        <definition>CameraPlacement Gaze::ProjectionEngine::placement</definition>
+        <argsstring></argsstring>
+        <name>placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="20" column="21" bodyfile="src/core/projection_engine.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a873fb9841c22ba0bcaf032a0aa57ce3a" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref></type>
+        <definition>GazeCalibration Gaze::ProjectionEngine::calibration</definition>
+        <argsstring></argsstring>
+        <name>calibration</name>
+        <qualifiedname>Gaze::ProjectionEngine::calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="21" column="21" bodyfile="src/core/projection_engine.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1aa079b529b616768a4c703394c2d41f0e" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::ProjectionEngine::screen_size_pixels</definition>
+        <argsstring></argsstring>
+        <name>screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_size_pixels</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>(1920.0, 1080.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="22" column="17" bodyfile="src/core/projection_engine.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1ac53cea030b5da1316b6cb1990b736e43" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::ProjectionEngine::screen_size_mm</definition>
+        <argsstring></argsstring>
+        <name>screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_size_mm</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>(527.0, 296.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="23" column="17" bodyfile="src/core/projection_engine.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::camera_focal_length_px</definition>
+        <argsstring></argsstring>
+        <name>camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::camera_focal_length_px</qualifiedname>
+        <initializer>= 1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="24" column="12" bodyfile="src/core/projection_engine.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a6566993e238a96000ecff46c45e3377d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ProjectionEngine::ProjectionEngine</definition>
+        <argsstring>()=default</argsstring>
+        <name>ProjectionEngine</name>
+        <qualifiedname>Gaze::ProjectionEngine::ProjectionEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="27" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9af4a8be2ff84ab6c2bd78cf1fae6e66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_camera_placement</definition>
+        <argsstring>(const CameraPlacement &amp;p)</argsstring>
+        <name>set_camera_placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_camera_placement</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="30" column="10" bodyfile="src/core/projection_engine.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ab40c4ec2da44a8f6e9b71515fe6a44c0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref></type>
+        <definition>CameraPlacement Gaze::ProjectionEngine::get_camera_placement</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_camera_placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="31" column="21" bodyfile="src/core/projection_engine.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae1b3489ea4bb2544af614e3724b09cb4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_calibration</definition>
+        <argsstring>(const GazeCalibration &amp;c)</argsstring>
+        <name>set_calibration</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_calibration</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="33" column="10" bodyfile="src/core/projection_engine.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a65c19d9d5d3670f775d3a9a7fc69c229" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref></type>
+        <definition>GazeCalibration Gaze::ProjectionEngine::get_calibration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_calibration</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="34" column="21" bodyfile="src/core/projection_engine.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1abf2cc16a956e2243f8a3f1d07d59c45f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_screen_size_pixels</definition>
+        <argsstring>(const GazeVector2 &amp;size)</argsstring>
+        <name>set_screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_screen_size_pixels</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="36" column="10" bodyfile="src/core/projection_engine.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae0f64afb19d1f4d0811a7f801e32dfba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::ProjectionEngine::get_screen_size_pixels</definition>
+        <argsstring>() const</argsstring>
+        <name>get_screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_screen_size_pixels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="37" column="17" bodyfile="src/core/projection_engine.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1afef2d8d4559f9b8cc3ef423897a3b03e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_screen_size_mm</definition>
+        <argsstring>(const GazeVector2 &amp;size)</argsstring>
+        <name>set_screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_screen_size_mm</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="39" column="10" bodyfile="src/core/projection_engine.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a3b8d0f18b4d47f765cc3d371d8bfa456" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::ProjectionEngine::get_screen_size_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_screen_size_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="40" column="17" bodyfile="src/core/projection_engine.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1aae392df178118a39b5ea9f68585eae12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_camera_focal_length_px</definition>
+        <argsstring>(double f)</argsstring>
+        <name>set_camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_camera_focal_length_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="42" column="10" bodyfile="src/core/projection_engine.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae678ec86b05c2be708d5ac65fbc9ee6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::get_camera_focal_length_px</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_camera_focal_length_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="43" column="12" bodyfile="src/core/projection_engine.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1afd883cbd9fac343f99f6c385fc54c8f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::estimate_depth_z</definition>
+        <argsstring>(double eye_distance_px, double ipd_mm=63.0) const</argsstring>
+        <name>estimate_depth_z</name>
+        <qualifiedname>Gaze::ProjectionEngine::estimate_depth_z</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>eye_distance_px</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>ipd_mm</declname>
+          <defval>63.0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="46" column="12" bodyfile="src/core/projection_engine.cpp" bodystart="8" bodyend="11"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a013fb345bf2fca1f5441330d1dde6ba6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::ProjectionEngine::pixel_to_millimeter</definition>
+        <argsstring>(const GazeVector2 &amp;pixel) const</argsstring>
+        <name>pixel_to_millimeter</name>
+        <qualifiedname>Gaze::ProjectionEngine::pixel_to_millimeter</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>pixel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="49" column="17" bodyfile="src/core/projection_engine.cpp" bodystart="82" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a1e813f55c0cfb6c5670a61efb727c280" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::ProjectionEngine::screen_mm_to_camera_space</definition>
+        <argsstring>(const GazeVector2 &amp;screen_mm) const</argsstring>
+        <name>screen_mm_to_camera_space</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_mm_to_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>screen_mm</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="52" column="17" bodyfile="src/core/projection_engine.cpp" bodystart="98" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1af9ebabfc0580663439806e1f681d2abd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::ProjectionEngine::apply_3d_bias</definition>
+        <argsstring>(const GazeVector3 &amp;raw_gaze_dir) const</argsstring>
+        <name>apply_3d_bias</name>
+        <qualifiedname>Gaze::ProjectionEngine::apply_3d_bias</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="55" column="17" bodyfile="src/core/projection_engine.cpp" bodystart="13" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ad399492874b1f41427e083e64e2e6d76" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ProjectionEngine::project_gaze</definition>
+        <argsstring>(const GazeVector3 &amp;gaze_origin_cam, const GazeVector3 &amp;raw_gaze_dir_cam, GazeVector2 &amp;out_pixel) const</argsstring>
+        <name>project_gaze</name>
+        <qualifiedname>Gaze::ProjectionEngine::project_gaze</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>gaze_origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir_cam</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>out_pixel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="58" column="10" bodyfile="src/core/projection_engine.cpp" bodystart="35" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ac9fdaa4122c965d6eec0813d6aad1ab4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ProjectionEngine::calibrate_3d_bias</definition>
+        <argsstring>(const GazeVector3 &amp;gaze_origin_cam, const GazeVector3 &amp;raw_gaze_dir_cam, const GazeVector2 &amp;target_pixel, GazeCalibration &amp;out_calib) const</argsstring>
+        <name>calibrate_3d_bias</name>
+        <qualifiedname>Gaze::ProjectionEngine::calibrate_3d_bias</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>gaze_origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>target_pixel</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &amp;</type>
+          <declname>out_calib</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="64" column="10" bodyfile="src/core/projection_engine.cpp" bodystart="111" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a4228b502633393c1d1a36667a71e6f19" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ProjectionEngine::calibrate_2d_bias</definition>
+        <argsstring>(const GazeVector3 &amp;gaze_origin_cam, const GazeVector3 &amp;raw_gaze_dir_cam, const GazeVector2 &amp;target_pixel, GazeCalibration &amp;out_calib) const</argsstring>
+        <name>calibrate_2d_bias</name>
+        <qualifiedname>Gaze::ProjectionEngine::calibrate_2d_bias</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>gaze_origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>target_pixel</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &amp;</type>
+          <declname>out_calib</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="71" column="10" bodyfile="src/core/projection_engine.cpp" bodystart="149" bodyend="166"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a1ba8797b8d5cf36577b083a2f6257faf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::ProjectionEngine::opencv_to_camera_space</definition>
+        <argsstring>(const GazeVector3 &amp;v_cv) const</argsstring>
+        <name>opencv_to_camera_space</name>
+        <qualifiedname>Gaze::ProjectionEngine::opencv_to_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>v_cv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="77" column="17" bodyfile="src/core/projection_engine.cpp" bodystart="168" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ad01fde35a469f379f2288e7f85d8d93a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_transform3_d" kindref="compound">GazeTransform3D</ref></type>
+        <definition>GazeTransform3D Gaze::ProjectionEngine::get_head_transform_in_camera_space</definition>
+        <argsstring>(const GazeVector3 &amp;opencv_translation, const GazeVector3 &amp;opencv_rvec) const</argsstring>
+        <name>get_head_transform_in_camera_space</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_head_transform_in_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>opencv_translation</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>opencv_rvec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="80" column="21" bodyfile="src/core/projection_engine.cpp" bodystart="172" bodyend="198"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/projection_engine.hpp" line="18" column="1" bodyfile="src/core/projection_engine.hpp" bodystart="18" bodyend="82"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_projection_engine_1af9ebabfc0580663439806e1f681d2abd" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>apply_3d_bias</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a4228b502633393c1d1a36667a71e6f19" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>calibrate_2d_bias</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ac9fdaa4122c965d6eec0813d6aad1ab4" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>calibrate_3d_bias</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a873fb9841c22ba0bcaf032a0aa57ce3a" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>calibration</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1afd883cbd9fac343f99f6c385fc54c8f1" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>estimate_depth_z</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a65c19d9d5d3670f775d3a9a7fc69c229" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_calibration</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae678ec86b05c2be708d5ac65fbc9ee6c" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ab40c4ec2da44a8f6e9b71515fe6a44c0" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_camera_placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ad01fde35a469f379f2288e7f85d8d93a" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_head_transform_in_camera_space</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a3b8d0f18b4d47f765cc3d371d8bfa456" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae0f64afb19d1f4d0811a7f801e32dfba" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_screen_size_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a1ba8797b8d5cf36577b083a2f6257faf" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>opencv_to_camera_space</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a013fb345bf2fca1f5441330d1dde6ba6" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>pixel_to_millimeter</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a7bf651918a4b21f13e06e2fc401f86f8" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ad399492874b1f41427e083e64e2e6d76" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>project_gaze</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a6566993e238a96000ecff46c45e3377d" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>ProjectionEngine</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a1e813f55c0cfb6c5670a61efb727c280" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_mm_to_camera_space</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ac53cea030b5da1316b6cb1990b736e43" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1aa079b529b616768a4c703394c2d41f0e" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_size_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae1b3489ea4bb2544af614e3724b09cb4" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_calibration</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1aae392df178118a39b5ea9f68585eae12" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a9af4a8be2ff84ab6c2bd78cf1fae6e66" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_camera_placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1afef2d8d4559f9b8cc3ef423897a3b03e" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1abf2cc16a956e2243f8a3f1d07d59c45f" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_screen_size_pixels</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

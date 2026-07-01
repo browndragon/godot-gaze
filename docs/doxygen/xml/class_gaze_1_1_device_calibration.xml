@@ -1,0 +1,574 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_device_calibration" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::DeviceCalibration</compoundname>
+    <basecompoundref refid="class_gaze_1_1_calibration" prot="public" virt="non-virtual">Gaze::Calibration</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1ae19347571492c25c2eecf70f79dec708" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::DeviceCalibration::pixel_size_mm_override</definition>
+        <argsstring></argsstring>
+        <name>pixel_size_mm_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::pixel_size_mm_override</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>(-1.0, -1.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="78" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a80ce95d2589c77ccc77b07b2ca925c0b" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::DeviceCalibration::camera_offset_override</definition>
+        <argsstring></argsstring>
+        <name>camera_offset_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::camera_offset_override</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(-1000.0, -1000.0, -1000.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="79" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1acdc6fec0722ecc8fc871c2a9dc97c2fb" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::camera_tilt_override</definition>
+        <argsstring></argsstring>
+        <name>camera_tilt_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::camera_tilt_override</qualifiedname>
+        <initializer>= -1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="80" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a5a0d601d4a0a615d33a46e91fbd1a3a1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::bias_pitch</definition>
+        <argsstring></argsstring>
+        <name>bias_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::bias_pitch</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="82" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a9ad0aad92cc9b08ff25f9c5fb8d2bf5b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::bias_yaw</definition>
+        <argsstring></argsstring>
+        <name>bias_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::bias_yaw</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="83" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1aa81f545af28807fa6dfd0823b4aa3336" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::scale_yaw</definition>
+        <argsstring></argsstring>
+        <name>scale_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::scale_yaw</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="84" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a2531a6c09d3d32fcffd29b0a65b1964b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::scale_pitch</definition>
+        <argsstring></argsstring>
+        <name>scale_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::scale_pitch</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="85" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a7338df7e1e59e6ddfff18c86196553a8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::bias_pixel_x</definition>
+        <argsstring></argsstring>
+        <name>bias_pixel_x</name>
+        <qualifiedname>Gaze::DeviceCalibration::bias_pixel_x</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="86" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_device_calibration_1a7e171010ca81e7e04b259237a8aa760b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::bias_pixel_y</definition>
+        <argsstring></argsstring>
+        <name>bias_pixel_y</name>
+        <qualifiedname>Gaze::DeviceCalibration::bias_pixel_y</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="87" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1abcc682eb49e0f1ef2dbaa031ab9afa94" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::DeviceCalibration::DeviceCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>DeviceCalibration</name>
+        <qualifiedname>Gaze::DeviceCalibration::DeviceCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="90" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1aa5415b1d43c27840c4fc1cacff126a5d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::DeviceCalibration::get_pixel_size_mm</definition>
+        <argsstring>(const GazeVector2 &amp;default_size) const override</argsstring>
+        <name>get_pixel_size_mm</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_pixel_size_mm</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1a8f8228e14d6fb3ac3e366587476aa792">get_pixel_size_mm</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>default_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="92" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="92" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a475070483575bc38ac9927285f1b8c11" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::DeviceCalibration::get_camera_offset</definition>
+        <argsstring>(const GazeVector3 &amp;default_offset) const override</argsstring>
+        <name>get_camera_offset</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_camera_offset</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1ad4fab2aec1e342a0d16ef96dbe06469f">get_camera_offset</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>default_offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="99" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="99" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a73688e0c2d727864a9e8f6d3b722bfdd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_camera_tilt</definition>
+        <argsstring>(double default_tilt) const override</argsstring>
+        <name>get_camera_tilt</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_camera_tilt</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1aab79f8c40a35fe0d874b07861ef1eb4b">get_camera_tilt</reimplements>
+        <param>
+          <type>double</type>
+          <declname>default_tilt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="106" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="106" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a757a873bd1538b072469b15ec44a6298" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_bias_pitch</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_bias_pitch</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1a5d04a83d788169c03c6dab051fb59c7a">get_bias_pitch</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="113" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1ad7bcc348790b14a5d28ff9db1e159375" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_bias_yaw</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_bias_yaw</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1aaba25679eb4bb215eca717f531889dd6">get_bias_yaw</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="114" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="114" bodyend="114"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a03385fbb8830b2e6d785696cff3d6139" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_scale_yaw</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_scale_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_scale_yaw</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1a002d2a5485d1014448299893c22bf91e">get_scale_yaw</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="115" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="115" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1aa0cd8edb58660932521f56e82871e2ec" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_scale_pitch</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_scale_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_scale_pitch</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1a7613f756f9b8567551a536e0ea4d35da">get_scale_pitch</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="116" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="116" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a91da7ec6a90d1cb4a8b14356e87fab03" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_bias_pixel_x</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_pixel_x</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_bias_pixel_x</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1a144471e6f0f655d940c1bd9fa3019052">get_bias_pixel_x</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="117" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="117" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1aed20cea37266274292630b5337fe92a0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_bias_pixel_y</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_pixel_y</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_bias_pixel_y</qualifiedname>
+        <reimplements refid="class_gaze_1_1_calibration_1aeaa6ec83712025f79c88b8e37b49d869">get_bias_pixel_y</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="118" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="118" bodyend="118"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1ac860325b9d19687f6d5515640d129da1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::DeviceCalibration::get_pixel_size_mm_override</definition>
+        <argsstring>() const</argsstring>
+        <name>get_pixel_size_mm_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_pixel_size_mm_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="121" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a70bc98ec662122ed1a50c36884b863c3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_pixel_size_mm_override</definition>
+        <argsstring>(const GazeVector2 &amp;val)</argsstring>
+        <name>set_pixel_size_mm_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_pixel_size_mm_override</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="122" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="122" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a5272cd627ab4478b519f3421c4a47188" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::DeviceCalibration::get_camera_offset_override</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_offset_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_camera_offset_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="124" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="124" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a3d713f2d0523b037ccd19b6da58bb0c8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_camera_offset_override</definition>
+        <argsstring>(const GazeVector3 &amp;val)</argsstring>
+        <name>set_camera_offset_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_camera_offset_override</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="125" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="125" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1ae109a59dcd67255663a067a135457682" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::DeviceCalibration::get_camera_tilt_override</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_tilt_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::get_camera_tilt_override</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="127" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="127" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a4e7725ce3908a61d1ad8a4b4a889d2b9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_camera_tilt_override</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_camera_tilt_override</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_camera_tilt_override</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="128" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="128" bodyend="128"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1abd2d5c51ceeaca1a8f5564eb6b2168e0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_bias_pitch</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_bias_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_bias_pitch</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="130" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a07b0bf2dc93ebf28a358c02100730ca1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_bias_yaw</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_bias_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_bias_yaw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="131" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a8ff4c45084814cd600d63e4280857d04" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_scale_yaw</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_scale_yaw</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_scale_yaw</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="132" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="132" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a75c840492b3dfd6728d742cd9f8ec0c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_scale_pitch</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_scale_pitch</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_scale_pitch</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="133" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="133" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a35caf2b3a049ac6833803f8fd6f85d15" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_bias_pixel_x</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_bias_pixel_x</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_bias_pixel_x</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="134" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="134" bodyend="134"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_device_calibration_1a26dae1e00aa3360daba946ed41d65e35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DeviceCalibration::set_bias_pixel_y</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_bias_pixel_y</name>
+        <qualifiedname>Gaze::DeviceCalibration::set_bias_pixel_y</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration.hpp" line="135" column="10" bodyfile="src/core/gaze_calibration.hpp" bodystart="135" bodyend="135"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::Calibration</label>
+        <link refid="class_gaze_1_1_calibration"/>
+      </node>
+      <node id="1">
+        <label>Gaze::DeviceCalibration</label>
+        <link refid="class_gaze_1_1_device_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::Calibration</label>
+        <link refid="class_gaze_1_1_calibration"/>
+      </node>
+      <node id="1">
+        <label>Gaze::DeviceCalibration</label>
+        <link refid="class_gaze_1_1_device_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/gaze_calibration.hpp" line="75" column="1" bodyfile="src/core/gaze_calibration.hpp" bodystart="75" bodyend="136"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_device_calibration_1a5a0d601d4a0a615d33a46e91fbd1a3a1" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>bias_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a7338df7e1e59e6ddfff18c86196553a8" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>bias_pixel_x</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a7e171010ca81e7e04b259237a8aa760b" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>bias_pixel_y</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a9ad0aad92cc9b08ff25f9c5fb8d2bf5b" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>bias_yaw</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a80ce95d2589c77ccc77b07b2ca925c0b" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>camera_offset_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1acdc6fec0722ecc8fc871c2a9dc97c2fb" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>camera_tilt_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1abcc682eb49e0f1ef2dbaa031ab9afa94" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>DeviceCalibration</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a757a873bd1538b072469b15ec44a6298" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_bias_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a91da7ec6a90d1cb4a8b14356e87fab03" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_bias_pixel_x</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1aed20cea37266274292630b5337fe92a0" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_bias_pixel_y</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1ad7bcc348790b14a5d28ff9db1e159375" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_bias_yaw</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a475070483575bc38ac9927285f1b8c11" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_camera_offset</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a5272cd627ab4478b519f3421c4a47188" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>get_camera_offset_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a73688e0c2d727864a9e8f6d3b722bfdd" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_camera_tilt</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1ae109a59dcd67255663a067a135457682" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>get_camera_tilt_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1aa5415b1d43c27840c4fc1cacff126a5d" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_pixel_size_mm</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1ac860325b9d19687f6d5515640d129da1" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>get_pixel_size_mm_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1aa0cd8edb58660932521f56e82871e2ec" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_scale_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a03385fbb8830b2e6d785696cff3d6139" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>get_scale_yaw</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1ae19347571492c25c2eecf70f79dec708" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>pixel_size_mm_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a2531a6c09d3d32fcffd29b0a65b1964b" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>scale_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1aa81f545af28807fa6dfd0823b4aa3336" prot="private" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>scale_yaw</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1abd2d5c51ceeaca1a8f5564eb6b2168e0" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_bias_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a35caf2b3a049ac6833803f8fd6f85d15" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_bias_pixel_x</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a26dae1e00aa3360daba946ed41d65e35" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_bias_pixel_y</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a07b0bf2dc93ebf28a358c02100730ca1" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_bias_yaw</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a3d713f2d0523b037ccd19b6da58bb0c8" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_camera_offset_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a4e7725ce3908a61d1ad8a4b4a889d2b9" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_camera_tilt_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a70bc98ec662122ed1a50c36884b863c3" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_pixel_size_mm_override</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a75c840492b3dfd6728d742cd9f8ec0c5" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_scale_pitch</name></member>
+      <member refid="class_gaze_1_1_device_calibration_1a8ff4c45084814cd600d63e4280857d04" prot="public" virt="non-virtual"><scope>Gaze::DeviceCalibration</scope><name>set_scale_yaw</name></member>
+      <member refid="class_gaze_1_1_calibration_1a41744c6237442d9d8c756ac7ab92056f" prot="public" virt="virtual"><scope>Gaze::DeviceCalibration</scope><name>~Calibration</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

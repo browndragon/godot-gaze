@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_basis3_d" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeBasis3D</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_basis3_d_1a882a5f11f602fe4061a4ed5af68fa98d" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeBasis3D::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="135" column="17" bodyfile="src/core/math_defs.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_basis3_d_1ad1d8399f9cceb904afb310250f18eaa9" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeBasis3D::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="136" column="17" bodyfile="src/core/math_defs.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_basis3_d_1a9758e68242053c8f413f0686ccd04d06" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>Gaze::GazeBasis3D::z</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="137" column="17" bodyfile="src/core/math_defs.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1adc71e85a3b966135c5a1846b9fea8112" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::GazeBasis3D::GazeBasis3D</definition>
+        <argsstring>()</argsstring>
+        <name>GazeBasis3D</name>
+        <qualifiedname>Gaze::GazeBasis3D::GazeBasis3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="139" column="5" bodyfile="src/core/math_defs.hpp" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a1bbc516296b5dadae422277a0401c4d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::GazeBasis3D::GazeBasis3D</definition>
+        <argsstring>(const GazeVector3 &amp;px, const GazeVector3 &amp;py, const GazeVector3 &amp;pz)</argsstring>
+        <name>GazeBasis3D</name>
+        <qualifiedname>Gaze::GazeBasis3D::GazeBasis3D</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>py</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>pz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="140" column="5" bodyfile="src/core/math_defs.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1ae2310cd906a7587ea2bd1a7461899535" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::multiply_vector</definition>
+        <argsstring>(const GazeVector3 &amp;v) const</argsstring>
+        <name>multiply_vector</name>
+        <qualifiedname>Gaze::GazeBasis3D::multiply_vector</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="142" column="17" bodyfile="src/core/math_defs.hpp" bodystart="142" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1aa5f83be40ea4bf12cf2303e851a65927" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>GazeBasis3D</type>
+        <definition>GazeBasis3D Gaze::GazeBasis3D::operator*</definition>
+        <argsstring>(const GazeBasis3D &amp;other) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::GazeBasis3D::operator*</qualifiedname>
+        <param>
+          <type>const GazeBasis3D &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="146" column="17" bodyfile="src/core/math_defs.hpp" bodystart="146" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a66f4348637e49660c7d8f794b119a06b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::get_euler_deg</definition>
+        <argsstring>() const</argsstring>
+        <name>get_euler_deg</name>
+        <qualifiedname>Gaze::GazeBasis3D::get_euler_deg</qualifiedname>
+        <briefdescription>
+<para>Decomposes the basis into ZYX Euler angles (pitch, yaw, roll in degrees). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>NON-STANDARD BEHAVIOR: Choosing a standard Euler decomposition for a face pointing towards the camera results in yaw being close to 180 degrees. At this boundary, standard ZYX decompositions (which restrict yaw to [-90, 90] degrees) experience severe gimbal-lock/sign-flipping discontinuities. This function is specialized to force the decomposition to select the branch where cos(yaw) &lt; 0 (yaw centered around 180 degrees), ensuring smooth angles during direct-to-camera tracking. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="178" column="17" bodyfile="src/core/math_defs.hpp" bodystart="178" bodyend="194"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1afcf1681d911879f52d45445d4a436df9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeBasis3D::get_euler_gaze_model_deg</definition>
+        <argsstring>() const</argsstring>
+        <name>get_euler_gaze_model_deg</name>
+        <qualifiedname>Gaze::GazeBasis3D::get_euler_gaze_model_deg</qualifiedname>
+        <briefdescription>
+<para>Decomposes the basis into standard ZYX Euler angles (pitch, yaw, roll in degrees). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Standard ZYX decomposition that restricts the yaw to [-90, 90] degrees (choosing the branch where cos(yaw) &gt; 0). Used specifically for feeding inputs to the ONNX gaze model which expects a standard coordinate convention (yaw centered around 0 degrees). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="203" column="17" bodyfile="src/core/math_defs.hpp" bodystart="203" bodyend="217"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a56f072b4e44e4056d0b3cc6a171c3016" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GazeBasis3D</type>
+        <definition>static GazeBasis3D Gaze::GazeBasis3D::from_euler_zyx</definition>
+        <argsstring>(double pitch_deg, double yaw_deg, double roll_deg)</argsstring>
+        <name>from_euler_zyx</name>
+        <qualifiedname>Gaze::GazeBasis3D::from_euler_zyx</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>pitch_deg</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>yaw_deg</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>roll_deg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="154" column="24" bodyfile="src/core/math_defs.hpp" bodystart="154" bodyend="166"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::GazeBasis3D</label>
+        <link refid="struct_gaze_1_1_gaze_basis3_d"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>x</edgelabel>
+          <edgelabel>y</edgelabel>
+          <edgelabel>z</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/math_defs.hpp" line="134" column="1" bodyfile="src/core/math_defs.hpp" bodystart="134" bodyend="218"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a56f072b4e44e4056d0b3cc6a171c3016" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>from_euler_zyx</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1adc71e85a3b966135c5a1846b9fea8112" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a1bbc516296b5dadae422277a0401c4d3" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a66f4348637e49660c7d8f794b119a06b" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>get_euler_deg</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1afcf1681d911879f52d45445d4a436df9" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>get_euler_gaze_model_deg</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1ae2310cd906a7587ea2bd1a7461899535" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>multiply_vector</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1aa5f83be40ea4bf12cf2303e851a65927" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>operator*</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a882a5f11f602fe4061a4ed5af68fa98d" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1ad1d8399f9cceb904afb310250f18eaa9" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>y</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a9758e68242053c8f413f0686ccd04d06" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

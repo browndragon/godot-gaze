@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_gaze_model" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>Gaze::GazeModel</compoundname>
+    <derivedcompoundref refid="class_gaze_1_1_open_c_v_gaze_model" prot="public" virt="non-virtual">Gaze::OpenCVGazeModel</derivedcompoundref>
+    <derivedcompoundref refid="class_gaze_1_1_web_gaze_model" prot="public" virt="non-virtual">Gaze::WebGazeModel</derivedcompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::GazeModel::~GazeModel</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeModel</name>
+        <qualifiedname>Gaze::GazeModel::~GazeModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_model.hpp" line="19" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_gaze_model_1a10bedfd9295068dc8671cc4d65c41c77" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::GazeModel::initialize</definition>
+        <argsstring>()=0</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::GazeModel::initialize</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1a715ddd569d4a3580e3e632d466c47687">initialize</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_web_gaze_model_1a6f63c37e461cd6a18e641a80d080cd9f">initialize</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_model.hpp" line="22" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_gaze_model_1a6ea251526afb477d2e78ae4a0646673d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::GazeModel::estimate_raw_gaze</definition>
+        <argsstring>(const EyeCrops &amp;crops, GazeVector3 &amp;out_gaze_dir_cv)=0</argsstring>
+        <name>estimate_raw_gaze</name>
+        <qualifiedname>Gaze::GazeModel::estimate_raw_gaze</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1a1c6f1435328c811f7192401a79891a40">estimate_raw_gaze</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_web_gaze_model_1a0ca18aaad8a0c8edc021693040c48496">estimate_raw_gaze</reimplementedby>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
+          <declname>crops</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>out_gaze_dir_cv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_model.hpp" line="26" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_gaze_model_1a128e54ad723e438c2840b18d83e5b902" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::GazeModel::set_config</definition>
+        <argsstring>(const PipelineConfig &amp;config)</argsstring>
+        <name>set_config</name>
+        <qualifiedname>Gaze::GazeModel::set_config</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1ae6c1e63050c4c8eb6dca6f3a2c5111a6">set_config</reimplementedby>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_model.hpp" line="29" column="18" bodyfile="src/core/gaze_model.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Gaze::GazeModel</label>
+        <link refid="class_gaze_1_1_gaze_model"/>
+      </node>
+      <node id="2">
+        <label>Gaze::OpenCVGazeModel</label>
+        <link refid="class_gaze_1_1_open_c_v_gaze_model"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Gaze::WebGazeModel</label>
+        <link refid="class_gaze_1_1_web_gaze_model"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="src/core/gaze_model.hpp" line="17" column="1" bodyfile="src/core/gaze_model.hpp" bodystart="17" bodyend="30"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_gaze_model_1a6ea251526afb477d2e78ae4a0646673d" prot="public" virt="pure-virtual"><scope>Gaze::GazeModel</scope><name>estimate_raw_gaze</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a10bedfd9295068dc8671cc4d65c41c77" prot="public" virt="pure-virtual"><scope>Gaze::GazeModel</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a128e54ad723e438c2840b18d83e5b902" prot="public" virt="virtual"><scope>Gaze::GazeModel</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" prot="public" virt="virtual"><scope>Gaze::GazeModel</scope><name>~GazeModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

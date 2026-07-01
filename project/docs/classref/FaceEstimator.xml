@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="FaceEstimator" inherits="Node3D">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="initialize_estimator">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="stop_estimator">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="process_frame">
+			<return type="bool"></return>
+			<param index="0" name="frame" type="const Gaze::Frame &amp;"></param>
+			<param index="1" name="out_crops" type="Gaze::EyeCrops &amp;"></param>
+			<description></description>
+		</method>
+		<method name="set_yunet_model_path">
+			<return type="void"></return>
+			<param index="0" name="path" type="String"></param>
+			<description></description>
+		</method>
+		<method name="get_yunet_model_path">
+			<return type="String"></return>
+			<description></description>
+		</method>
+		<method name="set_focal_length">
+			<return type="void"></return>
+			<param index="0" name="focal" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_focal_length">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_has_detected_face">
+			<return type="void"></return>
+			<param index="0" name="detected" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_has_detected_face">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_pipeline_config">
+			<return type="void"></return>
+			<param index="0" name="config" type="const Gaze::PipelineConfig &amp;"></param>
+			<description></description>
+		</method>
+		<method name="feed_pose_web">
+			<return type="void"></return>
+			<param index="0" name="detected" type="bool"></param>
+			<param index="1" name="translation" type="Vector3"></param>
+			<param index="2" name="rotation" type="Vector3"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

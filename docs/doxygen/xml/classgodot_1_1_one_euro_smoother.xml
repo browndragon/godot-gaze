@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_one_euro_smoother" kind="class" language="C++" prot="public">
+    <compoundname>godot::OneEuroSmoother</compoundname>
+    <basecompoundref refid="classgodot_1_1_smoother" prot="public" virt="non-virtual">godot::Smoother</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_one_euro_smoother_1a3189b144c5a71eacd835d63ad2eec8ea" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::min_cutoff</definition>
+        <argsstring></argsstring>
+        <name>min_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::min_cutoff</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="25" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_one_euro_smoother_1a8d333ea987add402ca3c18cc9fa9d14e" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::beta</definition>
+        <argsstring></argsstring>
+        <name>beta</name>
+        <qualifiedname>godot::OneEuroSmoother::beta</qualifiedname>
+        <initializer>= 0.01</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="26" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_one_euro_smoother_1ac9d4e86796064fe6ef38c8e0f59a1a1a" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::d_cutoff</definition>
+        <argsstring></argsstring>
+        <name>d_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::d_cutoff</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="27" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1af85a179f45d5e4479e4a812757e7da54" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::OneEuroSmoother::GDCLASS</definition>
+        <argsstring>(OneEuroSmoother, Smoother)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::OneEuroSmoother::GDCLASS</qualifiedname>
+        <param>
+          <type>OneEuroSmoother</type>
+        </param>
+        <param>
+          <type>Smoother</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="22" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1adae64d3dd3e92496ea7acdf0ecd817fd" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::OneEuroSmoother::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::OneEuroSmoother::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="30" column="17" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="28" bodyend="39"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a0a4534c845dbed89c54384214691106c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::OneEuroSmoother::OneEuroSmoother</definition>
+        <argsstring>()</argsstring>
+        <name>OneEuroSmoother</name>
+        <qualifiedname>godot::OneEuroSmoother::OneEuroSmoother</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="33" column="5" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a5728016d6f2cdc84edc536fcca1b2c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::OneEuroSmoother::~OneEuroSmoother</definition>
+        <argsstring>()</argsstring>
+        <name>~OneEuroSmoother</name>
+        <qualifiedname>godot::OneEuroSmoother::~OneEuroSmoother</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="34" column="13" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a030c36dec2ad83879c24522665afaf22" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Array</type>
+        <definition>Array godot::OneEuroSmoother::_smoother_init</definition>
+        <argsstring>() override</argsstring>
+        <name>_smoother_init</name>
+        <qualifiedname>godot::OneEuroSmoother::_smoother_init</qualifiedname>
+        <reimplements refid="classgodot_1_1_smoother_1abf4957e6269eb032ac0a276a42976869">_smoother_init</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="36" column="19" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="45" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a4e49ed16bcd81ad7aa388eea3011ed64" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Variant</type>
+        <definition>Variant godot::OneEuroSmoother::_smoother_next</definition>
+        <argsstring>(Array state, double tstamp, Variant value) override</argsstring>
+        <name>_smoother_next</name>
+        <qualifiedname>godot::OneEuroSmoother::_smoother_next</qualifiedname>
+        <reimplements refid="classgodot_1_1_smoother_1a80adb1ae0d3a54fafa0a3d85eb54dccb">_smoother_next</reimplements>
+        <param>
+          <type>Array</type>
+          <declname>state</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>tstamp</declname>
+        </param>
+        <param>
+          <type>Variant</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="37" column="21" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="67" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a6b102e2e6cd0e722ed6cadf0b2d1a663" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::OneEuroSmoother::set_min_cutoff</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_min_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::set_min_cutoff</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="39" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1ad65d1672b477a99b45efeea243f576f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::get_min_cutoff</definition>
+        <argsstring>() const</argsstring>
+        <name>get_min_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::get_min_cutoff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="40" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a394bfd4e9c6f1261480946328466779b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::OneEuroSmoother::set_beta</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_beta</name>
+        <qualifiedname>godot::OneEuroSmoother::set_beta</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="42" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="102" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1aa9827dc5d4841bd633a2d1df0bad8db7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::get_beta</definition>
+        <argsstring>() const</argsstring>
+        <name>get_beta</name>
+        <qualifiedname>godot::OneEuroSmoother::get_beta</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="43" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1af4f7ec165937d1ac268303b756d30eca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::OneEuroSmoother::set_d_cutoff</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_d_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::set_d_cutoff</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="45" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a44ec1f9eb6656413474a931abb48f74a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::OneEuroSmoother::get_d_cutoff</definition>
+        <argsstring>() const</argsstring>
+        <name>get_d_cutoff</name>
+        <qualifiedname>godot::OneEuroSmoother::get_d_cutoff</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="46" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="106" bodyend="106"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::OneEuroSmoother</label>
+        <link refid="classgodot_1_1_one_euro_smoother"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>godot::Smoother</label>
+        <link refid="classgodot_1_1_smoother"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::OneEuroSmoother</label>
+        <link refid="classgodot_1_1_one_euro_smoother"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>godot::Smoother</label>
+        <link refid="classgodot_1_1_smoother"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/one_euro_smoother.hpp" line="21" column="1" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="21" bodyend="47"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_one_euro_smoother_1adae64d3dd3e92496ea7acdf0ecd817fd" prot="protected" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a030c36dec2ad83879c24522665afaf22" prot="public" virt="virtual"><scope>godot::OneEuroSmoother</scope><name>_smoother_init</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a4e49ed16bcd81ad7aa388eea3011ed64" prot="public" virt="virtual"><scope>godot::OneEuroSmoother</scope><name>_smoother_next</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a8d333ea987add402ca3c18cc9fa9d14e" prot="private" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>beta</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1ac9d4e86796064fe6ef38c8e0f59a1a1a" prot="private" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>d_cutoff</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1af85a179f45d5e4479e4a812757e7da54" prot="private" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1aa9827dc5d4841bd633a2d1df0bad8db7" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>get_beta</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a44ec1f9eb6656413474a931abb48f74a" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>get_d_cutoff</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1ad65d1672b477a99b45efeea243f576f4" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>get_min_cutoff</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a3189b144c5a71eacd835d63ad2eec8ea" prot="private" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>min_cutoff</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a0a4534c845dbed89c54384214691106c" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>OneEuroSmoother</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a394bfd4e9c6f1261480946328466779b" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>set_beta</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1af4f7ec165937d1ac268303b756d30eca" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>set_d_cutoff</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a6b102e2e6cd0e722ed6cadf0b2d1a663" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>set_min_cutoff</name></member>
+      <member refid="classgodot_1_1_smoother_1a8ff45ff6b0bb8624c18b35c78c07cc50" prot="public" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>Smoother</name></member>
+      <member refid="classgodot_1_1_one_euro_smoother_1a5728016d6f2cdc84edc536fcca1b2c3d" prot="public" virt="virtual"><scope>godot::OneEuroSmoother</scope><name>~OneEuroSmoother</name></member>
+      <member refid="classgodot_1_1_smoother_1a2c7df7ae64c532be1cbab9614b9c8a43" prot="public" virt="virtual"><scope>godot::OneEuroSmoother</scope><name>~Smoother</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeDeviceCalibration" inherits="godot::GazeCalibration">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_device_impl">
+			<return type="std::shared_ptr&lt; Gaze::DeviceCalibration &gt;"></return>
+			<description></description>
+		</method>
+		<method name="set_pixel_size_mm_override">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm_override">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_offset_override">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_offset_override">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_tilt_override">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt_override">
+			<return type="double"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

@@ -1,4 +1,4 @@
-# Helper script to test the GazeTracker GDExtension module integration.
+# Testing toy that draws a ray from center screen to the projected head pose ("nose gaze") and eye gaze.
 extends Node2D
 
 var tracker: GazeTracker = null
@@ -70,18 +70,7 @@ func _process(_delta):
 			nose_gaze_pos = Vector2.ZERO
 			
 		# 2. Unified Eye Gaze projection
-		var gaze_origin = tracker.get_gaze_origin()
-		var gaze_dir = tracker.get_gaze_direction()
-		if tracker.debug_logging_frames != 0:
-			print("[GazeTracker Debug] -- Starting Eye Gaze --")
-		var gaze_pixel = tracker.project_gaze_ray_to_viewport(gaze_origin, gaze_dir)
-		if gaze_pixel != Vector2.INF:
-			# TODO: Refactor tracking loop into a multi-component architecture so that 
-			# GDScript authors get filtered coordinates by default without manually calling 
-			# filter_gaze_coordinate (see project/addons/godot-gaze/TODO.md ## Multi-Component Architecture Redesign)
-			eye_gaze_pos = tracker.filter_gaze_coordinate(gaze_pixel)
-		else:
-			eye_gaze_pos = Vector2.ZERO
+		eye_gaze_pos = tracker.get_latest_filtered_gaze()
 	else:
 		eye_gaze_pos = Vector2.ZERO
 		nose_gaze_pos = Vector2.ZERO
@@ -156,5 +145,3 @@ func _on_lifecycle_changed(state):
 			status_label.text = "Status: Running"
 		4: # GazeTracker.LIFECYCLE_ERROR
 			status_label.text = "Status: Error / Permission Denied"
-
- 

@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__pipeline__config_8cpp" kind="file" language="C++">
+    <compoundname>gaze_pipeline_config.cpp</compoundname>
+    <includes refid="gaze__pipeline__config_8hpp" local="yes">gaze_pipeline_config.hpp</includes>
+    <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <incdepgraph>
+      <node id="5">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="4">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/godot/gaze_pipeline_config.cpp</label>
+        <link refid="gaze__pipeline__config_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gaze__pipeline__config_8hpp" kindref="compound">gaze_pipeline_config.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_pitch_t_gain&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_pitch_t_gain);</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_pitch_t_gain&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_pitch_t_gain);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;pitch_t_gain&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_pitch_t_gain&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_pitch_t_gain&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_yaw_t_gain&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_yaw_t_gain);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_yaw_t_gain&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_yaw_t_gain);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;yaw_t_gain&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_yaw_t_gain&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_yaw_t_gain&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_nose_z&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_nose_z);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_nose_z&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_nose_z);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;nose_z&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_nose_z&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_nose_z&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_ipd_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_ipd_mm);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_ipd_mm&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_ipd_mm);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;ipd_mm&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_ipd_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_ipd_mm&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_face_detect_width&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_face_detect_width);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_face_detect_width&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_face_detect_width);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;face_detect_width&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_face_detect_width&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_face_detect_width&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_face_detect_height&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;val&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_face_detect_height);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_face_detect_height&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_face_detect_height);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;face_detect_height&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_face_detect_height&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_face_detect_height&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_desired_camera_size&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;size&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::set_desired_camera_size);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_desired_camera_size&quot;</highlight><highlight class="normal">),<sp/>&amp;GazePipelineConfig::get_desired_camera_size);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I,<sp/></highlight><highlight class="stringliteral">&quot;desired_camera_size&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_desired_camera_size&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_desired_camera_size&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_pitch_t_gain(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.pitch_t_gain<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_pitch_t_gain()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.pitch_t_gain;<sp/>}</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_yaw_t_gain(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.yaw_t_gain<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_yaw_t_gain()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.yaw_t_gain;<sp/>}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_nose_z(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.nose_z<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_nose_z()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.nose_z;<sp/>}</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_ipd_mm(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.ipd_mm<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_ipd_mm()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.ipd_mm;<sp/>}</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_face_detect_width(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.face_detect_width<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_face_detect_width()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.face_detect_width;<sp/>}</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_face_detect_height(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>val)<sp/>{<sp/>config.face_detect_height<sp/>=<sp/>val;<sp/>}</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>GazePipelineConfig::get_face_detect_height()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config.face_detect_height;<sp/>}</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazePipelineConfig::set_desired_camera_size(Vector2i<sp/>size)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>config.desired_camera_width<sp/>=<sp/>size.x;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>config.desired_camera_height<sp/>=<sp/>size.y;</highlight></codeline>
+<codeline lineno="57"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal">Vector2i<sp/>GazePipelineConfig::get_desired_camera_size()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2i(config.desired_camera_width,<sp/>config.desired_camera_height);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_pipeline_config.cpp"/>
+  </compounddef>
+</doxygen>

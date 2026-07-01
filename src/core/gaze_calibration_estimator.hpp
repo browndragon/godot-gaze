@@ -12,14 +12,12 @@ namespace Gaze {
 struct CalibrationSample {
     GazeVector3 gaze_origin;      // Eye center in camera space, mm
     GazeVector3 gaze_direction;   // Raw gaze direction unit vector in camera space
-    GazeVector2 target_pixel_ppix; // Target position in physical screen pixels
+    GazeVector2 target_pos_mm;    // Target position in screen millimeters (relative to center: +X right, +Y up)
 };
 
 struct CalibrationWeights {
     // Prior weights (regularization factors)
     // Locked to 1e9 to prevent physical parameters from shifting during calibration
-    double aspect_prior = 1e9;
-    double size_prior = 1e9;
     double offset_x = 1e9;
     double offset_y = 1e9;
     double offset_z = 1e9;
@@ -27,8 +25,6 @@ struct CalibrationWeights {
     double bias = 10.0;
 
     // Solver parameter boundaries
-    double min_pixel_size = 0.05;
-    double max_pixel_size = 2.0;
     double max_camera_offset_x = 300.0;
     double min_camera_offset_y = -150.0;
     double max_camera_offset_y = 400.0;
@@ -38,7 +34,6 @@ struct CalibrationWeights {
     double max_bias = 0.6;
 
     // Initial simplex step sizes
-    double step_pixel_size = 0.02;
     double step_camera_offset = 10.0;
     double step_camera_tilt = 3.0;
     double step_bias = 0.03;
@@ -53,11 +48,10 @@ class CalibrationEstimator {
 public:
     static bool estimate(
         const std::vector<CalibrationSample>& samples,
-        const GazeVector2& screen_size_pixels,
-        const GazeVector2& initial_pixel_size_mm,
+        const GazeVector2& screen_size_mm,
         const GazeVector3& initial_camera_offset,
         double initial_camera_tilt_deg,
-        GazeVector2& out_pixel_size_mm,
+        bool freeze_camera_params,
         GazeVector3& out_camera_offset,
         double& out_camera_tilt_deg,
         double& out_bias_pitch,

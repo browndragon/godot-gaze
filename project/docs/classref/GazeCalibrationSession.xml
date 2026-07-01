@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeCalibrationSession" inherits="Resource">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="add_sample">
+			<return type="void"></return>
+			<param index="0" name="target_pixel_px" type="Vector2"></param>
+			<param index="1" name="gaze_origin" type="Vector3"></param>
+			<param index="2" name="gaze_direction" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="clear">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="get_sample_count">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="calculate_calibration">
+			<return type="Ref&lt; GazeCalibration &gt;"></return>
+			<param index="0" name="tracker" type="GazeTracker *"></param>
+			<description></description>
+		</method>
+		<method name="set_freeze_camera_params">
+			<return type="void"></return>
+			<param index="0" name="p_freeze" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_freeze_camera_params">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_target_pixels_px">
+			<return type="void"></return>
+			<param index="0" name="arr" type="const Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_target_pixels_px">
+			<return type="Array"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_origins">
+			<return type="void"></return>
+			<param index="0" name="arr" type="const Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_origins">
+			<return type="Array"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_directions">
+			<return type="void"></return>
+			<param index="0" name="arr" type="const Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_directions">
+			<return type="Array"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

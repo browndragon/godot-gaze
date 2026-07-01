@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_calibration_sample" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::CalibrationSample</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_sample_1a105587935dd9c32ee158fde03944348d" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::CalibrationSample::gaze_origin</definition>
+        <argsstring></argsstring>
+        <name>gaze_origin</name>
+        <qualifiedname>Gaze::CalibrationSample::gaze_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="13" column="17" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_sample_1a17dc104f81d740b9bb7ad39f6af20d97" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::CalibrationSample::gaze_direction</definition>
+        <argsstring></argsstring>
+        <name>gaze_direction</name>
+        <qualifiedname>Gaze::CalibrationSample::gaze_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="14" column="17" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_sample_1aa66d6517bca7edb45331c82371f8c691" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <definition>GazeVector2 Gaze::CalibrationSample::target_pos_mm</definition>
+        <argsstring></argsstring>
+        <name>target_pos_mm</name>
+        <qualifiedname>Gaze::CalibrationSample::target_pos_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="15" column="17" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::CalibrationSample</label>
+        <link refid="struct_gaze_1_1_calibration_sample"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>gaze_direction</edgelabel>
+          <edgelabel>gaze_origin</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>target_pos_mm</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Gaze::GazeVector2</label>
+        <link refid="struct_gaze_1_1_gaze_vector2"/>
+      </node>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/gaze_calibration_estimator.hpp" line="12" column="1" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="12" bodyend="16"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_calibration_sample_1a17dc104f81d740b9bb7ad39f6af20d97" prot="public" virt="non-virtual"><scope>Gaze::CalibrationSample</scope><name>gaze_direction</name></member>
+      <member refid="struct_gaze_1_1_calibration_sample_1a105587935dd9c32ee158fde03944348d" prot="public" virt="non-virtual"><scope>Gaze::CalibrationSample</scope><name>gaze_origin</name></member>
+      <member refid="struct_gaze_1_1_calibration_sample_1aa66d6517bca7edb45331c82371f8c691" prot="public" virt="non-virtual"><scope>Gaze::CalibrationSample</scope><name>target_pos_mm</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

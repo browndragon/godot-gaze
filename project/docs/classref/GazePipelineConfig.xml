@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazePipelineConfig" inherits="Resource">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_pitch_t_gain">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_pitch_t_gain">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_yaw_t_gain">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_yaw_t_gain">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_nose_z">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_nose_z">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_ipd_mm">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_ipd_mm">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_face_detect_width">
+			<return type="void"></return>
+			<param index="0" name="val" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_face_detect_width">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_face_detect_height">
+			<return type="void"></return>
+			<param index="0" name="val" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_face_detect_height">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="set_desired_camera_size">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2i"></param>
+			<description></description>
+		</method>
+		<method name="get_desired_camera_size">
+			<return type="Vector2i"></return>
+			<description></description>
+		</method>
+		<method name="get_config">
+			<return type="Gaze::PipelineConfig"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

@@ -1,4 +1,4 @@
-# project/addons/godot-gaze/tests/calibrate_and_test.gd
+# Runs calibration, then immediately uses it for the testing toy.
 extends Control
 
 @export var calibration_scene_path: String = "res://addons/godot-gaze/tests/calibration.tscn"

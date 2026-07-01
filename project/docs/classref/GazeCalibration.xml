@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeCalibration" inherits="Resource">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_impl">
+			<return type="std::shared_ptr&lt; Gaze::Calibration &gt;"></return>
+			<description></description>
+		</method>
+		<method name="set_pixel_size_mm">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm_bind">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_offset">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_offset">
+			<return type="Vector3"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_offset_bind">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_tilt">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt">
+			<return type="double"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt_bind">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_bias_pitch">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_bias_pitch">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_bias_yaw">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_bias_yaw">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_bias_pixel_x">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_bias_pixel_x">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_bias_pixel_y">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_bias_pixel_y">
+			<return type="double"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

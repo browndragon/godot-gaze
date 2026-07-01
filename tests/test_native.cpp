@@ -227,6 +227,7 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
         GazeVector3 left_eye;
         GazeVector3 right_eye;
         GazeVector3 gaze_dir;
+        GazeVector3 head_forward;
         GazeVector2 nose_projected;
         GazeVector2 gaze_projected;
         double nose_error_x = 0.0;
@@ -270,6 +271,7 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
 
             // Head forward vector in standard Camera Space (standard forward is -Z in model space, which maps to +Z_cam towards screen)
             GazeVector3 head_forward_cam = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
+            sd.head_forward = head_forward_cam;
 
             // Gaze origin (nose/head center) in standard Camera Space
             GazeVector3 head_center_cam = head_transform.origin;
@@ -407,11 +409,19 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images") {
         CHECK(left->translation.x > right->translation.x);
         CHECK(right->rotation.y > left->rotation.y);
         CHECK(left->gaze_dir.x > right->gaze_dir.x); // +X points user-left, so left is greater
+
+        // Assert direction signs of head forward vector (user looks screen-left -> camera-right +X, user looks screen-right -> camera-left -X)
+        CHECK(left->head_forward.x > 0.1);
+        CHECK(right->head_forward.x < -0.1);
     }
 
     if (top && down) {
         CHECK(top->rotation.x < down->rotation.x);
         CHECK(top->gaze_dir.y > down->gaze_dir.y); // +Y points up, so top is greater
+
+        // Assert direction bounds of head forward vector (pitch is stable and pointing forward/downward)
+        CHECK(std::abs(top->head_forward.y) < 0.25);
+        CHECK(std::abs(down->head_forward.y) < 0.25);
     }
 
     // Eye Spatial Configuration
@@ -684,17 +694,17 @@ TEST_CASE("Testing Web Geometry Scaling and Coordinate Mapping Parity") {
 }
 
 TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping") {
-    // 1. Setup projection engine mock metrics
+    // 1. Setup projection engine mock metrics (MacBook Pro 15" logical sizing)
     Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GazeVector2(3024.0, 1964.0)); // Physical screen width
+    engine.set_screen_size_pixels(Gaze::GazeVector2(1440.0, 900.0)); // Logical screen width
     engine.set_screen_size_mm(Gaze::GazeVector2(300.0, 195.0));      // Physical screen mm
     Gaze::CameraPlacement placement(Gaze::GazeVector3(0.0, 95.5, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
-    // 2. Test standard-DPI window (Scale = 1.0, positioned at 0,0)
+    // 2. Test standard window (positioned at 0,0)
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::derive_configuration(
-            Gaze::GazeVector2(0.0, 0.0),      // Window pos in physical screen pixels
+            Gaze::GazeVector2(0.0, 0.0),      // Window pos in logical screen pixels
             Gaze::GazeVector2(1.0, 1.0),      // Viewport scale
             Gaze::GazeVector2(0.0, 0.0)       // Viewport origin offset
         );
@@ -706,15 +716,15 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping") {
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
         
         REQUIRE(ok);
-        // Center of 3024.0 screen is 1512.0. With win_pos=0 and vp_scale=1, viewport X should be 1512.0
-        CHECK(viewport_pixel.x == doctest::Approx(1512.0));
+        // Center of 1440.0 screen is 720.0. With win_pos=0 and vp_scale=1, viewport X should be 720.0
+        CHECK(viewport_pixel.x == doctest::Approx(720.0));
     }
 
-    // 3. Test High-DPI window (Retina Scale = 2.0, positioned at (360, 164) physical pixels)
+    // 3. Test window positioned at (180, 82) logical pixels
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::derive_configuration(
-            Gaze::GazeVector2(360.0, 164.0),  // Window pos in physical screen pixels
-            Gaze::GazeVector2(2.0, 2.0),      // Viewport scale
+            Gaze::GazeVector2(180.0, 82.0),   // Window pos in logical screen pixels
+            Gaze::GazeVector2(1.0, 1.0),      // Viewport scale
             Gaze::GazeVector2(0.0, 0.0)       // Viewport origin offset
         );
 
@@ -725,19 +735,17 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping") {
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
         
         REQUIRE(ok);
-        // physical screen X = 1512.0
-        // local window physical X = 1512.0 - 360.0 = 1152.0
-        // logical viewport X = 1152.0 / 2.0 = 576.0
-        CHECK(viewport_pixel.x == doctest::Approx(576.0));
+        // logical screen X = 720.0
+        // local window X = 720.0 - 180.0 = 540.0
+        CHECK(viewport_pixel.x == doctest::Approx(540.0));
     }
 
-    // 4. Test High-DPI scaling using from_godot_geometry factory
+    // 4. Test window positioned at (180, 82) logical pixels using from_godot_geometry
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(360.0, 164.0),  // Physical window pos (already physical)
-            Gaze::GazeVector2(1.0, 1.0),      // Logical scale (to be multiplied by ratio)
-            Gaze::GazeVector2(0.0, 0.0),      // Logical offset (to be multiplied by ratio)
-            2.0                               // Device pixel ratio
+            Gaze::GazeVector2(180.0, 82.0),   // Window pos in logical pixels
+            Gaze::GazeVector2(1.0, 1.0),      // Viewport scale
+            Gaze::GazeVector2(0.0, 0.0)       // Viewport origin offset
         );
 
         Gaze::GazeVector3 origin_cam(0.0, -95.5, 800.0);
@@ -747,37 +755,29 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping") {
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
         
         REQUIRE(ok);
-        // Should yield the exact same mapping as section 3:
-        CHECK(viewport_pixel.x == doctest::Approx(576.0));
+        CHECK(viewport_pixel.x == doctest::Approx(540.0));
     }
 }
 
 TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity") {
     // Setup projection engine mock metrics
     Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GazeVector2(2880.0, 1800.0)); // Physical screen width
+    engine.set_screen_size_pixels(Gaze::GazeVector2(1440.0, 900.0)); // Logical screen width
     engine.set_screen_size_mm(Gaze::GazeVector2(302.0, 188.0));      // Physical screen mm
     Gaze::CameraPlacement placement(Gaze::GazeVector3(0.0, 94.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
-    // 1. Standard DPI Configuration (DPR = 1.0, scale = 1.0)
+    // 1. Standard Configuration
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(100.0, 50.0),  // Window pos in physical screen pixels
+            Gaze::GazeVector2(100.0, 50.0),   // Window pos in logical screen pixels
             Gaze::GazeVector2(1.0, 1.0),      // Logical viewport scale
-            Gaze::GazeVector2(0.0, 0.0),      // Logical viewport offset
-            1.0,                              // Device pixel ratio (DPR)
-            1.0                               // window_to_screen_scale_ratio (godot_scale)
+            Gaze::GazeVector2(0.0, 0.0)       // Logical viewport offset
         );
 
         Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_logical_to_physical(logical_pixel);
+        Gaze::GazeVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
 
-        // Check math: screen_pixel = logical * (DPR / scale) * scale_logical + offset_logical * (DPR / scale) + win_pos
-        // scale_factor = 1.0 / 1.0 = 1.0
-        // viewport_scale = 1.0, viewport_offset = 0.0
-        // screen_pixel = 512 * 1.0 + 0 + 100 = 612
-        // Y = 300 * 1.0 + 0 + 50 = 350
         CHECK(physical_pixel.x == doctest::Approx(612.0));
         CHECK(physical_pixel.y == doctest::Approx(350.0));
 
@@ -788,30 +788,27 @@ TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity") {
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         REQUIRE(ok);
 
-        Gaze::GazeVector2 proj_physical = projector.map_logical_to_physical(proj_viewport);
+        Gaze::GazeVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
         
-        // Convert proj_physical back to viewport using projector's internal scale and offset
-        double local_x = proj_physical.x - projector.window_position_pixels.x;
-        double local_y = proj_physical.y - projector.window_position_pixels.y;
-        double view_x = (local_x - projector.viewport_offset.x) / projector.viewport_scale.x;
-        double view_y = (local_y - projector.viewport_offset.y) / projector.viewport_scale.y;
+        double local_x = proj_physical.x - projector.window_position_px.x;
+        double local_y = proj_physical.y - projector.window_position_px.y;
+        double view_x = (local_x - projector.viewport_offset_px.x) / projector.viewport_scale.x;
+        double view_y = (local_y - projector.viewport_offset_px.y) / projector.viewport_scale.y;
 
         CHECK(view_x == doctest::Approx(proj_viewport.x));
         CHECK(view_y == doctest::Approx(proj_viewport.y));
     }
 
-    // 2. High-DPI Retina Configuration (DPR = 2.0, scale = 2.0 with allow_hidpi = true)
+    // 2. Scaled viewport configuration (e.g. game viewport stretched by 2.0)
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(200.0, 100.0), // physical window position
-            Gaze::GazeVector2(2.0, 2.0),     // viewport scale is physical under allow_hidpi = true
-            Gaze::GazeVector2(0.0, 0.0),     // offset
-            2.0,                             // DPR
-            2.0                              // godot_scale = 2.0
+            Gaze::GazeVector2(200.0, 100.0), // window position in logical pixels
+            Gaze::GazeVector2(2.0, 2.0),     // viewport scale
+            Gaze::GazeVector2(0.0, 0.0)      // offset
         );
 
         Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_logical_to_physical(logical_pixel);
+        Gaze::GazeVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
         CHECK(physical_pixel.x == doctest::Approx(1224.0));
         CHECK(physical_pixel.y == doctest::Approx(700.0));
 
@@ -822,86 +819,22 @@ TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity") {
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         REQUIRE(ok);
 
-        Gaze::GazeVector2 proj_physical = projector.map_logical_to_physical(proj_viewport);
-        double local_x = proj_physical.x - projector.window_position_pixels.x;
-        double local_y = proj_physical.y - projector.window_position_pixels.y;
-        double view_x = (local_x - projector.viewport_offset.x) / projector.viewport_scale.x;
-        double view_y = (local_y - projector.viewport_offset.y) / projector.viewport_scale.y;
+        Gaze::GazeVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
+        double local_x = proj_physical.x - projector.window_position_px.x;
+        double local_y = proj_physical.y - projector.window_position_px.y;
+        double view_x = (local_x - projector.viewport_offset_px.x) / projector.viewport_scale.x;
+        double view_y = (local_y - projector.viewport_offset_px.y) / projector.viewport_scale.y;
 
         CHECK(view_x == doctest::Approx(proj_viewport.x));
         CHECK(view_y == doctest::Approx(proj_viewport.y));
     }
 
-    // 3. High-DPI Standard Viewport Configuration (DPR = 2.0, scale = 1.0 with allow_hidpi = false)
-    {
-        Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(200.0, 100.0),
-            Gaze::GazeVector2(1.0, 1.0),     // scale is logical
-            Gaze::GazeVector2(0.0, 0.0),
-            2.0,                             // DPR
-            1.0                              // godot_scale = 1.0
-        );
-
-        Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_logical_to_physical(logical_pixel);
-        CHECK(physical_pixel.x == doctest::Approx(1224.0));
-
-        // Assert inverse parity
-        Gaze::GazeVector3 origin_cam(0.0, -94.0, 800.0);
-        Gaze::GazeVector3 dir_cam(0.03, -0.04, -0.999);
-        Gaze::GazeVector2 proj_viewport;
-        bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
-        REQUIRE(ok);
-
-        Gaze::GazeVector2 proj_physical = projector.map_logical_to_physical(proj_viewport);
-        double local_x = proj_physical.x - projector.window_position_pixels.x;
-        double local_y = proj_physical.y - projector.window_position_pixels.y;
-        double view_x = (local_x - projector.viewport_offset.x) / projector.viewport_scale.x;
-        double view_y = (local_y - projector.viewport_offset.y) / projector.viewport_scale.y;
-
-        CHECK(view_x == doctest::Approx(proj_viewport.x));
-        CHECK(view_y == doctest::Approx(proj_viewport.y));
-    }
-
-    // 4. Fractional Browser Zoom Configuration (DPR = 2.2, scale = 1.1)
-    {
-        Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(150.0, 75.0),
-            Gaze::GazeVector2(1.1, 1.1),
-            Gaze::GazeVector2(0.0, 0.0),
-            2.2,
-            1.1
-        );
-
-        Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_logical_to_physical(logical_pixel);
-        CHECK(physical_pixel.x == doctest::Approx(1276.4));
-
-        // Assert inverse parity
-        Gaze::GazeVector3 origin_cam(0.0, -94.0, 800.0);
-        Gaze::GazeVector3 dir_cam(-0.02, 0.08, -0.995);
-        Gaze::GazeVector2 proj_viewport;
-        bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
-        REQUIRE(ok);
-
-        Gaze::GazeVector2 proj_physical = projector.map_logical_to_physical(proj_viewport);
-        double local_x = proj_physical.x - projector.window_position_pixels.x;
-        double local_y = proj_physical.y - projector.window_position_pixels.y;
-        double view_x = (local_x - projector.viewport_offset.x) / projector.viewport_scale.x;
-        double view_y = (local_y - projector.viewport_offset.y) / projector.viewport_scale.y;
-
-        CHECK(view_x == doctest::Approx(proj_viewport.x));
-        CHECK(view_y == doctest::Approx(proj_viewport.y));
-    }
-
-    // 5. Check Safeguards & Division-by-Zero Protection
+    // 3. Check Safeguards & Division-by-Zero Protection
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
             Gaze::GazeVector2(0.0, 0.0),
             Gaze::GazeVector2(0.0, 0.0),  // Scale = 0 (Division by zero risk!)
-            Gaze::GazeVector2(0.0, 0.0),
-            2.0,
-            0.0                           // Scale ratio = 0
+            Gaze::GazeVector2(0.0, 0.0)
         );
 
         Gaze::GazeVector3 origin_cam(0.0, -94.0, 800.0);
@@ -909,6 +842,72 @@ TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity") {
         Gaze::GazeVector2 proj_viewport;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         CHECK_FALSE(ok); // Must fail gracefully
+    }
+}
+
+TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs") {
+    Gaze::ProjectionEngine engine;
+    
+    // Test case A: Logical math verification
+    // 1. Staring straight ahead (near-zero rotation)
+    {
+        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
+        Gaze::GazeVector3 rotation_straight(0.0, 0.0, 0.0);
+        Gaze::GazeTransform3D transform = engine.get_head_transform_in_camera_space(translation, rotation_straight);
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+        
+        // Z points towards the screen (positive Z in Godot camera space)
+        CHECK(head_forward.z > 0.9);
+        CHECK(std::abs(head_forward.x) < 0.01);
+        CHECK(std::abs(head_forward.y) < 0.01);
+    }
+    
+    // 2. Head tilted up (pitch rotation around X is negative in OpenCV: rvec.x < 0)
+    {
+        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
+        Gaze::GazeVector3 rotation_up(-0.15, 0.0, 0.0); // ~8.6 degrees up
+        Gaze::GazeTransform3D transform = engine.get_head_transform_in_camera_space(translation, rotation_up);
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+        
+        // Pitch up must produce a positive Y component in camera space
+        CHECK(head_forward.y > 0.05);
+        CHECK(head_forward.z > 0.9);
+    }
+    
+    // 3. Head tilted down (pitch rotation around X is positive in OpenCV: rvec.x > 0)
+    {
+        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
+        Gaze::GazeVector3 rotation_down(0.15, 0.0, 0.0); // ~8.6 degrees down
+        Gaze::GazeTransform3D transform = engine.get_head_transform_in_camera_space(translation, rotation_down);
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+        
+        // Pitch down must produce a negative Y component in camera space
+        CHECK(head_forward.y < -0.05);
+        CHECK(head_forward.z > 0.9);
+    }
+    
+    // 4. Head turned left (yaw rotation around Y is positive in OpenCV: rvec.y > 0)
+    {
+        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
+        Gaze::GazeVector3 rotation_left(0.0, 0.2, 0.0); // ~11.5 degrees left (camera right)
+        Gaze::GazeTransform3D transform = engine.get_head_transform_in_camera_space(translation, rotation_left);
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+        
+        // Turning left (facing camera's negative X direction in standard camera space)
+        CHECK(head_forward.x < -0.05);
+        CHECK(head_forward.z > 0.9);
+    }
+    
+    // 5. Head turned right (yaw rotation around Y is negative in OpenCV: rvec.y < 0)
+    {
+        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
+        Gaze::GazeVector3 rotation_right(0.0, -0.2, 0.0); // ~11.5 degrees right (camera left)
+        Gaze::GazeTransform3D transform = engine.get_head_transform_in_camera_space(translation, rotation_right);
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
+        
+        // Turning right (facing camera's positive X direction in standard camera space)
+        CHECK(head_forward.x > 0.05);
+        CHECK(head_forward.z > 0.9);
     }
 }
 

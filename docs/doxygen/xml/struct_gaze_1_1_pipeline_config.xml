@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_pipeline_config" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::PipelineConfig</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a991e55fea6ecb0c32535ec315d557374" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PipelineConfig::pitch_t_gain</definition>
+        <argsstring></argsstring>
+        <name>pitch_t_gain</name>
+        <qualifiedname>Gaze::PipelineConfig::pitch_t_gain</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="15" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a7e5d5db4a92697f6d117172bde9edc60" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PipelineConfig::yaw_t_gain</definition>
+        <argsstring></argsstring>
+        <name>yaw_t_gain</name>
+        <qualifiedname>Gaze::PipelineConfig::yaw_t_gain</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="16" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a567bda07664640fe1a13575cae12390c" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PipelineConfig::nose_y</definition>
+        <argsstring></argsstring>
+        <name>nose_y</name>
+        <qualifiedname>Gaze::PipelineConfig::nose_y</qualifiedname>
+        <initializer>= FaceModelGeometry::DEFAULT_NOSE_Y</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="18" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a1189ca8edfb86dbc1b886852e9321954" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PipelineConfig::nose_z</definition>
+        <argsstring></argsstring>
+        <name>nose_z</name>
+        <qualifiedname>Gaze::PipelineConfig::nose_z</qualifiedname>
+        <initializer>= FaceModelGeometry::DEFAULT_NOSE_Z</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="19" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1acbaac2ac7f6017d28407733ff4c2fded" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PipelineConfig::ipd_mm</definition>
+        <argsstring></argsstring>
+        <name>ipd_mm</name>
+        <qualifiedname>Gaze::PipelineConfig::ipd_mm</qualifiedname>
+        <initializer>= 63.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="22" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1ada273d0e2d553ebc6f63733c10284db7" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::PipelineConfig::face_detect_width</definition>
+        <argsstring></argsstring>
+        <name>face_detect_width</name>
+        <qualifiedname>Gaze::PipelineConfig::face_detect_width</qualifiedname>
+        <initializer>= 160</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="25" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a2bcb65e865898404af270d3a4381c983" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::PipelineConfig::face_detect_height</definition>
+        <argsstring></argsstring>
+        <name>face_detect_height</name>
+        <qualifiedname>Gaze::PipelineConfig::face_detect_height</qualifiedname>
+        <initializer>= 128</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="26" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a1c9b354cbc738ea1947478839cc2bfed" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::PipelineConfig::desired_camera_width</definition>
+        <argsstring></argsstring>
+        <name>desired_camera_width</name>
+        <qualifiedname>Gaze::PipelineConfig::desired_camera_width</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="29" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1aaee25596e0592ad97674cf2762ee8490" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::PipelineConfig::desired_camera_height</definition>
+        <argsstring></argsstring>
+        <name>desired_camera_height</name>
+        <qualifiedname>Gaze::PipelineConfig::desired_camera_height</qualifiedname>
+        <initializer>= 480</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="30" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/pipeline_config.hpp" line="14" column="1" bodyfile="src/core/pipeline_config.hpp" bodystart="14" bodyend="31"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_pipeline_config_1aaee25596e0592ad97674cf2762ee8490" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>desired_camera_height</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a1c9b354cbc738ea1947478839cc2bfed" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>desired_camera_width</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a2bcb65e865898404af270d3a4381c983" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>face_detect_height</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1ada273d0e2d553ebc6f63733c10284db7" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>face_detect_width</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1acbaac2ac7f6017d28407733ff4c2fded" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>ipd_mm</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a567bda07664640fe1a13575cae12390c" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>nose_y</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a1189ca8edfb86dbc1b886852e9321954" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>nose_z</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a991e55fea6ecb0c32535ec315d557374" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>pitch_t_gain</name></member>
+      <member refid="struct_gaze_1_1_pipeline_config_1a7e5d5db4a92697f6d117172bde9edc60" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>yaw_t_gain</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

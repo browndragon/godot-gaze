@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_device_estimated_calibration" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeDeviceEstimatedCalibration</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Object</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_estimated_calibration_1ac36278baf3f09a244310cd70ab104527" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_calibration" kindref="compound">GazeDeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt;GazeDeviceCalibration&gt; godot::GazeDeviceEstimatedCalibration::calibration</definition>
+        <argsstring></argsstring>
+        <name>calibration</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="83" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1a3024576d296d302e4d472bf8c93b4dc1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeDeviceEstimatedCalibration::GDCLASS</definition>
+        <argsstring>(GazeDeviceEstimatedCalibration, Object)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeDeviceEstimatedCalibration</type>
+        </param>
+        <param>
+          <type>Object</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="80" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1aad02db12f97a5f0d4661b017dcebb662" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceEstimatedCalibration::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="86" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="272" bodyend="274"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1a15207000c9b11e6d5ef31b6b660fbd58" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeDeviceEstimatedCalibration::GazeDeviceEstimatedCalibration</definition>
+        <argsstring>()</argsstring>
+        <name>GazeDeviceEstimatedCalibration</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::GazeDeviceEstimatedCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="89" column="5" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="268" bodyend="270"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1a61495db442a94dd7301abcf21e791758" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::GazeDeviceEstimatedCalibration::~GazeDeviceEstimatedCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeDeviceEstimatedCalibration</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::~GazeDeviceEstimatedCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="90" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1ab502158f381ac42b6cfd2e9809fec053" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_calibration" kindref="compound">GazeDeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt; GazeDeviceCalibration &gt; godot::GazeDeviceEstimatedCalibration::get_calibration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_calibration</name>
+        <qualifiedname>godot::GazeDeviceEstimatedCalibration::get_calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="92" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeDeviceEstimatedCalibration</label>
+        <link refid="classgodot_1_1_gaze_device_estimated_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeDeviceEstimatedCalibration</label>
+        <link refid="classgodot_1_1_gaze_device_estimated_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_calibration_resource.hpp" line="79" column="1" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="79" bodyend="93"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1aad02db12f97a5f0d4661b017dcebb662" prot="protected" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1ac36278baf3f09a244310cd70ab104527" prot="private" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>calibration</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a15207000c9b11e6d5ef31b6b660fbd58" prot="public" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>GazeDeviceEstimatedCalibration</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a3024576d296d302e4d472bf8c93b4dc1" prot="private" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1ab502158f381ac42b6cfd2e9809fec053" prot="public" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>get_calibration</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a61495db442a94dd7301abcf21e791758" prot="public" virt="virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>~GazeDeviceEstimatedCalibration</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

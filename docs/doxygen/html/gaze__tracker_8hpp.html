@@ -140,11 +140,12 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__tracker_
 
 <p>GazeTracker Godot Node GDExtension binding.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;godot_cpp/classes/node.hpp&gt;</code><br />
+<div class="textblock"><code>#include &lt;godot_cpp/classes/node3d.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/variant/vector2.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/variant/vector2i.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/variant/vector3.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/variant/transform3d.hpp&gt;</code><br />
+<code>#include &lt;godot_cpp/variant/transform2d.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/variant/basis.hpp&gt;</code><br />
 <code>#include &lt;godot_cpp/classes/ref.hpp&gt;</code><br />
 <code>#include &quot;<a class="el" href="gaze__calibration__resource_8hpp_source.html">gaze_calibration_resource.hpp</a>&quot;</code><br />
@@ -153,14 +154,16 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__tracker_
 <code>#include &quot;<a class="el" href="face__pipeline_8hpp_source.html">face_pipeline.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="gaze__model_8hpp_source.html">gaze_model.hpp</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="projection__engine_8hpp_source.html">projection_engine.hpp</a>&quot;</code><br />
-<code>#include &quot;one_euro_filter.hpp&quot;</code><br />
 <code>#include &lt;godot_cpp/variant/array.hpp&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="gaze__tracker_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:godot_3A_3APlatformGeometry" id="r_godot_3A_3APlatformGeometry"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="structgodot_1_1_platform_geometry.html">godot::PlatformGeometry</a></td></tr>
 <tr class="memitem:godot_3A_3AGazeTracker" id="r_godot_3A_3AGazeTracker"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_tracker.html">godot::GazeTracker</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.  <a href="classgodot_1_1_gaze_tracker.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>

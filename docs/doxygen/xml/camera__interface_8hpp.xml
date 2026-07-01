@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="camera__interface_8hpp" kind="file" language="C++">
+    <compoundname>camera_interface.hpp</compoundname>
+    <includedby refid="face__pipeline_8hpp" local="yes">src/core/face_pipeline.hpp</includedby>
+    <includedby refid="camera__sensor_8hpp" local="yes">src/godot/camera_sensor.hpp</includedby>
+    <includedby refid="gaze__tracker_8hpp" local="yes">src/godot/gaze_tracker.hpp</includedby>
+    <includedby refid="opencv__camera_8hpp" local="yes">src/native/opencv_camera.hpp</includedby>
+    <invincdepgraph>
+      <node id="1">
+        <label>src/core/camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>src/core/face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>src/core/gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>src/godot/camera_sensor.hpp</label>
+        <link refid="camera__sensor_8hpp_source"/>
+      </node>
+      <node id="4">
+        <label>src/godot/eye_estimator.hpp</label>
+        <link refid="eye__estimator_8hpp_source"/>
+      </node>
+      <node id="10">
+        <label>src/godot/face_estimator.hpp</label>
+        <link refid="face__estimator_8hpp_source"/>
+      </node>
+      <node id="6">
+        <label>src/godot/gaze_calibration_resource.cpp</label>
+        <link refid="gaze__calibration__resource_8cpp"/>
+      </node>
+      <node id="7">
+        <label>src/godot/gaze_calibration_session.cpp</label>
+        <link refid="gaze__calibration__session_8cpp"/>
+      </node>
+      <node id="5">
+        <label>src/godot/gaze_tracker.hpp</label>
+        <link refid="gaze__tracker_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>src/native/opencv_camera.hpp</label>
+        <link refid="opencv__camera_8hpp"/>
+      </node>
+      <node id="8">
+        <label>src/native/opencv_gaze_model.hpp</label>
+        <link refid="opencv__gaze__model_8hpp"/>
+      </node>
+      <node id="11">
+        <label>src/native/yunet_pipeline.hpp</label>
+        <link refid="yunet__pipeline_8hpp"/>
+      </node>
+      <node id="9">
+        <label>src/web/web_gaze_model.hpp</label>
+        <link refid="web__gaze__model_8hpp"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="struct_gaze_1_1_frame" prot="public">Gaze::Frame</innerclass>
+    <innerclass refid="class_gaze_1_1_camera_interface" prot="public">Gaze::CameraInterface</innerclass>
+    <innernamespace refid="namespace_gaze">Gaze</innernamespace>
+    <briefdescription>
+<para>Frame Ingestion Interface (Layer 1). </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Defines the abstract interface and data structures for ingesting frames from hardware camera devices, video files, or mock frame injectors. Declares the core Frame struct which propagates raw pixel data and timestamps. </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="struct_gaze_1_1_frame" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref><sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*<sp/>data<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;<sp/></highlight><highlight class="comment">//<sp/>Raw<sp/>pixel<sp/>buffer<sp/>(e.g.<sp/>RGB<sp/>or<sp/>gray)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>timestamp<sp/>=<sp/>0.0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>High<sp/>precision<sp/>timestamp<sp/>in<sp/>seconds</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20" refid="class_gaze_1_1_camera_interface" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="class_gaze_1_1_camera_interface" kindref="compound">CameraInterface</ref><sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_camera_interface" kindref="compound">~CameraInterface</ref>()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Initializes<sp/>the<sp/>capture<sp/>source<sp/>(camera<sp/>device<sp/>or<sp/>mock<sp/>file)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>initialize()<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Sets<sp/>the<sp/>desired<sp/>camera<sp/>capture<sp/>resolution<sp/>(if<sp/>supported<sp/>by<sp/>the<sp/>device)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_resolution(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>h)<sp/>{}</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Grabs<sp/>the<sp/>next<sp/>frame.<sp/>Returns<sp/>true<sp/>if<sp/>successful.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>grab_frame(<ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref>&amp;<sp/>out_frame)<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Releases<sp/>the<sp/>capture<sp/>source<sp/>resources</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>release()<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/core/camera_interface.hpp"/>
+  </compounddef>
+</doxygen>

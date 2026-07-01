@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_one_euro_filter_state" kind="class" language="C++" prot="public">
+    <compoundname>godot::OneEuroFilterState</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">RefCounted</basecompoundref>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_one_euro_filter_state_1a3fcd2ab08a785b2f9f1eeced45343c90" prot="public" static="no" mutable="no">
+        <type>OneEuroFilter *</type>
+        <definition>OneEuroFilter* godot::OneEuroFilterState::impl</definition>
+        <argsstring></argsstring>
+        <name>impl</name>
+        <qualifiedname>godot::OneEuroFilterState::impl</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="15" column="19" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_filter_state_1a19ea34724f9e5e77269a73322fd8fc8b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::OneEuroFilterState::GDCLASS</definition>
+        <argsstring>(OneEuroFilterState, RefCounted)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::OneEuroFilterState::GDCLASS</qualifiedname>
+        <param>
+          <type>OneEuroFilterState</type>
+        </param>
+        <param>
+          <type>RefCounted</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="9" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_filter_state_1a7bc920d4f0329213bca23d3bc5a43bee" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::OneEuroFilterState::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::OneEuroFilterState::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="12" column="17" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="10" bodyend="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_one_euro_filter_state_1a293d56d3354855cac192dd6f92066982" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::OneEuroFilterState::OneEuroFilterState</definition>
+        <argsstring>()</argsstring>
+        <name>OneEuroFilterState</name>
+        <qualifiedname>godot::OneEuroFilterState::OneEuroFilterState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="17" column="5" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="14" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_one_euro_filter_state_1ad447f8ddb5690f5cff04228510e27809" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::OneEuroFilterState::~OneEuroFilterState</definition>
+        <argsstring>()</argsstring>
+        <name>~OneEuroFilterState</name>
+        <qualifiedname>godot::OneEuroFilterState::~OneEuroFilterState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/one_euro_smoother.hpp" line="18" column="13" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="18" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>RefCounted</label>
+      </node>
+      <node id="1">
+        <label>godot::OneEuroFilterState</label>
+        <link refid="classgodot_1_1_one_euro_filter_state"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>RefCounted</label>
+      </node>
+      <node id="1">
+        <label>godot::OneEuroFilterState</label>
+        <link refid="classgodot_1_1_one_euro_filter_state"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/one_euro_smoother.hpp" line="8" column="1" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="8" bodyend="19"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_one_euro_filter_state_1a7bc920d4f0329213bca23d3bc5a43bee" prot="protected" virt="non-virtual"><scope>godot::OneEuroFilterState</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_one_euro_filter_state_1a19ea34724f9e5e77269a73322fd8fc8b" prot="private" virt="non-virtual"><scope>godot::OneEuroFilterState</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_one_euro_filter_state_1a3fcd2ab08a785b2f9f1eeced45343c90" prot="public" virt="non-virtual"><scope>godot::OneEuroFilterState</scope><name>impl</name></member>
+      <member refid="classgodot_1_1_one_euro_filter_state_1a293d56d3354855cac192dd6f92066982" prot="public" virt="non-virtual"><scope>godot::OneEuroFilterState</scope><name>OneEuroFilterState</name></member>
+      <member refid="classgodot_1_1_one_euro_filter_state_1ad447f8ddb5690f5cff04228510e27809" prot="public" virt="virtual"><scope>godot::OneEuroFilterState</scope><name>~OneEuroFilterState</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

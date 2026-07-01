@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_calibration_weights" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::CalibrationWeights</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a627763d45e8031a88cd5f07aaa9bd29e" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::offset_x</definition>
+        <argsstring></argsstring>
+        <name>offset_x</name>
+        <qualifiedname>Gaze::CalibrationWeights::offset_x</qualifiedname>
+        <initializer>= 1e9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="21" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1aac4a0c4f8e6a1324d2ffe822b87bbb68" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::offset_y</definition>
+        <argsstring></argsstring>
+        <name>offset_y</name>
+        <qualifiedname>Gaze::CalibrationWeights::offset_y</qualifiedname>
+        <initializer>= 1e9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="22" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1aa204c23b7b8f9dcf3c062457c4ab3ed3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::offset_z</definition>
+        <argsstring></argsstring>
+        <name>offset_z</name>
+        <qualifiedname>Gaze::CalibrationWeights::offset_z</qualifiedname>
+        <initializer>= 1e9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="23" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1ad49d3189aac5feda1a32b721c87d96d7" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::tilt</definition>
+        <argsstring></argsstring>
+        <name>tilt</name>
+        <qualifiedname>Gaze::CalibrationWeights::tilt</qualifiedname>
+        <initializer>= 1e9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="24" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1ae9ea3da9d6fdd2c63b5e1a90b11abc7a" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::bias</definition>
+        <argsstring></argsstring>
+        <name>bias</name>
+        <qualifiedname>Gaze::CalibrationWeights::bias</qualifiedname>
+        <initializer>= 10.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="25" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a329364226ef3228d7440147dd6e90007" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::max_camera_offset_x</definition>
+        <argsstring></argsstring>
+        <name>max_camera_offset_x</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_camera_offset_x</qualifiedname>
+        <initializer>= 300.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="28" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1ad662974bd55226e21398736051098bf3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::min_camera_offset_y</definition>
+        <argsstring></argsstring>
+        <name>min_camera_offset_y</name>
+        <qualifiedname>Gaze::CalibrationWeights::min_camera_offset_y</qualifiedname>
+        <initializer>= -150.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="29" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a2ea0937900a22835827f3ea4fce3b5ec" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::max_camera_offset_y</definition>
+        <argsstring></argsstring>
+        <name>max_camera_offset_y</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_camera_offset_y</qualifiedname>
+        <initializer>= 400.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="30" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a38746dfb524abff969b1960ce1c0d484" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::min_camera_offset_z</definition>
+        <argsstring></argsstring>
+        <name>min_camera_offset_z</name>
+        <qualifiedname>Gaze::CalibrationWeights::min_camera_offset_z</qualifiedname>
+        <initializer>= -100.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="31" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a2ca8e4957d9b26fef49feb70f158572d" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::max_camera_offset_z</definition>
+        <argsstring></argsstring>
+        <name>max_camera_offset_z</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_camera_offset_z</qualifiedname>
+        <initializer>= 300.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="32" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1af3fa3d853485f04a1c5cdea4cea9e857" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::max_camera_tilt</definition>
+        <argsstring></argsstring>
+        <name>max_camera_tilt</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_camera_tilt</qualifiedname>
+        <initializer>= 75.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="33" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1acd0a542c5d83ac69da279bdcf5b22d96" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::max_bias</definition>
+        <argsstring></argsstring>
+        <name>max_bias</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_bias</qualifiedname>
+        <initializer>= 0.6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="34" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a9b1f9b68de01b510d3a79c04ea304ae5" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::step_camera_offset</definition>
+        <argsstring></argsstring>
+        <name>step_camera_offset</name>
+        <qualifiedname>Gaze::CalibrationWeights::step_camera_offset</qualifiedname>
+        <initializer>= 10.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="37" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a7770441b6f134d97cfd4b3cc1ef19f07" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::step_camera_tilt</definition>
+        <argsstring></argsstring>
+        <name>step_camera_tilt</name>
+        <qualifiedname>Gaze::CalibrationWeights::step_camera_tilt</qualifiedname>
+        <initializer>= 3.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="38" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a1e80bce973ff4800048f3e171840faff" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::step_bias</definition>
+        <argsstring></argsstring>
+        <name>step_bias</name>
+        <qualifiedname>Gaze::CalibrationWeights::step_bias</qualifiedname>
+        <initializer>= 0.03</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="39" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a7b7618627fae4c603dc15de5a46709a0" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::CalibrationWeights::max_iterations</definition>
+        <argsstring></argsstring>
+        <name>max_iterations</name>
+        <qualifiedname>Gaze::CalibrationWeights::max_iterations</qualifiedname>
+        <initializer>= 3000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="42" column="9" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1acd6d53ee38b5b556fce9e46410751ba4" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::convergence_threshold</definition>
+        <argsstring></argsstring>
+        <name>convergence_threshold</name>
+        <qualifiedname>Gaze::CalibrationWeights::convergence_threshold</qualifiedname>
+        <initializer>= 1e-5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="43" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_calibration_weights_1a9e4b7669c04f0dd3e1f07abc289be995" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::CalibrationWeights::penalty_multiplier</definition>
+        <argsstring></argsstring>
+        <name>penalty_multiplier</name>
+        <qualifiedname>Gaze::CalibrationWeights::penalty_multiplier</qualifiedname>
+        <initializer>= 1e6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="44" column="12" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/gaze_calibration_estimator.hpp" line="18" column="1" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="18" bodyend="45"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_calibration_weights_1ae9ea3da9d6fdd2c63b5e1a90b11abc7a" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>bias</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1acd6d53ee38b5b556fce9e46410751ba4" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>convergence_threshold</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1acd0a542c5d83ac69da279bdcf5b22d96" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_bias</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a329364226ef3228d7440147dd6e90007" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_camera_offset_x</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a2ea0937900a22835827f3ea4fce3b5ec" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_camera_offset_y</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a2ca8e4957d9b26fef49feb70f158572d" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_camera_offset_z</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1af3fa3d853485f04a1c5cdea4cea9e857" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_camera_tilt</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a7b7618627fae4c603dc15de5a46709a0" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>max_iterations</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1ad662974bd55226e21398736051098bf3" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>min_camera_offset_y</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a38746dfb524abff969b1960ce1c0d484" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>min_camera_offset_z</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a627763d45e8031a88cd5f07aaa9bd29e" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>offset_x</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1aac4a0c4f8e6a1324d2ffe822b87bbb68" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>offset_y</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1aa204c23b7b8f9dcf3c062457c4ab3ed3" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>offset_z</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a9e4b7669c04f0dd3e1f07abc289be995" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>penalty_multiplier</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a1e80bce973ff4800048f3e171840faff" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>step_bias</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a9b1f9b68de01b510d3a79c04ea304ae5" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>step_camera_offset</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1a7770441b6f134d97cfd4b3cc1ef19f07" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>step_camera_tilt</name></member>
+      <member refid="struct_gaze_1_1_calibration_weights_1ad49d3189aac5feda1a32b721c87d96d7" prot="public" virt="non-virtual"><scope>Gaze::CalibrationWeights</scope><name>tilt</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

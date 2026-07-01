@@ -36,7 +36,7 @@ sys.modules["onnx.mapping"] = mapping_mod
 from openvino2onnx.__main__ import main
 sys.argv = [
     "openvino2onnx",
-    "project/models/gaze-estimation-adas-0002.xml",
-    "project/models/gaze-estimation-adas-0002.onnx"
+    "test_assets/models/gaze-estimation-adas-0002.xml",
+    "project/addons/godot-gaze/models/gaze-estimation-adas-0002.onnx"
 ]
 main()

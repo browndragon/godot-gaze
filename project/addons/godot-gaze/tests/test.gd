@@ -1,5 +1,5 @@
 # Testing toy that draws a ray from center screen to the projected head pose ("nose gaze") and eye gaze.
-extends Node2D
+extends Control
 
 var tracker: GazeTracker = null
 @onready var cursor = $Cursor
@@ -11,6 +11,7 @@ var eye_gaze_pos: Vector2 = Vector2.ZERO
 var nose_gaze_pos: Vector2 = Vector2.ZERO
 var center_pos: Vector2 = Vector2.ZERO
 var coords_label: Label
+var is_maximized: bool = false: set=_set_maximized
 
 func _ready():
 	# Center the window on start
@@ -41,6 +42,46 @@ func _ready():
 	add_child(coords_label)
 	coords_label.text = ""
 
+	if "--run-automated-toggles" in OS.get_cmdline_args():
+		_run_automated_toggles()
+
+func _run_automated_toggles():
+	print("=================== STARTING AUTOMATED SCENE TOGGLES ===================")
+	for i in range(10):
+		print("Automated iteration ", i)
+		var ksm = get_node_or_null("DebugCamFeedControl")
+		if ksm:
+			var event = InputEventKey.new()
+			event.keycode = KEY_D
+			event.pressed = true
+			ksm._unhandled_input(event)
+		await get_tree().create_timer(0.1).timeout
+
+		var fs = get_node_or_null("FullScreener")
+		if fs:
+			var event = InputEventKey.new()
+			event.keycode = KEY_F
+			event.pressed = true
+			fs._input(event)
+		await get_tree().create_timer(0.1).timeout
+
+		if ksm:
+			var event = InputEventKey.new()
+			event.keycode = KEY_D
+			event.pressed = true
+			ksm._unhandled_input(event)
+		await get_tree().create_timer(0.1).timeout
+
+		if fs:
+			var event = InputEventKey.new()
+			event.keycode = KEY_F
+			event.pressed = true
+			fs._input(event)
+		await get_tree().create_timer(0.1).timeout
+
+	print("Automated toggles finished, calling get_tree().quit(0)...")
+	get_tree().quit(0)
+
 func _process(_delta):
 	if Engine.get_frames_drawn() % 60 == 0:
 		print("==================== GAZE DEBUG ====================")
@@ -51,7 +92,7 @@ func _process(_delta):
 			print("Eye Gaze Pos: ", eye_gaze_pos, " Nose Gaze Pos: ", nose_gaze_pos)
 			print("Camera-to-Screen Transform:\n", tracker.get_camera_to_screen_transform())
 		print("====================================================")
-		
+
 	if Input.is_key_pressed(KEY_SPACE) and tracker.debug_logging_frames <= 0:
 		print("[GDScript] Spacebar pressed, requesting 5-frame telemetry burst...")
 		tracker.debug_logging_frames = 5
@@ -118,30 +159,22 @@ func _on_face_detected(detected: bool):
 		cursor.color = Color.RED
 		status_label.text = "Status: Face Lost"
 
-func _input(event):
-	# Press 'F' to toggle Fullscreen mode
-	if event is InputEventKey and event.keycode == KEY_F and event.pressed:
-		var mode = DisplayServer.window_get_mode()
-		if mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_FULLSCREEN:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-			if is_instance_valid(status_label):
-				status_label.text = "Status: Windowed Mode"
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
-			if is_instance_valid(status_label):
-				status_label.text = "Status: Fullscreen Mode"
-
 func _on_lifecycle_changed(state):
 	if not is_instance_valid(status_label):
 		return
 	match state:
-		0: # GazeTracker.LIFECYCLE_UNKNOWN
+		GazeTracker.GazeLifecycle.LIFECYCLE_UNKNOWN:
 			status_label.text = "Status: Stopped"
-		1: # GazeTracker.LIFECYCLE_PERM_REQ
+		GazeTracker.GazeLifecycle.LIFECYCLE_PERM_REQ:
 			status_label.text = "Status: Requesting Camera Permission..."
-		2: # GazeTracker.LIFECYCLE_INITIALIZING
+		GazeTracker.GazeLifecycle.LIFECYCLE_INITIALIZING:
 			status_label.text = "Status: Initializing..."
-		3: # GazeTracker.LIFECYCLE_RUNNING
+		GazeTracker.GazeLifecycle.LIFECYCLE_RUNNING:
 			status_label.text = "Status: Running"
-		4: # GazeTracker.LIFECYCLE_ERROR
+		GazeTracker.GazeLifecycle.LIFECYCLE_ERROR:
 			status_label.text = "Status: Error / Permission Denied"
+
+func _set_maximized(v: bool) -> void:
+	print("Setting maximized: ", v)
+	is_maximized = v
+	if status_label: status_label.text = "Status: Full screen" if is_maximized else "Status: Windowed"

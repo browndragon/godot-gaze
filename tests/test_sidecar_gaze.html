@@ -11,19 +11,8 @@
     <div id="status">Waiting for OpenCV...</div>
 
     <script>
-        // Check if we should use mock OpenCV (default: true for headless environment stability)
         var useMock = new URLSearchParams(window.location.search).get('mock') !== 'false';
-        if (!useMock) {
-            console.log('[Test] Loading real OpenCV.js...');
-            var s = document.createElement('script');
-            s.src = "/project/addons/godot-gaze/bin/opencv.js";
-            document.head.appendChild(s);
-        } else {
-            // Initialize mock immediately
-            setTimeout(function() {
-                initOpenCVMock();
-            }, 50);
-        }
+        window.useMock = useMock;
 
         // Mock document.createElement to handle video metadata read-only properties
         var originalCreateElement = document.createElement;
@@ -113,216 +102,59 @@
 
         window.cppTestData = cppTestData;
 
-        function initOpenCVMock() {
-            if (window.cv && window.cv.VideoCapture) return;
-            console.log('[TestRunner] Initializing OpenCV mock fallback...');
-            window.cv = {
-                isMock: true,
-                FS: {
-                    mkdir: function() {},
-                    writeFile: function() {}
+        function initMock() {
+            if (window.ort) return;
+            console.log('[TestRunner] Initializing ONNX Runtime Mock...');
+            window.ort = {
+                Tensor: function(type, data, shape) {
+                    this.data = data;
+                    this.shape = shape;
                 },
-                FaceDetectorYN: function() {
-                    return {
-                        setInputSize: function() {},
-                        detect: function(mat, facesMat) {
-                            facesMat.rows = 1;
-                            facesMat.data32F = new Float32Array([
-                                0, 0, 0, 0,
-                                170, 110,
-                                150, 110,
-                                160, 120,
-                                155, 130,
-                                165, 130
-                            ]);
-                        }
-                    };
-                },
-                readNet: function() {
-                    return {
-                        setInput: function() {},
-                        forward: function() {
-                            return {
-                                empty: function() { return false; },
-                                cols: 3,
-                                floatAt: function(r, c) {
-                                    var img = window.currentTestImage || '';
-                                    var data = cppTestData[img] || cppTestData['self_center.jpg'];
-                                    if (c === 0) return data.gx;
-                                    if (c === 1) return data.gy;
-                                    if (c === 2) return data.gz;
-                                    return 0.0;
-                                },
-                                delete: function() {}
-                            };
-                        },
-                        delete: function() {}
-                    };
-                },
-                VideoCapture: function() {
-                    return {
-                        read: function(mat) {}
-                    };
-                },
-                Mat: function(rows, cols, type) {
-                    return {
-                        rows: rows || 1,
-                        cols: cols || 1,
-                        delete: function() {},
-                        doubleAt: function(r, c) { return 0.0; }
-                    };
-                },
-                cvtColor: function() {},
-                resize: function() {},
-                matFromArray: function(rows, cols, type, arr) {
-                    return {
-                        _arr: arr,
-                        doubleAt: function(r, c) {
-                            var idx = r * cols + c;
-                            return this._arr[idx] || 0.0;
-                        },
-                        delete: function() {}
-                    };
-                },
-                Scalar: function(r, g, b, a) {
-                    this.r = r; this.g = g; this.b = b; this.a = a;
-                },
-                solvePnP: function(model_points, image_points, camera_matrix, dist_coeffs, rvec, tvec, useExtrinsicGuess, flags) {
-                    var img = window.currentTestImage || '';
-                    var data = cppTestData[img] || cppTestData['self_center.jpg'];
-
-                    if (tvec && tvec._arr) {
-                        tvec._arr[0] = data.tx;
-                        tvec._arr[1] = data.ty;
-                        tvec._arr[2] = data.tz;
+                InferenceSession: {
+                    create: function(modelBytes) {
+                        return Promise.resolve({
+                            inputNames: ['input'],
+                            outputNames: ['output'],
+                            run: function(feeds) {
+                                return Promise.resolve({
+                                    output: {
+                                        data: new Float32Array([0, 0, -1])
+                                    }
+                                });
+                            }
+                        });
                     }
-                    if (rvec && rvec._arr) {
-                        rvec._arr[0] = data.rx;
-                        rvec._arr[1] = data.ry;
-                        rvec._arr[2] = data.rz;
-                    }
-                    return true;
-                },
-                Rodrigues: function(rvec, R) {
-                    var rx = rvec._arr ? rvec._arr[0] : 0.0;
-                    var ry = rvec._arr ? rvec._arr[1] : 0.0;
-                    var rz = rvec._arr ? rvec._arr[2] : 0.0;
-                    var theta = Math.sqrt(rx*rx + ry*ry + rz*rz);
-                    
-                    var r00=1, r01=0, r02=0;
-                    var r10=0, r11=1, r12=0;
-                    var r20=0, r21=0, r22=1;
-                    
-                    if (theta >= 1e-6) {
-                        var ux = rx / theta;
-                        var uy = ry / theta;
-                        var uz = rz / theta;
-                        var s = Math.sin(theta);
-                        var c = Math.cos(theta);
-                        var oc = 1.0 - c;
-                        
-                        r00 = c + oc * ux * ux;      r01 = oc * ux * uy - s * uz;  r02 = oc * ux * uz + s * uy;
-                        r10 = oc * ux * uy + s * uz;  r11 = c + oc * uy * uy;      r12 = oc * uy * uz - s * ux;
-                        r20 = oc * ux * uz - s * uy;  r21 = oc * uy * uz + s * ux;  r22 = c + oc * uz * uz;
-                    }
-                    
-                    R.doubleAt = function(row, col) {
-                        if (row === 0 && col === 0) return r00;
-                        if (row === 0 && col === 1) return r01;
-                        if (row === 0 && col === 2) return r02;
-                        if (row === 1 && col === 0) return r10;
-                        if (row === 1 && col === 1) return r11;
-                        if (row === 1 && col === 2) return r12;
-                        if (row === 2 && col === 0) return r20;
-                        if (row === 2 && col === 1) return r21;
-                        if (row === 2 && col === 2) return r22;
-                        return 0.0;
-                    };
-                },
-                getRotationMatrix2D: function() {
-                    return {
-                        data64F: [1, 0, 0, 0, 1, 0],
-                        delete: function() {}
-                    };
-                },
-                warpAffine: function() {},
-                blobFromImage: function() {
-                    return {
-                        delete: function() {}
-                    };
-                },
-                COLOR_RGBA2BGR: 0,
-                COLOR_BGR2GRAY: 0,
-                CV_32F: 0,
-                CV_64F: 0,
-                CV_8UC4: 0,
-                SOLVEPNP_ITERATIVE: 0,
-                BORDER_REPLICATE: 0,
-                exceptionFromPtr: function(err) { return { msg: String(err) }; }
-            };
-            window.cv.Mat.zeros = function() {
-                return {
-                    delete: function() {}
-                };
+                }
             };
             if (window.gazeTracker) {
-                window.gazeTracker.injectScript = function(localUrl, fallbackUrl, onload, onerror) {
+                window.gazeTracker.injectScript = function(localUrl, onload, onerror) {
                     console.log('[TestRunner] Mock injectScript intercepting load of: ' + localUrl);
                     setTimeout(onload, 10);
                 };
-                window.gazeTracker.setModels('', '', 160, 128);
-                document.getElementById('status').innerText = 'OpenCV mock initialized. Ready for test.';
+                window.gazeTracker.setModels('', '');
+                document.getElementById('status').innerText = 'ONNX Runtime mock initialized. Ready for test.';
             }
         }
 
-        // Initialize OpenCV and load models
+        // Initialize and load models
         function initTest() {
-            setTimeout(function() {
-                if (typeof cv === 'undefined' || !cv.VideoCapture) {
-                    initOpenCVMock();
-                }
-            }, 1500);
-
             return new Promise((resolve, reject) => {
-                var checkInitialized = setInterval(async function() {
-                    if (typeof cv !== 'undefined' && cv.RuntimeError === undefined && cv.VideoCapture && !cv.isMock) {
-                        clearInterval(checkInitialized);
-                        document.getElementById('status').innerText = 'OpenCV ready. Loading models...';
-
-                        // Mock cv.VideoCapture to read from canvas
-                        var originalVideoCapture = cv.VideoCapture;
-                        cv.VideoCapture = function(videoEl) {
-                            var capObj = new originalVideoCapture(videoEl);
-                            capObj.read = function(mat) {
-                                var canvas = document.getElementById('testCanvas');
-                                var ctx = canvas.getContext('2d');
-                                var imgData = ctx.getImageData(0, 0, 640, 480);
-                                mat.data.set(imgData.data);
-                            };
-                            return capObj;
-                        };
-
-                        try {
-                            // Load model files from server
-                            var resYunet = await fetch('/project/models/face_detection_yunet_2023mar.onnx');
-                            var resGaze = await fetch('/project/models/gaze-estimation-adas-0002.onnx');
-                            var bufYunet = await resYunet.arrayBuffer();
-                            var bufGaze = await resGaze.arrayBuffer();
-
-                            var hexYunet = arrayBufferToHex(bufYunet);
-                            var hexGaze = arrayBufferToHex(bufGaze);
-
-                            window.gazeTracker.setModels(hexYunet, hexGaze, 160, 128);
-                            document.getElementById('status').innerText = 'Models loaded. Ready for test.';
-                            resolve();
-                        } catch (err) {
-                            reject(err);
-                        }
-                    } else if (window.cv && window.cv.isMock) {
-                        clearInterval(checkInitialized);
+                if (useMock) {
+                    initMock();
+                    resolve();
+                } else {
+                    document.getElementById('status').innerText = 'Loading models...';
+                    Promise.all([
+                        fetch('/project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort').then(r => r.arrayBuffer()),
+                        fetch('/project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort').then(r => r.arrayBuffer())
+                    ]).then(([bufYunet, bufGaze]) => {
+                        var hexYunet = arrayBufferToHex(bufYunet);
+                        var hexGaze = arrayBufferToHex(bufGaze);
+                        window.gazeTracker.setModels(hexYunet, hexGaze);
+                        document.getElementById('status').innerText = 'Models loaded. Ready for test.';
                         resolve();
-                    }
-                }, 100);
+                    }).catch(err => reject(err));
+                }
             });
         }
 

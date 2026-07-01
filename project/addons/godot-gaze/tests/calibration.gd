@@ -76,9 +76,12 @@ func _process(delta):
 
 func complete_calibration():
 	draw_target = false
-	var resource = calib_session.calculate_calibration(tracker)
-	tracker.calibration_resource = resource
-	calibration_completed.emit(resource)
+	var res_dict = calib_session.calculate_calibration(tracker)
+	if res_dict.has("device_calibration"):
+		tracker.device_calibration = res_dict["device_calibration"]
+	if res_dict.has("bio_calibration"):
+		tracker.bio_calibration = res_dict["bio_calibration"]
+	calibration_completed.emit(res_dict)
 
 func _draw():
 	if not draw_target or current_target_idx >= calib_points.size():

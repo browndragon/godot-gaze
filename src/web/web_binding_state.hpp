@@ -1,29 +1,43 @@
 /**
  * @file web_binding_state.hpp
- * @brief Web Emscripten JavaScript Bindings stub structure (Web)
- *
- * Declares Emscripten-specific callbacks and hooks used to communicate between
- * C++ GDExtension and the browser page's JavaScript sidecar (gaze_sidecar.js).
+ * @brief Web Emscripten JavaScript Bindings structure (Web only)
  */
 #pragma once
 
 #ifdef WEB_ENABLED
+#include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/classes/java_script_object.hpp>
-#include <godot_cpp/classes/ref.hpp>
+#include <godot_cpp/variant/array.hpp>
 
-namespace godot {
+namespace godot
+{
+    class GazeTracker;
 
-class GazeTracker;
+    class WebBindingState : public RefCounted
+    {
+        GDCLASS(WebBindingState, RefCounted);
 
-struct WebBindingState {
-    Ref<JavaScriptObject> permission_callback;
-    Ref<JavaScriptObject> feed_callback;
-    Ref<JavaScriptObject> ready_callback;
+    private:
+        GazeTracker *tracker_ptr = nullptr;
+        Ref<JavaScriptObject> permission_callback;
+        Ref<JavaScriptObject> feed_callback;
+        Ref<JavaScriptObject> ready_callback;
 
-    void setup_callbacks(GazeTracker* tracker);
-    void start_tracking_loop(GazeTracker* tracker, const String& yunet_path, const String& gaze_onnx_path, int camera_width, int camera_height);
-    void cleanup();
-};
+    protected:
+        static void _bind_methods();
 
-} // namespace godot
+    public:
+        WebBindingState();
+        virtual ~WebBindingState();
+
+        void setup_callbacks(GazeTracker *tracker);
+        void start_tracking_loop(GazeTracker *tracker, const String &yunet_path, const String &gaze_onnx_path, int camera_width, int camera_height);
+        void cleanup();
+
+        // Web callbacks invoked from JavaScript
+        void feed_gaze_web_raw(const Array& args);
+        void on_sidecar_ready(const Array& args);
+        void on_permission_result(const Array& args);
+    };
+}
 #endif

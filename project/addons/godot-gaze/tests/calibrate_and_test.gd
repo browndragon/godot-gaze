@@ -9,7 +9,7 @@ extends Control
 @onready var test_scene = preload("res://addons/godot-gaze/tests/test.tscn")
 
 var current_scene_node: Node = null
-var active_calibration: GazeCalibration = null
+var active_calibration_dict: Dictionary = {}
 
 func _ready():
 	load_calibration_scene()
@@ -28,8 +28,8 @@ func load_calibration_scene():
 	
 	add_child(inst)
 
-func _on_calibration_completed(resource):
-	active_calibration = resource
+func _on_calibration_completed(res_dict):
+	active_calibration_dict = res_dict
 	load_test_scene()
 
 func load_test_scene():
@@ -41,6 +41,9 @@ func load_test_scene():
 	current_scene_node = inst
 	
 	inst.tracker = tracker
-	tracker.calibration_resource = active_calibration
+	if active_calibration_dict.has("device_calibration"):
+		tracker.device_calibration = active_calibration_dict["device_calibration"]
+	if active_calibration_dict.has("bio_calibration"):
+		tracker.bio_calibration = active_calibration_dict["bio_calibration"]
 	
 	add_child(inst)

@@ -1,12 +1,19 @@
 #include "gaze_tracker.hpp"
+#include "godot_files.hpp"
 #include "screen_projector.hpp"
 #include "log.hpp"
+
+namespace Gaze { extern bool g_is_exiting; }
 #include "camera_sensor.hpp"
 #include "face_estimator.hpp"
 #include "eye_estimator.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
 #include "display_profile.hpp"
+#include "vision_server.hpp"
+#include "gaze_server.hpp"
+
+
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
@@ -17,36 +24,34 @@
 #include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/dir_access.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/image.hpp>
+#include <godot_cpp/variant/callable.hpp>
+
 #ifdef WEB_ENABLED
+#include <godot_cpp/classes/java_script_object.hpp>
 #include <godot_cpp/classes/java_script_bridge.hpp>
 #endif
 
-// Platform-specific headers are included in gaze_tracker_native.cpp and gaze_tracker_web.cpp
-
-
 namespace godot {
 
-static Ref<GazeCalibration> get_default_calibration() {
+static Ref<DeviceCalibration> get_default_device_calibration() {
     GazeDeviceEstimatedCalibration* sing = Object::cast_to<GazeDeviceEstimatedCalibration>(Engine::get_singleton()->get_singleton("GazeDeviceEstimatedCalibration"));
     if (sing) {
         return sing->get_calibration();
     }
-    return Ref<GazeCalibration>();
+    return Ref<DeviceCalibration>();
 }
 
 void GazeTracker::_bind_methods() {
-    // Methods
     ClassDB::bind_method(D_METHOD("initialize_tracker"), &GazeTracker::initialize_tracker);
     ClassDB::bind_method(D_METHOD("stop_tracker", "emit_signal"), &GazeTracker::stop_tracker, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("complete_initialization"), &GazeTracker::complete_initialization);
     ClassDB::bind_method(D_METHOD("trigger_permission_request"), &GazeTracker::trigger_permission_request);
-    ClassDB::bind_method(D_METHOD("on_permission_result", "granted"), &GazeTracker::on_permission_result);
     ClassDB::bind_method(D_METHOD("clear_calibration"), &GazeTracker::clear_calibration);
+    ClassDB::bind_method(D_METHOD("update_projection_parameters"), &GazeTracker::update_projection_parameters);
     ClassDB::bind_method(D_METHOD("map_viewport_to_screen", "logical_pixel"), &GazeTracker::map_viewport_to_screen);
     ClassDB::bind_method(D_METHOD("filter_gaze_coordinate", "raw"), &GazeTracker::filter_gaze_coordinate);
     ClassDB::bind_method(D_METHOD("feed_gaze", "face_detected", "origin", "direction"), &GazeTracker::feed_gaze);
-    ClassDB::bind_method(D_METHOD("feed_gaze_web_raw", "args"), &GazeTracker::feed_gaze_web_raw);
-    ClassDB::bind_method(D_METHOD("on_sidecar_ready", "args"), &GazeTracker::on_sidecar_ready);
     ClassDB::bind_method(D_METHOD("get_camera_sensor"), &GazeTracker::get_camera_sensor);
     ClassDB::bind_method(D_METHOD("get_face_estimator"), &GazeTracker::get_face_estimator);
     ClassDB::bind_method(D_METHOD("get_eye_estimator"), &GazeTracker::get_eye_estimator);
@@ -59,26 +64,29 @@ void GazeTracker::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_derived_camera_offset"), &GazeTracker::get_derived_camera_offset);
     ClassDB::bind_method(D_METHOD("get_derived_camera_tilt"), &GazeTracker::get_derived_camera_tilt);
+    ClassDB::bind_method(D_METHOD("_on_gaze_data_ready", "rid"), &GazeTracker::_on_gaze_data_ready);
 
-    // Properties Setters & Getters
     ClassDB::bind_method(D_METHOD("get_lifecycle_state"), &GazeTracker::get_lifecycle_state);
     ClassDB::bind_method(D_METHOD("set_autostart", "autostart"), &GazeTracker::set_autostart);
     ClassDB::bind_method(D_METHOD("get_autostart"), &GazeTracker::get_autostart);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "lifecycle_state", PROPERTY_HINT_NONE, "", PROPERTY_USAGE_DEFAULT), "", "get_lifecycle_state");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "autostart"), "set_autostart", "get_autostart");
 
-    ClassDB::bind_method(D_METHOD("set_pipeline_config", "res"), &GazeTracker::set_pipeline_config);
-    ClassDB::bind_method(D_METHOD("get_pipeline_config"), &GazeTracker::get_pipeline_config);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "pipeline_config", PROPERTY_HINT_RESOURCE_TYPE, "GazePipelineConfig"), "set_pipeline_config", "get_pipeline_config");
 
-    ClassDB::bind_method(D_METHOD("set_calibration_resource", "res"), &GazeTracker::set_calibration_resource);
-    ClassDB::bind_method(D_METHOD("get_calibration_resource"), &GazeTracker::get_calibration_resource);
-    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "calibration_resource", PROPERTY_HINT_RESOURCE_TYPE, "GazeCalibration"), "set_calibration_resource", "get_calibration_resource");
+
+    ClassDB::bind_method(D_METHOD("set_device_calibration", "res"), &GazeTracker::set_device_calibration);
+    ClassDB::bind_method(D_METHOD("get_device_calibration"), &GazeTracker::get_device_calibration);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "device_calibration", PROPERTY_HINT_RESOURCE_TYPE, "DeviceCalibration"), "set_device_calibration", "get_device_calibration");
+
+    ClassDB::bind_method(D_METHOD("set_bio_calibration", "res"), &GazeTracker::set_bio_calibration);
+    ClassDB::bind_method(D_METHOD("get_bio_calibration"), &GazeTracker::get_bio_calibration);
+    ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "bio_calibration", PROPERTY_HINT_RESOURCE_TYPE, "BioCalibration"), "set_bio_calibration", "get_bio_calibration");
 
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "screen_smooth", PROPERTY_HINT_RESOURCE_TYPE, "Smoother"), "set_screen_smooth", "get_screen_smooth");
 
     ClassDB::bind_method(D_METHOD("set_display_profile", "profile"), &GazeTracker::set_display_profile);
     ClassDB::bind_method(D_METHOD("get_display_profile"), &GazeTracker::get_display_profile);
+    ClassDB::bind_method(D_METHOD("get_adjusted_viewport_transform"), &GazeTracker::get_adjusted_viewport_transform);
     ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "display_profile", PROPERTY_HINT_RESOURCE_TYPE, "DisplayProfile"), "set_display_profile", "get_display_profile");
 
     ClassDB::bind_method(D_METHOD("set_camera_device_id", "id"), &GazeTracker::set_camera_device_id);
@@ -98,16 +106,15 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeTracker::get_gaze_origin);
     ClassDB::bind_method(D_METHOD("get_gaze_direction", "apply_calibration"), &GazeTracker::get_gaze_direction, DEFVAL(true));
 
-    ClassDB::bind_method(D_METHOD("get_head_rotation_opencv_space"), &GazeTracker::get_head_rotation_opencv_space);
-    ClassDB::bind_method(D_METHOD("get_head_translation_opencv_space"), &GazeTracker::get_head_translation_opencv_space);
+    ClassDB::bind_method(D_METHOD("get_head_rotation_inference_space"), &GazeTracker::get_head_rotation_inference_space);
+    ClassDB::bind_method(D_METHOD("get_head_translation_inference_space"), &GazeTracker::get_head_translation_inference_space);
     ClassDB::bind_method(D_METHOD("get_head_position"), &GazeTracker::get_head_position);
     ClassDB::bind_method(D_METHOD("get_head_forward"), &GazeTracker::get_head_forward);
     ClassDB::bind_method(D_METHOD("project_gaze_ray_to_viewport", "origin", "direction", "apply_calibration"), &GazeTracker::project_gaze_ray_to_viewport, DEFVAL(true));
-    ClassDB::bind_method(D_METHOD("get_left_eye_center_opencv_space"), &GazeTracker::get_left_eye_center_opencv_space);
-    ClassDB::bind_method(D_METHOD("get_right_eye_center_opencv_space"), &GazeTracker::get_right_eye_center_opencv_space);
-    ClassDB::bind_method(D_METHOD("get_gaze_direction_opencv_space"), &GazeTracker::get_gaze_direction_opencv_space);
+    ClassDB::bind_method(D_METHOD("get_left_eye_center_inference_space"), &GazeTracker::get_left_eye_center_inference_space);
+    ClassDB::bind_method(D_METHOD("get_right_eye_center_inference_space"), &GazeTracker::get_right_eye_center_inference_space);
+    ClassDB::bind_method(D_METHOD("get_gaze_direction_inference_space"), &GazeTracker::get_gaze_direction_inference_space);
 
-    // Enums
     BIND_ENUM_CONSTANT(LIFECYCLE_UNKNOWN);
     BIND_ENUM_CONSTANT(LIFECYCLE_PERM_REQ);
     BIND_ENUM_CONSTANT(LIFECYCLE_INITIALIZING);
@@ -121,10 +128,17 @@ void GazeTracker::_bind_methods() {
 }
 
 GazeTracker::GazeTracker() {
+    ::Gaze::g_is_exiting = false;
     update_projection_parameters();
 }
-
 GazeTracker::~GazeTracker() {
+    Gaze::log_info("GazeTracker_Destructor_Began");
+    ::Gaze::g_is_exiting = true;
+    camera_sensor = nullptr;
+    face_estimator = nullptr;
+    eye_estimator = nullptr;
+    stop_tracker(false);
+    Gaze::log_info("GazeTracker_Destructor_Finished");
 }
 
 void GazeTracker::_ready() {
@@ -136,7 +150,11 @@ void GazeTracker::_ready() {
 void GazeTracker::_process(double delta) {
     if (!tracker_initialized) return;
 
-    // Global Watchdog: check if frame updates timed out (e.g. webcam stopped, face lost without active push)
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        gs->trigger_process();
+    }
+
     if (is_face_tracked) {
         uint64_t current_time = Time::get_singleton()->get_ticks_msec();
         if (current_time - last_frame_time > 1000) {
@@ -173,10 +191,15 @@ void GazeTracker::_notification(int p_what) {
             stop_tracker(true);
             break;
         }
+        case NOTIFICATION_WM_CLOSE_REQUEST:
+        case NOTIFICATION_WM_GO_BACK_REQUEST: {
+            Gaze::log_info("GazeTracker_Notification_WM_Close_Or_GoBack");
+            stop_tracker(false);
+            break;
+        }
         case NOTIFICATION_APPLICATION_FOCUS_IN:
         case NOTIFICATION_APPLICATION_RESUMED: {
             if (lifecycle_state == LIFECYCLE_PERM_REQ) {
-                // Verify Android permission
                 OS *os = OS::get_singleton();
                 if (os && os->has_feature("android")) {
                     PackedStringArray granted_perms = os->get_granted_permissions();
@@ -208,111 +231,27 @@ void GazeTracker::on_permission_result(bool granted) {
         return;
     }
 
-    // Permission verified, transition to INITIALIZING and complete setup
     set_lifecycle_state(LIFECYCLE_INITIALIZING);
     complete_initialization();
 }
 
-std::vector<uint8_t> GazeTracker::load_file_buffer(const String &path) {
-    std::vector<uint8_t> buffer;
-    if (path.is_empty()) {
-        return buffer;
-    }
-    Ref<FileAccess> file = FileAccess::open(path, FileAccess::READ);
-    if (file.is_null()) {
-        Gaze::log_error("GazeTrackerLoadFileBufferFailed_Open", "path", path.utf8().get_data());
-        return buffer;
-    }
-    uint64_t length = file->get_length();
-    if (length == 0) {
-        Gaze::log_error("GazeTrackerLoadFileBufferFailed_Empty", "path", path.utf8().get_data());
-        return buffer;
-    }
-    PackedByteArray godot_buffer = file->get_buffer(length);
-    buffer.resize(length);
-    std::memcpy(buffer.data(), godot_buffer.ptr(), length);
-    return buffer;
-}
 
-String GazeTracker::copy_model_to_user_dir(const String &res_path) {
 
-    if (res_path.is_empty()) return "";
-    
-    // Only copy if it is a res:// virtual path
-    if (!res_path.begins_with("res://")) {
-        return ProjectSettings::get_singleton()->globalize_path(res_path);
-    }
-    
-    String file_name = res_path.get_file();
-    String user_path = "user://models/" + file_name;
-    
-    Ref<DirAccess> dir = DirAccess::open("user://");
-    if (dir.is_valid() && !dir->dir_exists("models")) {
-        dir->make_dir("models");
-    }
-    
-    copy_individual_file(res_path, user_path);
-    
-    // If it's OpenVINO XML, we also copy the companion .bin file
-    if (res_path.ends_with(".xml")) {
-        String bin_res_path = res_path.replace(".xml", ".bin");
-        String bin_user_path = user_path.replace(".xml", ".bin");
-        copy_individual_file(bin_res_path, bin_user_path);
-    }
-    
-    return ProjectSettings::get_singleton()->globalize_path(user_path);
-}
 
-void GazeTracker::copy_individual_file(const String &src, const String &dest) {
-    bool dest_exists = FileAccess::file_exists(dest);
-    uint64_t src_len = 0;
-    uint64_t dest_len = 0;
-
-    if (dest_exists) {
-        Ref<FileAccess> f_dest = FileAccess::open(dest, FileAccess::READ);
-        if (f_dest.is_valid()) {
-            dest_len = f_dest->get_length();
-        }
-    }
-
-    Ref<FileAccess> file_in = FileAccess::open(src, FileAccess::READ);
-    if (file_in.is_valid()) {
-        src_len = file_in->get_length();
-    } else {
-        Error err_in = FileAccess::get_open_error();
-        Gaze::log_error("GazeTrackerCopyModelFailed_SrcInvalid", 
-                        "src", src.utf8().get_data(), 
-                        "err_in", (int)err_in);
-        return;
-    }
-
-    if (!dest_exists || dest_len != src_len || dest_len == 0) {
-        Ref<FileAccess> file_out = FileAccess::open(dest, FileAccess::WRITE);
-        Error err_out = FileAccess::get_open_error();
-        if (file_out.is_valid()) {
-            PackedByteArray buffer = file_in->get_buffer(src_len);
-            file_out->store_buffer(buffer);
-            Gaze::log_info("GazeTrackerCopiedModel", 
-                           "src", src.utf8().get_data(), 
-                           "dest", dest.utf8().get_data(), 
-                           "size", (int)src_len);
-        } else {
-            Gaze::log_error("GazeTrackerCopyModelFailed_DestWrite", 
-                            "src", src.utf8().get_data(), 
-                            "dest", dest.utf8().get_data(), 
-                            "err_out", (int)err_out);
-        }
-    }
-}
 
 bool GazeTracker::initialize_tracker() {
     if (lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
-    // Hierarchy discovery / dynamic instantiation
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return false;
+
+    display_rid = gs->display_create();
+
     camera_sensor = Object::cast_to<CameraSensor>(get_node_or_null("CameraSensor"));
     if (!camera_sensor) {
         camera_sensor = memnew(CameraSensor);
         camera_sensor->set_name("CameraSensor");
+        camera_sensor->set_camera_device_id(camera_device_id);
         add_child(camera_sensor);
     }
 
@@ -334,23 +273,10 @@ bool GazeTracker::initialize_tracker() {
         }
     }
 
-    // Initialize DisplayProfile Resource
     if (display_profile.is_null()) {
         display_profile = DisplayProfile::estimate_from_os();
-    } else {
-        if (display_profile->get_logical_size_px().x <= 0 || display_profile->get_logical_size_px().y <= 0 ||
-            display_profile->get_physical_size_mm().x <= 0.0 || display_profile->get_physical_size_mm().y <= 0.0) {
-            Ref<DisplayProfile> default_prof = DisplayProfile::estimate_from_os();
-            if (display_profile->get_logical_size_px().x <= 0 || display_profile->get_logical_size_px().y <= 0) {
-                display_profile->set_logical_size_px(default_prof->get_logical_size_px());
-            }
-            if (display_profile->get_physical_size_mm().x <= 0.0 || display_profile->get_physical_size_mm().y <= 0.0) {
-                display_profile->set_physical_size_mm(default_prof->get_physical_size_mm());
-            }
-        }
     }
 
-    // Initialize Smoother Resource
     if (screen_smooth.is_null()) {
         Ref<OneEuroSmoother> default_smoother;
         default_smoother.instantiate();
@@ -358,40 +284,54 @@ bool GazeTracker::initialize_tracker() {
     }
     smoother_state = screen_smooth->_smoother_init();
 
-    // Default CameraSensor position if unconfigured
     if (camera_sensor && camera_sensor->get_position() == Vector3(0.0, 0.0, 0.0)) {
         camera_sensor->set_position(Vector3(0.0, display_profile->get_physical_size_mm().y * 0.5, 0.0));
     }
 
     platform_initialize();
-
-    if (display_profile->get_logical_size_px().x <= 0 || display_profile->get_logical_size_px().y <= 0 ||
-        display_profile->get_physical_size_mm().x <= 0.0 || display_profile->get_physical_size_mm().y <= 0.0) {
-        Gaze::log_error("GazeTrackerInitFailed", "reason", "invalid screen geometry");
-        set_lifecycle_state(LIFECYCLE_ERROR);
-        return false;
-    }
-
-    Gaze::log_info("GazeTrackerGeometryInitialized",
-                   "pixels_x", display_profile->get_logical_size_px().x,
-                   "pixels_y", display_profile->get_logical_size_px().y,
-                   "mm_x", display_profile->get_physical_size_mm().x,
-                   "mm_y", display_profile->get_physical_size_mm().y);
-
     update_projection_parameters();
 
     return true;
 }
 
-
 void GazeTracker::stop_tracker(bool p_emit_signal) {
+    Gaze::log_info("GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal);
     tracker_initialized = false;
     is_face_tracked = false;
 
     platform_terminate();
 
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        if (gs->is_connected("gaze_data_ready", Callable(this, "_on_gaze_data_ready"))) {
+            gs->disconnect("gaze_data_ready", Callable(this, "_on_gaze_data_ready"));
+        }
+        Gaze::log_info("GazeTracker_StopTracker_GazeServerStopProcessing_Began");
+        gs->stop_processing();
+        Gaze::log_info("GazeTracker_StopTracker_GazeServerStopProcessing_Finished");
+        
+        if (eye_gaze_rid.is_valid()) {
+            gs->eye_tracker_free(eye_gaze_rid);
+            eye_gaze_rid = RID();
+        }
+        if (face_gaze_rid.is_valid()) {
+            gs->face_tracker_free(face_gaze_rid);
+            face_gaze_rid = RID();
+        }
+        if (camera_gaze_rid.is_valid()) {
+            gs->camera_free(camera_gaze_rid);
+            camera_gaze_rid = RID();
+        }
+        if (display_rid.is_valid()) {
+            gs->display_free(display_rid);
+            display_rid = RID();
+        }
+    }
+
     if (camera_sensor && ObjectDB::get_instance(camera_sensor->get_instance_id())) {
+        Gaze::log_info("GazeTracker_StopTracker_CameraSensorStop_Began");
         camera_sensor->stop_sensor();
+        Gaze::log_info("GazeTracker_StopTracker_CameraSensorStop_Finished");
     }
     if (face_estimator && ObjectDB::get_instance(face_estimator->get_instance_id())) {
         face_estimator->stop_estimator();
@@ -399,26 +339,30 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
     if (eye_estimator && ObjectDB::get_instance(eye_estimator->get_instance_id())) {
         eye_estimator->stop_estimator();
     }
-    if (screen_smooth.is_valid()) {
-        smoother_state = screen_smooth->_smoother_init();
-    }
 
     if (p_emit_signal) {
         set_lifecycle_state(LIFECYCLE_UNKNOWN);
     } else {
         lifecycle_state = LIFECYCLE_UNKNOWN;
     }
+    Gaze::log_info("GazeTracker_StopTracker_Finished");
 }
 
 void GazeTracker::clear_calibration() {
-    calibration_resource.unref();
+    if (device_calibration.is_valid() && device_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        device_calibration->disconnect("changed", Callable(this, "update_projection_parameters"));
+    }
+    if (bio_calibration.is_valid() && bio_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        bio_calibration->disconnect("changed", Callable(this, "update_projection_parameters"));
+    }
+    device_calibration.unref();
+    bio_calibration.unref();
     update_projection_parameters();
-    Gaze::log_info("CalibrationCleared");
 }
 
 void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 direction) {
+    // Legacy support
     last_frame_time = Time::get_singleton()->get_ticks_msec();
-
     bool state_changed = (face_detected != is_face_tracked);
     is_face_tracked = face_detected;
 
@@ -438,71 +382,128 @@ void GazeTracker::feed_gaze(bool face_detected, Vector3 origin, Vector3 directio
             emit_signal("gaze_updated", latest_filtered_gaze_px);
         }
     } else {
-        latest_crops.face_detected = false;
         latest_projected_gaze_px = Vector2();
         latest_filtered_gaze_px = Vector2();
     }
 }
 
 void GazeTracker::update_projection_parameters() {
-    Vector2i size_px = Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
-    Vector2 size_mm = Vector2(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
+    if (!display_rid.is_valid()) return;
+
+    Vector2i size_px(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+    Vector2 size_mm(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
 
     if (display_profile.is_valid()) {
         size_px = display_profile->get_logical_size_px();
         size_mm = display_profile->get_physical_size_mm();
     }
 
-    Ref<GazeCalibration> cal = calibration_resource;
-    if (cal.is_null()) {
-        cal = get_default_calibration();
+    Ref<DeviceCalibration> dev_cal = device_calibration;
+    if (dev_cal.is_null()) {
+        dev_cal = get_default_device_calibration();
+    }
+
+    Ref<BioCalibration> bio_cal = bio_calibration;
+    if (bio_cal.is_null()) {
+        Ref<DefaultBioCalibration> def_bio;
+        def_bio.instantiate();
+        bio_cal = def_bio;
     }
 
     Vector3 cam_off = get_derived_camera_offset();
     double cam_tilt = get_derived_camera_tilt();
+    Vector2 pixel_sz_mm(0.25, 0.25);
 
-    if (cal.is_valid()) {
-        cam_off = cal->get_camera_offset(const_cast<GazeTracker*>(this));
-        cam_tilt = cal->get_camera_tilt(const_cast<GazeTracker*>(this));
+    if (dev_cal.is_valid()) {
+        cam_off = dev_cal->get_camera_offset(const_cast<GazeTracker*>(this));
+        cam_tilt = dev_cal->get_camera_tilt(const_cast<GazeTracker*>(this));
+        pixel_sz_mm = dev_cal->get_pixel_size_mm(const_cast<GazeTracker*>(this));
+        if (pixel_sz_mm.x > 0.0 && pixel_sz_mm.y > 0.0) {
+            size_mm = pixel_sz_mm * Vector2(size_px.x, size_px.y);
+        }
     }
 
-    Gaze::CameraPlacement placement(
-        Gaze::GazeVector3(cam_off.x, cam_off.y, cam_off.z),
-        cam_tilt
-    );
-    projection_engine.set_camera_placement(placement);
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        gs->display_set_geometry(display_rid, Vector2(size_px.x, size_px.y), size_mm);
+        gs->display_set_device_calibration(display_rid, dev_cal);
+        gs->display_set_bio_calibration(display_rid, bio_cal);
 
+        PlatformGeometry geom = platform_get_geometry();
+        Transform2D vp_xform = get_adjusted_viewport_transform();
+        gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform);
+
+        if (camera_gaze_rid.is_valid()) {
+            gs->camera_set_offsets(camera_gaze_rid, cam_off, cam_tilt);
+        }
+    }
+
+    // Keep internal mathematical projection engine synchronized for mapping/projection helper calls
+    Gaze::CameraPlacement placement(Gaze::GazeVector3(cam_off.x, cam_off.y, cam_off.z), cam_tilt);
+    projection_engine.set_camera_placement(placement);
     projection_engine.set_screen_size_pixels(Gaze::GazeVector2(size_px.x, size_px.y));
     projection_engine.set_screen_size_mm(Gaze::GazeVector2(size_mm.x, size_mm.y));
 
     Gaze::GazeCalibration c;
-    if (cal.is_valid()) {
-        c.bias_pitch = cal->get_bias_pitch();
-        c.bias_yaw = cal->get_bias_yaw();
-        if (cal->get_impl()) {
-            c.scale_yaw = cal->get_impl()->get_scale_yaw();
-            c.scale_pitch = cal->get_impl()->get_scale_pitch();
-        }
-        c.bias_pixel_x = cal->get_bias_pixel_x();
-        c.bias_pixel_y = cal->get_bias_pixel_y();
+    if (bio_cal.is_valid()) {
+        c.bias_pitch = bio_cal->get_bias_pitch();
+        c.bias_yaw = bio_cal->get_bias_yaw();
+        c.scale_pitch = bio_cal->get_scale_pitch();
+        c.scale_yaw = bio_cal->get_scale_yaw();
+    }
+    if (dev_cal.is_valid()) {
+        c.pixel_size_mm = Gaze::GazeVector2(pixel_sz_mm.x, pixel_sz_mm.y);
+        c.camera_offset = Gaze::GazeVector3(cam_off.x, cam_off.y, cam_off.z);
+        c.camera_tilt = cam_tilt;
     }
     projection_engine.set_calibration(c);
 
-    double f = camera_sensor ? camera_sensor->get_focal_length() : 1000.0;
-    projection_engine.set_camera_focal_length_px(f);
-    if (face_estimator) {
-        face_estimator->set_focal_length(f);
+    double f = 1000.0;
+    if (camera_sensor) {
+        double focal = camera_sensor->get_focal_length();
+        if (focal > 0.0) {
+            f = focal;
+        } else {
+            double fov = camera_sensor->get_camera_fov();
+            int cam_w = 640;
+            Ref<Image> img = camera_sensor->get_last_frame();
+            if (img.is_valid() && img->get_width() > 0) {
+                cam_w = img->get_width();
+            }
+            f = Gaze::get_focal_length_px(cam_w, fov);
+        }
     }
+    projection_engine.set_camera_focal_length_px(f);
 }
 
-// Getters / Setters property bindings
-void GazeTracker::set_calibration_resource(const Ref<GazeCalibration>& res) {
-    calibration_resource = res;
+void GazeTracker::set_device_calibration(const Ref<DeviceCalibration>& res) {
+    if (device_calibration.is_valid() && device_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        device_calibration->disconnect("changed", Callable(this, "update_projection_parameters"));
+    }
+    device_calibration = res;
+    if (device_calibration.is_valid() && !device_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        device_calibration->connect("changed", Callable(this, "update_projection_parameters"));
+    }
     update_projection_parameters();
 }
 
-Ref<GazeCalibration> GazeTracker::get_calibration_resource() const {
-    return calibration_resource;
+Ref<DeviceCalibration> GazeTracker::get_device_calibration() const {
+    return device_calibration;
+}
+
+void GazeTracker::set_bio_calibration(const Ref<BioCalibration>& res) {
+    if (bio_calibration.is_valid() && bio_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        bio_calibration->disconnect("changed", Callable(this, "update_projection_parameters"));
+    }
+    bio_calibration = res;
+    if (bio_calibration.is_valid() && !bio_calibration->is_connected("changed", Callable(this, "update_projection_parameters"))) {
+        bio_calibration->connect("changed", Callable(this, "update_projection_parameters"));
+    }
+    update_projection_parameters();
+}
+
+Ref<BioCalibration> GazeTracker::get_bio_calibration() const {
+    return bio_calibration;
 }
 
 void GazeTracker::set_display_profile(const Ref<DisplayProfile>& profile) {
@@ -556,6 +557,9 @@ Vector2 GazeTracker::get_pixel_size_mm() const {
 
 void GazeTracker::set_camera_device_id(int id) {
     camera_device_id = id;
+    if (camera_sensor) {
+        camera_sensor->set_camera_device_id(id);
+    }
 }
 
 int GazeTracker::get_camera_device_id() const {
@@ -581,23 +585,8 @@ int GazeTracker::get_debug_logging_frames() const {
 }
 
 Transform3D GazeTracker::get_head_transform() const {
-    if (!is_face_tracked) {
-        return Transform3D();
-    }
-    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
-        latest_crops.head_pose_translation,
-        latest_crops.head_pose_rotation
-    );
-
-    Basis basis(
-        Vector3(gt.basis.x.x, gt.basis.x.y, gt.basis.x.z),
-        Vector3(gt.basis.y.x, gt.basis.y.y, gt.basis.y.z),
-        Vector3(gt.basis.z.x, gt.basis.z.y, gt.basis.z.z)
-    );
-
-    Vector3 translation(gt.origin.x, gt.origin.y, gt.origin.z);
-
-    return Transform3D(basis, translation);
+    if (!face_estimator) return Transform3D();
+    return GazeServer::get_singleton()->get_relative_transform(face_estimator->get_face_rid());
 }
 
 Transform3D GazeTracker::get_camera_to_screen_transform() const {
@@ -652,32 +641,17 @@ Transform3D GazeTracker::get_camera_to_screen_transform() const {
 }
 
 Vector3 GazeTracker::get_head_position() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, 0.0);
-    }
-    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
-        latest_crops.head_pose_translation,
-        latest_crops.head_pose_rotation
-    );
-    return Vector3(gt.origin.x, gt.origin.y, gt.origin.z);
+    return get_head_transform().origin;
 }
 
 Vector3 GazeTracker::get_head_forward() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, 1.0); // Facing straight toward screen (+Z)
-    }
-    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
-        latest_crops.head_pose_translation,
-        latest_crops.head_pose_rotation
-    );
-    Gaze::GazeVector3 forward = gt.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
-    return Vector3(forward.x, forward.y, forward.z);
+    return get_head_transform().basis.get_column(2).normalized();
 }
 
 Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration) const {
     const_cast<GazeTracker*>(this)->update_projection_parameters();
-    Gaze::GazeVector3 origin_cam(origin.x, origin.y, origin.z);
-    Gaze::GazeVector3 dir_cam(direction.x, direction.y, direction.z);
+    const Gaze::GazeVector3& origin_cam = reinterpret_cast<const Gaze::GazeVector3&>(origin);
+    Gaze::GazeVector3 dir_cam = reinterpret_cast<const Gaze::GazeVector3&>(direction);
 
     if (apply_calibration) {
         dir_cam = projection_engine.apply_3d_bias(dir_cam);
@@ -686,79 +660,74 @@ Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direct
     PlatformGeometry geom = platform_get_geometry();
     Transform2D vp_xform = get_adjusted_viewport_transform();
 
-    double scale = 1.0;
-    DisplayServer *ds = DisplayServer::get_singleton();
-    if (ds) {
-        scale = ds->screen_get_scale(ds->window_get_current_screen());
-    }
+    Vector2 scale = DisplayProfile::get_screen_scale();
 
     Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
         Gaze::GazeVector2(geom.window_position_px.x, geom.window_position_px.y),
-        Gaze::GazeVector2(vp_xform.get_scale().x / scale, vp_xform.get_scale().y / scale),
-        Gaze::GazeVector2(vp_xform.get_origin().x / scale, vp_xform.get_origin().y / scale)
+        Gaze::GazeVector2(vp_xform.get_scale().x / scale.x, vp_xform.get_scale().y / scale.y),
+        Gaze::GazeVector2(vp_xform.get_origin().x / scale.x, vp_xform.get_origin().y / scale.y)
     );
 
     Gaze::GazeVector2 local_pixel;
     if (projector.project_to_viewport(projection_engine, origin_cam, dir_cam, local_pixel)) {
-        double px = local_pixel.x;
-        double py = local_pixel.y;
-        if (apply_calibration) {
-            px += projection_engine.get_calibration().bias_pixel_x;
-            py += projection_engine.get_calibration().bias_pixel_y;
-        }
-        Vector2 out_pixel(px, py);
-        if (log_this_frame) {
-            UtilityFunctions::print("[GazeTracker Debug] window_pos: ", geom.window_position_px,
-                                    " | viewport_scale: ", vp_xform.get_scale(),
-                                    " | projected_viewport_pixel: ", out_pixel);
-        }
-        return out_pixel;
+        return Vector2(local_pixel.x, local_pixel.y);
     }
-    // Return unattainable infinity if the ray doesn't intersect or points away
     return Vector2(INFINITY, INFINITY);
 }
 
 Vector3 GazeTracker::get_gaze_origin() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, 0.0);
-    }
-    return Vector3(latest_gaze_origin.x, latest_gaze_origin.y, latest_gaze_origin.z);
+    if (!eye_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_gaze_origin_from_eye_tracker(eye_gaze_rid);
 }
 
 Vector3 GazeTracker::get_gaze_direction(bool apply_calibration) const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, -1.0);
+    if (!eye_gaze_rid.is_valid()) return Vector3(0.0, 0.0, -1.0);
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3(0.0, 0.0, -1.0);
+    
+    Vector3 dir = gs->get_gaze_direction_from_eye_tracker(eye_gaze_rid);
+    if (apply_calibration) {
+        Gaze::GazeVector3 calib_dir = projection_engine.apply_3d_bias(Gaze::GazeVector3(dir.x, dir.y, dir.z));
+        return Vector3(calib_dir.x, calib_dir.y, calib_dir.z);
     }
-    Gaze::GazeVector3 dir = apply_calibration ? projection_engine.apply_3d_bias(latest_gaze_dir) : latest_gaze_dir;
-    return Vector3(dir.x, dir.y, dir.z);
+    return dir;
 }
 
-Vector3 GazeTracker::get_head_rotation_opencv_space() const {
-    if (!is_face_tracked) {
-        return Vector3(0.0, 0.0, 0.0);
-    }
-    Gaze::GazeTransform3D gt = projection_engine.get_head_transform_in_camera_space(
-        latest_crops.head_pose_translation,
-        latest_crops.head_pose_rotation
-    );
-    Gaze::GazeVector3 euler = gt.basis.get_euler_deg();
-    return Vector3(euler.x, euler.y, euler.z);
+Vector3 GazeTracker::get_head_rotation_inference_space() const {
+    if (!face_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_head_rotation_from_face_tracker(face_gaze_rid);
 }
 
-Vector3 GazeTracker::get_head_translation_opencv_space() const {
-    return get_head_position();
+Vector3 GazeTracker::get_head_translation_inference_space() const {
+    if (!face_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_head_translation_from_face_tracker(face_gaze_rid);
 }
 
-Vector3 GazeTracker::get_left_eye_center_opencv_space() const {
-    return Vector3(latest_crops.left_eye_center_cam.x, latest_crops.left_eye_center_cam.y, latest_crops.left_eye_center_cam.z);
+Vector3 GazeTracker::get_left_eye_center_inference_space() const {
+    if (!eye_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_gaze_origin_from_eye_tracker(eye_gaze_rid);
 }
 
-Vector3 GazeTracker::get_right_eye_center_opencv_space() const {
-    return Vector3(latest_crops.right_eye_center_cam.x, latest_crops.right_eye_center_cam.y, latest_crops.right_eye_center_cam.z);
+Vector3 GazeTracker::get_right_eye_center_inference_space() const {
+    if (!eye_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_gaze_origin_from_eye_tracker(eye_gaze_rid);
 }
 
-Vector3 GazeTracker::get_gaze_direction_opencv_space() const {
-    return Vector3(latest_gaze_dir.x, latest_gaze_dir.y, latest_gaze_dir.z);
+Vector3 GazeTracker::get_gaze_direction_inference_space() const {
+    if (!eye_gaze_rid.is_valid()) return Vector3();
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return Vector3();
+    return gs->get_gaze_direction_from_eye_tracker(eye_gaze_rid);
 }
 
 CameraSensor* GazeTracker::get_camera_sensor() const { return camera_sensor; }
@@ -767,8 +736,8 @@ EyeEstimator* GazeTracker::get_eye_estimator() const { return eye_estimator; }
 
 void GazeTracker::set_screen_smooth(const Ref<Smoother>& smoother) {
     screen_smooth = smoother;
-    if (screen_smooth.is_valid()) {
-        smoother_state = screen_smooth->_smoother_init();
+    if (eye_estimator) {
+        GazeServer::get_singleton()->eye_tracker_set_smoother(eye_estimator->get_eye_rid(), screen_smooth);
     }
 }
 
@@ -776,29 +745,7 @@ Ref<Smoother> GazeTracker::get_screen_smooth() const {
     return screen_smooth;
 }
 
-void GazeTracker::set_pipeline_config(const Ref<GazePipelineConfig>& res) {
-    pipeline_config = res;
-    update_pipeline_config();
-}
 
-Ref<GazePipelineConfig> GazeTracker::get_pipeline_config() const {
-    return pipeline_config;
-}
-
-void GazeTracker::update_pipeline_config() {
-    if (pipeline_config.is_valid()) {
-        Gaze::PipelineConfig core_cfg = pipeline_config->get_config();
-        if (camera_sensor) {
-            camera_sensor->set_resolution(core_cfg.desired_camera_width, core_cfg.desired_camera_height);
-        }
-        if (face_estimator) {
-            face_estimator->set_pipeline_config(core_cfg);
-        }
-        if (eye_estimator) {
-            eye_estimator->set_pipeline_config(core_cfg);
-        }
-    }
-}
 
 Transform2D GazeTracker::get_adjusted_viewport_transform() const {
     Viewport* vp = const_cast<GazeTracker*>(this)->get_viewport();
@@ -811,38 +758,84 @@ Transform2D GazeTracker::get_adjusted_viewport_transform() const {
 Vector2 GazeTracker::map_viewport_to_screen(Vector2 logical_pixel) const {
     PlatformGeometry geom = platform_get_geometry();
     Transform2D vp_xform = get_adjusted_viewport_transform();
-
-    double scale = 1.0;
-    DisplayServer *ds = DisplayServer::get_singleton();
-    if (ds) {
-        scale = ds->screen_get_scale(ds->window_get_current_screen());
-    }
-
+    Vector2 scale = DisplayProfile::get_screen_scale();
     Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
         Gaze::GazeVector2(geom.window_position_px.x, geom.window_position_px.y),
-        Gaze::GazeVector2(vp_xform.get_scale().x / scale, vp_xform.get_scale().y / scale),
-        Gaze::GazeVector2(vp_xform.get_origin().x / scale, vp_xform.get_origin().y / scale)
+        Gaze::GazeVector2(vp_xform.get_scale().x / scale.x, vp_xform.get_scale().y / scale.y),
+        Gaze::GazeVector2(vp_xform.get_origin().x / scale.x, vp_xform.get_origin().y / scale.y)
     );
-
     Gaze::GazeVector2 screen_px = projector.map_viewport_to_screen_px(Gaze::GazeVector2(logical_pixel.x, logical_pixel.y));
     return Vector2(screen_px.x, screen_px.y);
 }
 
 Vector2 GazeTracker::filter_gaze_coordinate(Vector2 raw) {
     if (screen_smooth.is_null() || smoother_state.is_empty()) {
-        if (log_this_frame) {
-            UtilityFunctions::print("[GazeTracker Filter Debug] Smoother is null/empty! Returning raw: ", raw);
-        }
         return raw;
     }
     double tstamp = (double)Time::get_singleton()->get_ticks_msec() / 1000.0;
     Variant filtered = screen_smooth->_smoother_next(smoother_state, tstamp, raw);
-    Vector2 out = filtered;
-    if (log_this_frame) {
-        UtilityFunctions::print("[GazeTracker Filter Debug] raw: ", raw, " | filtered: ", out);
+    return filtered;
+}
+
+bool GazeTracker::complete_initialization() {
+    if (camera_sensor) camera_sensor->initialize_sensor();
+
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        // Create spatial representations
+        camera_gaze_rid = gs->camera_create(display_rid);
+        face_gaze_rid = gs->face_tracker_create(camera_gaze_rid);
+        eye_gaze_rid = gs->eye_tracker_create(face_gaze_rid);
+
+        // Inject them
+        if (face_estimator) face_estimator->set_face_rid(face_gaze_rid);
+        if (eye_estimator) {
+            eye_estimator->set_eye_rid(eye_gaze_rid);
+            if (screen_smooth.is_valid()) {
+                gs->eye_tracker_set_smoother(eye_gaze_rid, screen_smooth);
+            }
+        }
+
+        // Link GazeServer camera to VisionServer camera
+        if (camera_sensor) {
+            gs->camera_set_vision_rid(camera_gaze_rid, camera_sensor->get_camera_rid());
+        }
+
+        // Initialize estimators (connects signals)
+        if (face_estimator) face_estimator->initialize_estimator();
+        if (eye_estimator) eye_estimator->initialize_estimator();
+
+        gs->connect("gaze_data_ready", Callable(this, "_on_gaze_data_ready"));
+
+#ifndef WEB_ENABLED
+        // Push initial geometry parameters to GazeServer display
+        update_projection_parameters();
+
+        gs->start_processing();
+#endif
     }
-    return out;
+
+    tracker_initialized = true;
+    set_lifecycle_state(LIFECYCLE_RUNNING);
+    return true;
+}
+
+void GazeTracker::_on_gaze_data_ready(RID p_rid) {
+    if (!eye_estimator) return;
+    
+    RID target_eye = eye_estimator->get_eye_rid();
+    if (p_rid == target_eye) {
+        GazeServer *gs = GazeServer::get_singleton();
+        if (gs && face_estimator) {
+            is_face_tracked = gs->is_face_detected(face_estimator->get_face_rid());
+            last_frame_time = Time::get_singleton()->get_ticks_msec();
+            
+            latest_filtered_gaze_px = gs->get_gaze_screen(display_rid, true);
+            latest_projected_gaze_px = gs->get_gaze_screen(display_rid, false);
+
+            emit_signal("gaze_updated", latest_filtered_gaze_px);
+        }
+    }
 }
 
 } // namespace godot
-

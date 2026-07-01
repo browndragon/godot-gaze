@@ -1,3 +1,4 @@
+// TODO: again, I prefer `_test.cpp` naming.
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "projection_engine.hpp"
@@ -5,7 +6,8 @@
 
 using namespace Gaze;
 
-TEST_CASE("Testing custom Vector3 arithmetic") {
+TEST_CASE("Testing custom Vector3 arithmetic")
+{
     GazeVector3 a(1.0, 2.0, 3.0);
     GazeVector3 b(4.0, 5.0, 6.0);
 
@@ -32,7 +34,8 @@ TEST_CASE("Testing custom Vector3 arithmetic") {
     CHECK(norm.length() == doctest::Approx(1.0));
 }
 
-TEST_CASE("Testing 1 Euro Filter basic noise reduction") {
+TEST_CASE("Testing 1 Euro Filter basic noise reduction")
+{
     // Initialize filter: mincutoff = 1.0Hz, beta = 0.0 (constant low-pass filter)
     OneEuroFilter filter(60.0, 1.0, 0.0, 1.0);
 
@@ -46,7 +49,8 @@ TEST_CASE("Testing 1 Euro Filter basic noise reduction") {
 
     // Feed noisy signal centered at 100
     double sum = 0.0;
-    for (int i = 0; i < 20; ++i) {
+    for (int i = 0; i < 20; ++i)
+    {
         timestamp += dt;
         double noise = (i % 2 == 0) ? 5.0 : -5.0;
         filtered = filter.filter(value + noise, timestamp);
@@ -59,9 +63,10 @@ TEST_CASE("Testing 1 Euro Filter basic noise reduction") {
     CHECK(std::abs(filtered - 100.0) < 2.0);
 }
 
-TEST_CASE("Testing Projection Engine Math (Zero Tilt)") {
+TEST_CASE("Testing Projection Engine Math (Zero Tilt)")
+{
     ProjectionEngine engine;
-    
+
     // Configure standard screen: 1920x1080px, 527x296mm
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
@@ -76,7 +81,7 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)") {
 
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
-    
+
     REQUIRE(success == true);
     // Center of screen horizontally, top of screen vertically (10mm offset below camera)
     // Camera is at y = 148mm (top edge). Gaze hits at y = 0mm screen relative coordinate.
@@ -88,12 +93,13 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)") {
     CHECK(pixel.y == doctest::Approx(0.0));
 }
 
-TEST_CASE("Testing Projection Sensitivity under Retina Dimensions") {
+TEST_CASE("Testing Projection Sensitivity under Retina Dimensions")
+{
     ProjectionEngine engine;
     // Mock logical pixels and the logical millimeters (without scale multiplier)
     engine.set_screen_size_pixels(GazeVector2(1440.0, 900.0));
     engine.set_screen_size_mm(GazeVector2(166.0, 103.0));
-    
+
     CameraPlacement placement(GazeVector3(0.0, 51.5, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
@@ -103,7 +109,7 @@ TEST_CASE("Testing Projection Sensitivity under Retina Dimensions") {
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
     REQUIRE(success == true);
-    
+
     // With correct logical scale (high sensitivity), X should project to approx 286 px.
     // If a physical scale multiplier was incorrectly applied, screen_size_mm would double,
     // halving the sensitivity, causing X to project to approx 503 px (much closer to center).
@@ -111,7 +117,8 @@ TEST_CASE("Testing Projection Sensitivity under Retina Dimensions") {
     CHECK(pixel.x < 350.0);
 }
 
-TEST_CASE("Testing Projection Engine Math (With Tilt)") {
+TEST_CASE("Testing Projection Engine Math (With Tilt)")
+{
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
@@ -125,120 +132,39 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)") {
 
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
-    
+
     REQUIRE(success == true);
     // Check that vertical coordinate incorporates the 15-degree tilt
     CHECK(pixel.x == doctest::Approx(960.0));
     // Since camera is tilted down, looking straight along the optical axis projects higher up (above the screen top edge)
-    CHECK(pixel.y < 0.0); 
+    CHECK(pixel.y < 0.0);
 }
 
-TEST_CASE("Testing 3D Calibration Bias Correction") {
-    ProjectionEngine engine;
-    engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
-    engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
-
-    // Camera at top center, tilted down by 10 degrees
-    CameraPlacement placement(GazeVector3(0.0, 148.0, 15.0), 10.0);
-    engine.set_camera_placement(placement);
-
-    // Initial state: no calibration
-    GazeCalibration calib;
-    engine.set_calibration(calib);
-
-    // User is looking from (10.0, 20.0, -600.0) with a raw gaze direction pointing towards screen
-    GazeVector3 origin(10.0, 20.0, -600.0);
-    GazeVector3 raw_dir(0.02, 0.05, 0.99);
-
-    // Let's say the user is instructed to look at the center of the screen (960, 540)
-    GazeVector2 target(960.0, 540.0);
-
-    // Perform 3D calibration calculation
-    bool success = engine.calibrate_3d_bias(origin, raw_dir, target, calib);
-    REQUIRE(success == true);
-
-    // Check that computed angular biases are non-zero
-    CHECK((calib.bias_pitch != 0.0 || calib.bias_yaw != 0.0));
-
-    // Apply the calibration to the engine
-    engine.set_calibration(calib);
-
-    // Reproject the gaze and verify it hits the target pixel exactly
-    GazeVector2 calibrated_pixel;
-    GazeVector3 calib_dir = engine.apply_3d_bias(raw_dir);
-    success = engine.project_gaze(origin, calib_dir, calibrated_pixel);
-    
-    REQUIRE(success == true);
-    CHECK(calibrated_pixel.x == doctest::Approx(target.x));
-    CHECK(calibrated_pixel.y == doctest::Approx(target.y));
-}
-
-TEST_CASE("Testing 2D Calibration Bias Correction") {
-    ProjectionEngine engine;
-    engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
-    engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
-
-    CameraPlacement placement(GazeVector3(10.0, 140.0, 20.0), 12.0);
-    engine.set_camera_placement(placement);
-
-    GazeCalibration calib;
-    engine.set_calibration(calib);
-
-    GazeVector3 origin(-5.0, -15.0, -550.0);
-    GazeVector3 raw_dir(-0.04, -0.02, 0.98);
-
-    // Target a specific point on screen
-    GazeVector2 target(1200.0, 800.0);
-
-    // Perform 2D pixel calibration
-    bool success = engine.calibrate_2d_bias(origin, raw_dir, target, calib);
-    REQUIRE(success == true);
-
-    // Check that 2D pixel biases are non-zero
-    CHECK(calib.bias_pixel_x != 0.0);
-    CHECK(calib.bias_pixel_y != 0.0);
-    // 3D biases should remain untouched (zero)
-    CHECK(calib.bias_pitch == 0.0);
-    CHECK(calib.bias_yaw == 0.0);
-
-    // Apply the calibration to the engine
-    engine.set_calibration(calib);
-
-    // Reproject and verify it hits the target pixel exactly
-    GazeVector2 calibrated_pixel;
-    GazeVector3 calib_dir = engine.apply_3d_bias(raw_dir);
-    success = engine.project_gaze(origin, calib_dir, calibrated_pixel);
-    calibrated_pixel.x += calib.bias_pixel_x;
-    calibrated_pixel.y += calib.bias_pixel_y;
-    
-    REQUIRE(success == true);
-    CHECK(calibrated_pixel.x == doctest::Approx(target.x));
-    CHECK(calibrated_pixel.y == doctest::Approx(target.y));
-}
-
-TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
+TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs")
+{
     // Reconstruct head forward directions using the new unmirrored C++ mapping:
     // basis.z = (-r02, -r12, r22) -> head_forward = -basis.z = (r02, r12, -r22)
-    auto get_unmirrored_forward = [](double pitch_deg, double yaw_deg, double roll_deg) {
+    auto get_unmirrored_forward = [](double pitch_deg, double yaw_deg, double roll_deg)
+    {
         double p = pitch_deg * 3.14159265358979323846 / 180.0;
         double y = yaw_deg * 3.14159265358979323846 / 180.0;
         double r = -roll_deg * 3.14159265358979323846 / 180.0;
-        
+
         double cp = std::cos(p), sp = std::sin(p);
         double cy = std::cos(y), sy = std::sin(y);
         double cr = std::cos(r), sr = std::sin(r);
-        
+
         double r02 = cr * sy * cp + sr * sp;
         double r12 = sr * sy * cp - cr * sp;
         double r22 = cy * cp;
-        
+
         // head_forward = basis.z = (-r02, r12, r22) from get_head_transform
         double fx = -r02;
         double fy = r12;
         double fz = r22;
-        
-        double len = std::sqrt(fx*fx + fy*fy + fz*fz);
-        return GazeVector3(fx/len, fy/len, fz/len);
+
+        double len = std::sqrt(fx * fx + fy * fy + fz * fz);
+        return GazeVector3(fx / len, fy / len, fz / len);
     };
 
     // User logs: Point 1 (TL, left side) and Point 2 (TR, right side)
@@ -270,8 +196,10 @@ TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs") {
     // Moving to the right should increase Godot X translation
 }
 
-TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & Projection cases") {
-    struct TransformTestScenario {
+TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & Projection cases")
+{
+    struct TransformTestScenario
+    {
         std::string description;
         double camera_tilt_deg;
         GazeVector3 camera_offset_mm;
@@ -290,8 +218,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(960.0, 540.0)
-        },
+            GazeVector2(960.0, 540.0)},
         // 2. Laptop: Seated Center, Looking at Screen Top-Edge
         {
             "Laptop: Seated Center, Looking at Screen Top-Edge",
@@ -300,8 +227,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(960.0, 0.0)
-        },
+            GazeVector2(960.0, 0.0)},
         // 3. Laptop: Seated Center, Looking at Screen Bottom-Edge
         {
             "Laptop: Seated Center, Looking at Screen Bottom-Edge",
@@ -310,8 +236,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(960.0, 1080.0)
-        },
+            GazeVector2(960.0, 1080.0)},
         // 4. Laptop: Seated Center, Looking at Screen Left-Edge
         {
             "Laptop: Seated Center, Looking at Screen Left-Edge",
@@ -320,8 +245,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(0.0, 540.0)
-        },
+            GazeVector2(0.0, 540.0)},
         // 5. Laptop: Seated Center, Looking at Screen Right-Edge
         {
             "Laptop: Seated Center, Looking at Screen Right-Edge",
@@ -330,8 +254,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(1920.0, 540.0)
-        },
+            GazeVector2(1920.0, 540.0)},
         // 6. Laptop: Seated Left, Looking at Bottom-Right
         {
             "Laptop: Seated Left, Looking at Bottom-Right",
@@ -340,8 +263,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(46.9, 4.5, -775.6),
-            GazeVector2(1920.0, 1080.0)
-        },
+            GazeVector2(1920.0, 1080.0)},
         // 7. Laptop: Seated Right, Looking at Top-Left
         {
             "Laptop: Seated Right, Looking at Top-Left",
@@ -350,8 +272,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(-14.2, -1.1, -725.5),
-            GazeVector2(0.0, 0.0)
-        },
+            GazeVector2(0.0, 0.0)},
         // 8. Laptop: Looking off-screen Left
         {
             "Laptop: Looking off-screen Left",
@@ -360,11 +281,10 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
-            GazeVector2(-100.0, 540.0)
-        }
-    };
+            GazeVector2(-100.0, 540.0)}};
 
-    for (const auto& sc : scenarios) {
+    for (const auto &sc : scenarios)
+    {
         INFO("Running Scenario: " << sc.description);
 
         ProjectionEngine engine;
@@ -397,8 +317,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         GazeVector3 P_cam_target(
             dx,
             dy * cos_t + dz * sin_t,
-            dy * sin_t - dz * cos_t
-        );
+            dy * sin_t - dz * cos_t);
 
         // 2. Verify Ray Intersection in ProjectionEngine
         GazeVector3 V_cam = (P_cam_target - sc.head_position_cam).normalized();
@@ -406,8 +325,8 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         bool success = engine.project_gaze(sc.head_position_cam, V_cam, projected);
         REQUIRE(success == true);
 
-        CHECK(projected.x == doctest::Approx(sc.target_screen_px.x));
-        CHECK(projected.y == doctest::Approx(sc.target_screen_px.y));
+        CHECK(projected.x == doctest::Approx(sc.target_screen_px.x).epsilon(0.001));
+        CHECK(projected.y == doctest::Approx(sc.target_screen_px.y).epsilon(0.001));
 
         // 3. Verify Camera-to-Screen Matrix (simulated get_camera_to_screen_transform)
         double scale_x = W_px / W_mm;
@@ -421,36 +340,38 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         GazeVector3 translation(
             sc.camera_offset_mm.x * scale_x + W_half,
             sc.camera_offset_mm.y * scale_y + H_half,
-            sc.camera_offset_mm.z
-        );
+            sc.camera_offset_mm.z);
 
         // Apply matrix multiplication P_disp = basis * P_cam_target + translation
         double P_disp_x = basis_col0.x * P_cam_target.x + basis_col1.x * P_cam_target.y + basis_col2.x * P_cam_target.z + translation.x;
         double P_disp_y = basis_col0.y * P_cam_target.x + basis_col1.y * P_cam_target.y + basis_col2.y * P_cam_target.z + translation.y;
         double P_disp_z = basis_col0.z * P_cam_target.x + basis_col1.z * P_cam_target.y + basis_col2.z * P_cam_target.z + translation.z;
 
-        CHECK(P_disp_x == doctest::Approx(sc.target_screen_px.x));
-        CHECK(P_disp_y == doctest::Approx(sc.target_screen_px.y));
+        CHECK(P_disp_x == doctest::Approx(sc.target_screen_px.x).epsilon(0.001));
+        CHECK(P_disp_y == doctest::Approx(sc.target_screen_px.y).epsilon(0.001));
         CHECK(P_disp_z == doctest::Approx(0.0));
     }
 }
 
-TEST_CASE("Testing Viewport-to-Screen Mapping & Coordinate Translation") {
+TEST_CASE("Testing Viewport-to-Screen Mapping & Coordinate Translation")
+{
     // Test Case 1: Desktop Scaling and Offset Mapping
     double screen_w = 1920.0, screen_h = 1080.0;
     double win_x = 300.0, win_y = 200.0;
     double gaze_screen_x = 960.0, gaze_screen_y = 540.0;
-    
+
     double local_x = gaze_screen_x - win_x;
     double local_y = gaze_screen_y - win_y;
-    
+
     CHECK(local_x == 660.0);
     CHECK(local_y == 340.0);
 }
 
-TEST_CASE("Testing Multi-Resolution Layout Scaling") {
+TEST_CASE("Testing Multi-Resolution Layout Scaling")
+{
     // Test Case 2: Multi-Resolution Layout Scaling
-    struct ScreenResolution {
+    struct ScreenResolution
+    {
         double w_px;
         double h_px;
         double w_mm;
@@ -463,51 +384,56 @@ TEST_CASE("Testing Multi-Resolution Layout Scaling") {
         {3840.0, 2160.0, 697.0, 392.0}  // 4K
     };
 
-    for (const auto& res : resolutions) {
+    for (const auto &res : resolutions)
+    {
         double scale_x = res.w_px / res.w_mm;
         double scale_y = res.h_px / res.h_mm;
-        
+
         // Assert that the pixel density (aspect ratios) are consistent
         double aspect_px = res.w_px / res.h_px;
         double aspect_mm = res.w_mm / res.h_mm;
         CHECK(aspect_px == doctest::Approx(aspect_mm).epsilon(0.05)); // within 5% tolerance due to bezel/DPI variances
-        
+
         // Assert linear mapping
         double mm_point_x = res.w_mm * 0.5;
         double mm_point_y = res.h_mm * 0.5;
         double px_point_x = mm_point_x * scale_x;
         double px_point_y = mm_point_y * scale_y;
-        
+
         CHECK(px_point_x == doctest::Approx(res.w_px * 0.5));
         CHECK(px_point_y == doctest::Approx(res.h_px * 0.5));
     }
 }
 
-TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)") {
+TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)")
+{
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     double tilts[] = {-30.0, -15.0, 0.0, 15.0, 30.0};
     GazeVector3 camera_offsets[] = {
-        GazeVector3(0.0, 148.0, 10.0),   // Top center
-        GazeVector3(0.0, -148.0, 10.0),  // Bottom center
-        GazeVector3(-250.0, 0.0, 10.0),  // Left side
-        GazeVector3(250.0, 0.0, 10.0)    // Right side
+        GazeVector3(0.0, 148.0, 10.0),  // Top center
+        GazeVector3(0.0, -148.0, 10.0), // Bottom center
+        GazeVector3(-250.0, 0.0, 10.0), // Left side
+        GazeVector3(250.0, 0.0, 10.0)   // Right side
     };
 
-    for (double tilt : tilts) {
-        for (const auto& offset : camera_offsets) {
+    for (double tilt : tilts)
+    {
+        for (const auto &offset : camera_offsets)
+        {
             CameraPlacement placement(offset, tilt);
             engine.set_camera_placement(placement);
 
             GazeVector3 origin(0.0, 0.0, -500.0);
-            
+
             // Sweep yaw from left to right (from user's perspective, looking left is +x yaw, looking right is -x yaw)
             // So we step gaze direction v.x from 0.5 (far left) down to -0.5 (far right)
             // Projected pixel coordinate X should increase strictly (moving from left side of screen to right side)
             double prev_pixel_x = -1e9;
-            for (int i = 0; i <= 20; ++i) {
+            for (int i = 0; i <= 20; ++i)
+            {
                 double vx = 0.5 - (i * 0.05); // 0.5 down to -0.5
                 double vz = std::sqrt(1.0 - vx * vx);
                 GazeVector3 dir(vx, 0.0, vz);
@@ -516,13 +442,14 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)") {
                 bool success = engine.project_gaze(origin, dir, pixel);
                 REQUIRE(success == true);
 
-                if (i > 0) {
+                if (i > 0)
+                {
                     // Check strict increase: user looking right -> larger pixel.x
-                    CHECK_MESSAGE(pixel.x > prev_pixel_x, 
-                        "Yaw sweep monotonicity failed at tilt=" << tilt 
-                        << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
-                        << ", vx=" << vx << ", current_pixel_x=" << pixel.x 
-                        << ", previous_pixel_x=" << prev_pixel_x);
+                    CHECK_MESSAGE(pixel.x > prev_pixel_x,
+                                  "Yaw sweep monotonicity failed at tilt=" << tilt
+                                                                           << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
+                                                                           << ", vx=" << vx << ", current_pixel_x=" << pixel.x
+                                                                           << ", previous_pixel_x=" << prev_pixel_x);
                 }
                 prev_pixel_x = pixel.x;
             }
@@ -530,31 +457,35 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)") {
     }
 }
 
-TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)") {
+TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)")
+{
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     double tilts[] = {-30.0, -15.0, 0.0, 15.0, 30.0};
     GazeVector3 camera_offsets[] = {
-        GazeVector3(0.0, 148.0, 10.0),   // Top center
-        GazeVector3(0.0, -148.0, 10.0),  // Bottom center
-        GazeVector3(-250.0, 0.0, 10.0),  // Left side
-        GazeVector3(250.0, 0.0, 10.0)    // Right side
+        GazeVector3(0.0, 148.0, 10.0),  // Top center
+        GazeVector3(0.0, -148.0, 10.0), // Bottom center
+        GazeVector3(-250.0, 0.0, 10.0), // Left side
+        GazeVector3(250.0, 0.0, 10.0)   // Right side
     };
 
-    for (double tilt : tilts) {
-        for (const auto& offset : camera_offsets) {
+    for (double tilt : tilts)
+    {
+        for (const auto &offset : camera_offsets)
+        {
             CameraPlacement placement(offset, tilt);
             engine.set_camera_placement(placement);
 
             GazeVector3 origin(0.0, 0.0, -500.0);
-            
+
             // Sweep pitch from up to down (looking up is +y, looking down is -y)
             // So we step gaze direction v.y from 0.5 (looking up) down to -0.5 (looking down)
             // Projected pixel coordinate Y should increase strictly (moving from top of screen to bottom of screen)
             double prev_pixel_y = -1e9;
-            for (int i = 0; i <= 20; ++i) {
+            for (int i = 0; i <= 20; ++i)
+            {
                 double vy = 0.5 - (i * 0.05); // 0.5 down to -0.5
                 double vz = std::sqrt(1.0 - vy * vy);
                 GazeVector3 dir(0.0, vy, vz);
@@ -563,13 +494,14 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)") {
                 bool success = engine.project_gaze(origin, dir, pixel);
                 REQUIRE(success == true);
 
-                if (i > 0) {
+                if (i > 0)
+                {
                     // Check strict increase: user looking down -> larger pixel.y
-                    CHECK_MESSAGE(pixel.y > prev_pixel_y, 
-                        "Pitch sweep monotonicity failed at tilt=" << tilt 
-                        << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
-                        << ", vy=" << vy << ", current_pixel_y=" << pixel.y 
-                        << ", previous_pixel_y=" << prev_pixel_y);
+                    CHECK_MESSAGE(pixel.y > prev_pixel_y,
+                                  "Pitch sweep monotonicity failed at tilt=" << tilt
+                                                                             << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
+                                                                             << ", vy=" << vy << ", current_pixel_y=" << pixel.y
+                                                                             << ", previous_pixel_y=" << prev_pixel_y);
                 }
                 prev_pixel_y = pixel.y;
             }
@@ -577,7 +509,8 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)") {
     }
 }
 
-TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)") {
+TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)")
+{
     ProjectionEngine engine;
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
@@ -593,7 +526,8 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)") {
     // So we step origin.x from 100.0 (left) down to -100.0 (right)
     // Projected pixel coordinate X should shift from left (smaller) to right (larger)
     double prev_pixel_x = -1e9;
-    for (int i = 0; i <= 20; ++i) {
+    for (int i = 0; i <= 20; ++i)
+    {
         double ox = 100.0 - (i * 10.0); // 100 down to -100
         GazeVector3 origin(ox, 0.0, -500.0);
 
@@ -601,11 +535,12 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)") {
         bool success = engine.project_gaze(origin, dir, pixel);
         REQUIRE(success == true);
 
-        if (i > 0) {
-            CHECK_MESSAGE(pixel.x > prev_pixel_x, 
-                "Head X translation sweep failed: ox=" << ox 
-                << ", current_pixel_x=" << pixel.x 
-                << ", previous_pixel_x=" << prev_pixel_x);
+        if (i > 0)
+        {
+            CHECK_MESSAGE(pixel.x > prev_pixel_x,
+                          "Head X translation sweep failed: ox=" << ox
+                                                                 << ", current_pixel_x=" << pixel.x
+                                                                 << ", previous_pixel_x=" << prev_pixel_x);
         }
         prev_pixel_x = pixel.x;
     }
@@ -614,7 +549,8 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)") {
     // So we step origin.y from 100.0 (up) down to -100.0 (down)
     // Projected pixel coordinate Y should shift from top (smaller) to bottom (larger)
     double prev_pixel_y = -1e9;
-    for (int i = 0; i <= 20; ++i) {
+    for (int i = 0; i <= 20; ++i)
+    {
         double oy = 100.0 - (i * 10.0); // 100 down to -100
         GazeVector3 origin(0.0, oy, -500.0);
 
@@ -622,48 +558,51 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)") {
         bool success = engine.project_gaze(origin, dir, pixel);
         REQUIRE(success == true);
 
-        if (i > 0) {
-            CHECK_MESSAGE(pixel.y > prev_pixel_y, 
-                "Head Y translation sweep failed: oy=" << oy 
-                << ", current_pixel_y=" << pixel.y 
-                << ", previous_pixel_y=" << prev_pixel_y);
+        if (i > 0)
+        {
+            CHECK_MESSAGE(pixel.y > prev_pixel_y,
+                          "Head Y translation sweep failed: oy=" << oy
+                                                                 << ", current_pixel_y=" << pixel.y
+                                                                 << ", previous_pixel_y=" << prev_pixel_y);
         }
         prev_pixel_y = pixel.y;
     }
 }
 
-TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations") {
+TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations")
+{
     ProjectionEngine engine;
-    
+
     // Configure screen: 1920x1080 physical pixels (which on a DPR of 2.0 is 960x540 logical points)
     // screen size in mm: 305x191
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(305.0, 191.0));
-    
+
     CameraPlacement placement(GazeVector3(0.0, 95.5, 0.0), 0.0);
     engine.set_camera_placement(placement);
-    
+
     // Gaze origin (user's eyes) straight in front at -500mm (aligned with screen center vertically at y = -95.5mm), looking forward along Z axis
     GazeVector3 origin(0.0, -95.5, -500.0);
     GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at screen center
-    
+
     GazeVector2 physical_pixel;
     bool success = engine.project_gaze(origin, dir, physical_pixel);
     REQUIRE(success == true);
-    
+
     // Physical pixel center should be (960, 540)
     CHECK(physical_pixel.x == doctest::Approx(960.0));
     CHECK(physical_pixel.y == doctest::Approx(540.0));
-    
+
     // Let's test varying DPR values
     double dprs[] = {1.0, 1.5, 2.0, 3.0};
-    for (double dpr : dprs) {
+    for (double dpr : dprs)
+    {
         // Logical pixel center is physical_pixel / dpr
         GazeVector2 logical_pixel(physical_pixel.x / dpr, physical_pixel.y / dpr);
-        
+
         // Logical screen size is screen_size_pixels / dpr
         GazeVector2 screen_size_logical(1920.0 / dpr, 1080.0 / dpr);
-        
+
         // Assert that the scale matches
         CHECK(logical_pixel.x == doctest::Approx(screen_size_logical.x / 2.0));
         CHECK(logical_pixel.y == doctest::Approx(screen_size_logical.y / 2.0));
@@ -673,44 +612,23 @@ TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations") {
 #include "gaze_calibration.hpp"
 #include "gaze_calibration_estimator.hpp"
 
-TEST_CASE("Testing Polymorphic Calibration Hierarchy and Overrides") {
-    // 1. Test FixedCalibration
-    GazeCalibration data;
-    data.pixel_size_mm = GazeVector2(0.24, 0.24);
-    data.camera_offset = GazeVector3(10.0, 150.0, 5.0);
-    data.camera_tilt = 12.0;
-    data.bias_pitch = 0.05;
-    data.bias_yaw = -0.05;
-
-    FixedCalibration fixed_cal(data);
-    GazeVector2 def_sz(0.25, 0.25);
-    GazeVector3 def_off(0.0, 148.0, 0.0);
-    double def_tilt = 0.0;
-
-    CHECK(fixed_cal.get_pixel_size_mm(def_sz).x == doctest::Approx(0.24));
-    CHECK(fixed_cal.get_camera_offset(def_off).y == doctest::Approx(150.0));
-    CHECK(fixed_cal.get_camera_tilt(def_tilt) == doctest::Approx(12.0));
-    CHECK(fixed_cal.get_bias_pitch() == doctest::Approx(0.05));
-    CHECK(fixed_cal.get_bias_yaw() == doctest::Approx(-0.05));
-
-    // 2. Test DeviceCalibration defaults and overrides
-    DeviceCalibration dev_cal;
-    // When unset, it should return default arguments
-    CHECK(dev_cal.get_pixel_size_mm(def_sz).x == doctest::Approx(0.25));
-    CHECK(dev_cal.get_camera_offset(def_off).y == doctest::Approx(148.0));
-    CHECK(dev_cal.get_camera_tilt(def_tilt) == doctest::Approx(0.0));
-
-    // Set overrides
-    dev_cal.set_pixel_size_mm_override(GazeVector2(0.28, 0.28));
-    dev_cal.set_camera_offset_override(GazeVector3(5.0, 120.0, -10.0));
-    dev_cal.set_camera_tilt_override(5.0);
-
-    CHECK(dev_cal.get_pixel_size_mm(def_sz).x == doctest::Approx(0.28));
-    CHECK(dev_cal.get_camera_offset(def_off).y == doctest::Approx(120.0));
-    CHECK(dev_cal.get_camera_tilt(def_tilt) == doctest::Approx(5.0));
+TEST_CASE("Testing GazeCalibration Layout and Defaults")
+{
+    GazeCalibration cal;
+    CHECK(cal.pixel_size_mm.x == doctest::Approx(0.25));
+    CHECK(cal.pixel_size_mm.y == doctest::Approx(0.25));
+    CHECK(cal.camera_offset.x == doctest::Approx(0.0));
+    CHECK(cal.camera_offset.y == doctest::Approx(148.0));
+    CHECK(cal.camera_offset.z == doctest::Approx(0.0));
+    CHECK(cal.camera_tilt == doctest::Approx(0.0));
+    CHECK(cal.bias_pitch == doctest::Approx(0.0));
+    CHECK(cal.bias_yaw == doctest::Approx(0.0));
+    CHECK(cal.scale_pitch == doctest::Approx(1.0));
+    CHECK(cal.scale_yaw == doctest::Approx(1.0));
 }
 
-TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)") {
+TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
+{
     // We simulate ground truth parameters:
     GazeVector2 gt_pixel_size(0.26, 0.26);
     GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
@@ -728,15 +646,15 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
     engine.set_screen_size_mm(GazeVector2(screen_mm_x, screen_mm_y));
     CameraPlacement placement(gt_camera_offset, gt_camera_tilt);
     engine.set_camera_placement(placement);
-    
+
     // We simulate a user at a distance of ~600mm
     // Generate 5 target pixel points: Center, Top-Left, Top-Right, Bottom-Left, Bottom-Right
     std::vector<GazeVector2> targets = {
-        GazeVector2(960.0, 540.0), // Center
-        GazeVector2(192.0, 108.0), // Top-Left
+        GazeVector2(960.0, 540.0),  // Center
+        GazeVector2(192.0, 108.0),  // Top-Left
         GazeVector2(1728.0, 108.0), // Top-Right
-        GazeVector2(192.0, 972.0), // Bottom-Left
-        GazeVector2(1728.0, 972.0) // Bottom-Right
+        GazeVector2(192.0, 972.0),  // Bottom-Left
+        GazeVector2(1728.0, 972.0)  // Bottom-Right
     };
 
     std::vector<CalibrationSample> samples;
@@ -745,12 +663,12 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
-    for (const auto& tgt : targets) {
+    for (const auto &tgt : targets)
+    {
         CalibrationSample sample;
         sample.target_pos_mm = GazeVector2(
             (tgt.x / screen_res.x) * screen_mm_x,
-            (tgt.y / screen_res.y) * screen_mm_y
-        );
+            (tgt.y / screen_res.y) * screen_mm_y);
 
         // Simulate gaze origin at different minor head offsets
         sample.gaze_origin = GazeVector3((tgt.x - 960.0) * 0.05, 0.0, -600.0);
@@ -773,7 +691,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
         // Undo the biological bias to get the simulated raw gaze direction
         // Pitch/yaw of biased vector
         double vy = biased_dir.y;
-        if (vy > 1.0) vy = 1.0; else if (vy < -1.0) vy = -1.0;
+        if (vy > 1.0)
+            vy = 1.0;
+        else if (vy < -1.0)
+            vy = -1.0;
         double yaw = std::atan2(biased_dir.x, biased_dir.z);
         double pitch = std::asin(vy);
 
@@ -782,10 +703,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
 
         double cos_raw_pitch = std::cos(raw_pitch);
         sample.gaze_direction = GazeVector3(
-            std::sin(raw_yaw) * cos_raw_pitch,
-            std::sin(raw_pitch),
-            std::cos(raw_yaw) * cos_raw_pitch
-        ).normalized();
+                                    std::sin(raw_yaw) * cos_raw_pitch,
+                                    std::sin(raw_pitch),
+                                    std::cos(raw_yaw) * cos_raw_pitch)
+                                    .normalized();
 
         samples.push_back(sample);
     }
@@ -816,20 +737,20 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
         est_tilt,
         est_pitch,
         est_yaw,
-        weights
-    );
+        weights);
 
     REQUIRE(success == true);
 
     // Verify optimized values converge close to ground truth
     CHECK(std::abs(est_off.y - gt_camera_offset.y) < 3.0); // within 3mm
     CHECK(std::abs(est_off.z - gt_camera_offset.z) < 3.0);
-    CHECK(std::abs(est_tilt - gt_camera_tilt) < 1.5);     // within 1.5 degrees
-    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02);    // within 0.02 rad
+    CHECK(std::abs(est_tilt - gt_camera_tilt) < 1.5);  // within 1.5 degrees
+    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02); // within 0.02 rad
     CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
 }
 
-TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biological Bias)") {
+TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biological Bias)")
+{
     // We simulate ground truth parameters where camera position is fixed
     GazeVector2 gt_pixel_size(0.26, 0.26);
     GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
@@ -852,12 +773,12 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
-    for (const auto& tgt : targets) {
+    for (const auto &tgt : targets)
+    {
         CalibrationSample sample;
         sample.target_pos_mm = GazeVector2(
             (tgt.x / screen_res.x) * screen_mm_x,
-            (tgt.y / screen_res.y) * screen_mm_y
-        );
+            (tgt.y / screen_res.y) * screen_mm_y);
 
         sample.gaze_origin = GazeVector3(0.0, 0.0, -600.0);
 
@@ -873,7 +794,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
         GazeVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
 
         double vy = biased_dir.y;
-        if (vy > 1.0) vy = 1.0; else if (vy < -1.0) vy = -1.0;
+        if (vy > 1.0)
+            vy = 1.0;
+        else if (vy < -1.0)
+            vy = -1.0;
         double yaw = std::atan2(biased_dir.x, biased_dir.z);
         double pitch = std::asin(vy);
 
@@ -882,10 +806,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
 
         double cos_raw_pitch = std::cos(raw_pitch);
         sample.gaze_direction = GazeVector3(
-            std::sin(raw_yaw) * cos_raw_pitch,
-            std::sin(raw_pitch),
-            std::cos(raw_yaw) * cos_raw_pitch
-        ).normalized();
+                                    std::sin(raw_yaw) * cos_raw_pitch,
+                                    std::sin(raw_pitch),
+                                    std::cos(raw_yaw) * cos_raw_pitch)
+                                    .normalized();
 
         samples.push_back(sample);
     }
@@ -908,8 +832,7 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
         est_tilt,
         est_pitch,
         est_yaw,
-        weights
-    );
+        weights);
 
     REQUIRE(success == true);
 

@@ -1,0 +1,141 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/godot-gaze/debug_cam_feed.gd" id="1_gdscript"]
+
+[node name="DebugCamFeed" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gdscript")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 0.65
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 16
+
+[node name="CameraFeedBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CameraFeedLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/CameraFeedBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+text = "Camera Feed & Landmarks"
+horizontal_alignment = 1
+
+[node name="CameraFeedRect" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/CameraFeedBox"]
+custom_minimum_size = Vector2(240, 180)
+layout_mode = 2
+size_flags_horizontal = 4
+expand_mode = 1
+stretch_mode = 6
+
+[node name="EyesBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="EyesHeader" type="Label" parent="Panel/ScrollContainer/VBoxContainer/EyesBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+text = "Eye Viewports"
+horizontal_alignment = 1
+
+[node name="EyesContainer" type="HBoxContainer" parent="Panel/ScrollContainer/VBoxContainer/EyesBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="RightEyeBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer"]
+layout_mode = 2
+
+[node name="RightEyeLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer/RightEyeBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.682353, 0.752941, 1)
+theme_override_font_sizes/font_size = 10
+text = "Right (Img Left)"
+horizontal_alignment = 1
+
+[node name="RightEyeRect" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer/RightEyeBox"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="LeftEyeBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer"]
+layout_mode = 2
+
+[node name="LeftEyeLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer/LeftEyeBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.627451, 0.682353, 0.752941, 1)
+theme_override_font_sizes/font_size = 10
+text = "Left (Img Right)"
+horizontal_alignment = 1
+
+[node name="LeftEyeRect" type="TextureRect" parent="Panel/ScrollContainer/VBoxContainer/EyesBox/EyesContainer/LeftEyeBox"]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HSeparator" type="HSeparator" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MetricsBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="MetricsHeaderLabel" type="Label" parent="Panel/ScrollContainer/VBoxContainer/MetricsBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 12
+text = "GAZE DIAGNOSTICS"
+horizontal_alignment = 1
+
+[node name="MetricsLabel" type="RichTextLabel" parent="Panel/ScrollContainer/VBoxContainer/MetricsBox"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.796078, 0.835294, 0.878431, 1)
+theme_override_font_sizes/normal_font_size = 11
+bbcode_enabled = true
+text = "Initializing diagnostics..."
+fit_content = true
+
+[node name="CopyButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -45.0
+offset_right = -12.0
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 1, 0.8, 1)
+theme_override_font_sizes/font_size = 12
+text = "📋 Copy Diagnostics"

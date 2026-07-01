@@ -51,9 +51,17 @@ int GazeCalibrationSession::get_sample_count() const {
     return target_pixels_px.size();
 }
 
-Ref<GazeCalibration> GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
-    Ref<GazeCalibration> res;
-    res.instantiate();
+Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
+    Dictionary res;
+
+    Ref<GuessDeviceCalibration> dev_cal;
+    dev_cal.instantiate();
+
+    Ref<GuessBioCalibration> bio_cal;
+    bio_cal.instantiate();
+
+    res["device_calibration"] = dev_cal;
+    res["bio_calibration"] = bio_cal;
 
     if (!tracker) {
         return res;
@@ -122,15 +130,14 @@ Ref<GazeCalibration> GazeCalibrationSession::calculate_calibration(GazeTracker *
     );
 
     if (success) {
-        res->set_camera_offset(Vector3(out_off.x, out_off.y, out_off.z));
-        res->set_camera_tilt(out_tilt);
-        res->set_bias_pitch(out_pitch);
-        res->set_bias_yaw(out_yaw);
-        res->set_bias_pixel_x(0.0);
-        res->set_bias_pixel_y(0.0);
+        dev_cal->set_camera_offset(Vector3(out_off.x, out_off.y, out_off.z));
+        dev_cal->set_camera_tilt(out_tilt);
+        dev_cal->set_pixel_size_mm(tracker->get_pixel_size_mm());
 
-        // Keep pixel size mm at tracker default (not optimized)
-        res->set_pixel_size_mm(tracker->get_pixel_size_mm());
+        bio_cal->set_bias_pitch(out_pitch);
+        bio_cal->set_bias_yaw(out_yaw);
+        bio_cal->set_scale_pitch(1.0);
+        bio_cal->set_scale_yaw(1.0);
 
         UtilityFunctions::print("[Calibration] Success. Solved parameters (Millimeter Space Solver):");
         UtilityFunctions::print("  Camera Offset: (", out_off.x, ", ", out_off.y, ", ", out_off.z, ") mm");

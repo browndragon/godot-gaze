@@ -1,21 +1,81 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://dj5kar0xasisc"]
 
-[ext_resource type="Script" path="res://addons/godot-gaze/tests/test.gd" id="1_test_scene"]
+[ext_resource type="Script" uid="uid://b17c83d82kiqd" path="res://addons/godot-gaze/tests/test.gd" id="1_test_scene"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_eebbd"]
 
-[node name="TestScene" type="Node2D"]
+[sub_resource type="GDScript" id="GDScript_7a0ga"]
+resource_name = "KeyStateMachine"
+script/source = "extends Control
+
+@onready var debug_cam_feed_scene = %DebugCamFeed as InstancePlaceholder
+var debug_cam_feed_node: Control = null
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_pressed():
+		if event.keycode != KEY_D: return
+		if debug_cam_feed_node:
+			debug_cam_feed_node.queue_free()
+			debug_cam_feed_node = null
+		else:
+			debug_cam_feed_node = debug_cam_feed_scene.create_instance(false)
+"
+
+[sub_resource type="GDScript" id="GDScript_0ejwa"]
+resource_name = "FullScreener"
+script/source = "extends Node
+
+signal full_screened(yes: bool)
+
+func _input(event):
+	if event is InputEventKey and event.keycode == KEY_F and event.pressed:
+		var mode = DisplayServer.window_get_mode()
+		if mode == DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN or mode == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+			full_screened.emit(false)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			full_screened.emit(true)
+"
+
+[node name="TestScene" type="Control" unique_id=1183059267]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_test_scene")
 
-[node name="Cursor" type="ColorRect" parent="."]
+[node name="Cursor" type="ColorRect" parent="." unique_id=790839392]
+layout_mode = 0
 offset_right = 24.0
 offset_bottom = 24.0
 color = Color(1, 0, 0, 1)
 
-[node name="StatusLabel" type="Label" parent="."]
+[node name="StatusLabel" type="Label" parent="." unique_id=1062967092]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
 offset_right = 400.0
 offset_bottom = 60.0
 text = "Status: Idle"
 label_settings = SubResource("LabelSettings_eebbd")
+
+[node name="DebugCamFeedControl" type="Control" parent="." unique_id=1979628168]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_7a0ga")
+
+[node name="DebugCamFeed" parent="DebugCamFeedControl" unique_id=103854542 instance_placeholder="res://addons/godot-gaze/debug_cam_feed.tscn"]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="FullScreener" type="Node" parent="." unique_id=1363448967]
+script = SubResource("GDScript_0ejwa")
+
+[connection signal="full_screened" from="FullScreener" to="." method="_set_maximized"]

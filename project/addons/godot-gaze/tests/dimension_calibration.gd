@@ -4,7 +4,7 @@ extends Control
 signal dimension_calibration_completed(profile)
 signal dimension_calibration_cancelled()
 
-@export var tracker: GazeTracker = null
+@export var display_profile: DisplayProfile = null
 
 # Credit card ISO/IEC 7810 ID-1 standard dimensions: 85.60 mm x 53.98 mm
 const CARD_PHYSICAL_WIDTH_MM = 85.6
@@ -29,35 +29,27 @@ func _ready():
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	
-	# Fetch screen metrics
-	screen_id = DisplayServer.window_get_current_screen()
-	screen_scale = DisplayServer.screen_get_scale(screen_id)
-	screen_size_lpix = Vector2(DisplayServer.screen_get_size(screen_id)) / screen_scale
+	# Fetch screen metrics using clean DisplayProfile static utility functions
+	screen_size_lpix = DisplayProfile.get_screen_size_logical()
+	var window_size_lpix = DisplayProfile.get_window_size_logical()
 	
-	# Calculate viewport-relative screen width to support high-DPI/Retina setups correctly
+	# Calculate viewport-relative screen width to support high-DPI/Retina/Web setups correctly
 	var viewport_size = get_viewport().get_visible_rect().size
-	var window_size = DisplayServer.window_get_size()
-	var screen_size = DisplayServer.screen_get_size(screen_id)
-	screen_width_viewport = (float(screen_size.x) / float(window_size.x)) * viewport_size.x
+	screen_width_viewport = (screen_size_lpix.x / window_size_lpix.x) * viewport_size.x
 	
-	# Try to find gaze tracker in tree if not injected
-	if not tracker:
-		tracker = get_node_or_null("/root/GazeTracker")
-		if not tracker:
-			var parent = get_parent()
-			if parent and parent.has_node("GazeTracker"):
-				tracker = parent.get_node("GazeTracker")
+	print("[CalibrationDebug] screen_size_lpix = ", screen_size_lpix)
+	print("[CalibrationDebug] window_size_lpix = ", window_size_lpix)
+	print("[CalibrationDebug] viewport_size = ", viewport_size)
+	print("[CalibrationDebug] screen_width_viewport = ", screen_width_viewport)
+	print("[CalibrationDebug] DisplayProfile.get_screen_scale() = ", DisplayProfile.get_screen_scale())
 	
 	# Configure default slider value from the DisplayProfile, falling back to estimation from OS
 	var current_width_lpix = 300.0
-	var profile: DisplayProfile = null
-	if tracker and tracker.display_profile:
-		profile = tracker.display_profile
-	else:
-		profile = DisplayProfile.estimate_from_os()
+	if not display_profile:
+		display_profile = DisplayProfile.estimate_from_os()
 		
-	if profile:
-		var phys_size = profile.get_physical_size_mm()
+	if display_profile:
+		var phys_size = display_profile.get_physical_size_mm()
 		if phys_size.x > 0.0:
 			var px_per_mm = screen_width_viewport / phys_size.x
 			current_width_lpix = px_per_mm * CARD_PHYSICAL_WIDTH_MM
@@ -96,6 +88,11 @@ func _on_slider_value_changed(val: float):
 	
 	var physical_w_mm = screen_size_lpix.x / px_per_mm_logical
 	var physical_h_mm = screen_size_lpix.y / px_per_mm_logical
+	
+	print("[CalibrationDebug] slider val w = ", w)
+	print("[CalibrationDebug] px_per_mm_viewport = ", px_per_mm_viewport)
+	print("[CalibrationDebug] px_per_mm_logical = ", px_per_mm_logical)
+	print("[CalibrationDebug] physical_w_mm = ", physical_w_mm)
 	
 	# Update labels
 	val_label.text = "%d px (%.1f px/mm)" % [int(val), px_per_mm_viewport]
@@ -182,25 +179,20 @@ func _on_save_pressed():
 	var px_per_mm_logical = px_per_mm_viewport * (screen_size_lpix.x / screen_width_viewport)
 	var physical_size = screen_size_lpix / px_per_mm_logical
 	
-	var profile: DisplayProfile = null
-	if tracker and tracker.display_profile:
-		profile = tracker.display_profile
-	else:
-		profile = DisplayProfile.estimate_from_os()
+	if not display_profile:
+		display_profile = DisplayProfile.estimate_from_os()
 	
-	profile.set_logical_size_px(Vector2i(int(screen_size_lpix.x), int(screen_size_lpix.y)))
-	profile.set_physical_size_mm(physical_size)
+	display_profile.set_logical_size_px(Vector2i(int(screen_size_lpix.x), int(screen_size_lpix.y)))
+	display_profile.set_physical_size_mm(physical_size)
 	
-	if tracker:
-		tracker.display_profile = profile
-		print("[DimensionCalibration] Saved display profile size: %s mm" % physical_size)
+	print("[DimensionCalibration] Saved display profile size: %s mm" % physical_size)
 	
 	# Fade-out animation before completion
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await tween.finished
 	
-	dimension_calibration_completed.emit(profile)
+	dimension_calibration_completed.emit(display_profile)
 	queue_free()
 
 func _on_cancel_pressed():

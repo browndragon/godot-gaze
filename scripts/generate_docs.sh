@@ -31,6 +31,9 @@ echo "Generating documentation website..."
 cd "${BASE_DIR}"
 doxygen Doxyfile
 
+echo "Translating Doxygen XML to Godot classref XML..."
+python3 "${BASE_DIR}/scripts/doxygen_to_godot_doc.py"
+
 echo ""
 echo "=== Documentation successfully compiled! ==="
 echo "You can open the documentation main page by running:"

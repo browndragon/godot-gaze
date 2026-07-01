@@ -7,8 +7,6 @@ const path = require('path');
 
 const PORT = process.env.PORT || 8000;
 const EXPORTS_DIR = path.join(__dirname, '../project/exports');
-const OPENCV_DEST = path.join(EXPORTS_DIR, 'opencv.js');
-const OPENCV_URL = 'https://cdn.jsdelivr.net/npm/@techstark/opencv-js@4.9.0-release.2/dist/opencv.js';
 
 const MIME_TYPES = {
     '.html': 'text/html',
@@ -29,39 +27,7 @@ if (!fs.existsSync(EXPORTS_DIR)) {
     fs.mkdirSync(EXPORTS_DIR, { recursive: true });
 }
 
-// 2. Download opencv.js if missing
-function downloadOpenCV(callback) {
-    if (fs.existsSync(OPENCV_DEST)) {
-        console.log(`[DevServer] Found opencv.js at ${OPENCV_DEST}`);
-        return callback();
-    }
-
-    console.log(`[DevServer] Downloading opencv.js from ${OPENCV_URL}...`);
-    console.log(`[DevServer] Saving to: ${OPENCV_DEST}`);
-    
-    const file = fs.createWriteStream(OPENCV_DEST);
-    https.get(OPENCV_URL, (response) => {
-        if (response.statusCode !== 200) {
-            console.error(`[DevServer] Error downloading: Status Code ${response.statusCode}`);
-            fs.unlinkSync(OPENCV_DEST);
-            process.exit(1);
-        }
-        
-        response.pipe(file);
-        
-        file.on('finish', () => {
-            file.close();
-            console.log('[DevServer] opencv.js download completed successfully.');
-            callback();
-        });
-    }).on('error', (err) => {
-        try { fs.unlinkSync(OPENCV_DEST); } catch (e) {}
-        console.error(`[DevServer] Failed to download opencv.js: ${err.message}`);
-        process.exit(1);
-    });
-}
-
-// 3. Start static server
+// 2. Start static server
 function startServer() {
     const server = http.createServer((req, res) => {
         // Strip query parameters
@@ -116,4 +82,5 @@ function startServer() {
     });
 }
 
-downloadOpenCV(startServer);
+startServer();
+

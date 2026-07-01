@@ -34,14 +34,13 @@ public:
     void set_ipd_mm(double val);
     double get_ipd_mm() const;
 
-    void set_face_detect_width(int val);
-    int get_face_detect_width() const;
 
-    void set_face_detect_height(int val);
-    int get_face_detect_height() const;
 
     void set_desired_camera_size(Vector2i size);
     Vector2i get_desired_camera_size() const;
+
+    void set_debug_image_throttle_interval(int val);
+    int get_debug_image_throttle_interval() const;
 
     Gaze::PipelineConfig get_config() const { return config; }
 };

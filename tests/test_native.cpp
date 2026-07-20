@@ -1409,3 +1409,85 @@ TEST_CASE("Testing Godot C++ Bindings Transform2D::xform_inv Scaling Bug")
     CHECK(correct_inverse.x == doctest::Approx(5.0));
     CHECK(correct_inverse.y == doctest::Approx(5.0));
 }
+
+#include "log.hpp"
+#include <vector>
+#include <string>
+
+TEST_CASE("Testing Log Verbosity Filtering")
+{
+    // Save original verbosity and log handler
+    int original_verbosity = Gaze::get_log_verbosity().load();
+    auto original_handler = Gaze::get_log_handler().load();
+
+    // Set up a mock log handler to collect logs
+    static std::vector<std::pair<bool, std::string>> captured_logs;
+    captured_logs.clear();
+
+    Gaze::register_log_handler([](bool is_error, const char* msg) {
+        captured_logs.push_back({is_error, std::string(msg)});
+    });
+
+    // Test Case 1: Verbosity 1 (Default)
+    Gaze::set_log_verbosity(1);
+    Gaze::log_info("standard_event");
+    Gaze::log_info(2, "verbose_event");
+    Gaze::log_info(3, "analysis_event");
+    Gaze::log_info(4, "capture_event");
+
+    REQUIRE(captured_logs.size() == 1);
+    CHECK(captured_logs[0].second.find("standard_event") != std::string::npos);
+    captured_logs.clear();
+
+    // Test Case 2: Verbosity 2
+    Gaze::set_log_verbosity(2);
+    Gaze::log_info("standard_event");
+    Gaze::log_info(2, "verbose_event");
+    Gaze::log_info(3, "analysis_event");
+    Gaze::log_info(4, "capture_event");
+
+    REQUIRE(captured_logs.size() == 2);
+    CHECK(captured_logs[0].second.find("standard_event") != std::string::npos);
+    CHECK(captured_logs[1].second.find("verbose_event") != std::string::npos);
+    captured_logs.clear();
+
+    // Test Case 3: Verbosity 3
+    Gaze::set_log_verbosity(3);
+    Gaze::log_info("standard_event");
+    Gaze::log_info(2, "verbose_event");
+    Gaze::log_info(3, "analysis_event");
+    Gaze::log_info(4, "capture_event");
+
+    REQUIRE(captured_logs.size() == 3);
+    CHECK(captured_logs[0].second.find("standard_event") != std::string::npos);
+    CHECK(captured_logs[1].second.find("verbose_event") != std::string::npos);
+    CHECK(captured_logs[2].second.find("analysis_event") != std::string::npos);
+    captured_logs.clear();
+
+    // Test Case 4: Verbosity 4
+    Gaze::set_log_verbosity(4);
+    Gaze::log_info("standard_event");
+    Gaze::log_info(2, "verbose_event");
+    Gaze::log_info(3, "analysis_event");
+    Gaze::log_info(4, "capture_event");
+
+    REQUIRE(captured_logs.size() == 4);
+    CHECK(captured_logs[0].second.find("standard_event") != std::string::npos);
+    CHECK(captured_logs[1].second.find("verbose_event") != std::string::npos);
+    CHECK(captured_logs[2].second.find("analysis_event") != std::string::npos);
+    CHECK(captured_logs[3].second.find("capture_event") != std::string::npos);
+    captured_logs.clear();
+
+    // Test Case 5: Verbosity 0 (Quiet)
+    Gaze::set_log_verbosity(0);
+    Gaze::log_info("standard_event");
+    Gaze::log_info(2, "verbose_event");
+    Gaze::log_info(3, "analysis_event");
+    Gaze::log_info(4, "capture_event");
+
+    CHECK(captured_logs.empty() == true);
+
+    // Restore original handler and verbosity
+    Gaze::register_log_handler(original_handler);
+    Gaze::set_log_verbosity(original_verbosity);
+}

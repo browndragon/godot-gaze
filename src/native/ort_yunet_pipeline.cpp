@@ -396,7 +396,7 @@ namespace Gaze
             {
                 out_crops.landmarks[i] = final_ldm[i];
             }
-            log_info("ORTYuNetPipelineLandmarks",
+            log_info(3, "ORTYuNetPipelineLandmarks",
                      "x0", final_ldm[0].x, "y0", final_ldm[0].y,
                      "x1", final_ldm[1].x, "y1", final_ldm[1].y,
                      "x2", final_ldm[2].x, "y2", final_ldm[2].y,
@@ -480,7 +480,7 @@ namespace Gaze
                     }
                 }
                 double rmse = std::sqrt(total_sq_err / 5.0);
-                log_info("ORTYuNetPipelinePnPResult", "rmse_px", rmse, "tx", tvec.x, "ty", tvec.y, "tz", tvec.z);
+                log_info(3, "ORTYuNetPipelinePnPResult", "rmse_px", rmse, "tx", tvec.x, "ty", tvec.y, "tz", tvec.z);
 
                 out_crops.left_eye_center_cam = R.multiply_vector(GazeVector3(FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z)) + tvec;
                 out_crops.right_eye_center_cam = R.multiply_vector(GazeVector3(-FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z)) + tvec;

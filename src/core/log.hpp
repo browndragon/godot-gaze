@@ -44,11 +44,27 @@ void log_kv_impl(bool is_error, std::stringstream& ss, const K& key, const V& va
     log_kv_impl(is_error, ss, args...);
 }
 
+inline std::atomic<int>& get_log_verbosity() {
+    static std::atomic<int> verbosity{1}; // default to 1 (standard)
+    return verbosity;
+}
+
+inline void set_log_verbosity(int level) {
+    get_log_verbosity().store(level, std::memory_order_release);
+}
+
+template<typename... Args>
+void log_info(int level, const std::string& event, const Args&... args) {
+    if (get_log_verbosity().load(std::memory_order_acquire) >= level) {
+        std::stringstream ss;
+        ss << "[INFO] event=" << event;
+        log_kv_impl(false, ss, args...);
+    }
+}
+
 template<typename... Args>
 void log_info(const std::string& event, const Args&... args) {
-    std::stringstream ss;
-    ss << "[INFO] event=" << event;
-    log_kv_impl(false, ss, args...);
+    log_info(1, event, args...);
 }
 
 template<typename... Args>

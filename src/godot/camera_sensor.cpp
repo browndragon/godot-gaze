@@ -35,9 +35,9 @@ void CameraSensor::_bind_methods() {
 CameraSensor::CameraSensor() {}
 
 CameraSensor::~CameraSensor() {
-    Gaze::log_info("CameraSensor_Destructor_Began");
+    Gaze::log_info(2, "CameraSensor_Destructor_Began");
     stop_sensor();
-    Gaze::log_info("CameraSensor_Destructor_Finished");
+    Gaze::log_info(2, "CameraSensor_Destructor_Finished");
 }
 
 bool CameraSensor::initialize_sensor() {
@@ -61,7 +61,7 @@ bool CameraSensor::initialize_sensor() {
 }
 
 void CameraSensor::stop_sensor() {
-    Gaze::log_info("CameraSensor_StopSensor_Began");
+    Gaze::log_info(2, "CameraSensor_StopSensor_Began");
     if (camera_rid.is_valid()) {
         GazeServer *gs = GazeServer::get_singleton();
         if (gs && gs->is_connected("gaze_data_ready", Callable(this, "_on_gaze_data_ready"))) {
@@ -70,14 +70,14 @@ void CameraSensor::stop_sensor() {
 
         VisionServer *vs = VisionServer::get_singleton();
         if (vs) {
-            Gaze::log_info("CameraSensor_StopSensor_CameraStop_Began");
+            Gaze::log_info(2, "CameraSensor_StopSensor_CameraStop_Began");
             vs->camera_stop(camera_rid);
-            Gaze::log_info("CameraSensor_StopSensor_CameraStop_Finished");
+            Gaze::log_info(2, "CameraSensor_StopSensor_CameraStop_Finished");
             vs->camera_free(camera_rid);
         }
         camera_rid = RID();
     }
-    Gaze::log_info("CameraSensor_StopSensor_Finished");
+    Gaze::log_info(2, "CameraSensor_StopSensor_Finished");
 }
 
 Ref<Image> CameraSensor::get_last_frame() const {

@@ -125,6 +125,10 @@ void GazeTracker::_bind_methods() {
     ADD_SIGNAL(MethodInfo("face_detection_changed", PropertyInfo(Variant::BOOL, "detected")));
     ADD_SIGNAL(MethodInfo("face_frame_ready"));
     ADD_SIGNAL(MethodInfo("lifecycle_changed", PropertyInfo(Variant::INT, "state")));
+
+    ClassDB::bind_method(D_METHOD("set_verbosity", "level"), &GazeTracker::set_verbosity);
+    ClassDB::bind_method(D_METHOD("get_verbosity"), &GazeTracker::get_verbosity);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "verbosity"), "set_verbosity", "get_verbosity");
 }
 
 GazeTracker::GazeTracker() {
@@ -132,13 +136,13 @@ GazeTracker::GazeTracker() {
     update_projection_parameters();
 }
 GazeTracker::~GazeTracker() {
-    Gaze::log_info("GazeTracker_Destructor_Began");
+    Gaze::log_info(2, "GazeTracker_Destructor_Began");
     ::Gaze::g_is_exiting = true;
     camera_sensor = nullptr;
     face_estimator = nullptr;
     eye_estimator = nullptr;
     stop_tracker(false);
-    Gaze::log_info("GazeTracker_Destructor_Finished");
+    Gaze::log_info(2, "GazeTracker_Destructor_Finished");
 }
 
 void GazeTracker::_ready() {
@@ -295,7 +299,7 @@ bool GazeTracker::initialize_tracker() {
 }
 
 void GazeTracker::stop_tracker(bool p_emit_signal) {
-    Gaze::log_info("GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal);
+    Gaze::log_info(2, "GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal);
     tracker_initialized = false;
     is_face_tracked = false;
 
@@ -306,9 +310,9 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
         if (gs->is_connected("gaze_data_ready", Callable(this, "_on_gaze_data_ready"))) {
             gs->disconnect("gaze_data_ready", Callable(this, "_on_gaze_data_ready"));
         }
-        Gaze::log_info("GazeTracker_StopTracker_GazeServerStopProcessing_Began");
+        Gaze::log_info(2, "GazeTracker_StopTracker_GazeServerStopProcessing_Began");
         gs->stop_processing();
-        Gaze::log_info("GazeTracker_StopTracker_GazeServerStopProcessing_Finished");
+        Gaze::log_info(2, "GazeTracker_StopTracker_GazeServerStopProcessing_Finished");
         
         if (eye_gaze_rid.is_valid()) {
             gs->eye_tracker_free(eye_gaze_rid);
@@ -329,9 +333,9 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
     }
 
     if (camera_sensor && ObjectDB::get_instance(camera_sensor->get_instance_id())) {
-        Gaze::log_info("GazeTracker_StopTracker_CameraSensorStop_Began");
+        Gaze::log_info(2, "GazeTracker_StopTracker_CameraSensorStop_Began");
         camera_sensor->stop_sensor();
-        Gaze::log_info("GazeTracker_StopTracker_CameraSensorStop_Finished");
+        Gaze::log_info(2, "GazeTracker_StopTracker_CameraSensorStop_Finished");
     }
     if (face_estimator && ObjectDB::get_instance(face_estimator->get_instance_id())) {
         face_estimator->stop_estimator();
@@ -345,7 +349,7 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
     } else {
         lifecycle_state = LIFECYCLE_UNKNOWN;
     }
-    Gaze::log_info("GazeTracker_StopTracker_Finished");
+    Gaze::log_info(2, "GazeTracker_StopTracker_Finished");
 }
 
 void GazeTracker::clear_calibration() {
@@ -580,6 +584,14 @@ void GazeTracker::set_window_position_override(Vector2 pos) {
 
 Vector2 GazeTracker::get_window_position_override() const {
     return window_position_override;
+}
+
+void GazeTracker::set_verbosity(int level) {
+    Gaze::set_log_verbosity(level);
+}
+
+int GazeTracker::get_verbosity() const {
+    return Gaze::get_log_verbosity().load();
 }
 
 void GazeTracker::set_debug_logging_frames(int frames) {

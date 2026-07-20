@@ -50,19 +50,19 @@ bool VisionServer::camera_start(RID p_camera) {
 }
 
 void VisionServer::camera_stop(RID p_camera) {
-    Gaze::log_info("VisionServer_CameraStop_Began");
+    Gaze::log_info(2, "VisionServer_CameraStop_Began");
     CameraData *data = camera_owner.get_or_null(p_camera);
     ERR_FAIL_NULL(data);
 
     if (!data->is_active) {
-        Gaze::log_info("VisionServer_CameraStop_NotActive");
+        Gaze::log_info(2, "VisionServer_CameraStop_NotActive");
         return;
     }
 
     if (data->camera) {
-        Gaze::log_info("VisionServer_CameraStop_CameraRelease_Began");
+        Gaze::log_info(2, "VisionServer_CameraStop_CameraRelease_Began");
         data->camera->release();
-        Gaze::log_info("VisionServer_CameraStop_CameraRelease_Finished");
+        Gaze::log_info(2, "VisionServer_CameraStop_CameraRelease_Finished");
         delete data->camera;
         data->camera = nullptr;
     }

@@ -10,9 +10,9 @@ namespace Gaze {
 GodotCamera::GodotCamera(int device) : device_id(device), start_time(0.0), horizontal_flip(false) {}
 
 GodotCamera::~GodotCamera() {
-    log_info("GodotCamera_Destructor_Began");
+    log_info(2, "GodotCamera_Destructor_Began");
     release();
-    log_info("GodotCamera_Destructor_Finished");
+    log_info(2, "GodotCamera_Destructor_Finished");
 }
 
 bool GodotCamera::initialize() {
@@ -146,6 +146,7 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
             log_info("GodotCamera_FirstFrameGrabbed", "w", width, "h", height, "format", (int)format, "data_size", (int)img->get_data().size());
             logged_first_frame = true;
         }
+        log_info(4, "GodotCamera_FrameGrabbed", "w", width, "h", height, "format", (int)format);
 
         if (format == godot::Image::FORMAT_R8) {
             godot::PackedByteArray data = img->get_data();
@@ -268,33 +269,33 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
 }
 
 void GodotCamera::release() {
-    log_info("GodotCamera_Release_Began");
+    log_info(2, "GodotCamera_Release_Began");
     if (feed.is_valid()) {
-        log_info("GodotCamera_Release_SetActiveFalse_Began", "feed_id", feed->get_id());
+        log_info(2, "GodotCamera_Release_SetActiveFalse_Began", "feed_id", feed->get_id());
         feed->set_active(false);
-        log_info("GodotCamera_Release_SetActiveFalse_Finished");
-        log_info("GodotCamera_Released", "feed_id", feed->get_id());
+        log_info(2, "GodotCamera_Release_SetActiveFalse_Finished");
+        log_info(2, "GodotCamera_Released", "feed_id", feed->get_id());
         feed.unref();
     }
     if (camera_texture.is_valid()) {
-        log_info("GodotCamera_Release_CameraTextureActiveFalse_Began");
+        log_info(2, "GodotCamera_Release_CameraTextureActiveFalse_Began");
         camera_texture->set_camera_active(false);
-        log_info("GodotCamera_Release_CameraTextureActiveFalse_Finished");
+        log_info(2, "GodotCamera_Release_CameraTextureActiveFalse_Finished");
         camera_texture.unref();
     }
     if (y_texture.is_valid()) {
-        log_info("GodotCamera_Release_YTextureActiveFalse_Began");
+        log_info(2, "GodotCamera_Release_YTextureActiveFalse_Began");
         y_texture->set_camera_active(false);
-        log_info("GodotCamera_Release_YTextureActiveFalse_Finished");
+        log_info(2, "GodotCamera_Release_YTextureActiveFalse_Finished");
         y_texture.unref();
     }
     if (cbcr_texture.is_valid()) {
-        log_info("GodotCamera_Release_CbCrTextureActiveFalse_Began");
+        log_info(2, "GodotCamera_Release_CbCrTextureActiveFalse_Began");
         cbcr_texture->set_camera_active(false);
-        log_info("GodotCamera_Release_CbCrTextureActiveFalse_Finished");
+        log_info(2, "GodotCamera_Release_CbCrTextureActiveFalse_Finished");
         cbcr_texture.unref();
     }
-    log_info("GodotCamera_Release_Finished");
+    log_info(2, "GodotCamera_Release_Finished");
 }
 
 } // namespace Gaze

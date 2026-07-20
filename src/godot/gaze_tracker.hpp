@@ -222,6 +222,9 @@ public:
     void set_window_position_override(Vector2 pos);
     Vector2 get_window_position_override() const;
 
+    void set_verbosity(int level);
+    int get_verbosity() const;
+
     Vector2 get_latest_projected_gaze() const { return latest_projected_gaze_px; }
     Vector2 get_latest_filtered_gaze() const { return latest_filtered_gaze_px; }
     bool is_face_detected() const { return is_face_tracked; }

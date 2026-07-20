@@ -172,6 +172,10 @@ void GazeServer::_bind_methods() {
     ADD_SIGNAL(MethodInfo("gaze_data_ready", PropertyInfo(Variant::RID, "entity_rid")));
     ADD_SIGNAL(MethodInfo("gaze_frame_began", PropertyInfo(Variant::OBJECT, "frame", PROPERTY_HINT_RESOURCE_TYPE, "GazeFrame")));
     ADD_SIGNAL(MethodInfo("gaze_frame_ready", PropertyInfo(Variant::OBJECT, "frame", PROPERTY_HINT_RESOURCE_TYPE, "GazeFrame")));
+
+    ClassDB::bind_method(D_METHOD("set_verbosity", "level"), &GazeServer::set_verbosity);
+    ClassDB::bind_method(D_METHOD("get_verbosity"), &GazeServer::get_verbosity);
+    ADD_PROPERTY(PropertyInfo(Variant::INT, "verbosity"), "set_verbosity", "get_verbosity");
 }
 
 
@@ -208,7 +212,7 @@ GazeServer::GazeServer() : impl(std::make_unique<GazeServerImpl>()) {
 }
 
 GazeServer::~GazeServer() {
-    Gaze::log_info("GazeServer_Destructor_Began");
+    Gaze::log_info(2, "GazeServer_Destructor_Began");
     {
         std::lock_guard<std::recursive_mutex> lock(state_mutex);
         active_trackers = 0;
@@ -226,12 +230,12 @@ GazeServer::~GazeServer() {
             }
         }
     }
-    Gaze::log_info("GazeServer_Destructor_PipelineReset_Began");
+    Gaze::log_info(2, "GazeServer_Destructor_PipelineReset_Began");
     pipeline.reset();
-    Gaze::log_info("GazeServer_Destructor_PipelineReset_Finished");
+    Gaze::log_info(2, "GazeServer_Destructor_PipelineReset_Finished");
 #endif
     singleton = nullptr;
-    Gaze::log_info("GazeServer_Destructor_Finished");
+    Gaze::log_info(2, "GazeServer_Destructor_Finished");
 }
 
 
@@ -721,23 +725,23 @@ void GazeServer::start_processing() {
 }
 
 void GazeServer::stop_processing() {
-    Gaze::log_info("GazeServer_StopProcessing_Began", "active_trackers", active_trackers);
+    Gaze::log_info(2, "GazeServer_StopProcessing_Began", "active_trackers", active_trackers);
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     if (active_trackers > 0) {
         active_trackers--;
     }
-    Gaze::log_info("GazeServer_StopProcessing_AfterDec", "active_trackers", active_trackers);
+    Gaze::log_info(2, "GazeServer_StopProcessing_AfterDec", "active_trackers", active_trackers);
     if (active_trackers > 0) {
         return; // Other active trackers are still using it
     }
 #ifndef WEB_ENABLED
     if (pipeline) {
-        Gaze::log_info("GazeServer_StopProcessing_PipelineStop_Began");
+        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Began");
         pipeline->stop();
-        Gaze::log_info("GazeServer_StopProcessing_PipelineStop_Finished");
+        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Finished");
     }
 #endif
-    Gaze::log_info("GazeServer_StopProcessing_Finished");
+    Gaze::log_info(2, "GazeServer_StopProcessing_Finished");
 }
 
 void GazeServer::trigger_process() {
@@ -932,6 +936,14 @@ void GazeServer::feed_gaze_web_raw(const Array& args) {
     }
 }
 #endif
+
+void GazeServer::set_verbosity(int level) {
+    Gaze::set_log_verbosity(level);
+}
+
+int GazeServer::get_verbosity() const {
+    return Gaze::get_log_verbosity().load();
+}
 
 } // namespace godot
 

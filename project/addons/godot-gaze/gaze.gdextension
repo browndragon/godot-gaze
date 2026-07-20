@@ -22,6 +22,8 @@ android.debug.arm64 = "res://addons/godot-gaze/bin/libgaze.android.template_debu
 android.release.arm64 = "res://addons/godot-gaze/bin/libgaze.android.template_release.arm64.so"
 android.debug.x86_64 = "res://addons/godot-gaze/bin/libgaze.android.template_debug.x86_64.so"
 android.release.x86_64 = "res://addons/godot-gaze/bin/libgaze.android.template_release.x86_64.so"
+android.editor.arm64 = "res://addons/godot-gaze/bin/libgaze.android.editor.arm64.so"
+android.editor.x86_64 = "res://addons/godot-gaze/bin/libgaze.android.editor.x86_64.so"
 
 ios.debug.arm64 = "res://addons/godot-gaze/bin/libgaze.ios.template_debug.arm64.a"
 ios.release.arm64 = "res://addons/godot-gaze/bin/libgaze.ios.template_release.arm64.a"

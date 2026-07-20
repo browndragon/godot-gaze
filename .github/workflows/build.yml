@@ -22,6 +22,10 @@ jobs:
             os: macos-latest
             target: template_release
             scons_flags: ""
+          - platform: macos
+            os: macos-latest
+            target: editor
+            scons_flags: ""
 
           - platform: windows
             os: windows-latest
@@ -31,6 +35,10 @@ jobs:
             os: windows-latest
             target: template_release
             scons_flags: ""
+          - platform: windows
+            os: windows-latest
+            target: editor
+            scons_flags: ""
 
           - platform: linux
             os: ubuntu-latest
@@ -39,6 +47,10 @@ jobs:
           - platform: linux
             os: ubuntu-latest
             target: template_release
+            scons_flags: ""
+          - platform: linux
+            os: ubuntu-latest
+            target: editor
             scons_flags: ""
 
           - platform: android
@@ -57,7 +69,16 @@ jobs:
             os: ubuntu-latest
             target: template_release
             scons_flags: "arch=x86_64"
+          - platform: android
+            os: ubuntu-latest
+            target: editor
+            scons_flags: "arch=arm64"
+          - platform: android
+            os: ubuntu-latest
+            target: editor
+            scons_flags: "arch=x86_64"
 
+          # Note: Godot does not support running the Godot Editor on iOS, so no iOS editor target is compiled.
           - platform: ios
             os: macos-latest
             target: template_debug
@@ -206,11 +227,28 @@ jobs:
 
       - name: Install dependencies for model conversion
         run: |
-          pip install numpy openvino2onnx
+          pip install numpy openvino2onnx onnx onnxruntime
 
       - name: Convert Gaze Model to ONNX
         shell: bash
         run: python3 scripts/convert_model.py
+
+      - name: Convert ONNX models to ORT format
+        shell: bash
+        run: |
+          python3 -m onnxruntime.tools.convert_onnx_models_to_ort --optimization_style=Runtime project/addons/godot-gaze/models/
+          # Rename generated files
+          mv project/addons/godot-gaze/models/face_detection_yunet_2023mar.with_runtime_opt.ort project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort
+          mv project/addons/godot-gaze/models/gaze-estimation-adas-0002.with_runtime_opt.ort project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort
+          # Clean up config if needed
+          if [ -f project/addons/godot-gaze/models/required_operators.with_runtime_opt.config ]; then
+            grep -v "com.microsoft" project/addons/godot-gaze/models/required_operators.with_runtime_opt.config > project/addons/godot-gaze/models/required_operators.config
+            rm project/addons/godot-gaze/models/required_operators.with_runtime_opt.config
+          fi
+          # Clean up raw ONNX and OpenVINO files from models folder
+          rm -f project/addons/godot-gaze/models/*.onnx
+          rm -f project/addons/godot-gaze/models/*.xml
+          rm -f project/addons/godot-gaze/models/*.bin
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -237,3 +275,11 @@ jobs:
         with:
           name: godot-gaze-release
           path: godot-gaze.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: godot-gaze.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

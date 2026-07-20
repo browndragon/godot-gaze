@@ -95,23 +95,39 @@ This project uses `asdf` to manage local compiler toolchains, Python, and SCons.
 SCons is used to compile the GDExtension libraries for different target platforms:
 
 ```bash
-# Compile for macOS
+# Compile for macOS (Editor and Export Templates)
+scons platform=macos target=editor
 scons platform=macos target=template_debug
+scons platform=macos target=template_release
 
 # Compile for Windows
+scons platform=windows target=editor
 scons platform=windows target=template_debug
+
+# Compile for Linux
+scons platform=linux target=editor
+scons platform=linux target=template_debug
 
 # Compile for WebAssembly
 scons platform=web target=template_debug
 
-# Compile for Android (ARM64)
+# Compile for Android (ARM64 Editor and Export Templates)
+scons platform=android target=editor arch=arm64
 scons platform=android target=template_debug arch=arm64
 
-# Compile for iOS (Simulator)
+# Compile for iOS (Simulator Export Template)
 scons platform=ios target=template_debug ios_simulator=yes arch=arm64
 ```
 
 *Note: On macOS, SCons automatically performs ad-hoc codesigning (`codesign -s - --force`) on compiled libraries and test binaries.*
+
+### Local Project Symlinking (Zero-Copy Development)
+If you want to test and run your compiled binary changes directly inside another Godot game project:
+1. Create a symbolic link inside your target game project's `addons/` directory pointing back to the repository's `project/addons/godot-gaze` folder:
+   ```bash
+   ln -s /path/to/godot-gaze/project/addons/godot-gaze /path/to/your-target-project/addons/godot-gaze
+   ```
+2. When you run SCons, any newly compiled `.dylib`/`.dll`/`.so`/`.wasm` file will be generated in `project/addons/godot-gaze/bin/` and instantly loaded by your target project without requiring manual file copy steps.
 
 ---
 
@@ -147,3 +163,20 @@ To generate and view the API documentation locally:
 ```
 
 The documentation will be generated in `docs/doxygen/html/index.html`.
+
+---
+
+## 5. Release Guidelines & GitHub Workflows
+
+Releases are fully automated via GitHub Actions to ensure consistent multiplatform builds.
+
+### Triggering a Pre-compiled Release
+- **Tag-based Release (Production)**: When you push a git tag starting with `v` (e.g. `v1.0.0`), the compile and package workflow `.github/workflows/build.yml` is automatically triggered.
+- **Workflow Dispatch (Manual)**: You can also run the build workflow manually from the **Actions** tab of the GitHub repository.
+
+### Release Artifact Packaging
+The workflow compiles editor targets and template binaries for macOS, Windows, Linux, Android, and iOS, downloads the required AI models, converts them to optimized `.ort` formats, cleans up the raw source models, and outputs a single `godot-gaze.zip`.
+
+If triggered by a `v*` tag, the workflow will automatically create a new GitHub Release for that tag and upload the `godot-gaze.zip` asset directly to the release page.
+
+This ZIP file can then be downloaded by users or referenced directly in the Godot Asset Library.

@@ -153,6 +153,18 @@ static void register_gaze_project_settings() {
         prop_overlay["type"] = Variant::STRING;
         ps->add_property_info(prop_overlay);
         ps->set_initial_value("gaze/debug/overlay_scene_path", "res://addons/godot-gaze/debug_cam_feed.tscn");
+
+        if (!ps->has_setting("gaze/debug/verbosity")) {
+            ps->set_setting("gaze/debug/verbosity", 1);
+        }
+        Dictionary prop_verbosity;
+        prop_verbosity["name"] = "gaze/debug/verbosity";
+        prop_verbosity["type"] = Variant::INT;
+        ps->add_property_info(prop_verbosity);
+        ps->set_initial_value("gaze/debug/verbosity", 1);
+
+        int verbosity = ps->get_setting("gaze/debug/verbosity");
+        Gaze::set_log_verbosity(verbosity);
     }
 }
 

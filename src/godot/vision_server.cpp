@@ -40,14 +40,14 @@ VisionServer::VisionServer() {
 }
 
 VisionServer::~VisionServer() {
-    Gaze::log_info("VisionServer_Destructor_Began");
+    Gaze::log_info(2, "VisionServer_Destructor_Began");
     for (RID rid : allocated_cameras) {
         CameraData *data = camera_owner.get_or_null(rid);
         if (data) {
             if (data->camera) {
-                Gaze::log_info("VisionServer_Destructor_CameraRelease_Began");
+                Gaze::log_info(2, "VisionServer_Destructor_CameraRelease_Began");
                 data->camera->release();
-                Gaze::log_info("VisionServer_Destructor_CameraRelease_Finished");
+                Gaze::log_info(2, "VisionServer_Destructor_CameraRelease_Finished");
                 delete data->camera;
                 data->camera = nullptr;
             }
@@ -59,7 +59,7 @@ VisionServer::~VisionServer() {
     if (singleton == this) {
         singleton = nullptr;
     }
-    Gaze::log_info("VisionServer_Destructor_Finished");
+    Gaze::log_info(2, "VisionServer_Destructor_Finished");
 }
 
 RID VisionServer::camera_create() {

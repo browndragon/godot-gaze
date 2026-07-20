@@ -24,9 +24,9 @@ namespace Gaze
 
     GazeTrackingPipeline::~GazeTrackingPipeline()
     {
-        log_info("GazeTrackingPipeline_Destructor_Began");
+        log_info(2, "GazeTrackingPipeline_Destructor_Began");
         stop();
-        log_info("GazeTrackingPipeline_Destructor_Finished");
+        log_info(2, "GazeTrackingPipeline_Destructor_Finished");
     }
 
     bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data)
@@ -73,18 +73,18 @@ namespace Gaze
 
     void GazeTrackingPipeline::stop()
     {
-        log_info("GazeTrackingPipeline_Stop_Began");
+        log_info(2, "GazeTrackingPipeline_Stop_Began");
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         {
             std::lock_guard<std::mutex> lock(state_mutex);
             if (!thread_running) {
-                log_info("GazeTrackingPipeline_Stop_ThreadNotRunning");
+                log_info(2, "GazeTrackingPipeline_Stop_ThreadNotRunning");
                 return;
             }
             thread_running = false;
         }
 
-        log_info("GazeTrackingPipeline_Stop_NotifyWorker");
+        log_info(2, "GazeTrackingPipeline_Stop_NotifyWorker");
         {
             std::lock_guard<std::mutex> lock(worker_mutex);
             frame_pending = true;
@@ -93,9 +93,9 @@ namespace Gaze
 
         if (worker_thread.joinable())
         {
-            log_info("GazeTrackingPipeline_Stop_JoiningWorker");
+            log_info(2, "GazeTrackingPipeline_Stop_JoiningWorker");
             worker_thread.join();
-            log_info("GazeTrackingPipeline_Stop_WorkerJoined");
+            log_info(2, "GazeTrackingPipeline_Stop_WorkerJoined");
         }
         log_info("GazeTrackingPipeline_ThreadStopped");
     }
@@ -237,9 +237,10 @@ namespace Gaze
                         double total_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
 
                         static int stats_count = 0;
-                        if (stats_count++ % 30 == 0)
+                        int verbosity = get_log_verbosity().load(std::memory_order_acquire);
+                        if (verbosity >= 3 || (verbosity >= 1 && stats_count++ % 30 == 0))
                         {
-                            log_info("Pipeline_PerformanceStats",
+                            log_info(verbosity >= 3 ? 3 : 1, "Pipeline_PerformanceStats",
                                      "face_ms", face_ms,
                                      "gaze_ms", gaze_ms,
                                      "total_ms", total_ms,

@@ -253,6 +253,9 @@ public:
 #ifdef WEB_ENABLED
     void feed_gaze_web_raw(const Array& args);
 #endif
+
+    void set_verbosity(int level);
+    int get_verbosity() const;
 };
 
 } // namespace godot

@@ -38,6 +38,8 @@ func _input(event):
 			full_screened.emit(true)
 "
 
+[sub_resource type="OneEuroSmoother" id="OneEuroSmoother_7a0ga"]
+
 [node name="TestScene" type="Control" unique_id=1183059267]
 layout_mode = 3
 anchors_preset = 15
@@ -77,5 +79,8 @@ layout_mode = 1
 
 [node name="FullScreener" type="Node" parent="." unique_id=1363448967]
 script = SubResource("GDScript_0ejwa")
+
+[node name="GazeTracker" type="GazeTracker" parent="." unique_id=1112781723]
+screen_smooth = SubResource("OneEuroSmoother_7a0ga")
 
 [connection signal="full_screened" from="FullScreener" to="." method="_set_maximized"]

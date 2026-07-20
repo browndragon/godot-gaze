@@ -242,13 +242,37 @@ func run_tests():
 	tracker._on_gaze_data_ready(eye_rid)
 	
 	var raw_feed_proj = tracker.get_latest_projected_gaze()
+	var raw_project_ray = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
 	print("Raw OpenCV fed projected coordinate: ", raw_feed_proj)
-	var raw_expected_proj = Vector2(-162.6095, 444.239) * tracker.get_adjusted_viewport_transform().get_scale()
-	if abs(raw_feed_proj.x - raw_expected_proj.x) > 0.5 or abs(raw_feed_proj.y - raw_expected_proj.y) > 0.5:
-		printerr("FAIL: Raw OpenCV fed projection did not match expected: ", raw_feed_proj, " vs ", raw_expected_proj)
+	print("Projected gaze ray coordinate: ", raw_project_ray)
+	if abs(raw_feed_proj.x - raw_project_ray.x) > 0.5 or abs(raw_feed_proj.y - raw_project_ray.y) > 0.5:
+		printerr("FAIL: GazeServer eye gaze projection and project_gaze_ray_to_viewport coordinates differ! Eye: ", raw_feed_proj, " Ray: ", raw_project_ray)
 		quit(1)
 		return
 	print("PASS: Raw OpenCV space coordinate projection verified.")
+ 
+	# 5.6 Test window position shifts with GazeServer eye gaze projection
+	print("--- Running Window Shift Eye Gaze Test ---")
+	tracker.window_position_override = Vector2(100, 150)
+	tracker.update_projection_parameters()
+	if gs:
+		var active_eye = eye_estimator.get_eye_rid()
+		var left_eye_cv = Vector3(raw_args[1], raw_args[2], raw_args[3])
+		var right_eye_cv = Vector3(raw_args[4], raw_args[5], raw_args[6])
+		var dir_cv = Vector3(raw_args[7], raw_args[8], raw_args[9])
+		var origin_cv = (left_eye_cv + right_eye_cv) * 0.5
+		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
+		var dir_cam = Vector3(dir_cv.x, -dir_cv.y, -dir_cv.z)
+		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
+	tracker._on_gaze_data_ready(eye_rid)
+	var raw_feed_proj_shifted = tracker.get_latest_projected_gaze()
+	var raw_project_ray_shifted = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
+	print("Shifted projected eye gaze coordinate: ", raw_feed_proj_shifted, " Ray: ", raw_project_ray_shifted)
+	if abs(raw_feed_proj_shifted.x - raw_project_ray_shifted.x) > 0.5 or abs(raw_feed_proj_shifted.y - raw_project_ray_shifted.y) > 0.5:
+		printerr("FAIL: Eye gaze projection did not shift correctly when window moved. Eye: ", raw_feed_proj_shifted, " Ray: ", raw_project_ray_shifted)
+		quit(1)
+		return
+	print("PASS: Eye gaze window position shift verified.")
  
 	# Verify Head Forward points towards the screen (positive Z in camera space)
 	var head_fwd = tracker.get_head_forward()

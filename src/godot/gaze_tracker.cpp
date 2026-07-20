@@ -431,7 +431,14 @@ void GazeTracker::update_projection_parameters() {
 
         PlatformGeometry geom = platform_get_geometry();
         Transform2D vp_xform = get_adjusted_viewport_transform();
-        gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform);
+        Transform2D vp_xform_logical = vp_xform;
+        Vector2 scale = DisplayProfile::get_screen_scale();
+        if (scale.x > 0.0 && scale.y > 0.0) {
+            vp_xform_logical.columns[0] /= scale.x;
+            vp_xform_logical.columns[1] /= scale.y;
+            vp_xform_logical.columns[2] /= scale;
+        }
+        gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform_logical);
 
         if (camera_gaze_rid.is_valid()) {
             gs->camera_set_offsets(camera_gaze_rid, cam_off, cam_tilt);

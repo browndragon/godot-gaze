@@ -472,7 +472,7 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
                     double scale_y = disp->logical_size_px.y / disp->physical_size_mm.y;
                     Vector2 px(pos_mm.x * scale_x, pos_mm.y * scale_y);
 
-                    px = disp->viewport_transform.xform_inv(px);
+                    px = disp->viewport_transform.affine_inverse().xform(px - disp->window_position_px);
 
                     eye->latest_projected_gaze = px;
                     

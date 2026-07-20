@@ -952,7 +952,7 @@
                     );
                     var headPoseT = new ort.Tensor(
                       "float32",
-                      new Float32Array([-yaw, pitch, -roll]),
+                      new Float32Array([-yaw, pitch, roll]),
                       [1, 3],
                     );
 

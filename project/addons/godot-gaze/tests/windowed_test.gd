@@ -168,6 +168,70 @@ func _init():
 
 	print("PASS: Compute shaders executed successfully on the still frame (eye crops are NOT flat black).")
 
+	# 4. Test Dynamic Window Position/Size Synchronization (reproducing window drift bug)
+	print("=================== E2E TEST: DYNAMIC WINDOW POSITION SYNC ===================")
+	# Center the window first
+	var screen_id = DisplayServer.window_get_current_screen()
+	var screen_size = DisplayServer.screen_get_size(screen_id)
+	var window_size = DisplayServer.window_get_size()
+	var initial_pos = (screen_size - window_size) / 2
+	DisplayServer.window_set_position(initial_pos)
+	
+	# Wait for OS window movements to settle
+	await create_timer(0.5).timeout
+	
+	# Reset the tracker's projection parameters to match this initial centered position
+	gpu_tracker.update_projection_parameters()
+	
+	# Inject texture a few times to get initial gaze coordinate
+	var initial_gaze = Vector2.ZERO
+	for frame_step in range(30):
+		gpu_mock_vs.inject_texture(gpu_sensor.get_camera_rid(), face_tex)
+		await create_timer(0.05).timeout
+		initial_gaze = gpu_tracker.get_latest_projected_gaze()
+		if initial_gaze != Vector2.ZERO:
+			break
+			
+	var test_scale = DisplayProfile.get_screen_scale()
+	print("Initial window position: ", DisplayServer.window_get_position(), " | Initial scale: ", test_scale)
+	print("Initial gaze: ", initial_gaze)
+	if initial_gaze == Vector2.ZERO:
+		printerr("FAIL: Could not obtain a valid initial gaze estimation.")
+		quit(1)
+		return
+		
+	# Get the exact same origin and direction to project before and after window movement
+	var origin = gpu_tracker.get_gaze_origin()
+	var direction = gpu_tracker.get_gaze_direction(false) # without calibration
+	var initial_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
+	
+	# Move the window by a known offset
+	var offset = Vector2i(150, 100)
+	DisplayServer.window_set_position(DisplayServer.window_get_position() + offset)
+	
+	# Wait for OS to register position change
+	await create_timer(0.5).timeout
+	
+	var new_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
+	
+	var shift = new_proj - initial_proj
+	var vp_scale = gpu_tracker.get_adjusted_viewport_transform().get_scale()
+	var expected_shift = -Vector2(offset) / vp_scale
+	
+	print("Direct Projection - Initial: ", initial_proj, " | New: ", new_proj)
+	print("Direct Projection - Observed shift: ", shift, " | Expected shift: ", expected_shift)
+	
+	# Assert that the projection shifted to match the window position change
+	if abs(shift.x - expected_shift.x) > 1.0 or abs(shift.y - expected_shift.y) > 1.0:
+		printerr("FAIL: Eye gaze projection did not automatically shift when the window moved.")
+		gpu_tracker.stop_tracker()
+		gpu_tracker.free()
+		gpu_mock_vs.free()
+		quit(1)
+		return
+		
+	print("PASS: Dynamic window position synchronization verified.")
+
 	# Clean up
 	gpu_tracker.stop_tracker()
 	gpu_tracker.free()

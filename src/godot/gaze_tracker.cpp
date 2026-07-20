@@ -154,6 +154,12 @@ void GazeTracker::_ready() {
 void GazeTracker::_process(double delta) {
     if (!tracker_initialized) return;
 
+    PlatformGeometry geom = platform_get_geometry();
+    Transform2D vp_xform = get_adjusted_viewport_transform();
+    if (geom.window_position_px != last_window_pos || vp_xform != last_vp_xform) {
+        update_projection_parameters();
+    }
+
     GazeServer *gs = GazeServer::get_singleton();
     if (gs) {
         gs->trigger_process();
@@ -443,6 +449,9 @@ void GazeTracker::update_projection_parameters() {
             vp_xform_logical.columns[2] /= scale;
         }
         gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform_logical);
+        
+        last_window_pos = geom.window_position_px;
+        last_vp_xform = vp_xform;
 
         if (camera_gaze_rid.is_valid()) {
             gs->camera_set_offsets(camera_gaze_rid, cam_off, cam_tilt);

@@ -118,7 +118,7 @@ def run_command_and_log(target, source, env):
 VariantDir(gaze_variant_dir + "/tests", "tests", duplicate=0)
 
 # Add doctest and stb include path to core_env
-core_env.Append(CPPPATH=["#thirdparty/doctest", "#thirdparty/stb"])
+core_env.Append(CPPPATH=["#thirdparty/doctest", "#thirdparty/stb", "#thirdparty/godot-cpp/include", "#thirdparty/godot-cpp/gen/include"])
 
 # Configure native test target binaries (only on non-web/non-javascript platforms)
 if env["platform"] != "javascript":

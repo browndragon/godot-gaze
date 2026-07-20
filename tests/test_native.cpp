@@ -1379,3 +1379,33 @@ TEST_CASE("Testing resize_bgr_to_rgb bilinear filtering and color swap")
     CHECK(dst[1] == 20); // G
     CHECK(dst[2] == 10); // B
 }
+
+#include <godot_cpp/variant/transform2d.hpp>
+
+TEST_CASE("Testing Godot C++ Bindings Transform2D::xform_inv Scaling Bug")
+{
+    // Under scaling (e.g. Retina/High-DPI stretching), godot-cpp's Transform2D::xform_inv()
+    // does not perform a mathematically correct inverse transform. It assumes the basis is
+    // orthonormal (scale = 1.0) and uses transpose multiplication, which multiplies by the
+    // scale instead of dividing by it.
+    //
+    // For a scale of 2.0 and vector (10, 10), the correct inverse is (5, 5).
+    // But xform_inv(10, 10) returns (20, 20).
+    //
+    // We document and verify this behavior here as a regression check for the workaround
+    // implemented using `viewport_transform.affine_inverse().xform()`.
+
+    godot::Transform2D t(godot::Vector2(2.0, 0.0), godot::Vector2(0.0, 2.0), godot::Vector2(0.0, 0.0));
+    godot::Vector2 v(10.0, 10.0);
+
+    godot::Vector2 result = t.xform_inv(v);
+
+    // Assert that the scaling bug multiplies the vector instead of dividing
+    CHECK(result.x == doctest::Approx(20.0));
+    CHECK(result.y == doctest::Approx(20.0));
+
+    // Assert that using affine_inverse().xform() yields the correct inverse coordinate (5.0)
+    godot::Vector2 correct_inverse = t.affine_inverse().xform(v);
+    CHECK(correct_inverse.x == doctest::Approx(5.0));
+    CHECK(correct_inverse.y == doctest::Approx(5.0));
+}

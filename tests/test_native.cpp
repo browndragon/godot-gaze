@@ -1491,3 +1491,99 @@ TEST_CASE("Testing Log Verbosity Filtering")
     Gaze::register_log_handler(original_handler);
     Gaze::set_log_verbosity(original_verbosity);
 }
+
+TEST_CASE("Testing Head Roll Landmark Detection")
+{
+    const double PI = 3.14159265358979323846;
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    
+    // 1. Test Anatomical Left Ear to Shoulder Tilt (self_roll_left.jpg)
+    {
+        ORTYuNetPipeline pipeline(yunet_path);
+        REQUIRE(pipeline.initialize() == true);
+
+        LoadedImage img = load_test_image("tests/resources/self_roll_left.jpg");
+        REQUIRE(!img.data.empty());
+
+        Frame frame;
+        frame.width = img.width;
+        frame.height = img.height;
+        frame.timestamp = 0.0;
+        frame.data = img.data.data();
+
+        // Standard YuNet without hint should fail or get incorrect/lost track (horizontal roll)
+        EyeCrops crops_no_hint;
+        pipeline.process_frame(frame, crops_no_hint);
+        if (crops_no_hint.face_detected) {
+            double roll_dx = crops_no_hint.landmarks[1].x - crops_no_hint.landmarks[0].x;
+            double roll_dy = crops_no_hint.landmarks[1].y - crops_no_hint.landmarks[0].y;
+            double roll_rad = std::atan2(roll_dy, roll_dx);
+            // Verify that standard YuNet predicts landmarks with a large error (more than 0.4 rad off from true tilt)
+            CHECK(std::abs(roll_rad - (-PI / 3.0)) > 0.4);
+        }
+
+        // Provide the roll hint of about -pi / 3 (approx -60 degrees, which is anatomical left ear to shoulder)
+        pipeline.reset_tracking_state();
+        pipeline.set_roll_hint(-PI / 3.0);
+
+        EyeCrops crops_with_hint;
+        bool pipeline_success = pipeline.process_frame(frame, crops_with_hint);
+        REQUIRE(pipeline_success == true);
+        REQUIRE(crops_with_hint.face_detected == true);
+
+        // Verify landmarks coordinates are non-zero/valid
+        CHECK(crops_with_hint.landmarks[0].x > 0.0);
+        CHECK(crops_with_hint.landmarks[1].x > 0.0);
+        
+        // Verify that the detected face roll angle is correct
+        double roll_dx = crops_with_hint.landmarks[1].x - crops_with_hint.landmarks[0].x;
+        double roll_dy = crops_with_hint.landmarks[1].y - crops_with_hint.landmarks[0].y;
+        double roll_rad = std::atan2(roll_dy, roll_dx);
+        CHECK(roll_rad == doctest::Approx(-PI / 3.0).epsilon(0.35));
+    }
+
+    // 2. Test Anatomical Right Ear to Shoulder Tilt (self_roll_right.jpg)
+    {
+        ORTYuNetPipeline pipeline(yunet_path);
+        REQUIRE(pipeline.initialize() == true);
+
+        LoadedImage img = load_test_image("tests/resources/self_roll_right.jpg");
+        REQUIRE(!img.data.empty());
+
+        Frame frame;
+        frame.width = img.width;
+        frame.height = img.height;
+        frame.timestamp = 0.0;
+        frame.data = img.data.data();
+
+        // Standard YuNet without hint should fail or get incorrect/lost track (horizontal roll)
+        EyeCrops crops_no_hint;
+        pipeline.process_frame(frame, crops_no_hint);
+        if (crops_no_hint.face_detected) {
+            double roll_dx = crops_no_hint.landmarks[1].x - crops_no_hint.landmarks[0].x;
+            double roll_dy = crops_no_hint.landmarks[1].y - crops_no_hint.landmarks[0].y;
+            double roll_rad = std::atan2(roll_dy, roll_dx);
+            // Verify that standard YuNet predicts landmarks with a large error (more than 0.4 rad off from true tilt)
+            CHECK(std::abs(roll_rad - (PI / 3.0)) > 0.4);
+        }
+
+        // Provide the roll hint of about +pi / 3 (approx +60 degrees, which is anatomical right ear to shoulder)
+        pipeline.reset_tracking_state();
+        pipeline.set_roll_hint(PI / 3.0);
+
+        EyeCrops crops_with_hint;
+        bool pipeline_success = pipeline.process_frame(frame, crops_with_hint);
+        REQUIRE(pipeline_success == true);
+        REQUIRE(crops_with_hint.face_detected == true);
+
+        // Verify landmarks coordinates are non-zero/valid
+        CHECK(crops_with_hint.landmarks[0].x > 0.0);
+        CHECK(crops_with_hint.landmarks[1].x > 0.0);
+
+        // Verify that the detected face roll angle is correct
+        double roll_dx = crops_with_hint.landmarks[1].x - crops_with_hint.landmarks[0].x;
+        double roll_dy = crops_with_hint.landmarks[1].y - crops_with_hint.landmarks[0].y;
+        double roll_rad = std::atan2(roll_dy, roll_dx);
+        CHECK(roll_rad == doctest::Approx(PI / 3.0).epsilon(0.35));
+    }
+}

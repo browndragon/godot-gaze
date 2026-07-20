@@ -183,6 +183,17 @@ namespace Gaze
         std::vector<unsigned char> resized_bgr(model_w * model_h * 3);
         bilinear_resize_letterbox(frame.data, width, height, resized_bgr.data(), model_w, model_h, pad_x, pad_y, new_w, new_h);
 
+        // Apply roll compensation rotation if tracking
+        double roll_angle_to_apply = 0.0;
+        bool use_roll = has_last_roll && (std::abs(last_roll_rad) > 1e-4);
+        if (use_roll)
+        {
+            roll_angle_to_apply = last_roll_rad;
+            std::vector<unsigned char> rotated_bgr(model_w * model_h * 3);
+            rotate_image_bgr(resized_bgr.data(), model_w, model_h, rotated_bgr.data(), -roll_angle_to_apply);
+            resized_bgr = std::move(rotated_bgr);
+        }
+
         int channel_size = model_h * model_w;
         for (int y = 0; y < model_h; ++y)
         {
@@ -374,6 +385,11 @@ namespace Gaze
 
             if (keep.empty())
             {
+                if (use_roll)
+                {
+                    reset_tracking_state();
+                    return process_frame(frame, out_crops);
+                }
                 out_crops.face_detected = false;
                 return false;
             }
@@ -384,18 +400,45 @@ namespace Gaze
 
             const auto &model_ldm = candidate_landmarks[best_idx];
 
+            // Map landmarks back to unrotated 640x640 space
+            std::vector<GazePoint> unrotated_ldm(5);
+            if (use_roll)
+            {
+                double cos_a = std::cos(roll_angle_to_apply);
+                double sin_a = std::sin(roll_angle_to_apply);
+                double cx = model_w / 2.0;
+                double cy = model_h / 2.0;
+                for (int i = 0; i < 5; ++i)
+                {
+                    double dx = model_ldm[i].x - cx;
+                    double dy = model_ldm[i].y - cy;
+                    unrotated_ldm[i].x = cx + dx * cos_a - dy * sin_a;
+                    unrotated_ldm[i].y = cy + dx * sin_a + dy * cos_a;
+                }
+            }
+            else
+            {
+                unrotated_ldm = model_ldm;
+            }
+
             // Scale landmarks back to original frame scale (reversing letterboxing)
             std::vector<GazePoint> final_ldm(5);
             for (int i = 0; i < 5; ++i)
             {
-                final_ldm[i].x = (model_ldm[i].x - pad_x) / scale;
-                final_ldm[i].y = (model_ldm[i].y - pad_y) / scale;
+                final_ldm[i].x = (unrotated_ldm[i].x - pad_x) / scale;
+                final_ldm[i].y = (unrotated_ldm[i].y - pad_y) / scale;
             }
 
             for (int i = 0; i < 5; ++i)
             {
                 out_crops.landmarks[i] = final_ldm[i];
             }
+
+            // Update tracking state for next frame
+            double roll_dx = final_ldm[1].x - final_ldm[0].x;
+            double roll_dy = final_ldm[1].y - final_ldm[0].y;
+            last_roll_rad = std::atan2(roll_dy, roll_dx);
+            has_last_roll = true;
             log_info(3, "ORTYuNetPipelineLandmarks",
                      "x0", final_ldm[0].x, "y0", final_ldm[0].y,
                      "x1", final_ldm[1].x, "y1", final_ldm[1].y,
@@ -441,9 +484,7 @@ namespace Gaze
             double cy = height / 2.0;
             double fx = (camera_focal_length_px > 0.0) ? camera_focal_length_px : get_focal_length_px(width, camera_fov_degrees);
 
-            double roll_dx = final_ldm[1].x - final_ldm[0].x; // Left Eye (Image Right) - Right Eye (Image Left) (positive)
-            double roll_dy = final_ldm[1].y - final_ldm[0].y;
-            double roll_angle_rad = std::atan2(roll_dy, roll_dx);
+            double roll_angle_rad = last_roll_rad;
 
             GazeVector3 rvec(0.0, 0.0, roll_angle_rad);
             GazeVector3 tvec(0.0, 0.0, 700.0);
@@ -553,6 +594,57 @@ namespace Gaze
     void ORTYuNetPipeline::set_camera_focal_length_px(double f)
     {
         camera_focal_length_px = f;
+    }
+
+    void ORTYuNetPipeline::rotate_image_bgr(const unsigned char *src, int w, int h, unsigned char *dst, double angle_rad)
+    {
+        double cos_a = std::cos(angle_rad);
+        double sin_a = std::sin(angle_rad);
+        double cx = w / 2.0;
+        double cy = h / 2.0;
+
+        for (int y = 0; y < h; ++y)
+        {
+            double dy = y - cy;
+            for (int x = 0; x < w; ++x)
+            {
+                double dx = x - cx;
+                // Backward mapping
+                double src_x = cx + dx * cos_a + dy * sin_a;
+                double src_y = cy - dx * sin_a + dy * cos_a;
+
+                int dst_idx = (y * w + x) * 3;
+                if (src_x >= 0.0 && src_x < w - 1.0 && src_y >= 0.0 && src_y < h - 1.0)
+                {
+                    int x0 = static_cast<int>(std::floor(src_x));
+                    int y0 = static_cast<int>(std::floor(src_y));
+                    int x1 = x0 + 1;
+                    int y1 = y0 + 1;
+                    float tx = static_cast<float>(src_x - x0);
+                    float ty = static_cast<float>(src_y - y0);
+
+                    for (int c = 0; c < 3; ++c)
+                    {
+                        float p00 = src[(y0 * w + x0) * 3 + c];
+                        float p10 = src[(y0 * w + x1) * 3 + c];
+                        float p01 = src[(y1 * w + x0) * 3 + c];
+                        float p11 = src[(y1 * w + x1) * 3 + c];
+
+                        float val = (1.0f - tx) * (1.0f - ty) * p00 +
+                                    tx * (1.0f - ty) * p10 +
+                                    (1.0f - tx) * ty * p01 +
+                                    tx * ty * p11;
+                        dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
+                    }
+                }
+                else
+                {
+                    dst[dst_idx + 0] = 0;
+                    dst[dst_idx + 1] = 0;
+                    dst[dst_idx + 2] = 0;
+                }
+            }
+        }
     }
 
 } // namespace Gaze

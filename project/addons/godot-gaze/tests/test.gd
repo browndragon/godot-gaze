@@ -26,6 +26,11 @@ func _ready():
 			tracker = GazeTracker.new()
 			add_child(tracker)
 			tracker.initialize_tracker()
+	var smoother := tracker.screen_smooth
+	if smoother:
+		print("INITIALIZING TRACKER with smoother.min_cutoff: ", smoother.min_cutoff, " .beta:", smoother.beta)
+	else:
+		push_error("INITIALIZING TRACKER withno smooth")
 
 	# Connect to GDExtension signals
 	tracker.gaze_updated.connect(_on_gaze_updated)

@@ -27,6 +27,9 @@ namespace Gaze
         double camera_fov_degrees = DEFAULT_CAMERA_FOV_DEGREES;
         PipelineConfig config;
 
+        double last_roll_rad = 0.0;
+        bool has_last_roll = false;
+
         struct Anchor
         {
             float cx, cy;
@@ -43,6 +46,7 @@ namespace Gaze
 
         std::vector<Anchor> generate_anchors(int width, int height);
         bool crop_eye(const Frame &frame, const GazePoint landmarks[5], bool is_left, uint8_t out_buffer[EyeCrops::EYE_CROP_SIZE]);
+        void rotate_image_bgr(const unsigned char *src, int w, int h, unsigned char *dst, double angle_rad);
 
     public:
         static constexpr int INFERENCE_WIDTH = 640;
@@ -57,6 +61,9 @@ namespace Gaze
         virtual void set_camera_focal_length_px(double f) override;
         virtual void set_camera_fov_degrees(double fov) override { camera_fov_degrees = fov; }
         virtual void set_config(const PipelineConfig &cfg) override { config = cfg; }
+
+        void set_roll_hint(double angle_rad) { last_roll_rad = angle_rad; has_last_roll = true; }
+        void reset_tracking_state() { last_roll_rad = 0.0; has_last_roll = false; }
     };
 
 } // namespace Gaze

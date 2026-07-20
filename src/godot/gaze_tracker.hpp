@@ -108,6 +108,8 @@ private:
     Gaze::EyeCrops latest_crops;
 
     Vector2 web_canvas_pos = Vector2(0.0, 0.0);
+    Vector2 last_window_pos = Vector2();
+    Transform2D last_vp_xform;
     void* opaque = nullptr;
     RID display_rid;
     RID camera_gaze_rid;

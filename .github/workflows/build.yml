@@ -183,7 +183,7 @@ jobs:
         run: |
           scons platform=${{ matrix.platform }} target=${{ matrix.target }} ${{ matrix.scons_flags }}
         env:
-          ANDROID_NDK_ROOT: ${{ env.ANDROID_HOME }}/ndk/28.1.13356709
+          ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/28.1.13356709
 
 
 

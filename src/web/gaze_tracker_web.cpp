@@ -9,6 +9,7 @@
 
 #ifdef WEB_ENABLED
 #include "web_binding_state.hpp"
+#include "godot_files.hpp"
 #include <godot_cpp/classes/java_script_bridge.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/viewport.hpp>

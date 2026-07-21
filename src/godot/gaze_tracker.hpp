@@ -101,6 +101,7 @@ private:
     GazeLifecycle lifecycle_state = LIFECYCLE_UNKNOWN;
     bool autostart = true;
     void set_lifecycle_state(GazeLifecycle p_state);
+    Vector2 get_window_scale() const;
     bool is_face_tracked = false;
     uint64_t last_frame_time = 0;
     Gaze::GazeVector3 latest_gaze_origin = Gaze::GazeVector3(0.0, 0.0, 500.0);

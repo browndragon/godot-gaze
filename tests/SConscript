@@ -317,6 +317,16 @@ android_run = env.Command(
 env.AlwaysBuild(android_run)
 env.Alias("tests/android", android_run)
 
+# Managed Android E2E test target
+android_managed_run = env.Command(
+    "build/tests/logs/tests.android_managed.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["/usr/bin/env", "bash", "scripts/run_android_tests_managed.sh"]
+)
+env.AlwaysBuild(android_managed_run)
+env.Alias("tests/android_managed", android_managed_run)
+
 # Standard local quick tests run (native + python + headless)
 local_tests = ["tests/python"]
 if env["platform"] != "javascript":
@@ -325,7 +335,7 @@ if env["platform"] != "javascript":
 env.Alias("tests", local_tests)
 
 # Run all E2E targets
-all_tests = ["tests/python", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android"]
+all_tests = ["tests/python", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
 if env["platform"] != "javascript":
     all_tests.append("tests/native")
 env.Alias("tests/all", all_tests)

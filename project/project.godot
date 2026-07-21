@@ -12,6 +12,7 @@ config_version=5
 
 config/name="godot-gaze"
 run/main_scene="uid://xb3475hljvun"
+run/main_scene.android_test="res://addons/godot-gaze/tests/headless_test.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -30,4 +31,6 @@ enabled=PackedStringArray("res://addons/godot-gaze/plugin.cfg")
 
 [rendering]
 
+renderer/rendering_method.android_test="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 rendering_device/driver.windows="d3d12"

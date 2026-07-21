@@ -346,6 +346,8 @@ def setup_onnxruntime(env):
         print(f"[SCons] {expected_lib_path} not found. Starting ONNX Runtime custom build...")
         
         ep_flags = ["--use_xnnpack"]
+        if platform == "android":
+            ep_flags.append("--use_nnapi")
             
         minimal_build_type = "extended"
         build_cmd = [
@@ -454,8 +456,9 @@ def setup_onnxruntime(env):
         if env["target"] != "template_debug":
             print(f"[SCons] Stripping local symbols from {dylib_path}...")
             subprocess.run(["strip", "-x", dylib_path], check=False)
-    elif platform == "linux":
-        env.Append(LINKFLAGS=["-Wl,-rpath,$ORIGIN"])
+    elif platform in ["linux", "android"]:
+        if platform == "linux":
+            env.Append(LINKFLAGS=["-Wl,-rpath,$ORIGIN"])
         out_dir = "project/addons/godot-gaze/bin"
         os.makedirs(out_dir, exist_ok=True)
         import shutil

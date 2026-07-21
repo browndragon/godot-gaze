@@ -410,7 +410,9 @@ void GazeTracker::update_projection_parameters() {
 
     if (display_profile.is_valid()) {
         size_mm = display_profile->get_physical_size_mm();
-        size_px = Vector2i(display_profile->get_logical_size_px() * DisplayProfile::get_screen_scale());
+        Vector2 scale = DisplayProfile::get_screen_scale();
+        Vector2 logical_size = display_profile->get_logical_size_px();
+        size_px = Vector2i(logical_size.x * scale.x, logical_size.y * scale.y);
     }
 
     Ref<DeviceCalibration> dev_cal = device_calibration;
@@ -434,7 +436,8 @@ void GazeTracker::update_projection_parameters() {
         cam_tilt = dev_cal->get_camera_tilt(const_cast<GazeTracker*>(this));
         pixel_sz_mm = dev_cal->get_pixel_size_mm(const_cast<GazeTracker*>(this));
         if (pixel_sz_mm.x > 0.0 && pixel_sz_mm.y > 0.0) {
-            size_mm = pixel_sz_mm * Vector2(size_px.x, size_px.y);
+            Vector2 scale = DisplayProfile::get_screen_scale();
+            size_mm = pixel_sz_mm * (Vector2(size_px.x, size_px.y) / scale);
         }
     }
 

@@ -37,3 +37,9 @@ web.release.wasm32 = "res://addons/godot-gaze/bin/gaze.javascript.template_relea
 web.debug.wasm32.threads = "res://addons/godot-gaze/bin/gaze.javascript.template_debug.threads.wasm"
 web.release.wasm32.threads = "res://addons/godot-gaze/bin/gaze.javascript.template_release.threads.wasm"
 
+[dependencies]
+android.debug.arm64 = { "res://addons/godot-gaze/bin/libonnxruntime.so": "" }
+android.release.arm64 = { "res://addons/godot-gaze/bin/libonnxruntime.so": "" }
+android.debug.x86_64 = { "res://addons/godot-gaze/bin/libonnxruntime.so": "" }
+android.release.x86_64 = { "res://addons/godot-gaze/bin/libonnxruntime.so": "" }
+

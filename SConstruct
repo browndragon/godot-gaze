@@ -239,6 +239,8 @@ def setup_onnxruntime(env):
     # TODO: I'm sympathetic to leaving this tool available through scons. Perhaps as a custom target? But it seems just as easy to just make it a script (which I think it also is...?), so why repeat ourselves, esp in this specific, navigation-oriented build-oriented file?
     model_dir = "project/addons/godot-gaze/models"
     clean_models_marker = os.path.join(model_dir, ".clean_models_v2")
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir, exist_ok=True)
     if not os.path.exists(clean_models_marker):
         print("[SCons] Deleting old ORT models and config to regenerate with basic optimization...")
         for f in os.listdir(model_dir):

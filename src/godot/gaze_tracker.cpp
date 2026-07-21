@@ -19,6 +19,7 @@ namespace Gaze { extern bool g_is_exiting; }
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/viewport.hpp>
+#include <godot_cpp/classes/window.hpp>
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/time.hpp>
 #include <godot_cpp/classes/file_access.hpp>
@@ -401,11 +402,15 @@ void GazeTracker::update_projection_parameters() {
     if (!display_rid.is_valid()) return;
 
     Vector2i size_px(DEFAULT_SCREEN_SIZE_PIXELS.x, DEFAULT_SCREEN_SIZE_PIXELS.y);
+    DisplayServer *ds = DisplayServer::get_singleton();
+    if (ds) {
+        size_px = ds->screen_get_size(ds->window_get_current_screen());
+    }
     Vector2 size_mm(DEFAULT_SCREEN_SIZE_MM.x, DEFAULT_SCREEN_SIZE_MM.y);
 
     if (display_profile.is_valid()) {
-        size_px = display_profile->get_logical_size_px();
         size_mm = display_profile->get_physical_size_mm();
+        size_px = Vector2i(display_profile->get_logical_size_px() * DisplayProfile::get_screen_scale());
     }
 
     Ref<DeviceCalibration> dev_cal = device_calibration;
@@ -441,14 +446,7 @@ void GazeTracker::update_projection_parameters() {
 
         PlatformGeometry geom = platform_get_geometry();
         Transform2D vp_xform = get_adjusted_viewport_transform();
-        Transform2D vp_xform_logical = vp_xform;
-        Vector2 scale = DisplayProfile::get_screen_scale();
-        if (scale.x > 0.0 && scale.y > 0.0) {
-            vp_xform_logical.columns[0] /= scale.x;
-            vp_xform_logical.columns[1] /= scale.y;
-            vp_xform_logical.columns[2] /= scale;
-        }
-        gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform_logical);
+        gs->display_set_window_parameters(display_rid, geom.window_position_px, vp_xform);
         
         last_window_pos = geom.window_position_px;
         last_vp_xform = vp_xform;
@@ -533,6 +531,24 @@ void GazeTracker::set_display_profile(const Ref<DisplayProfile>& profile) {
 
 Ref<DisplayProfile> GazeTracker::get_display_profile() const {
     return display_profile;
+}
+
+Vector2 GazeTracker::get_window_scale() const {
+    DisplayServer *ds = DisplayServer::get_singleton();
+    if (ds) {
+        Window *win = const_cast<GazeTracker*>(this)->get_window();
+        if (win) {
+            Vector2i win_size_logical = win->get_size();
+            Vector2i win_size_physical = ds->window_get_size(win->get_window_id());
+            if (win_size_logical.x > 0 && win_size_logical.y > 0) {
+                return Vector2(
+                    (double)win_size_physical.x / win_size_logical.x,
+                    (double)win_size_physical.y / win_size_logical.y
+                );
+            }
+        }
+    }
+    return Vector2(1.0, 1.0);
 }
 
 Vector3 GazeTracker::get_derived_camera_offset() const {
@@ -688,12 +704,10 @@ Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direct
     PlatformGeometry geom = platform_get_geometry();
     Transform2D vp_xform = get_adjusted_viewport_transform();
 
-    Vector2 scale = DisplayProfile::get_screen_scale();
-
     Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
         Gaze::GazeVector2(geom.window_position_px.x, geom.window_position_px.y),
-        Gaze::GazeVector2(vp_xform.get_scale().x / scale.x, vp_xform.get_scale().y / scale.y),
-        Gaze::GazeVector2(vp_xform.get_origin().x / scale.x, vp_xform.get_origin().y / scale.y)
+        Gaze::GazeVector2(vp_xform.get_scale().x, vp_xform.get_scale().y),
+        Gaze::GazeVector2(vp_xform.get_origin().x, vp_xform.get_origin().y)
     );
 
     Gaze::GazeVector2 local_pixel;
@@ -786,11 +800,10 @@ Transform2D GazeTracker::get_adjusted_viewport_transform() const {
 Vector2 GazeTracker::map_viewport_to_screen(Vector2 logical_pixel) const {
     PlatformGeometry geom = platform_get_geometry();
     Transform2D vp_xform = get_adjusted_viewport_transform();
-    Vector2 scale = DisplayProfile::get_screen_scale();
     Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
         Gaze::GazeVector2(geom.window_position_px.x, geom.window_position_px.y),
-        Gaze::GazeVector2(vp_xform.get_scale().x / scale.x, vp_xform.get_scale().y / scale.y),
-        Gaze::GazeVector2(vp_xform.get_origin().x / scale.x, vp_xform.get_origin().y / scale.y)
+        Gaze::GazeVector2(vp_xform.get_scale().x, vp_xform.get_scale().y),
+        Gaze::GazeVector2(vp_xform.get_origin().x, vp_xform.get_origin().y)
     );
     Gaze::GazeVector2 screen_px = projector.map_viewport_to_screen_px(Gaze::GazeVector2(logical_pixel.x, logical_pixel.y));
     return Vector2(screen_px.x, screen_px.y);

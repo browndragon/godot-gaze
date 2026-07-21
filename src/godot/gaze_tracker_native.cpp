@@ -99,7 +99,7 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
             window_pos_ppix = (screen_size_ppix - window_size_ppix) / 2;
         }
 
-        geom.window_position_px = Vector2(window_pos_ppix.x / scale, window_pos_ppix.y / scale);
+        geom.window_position_px = Vector2(window_pos_ppix.x, window_pos_ppix.y);
     }
 
     if (window_position_override.x >= 0.0 && window_position_override.y >= 0.0) {

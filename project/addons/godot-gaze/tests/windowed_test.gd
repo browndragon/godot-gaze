@@ -232,6 +232,38 @@ func _init():
 		
 	print("PASS: Dynamic window position synchronization verified.")
 
+	# ----------------------------------------------------
+	# DYNAMIC WINDOW FULLSCREEN SYNC
+	# ----------------------------------------------------
+	print("--- Dynamic window fullscreen synchronization verification ---")
+	var initial_screen_px = gpu_tracker.map_viewport_to_screen(new_proj)
+	
+	# Transition to exclusive fullscreen
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
+	
+	# Wait for OS transition to settle
+	await create_timer(1.0).timeout
+	
+	var fs_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
+	var fs_screen_px = gpu_tracker.map_viewport_to_screen(fs_proj)
+	
+	print("Fullscreen Transition - Windowed screen px: ", initial_screen_px, " | Fullscreen screen px: ", fs_screen_px)
+	
+	# Restore window mode
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	await create_timer(0.5).timeout
+	
+	# Assert physical position is identical (within 1 pixel tolerance)
+	if abs(fs_screen_px.x - initial_screen_px.x) > 1.0 or abs(fs_screen_px.y - initial_screen_px.y) > 1.0:
+		printerr("FAIL: Projected screen coordinate shifted across fullscreen transition.")
+		gpu_tracker.stop_tracker()
+		gpu_tracker.free()
+		gpu_mock_vs.free()
+		quit(1)
+		return
+		
+	print("PASS: Dynamic window fullscreen synchronization verified.")
+
 	# Clean up
 	gpu_tracker.stop_tracker()
 	gpu_tracker.free()

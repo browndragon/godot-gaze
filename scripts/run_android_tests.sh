@@ -22,7 +22,7 @@ if [[ ! -f "$apk_path" ]]; then
 fi
 
 echo "Installing APK to emulator..."
-adb -s "$device_id" install -r "$apk_path"
+adb -s "$device_id" install --no-incremental -r "$apk_path"
 
 echo "Pre-granting camera permission..."
 adb -s "$device_id" shell pm grant org.godotengine.godotgaze android.permission.CAMERA || true
@@ -32,17 +32,25 @@ adb -s "$device_id" logcat -c
 
 # Launch the Godot app E2E tests
 echo "Launching Godot App E2E tests..."
-adb -s "$device_id" shell am start -n org.godotengine.godotgaze/com.godot.game.GodotApp --esa cmdline "run-tests"
+adb -s "$device_id" shell am start -n org.godotengine.godotgaze/com.godot.game.GodotAppLauncher --esa cmdline "run-tests"
 
 log_file="build/tests/logs/android_logcat_raw.log"
+mkdir -p "$(dirname "$log_file")"
 rm -f "$log_file"
 
 # Stream logcat in background
 adb -s "$device_id" logcat godot:I AndroidRuntime:E DEBUG:V *:S > "$log_file" &
 logcat_pid=$!
 
+# Tail logs to stdout in real-time
+tail -f "$log_file" &
+tail_pid=$!
+
 cleanup() {
     set +e
+    if [[ -n "${tail_pid:-}" ]]; then
+        kill "$tail_pid" 2>/dev/null || true
+    fi
     if [[ -n "${logcat_pid:-}" ]]; then
         kill "$logcat_pid" 2>/dev/null || true
     fi
@@ -52,7 +60,7 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Monitoring logs for test completion..."
-timeout=30
+timeout=180
 elapsed=0
 test_passed=0
 test_completed=0

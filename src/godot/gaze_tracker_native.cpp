@@ -103,7 +103,12 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
     }
 
     if (window_position_override.x >= 0.0 && window_position_override.y >= 0.0) {
-        geom.window_position_px = window_position_override;
+        double scale = 1.0;
+        if (ds) {
+            int screen_id = ds->window_get_current_screen();
+            scale = ds->screen_get_scale(screen_id);
+        }
+        geom.window_position_px = window_position_override * scale;
     }
 
     return geom;

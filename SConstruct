@@ -13,6 +13,7 @@ def copy_js_sidecar():
     if not os.path.exists(js_path):
         print(f"Error: {js_path} does not exist. Cannot copy JS sidecar.")
         return
+    os.makedirs(os.path.dirname(dest_path), exist_ok=True)
     print(f"[SCons] Copying {js_path} to {dest_path}...")
     import shutil
     shutil.copy2(js_path, dest_path)

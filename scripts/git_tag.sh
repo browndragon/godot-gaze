@@ -79,8 +79,20 @@ if command -v gh &> /dev/null; then
     done
 
     if [ -n "$RUN_ID" ] && [ "$RUN_ID" != "null" ]; then
-        echo "Found GitHub Actions run ID: ${RUN_ID}. Watching build..."
-        gh run watch "${RUN_ID}"
+        echo "Found GitHub Actions run ID: ${RUN_ID}. Monitoring build..."
+        
+        while true; do
+            STATUS=$(gh run view "${RUN_ID}" --json status -q ".status" 2>/dev/null || echo "completed")
+            if [ "$STATUS" = "completed" ] || [ -z "$STATUS" ]; then
+                break
+            fi
+            echo "--- [$(date +'%H:%M:%S')] Build is ${STATUS}. Current job summary: ---"
+            gh run view "${RUN_ID}"
+            sleep 30
+        done
+
+        echo "--- Build Completed ---"
+        gh run view "${RUN_ID}"
         
         CONCLUSION=$(gh run view "${RUN_ID}" --json conclusion -q ".conclusion" 2>/dev/null || echo "failed")
         if [ "$CONCLUSION" = "success" ]; then

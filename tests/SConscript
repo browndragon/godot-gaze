@@ -182,7 +182,8 @@ if env["platform"] != "javascript":
         source="#tests/test_native.cpp"
     ))
     
-    target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}"
+    exe_suffix = ".exe" if env["platform"] == "windows" else ""
+    target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
     test_program = core_env.Program(target=target_test_bin, source=test_objs)
 
     # Build benchmark test executable
@@ -192,14 +193,14 @@ if env["platform"] != "javascript":
         source="#tests/test_benchmark.cpp"
     ))
     
-    target_benchmark_bin = "#" + f"build/tests/test_benchmark.{platform_str}.{env['arch']}"
+    target_benchmark_bin = "#" + f"build/tests/test_benchmark.{platform_str}.{env['arch']}{exe_suffix}"
     benchmark_program = core_env.Program(target=target_benchmark_bin, source=benchmark_objs)
     
     # Build stress test cast
     stress_test_objs = [
         env.Object(target="#" + os.path.join(gaze_variant_dir, "tests/stress_test_cast" + env["OBJSUFFIX"]), source="#tests/stress_test_cast.cpp")
     ]
-    stress_target_test_bin = "#" + f"build/tests/stress_test_cast.{platform_str}.{env['arch']}"
+    stress_target_test_bin = "#" + f"build/tests/stress_test_cast.{platform_str}.{env['arch']}{exe_suffix}"
     stress_test_program = env.Program(target=stress_target_test_bin, source=stress_test_objs)
 
     # Codesigning on macOS

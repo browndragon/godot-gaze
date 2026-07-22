@@ -23,9 +23,9 @@ namespace godot
     {
         if (!opaque)
         {
-            WebBindingState *state = memnew(WebBindingState);
+            Ref<WebBindingState> state = memnew(WebBindingState);
             state->reference(); // Increment reference count
-            opaque = state;
+            opaque = state.ptr();
             state->setup_callbacks(this);
         }
 

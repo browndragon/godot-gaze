@@ -418,7 +418,7 @@ def setup_onnxruntime(env):
                 "--android_api", "29"
             ]
         elif platform == "ios":
-            build_cmd += ["--ios", "--osx_arch", arch, "--apple_deploy_target", "12.0"]
+            build_cmd += ["--ios", "--osx_arch", arch, "--apple_deploy_target", "12.0", "--cmake_generator", "Xcode"]
             if env.get("ios_simulator", False):
                 if env.get("IOS_SDK_PATH", "") != "":
                     build_cmd += ["--apple_sysroot", env["IOS_SDK_PATH"]]
@@ -434,7 +434,20 @@ def setup_onnxruntime(env):
             pass
             
         print(f"[SCons] Building ORT: {' '.join(build_cmd)}")
-        my_env = os.environ.copy()
+        # Use SCons-configured environment to ensure MSVC/Xcode/compiler flags are properly passed on all platforms
+        my_env = env["ENV"].copy()
+        # Merge system environment variables (like path, system root, temp dirs, and SDK/NDK roots)
+        for key in os.environ:
+            if key not in my_env or key == "PATH":
+                if key == "PATH":
+                    # Merge PATHs, prioritizing SCons's PATH
+                    scons_paths = my_env.get("PATH", "").split(os.pathsep)
+                    os_paths = os.environ.get("PATH", "").split(os.pathsep)
+                    combined = scons_paths + [p for p in os_paths if p not in scons_paths]
+                    my_env["PATH"] = os.pathsep.join(combined)
+                else:
+                    my_env[key] = os.environ[key]
+
         for env_var in ["CPATH", "C_INCLUDE_PATH", "CXX_INCLUDE_PATH"]:
             if env_var in my_env:
                 print(f"[SCons] Removing polluting environment variable: {env_var}={my_env[env_var]}")

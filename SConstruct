@@ -132,6 +132,13 @@ if GetOption('num_jobs') <= 1:
 if env["platform"] == "javascript":
     env["platform"] = "web"
 
+# ARCOM: The archivier commandline
+# Wrap ARCOM with TEMPFILE for non-Windows platforms to avoid "Argument list too long" errors.
+# We skip Windows because SCons natively manages long command lines for MSVC by generating
+# MSVC-specific .rsp files. Overwriting ARCOM here would break MSVC's custom /OUT: syntax.
+if env["platform"] != "windows":
+    env["ARCOM"] = "${TEMPFILE('$AR $ARFLAGS $TARGET $SOURCES')}"
+
 # Set build target directory
 # TODO: checking this is still correct? I'd expect this was specific to current targets.
 env.Append(CPPPATH=["#src/core", "#src/native", "#src/web", "#src/godot", "#thirdparty/one_euro_filter"])

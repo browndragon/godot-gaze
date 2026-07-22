@@ -241,27 +241,40 @@ def setup_onnxruntime(env):
     clean_models_marker = os.path.join(model_dir, ".clean_models_v2")
     if not os.path.exists(model_dir):
         os.makedirs(model_dir, exist_ok=True)
-    if not os.path.exists(clean_models_marker):
-        print("[SCons] Deleting old ORT models and config to regenerate with basic optimization...")
-        for f in os.listdir(model_dir):
-            if f.endswith(".ort") or f == "required_operators.config":
-                try:
-                    os.remove(os.path.join(model_dir, f))
-                except Exception as e:
-                    pass
-        with open(clean_models_marker, "w") as f:
-            f.write("cleaned")
-            
+
+    config_dst = os.path.join(model_dir, "required_operators.config")
+    if not os.path.exists(config_dst):
+        config_src = "scripts/required_operators.config"
+        if os.path.exists(config_src):
+            print(f"[SCons] Copying fallback required operators config from {config_src} to {config_dst}...")
+            import shutil
+            shutil.copy2(config_src, config_dst)
+
     models_to_convert = [
         ("face_detection_yunet_2023mar.onnx", "face_detection_yunet_2023mar.ort"),
         ("gaze-estimation-adas-0002.onnx", "gaze-estimation-adas-0002.ort")
     ]
-    
+
+    if not os.path.exists(clean_models_marker):
+        has_onnx = any(os.path.exists(os.path.join(model_dir, onnx_name)) for onnx_name, _ in models_to_convert)
+        if has_onnx:
+            print("[SCons] Deleting old ORT models and config to regenerate with basic optimization...")
+            for f in os.listdir(model_dir):
+                if f.endswith(".ort") or f == "required_operators.config":
+                    try:
+                        os.remove(os.path.join(model_dir, f))
+                    except Exception as e:
+                        pass
+        with open(clean_models_marker, "w") as f:
+            f.write("cleaned")
+            
     needed_conversion = False
     for onnx_name, ort_name in models_to_convert:
         if not os.path.exists(os.path.join(model_dir, ort_name)):
-            needed_conversion = True
-            break
+            # Only trigger conversion if the source ONNX file actually exists.
+            if os.path.exists(os.path.join(model_dir, onnx_name)):
+                needed_conversion = True
+                break
             
     if needed_conversion:
         print("[SCons] Converting ONNX models to ORT format...")

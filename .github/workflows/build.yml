@@ -258,7 +258,11 @@ jobs:
       - name: Copy binaries to addon folder
         run: |
           mkdir -p project/addons/godot-gaze/bin
-          cp -rp temp-binaries/bin-*/* project/addons/godot-gaze/bin/
+          for d in temp-binaries/bin-*; do
+            if [ -d "$d" ]; then
+              cp -rp "$d"/* project/addons/godot-gaze/bin/
+            fi
+          done
 
       - name: Display package structure
         run: |

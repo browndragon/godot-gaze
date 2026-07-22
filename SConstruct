@@ -348,7 +348,18 @@ def setup_onnxruntime(env):
     
     # TODO: This can't be specific to onnx, we must use this elsewhere. Is there a way to share it?
     lib_prefix = "lib" if platform != "windows" else ""
-    expected_lib_path = os.path.join(ort_build_dir, ort_config, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
+    # For multi-config generators like Visual Studio on Windows, the binary is located in a nested config subdirectory.
+    primary_lib_path = os.path.join(ort_build_dir, ort_config, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
+    nested_lib_path = os.path.join(ort_build_dir, ort_config, ort_config, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
+    
+    if platform == "windows":
+        expected_lib_path = nested_lib_path if (os.path.exists(nested_lib_path) or not os.path.exists(primary_lib_path)) else primary_lib_path
+        primary_import_lib_path = os.path.join(ort_build_dir, ort_config, f"{ort_lib_name}.lib")
+        nested_import_lib_path = os.path.join(ort_build_dir, ort_config, ort_config, f"{ort_lib_name}.lib")
+        expected_import_lib_path = nested_import_lib_path if (os.path.exists(nested_import_lib_path) or not os.path.exists(primary_import_lib_path)) else primary_import_lib_path
+    else:
+        expected_lib_path = primary_lib_path
+        expected_import_lib_path = os.path.join(ort_build_dir, ort_config, f"{ort_lib_name}.lib")
     
     # TODO: This can't be specific to onnx, we must use this elsewhere. Is there a way to share it?
     out_dir = "project/addons/godot-gaze/bin"
@@ -360,9 +371,8 @@ def setup_onnxruntime(env):
         shutil.copy2(target_lib_path, expected_lib_path)
         if platform == "windows":
             target_import_lib = os.path.join(out_dir, f"{ort_lib_name}.lib")
-            expected_import_lib = os.path.join(ort_build_dir, ort_config, f"{ort_lib_name}.lib")
             if os.path.exists(target_import_lib):
-                shutil.copy2(target_import_lib, expected_import_lib)
+                shutil.copy2(target_import_lib, expected_import_lib_path)
 
     # TODO: This + the above feels really weird. Is this the expected way for an scons file to run? I'd expect we'd just use a build if cached or do a build. The "restoring" step feels strange.
     if not os.path.exists(expected_lib_path):
@@ -418,7 +428,7 @@ def setup_onnxruntime(env):
                 "--android_api", "29"
             ]
         elif platform == "ios":
-            build_cmd += ["--ios", "--osx_arch", arch, "--apple_deploy_target", "12.0", "--cmake_generator", "Xcode"]
+            build_cmd += ["--ios", "--osx_arch", arch, "--apple_deploy_target", "13.0", "--cmake_generator", "Xcode"]
             if env.get("ios_simulator", False):
                 if env.get("IOS_SDK_PATH", "") != "":
                     build_cmd += ["--apple_sysroot", env["IOS_SDK_PATH"]]
@@ -469,7 +479,10 @@ def setup_onnxruntime(env):
         ort_dir_scons + "/objectivec/include"
     ])
     
-    env.Append(LIBPATH=["#" + os.path.join(ort_build_dir, ort_config)])
+    if platform == "windows" and expected_import_lib_path == nested_import_lib_path:
+        env.Append(LIBPATH=["#" + os.path.join(ort_build_dir, ort_config, ort_config)])
+    else:
+        env.Append(LIBPATH=["#" + os.path.join(ort_build_dir, ort_config)])
     env.Append(LIBS=[ort_lib_name])
     
     if platform == "macos":
@@ -504,9 +517,8 @@ def setup_onnxruntime(env):
         os.makedirs(out_dir, exist_ok=True)
         import shutil
         shutil.copy2(expected_lib_path, os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}"))
-        lib_path = os.path.join(ort_build_dir, ort_config, f"{ort_lib_name}.lib")
-        if os.path.exists(lib_path):
-            shutil.copy2(lib_path, os.path.join(out_dir, f"{ort_lib_name}.lib"))
+        if os.path.exists(expected_import_lib_path):
+            shutil.copy2(expected_import_lib_path, os.path.join(out_dir, f"{ort_lib_name}.lib"))
 
 # Conditional Source and Dependency mapping
 # Compile core, native, and windows using core_env (no Godot includes)

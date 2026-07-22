@@ -63,3 +63,35 @@ echo "Pushing tag '${TAG_NAME}' to origin..."
 git push origin "${TAG_NAME}"
 
 echo "Successfully set and pushed tag '${TAG_NAME}'!"
+
+# Monitor the triggered GitHub Actions build if gh is available
+if command -v gh &> /dev/null; then
+    COMMIT_SHA=$(git rev-parse "${TAG_NAME}")
+    echo "Waiting for GitHub Actions run to trigger for commit ${COMMIT_SHA:0:7}..."
+    sleep 5
+    RUN_ID=""
+    for i in {1..12}; do
+        RUN_ID=$(gh run list --workflow=build.yml --commit "${COMMIT_SHA}" --json databaseId -q ".[0].databaseId" 2>/dev/null || true)
+        if [ -n "$RUN_ID" ] && [ "$RUN_ID" != "null" ]; then
+            break
+        fi
+        sleep 5
+    done
+
+    if [ -n "$RUN_ID" ] && [ "$RUN_ID" != "null" ]; then
+        echo "Found GitHub Actions run ID: ${RUN_ID}. Watching build..."
+        gh run watch "${RUN_ID}"
+        
+        CONCLUSION=$(gh run view "${RUN_ID}" --json conclusion -q ".conclusion" 2>/dev/null || echo "failed")
+        if [ "$CONCLUSION" = "success" ]; then
+            echo "GitHub Actions build succeeded!"
+            exit 0
+        else
+            echo "GitHub Actions build failed with status: ${CONCLUSION}"
+            exit 2
+        fi
+    else
+        echo "Warning: Could not find GitHub Actions run for commit ${COMMIT_SHA:0:7} after 60 seconds."
+    fi
+fi
+

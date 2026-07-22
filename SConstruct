@@ -151,6 +151,7 @@ if env["platform"] == "macos":
         env.Replace(CC="clang", CXX="clang++")
 elif env["platform"] == "windows":
     env.Append(CCFLAGS=["/std:c++17", "/O2", "/EHsc"])
+    env.Append(CPPDEFINES=["_USE_MATH_DEFINES"])
 elif env["platform"] == "web":
     env["CC"] = "emcc"
     env["CXX"] = "em++"

@@ -133,10 +133,11 @@ if env["platform"] == "javascript":
     env["platform"] = "web"
 
 # ARCOM: The archivier commandline
-# Wrap ARCOM with TEMPFILE for non-Windows platforms to avoid "Argument list too long" errors.
+# Wrap ARCOM with TEMPFILE for non-Windows, non-macOS, non-iOS platforms to avoid "Argument list too long" errors.
 # We skip Windows because SCons natively manages long command lines for MSVC by generating
-# MSVC-specific .rsp files. Overwriting ARCOM here would break MSVC's custom /OUT: syntax.
-if env["platform"] != "windows":
+# MSVC-specific .rsp files. We also skip macOS/iOS because they use Apple's BSD ar which does
+# not support response files natively (and their command-line length limits are very large, so it's not needed).
+if env["platform"] not in ["windows", "macos", "ios"]:
     env["ARCOM"] = "${TEMPFILE('$AR $ARFLAGS $TARGET $SOURCES')}"
 
 # Set build target directory
@@ -184,6 +185,18 @@ SConscript(
     variant_dir=variant_path,
     duplicate=0
 )
+
+# Force OBJSUFFIX and SHOBJSUFFIX to be plain strings on Windows to avoid SCons AttributeError bugs
+# during string expansion of variables that might start with $OBJSUFFIX
+if env["platform"] == "windows":
+    suffix = f".windows.{env['target']}"
+    if env.get("precision") == "double":
+        suffix += ".double"
+    suffix += f".{env['arch']}"
+    if not env["threads"]:
+        suffix += ".nothreads"
+    env["OBJSUFFIX"] = suffix + ".obj"
+    env["SHOBJSUFFIX"] = suffix + ".obj"
 
 # Clone clean environment AFTER SConscript executes to preserve SCons builders (e.g. compilation_db)
 core_env = env.Clone()

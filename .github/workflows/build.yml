@@ -11,7 +11,7 @@ jobs:
     name: Build ${{ matrix.platform }} (${{ matrix.target }}${{ matrix.threads && format(', threads={0}', matrix.threads) || '' }})
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
           - platform: macos

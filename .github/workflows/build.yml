@@ -126,8 +126,8 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install SCons
-        run: pip install scons
+      - name: Install SCons and dependencies
+        run: pip install scons flatbuffers
 
       - name: Checkout godot-cpp submodule
         run: git submodule update --init --recursive --depth 1 thirdparty/godot-cpp

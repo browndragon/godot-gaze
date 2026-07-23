@@ -191,13 +191,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: bin-${{ matrix.platform }}-${{ matrix.target }}${{ matrix.threads && format('-threads-{0}', matrix.threads) || '' }}
-          path: |
-            project/addons/godot-gaze/bin/*.dylib
-            project/addons/godot-gaze/bin/*.dll
-            project/addons/godot-gaze/bin/*.so
-            project/addons/godot-gaze/bin/*.a
-            project/addons/godot-gaze/bin/*.wasm
-            project/addons/godot-gaze/bin/*.js
+          path: project/addons/godot-gaze/bin/
           if-no-files-found: warn
 
   package:
@@ -210,11 +204,7 @@ jobs:
 
       - name: Clean pre-existing binaries from repo
         run: |
-          rm -f project/addons/godot-gaze/bin/*.dylib
-          rm -f project/addons/godot-gaze/bin/*.dll
-          rm -f project/addons/godot-gaze/bin/*.so
-          rm -f project/addons/godot-gaze/bin/*.a
-          rm -f project/addons/godot-gaze/bin/*.wasm
+          rm -rf project/addons/godot-gaze/bin/
 
       - name: Setup Python
         uses: actions/setup-python@v5

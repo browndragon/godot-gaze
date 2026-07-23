@@ -328,15 +328,26 @@ android_managed_run = env.Command(
 env.AlwaysBuild(android_managed_run)
 env.Alias("tests/android_managed", android_managed_run)
 
-# Standard local quick tests run (native + python + headless)
-local_tests = ["tests/python"]
+# Style compliance check target
+style_run = env.Command(
+    "build/tests/logs/tests.style.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=[sys.executable, "tests/test_style.py"]
+)
+env.AlwaysBuild(style_run)
+env.Alias("tests/style", style_run)
+
+# Standard local quick tests run (native + python + headless + style)
+local_tests = ["tests/python", "tests/style"]
 if env["platform"] != "javascript":
     local_tests.extend(["tests/native", "tests/godot/headless"])
 
 env.Alias("tests", local_tests)
 
 # Run all E2E targets
-all_tests = ["tests/python", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
+all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
 if env["platform"] != "javascript":
     all_tests.append("tests/native")
 env.Alias("tests/all", all_tests)
+

@@ -132,7 +132,7 @@ double CameraSensor::get_camera_fov() const {
 }
 
 void CameraSensor::_on_gaze_data_ready(RID p_rid) {
-    UtilityFunctions::print("[C++] CameraSensor::_on_gaze_data_ready: p_rid=", p_rid, " camera_rid=", camera_rid);
+    Gaze::log_info(4, "CameraSensor_GazeDataReady", "p_rid", p_rid.get_id(), "camera_rid", camera_rid.get_id());
     if (p_rid == camera_rid) {
         emit_signal("frame_ready", get_last_frame());
     }

@@ -883,12 +883,22 @@ void GazeTracker::_on_gaze_data_ready(RID p_rid) {
                 Vector3 direction = get_gaze_direction(false); // raw uncalibrated direction
                 Vector3 head_pos = get_head_translation_inference_space();
                 Vector3 head_rot = get_head_rotation_inference_space();
-                UtilityFunctions::print("[GazeTrackerTelemetry] frame=", debug_log_frame_counter,
-                                         " head_pos=(", head_pos.x, ",", head_pos.y, ",", head_pos.z, ")",
-                                         " head_rot=(", head_rot.x, ",", head_rot.y, ",", head_rot.z, ")",
-                                         " origin=(", origin.x, ",", origin.y, ",", origin.z, ")",
-                                         " dir=(", direction.x, ",", direction.y, ",", direction.z, ")",
-                                         " proj=(", latest_projected_gaze_px.x, ",", latest_projected_gaze_px.y, ")");
+                Gaze::log_info(4, "GazeTracker_Telemetry",
+                               "frame", debug_log_frame_counter,
+                               "head_pos_x", head_pos.x,
+                               "head_pos_y", head_pos.y,
+                               "head_pos_z", head_pos.z,
+                               "head_rot_x", head_rot.x,
+                               "head_rot_y", head_rot.y,
+                               "head_rot_z", head_rot.z,
+                               "origin_x", origin.x,
+                               "origin_y", origin.y,
+                               "origin_z", origin.z,
+                               "dir_x", direction.x,
+                               "dir_y", direction.y,
+                               "dir_z", direction.z,
+                               "proj_x", latest_projected_gaze_px.x,
+                               "proj_y", latest_projected_gaze_px.y);
             }
 
             emit_signal("gaze_updated", latest_filtered_gaze_px);

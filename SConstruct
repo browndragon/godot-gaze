@@ -375,8 +375,10 @@ def setup_onnxruntime(env):
         expected_lib_path = primary_lib_path
         expected_import_lib_path = os.path.join(ort_build_dir, ort_config, f"{ort_lib_name}.lib")
     
-    # TODO: This can't be specific to onnx, we must use this elsewhere. Is there a way to share it?
-    out_dir = "project/addons/godot-gaze/bin"
+    if platform == "android":
+        out_dir = f"project/addons/godot-gaze/bin/android/{arch}"
+    else:
+        out_dir = "project/addons/godot-gaze/bin"
     target_lib_path = os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
     if os.path.exists(target_lib_path) and not os.path.exists(expected_lib_path):
         print(f"[SCons] Restoring {expected_lib_path} from {target_lib_path} to avoid redundant build...")
@@ -522,7 +524,6 @@ def setup_onnxruntime(env):
     elif platform in ["linux", "android"]:
         if platform == "linux":
             env.Append(LINKFLAGS=["-Wl,-rpath,$ORIGIN"])
-        out_dir = "project/addons/godot-gaze/bin"
         os.makedirs(out_dir, exist_ok=True)
         import shutil
         shutil.copy2(expected_lib_path, os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}"))

@@ -7,6 +7,7 @@
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_estimator.hpp"
 #include "display_profile.hpp"
+#include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -139,12 +140,15 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
         bio_cal->set_scale_pitch(1.0);
         bio_cal->set_scale_yaw(1.0);
 
-        UtilityFunctions::print("[Calibration] Success. Solved parameters (Millimeter Space Solver):");
-        UtilityFunctions::print("  Camera Offset: (", out_off.x, ", ", out_off.y, ", ", out_off.z, ") mm");
-        UtilityFunctions::print("  Camera Tilt: ", out_tilt, " degrees");
-        UtilityFunctions::print("  Bias Pitch/Yaw: (", out_pitch, ", ", out_yaw, ") radians");
+        Gaze::log_info(1, "Calibration_Success",
+                       "camera_offset_x", out_off.x,
+                       "camera_offset_y", out_off.y,
+                       "camera_offset_z", out_off.z,
+                       "camera_tilt", out_tilt,
+                       "bias_pitch", out_pitch,
+                       "bias_yaw", out_yaw);
     } else {
-        UtilityFunctions::printerr("[Calibration] Estimation failed to converge!");
+        Gaze::log_warning("Calibration_Failed", "reason", "estimation failed to converge");
     }
 
     return res;

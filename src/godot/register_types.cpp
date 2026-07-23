@@ -256,7 +256,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         should_run_tests = emscripten_run_script_int("window.location.search.includes('run-tests=true') ? 1 : 0") != 0;
 #endif
         if (should_run_tests) {
-            UtilityFunctions::print("[GodotGaze] E2E test run requested in URL, dynamically overriding main scene to headless_test.tscn...");
+            Gaze::log_info("GodotGaze_E2ETestOverride", "msg", "E2E test run requested in URL, dynamically overriding main scene to headless_test.tscn...");
             ps->set_setting("application/run/main_scene", "res://addons/godot-gaze/tests/headless_test.tscn");
         }
     }

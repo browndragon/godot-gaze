@@ -104,7 +104,7 @@ void EyeEstimator::_on_gaze_frame_began(GazeFrame* frame) {
             left_eye_crop = frame->get_left_eye_crop();
             right_eye_crop = frame->get_right_eye_crop();
 
-            UtilityFunctions::print("[C++] EyeEstimator::_on_gaze_frame_began: left_crop_valid=", left_eye_crop.is_valid());
+            Gaze::log_info(4, "EyeEstimator_GazeFrameBegan", "left_crop_valid", left_eye_crop.is_valid());
 
             emit_signal("gaze_estimated");
             emit_signal("eye_crops_ready", left_eye_crop, right_eye_crop);

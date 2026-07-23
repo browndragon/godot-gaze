@@ -71,7 +71,7 @@ namespace godot
 
         if (log_this_frame)
         {
-            UtilityFunctions::print("[GazeTracker Web Debug] platform_get_geometry return: window_pos_lpix: ", geom.window_position_px);
+            Gaze::log_info(4, "GazeTracker_WebDebugGeometry", "window_pos_x", geom.window_position_px.x, "window_pos_y", geom.window_position_px.y);
         }
 
         return geom;

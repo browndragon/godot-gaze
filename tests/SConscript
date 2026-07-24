@@ -74,20 +74,49 @@ def run_command_and_log(target, source, env):
     run_env = os.environ.copy()
     bin_dir = os.path.abspath("project/addons/godot-gaze/bin")
     if sys.platform == "darwin":
-        run_env["DYLD_LIBRARY_PATH"] = bin_dir
+        existing_dyld = run_env.get("DYLD_LIBRARY_PATH", "")
+        if existing_dyld:
+            run_env["DYLD_LIBRARY_PATH"] = bin_dir + os.pathsep + existing_dyld
+        else:
+            run_env["DYLD_LIBRARY_PATH"] = bin_dir
     elif sys.platform == "win32":
         run_env["PATH"] = bin_dir + os.pathsep + run_env.get("PATH", "")
     else:
-        run_env["LD_LIBRARY_PATH"] = bin_dir
+        existing_ld = run_env.get("LD_LIBRARY_PATH", "")
+        if existing_ld:
+            run_env["LD_LIBRARY_PATH"] = bin_dir + os.pathsep + existing_ld
+        else:
+            run_env["LD_LIBRARY_PATH"] = bin_dir
         
     import shutil
     resolved_cmd = list(cmd)
     if resolved_cmd and not os.path.isabs(resolved_cmd[0]):
-        which_path = shutil.which(resolved_cmd[0], path=run_env.get("PATH"))
-        if which_path:
-            resolved_cmd[0] = which_path
-        elif resolved_cmd[0] == "node" and sys.platform != "win32":
-            resolved_cmd = ["/usr/bin/env", "node"] + resolved_cmd[1:]
+        path_dirs = run_env.get("PATH", "").split(os.pathsep)
+        found_bin = None
+        for p in path_dirs:
+            if "shims" in p:
+                continue
+            cand = os.path.join(p, resolved_cmd[0])
+            if os.path.isfile(cand) and os.access(cand, os.X_OK):
+                found_bin = cand
+                break
+        if not found_bin:
+            home = os.path.expanduser("~")
+            known_dirs = [
+                os.path.join(home, ".pyenv/versions/3.14.4/bin"),
+                os.path.join(home, ".asdf/installs/nodejs/18.12.1/bin"),
+                "/opt/homebrew/bin",
+                "/usr/local/bin"
+            ]
+            for p in known_dirs:
+                cand = os.path.join(p, resolved_cmd[0])
+                if os.path.isfile(cand) and os.access(cand, os.X_OK):
+                    found_bin = cand
+                    break
+        if not found_bin:
+            found_bin = shutil.which(resolved_cmd[0], path=run_env.get("PATH"))
+        if found_bin:
+            resolved_cmd[0] = found_bin
 
     try:
         process = subprocess.Popen(

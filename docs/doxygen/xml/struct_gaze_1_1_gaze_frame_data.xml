@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_frame_data" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeFrameData</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1ad7bf761e8cbdde42935b54a7e439168f" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; Gaze::GazeFrameData::camera_raw_bgr</definition>
+        <argsstring></argsstring>
+        <name>camera_raw_bgr</name>
+        <qualifiedname>Gaze::GazeFrameData::camera_raw_bgr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="13" column="17" bodyfile="src/core/gaze_frame_data.hpp" bodystart="13" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a53967e0485b1aad835e25fdfb6037abb" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeFrameData::camera_width</definition>
+        <argsstring></argsstring>
+        <name>camera_width</name>
+        <qualifiedname>Gaze::GazeFrameData::camera_width</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="14" column="9" bodyfile="src/core/gaze_frame_data.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1aa2e34bef1a2ac28aef044348677597a2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeFrameData::camera_height</definition>
+        <argsstring></argsstring>
+        <name>camera_height</name>
+        <qualifiedname>Gaze::GazeFrameData::camera_height</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="15" column="9" bodyfile="src/core/gaze_frame_data.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1afe16d0d4c56153344da98e8bb9d5ff68" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GazeFrameData::timestamp</definition>
+        <argsstring></argsstring>
+        <name>timestamp</name>
+        <qualifiedname>Gaze::GazeFrameData::timestamp</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="16" column="12" bodyfile="src/core/gaze_frame_data.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a8405b16c4c323a38067767da18113d16" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GazeFrameData::camera_focal_length_px</definition>
+        <argsstring></argsstring>
+        <name>camera_focal_length_px</name>
+        <qualifiedname>Gaze::GazeFrameData::camera_focal_length_px</qualifiedname>
+        <initializer>= -1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="17" column="12" bodyfile="src/core/gaze_frame_data.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1ae19aa9174c7dc5c3ec812bfa265d89d8" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GazeFrameData::camera_fov_degrees</definition>
+        <argsstring></argsstring>
+        <name>camera_fov_degrees</name>
+        <qualifiedname>Gaze::GazeFrameData::camera_fov_degrees</qualifiedname>
+        <initializer>= DEFAULT_CAMERA_FOV_DEGREES</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="18" column="12" bodyfile="src/core/gaze_frame_data.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a8128e918ce094d52dd107d9122e5a476" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::GazeFrameData::face_detected</definition>
+        <argsstring></argsstring>
+        <name>face_detected</name>
+        <qualifiedname>Gaze::GazeFrameData::face_detected</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="20" column="10" bodyfile="src/core/gaze_frame_data.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1ac20aa020c950df2cd587f05eb35adca1" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::GazeFrameData::gaze_success</definition>
+        <argsstring></argsstring>
+        <name>gaze_success</name>
+        <qualifiedname>Gaze::GazeFrameData::gaze_success</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="21" column="10" bodyfile="src/core/gaze_frame_data.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a9c1437a23c06ba5ad996fd41f9dba1a3" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeFrameData::head_translation</definition>
+        <argsstring></argsstring>
+        <name>head_translation</name>
+        <qualifiedname>Gaze::GazeFrameData::head_translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="23" column="17" bodyfile="src/core/gaze_frame_data.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a5273318406740a14ede46b750fdea884" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeFrameData::head_rotation</definition>
+        <argsstring></argsstring>
+        <name>head_rotation</name>
+        <qualifiedname>Gaze::GazeFrameData::head_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="24" column="17" bodyfile="src/core/gaze_frame_data.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1ad50b3ff1a4a0e235841cddbbb5dd7e31" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeFrameData::gaze_origin</definition>
+        <argsstring></argsstring>
+        <name>gaze_origin</name>
+        <qualifiedname>Gaze::GazeFrameData::gaze_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="25" column="17" bodyfile="src/core/gaze_frame_data.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1aaf7215432f74d70fb6d75ce84369a6b1" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::GazeFrameData::gaze_direction</definition>
+        <argsstring></argsstring>
+        <name>gaze_direction</name>
+        <qualifiedname>Gaze::GazeFrameData::gaze_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="26" column="17" bodyfile="src/core/gaze_frame_data.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a08e1500f6d930afdf1ed5d9f47c3c9bd" prot="public" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* Gaze::GazeFrameData::left_eye_buffer</definition>
+        <argsstring></argsstring>
+        <name>left_eye_buffer</name>
+        <qualifiedname>Gaze::GazeFrameData::left_eye_buffer</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="29" column="13" bodyfile="src/core/gaze_frame_data.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a9e73af014954b83da72e919cd835d30f" prot="public" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* Gaze::GazeFrameData::right_eye_buffer</definition>
+        <argsstring></argsstring>
+        <name>right_eye_buffer</name>
+        <qualifiedname>Gaze::GazeFrameData::right_eye_buffer</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="30" column="13" bodyfile="src/core/gaze_frame_data.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1ac9ae75465d2f6a41b3ec2d7222d5183a" prot="public" static="no" mutable="no">
+        <type>uint8_t *</type>
+        <definition>uint8_t* Gaze::GazeFrameData::full_crop_buffer</definition>
+        <argsstring></argsstring>
+        <name>full_crop_buffer</name>
+        <qualifiedname>Gaze::GazeFrameData::full_crop_buffer</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="31" column="13" bodyfile="src/core/gaze_frame_data.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a292961d8e63d05543e91c1aa6d03b082" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::GazeFrameData::full_crop_bytes</definition>
+        <argsstring></argsstring>
+        <name>full_crop_bytes</name>
+        <qualifiedname>Gaze::GazeFrameData::full_crop_bytes</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="32" column="12" bodyfile="src/core/gaze_frame_data.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a4d40c3bae02719faf99221c1a2fe601b" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::GazeFrameData::face_rid_val</definition>
+        <argsstring></argsstring>
+        <name>face_rid_val</name>
+        <qualifiedname>Gaze::GazeFrameData::face_rid_val</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="34" column="14" bodyfile="src/core/gaze_frame_data.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a86d9bc667ea9de42233134860ae730aa" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::GazeFrameData::eye_rid_val</definition>
+        <argsstring></argsstring>
+        <name>eye_rid_val</name>
+        <qualifiedname>Gaze::GazeFrameData::eye_rid_val</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="35" column="14" bodyfile="src/core/gaze_frame_data.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_frame_data_1a1df8d4e333420fa133b88cc368d9b23f" prot="public" static="no" mutable="no">
+        <type>void *</type>
+        <definition>void* Gaze::GazeFrameData::userdata</definition>
+        <argsstring></argsstring>
+        <name>userdata</name>
+        <qualifiedname>Gaze::GazeFrameData::userdata</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="38" column="10" bodyfile="src/core/gaze_frame_data.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::GazeFrameData</label>
+        <link refid="struct_gaze_1_1_gaze_frame_data"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>gaze_direction</edgelabel>
+          <edgelabel>gaze_origin</edgelabel>
+          <edgelabel>head_rotation</edgelabel>
+          <edgelabel>head_translation</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/gaze_frame_data.hpp" line="12" column="1" bodyfile="src/core/gaze_frame_data.hpp" bodystart="12" bodyend="40"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a8405b16c4c323a38067767da18113d16" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>camera_focal_length_px</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1ae19aa9174c7dc5c3ec812bfa265d89d8" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>camera_fov_degrees</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1aa2e34bef1a2ac28aef044348677597a2" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>camera_height</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1ad7bf761e8cbdde42935b54a7e439168f" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>camera_raw_bgr</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a53967e0485b1aad835e25fdfb6037abb" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>camera_width</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a86d9bc667ea9de42233134860ae730aa" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>eye_rid_val</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a8128e918ce094d52dd107d9122e5a476" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>face_detected</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a4d40c3bae02719faf99221c1a2fe601b" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>face_rid_val</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1ac9ae75465d2f6a41b3ec2d7222d5183a" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>full_crop_buffer</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a292961d8e63d05543e91c1aa6d03b082" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>full_crop_bytes</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1aaf7215432f74d70fb6d75ce84369a6b1" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>gaze_direction</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1ad50b3ff1a4a0e235841cddbbb5dd7e31" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>gaze_origin</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1ac20aa020c950df2cd587f05eb35adca1" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>gaze_success</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a5273318406740a14ede46b750fdea884" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>head_rotation</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a9c1437a23c06ba5ad996fd41f9dba1a3" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>head_translation</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a08e1500f6d930afdf1ed5d9f47c3c9bd" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>left_eye_buffer</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a9e73af014954b83da72e919cd835d30f" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>right_eye_buffer</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1afe16d0d4c56153344da98e8bb9d5ff68" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>timestamp</name></member>
+      <member refid="struct_gaze_1_1_gaze_frame_data_1a1df8d4e333420fa133b88cc368d9b23f" prot="public" virt="non-virtual"><scope>Gaze::GazeFrameData</scope><name>userdata</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespace_gaze_1_1_inference" kind="namespace" language="C++">
+    <compoundname>Gaze::Inference</compoundname>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="space__conversions_8hpp_1a41c66caefdb5f0b1823c05852031a6c1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::Inference::to_camera_space</definition>
+        <argsstring>(const GazeVector3 &amp;v_cv)</argsstring>
+        <name>to_camera_space</name>
+        <qualifiedname>Gaze::Inference::to_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>v_cv</declname>
+        </param>
+        <briefdescription>
+<para>Map Inference Camera Space coordinates to standard Camera Space. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/space_conversions.hpp" line="23" column="28" bodyfile="src/core/space_conversions.hpp" bodystart="23" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="space__conversions_8hpp_1a559d16811d9f570ba4583fd38db58e43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_transform3_d" kindref="compound">GazeTransform3D</ref></type>
+        <definition>GazeTransform3D Gaze::Inference::get_head_transform_in_camera_space</definition>
+        <argsstring>(const GazeVector3 &amp;inference_translation, const GazeVector3 &amp;inference_rvec)</argsstring>
+        <name>get_head_transform_in_camera_space</name>
+        <qualifiedname>Gaze::Inference::get_head_transform_in_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>inference_translation</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>inference_rvec</declname>
+        </param>
+        <briefdescription>
+<para>Map Inference Face-to-Camera translation and rotation to standard Camera Space <ref refid="struct_gaze_1_1_gaze_transform3_d" kindref="compound">GazeTransform3D</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/space_conversions.hpp" line="31" column="32" bodyfile="src/core/space_conversions.hpp" bodystart="31" bodyend="57"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/space_conversions.hpp" line="17" column="5"/>
+  </compounddef>
+</doxygen>

@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['5_20calibration_20error_20correction_0',['5. Calibration &amp;amp; Error Correction',['../md_docs_2gaze__math__physical__model.html#autotoc_md29',1,'']]],
-  ['5_20transformation_20between_20spaces_1',['1.5. Transformation between Spaces',['../md_docs_2gaze__math__physical__model.html#autotoc_md19',1,'']]]
+  ['compiled_20release_20recommended_0',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]],
+  ['compiling_1',['Developer Guidelines &amp;amp; Compiling',['../index.html#autotoc_md17',1,'']]],
+  ['contributors_2',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]],
+  ['core_20layer_3',['Core Layer',['../dir_aebb8dcc11953d78e620bbef0b9e2183.html#autotoc_md0',1,'']]]
 ];

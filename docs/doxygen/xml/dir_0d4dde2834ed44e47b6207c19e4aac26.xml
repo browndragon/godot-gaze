@@ -6,11 +6,24 @@
     <innerfile refid="gaze__tracker__web_8cpp">gaze_tracker_web.cpp</innerfile>
     <innerfile refid="web__binding__state_8cpp">web_binding_state.cpp</innerfile>
     <innerfile refid="web__binding__state_8hpp">web_binding_state.hpp</innerfile>
-    <innerfile refid="web__gaze__model_8cpp">web_gaze_model.cpp</innerfile>
-    <innerfile refid="web__gaze__model_8hpp">web_gaze_model.hpp</innerfile>
     <briefdescription>
+<para>Web-specific GDExtension bridge -. </para>
     </briefdescription>
     <detaileddescription>
+<para>/**</para>
+<para><itemizedlist>
+<listitem></listitem></itemizedlist>
+</para>
+<para>-- This directory contains the WebAssembly (WASM) compatibility bridge.<itemizedlist>
+<listitem></listitem><listitem><para>When compiling for the Web, SCons stub-out the native C++ ONNX Runtime and replaces them with a lightweight Emscripten JS data bridge.</para>
+</listitem><listitem><para>- The main thread interacts with the browser sidecar (<computeroutput>gaze_sidecar.js</computeroutput>).</para>
+</listitem><listitem><para>- The sidecar runs MediaPipe Face Landmarker JS and ONNX Runtime Web inside a dedicated browser Web Worker.</para>
+</listitem><listitem><para>- Ingested coordinates are fed back to Godot through registered Emscripten callbacks on the <computeroutput>WebBindingState</computeroutput> class. */</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="dir_0d4dde2834ed44e47b6207c19e4aac26_1autotoc_md3">
+<title>Web Platform Layer</title><para>Provides the Emscripten binding classes and Web Worker sidecar integration to support high-frequency gaze tracking inside web browsers. </para>
+</sect1>
     </detaileddescription>
     <location file="src/web/"/>
   </compounddef>

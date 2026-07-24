@@ -1,0 +1,612 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_o_r_t_yu_net_pipeline" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::ORTYuNetPipeline</compoundname>
+    <basecompoundref refid="class_gaze_1_1_face_pipeline" prot="public" virt="non-virtual">Gaze::FacePipeline</basecompoundref>
+    <innerclass refid="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor" prot="private">Gaze::ORTYuNetPipeline::Anchor</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a4d2a039fb4511e43900031c252eee311" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Gaze::ORTYuNetPipeline::model_path</definition>
+        <argsstring></argsstring>
+        <name>model_path</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::model_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="17" column="21" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1ada3b39ac1676bb0df578fa8aeee9de6d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; Gaze::ORTYuNetPipeline::model_buffer</definition>
+        <argsstring></argsstring>
+        <name>model_buffer</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::model_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="18" column="21" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a74fbf01dde5356385e554553cc5f81b5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::ORTYuNetPipeline::load_from_buffer</definition>
+        <argsstring></argsstring>
+        <name>load_from_buffer</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::load_from_buffer</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="19" column="14" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a66354d44c93e6b1c2e42822908dc6c85" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt;Ort::Session&gt; Gaze::ORTYuNetPipeline::session</definition>
+        <argsstring></argsstring>
+        <name>session</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::session</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="21" column="25" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1ae3bd16b0b5bdbb4fddc84051785ee080" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::score_threshold</definition>
+        <argsstring></argsstring>
+        <name>score_threshold</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::score_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="22" column="15" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a30f4b8c5f572f3885cf3e337909d8817" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::nms_threshold</definition>
+        <argsstring></argsstring>
+        <name>nms_threshold</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::nms_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="23" column="15" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1aa498ef6817aabd64f4e046790fb7ccc0" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::ORTYuNetPipeline::top_k</definition>
+        <argsstring></argsstring>
+        <name>top_k</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::top_k</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="24" column="13" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a18c91d4cffaf9a1d244d3975204f8f35" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::ORTYuNetPipeline::camera_focal_length_px</definition>
+        <argsstring></argsstring>
+        <name>camera_focal_length_px</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::camera_focal_length_px</qualifiedname>
+        <initializer>= -1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="26" column="16" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a216b35cdf71abbc5fe9bead2bb194286" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::ORTYuNetPipeline::camera_fov_degrees</definition>
+        <argsstring></argsstring>
+        <name>camera_fov_degrees</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::camera_fov_degrees</qualifiedname>
+        <initializer>= DEFAULT_CAMERA_FOV_DEGREES</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="27" column="16" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a306df4e802f5637d59529482c4b62772" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref></type>
+        <definition>PipelineConfig Gaze::ORTYuNetPipeline::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="28" column="24" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a772ef447b7ffff54f033a0b61a1e0444" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::ORTYuNetPipeline::last_roll_rad</definition>
+        <argsstring></argsstring>
+        <name>last_roll_rad</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::last_roll_rad</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="30" column="16" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1ac1a88e67408f59eff1665f1d2ab4af0c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::ORTYuNetPipeline::has_last_roll</definition>
+        <argsstring></argsstring>
+        <name>has_last_roll</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::has_last_roll</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="31" column="14" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a65c35476cae1b607d067f889384fe71d" prot="private" static="no" mutable="no">
+        <type>const std::vector&lt; const char * &gt;</type>
+        <definition>const std::vector&lt;const char *&gt; Gaze::ORTYuNetPipeline::input_names</definition>
+        <argsstring></argsstring>
+        <name>input_names</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::input_names</qualifiedname>
+        <initializer>= {&quot;input&quot;}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="40" column="27" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a2f270834a92fa13663a9e3be221f230b" prot="private" static="no" mutable="no">
+        <type>const std::vector&lt; const char * &gt;</type>
+        <definition>const std::vector&lt;const char *&gt; Gaze::ORTYuNetPipeline::output_names</definition>
+        <argsstring></argsstring>
+        <name>output_names</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::output_names</qualifiedname>
+        <initializer>                           = {
+&quot;cls_8&quot;, &quot;cls_16&quot;, &quot;cls_32&quot;,
+&quot;obj_8&quot;, &quot;obj_16&quot;, &quot;obj_32&quot;,
+&quot;bbox_8&quot;, &quot;bbox_16&quot;, &quot;bbox_32&quot;,
+&quot;kps_8&quot;, &quot;kps_16&quot;, &quot;kps_32&quot;}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="41" column="27" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="41" bodyend="45"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1afeae3214e5fa85bb7823db69dc661185" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::ORTYuNetPipeline::INFERENCE_WIDTH</definition>
+        <argsstring></argsstring>
+        <name>INFERENCE_WIDTH</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::INFERENCE_WIDTH</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="52" column="30" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a2ab1f7490d8974cfdef6f4064907b2fe" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::ORTYuNetPipeline::INFERENCE_HEIGHT</definition>
+        <argsstring></argsstring>
+        <name>INFERENCE_HEIGHT</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::INFERENCE_HEIGHT</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="53" column="30" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a256d18b6d50c7e7e85bd15973e9af8ce" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; Anchor &gt;</type>
+        <definition>std::vector&lt; ORTYuNetPipeline::Anchor &gt; Gaze::ORTYuNetPipeline::generate_anchors</definition>
+        <argsstring>(int width, int height)</argsstring>
+        <name>generate_anchors</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::generate_anchors</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="47" column="21" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="125" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1adb1535d4cee981233914006f568357f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTYuNetPipeline::crop_eye</definition>
+        <argsstring>(const Frame &amp;frame, const GazePoint landmarks[5], bool is_left, uint8_t out_buffer[EyeCrops::EYE_CROP_SIZE])</argsstring>
+        <name>crop_eye</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::crop_eye</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>frame</declname>
+        </param>
+        <param>
+          <type>const GazePoint</type>
+          <declname>landmarks</declname>
+          <array>[5]</array>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>is_left</declname>
+        </param>
+        <param>
+          <type>uint8_t</type>
+          <declname>out_buffer</declname>
+          <array>[EyeCrops::EYE_CROP_SIZE]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="48" column="14" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="569" bodyend="592"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1abb6b28520f5344058ee977d3176e9715" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ORTYuNetPipeline::rotate_image_bgr</definition>
+        <argsstring>(const unsigned char *src, int w, int h, unsigned char *dst, double angle_rad)</argsstring>
+        <name>rotate_image_bgr</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::rotate_image_bgr</qualifiedname>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>angle_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="49" column="14" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="599" bodyend="648"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a5468a7935e4bcd4086f03fc4029e7269" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ORTYuNetPipeline::ORTYuNetPipeline</definition>
+        <argsstring>(const std::string &amp;yunet_model_path, float score_thresh=0.3f, float nms_thresh=0.3f, int k=5000)</argsstring>
+        <name>ORTYuNetPipeline</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::ORTYuNetPipeline</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>yunet_model_path</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>score_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nms_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>k</declname>
+          <defval>5000</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="55" column="9" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="56" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1afeb03af3d085b4fcfcf1c0320962caed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ORTYuNetPipeline::ORTYuNetPipeline</definition>
+        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;buffer, float score_thresh=0.3f, float nms_thresh=0.3f, int k=5000)</argsstring>
+        <name>ORTYuNetPipeline</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::ORTYuNetPipeline</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>score_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nms_thresh</declname>
+          <defval>0.3f</defval>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>k</declname>
+          <defval>5000</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="56" column="9" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="59" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1aec3ca6700987e01559832f58cfc5db5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::ORTYuNetPipeline::~ORTYuNetPipeline</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ORTYuNetPipeline</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::~ORTYuNetPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="57" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1af22bc9e9ced4bdb0b2bbe5f161c2a973" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTYuNetPipeline::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1abe41495e228f095470c1d533cb06fbfa">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="59" column="22" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="62" bodyend="123"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a57938af2f1a9bdbdff4499f7f19b70cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTYuNetPipeline::process_frame</definition>
+        <argsstring>(const Frame &amp;frame, EyeCrops &amp;out_crops) override</argsstring>
+        <name>process_frame</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::process_frame</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1adf405bee12088858888b8af793b1d70a">process_frame</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>frame</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
+          <declname>out_crops</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="60" column="22" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="154" bodyend="567"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1af7078f1750a89cf88b8fec8905662ec2" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::ORTYuNetPipeline::set_camera_focal_length_px</definition>
+        <argsstring>(double f) override</argsstring>
+        <name>set_camera_focal_length_px</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::set_camera_focal_length_px</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1ae3ec72e95ecbe68f9318e1062df15bc9">set_camera_focal_length_px</reimplements>
+        <param>
+          <type>double</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="61" column="22" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="594" bodyend="597"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a8762d5cc0e5e0f06a22a603655095a47" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::ORTYuNetPipeline::set_camera_fov_degrees</definition>
+        <argsstring>(double fov) override</argsstring>
+        <name>set_camera_fov_degrees</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::set_camera_fov_degrees</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1a88885e9fb8a11900a2cc2121eb6326fa">set_camera_fov_degrees</reimplements>
+        <param>
+          <type>double</type>
+          <declname>fov</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="62" column="22" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a5e80185caa09ac4225fe25c6968b65b4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::ORTYuNetPipeline::set_config</definition>
+        <argsstring>(const PipelineConfig &amp;cfg) override</argsstring>
+        <name>set_config</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::set_config</qualifiedname>
+        <reimplements refid="class_gaze_1_1_face_pipeline_1a1049cdc1bace7ad121cbfd2cde0b2f99">set_config</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
+          <declname>cfg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="63" column="22" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a1c436a1c8de90a2b2ad62c7cf789a46e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ORTYuNetPipeline::set_roll_hint</definition>
+        <argsstring>(double angle_rad)</argsstring>
+        <name>set_roll_hint</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::set_roll_hint</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>angle_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="65" column="14" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_yu_net_pipeline_1a3bfbbbff7243dea255c354d9aa547784" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ORTYuNetPipeline::reset_tracking_state</definition>
+        <argsstring>()</argsstring>
+        <name>reset_tracking_state</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::reset_tracking_state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="66" column="14" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::FacePipeline</label>
+        <link refid="class_gaze_1_1_face_pipeline"/>
+      </node>
+      <node id="1">
+        <label>Gaze::ORTYuNetPipeline</label>
+        <link refid="class_gaze_1_1_o_r_t_yu_net_pipeline"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::FacePipeline</label>
+        <link refid="class_gaze_1_1_face_pipeline"/>
+      </node>
+      <node id="1">
+        <label>Gaze::ORTYuNetPipeline</label>
+        <link refid="class_gaze_1_1_o_r_t_yu_net_pipeline"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/native/ort_yunet_pipeline.hpp" line="14" column="5" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="15" bodyend="67"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a18c91d4cffaf9a1d244d3975204f8f35" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a216b35cdf71abbc5fe9bead2bb194286" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>camera_fov_degrees</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a306df4e802f5637d59529482c4b62772" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>config</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1adb1535d4cee981233914006f568357f8" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>crop_eye</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a256d18b6d50c7e7e85bd15973e9af8ce" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>generate_anchors</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a4e880a2386aa3fc57c9a0ef9ada2051e" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>get_image_warper</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1ac1a88e67408f59eff1665f1d2ab4af0c" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>has_last_roll</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a2ab1f7490d8974cfdef6f4064907b2fe" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>INFERENCE_HEIGHT</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1afeae3214e5fa85bb7823db69dc661185" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>INFERENCE_WIDTH</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1af22bc9e9ced4bdb0b2bbe5f161c2a973" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a65c35476cae1b607d067f889384fe71d" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>input_names</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a772ef447b7ffff54f033a0b61a1e0444" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>last_roll_rad</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a74fbf01dde5356385e554553cc5f81b5" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>load_from_buffer</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1ada3b39ac1676bb0df578fa8aeee9de6d" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>model_buffer</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a4d2a039fb4511e43900031c252eee311" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>model_path</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a30f4b8c5f572f3885cf3e337909d8817" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>nms_threshold</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a5468a7935e4bcd4086f03fc4029e7269" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>ORTYuNetPipeline</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1afeb03af3d085b4fcfcf1c0320962caed" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>ORTYuNetPipeline</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a2f270834a92fa13663a9e3be221f230b" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>output_names</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a57938af2f1a9bdbdff4499f7f19b70cc" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>process_frame</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a3bfbbbff7243dea255c354d9aa547784" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>reset_tracking_state</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1abb6b28520f5344058ee977d3176e9715" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>rotate_image_bgr</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1ae3bd16b0b5bdbb4fddc84051785ee080" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>score_threshold</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a66354d44c93e6b1c2e42822908dc6c85" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>session</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1af7078f1750a89cf88b8fec8905662ec2" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>set_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a8762d5cc0e5e0f06a22a603655095a47" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>set_camera_fov_degrees</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a5e80185caa09ac4225fe25c6968b65b4" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a915d5d9fd8ba14e84e9f981860b2a909" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>set_image_warper</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a1c436a1c8de90a2b2ad62c7cf789a46e" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>set_roll_hint</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1aa498ef6817aabd64f4e046790fb7ccc0" prot="private" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>top_k</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a60043e5e081b565042318c0996234d37" prot="protected" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>warper</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1afe4c907abf282e5a1084fdf6632af332" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>~FacePipeline</name></member>
+      <member refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1aec3ca6700987e01559832f58cfc5db5b" prot="public" virt="virtual"><scope>Gaze::ORTYuNetPipeline</scope><name>~ORTYuNetPipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

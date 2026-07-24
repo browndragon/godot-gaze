@@ -1,11 +1,14 @@
 var searchData=
 [
-  ['initialize_5ftracker_0',['initialize_tracker',['../classgodot_1_1_gaze_tracker.html#a875df127fa340856d785960dfd111fd3',1,'godot::GazeTracker']]],
-  ['input_20feature_20preprocessing_1',['Input Feature Preprocessing',['../md_docs_2gaze__math__physical__model.html#autotoc_md36',1,'']]],
-  ['inside_20godot_2',['2. Integration inside Godot',['../index.html#autotoc_md8',1,'']]],
-  ['instructions_3',['Getting Started &amp;amp; Build Instructions',['../index.html#autotoc_md6',1,'']]],
-  ['integration_4',['Web / HTML5 Export Integration',['../index.html#autotoc_md11',1,'']]],
-  ['integration_20inside_20godot_5',['2. Integration inside Godot',['../index.html#autotoc_md8',1,'']]],
-  ['intersect_5fray_5fplane_6',['intersect_ray_plane',['../math__defs_8hpp.html#a7f79b5b50d0012fbba68f3bd6f4b5eaa',1,'Gaze']]],
-  ['intersection_7',['3. 3D Ray-Plane Intersection',['../md_docs_2gaze__math__physical__model.html#autotoc_md24',1,'']]]
+  ['pipeline_5fconfig_2ehpp_0',['pipeline_config.hpp',['../pipeline__config_8hpp.html',1,'']]],
+  ['pipelineconfig_1',['PipelineConfig',['../struct_gaze_1_1_pipeline_config.html',1,'Gaze']]],
+  ['platform_20layer_2',['Web Platform Layer',['../dir_0d4dde2834ed44e47b6207c19e4aac26.html#autotoc_md3',1,'']]],
+  ['platformgeometry_3',['PlatformGeometry',['../structgodot_1_1_platform_geometry.html',1,'godot']]],
+  ['pool_4',['Pool',['../class_pool.html',1,'']]],
+  ['pool_3c_20gaze_3a_3agazeframedata_2c_202_20_3e_5',['Pool&lt; Gaze::GazeFrameData, 2 &gt;',['../class_pool.html',1,'']]],
+  ['pre_20compiled_20release_20recommended_6',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]],
+  ['project_5fgaze_5fray_5fto_5fviewport_7',['project_gaze_ray_to_viewport',['../classgodot_1_1_gaze_tracker.html#ae3e8acf31fbdcd82680ef0c7b66b5c5e',1,'godot::GazeTracker']]],
+  ['project_5fray_5fto_5fscreen_5fmm_8',['project_ray_to_screen_mm',['../math__defs_8hpp.html#a38517b7bb8c677200c9e70a259b1c0eb',1,'Gaze']]],
+  ['projection_5fengine_2ehpp_9',['projection_engine.hpp',['../projection__engine_8hpp.html',1,'']]],
+  ['projectionengine_10',['ProjectionEngine',['../class_gaze_1_1_projection_engine.html',1,'Gaze']]]
 ];

@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="GazeTracker" inherits="Node3D">
 	<brief_description>Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.</brief_description>
-	<description>GazeTracker handles camera acquisition (via CameraSensor), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels).</description>
+	<description>GazeTracker handles camera acquisition (via CameraSensor), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels).
+
+NOTE: The implementation of GazeTracker is split across three platform layers:src/godot/gaze_tracker.cpp : Handles generic ClassDB binding, properties, signal routing, lifecycle, and projection math.src/native/gaze_tracker_native.cpp : Implements native camera/model initialization and tracking loop via GazeServer thread.src/web/gaze_tracker_web.cpp : Implements Web HTML5 JS/Emscripten tracking loop integration and sidecar message polling.
+
+src/godot/gaze_tracker.cpp : Handles generic ClassDB binding, properties, signal routing, lifecycle, and projection math.
+
+src/native/gaze_tracker_native.cpp : Implements native camera/model initialization and tracking loop via GazeServer thread.
+
+src/web/gaze_tracker_web.cpp : Implements Web HTML5 JS/Emscripten tracking loop integration and sidecar message polling.</description>
 	<tutorials></tutorials>
 	<methods>
-		<method name="initialize_tracker">
+		<method name="update_projection_parameters">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="start_tracker">
 			<return type="bool"></return>
-			<description>Initializes the gaze tracker, setting up camera and models.
+			<description>Starts the gaze tracker, setting up camera and models.
 
 True if initialized successfully, false otherwise.
 
 True if initialized successfully, false otherwise.</description>
+		</method>
+		<method name="initialize_tracker">
+			<return type="bool"></return>
+			<description>[DEPRECATED] Backward-compatible alias for start_tracker().
+
+Use start_tracker() instead.</description>
 		</method>
 		<method name="stop_tracker">
 			<return type="void"></return>
@@ -85,16 +103,6 @@ Gaze origin 3D camera-space vector (mm).
 
 Gaze direction unit vector in camera-space.</description>
 		</method>
-		<method name="feed_gaze_web_raw">
-			<return type="void"></return>
-			<param index="0" name="args" type="const Array &amp;"></param>
-			<description></description>
-		</method>
-		<method name="on_sidecar_ready">
-			<return type="void"></return>
-			<param index="0" name="args" type="const Array &amp;"></param>
-			<description></description>
-		</method>
 		<method name="get_camera_sensor">
 			<return type="CameraSensor *"></return>
 			<description></description>
@@ -129,22 +137,22 @@ Gaze direction unit vector in camera-space.</description>
 			<return type="bool"></return>
 			<description></description>
 		</method>
-		<method name="set_pipeline_config">
+		<method name="set_device_calibration">
 			<return type="void"></return>
-			<param index="0" name="res" type="const Ref&lt; GazePipelineConfig &gt; &amp;"></param>
+			<param index="0" name="res" type="const Ref&lt; DeviceCalibration &gt; &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_pipeline_config">
-			<return type="Ref&lt; GazePipelineConfig &gt;"></return>
+		<method name="get_device_calibration">
+			<return type="Ref&lt; DeviceCalibration &gt;"></return>
 			<description></description>
 		</method>
-		<method name="set_calibration_resource">
+		<method name="set_bio_calibration">
 			<return type="void"></return>
-			<param index="0" name="res" type="const Ref&lt; GazeCalibration &gt; &amp;"></param>
+			<param index="0" name="res" type="const Ref&lt; BioCalibration &gt; &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_calibration_resource">
-			<return type="Ref&lt; GazeCalibration &gt;"></return>
+		<method name="get_bio_calibration">
+			<return type="Ref&lt; BioCalibration &gt;"></return>
 			<description></description>
 		</method>
 		<method name="set_display_profile">
@@ -185,6 +193,15 @@ Gaze direction unit vector in camera-space.</description>
 		</method>
 		<method name="get_window_position_override">
 			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_verbosity">
+			<return type="void"></return>
+			<param index="0" name="level" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_verbosity">
+			<return type="int"></return>
 			<description></description>
 		</method>
 		<method name="get_latest_projected_gaze">

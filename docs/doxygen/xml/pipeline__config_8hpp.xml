@@ -6,6 +6,7 @@
     <includedby refid="face__pipeline_8hpp" local="yes">src/core/face_pipeline.hpp</includedby>
     <includedby refid="gaze__model_8hpp" local="yes">src/core/gaze_model.hpp</includedby>
     <includedby refid="gaze__pipeline__config_8hpp" local="yes">src/godot/gaze_pipeline_config.hpp</includedby>
+    <includedby refid="gaze__tracking__pipeline_8hpp" local="yes">src/native/gaze_tracking_pipeline.hpp</includedby>
     <incdepgraph>
       <node id="2">
         <label>face_model_geometry.hpp</label>
@@ -19,28 +20,28 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
+      <node id="3">
+        <label>src/core/cpu_image_warper.hpp</label>
+        <link refid="cpu__image__warper_8hpp_source"/>
+      </node>
       <node id="2">
         <label>src/core/face_pipeline.hpp</label>
         <link refid="face__pipeline_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
-        </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>src/core/gaze_model.hpp</label>
-        <link refid="gaze__model_8hpp"/>
         <childnode refid="4" relation="include">
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
-        <childnode refid="9" relation="include">
+      </node>
+      <node id="4">
+        <label>src/core/gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -48,52 +49,50 @@
         <link refid="pipeline__config_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="3" relation="include">
+        <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="12" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
-      </node>
-      <node id="4">
-        <label>src/godot/eye_estimator.hpp</label>
-        <link refid="eye__estimator_8hpp_source"/>
-      </node>
-      <node id="10">
-        <label>src/godot/face_estimator.hpp</label>
-        <link refid="face__estimator_8hpp_source"/>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
       <node id="6">
-        <label>src/godot/gaze_calibration_resource.cpp</label>
-        <link refid="gaze__calibration__resource_8cpp"/>
-      </node>
-      <node id="7">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
       </node>
-      <node id="12">
+      <node id="11">
         <label>src/godot/gaze_pipeline_config.hpp</label>
         <link refid="gaze__pipeline__config_8hpp"/>
-        <childnode refid="5" relation="include">
+        <childnode refid="9" relation="include">
         </childnode>
+      </node>
+      <node id="9">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
       </node>
       <node id="5">
         <label>src/godot/gaze_tracker.hpp</label>
         <link refid="gaze__tracker_8hpp"/>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
-        </childnode>
       </node>
       <node id="8">
-        <label>src/native/opencv_gaze_model.hpp</label>
-        <link refid="opencv__gaze__model_8hpp"/>
+        <label>src/native/gaze_tracking_pipeline.hpp</label>
+        <link refid="gaze__tracking__pipeline_8hpp_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
       </node>
-      <node id="11">
-        <label>src/native/yunet_pipeline.hpp</label>
-        <link refid="yunet__pipeline_8hpp"/>
+      <node id="7">
+        <label>src/native/ort_gaze_model.hpp</label>
+        <link refid="ort__gaze__model_8hpp_source"/>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
-      <node id="9">
-        <label>src/web/web_gaze_model.hpp</label>
-        <link refid="web__gaze__model_8hpp"/>
+      <node id="10">
+        <label>src/native/ort_yunet_pipeline.hpp</label>
+        <link refid="ort__yunet__pipeline_8hpp_source"/>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
     </invincdepgraph>
     <innerclass refid="struct_gaze_1_1_pipeline_config" prot="public">Gaze::PipelineConfig</innerclass>
@@ -121,16 +120,17 @@
 <codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Default<sp/>IPD<sp/>in<sp/>millimeters</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>ipd_mm<sp/>=<sp/>63.0;</highlight></codeline>
 <codeline lineno="23"><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Resizing<sp/>dimensions<sp/>for<sp/>face<sp/>detection</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>face_detect_width<sp/>=<sp/>160;</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>face_detect_height<sp/>=<sp/>128;</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Desired<sp/>camera<sp/>capture<sp/>resolution<sp/>(default<sp/>640x480)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_width<sp/>=<sp/>640;</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_height<sp/>=<sp/>480;</highlight></codeline>
-<codeline lineno="31"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight></codeline>
-<codeline lineno="33"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Desired<sp/>camera<sp/>capture<sp/>resolution<sp/>(default<sp/>640x480)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_width<sp/>=<sp/>640;</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_height<sp/>=<sp/>480;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Throttling<sp/>interval<sp/>for<sp/>sending<sp/>debug<sp/>image/crop<sp/>data<sp/>(currently<sp/>utilized<sp/>by<sp/>the<sp/>web<sp/>sidecar)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>debug_image_throttle_interval<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/core/pipeline_config.hpp"/>
   </compounddef>

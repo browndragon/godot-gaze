@@ -2,33 +2,37 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="namespace_gaze" kind="namespace" language="C++">
     <compoundname>Gaze</compoundname>
-    <innerclass refid="class_gaze_1_1_calibration" prot="public">Gaze::Calibration</innerclass>
+    <innerclass refid="class_gaze_1_1_atomic_mailbox" prot="public">Gaze::AtomicMailbox</innerclass>
     <innerclass refid="class_gaze_1_1_calibration_estimator" prot="public">Gaze::CalibrationEstimator</innerclass>
     <innerclass refid="struct_gaze_1_1_calibration_sample" prot="public">Gaze::CalibrationSample</innerclass>
     <innerclass refid="struct_gaze_1_1_calibration_weights" prot="public">Gaze::CalibrationWeights</innerclass>
     <innerclass refid="class_gaze_1_1_camera_interface" prot="public">Gaze::CameraInterface</innerclass>
     <innerclass refid="struct_gaze_1_1_camera_placement" prot="public">Gaze::CameraPlacement</innerclass>
-    <innerclass refid="class_gaze_1_1_device_calibration" prot="public">Gaze::DeviceCalibration</innerclass>
+    <innerclass refid="class_gaze_1_1_c_p_u_image_warper" prot="public">Gaze::CPUImageWarper</innerclass>
     <innerclass refid="struct_gaze_1_1_eye_crops" prot="public">Gaze::EyeCrops</innerclass>
     <innerclass refid="struct_gaze_1_1_face_model_geometry" prot="public">Gaze::FaceModelGeometry</innerclass>
     <innerclass refid="class_gaze_1_1_face_pipeline" prot="public">Gaze::FacePipeline</innerclass>
-    <innerclass refid="class_gaze_1_1_fixed_calibration" prot="public">Gaze::FixedCalibration</innerclass>
     <innerclass refid="struct_gaze_1_1_frame" prot="public">Gaze::Frame</innerclass>
     <innerclass refid="struct_gaze_1_1_gaze_basis3_d" prot="public">Gaze::GazeBasis3D</innerclass>
     <innerclass refid="struct_gaze_1_1_gaze_calibration" prot="public">Gaze::GazeCalibration</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_frame_data" prot="public">Gaze::GazeFrameData</innerclass>
     <innerclass refid="class_gaze_1_1_gaze_model" prot="public">Gaze::GazeModel</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_rect" prot="public">Gaze::GazeRect</innerclass>
+    <innerclass refid="class_gaze_1_1_gaze_tracking_pipeline" prot="public">Gaze::GazeTrackingPipeline</innerclass>
     <innerclass refid="struct_gaze_1_1_gaze_transform3_d" prot="public">Gaze::GazeTransform3D</innerclass>
-    <innerclass refid="struct_gaze_1_1_gaze_vector2" prot="public">Gaze::GazeVector2</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_vector2__32f" prot="public">Gaze::GazeVector2_32f</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_vector2__64f" prot="public">Gaze::GazeVector2_64f</innerclass>
     <innerclass refid="struct_gaze_1_1_gaze_vector2i" prot="public">Gaze::GazeVector2i</innerclass>
     <innerclass refid="struct_gaze_1_1_gaze_vector3" prot="public">Gaze::GazeVector3</innerclass>
-    <innerclass refid="class_gaze_1_1_open_c_v_camera" prot="public">Gaze::OpenCVCamera</innerclass>
-    <innerclass refid="class_gaze_1_1_open_c_v_gaze_model" prot="public">Gaze::OpenCVGazeModel</innerclass>
+    <innerclass refid="class_gaze_1_1_godot_camera" prot="public">Gaze::GodotCamera</innerclass>
+    <innerclass refid="class_gaze_1_1_image_warper" prot="public">Gaze::ImageWarper</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_gaze_model" prot="public">Gaze::ORTGazeModel</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_yu_net_pipeline" prot="public">Gaze::ORTYuNetPipeline</innerclass>
     <innerclass refid="struct_gaze_1_1_pipeline_config" prot="public">Gaze::PipelineConfig</innerclass>
     <innerclass refid="class_gaze_1_1_projection_engine" prot="public">Gaze::ProjectionEngine</innerclass>
     <innerclass refid="class_gaze_1_1_screen_projector" prot="public">Gaze::ScreenProjector</innerclass>
     <innerclass refid="struct_gaze_1_1_vertex" prot="public">Gaze::Vertex</innerclass>
-    <innerclass refid="class_gaze_1_1_web_gaze_model" prot="public">Gaze::WebGazeModel</innerclass>
-    <innerclass refid="class_gaze_1_1_yu_net_pipeline" prot="public">Gaze::YuNetPipeline</innerclass>
+    <innernamespace refid="namespace_gaze_1_1_inference">Gaze::Inference</innernamespace>
     <sectiondef kind="typedef">
       <memberdef kind="typedef" id="log_8hpp_1aef7bed9f33c120fec062934ecc6e1fb8" prot="public" static="no">
         <type>void(*)(bool, const char *)</type>
@@ -44,8 +48,81 @@
         </inbodydescription>
         <location file="src/core/log.hpp" line="19" column="1" bodyfile="src/core/log.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="typedef" id="math__defs_8hpp_1a9d93b05168c9b3ccc4f44385fc1b28d8" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2__64f" kindref="compound">GazeVector2_64f</ref></type>
+        <definition>using Gaze::GazeVector2 = GazeVector2_64f</definition>
+        <argsstring></argsstring>
+        <name>GazeVector2</name>
+        <qualifiedname>Gaze::GazeVector2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="140" column="5" bodyfile="src/core/math_defs.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="math__defs_8hpp_1a3d31a87032651b03be341e302ed98ada" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector2__64f" kindref="compound">GazeVector2_64f</ref></type>
+        <definition>using Gaze::GazePoint = GazeVector2_64f</definition>
+        <argsstring></argsstring>
+        <name>GazePoint</name>
+        <qualifiedname>Gaze::GazePoint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="152" column="5" bodyfile="src/core/math_defs.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
     </sectiondef>
     <sectiondef kind="var">
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1ab4d649fc24f81d0be82e7a69f1c8d8dd" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_SIZE</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_SIZE</name>
+        <qualifiedname>Gaze::EYE_CROP_SIZE</qualifiedname>
+        <initializer>= 60</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="8" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="8" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1a4678e7a0b3161cacb40a3a612ca953ca" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_CHANNELS</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_CHANNELS</name>
+        <qualifiedname>Gaze::EYE_CROP_CHANNELS</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="9" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1a6554a0c267bed0f3816d1150570644d3" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_BYTES</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_BYTES</name>
+        <qualifiedname>Gaze::EYE_CROP_BYTES</qualifiedname>
+        <initializer>= EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANNELS</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="10" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="10" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="variable" id="math__defs_8hpp_1aaabd53b70275dd09f6134c0371ed887a" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>double</type>
         <definition>double Gaze::PI</definition>
@@ -59,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="16" column="25" bodyfile="src/core/math_defs.hpp" bodystart="16" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="54" column="29" bodyfile="src/core/math_defs.hpp" bodystart="54" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="math__defs_8hpp_1ab1d00d4a9145ef3d69320fbc645e1f31" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>double</type>
@@ -74,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="17" column="25" bodyfile="src/core/math_defs.hpp" bodystart="17" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="55" column="29" bodyfile="src/core/math_defs.hpp" bodystart="55" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="math__defs_8hpp_1a97438f8805f1361b33a9fa6ddd07c253" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>double</type>
@@ -89,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="18" column="25" bodyfile="src/core/math_defs.hpp" bodystart="18" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="56" column="29" bodyfile="src/core/math_defs.hpp" bodystart="56" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="math__defs_8hpp_1a4ac56bd607c627828ef9c833eb11dcc5" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>double</type>
@@ -104,7 +181,157 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="19" column="25" bodyfile="src/core/math_defs.hpp" bodystart="19" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="57" column="29" bodyfile="src/core/math_defs.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a7061a980ac72084619f520d70a9cb4c4" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEFAULT_CAMERA_FOV_DEGREES</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_CAMERA_FOV_DEGREES</name>
+        <qualifiedname>Gaze::DEFAULT_CAMERA_FOV_DEGREES</qualifiedname>
+        <initializer>= 35.488537576579634</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="62" column="29" bodyfile="src/core/math_defs.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a695977898a860cf2664056c17d90281e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEFAULT_FOCAL_TO_WIDTH_RATIO</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_FOCAL_TO_WIDTH_RATIO</name>
+        <qualifiedname>Gaze::DEFAULT_FOCAL_TO_WIDTH_RATIO</qualifiedname>
+        <initializer>= 1.5625</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="63" column="29" bodyfile="src/core/math_defs.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1aa2ee9b2a748b67b2671c7b2593354e7b" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::LEFT</definition>
+        <argsstring></argsstring>
+        <name>LEFT</name>
+        <qualifiedname>Gaze::LEFT</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(-1.0f, 0.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="294" column="34" bodyfile="src/core/math_defs.hpp" bodystart="294" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a3850de92768808b77ec00435e858c221" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::RIGHT</definition>
+        <argsstring></argsstring>
+        <name>RIGHT</name>
+        <qualifiedname>Gaze::RIGHT</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(1.0f, 0.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="295" column="34" bodyfile="src/core/math_defs.hpp" bodystart="295" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a2a6e9a2568a4df7baf0a0934ed440a3c" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::UP</definition>
+        <argsstring></argsstring>
+        <name>UP</name>
+        <qualifiedname>Gaze::UP</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0f, 1.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="296" column="34" bodyfile="src/core/math_defs.hpp" bodystart="296" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1ab519933c46967fdd02c2c9a5eeee59af" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::DOWN</definition>
+        <argsstring></argsstring>
+        <name>DOWN</name>
+        <qualifiedname>Gaze::DOWN</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0f, -1.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="297" column="34" bodyfile="src/core/math_defs.hpp" bodystart="297" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a953d4066052741c25ffbdc3ba465aa86" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::FORWARD</definition>
+        <argsstring></argsstring>
+        <name>FORWARD</name>
+        <qualifiedname>Gaze::FORWARD</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0f, 0.0f, -1.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="298" column="34" bodyfile="src/core/math_defs.hpp" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a26700d1d40341f351a4cf40b001c793d" prot="public" static="no" constexpr="yes" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::BACK</definition>
+        <argsstring></argsstring>
+        <name>BACK</name>
+        <qualifiedname>Gaze::BACK</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0f, 0.0f, 1.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="299" column="34" bodyfile="src/core/math_defs.hpp" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="gaze__tracker_8cpp_1a8aa78114bd59aafab0ace66afaed635a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::g_is_exiting</definition>
+        <argsstring></argsstring>
+        <name>g_is_exiting</name>
+        <qualifiedname>Gaze::g_is_exiting</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="34" column="6" bodyfile="src/godot/register_types.cpp" bodystart="34" bodyend="-1" declfile="src/godot/gaze_tracker.cpp" declline="6" declcolumn="26"/>
+      </memberdef>
+      <memberdef kind="variable" id="ort__gaze__model_8cpp_1a9c5370ea10560da74af2859c16ce2a9b" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::g_is_unit_test</definition>
+        <argsstring></argsstring>
+        <name>g_is_unit_test</name>
+        <qualifiedname>Gaze::g_is_unit_test</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.cpp" line="10" column="6" bodyfile="src/native/ort_gaze_model.cpp" bodystart="10" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
@@ -119,7 +346,7 @@
           <declname>samples</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>screen_size_mm</declname>
         </param>
         <param>
@@ -149,7 +376,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration_estimator.cpp" line="16" column="15" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="16" bodyend="133"/>
+        <location file="src/core/gaze_calibration_estimator.cpp" line="16" column="15" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="16" bodyend="108"/>
       </memberdef>
       <memberdef kind="function" id="log_8hpp_1a4e8b4a47826f4c164d7d60f397016f4b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>std::atomic&lt; LogHandler &gt; &amp;</type>
@@ -252,6 +479,71 @@
         </inbodydescription>
         <location file="src/core/log.hpp" line="42" column="6" bodyfile="src/core/log.hpp" bodystart="42" bodyend="45"/>
       </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ad99700578624d0381239c9dd658be2ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::atomic&lt; int &gt; &amp;</type>
+        <definition>std::atomic&lt; int &gt; &amp; Gaze::get_log_verbosity</definition>
+        <argsstring>()</argsstring>
+        <name>get_log_verbosity</name>
+        <qualifiedname>Gaze::get_log_verbosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="47" column="20" bodyfile="src/core/log.hpp" bodystart="47" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a2ec5bfa00ca71e4baa94dec238a2b13a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::set_log_verbosity</definition>
+        <argsstring>(int level)</argsstring>
+        <name>set_log_verbosity</name>
+        <qualifiedname>Gaze::set_log_verbosity</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="52" column="13" bodyfile="src/core/log.hpp" bodystart="52" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ad79944750084eb8fac105372d87313b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_info</definition>
+        <argsstring>(int level, const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_info</name>
+        <qualifiedname>Gaze::log_info</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="57" column="6" bodyfile="src/core/log.hpp" bodystart="57" bodyend="63"/>
+      </memberdef>
       <memberdef kind="function" id="log_8hpp_1abafa3f20c1fb6e3234e6d56d38131659" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
@@ -279,7 +571,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/log.hpp" line="48" column="6" bodyfile="src/core/log.hpp" bodystart="48" bodyend="52"/>
+        <location file="src/core/log.hpp" line="66" column="6" bodyfile="src/core/log.hpp" bodystart="66" bodyend="68"/>
       </memberdef>
       <memberdef kind="function" id="log_8hpp_1ae5957a715620ce492f7f80c8cd77fc5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -308,7 +600,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/log.hpp" line="55" column="6" bodyfile="src/core/log.hpp" bodystart="55" bodyend="59"/>
+        <location file="src/core/log.hpp" line="71" column="6" bodyfile="src/core/log.hpp" bodystart="71" bodyend="75"/>
       </memberdef>
       <memberdef kind="function" id="log_8hpp_1abcd6f53a7312a1fae64a14c3bd8d2989" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
@@ -337,7 +629,150 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/log.hpp" line="62" column="6" bodyfile="src/core/log.hpp" bodystart="62" bodyend="66"/>
+        <location file="src/core/log.hpp" line="78" column="6" bodyfile="src/core/log.hpp" bodystart="78" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ae6da62914f1bba3510e826b1d196e27f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::resize_bgr_to_rgb</definition>
+        <argsstring>(const uint8_t *src, int src_w, int src_h, uint8_t *dst, int dst_w, int dst_h)</argsstring>
+        <name>resize_bgr_to_rgb</name>
+        <qualifiedname>Gaze::resize_bgr_to_rgb</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="20" column="17" bodyfile="src/core/math_defs.hpp" bodystart="20" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a598ea344cf8ef8b3d9083dde52cd3197" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_focal_length_px</definition>
+        <argsstring>(double width_px, double fov_degrees)</argsstring>
+        <name>get_focal_length_px</name>
+        <qualifiedname>Gaze::get_focal_length_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>width_px</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="66" column="19" bodyfile="src/core/math_defs.hpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a61faa4b0cd24d89b41478d29adb054d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_focal_length_under_scaling</definition>
+        <argsstring>(double f_original, double original_dim, double new_dim)</argsstring>
+        <name>get_focal_length_under_scaling</name>
+        <qualifiedname>Gaze::get_focal_length_under_scaling</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_original</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>original_dim</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>new_dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="72" column="19" bodyfile="src/core/math_defs.hpp" bodystart="72" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1aff4837e22126a78f320f88afafd46e6a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_card_width_px</definition>
+        <argsstring>(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm=85.603)</argsstring>
+        <name>get_card_width_px</name>
+        <qualifiedname>Gaze::get_card_width_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_distance_mm</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>frame_width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_width_mm</declname>
+          <defval>85.603</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="79" column="19" bodyfile="src/core/math_defs.hpp" bodystart="79" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ab5f0997d3b9b2bc468cba03eb7909257" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::diagonal_to_horizontal_fov</definition>
+        <argsstring>(double diagonal_fov_degrees, double width, double height)</argsstring>
+        <name>diagonal_to_horizontal_fov</name>
+        <qualifiedname>Gaze::diagonal_to_horizontal_fov</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>diagonal_fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="89" column="19" bodyfile="src/core/math_defs.hpp" bodystart="89" bodyend="96"/>
       </memberdef>
       <memberdef kind="function" id="math__defs_8hpp_1a956327787e5b5bf19a5c91d0ec705d3e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref></type>
@@ -357,7 +792,27 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="243" column="20" bodyfile="src/core/math_defs.hpp" bodystart="243" bodyend="261"/>
+        <location file="src/core/math_defs.hpp" line="436" column="24" bodyfile="src/core/math_defs.hpp" bodystart="436" bodyend="455"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1affe895852483e031ecf8b552a96fdc65" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::basis_to_rodrigues</definition>
+        <argsstring>(const GazeBasis3D &amp;basis)</argsstring>
+        <name>basis_to_rodrigues</name>
+        <qualifiedname>Gaze::basis_to_rodrigues</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref> &amp;</type>
+          <declname>basis</declname>
+        </param>
+        <briefdescription>
+<para>Converts a 3x3 rotation basis to a 3D rotation vector (Rodrigues vector). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Inverse of rodrigues_to_basis, matching OpenCV&apos;s cv::Rodrigues convention. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="462" column="24" bodyfile="src/core/math_defs.hpp" bodystart="462" bodyend="531"/>
       </memberdef>
       <memberdef kind="function" id="math__defs_8hpp_1a91a0aaace63d1f6598a11964186621a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -375,7 +830,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="264" column="20" bodyfile="src/core/math_defs.hpp" bodystart="264" bodyend="278"/>
+        <location file="src/core/math_defs.hpp" line="533" column="24" bodyfile="src/core/math_defs.hpp" bodystart="533" bodyend="548"/>
       </memberdef>
       <memberdef kind="function" id="math__defs_8hpp_1a7f79b5b50d0012fbba68f3bd6f4b5eaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -411,13 +866,517 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="286" column="13" bodyfile="src/core/math_defs.hpp" bodystart="286" bodyend="299"/>
+        <location file="src/core/math_defs.hpp" line="556" column="17" bodyfile="src/core/math_defs.hpp" bodystart="556" bodyend="570"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ad93a5bce0845264d135053937ec1b70b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
+        <definition>GazeVector3 Gaze::apply_3d_bias_vector</definition>
+        <argsstring>(const GazeVector3 &amp;raw_gaze_dir, const GazeVector2 &amp;bias_pitch_yaw, const GazeVector2 &amp;scale_pitch_yaw=GazeVector2(1.0, 1.0))</argsstring>
+        <name>apply_3d_bias_vector</name>
+        <qualifiedname>Gaze::apply_3d_bias_vector</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir</declname>
+        </param>
+        <param>
+          <type>const GazeVector2 &amp;</type>
+          <declname>bias_pitch_yaw</declname>
+        </param>
+        <param>
+          <type>const GazeVector2 &amp;</type>
+          <declname>scale_pitch_yaw</declname>
+          <defval>GazeVector2(1.0, 1.0)</defval>
+        </param>
+        <briefdescription>
+<para>Applies pitch and yaw bias corrections (and scaling) to a raw 3D gaze vector. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="575" column="24" bodyfile="src/core/math_defs.hpp" bodystart="575" bodyend="590"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a38517b7bb8c677200c9e70a259b1c0eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::project_ray_to_screen_mm</definition>
+        <argsstring>(const GazeVector3 &amp;origin_cam, const GazeVector3 &amp;dir_cam, const GazeVector3 &amp;camera_offset, double camera_tilt_deg, const GazeVector2 &amp;screen_size_mm, GazeVector2 &amp;out_pos_mm)</argsstring>
+        <name>project_ray_to_screen_mm</name>
+        <qualifiedname>Gaze::project_ray_to_screen_mm</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>dir_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>camera_offset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>camera_tilt_deg</declname>
+        </param>
+        <param>
+          <type>const GazeVector2 &amp;</type>
+          <declname>screen_size_mm</declname>
+        </param>
+        <param>
+          <type>GazeVector2 &amp;</type>
+          <declname>out_pos_mm</declname>
+        </param>
+        <briefdescription>
+<para>Projects a camera-space gaze ray onto a tilted screen plane in millimeters. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="595" column="17" bodyfile="src/core/math_defs.hpp" bodystart="595" bodyend="633"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8cpp_1ae8f5d2f55fa6990ea8e9c3d28865d979" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>GazeVector2</type>
+        <definition>static GazeVector2 Gaze::project_point</definition>
+        <argsstring>(const GazeVector3 &amp;P, const GazeVector3 &amp;r, const GazeVector3 &amp;t, double fx, double fy, double cx, double cy)</argsstring>
+        <name>project_point</name>
+        <qualifiedname>Gaze::project_point</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>P</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>r</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>t</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.cpp" line="9" column="20" bodyfile="src/core/pnp_solver.cpp" bodystart="9" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8cpp_1af01d1d73c50e93687d4bb9c338e94891" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>static double Gaze::compute_residuals</definition>
+        <argsstring>(const std::vector&lt; GazeVector3 &gt; &amp;model_points, const std::vector&lt; GazeVector2 &gt; &amp;image_points, const double beta[6], double fx, double fy, double cx, double cy, double residuals[10])</argsstring>
+        <name>compute_residuals</name>
+        <qualifiedname>Gaze::compute_residuals</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt; &amp;</type>
+          <declname>model_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; GazeVector2 &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>beta</declname>
+          <array>[6]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>residuals</declname>
+          <array>[10]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.cpp" line="22" column="15" bodyfile="src/core/pnp_solver.cpp" bodystart="22" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8cpp_1ac695b886859de1d33247aa5ff31dc3ee" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void Gaze::compute_jacobian</definition>
+        <argsstring>(const std::vector&lt; GazeVector3 &gt; &amp;model_points, const double beta[6], double fx, double fy, double cx, double cy, double J[10][6])</argsstring>
+        <name>compute_jacobian</name>
+        <qualifiedname>Gaze::compute_jacobian</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt; &amp;</type>
+          <declname>model_points</declname>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>beta</declname>
+          <array>[6]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>J</declname>
+          <array>[10][6]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.cpp" line="42" column="13" bodyfile="src/core/pnp_solver.cpp" bodystart="42" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8cpp_1ad873adf47c8a0bdd34964d79b316d22a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool Gaze::solve6x6</definition>
+        <argsstring>(double A[6][6], const double b[6], double x[6])</argsstring>
+        <name>solve6x6</name>
+        <qualifiedname>Gaze::solve6x6</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>A</declname>
+          <array>[6][6]</array>
+        </param>
+        <param>
+          <type>const double</type>
+          <declname>b</declname>
+          <array>[6]</array>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>x</declname>
+          <array>[6]</array>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.cpp" line="78" column="13" bodyfile="src/core/pnp_solver.cpp" bodystart="78" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8cpp_1a449f9a58069133c8de0a5959e933d6f7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::solve_pnp_lm</definition>
+        <argsstring>(const std::vector&lt; GazeVector3 &gt; &amp;model_points, const std::vector&lt; GazeVector2 &gt; &amp;image_points, double fx, double fy, double cx, double cy, GazeVector3 &amp;rvec, GazeVector3 &amp;tvec, bool use_extrinsic_guess=true)</argsstring>
+        <name>solve_pnp_lm</name>
+        <qualifiedname>Gaze::solve_pnp_lm</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt; &amp;</type>
+          <declname>model_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; GazeVector2 &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>rvec</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>tvec</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>use_extrinsic_guess</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Solves the Perspective-n-Point (PnP) problem for 5-point face landmarks using Levenberg-Marquardt optimization. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 3D canonical landmarks (size 5). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 2D image landmarks (size 5). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length along X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length along Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rvec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input/Output rotation vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tvec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Input/Output translation vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>use_extrinsic_guess</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If true, uses the input values of rvec/tvec as initial guess. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if the solver converged successfully, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.cpp" line="118" column="6" bodyfile="src/core/pnp_solver.cpp" bodystart="118" bodyend="230" declfile="src/core/pnp_solver.hpp" declline="23" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__tracking__pipeline_8cpp_1ae9af81f5b250fd72ccf210274ff238e1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void Gaze::copy_rgb_to_gbr</definition>
+        <argsstring>(const uint8_t *src, uint8_t *dst, size_t sz)</argsstring>
+        <name>copy_rgb_to_gbr</name>
+        <qualifiedname>Gaze::copy_rgb_to_gbr</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_tracking_pipeline.cpp" line="12" column="17" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="12" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__gaze__model_8hpp_1acc280d0d313f97f3deab08e12d3403f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>Ort::Env &amp;</type>
+        <definition>Ort::Env &amp; Gaze::get_ort_env</definition>
+        <argsstring>()</argsstring>
+        <name>get_ort_env</name>
+        <qualifiedname>Gaze::get_ort_env</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="13" column="21" bodyfile="src/native/ort_gaze_model.hpp" bodystart="13" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__yunet__pipeline_8cpp_1ab8ad78f4462d3fca7f61d240dea70231" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void Gaze::bilinear_resize_letterbox</definition>
+        <argsstring>(const unsigned char *src, int src_w, int src_h, unsigned char *dst, int dst_w, int dst_h, int pad_x, int pad_y, int new_w, int new_h)</argsstring>
+        <name>bilinear_resize_letterbox</name>
+        <qualifiedname>Gaze::bilinear_resize_letterbox</qualifiedname>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>pad_x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>pad_y</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>new_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>new_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.cpp" line="17" column="17" bodyfile="src/native/ort_yunet_pipeline.cpp" bodystart="17" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="platform__ort_8fallback_8cpp_1a1d0831bfa024ca9bdba9b785b4f9270f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt; Ort::Session &gt; Gaze::platform_create_ort_session</definition>
+        <argsstring>(Ort::Env &amp;env, const std::string &amp;path, Ort::SessionOptions *options)</argsstring>
+        <name>platform_create_ort_session</name>
+        <qualifiedname>Gaze::platform_create_ort_session</qualifiedname>
+        <param>
+          <type>Ort::Env &amp;</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>Ort::SessionOptions *</type>
+          <declname>options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/platform_ort.fallback.cpp" line="5" column="17" bodyfile="src/native/platform_ort.fallback.cpp" bodystart="5" bodyend="11" declfile="src/native/platform_ort.hpp" declline="10" declcolumn="21"/>
+      </memberdef>
+      <memberdef kind="function" id="platform__ort_8fallback_8cpp_1aa056d0da16f7a14294069d186098b1c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt; Ort::Session &gt; Gaze::platform_create_ort_session</definition>
+        <argsstring>(Ort::Env &amp;env, const std::vector&lt; uint8_t &gt; &amp;buffer, Ort::SessionOptions *options)</argsstring>
+        <name>platform_create_ort_session</name>
+        <qualifiedname>Gaze::platform_create_ort_session</qualifiedname>
+        <param>
+          <type>Ort::Env &amp;</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>Ort::SessionOptions *</type>
+          <declname>options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/platform_ort.fallback.cpp" line="13" column="17" bodyfile="src/native/platform_ort.fallback.cpp" bodystart="13" bodyend="19" declfile="src/native/platform_ort.hpp" declline="17" declcolumn="21"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/camera_interface.hpp" line="11" column="1"/>
+    <location file="src/core/atomic_mailbox.hpp" line="5" column="1"/>
   </compounddef>
 </doxygen>

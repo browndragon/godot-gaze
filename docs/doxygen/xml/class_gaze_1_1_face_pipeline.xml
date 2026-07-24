@@ -2,7 +2,23 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="class_gaze_1_1_face_pipeline" kind="class" language="C++" prot="public" abstract="yes">
     <compoundname>Gaze::FacePipeline</compoundname>
-    <derivedcompoundref refid="class_gaze_1_1_yu_net_pipeline" prot="public" virt="non-virtual">Gaze::YuNetPipeline</derivedcompoundref>
+    <derivedcompoundref refid="class_gaze_1_1_o_r_t_yu_net_pipeline" prot="public" virt="non-virtual">Gaze::ORTYuNetPipeline</derivedcompoundref>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_face_pipeline_1a60043e5e081b565042318c0996234d37" prot="protected" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="class_gaze_1_1_image_warper" kindref="compound">ImageWarper</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;ImageWarper&gt; Gaze::FacePipeline::warper</definition>
+        <argsstring></argsstring>
+        <name>warper</name>
+        <qualifiedname>Gaze::FacePipeline::warper</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="74" column="25" bodyfile="src/core/face_pipeline.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
     <sectiondef kind="public-func">
       <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1afe4c907abf282e5a1084fdf6632af332" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -16,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="37" column="13"/>
+        <location file="src/core/face_pipeline.hpp" line="77" column="17"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1abe41495e228f095470c1d533cb06fbfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>bool</type>
@@ -24,14 +40,14 @@
         <argsstring>()=0</argsstring>
         <name>initialize</name>
         <qualifiedname>Gaze::FacePipeline::initialize</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_yu_net_pipeline_1a028337b1ad662a6ef97ec2c8124c42b7">initialize</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1af22bc9e9ced4bdb0b2bbe5f161c2a973">initialize</reimplementedby>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="40" column="18"/>
+        <location file="src/core/face_pipeline.hpp" line="80" column="22"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1adf405bee12088858888b8af793b1d70a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
         <type>bool</type>
@@ -39,7 +55,7 @@
         <argsstring>(const Frame &amp;frame, EyeCrops &amp;out_crops)=0</argsstring>
         <name>process_frame</name>
         <qualifiedname>Gaze::FacePipeline::process_frame</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_yu_net_pipeline_1a1e392fb8ad404f5e7bdd9fefd041a1f7">process_frame</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a57938af2f1a9bdbdff4499f7f19b70cc">process_frame</reimplementedby>
         <param>
           <type>const <ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
           <declname>frame</declname>
@@ -54,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="43" column="18"/>
+        <location file="src/core/face_pipeline.hpp" line="83" column="22"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1ae3ec72e95ecbe68f9318e1062df15bc9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>void</type>
@@ -62,7 +78,7 @@
         <argsstring>(double f)</argsstring>
         <name>set_camera_focal_length_px</name>
         <qualifiedname>Gaze::FacePipeline::set_camera_focal_length_px</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_yu_net_pipeline_1ac1978ac77496506e474acfed32176dc5">set_camera_focal_length_px</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1af7078f1750a89cf88b8fec8905662ec2">set_camera_focal_length_px</reimplementedby>
         <param>
           <type>double</type>
           <declname>f</declname>
@@ -73,7 +89,26 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="46" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="46" bodyend="46"/>
+        <location file="src/core/face_pipeline.hpp" line="86" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1a88885e9fb8a11900a2cc2121eb6326fa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::FacePipeline::set_camera_fov_degrees</definition>
+        <argsstring>(double fov)</argsstring>
+        <name>set_camera_fov_degrees</name>
+        <qualifiedname>Gaze::FacePipeline::set_camera_fov_degrees</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a8762d5cc0e5e0f06a22a603655095a47">set_camera_fov_degrees</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>fov</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="89" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="89" bodyend="89"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1a1049cdc1bace7ad121cbfd2cde0b2f99" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>void</type>
@@ -81,7 +116,7 @@
         <argsstring>(const PipelineConfig &amp;config)</argsstring>
         <name>set_config</name>
         <qualifiedname>Gaze::FacePipeline::set_config</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_yu_net_pipeline_1afb97ff41ad5267fcd32ab01f1ca7339b">set_config</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_yu_net_pipeline_1a5e80185caa09ac4225fe25c6968b65b4">set_config</reimplementedby>
         <param>
           <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
           <declname>config</declname>
@@ -92,7 +127,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="49" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="49" bodyend="49"/>
+        <location file="src/core/face_pipeline.hpp" line="92" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1a915d5d9fd8ba14e84e9f981860b2a909" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::FacePipeline::set_image_warper</definition>
+        <argsstring>(std::shared_ptr&lt; ImageWarper &gt; p_warper)</argsstring>
+        <name>set_image_warper</name>
+        <qualifiedname>Gaze::FacePipeline::set_image_warper</qualifiedname>
+        <param>
+          <type>std::shared_ptr&lt; <ref refid="class_gaze_1_1_image_warper" kindref="compound">ImageWarper</ref> &gt;</type>
+          <declname>p_warper</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="94" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_pipeline_1a4e880a2386aa3fc57c9a0ef9ada2051e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>std::shared_ptr&lt; <ref refid="class_gaze_1_1_image_warper" kindref="compound">ImageWarper</ref> &gt;</type>
+        <definition>virtual std::shared_ptr&lt; ImageWarper &gt; Gaze::FacePipeline::get_image_warper</definition>
+        <argsstring>() const</argsstring>
+        <name>get_image_warper</name>
+        <qualifiedname>Gaze::FacePipeline::get_image_warper</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="95" column="33" bodyfile="src/core/face_pipeline.hpp" bodystart="95" bodyend="95"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -105,18 +172,22 @@
         <link refid="class_gaze_1_1_face_pipeline"/>
       </node>
       <node id="2">
-        <label>Gaze::YuNetPipeline</label>
-        <link refid="class_gaze_1_1_yu_net_pipeline"/>
+        <label>Gaze::ORTYuNetPipeline</label>
+        <link refid="class_gaze_1_1_o_r_t_yu_net_pipeline"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>
     </inheritancegraph>
-    <location file="src/core/face_pipeline.hpp" line="35" column="1" bodyfile="src/core/face_pipeline.hpp" bodystart="35" bodyend="50"/>
+    <location file="src/core/face_pipeline.hpp" line="71" column="5" bodyfile="src/core/face_pipeline.hpp" bodystart="72" bodyend="96"/>
     <listofallmembers>
+      <member refid="class_gaze_1_1_face_pipeline_1a4e880a2386aa3fc57c9a0ef9ada2051e" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>get_image_warper</name></member>
       <member refid="class_gaze_1_1_face_pipeline_1abe41495e228f095470c1d533cb06fbfa" prot="public" virt="pure-virtual"><scope>Gaze::FacePipeline</scope><name>initialize</name></member>
       <member refid="class_gaze_1_1_face_pipeline_1adf405bee12088858888b8af793b1d70a" prot="public" virt="pure-virtual"><scope>Gaze::FacePipeline</scope><name>process_frame</name></member>
       <member refid="class_gaze_1_1_face_pipeline_1ae3ec72e95ecbe68f9318e1062df15bc9" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>set_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a88885e9fb8a11900a2cc2121eb6326fa" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>set_camera_fov_degrees</name></member>
       <member refid="class_gaze_1_1_face_pipeline_1a1049cdc1bace7ad121cbfd2cde0b2f99" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a915d5d9fd8ba14e84e9f981860b2a909" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>set_image_warper</name></member>
+      <member refid="class_gaze_1_1_face_pipeline_1a60043e5e081b565042318c0996234d37" prot="protected" virt="non-virtual"><scope>Gaze::FacePipeline</scope><name>warper</name></member>
       <member refid="class_gaze_1_1_face_pipeline_1afe4c907abf282e5a1084fdf6632af332" prot="public" virt="virtual"><scope>Gaze::FacePipeline</scope><name>~FacePipeline</name></member>
     </listofallmembers>
   </compounddef>

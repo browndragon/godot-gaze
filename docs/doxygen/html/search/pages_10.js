@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['html5_20export_20integration_0',['Web / HTML5 Export Integration',['../index.html#autotoc_md11',1,'']]]
+  ['recommended_0',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]],
+  ['release_20recommended_1',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]]
 ];

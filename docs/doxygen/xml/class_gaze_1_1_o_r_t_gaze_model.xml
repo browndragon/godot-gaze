@@ -1,0 +1,328 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_o_r_t_gaze_model" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::ORTGazeModel</compoundname>
+    <basecompoundref refid="class_gaze_1_1_gaze_model" prot="public" virt="non-virtual">Gaze::GazeModel</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a386f31f7497825f384b5e0810cfed248" prot="private" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string Gaze::ORTGazeModel::model_path</definition>
+        <argsstring></argsstring>
+        <name>model_path</name>
+        <qualifiedname>Gaze::ORTGazeModel::model_path</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="22" column="21" bodyfile="src/native/ort_gaze_model.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a18c92c0859a9adc1b92d14e2dd38ecdb" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; Gaze::ORTGazeModel::model_buffer</definition>
+        <argsstring></argsstring>
+        <name>model_buffer</name>
+        <qualifiedname>Gaze::ORTGazeModel::model_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="23" column="21" bodyfile="src/native/ort_gaze_model.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a72fbc5414f8b362b17dd491760b5ec2d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::ORTGazeModel::load_from_buffer</definition>
+        <argsstring></argsstring>
+        <name>load_from_buffer</name>
+        <qualifiedname>Gaze::ORTGazeModel::load_from_buffer</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="24" column="14" bodyfile="src/native/ort_gaze_model.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a592b15277ef56e5bccc9bb4cb8ee4056" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt;Ort::Session&gt; Gaze::ORTGazeModel::session</definition>
+        <argsstring></argsstring>
+        <name>session</name>
+        <qualifiedname>Gaze::ORTGazeModel::session</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="26" column="25" bodyfile="src/native/ort_gaze_model.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a04fcd9f13cd8f5af2840e09386deb10e" prot="private" static="no" mutable="no">
+        <type>Ort::MemoryInfo</type>
+        <definition>Ort::MemoryInfo Gaze::ORTGazeModel::memory_info</definition>
+        <argsstring></argsstring>
+        <name>memory_info</name>
+        <qualifiedname>Gaze::ORTGazeModel::memory_info</qualifiedname>
+        <initializer>{nullptr}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="27" column="25" bodyfile="src/native/ort_gaze_model.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1adaea253d279af97a43636d10f43cea57" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref></type>
+        <definition>PipelineConfig Gaze::ORTGazeModel::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>Gaze::ORTGazeModel::config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="28" column="24" bodyfile="src/native/ort_gaze_model.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1a658f8e289bd38928ca1adb620ff03005" prot="private" static="no" mutable="no">
+        <type>const std::vector&lt; const char * &gt;</type>
+        <definition>const std::vector&lt;const char *&gt; Gaze::ORTGazeModel::input_names</definition>
+        <argsstring></argsstring>
+        <name>input_names</name>
+        <qualifiedname>Gaze::ORTGazeModel::input_names</qualifiedname>
+        <initializer>= {&quot;left_eye_image&quot;, &quot;right_eye_image&quot;, &quot;head_pose_angles&quot;}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="31" column="27" bodyfile="src/native/ort_gaze_model.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_gaze_model_1ab13eab164a52e50cbdc25f159c05606b" prot="private" static="no" mutable="no">
+        <type>const std::vector&lt; const char * &gt;</type>
+        <definition>const std::vector&lt;const char *&gt; Gaze::ORTGazeModel::output_names</definition>
+        <argsstring></argsstring>
+        <name>output_names</name>
+        <qualifiedname>Gaze::ORTGazeModel::output_names</qualifiedname>
+        <initializer>= {&quot;gaze_vector/sink_port_0&quot;}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="32" column="27" bodyfile="src/native/ort_gaze_model.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a6fcb187332769b4c79a523bcef7d2591" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ORTGazeModel::preprocess_eye_crop</definition>
+        <argsstring>(const uint8_t *raw_crop, float *out_buffer)</argsstring>
+        <name>preprocess_eye_crop</name>
+        <qualifiedname>Gaze::ORTGazeModel::preprocess_eye_crop</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>raw_crop</declname>
+        </param>
+        <param>
+          <type>float *</type>
+          <declname>out_buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="34" column="14" bodyfile="src/native/ort_gaze_model.cpp" bodystart="87" bodyend="94"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1abb79047badbd7ab8ce5c621d8711e879" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ORTGazeModel::ORTGazeModel</definition>
+        <argsstring>(const std::string &amp;gaze_ort_path)</argsstring>
+        <name>ORTGazeModel</name>
+        <qualifiedname>Gaze::ORTGazeModel::ORTGazeModel</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>gaze_ort_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="37" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="12" bodyend="15"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ac161a5ba84b50679276dce4d511438ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ORTGazeModel::ORTGazeModel</definition>
+        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;ort_buffer)</argsstring>
+        <name>ORTGazeModel</name>
+        <qualifiedname>Gaze::ORTGazeModel::ORTGazeModel</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>ort_buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="38" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="17" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ad07c4803d77b91af848e81f4cfa2a851" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ORTGazeModel::ORTGazeModel</definition>
+        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;xml_buffer, const std::vector&lt; uint8_t &gt; &amp;bin_buffer)</argsstring>
+        <name>ORTGazeModel</name>
+        <qualifiedname>Gaze::ORTGazeModel::ORTGazeModel</qualifiedname>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>xml_buffer</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>bin_buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="39" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="22" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ac5e0e7134c4e97b8d89b3adfee344da4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::ORTGazeModel::~ORTGazeModel</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ORTGazeModel</name>
+        <qualifiedname>Gaze::ORTGazeModel::~ORTGazeModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="40" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a3e605a670506add0f7a4b4aa916d5060" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTGazeModel::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::ORTGazeModel::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_gaze_model_1a10bedfd9295068dc8671cc4d65c41c77">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="42" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="27" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a8baef8f34356e926e1b4649092352dc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTGazeModel::estimate_raw_gaze</definition>
+        <argsstring>(const EyeCrops &amp;crops, GazeVector3 &amp;out_gaze_dir_cv) override</argsstring>
+        <name>estimate_raw_gaze</name>
+        <qualifiedname>Gaze::ORTGazeModel::estimate_raw_gaze</qualifiedname>
+        <reimplements refid="class_gaze_1_1_gaze_model_1a6ea251526afb477d2e78ae4a0646673d">estimate_raw_gaze</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
+          <declname>crops</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &amp;</type>
+          <declname>out_gaze_dir_cv</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="43" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="96" bodyend="184"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a90a87379c8b415212f8abc4349386087" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::ORTGazeModel::set_config</definition>
+        <argsstring>(const PipelineConfig &amp;cfg) override</argsstring>
+        <name>set_config</name>
+        <qualifiedname>Gaze::ORTGazeModel::set_config</qualifiedname>
+        <reimplements refid="class_gaze_1_1_gaze_model_1a128e54ad723e438c2840b18d83e5b902">set_config</reimplements>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
+          <declname>cfg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="44" column="22" bodyfile="src/native/ort_gaze_model.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::GazeModel</label>
+        <link refid="class_gaze_1_1_gaze_model"/>
+      </node>
+      <node id="1">
+        <label>Gaze::ORTGazeModel</label>
+        <link refid="class_gaze_1_1_o_r_t_gaze_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::GazeModel</label>
+        <link refid="class_gaze_1_1_gaze_model"/>
+      </node>
+      <node id="1">
+        <label>Gaze::ORTGazeModel</label>
+        <link refid="class_gaze_1_1_o_r_t_gaze_model"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/native/ort_gaze_model.hpp" line="19" column="5" bodyfile="src/native/ort_gaze_model.hpp" bodystart="20" bodyend="45"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1adaea253d279af97a43636d10f43cea57" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>config</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a8baef8f34356e926e1b4649092352dc3" prot="public" virt="virtual"><scope>Gaze::ORTGazeModel</scope><name>estimate_raw_gaze</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a3e605a670506add0f7a4b4aa916d5060" prot="public" virt="virtual"><scope>Gaze::ORTGazeModel</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a658f8e289bd38928ca1adb620ff03005" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>input_names</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a72fbc5414f8b362b17dd491760b5ec2d" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>load_from_buffer</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a04fcd9f13cd8f5af2840e09386deb10e" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>memory_info</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a18c92c0859a9adc1b92d14e2dd38ecdb" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>model_buffer</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a386f31f7497825f384b5e0810cfed248" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>model_path</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1abb79047badbd7ab8ce5c621d8711e879" prot="public" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>ORTGazeModel</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1ac161a5ba84b50679276dce4d511438ef" prot="public" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>ORTGazeModel</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1ad07c4803d77b91af848e81f4cfa2a851" prot="public" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>ORTGazeModel</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1ab13eab164a52e50cbdc25f159c05606b" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>output_names</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a6fcb187332769b4c79a523bcef7d2591" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>preprocess_eye_crop</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a592b15277ef56e5bccc9bb4cb8ee4056" prot="private" virt="non-virtual"><scope>Gaze::ORTGazeModel</scope><name>session</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1a90a87379c8b415212f8abc4349386087" prot="public" virt="virtual"><scope>Gaze::ORTGazeModel</scope><name>set_config</name></member>
+      <member refid="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" prot="public" virt="virtual"><scope>Gaze::ORTGazeModel</scope><name>~GazeModel</name></member>
+      <member refid="class_gaze_1_1_o_r_t_gaze_model_1ac5e0e7134c4e97b8d89b3adfee344da4" prot="public" virt="virtual"><scope>Gaze::ORTGazeModel</scope><name>~ORTGazeModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

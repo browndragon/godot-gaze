@@ -5,7 +5,7 @@
 	<tutorials></tutorials>
 	<methods>
 		<method name="get_calibration">
-			<return type="Ref&lt; GazeDeviceCalibration &gt;"></return>
+			<return type="Ref&lt; DeviceCalibration &gt;"></return>
 			<description></description>
 		</method>
 	</methods>

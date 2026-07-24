@@ -26,31 +26,6 @@ var NAVTREE =
 [
   [ "Godot Gaze", "index.html", [
     [ "godot-gaze", "index.html", "index" ],
-    [ "Gaze Tracking Physical Geometry &amp; Projection Model", "md_docs_2gaze__math__physical__model.html", [
-      [ "1. Coordinate Systems", "md_docs_2gaze__math__physical__model.html#autotoc_md14", [
-        [ "OpenCV Camera Space", "md_docs_2gaze__math__physical__model.html#autotoc_md15", null ],
-        [ "OpenCV Face Space", "md_docs_2gaze__math__physical__model.html#autotoc_md16", null ],
-        [ "GodotGaze Camera Space (Standard Camera Space)", "md_docs_2gaze__math__physical__model.html#autotoc_md17", null ],
-        [ "GodotGaze Face Space (Face Space)", "md_docs_2gaze__math__physical__model.html#autotoc_md18", null ],
-        [ "1.5. Transformation between Spaces", "md_docs_2gaze__math__physical__model.html#autotoc_md19", null ],
-        [ "Physical Display Space (Monitor Local Space)", "md_docs_2gaze__math__physical__model.html#autotoc_md20", null ]
-      ] ],
-      [ "2. Camera-to-Display Transformation", "md_docs_2gaze__math__physical__model.html#autotoc_md22", null ],
-      [ "3. 3D Ray-Plane Intersection", "md_docs_2gaze__math__physical__model.html#autotoc_md24", null ],
-      [ "4. Monitor-to-Viewport Pixel Mapping", "md_docs_2gaze__math__physical__model.html#autotoc_md26", [
-        [ "Viewport Localization", "md_docs_2gaze__math__physical__model.html#autotoc_md27", null ]
-      ] ],
-      [ "5. Calibration &amp; Error Correction", "md_docs_2gaze__math__physical__model.html#autotoc_md29", [
-        [ "3D Spherical Angular Calibration", "md_docs_2gaze__math__physical__model.html#autotoc_md30", null ],
-        [ "2D Pixel-Space Calibration", "md_docs_2gaze__math__physical__model.html#autotoc_md31", null ]
-      ] ],
-      [ "6. Real-Time Depth Triangulation (Z Engine)", "md_docs_2gaze__math__physical__model.html#autotoc_md33", null ],
-      [ "7. OpenVINO Gaze Estimation Model (ADAS-0002) Conventions", "md_docs_2gaze__math__physical__model.html#autotoc_md35", [
-        [ "Input Feature Preprocessing", "md_docs_2gaze__math__physical__model.html#autotoc_md36", null ],
-        [ "Output Vector Mapping", "md_docs_2gaze__math__physical__model.html#autotoc_md37", null ]
-      ] ],
-      [ "8. Pipeline Configurations (GazePipelineConfig)", "md_docs_2gaze__math__physical__model.html#autotoc_md39", null ]
-    ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
       [ "Class Index", "classes.html", null ],

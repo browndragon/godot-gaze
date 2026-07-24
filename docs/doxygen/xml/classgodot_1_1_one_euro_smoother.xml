@@ -10,14 +10,14 @@
         <argsstring></argsstring>
         <name>min_cutoff</name>
         <qualifiedname>godot::OneEuroSmoother::min_cutoff</qualifiedname>
-        <initializer>= 1.0</initializer>
+        <initializer>= 0.25</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="25" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="25" bodyend="-1"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="28" column="16" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_one_euro_smoother_1a8d333ea987add402ca3c18cc9fa9d14e" prot="private" static="no" mutable="no">
         <type>double</type>
@@ -25,14 +25,14 @@
         <argsstring></argsstring>
         <name>beta</name>
         <qualifiedname>godot::OneEuroSmoother::beta</qualifiedname>
-        <initializer>= 0.01</initializer>
+        <initializer>= 0.05</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="26" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="26" bodyend="-1"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="29" column="16" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_one_euro_smoother_1ac9d4e86796064fe6ef38c8e0f59a1a1a" prot="private" static="no" mutable="no">
         <type>double</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="27" column="12" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="27" bodyend="-1"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="30" column="16" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -69,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="22" column="5"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="25" column="9"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="30" column="17" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="28" bodyend="39"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="33" column="21" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="28" bodyend="39"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -101,7 +101,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="33" column="5" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="41" bodyend="41"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="36" column="9" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="41" bodyend="41"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a5728016d6f2cdc84edc536fcca1b2c3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -115,7 +115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="34" column="13" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="43" bodyend="43"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="37" column="17" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a030c36dec2ad83879c24522665afaf22" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Array</type>
@@ -130,7 +130,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="36" column="19" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="45" bodyend="65"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="39" column="23" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="45" bodyend="65"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a4e49ed16bcd81ad7aa388eea3011ed64" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Variant</type>
@@ -157,7 +157,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="37" column="21" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="67" bodyend="97"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="40" column="25" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="67" bodyend="97"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a6b102e2e6cd0e722ed6cadf0b2d1a663" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -175,7 +175,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="39" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="99" bodyend="99"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="42" column="14" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="99" bodyend="99"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1ad65d1672b477a99b45efeea243f576f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -189,7 +189,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="40" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="100" bodyend="100"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="43" column="16" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="100" bodyend="100"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a394bfd4e9c6f1261480946328466779b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -207,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="42" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="102" bodyend="102"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="45" column="14" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="102" bodyend="102"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1aa9827dc5d4841bd633a2d1df0bad8db7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -221,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="43" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="103" bodyend="103"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="46" column="16" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="103" bodyend="103"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1af4f7ec165937d1ac268303b756d30eca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -239,7 +239,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="45" column="10" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="105" bodyend="105"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="48" column="14" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="105" bodyend="105"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_one_euro_smoother_1a44ec1f9eb6656413474a931abb48f74a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -253,7 +253,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/one_euro_smoother.hpp" line="46" column="12" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="106" bodyend="106"/>
+        <location file="src/godot/one_euro_smoother.hpp" line="49" column="16" bodyfile="src/godot/one_euro_smoother.cpp" bodystart="106" bodyend="106"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -294,7 +294,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/one_euro_smoother.hpp" line="21" column="1" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="21" bodyend="47"/>
+    <location file="src/godot/one_euro_smoother.hpp" line="23" column="5" bodyfile="src/godot/one_euro_smoother.hpp" bodystart="24" bodyend="50"/>
     <listofallmembers>
       <member refid="classgodot_1_1_one_euro_smoother_1adae64d3dd3e92496ea7acdf0ecd817fd" prot="protected" virt="non-virtual"><scope>godot::OneEuroSmoother</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_one_euro_smoother_1a030c36dec2ad83879c24522665afaf22" prot="public" virt="virtual"><scope>godot::OneEuroSmoother</scope><name>_smoother_init</name></member>

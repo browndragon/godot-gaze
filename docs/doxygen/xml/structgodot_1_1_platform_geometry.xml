@@ -3,36 +3,6 @@
   <compounddef id="structgodot_1_1_platform_geometry" kind="struct" language="C++" prot="public">
     <compoundname>godot::PlatformGeometry</compoundname>
     <sectiondef kind="public-attrib">
-      <memberdef kind="variable" id="structgodot_1_1_platform_geometry_1a2d15fa0f5d88dd323318509a5d354064" prot="public" static="no" mutable="no">
-        <type>Vector2i</type>
-        <definition>Vector2i godot::PlatformGeometry::screen_size_lpix</definition>
-        <argsstring></argsstring>
-        <name>screen_size_lpix</name>
-        <qualifiedname>godot::PlatformGeometry::screen_size_lpix</qualifiedname>
-        <initializer>= Vector2i(-1, -1)</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="44" column="14" bodyfile="src/godot/gaze_tracker.hpp" bodystart="44" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="structgodot_1_1_platform_geometry_1aa399231e484a9dbe2507d9cb8232ba1d" prot="public" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::PlatformGeometry::screen_size_mm</definition>
-        <argsstring></argsstring>
-        <name>screen_size_mm</name>
-        <qualifiedname>godot::PlatformGeometry::screen_size_mm</qualifiedname>
-        <initializer>= Vector2(-1.0, -1.0)</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="47" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="47" bodyend="-1"/>
-      </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_platform_geometry_1a6fcbc2f0561e6632e6467ff14a555a8d" prot="public" static="no" mutable="no">
         <type>Vector2</type>
         <definition>Vector2 godot::PlatformGeometry::window_position_px</definition>
@@ -46,38 +16,15 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="50" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="50" bodyend="-1"/>
-      </memberdef>
-    </sectiondef>
-    <sectiondef kind="public-func">
-      <memberdef kind="function" id="structgodot_1_1_platform_geometry_1a52a28bb2edf47d5dbbe63cbadd30fed1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::PlatformGeometry::merge_overrides</definition>
-        <argsstring>(const PlatformGeometry &amp;overrides)</argsstring>
-        <name>merge_overrides</name>
-        <qualifiedname>godot::PlatformGeometry::merge_overrides</qualifiedname>
-        <param>
-          <type>const <ref refid="structgodot_1_1_platform_geometry" kindref="compound">PlatformGeometry</ref> &amp;</type>
-          <declname>overrides</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="52" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="52" bodyend="59"/>
+        <location file="src/godot/gaze_tracker.hpp" line="43" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/godot/gaze_tracker.hpp" line="42" column="1" bodyfile="src/godot/gaze_tracker.hpp" bodystart="42" bodyend="60"/>
+    <location file="src/godot/gaze_tracker.hpp" line="41" column="1" bodyfile="src/godot/gaze_tracker.hpp" bodystart="41" bodyend="44"/>
     <listofallmembers>
-      <member refid="structgodot_1_1_platform_geometry_1a52a28bb2edf47d5dbbe63cbadd30fed1" prot="public" virt="non-virtual"><scope>godot::PlatformGeometry</scope><name>merge_overrides</name></member>
-      <member refid="structgodot_1_1_platform_geometry_1a2d15fa0f5d88dd323318509a5d354064" prot="public" virt="non-virtual"><scope>godot::PlatformGeometry</scope><name>screen_size_lpix</name></member>
-      <member refid="structgodot_1_1_platform_geometry_1aa399231e484a9dbe2507d9cb8232ba1d" prot="public" virt="non-virtual"><scope>godot::PlatformGeometry</scope><name>screen_size_mm</name></member>
       <member refid="structgodot_1_1_platform_geometry_1a6fcbc2f0561e6632e6467ff14a555a8d" prot="public" virt="non-virtual"><scope>godot::PlatformGeometry</scope><name>window_position_px</name></member>
     </listofallmembers>
   </compounddef>

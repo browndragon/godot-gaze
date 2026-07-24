@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl</compoundname>
+    <innerclass refid="structgodot_1_1_gaze_server_impl_1_1_display_info" prot="public">godot::GazeServerImpl::DisplayInfo</innerclass>
+    <innerclass refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" prot="public">godot::GazeServerImpl::CameraInfo</innerclass>
+    <innerclass refid="structgodot_1_1_gaze_server_impl_1_1_face_info" prot="public">godot::GazeServerImpl::FaceInfo</innerclass>
+    <innerclass refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" prot="public">godot::GazeServerImpl::EyeInfo</innerclass>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1aa040b74c76abadc1d416452529302059" prot="public" static="no" mutable="no">
+        <type>RID_PtrOwner&lt; <ref refid="structgodot_1_1_gaze_server_impl_1_1_display_info" kindref="compound">DisplayInfo</ref>, true &gt;</type>
+        <definition>RID_PtrOwner&lt;DisplayInfo, true&gt; godot::GazeServerImpl::display_owner</definition>
+        <argsstring></argsstring>
+        <name>display_owner</name>
+        <qualifiedname>godot::GazeServerImpl::display_owner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="78" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1ac317f86d96d341a5e0757f4f88bd3332" prot="public" static="no" mutable="no">
+        <type>RID_PtrOwner&lt; <ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">CameraInfo</ref>, true &gt;</type>
+        <definition>RID_PtrOwner&lt;CameraInfo, true&gt; godot::GazeServerImpl::camera_owner</definition>
+        <argsstring></argsstring>
+        <name>camera_owner</name>
+        <qualifiedname>godot::GazeServerImpl::camera_owner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="79" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a54744e507d0218d9db0cb44a31dd29a0" prot="public" static="no" mutable="no">
+        <type>RID_PtrOwner&lt; <ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">FaceInfo</ref>, true &gt;</type>
+        <definition>RID_PtrOwner&lt;FaceInfo, true&gt; godot::GazeServerImpl::face_owner</definition>
+        <argsstring></argsstring>
+        <name>face_owner</name>
+        <qualifiedname>godot::GazeServerImpl::face_owner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="80" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a72841e87008a003bb86bc0311c3bcb78" prot="public" static="no" mutable="no">
+        <type>RID_PtrOwner&lt; <ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">EyeInfo</ref>, true &gt;</type>
+        <definition>RID_PtrOwner&lt;EyeInfo, true&gt; godot::GazeServerImpl::eye_owner</definition>
+        <argsstring></argsstring>
+        <name>eye_owner</name>
+        <qualifiedname>godot::GazeServerImpl::eye_owner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="81" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a8770a278d7b98f1f467cbcb23773d90c" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; RID &gt;</type>
+        <definition>std::vector&lt;RID&gt; godot::GazeServerImpl::allocated_displays</definition>
+        <argsstring></argsstring>
+        <name>allocated_displays</name>
+        <qualifiedname>godot::GazeServerImpl::allocated_displays</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="83" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1abb9b499a4789c21d6d7798de79704b94" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; RID &gt;</type>
+        <definition>std::vector&lt;RID&gt; godot::GazeServerImpl::allocated_cameras</definition>
+        <argsstring></argsstring>
+        <name>allocated_cameras</name>
+        <qualifiedname>godot::GazeServerImpl::allocated_cameras</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="84" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1ad0bfdafc962326b15b3ec569823f11e9" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; RID &gt;</type>
+        <definition>std::vector&lt;RID&gt; godot::GazeServerImpl::allocated_faces</definition>
+        <argsstring></argsstring>
+        <name>allocated_faces</name>
+        <qualifiedname>godot::GazeServerImpl::allocated_faces</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="85" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a8c01a1bba0f57b1f61405e5282707fa9" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; RID &gt;</type>
+        <definition>std::vector&lt;RID&gt; godot::GazeServerImpl::allocated_eyes</definition>
+        <argsstring></argsstring>
+        <name>allocated_eyes</name>
+        <qualifiedname>godot::GazeServerImpl::allocated_eyes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="86" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="structgodot_1_1_gaze_server_impl_1a28e8c829e4fbd7b3ca60e1194807c79c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeServerImpl::~GazeServerImpl</definition>
+        <argsstring>()</argsstring>
+        <name>~GazeServerImpl</name>
+        <qualifiedname>godot::GazeServerImpl::~GazeServerImpl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="88" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="88" bodyend="120"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="25" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="25" bodyend="121"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1abb9b499a4789c21d6d7798de79704b94" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>allocated_cameras</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1a8770a278d7b98f1f467cbcb23773d90c" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>allocated_displays</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1a8c01a1bba0f57b1f61405e5282707fa9" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>allocated_eyes</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1ad0bfdafc962326b15b3ec569823f11e9" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>allocated_faces</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1ac317f86d96d341a5e0757f4f88bd3332" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>camera_owner</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1aa040b74c76abadc1d416452529302059" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>display_owner</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1a72841e87008a003bb86bc0311c3bcb78" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>eye_owner</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1a54744e507d0218d9db0cb44a31dd29a0" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>face_owner</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1a28e8c829e4fbd7b3ca60e1194807c79c" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>~GazeServerImpl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

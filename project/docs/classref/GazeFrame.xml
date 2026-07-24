@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeFrame" inherits="Object">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="initialize_buffers">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="post_process">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="get_left_eye_crop">
+			<return type="Ref&lt; Image &gt;"></return>
+			<description></description>
+		</method>
+		<method name="get_right_eye_crop">
+			<return type="Ref&lt; Image &gt;"></return>
+			<description></description>
+		</method>
+		<method name="get_full_crop">
+			<return type="Ref&lt; Image &gt;"></return>
+			<description></description>
+		</method>
+		<method name="get_left_eye_buffer_ptr">
+			<return type="uint8_t *"></return>
+			<description></description>
+		</method>
+		<method name="get_right_eye_buffer_ptr">
+			<return type="uint8_t *"></return>
+			<description></description>
+		</method>
+		<method name="get_full_crop_buffer_ptr">
+			<return type="uint8_t *"></return>
+			<description></description>
+		</method>
+		<method name="get_full_crop_bytes_size">
+			<return type="size_t"></return>
+			<description></description>
+		</method>
+		<method name="resize_full_crop">
+			<return type="void"></return>
+			<param index="0" name="width" type="int"></param>
+			<param index="1" name="height" type="int"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_size">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2i"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_size">
+			<return type="Vector2i"></return>
+			<description></description>
+		</method>
+		<method name="set_timestamp">
+			<return type="void"></return>
+			<param index="0" name="t" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_timestamp">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_face_detected">
+			<return type="void"></return>
+			<param index="0" name="d" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_face_detected">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_success">
+			<return type="void"></return>
+			<param index="0" name="s" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_success">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_head_translation">
+			<return type="void"></return>
+			<param index="0" name="t" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_head_translation">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_head_rotation">
+			<return type="void"></return>
+			<param index="0" name="r" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_head_rotation">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_origin">
+			<return type="void"></return>
+			<param index="0" name="o" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_origin">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_direction">
+			<return type="void"></return>
+			<param index="0" name="d" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_direction">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

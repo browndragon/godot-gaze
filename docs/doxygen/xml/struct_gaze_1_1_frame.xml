@@ -9,14 +9,13 @@
         <argsstring></argsstring>
         <name>width</name>
         <qualifiedname>Gaze::Frame::width</qualifiedname>
-        <initializer>= 0</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/camera_interface.hpp" line="14" column="9" bodyfile="src/core/camera_interface.hpp" bodystart="14" bodyend="-1"/>
+        <location file="src/core/camera_interface.hpp" line="18" column="13" bodyfile="src/core/camera_interface.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_frame_1a551d5f6f9085dde4b88e74977a2ea1a3" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -24,29 +23,27 @@
         <argsstring></argsstring>
         <name>height</name>
         <qualifiedname>Gaze::Frame::height</qualifiedname>
-        <initializer>= 0</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/camera_interface.hpp" line="15" column="9" bodyfile="src/core/camera_interface.hpp" bodystart="15" bodyend="-1"/>
+        <location file="src/core/camera_interface.hpp" line="19" column="13" bodyfile="src/core/camera_interface.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_frame_1aa94121f8947a28db24eeee803a7ba634" prot="public" static="no" mutable="no">
-        <type>const unsigned char *</type>
-        <definition>const unsigned char* Gaze::Frame::data</definition>
+      <memberdef kind="variable" id="struct_gaze_1_1_frame_1a14faf80d77df11b314a262e5e11cb487" prot="public" static="no" mutable="no">
+        <type>const uint8_t *</type>
+        <definition>const uint8_t* Gaze::Frame::data</definition>
         <argsstring></argsstring>
         <name>data</name>
         <qualifiedname>Gaze::Frame::data</qualifiedname>
-        <initializer>= nullptr</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/camera_interface.hpp" line="16" column="25" bodyfile="src/core/camera_interface.hpp" bodystart="16" bodyend="-1"/>
+        <location file="src/core/camera_interface.hpp" line="20" column="23" bodyfile="src/core/camera_interface.hpp" bodystart="20" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_frame_1a83851d199b716cf3dfe266db736f15e0" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -54,23 +51,39 @@
         <argsstring></argsstring>
         <name>timestamp</name>
         <qualifiedname>Gaze::Frame::timestamp</qualifiedname>
-        <initializer>= 0.0</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/camera_interface.hpp" line="17" column="12" bodyfile="src/core/camera_interface.hpp" bodystart="17" bodyend="-1"/>
+        <location file="src/core/camera_interface.hpp" line="21" column="16" bodyfile="src/core/camera_interface.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_frame_1ae56903d53a9c811da3c2890b269bbb46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Frame::Frame</definition>
+        <argsstring>()=default</argsstring>
+        <name>Frame</name>
+        <qualifiedname>Gaze::Frame::Frame</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/camera_interface.hpp" line="23" column="9"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/camera_interface.hpp" line="13" column="1" bodyfile="src/core/camera_interface.hpp" bodystart="13" bodyend="18"/>
+    <location file="src/core/camera_interface.hpp" line="16" column="5" bodyfile="src/core/camera_interface.hpp" bodystart="17" bodyend="24"/>
     <listofallmembers>
-      <member refid="struct_gaze_1_1_frame_1aa94121f8947a28db24eeee803a7ba634" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>data</name></member>
+      <member refid="struct_gaze_1_1_frame_1a14faf80d77df11b314a262e5e11cb487" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>data</name></member>
+      <member refid="struct_gaze_1_1_frame_1ae56903d53a9c811da3c2890b269bbb46" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>Frame</name></member>
       <member refid="struct_gaze_1_1_frame_1a551d5f6f9085dde4b88e74977a2ea1a3" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>height</name></member>
       <member refid="struct_gaze_1_1_frame_1a83851d199b716cf3dfe266db736f15e0" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>timestamp</name></member>
       <member refid="struct_gaze_1_1_frame_1ab21e35cd338702f25865adf931e637a5" prot="public" virt="non-virtual"><scope>Gaze::Frame</scope><name>width</name></member>

@@ -149,13 +149,13 @@ void&#160;</td><td class="memItemRight"><b>set_calibration</b> (const <a class="
 <tr class="memitem:a65c19d9d5d3670f775d3a9a7fc69c229" id="r_a65c19d9d5d3670f775d3a9a7fc69c229"><td class="memItemLeft"><a id="a65c19d9d5d3670f775d3a9a7fc69c229" name="a65c19d9d5d3670f775d3a9a7fc69c229"></a>
 <a class="el" href="struct_gaze_1_1_gaze_calibration.html">GazeCalibration</a>&#160;</td><td class="memItemRight"><b>get_calibration</b> () const</td></tr>
 <tr class="memitem:abf2cc16a956e2243f8a3f1d07d59c45f" id="r_abf2cc16a956e2243f8a3f1d07d59c45f"><td class="memItemLeft"><a id="abf2cc16a956e2243f8a3f1d07d59c45f" name="abf2cc16a956e2243f8a3f1d07d59c45f"></a>
-void&#160;</td><td class="memItemRight"><b>set_screen_size_pixels</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;size)</td></tr>
+void&#160;</td><td class="memItemRight"><b>set_screen_size_pixels</b> (const GazeVector2 &amp;size)</td></tr>
 <tr class="memitem:ae0f64afb19d1f4d0811a7f801e32dfba" id="r_ae0f64afb19d1f4d0811a7f801e32dfba"><td class="memItemLeft"><a id="ae0f64afb19d1f4d0811a7f801e32dfba" name="ae0f64afb19d1f4d0811a7f801e32dfba"></a>
-<a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a>&#160;</td><td class="memItemRight"><b>get_screen_size_pixels</b> () const</td></tr>
+GazeVector2&#160;</td><td class="memItemRight"><b>get_screen_size_pixels</b> () const</td></tr>
 <tr class="memitem:afef2d8d4559f9b8cc3ef423897a3b03e" id="r_afef2d8d4559f9b8cc3ef423897a3b03e"><td class="memItemLeft"><a id="afef2d8d4559f9b8cc3ef423897a3b03e" name="afef2d8d4559f9b8cc3ef423897a3b03e"></a>
-void&#160;</td><td class="memItemRight"><b>set_screen_size_mm</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;size)</td></tr>
+void&#160;</td><td class="memItemRight"><b>set_screen_size_mm</b> (const GazeVector2 &amp;size)</td></tr>
 <tr class="memitem:a3b8d0f18b4d47f765cc3d371d8bfa456" id="r_a3b8d0f18b4d47f765cc3d371d8bfa456"><td class="memItemLeft"><a id="a3b8d0f18b4d47f765cc3d371d8bfa456" name="a3b8d0f18b4d47f765cc3d371d8bfa456"></a>
-<a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a>&#160;</td><td class="memItemRight"><b>get_screen_size_mm</b> () const</td></tr>
+GazeVector2&#160;</td><td class="memItemRight"><b>get_screen_size_mm</b> () const</td></tr>
 <tr class="memitem:aae392df178118a39b5ea9f68585eae12" id="r_aae392df178118a39b5ea9f68585eae12"><td class="memItemLeft"><a id="aae392df178118a39b5ea9f68585eae12" name="aae392df178118a39b5ea9f68585eae12"></a>
 void&#160;</td><td class="memItemRight"><b>set_camera_focal_length_px</b> (double f)</td></tr>
 <tr class="memitem:ae678ec86b05c2be708d5ac65fbc9ee6c" id="r_ae678ec86b05c2be708d5ac65fbc9ee6c"><td class="memItemLeft"><a id="ae678ec86b05c2be708d5ac65fbc9ee6c" name="ae678ec86b05c2be708d5ac65fbc9ee6c"></a>
@@ -163,21 +163,13 @@ double&#160;</td><td class="memItemRight"><b>get_camera_focal_length_px</b> () c
 <tr class="memitem:afd883cbd9fac343f99f6c385fc54c8f1" id="r_afd883cbd9fac343f99f6c385fc54c8f1"><td class="memItemLeft"><a id="afd883cbd9fac343f99f6c385fc54c8f1" name="afd883cbd9fac343f99f6c385fc54c8f1"></a>
 double&#160;</td><td class="memItemRight"><b>estimate_depth_z</b> (double eye_distance_px, double ipd_mm=63.0) const</td></tr>
 <tr class="memitem:a013fb345bf2fca1f5441330d1dde6ba6" id="r_a013fb345bf2fca1f5441330d1dde6ba6"><td class="memItemLeft"><a id="a013fb345bf2fca1f5441330d1dde6ba6" name="a013fb345bf2fca1f5441330d1dde6ba6"></a>
-<a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a>&#160;</td><td class="memItemRight"><b>pixel_to_millimeter</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;pixel) const</td></tr>
+GazeVector2&#160;</td><td class="memItemRight"><b>pixel_to_millimeter</b> (const GazeVector2 &amp;pixel) const</td></tr>
 <tr class="memitem:a1e813f55c0cfb6c5670a61efb727c280" id="r_a1e813f55c0cfb6c5670a61efb727c280"><td class="memItemLeft"><a id="a1e813f55c0cfb6c5670a61efb727c280" name="a1e813f55c0cfb6c5670a61efb727c280"></a>
-<a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>screen_mm_to_camera_space</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;screen_mm) const</td></tr>
+<a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>screen_mm_to_camera_space</b> (const GazeVector2 &amp;screen_mm) const</td></tr>
 <tr class="memitem:af9ebabfc0580663439806e1f681d2abd" id="r_af9ebabfc0580663439806e1f681d2abd"><td class="memItemLeft"><a id="af9ebabfc0580663439806e1f681d2abd" name="af9ebabfc0580663439806e1f681d2abd"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>apply_3d_bias</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir) const</td></tr>
 <tr class="memitem:ad399492874b1f41427e083e64e2e6d76" id="r_ad399492874b1f41427e083e64e2e6d76"><td class="memItemLeft"><a id="ad399492874b1f41427e083e64e2e6d76" name="ad399492874b1f41427e083e64e2e6d76"></a>
-bool&#160;</td><td class="memItemRight"><b>project_gaze</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;gaze_origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir_cam, <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;out_pixel) const</td></tr>
-<tr class="memitem:ac9fdaa4122c965d6eec0813d6aad1ab4" id="r_ac9fdaa4122c965d6eec0813d6aad1ab4"><td class="memItemLeft"><a id="ac9fdaa4122c965d6eec0813d6aad1ab4" name="ac9fdaa4122c965d6eec0813d6aad1ab4"></a>
-bool&#160;</td><td class="memItemRight"><b>calibrate_3d_bias</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;gaze_origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;target_pixel, <a class="el" href="struct_gaze_1_1_gaze_calibration.html">GazeCalibration</a> &amp;out_calib) const</td></tr>
-<tr class="memitem:a4228b502633393c1d1a36667a71e6f19" id="r_a4228b502633393c1d1a36667a71e6f19"><td class="memItemLeft"><a id="a4228b502633393c1d1a36667a71e6f19" name="a4228b502633393c1d1a36667a71e6f19"></a>
-bool&#160;</td><td class="memItemRight"><b>calibrate_2d_bias</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;gaze_origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> &amp;target_pixel, <a class="el" href="struct_gaze_1_1_gaze_calibration.html">GazeCalibration</a> &amp;out_calib) const</td></tr>
-<tr class="memitem:a1ba8797b8d5cf36577b083a2f6257faf" id="r_a1ba8797b8d5cf36577b083a2f6257faf"><td class="memItemLeft"><a id="a1ba8797b8d5cf36577b083a2f6257faf" name="a1ba8797b8d5cf36577b083a2f6257faf"></a>
-<a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>opencv_to_camera_space</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;v_cv) const</td></tr>
-<tr class="memitem:ad01fde35a469f379f2288e7f85d8d93a" id="r_ad01fde35a469f379f2288e7f85d8d93a"><td class="memItemLeft"><a id="ad01fde35a469f379f2288e7f85d8d93a" name="ad01fde35a469f379f2288e7f85d8d93a"></a>
-<a class="el" href="struct_gaze_1_1_gaze_transform3_d.html">GazeTransform3D</a>&#160;</td><td class="memItemRight"><b>get_head_transform_in_camera_space</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;opencv_translation, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;opencv_rvec) const</td></tr>
+bool&#160;</td><td class="memItemRight"><b>project_gaze</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;gaze_origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir_cam, GazeVector2 &amp;out_pixel) const</td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/core/<a class="el" href="projection__engine_8hpp_source.html">projection_engine.hpp</a></li>

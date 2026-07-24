@@ -12,11 +12,6 @@
 			<return type="void"></return>
 			<description></description>
 		</method>
-		<method name="grab_frame">
-			<return type="bool"></return>
-			<param index="0" name="out_frame" type="Gaze::Frame &amp;"></param>
-			<description></description>
-		</method>
 		<method name="get_last_frame">
 			<return type="Ref&lt; Image &gt;"></return>
 			<description></description>
@@ -43,6 +38,19 @@
 		</method>
 		<method name="get_focal_length">
 			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_fov">
+			<return type="void"></return>
+			<param index="0" name="fov" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_fov">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_rid">
+			<return type="RID"></return>
 			<description></description>
 		</method>
 	</methods>

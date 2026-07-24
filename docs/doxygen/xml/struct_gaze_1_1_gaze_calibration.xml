@@ -2,21 +2,22 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="struct_gaze_1_1_gaze_calibration" kind="struct" language="C++" prot="public">
     <compoundname>Gaze::GazeCalibration</compoundname>
+    <includes refid="gaze__calibration_8hpp" local="no">gaze_calibration.hpp</includes>
     <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1a86a3a92c7dcb19e42b8c3f5679cfc7b1" prot="public" static="no" mutable="no">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <type>GazeVector2</type>
         <definition>GazeVector2 Gaze::GazeCalibration::pixel_size_mm</definition>
         <argsstring></argsstring>
         <name>pixel_size_mm</name>
         <qualifiedname>Gaze::GazeCalibration::pixel_size_mm</qualifiedname>
-        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>(0.25, 0.25)</initializer>
+        <initializer>= GazeVector2(0.25, 0.25)</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="13" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="13" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="19" column="21" bodyfile="src/core/gaze_calibration.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1ac85d548abd4de3f112751f36d6107507" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -31,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="14" column="17" bodyfile="src/core/gaze_calibration.hpp" bodystart="14" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="22" column="21" bodyfile="src/core/gaze_calibration.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1a6cf9a5b7c22541dbf82a1e3aec3617c5" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -46,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="15" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="15" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="25" column="16" bodyfile="src/core/gaze_calibration.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1ae48aeb18dab1d0cd7f68019768033a04" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -61,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="19" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="19" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="29" column="16" bodyfile="src/core/gaze_calibration.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1af97380e2478cbb1db77d0d7d7f8ce683" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -76,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="20" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="20" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="30" column="16" bodyfile="src/core/gaze_calibration.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1ad3deb3e2150993c57fdff2a968ce2f8c" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -91,7 +92,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="23" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="23" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="33" column="16" bodyfile="src/core/gaze_calibration.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1a657f078970c25671a261813a481fcdce" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -106,37 +107,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="24" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="24" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1a7e8f6f68b09bb1f170615d60797fd3a7" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double Gaze::GazeCalibration::bias_pixel_x</definition>
-        <argsstring></argsstring>
-        <name>bias_pixel_x</name>
-        <qualifiedname>Gaze::GazeCalibration::bias_pixel_x</qualifiedname>
-        <initializer>= 0.0</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="28" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_gaze_calibration_1ae2072eb308cae11d043baf920b47468b" prot="public" static="no" mutable="no">
-        <type>double</type>
-        <definition>double Gaze::GazeCalibration::bias_pixel_y</definition>
-        <argsstring></argsstring>
-        <name>bias_pixel_y</name>
-        <qualifiedname>Gaze::GazeCalibration::bias_pixel_y</qualifiedname>
-        <initializer>= 0.0</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="29" column="12" bodyfile="src/core/gaze_calibration.hpp" bodystart="29" bodyend="-1"/>
+        <location file="src/core/gaze_calibration.hpp" line="34" column="16" bodyfile="src/core/gaze_calibration.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -152,12 +123,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="31" column="5"/>
+        <location file="src/core/gaze_calibration.hpp" line="36" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="struct_gaze_1_1_gaze_calibration_1a7b23e44d46b5c0a04fda0afbbdf87b10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_calibration_1aac3f03706e28027e667abf349af35eaa" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
         <definition>Gaze::GazeCalibration::GazeCalibration</definition>
-        <argsstring>(double pitch, double yaw, double px, double py)</argsstring>
+        <argsstring>(double pitch, double yaw)</argsstring>
         <name>GazeCalibration</name>
         <qualifiedname>Gaze::GazeCalibration::GazeCalibration</qualifiedname>
         <param>
@@ -168,24 +139,17 @@
           <type>double</type>
           <declname>yaw</declname>
         </param>
-        <param>
-          <type>double</type>
-          <declname>px</declname>
-        </param>
-        <param>
-          <type>double</type>
-          <declname>py</declname>
-        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration.hpp" line="32" column="5" bodyfile="src/core/gaze_calibration.hpp" bodystart="32" bodyend="33"/>
+        <location file="src/core/gaze_calibration.hpp" line="37" column="9" bodyfile="src/core/gaze_calibration.hpp" bodystart="37" bodyend="38"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
+<para>Calibration parameters for physical monitors and user biological gaze biases. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
@@ -201,24 +165,22 @@
         </childnode>
       </node>
       <node id="2">
-        <label>Gaze::GazeVector2</label>
-        <link refid="struct_gaze_1_1_gaze_vector2"/>
+        <label>Gaze::GazeVector2_64f</label>
+        <link refid="struct_gaze_1_1_gaze_vector2__64f"/>
       </node>
       <node id="3">
         <label>Gaze::GazeVector3</label>
         <link refid="struct_gaze_1_1_gaze_vector3"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/gaze_calibration.hpp" line="11" column="1" bodyfile="src/core/gaze_calibration.hpp" bodystart="11" bodyend="34"/>
+    <location file="src/core/gaze_calibration.hpp" line="16" column="5" bodyfile="src/core/gaze_calibration.hpp" bodystart="17" bodyend="39"/>
     <listofallmembers>
       <member refid="struct_gaze_1_1_gaze_calibration_1ae48aeb18dab1d0cd7f68019768033a04" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>bias_pitch</name></member>
-      <member refid="struct_gaze_1_1_gaze_calibration_1a7e8f6f68b09bb1f170615d60797fd3a7" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>bias_pixel_x</name></member>
-      <member refid="struct_gaze_1_1_gaze_calibration_1ae2072eb308cae11d043baf920b47468b" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>bias_pixel_y</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1af97380e2478cbb1db77d0d7d7f8ce683" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>bias_yaw</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1ac85d548abd4de3f112751f36d6107507" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>camera_offset</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1a6cf9a5b7c22541dbf82a1e3aec3617c5" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>camera_tilt</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1abacde24144b7f90e9668aaf5e29a5ae9" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>GazeCalibration</name></member>
-      <member refid="struct_gaze_1_1_gaze_calibration_1a7b23e44d46b5c0a04fda0afbbdf87b10" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>GazeCalibration</name></member>
+      <member refid="struct_gaze_1_1_gaze_calibration_1aac3f03706e28027e667abf349af35eaa" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>GazeCalibration</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1a86a3a92c7dcb19e42b8c3f5679cfc7b1" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>pixel_size_mm</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1a657f078970c25671a261813a481fcdce" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>scale_pitch</name></member>
       <member refid="struct_gaze_1_1_gaze_calibration_1ad3deb3e2150993c57fdff2a968ce2f8c" prot="public" virt="non-virtual"><scope>Gaze::GazeCalibration</scope><name>scale_yaw</name></member>

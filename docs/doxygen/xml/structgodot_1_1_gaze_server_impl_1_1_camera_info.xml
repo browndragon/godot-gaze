@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_camera_info" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::CameraInfo</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_camera_info_1aa1f3f203fe49c871a7ffc766ac7594dc" prot="public" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeServerImpl::CameraInfo::parent_display_rid</definition>
+        <argsstring></argsstring>
+        <name>parent_display_rid</name>
+        <qualifiedname>godot::GazeServerImpl::CameraInfo::parent_display_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="45" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a80f6665ef918c126cbff633df6b77c5b" prot="public" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServerImpl::CameraInfo::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>godot::GazeServerImpl::CameraInfo::offset</qualifiedname>
+        <initializer>= Vector3(0.0, 107.5, 0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="46" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_camera_info_1af7d9b6a039ae961027a864bb64cec321" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeServerImpl::CameraInfo::tilt</definition>
+        <argsstring></argsstring>
+        <name>tilt</name>
+        <qualifiedname>godot::GazeServerImpl::CameraInfo::tilt</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="47" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a86b6bb15ff6fe604b851ba02d2dd1772" prot="public" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeServerImpl::CameraInfo::vision_camera_rid</definition>
+        <argsstring></argsstring>
+        <name>vision_camera_rid</name>
+        <qualifiedname>godot::GazeServerImpl::CameraInfo::vision_camera_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="48" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="44" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="44" bodyend="49"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a80f6665ef918c126cbff633df6b77c5b" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>offset</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1aa1f3f203fe49c871a7ffc766ac7594dc" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>parent_display_rid</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1af7d9b6a039ae961027a864bb64cec321" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>tilt</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a86b6bb15ff6fe604b851ba02d2dd1772" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>vision_camera_rid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

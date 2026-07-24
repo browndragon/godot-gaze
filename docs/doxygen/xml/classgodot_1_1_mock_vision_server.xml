@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_mock_vision_server" kind="class" language="C++" prot="public">
+    <compoundname>godot::MockVisionServer</compoundname>
+    <basecompoundref refid="classgodot_1_1_vision_server" prot="public" virt="non-virtual">godot::VisionServer</basecompoundref>
+    <includes refid="vision__server_8hpp" local="no">vision_server.hpp</includes>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a36e6e72a35e880fc4ce94be169fd9ebe" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::MockVisionServer::GDCLASS</definition>
+        <argsstring>(MockVisionServer, VisionServer)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::MockVisionServer::GDCLASS</qualifiedname>
+        <param>
+          <type>MockVisionServer</type>
+        </param>
+        <param>
+          <type>VisionServer</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="144" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1ae1fd44afffc72c08763eedeb1f56a072" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::MockVisionServer::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::MockVisionServer::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="147" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="164" bodyend="166"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a1ccdbf4e7385c83935ae960cd86904db" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::MockVisionServer::MockVisionServer</definition>
+        <argsstring>()=default</argsstring>
+        <name>MockVisionServer</name>
+        <qualifiedname>godot::MockVisionServer::MockVisionServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="150" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a2abca97bbda4fb1b898335b0f053cf16" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::MockVisionServer::~MockVisionServer</definition>
+        <argsstring>()=default</argsstring>
+        <name>~MockVisionServer</name>
+        <qualifiedname>godot::MockVisionServer::~MockVisionServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="151" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>RID</type>
+        <definition>RID godot::MockVisionServer::camera_create</definition>
+        <argsstring>() override</argsstring>
+        <name>camera_create</name>
+        <qualifiedname>godot::MockVisionServer::camera_create</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e">camera_create</reimplements>
+        <briefdescription>
+<para>Create a new camera resource and return its unique RID. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="153" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="168" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool godot::MockVisionServer::camera_start</definition>
+        <argsstring>(RID p_camera) override</argsstring>
+        <name>camera_start</name>
+        <qualifiedname>godot::MockVisionServer::camera_start</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1a6a077be45fb502ef66adbd69a9b1baf0">camera_start</reimplements>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Start frame capture capture on the camera. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>True if started successfully, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="154" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="178" bodyend="183"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::MockVisionServer::camera_stop</definition>
+        <argsstring>(RID p_camera) override</argsstring>
+        <name>camera_stop</name>
+        <qualifiedname>godot::MockVisionServer::camera_stop</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1acfd359215cca0d1bd9c86a2832b883bc">camera_stop</reimplements>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Stop frame capture and release hardware resources. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="155" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="185" bodyend="189"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; Texture2D &gt;</type>
+        <definition>Ref&lt; Texture2D &gt; godot::MockVisionServer::get_camera_current_texture</definition>
+        <argsstring>(RID p_camera) override</argsstring>
+        <name>get_camera_current_texture</name>
+        <qualifiedname>godot::MockVisionServer::get_camera_current_texture</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8">get_camera_current_texture</reimplements>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the latest captured frame texture for Godot rendering. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="156" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="191" bodyend="195"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::MockVisionServer::camera_get_current_image</definition>
+        <argsstring>(RID p_camera) override</argsstring>
+        <name>camera_get_current_image</name>
+        <qualifiedname>godot::MockVisionServer::camera_get_current_image</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a">camera_get_current_image</reimplements>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the latest captured CPU image resource. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="157" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="197" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1acb358611cd86c171b357adbb5e6d548b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::MockVisionServer::inject_texture</definition>
+        <argsstring>(RID p_camera, const Ref&lt; Texture2D &gt; &amp;p_texture)</argsstring>
+        <name>inject_texture</name>
+        <qualifiedname>godot::MockVisionServer::inject_texture</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>const Ref&lt; Texture2D &gt; &amp;</type>
+          <declname>p_texture</declname>
+        </param>
+        <briefdescription>
+<para>Manually inject a frame texture into the mock camera. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mock camera RID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_texture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The frame texture to inject. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="164" column="10" bodyfile="src/godot/vision_server.cpp" bodystart="203" bodyend="247"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Subclass of <ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> enabling manual frame injection for unit testing and virtualization. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classgodot_1_1_mock_vision_server" kindref="compound">MockVisionServer</ref> overrides camera capture logic to return manually injected textures rather than reading from a physical webcam. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::MockVisionServer</label>
+        <link refid="classgodot_1_1_mock_vision_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>godot::VisionServer</label>
+        <link refid="classgodot_1_1_vision_server"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::MockVisionServer</label>
+        <link refid="classgodot_1_1_mock_vision_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>godot::VisionServer</label>
+        <link refid="classgodot_1_1_vision_server"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/vision_server.hpp" line="143" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="143" bodyend="165"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_mock_vision_server_1ae1fd44afffc72c08763eedeb1f56a072" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_vision_server_1ac3fa98a823c4e2f8428a6dfa5f059254" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>allocated_cameras</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_create</name></member>
+      <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_free</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_current_image</name></member>
+      <member refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_focal_length</name></member>
+      <member refid="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_fov</name></member>
+      <member refid="classgodot_1_1_vision_server_1a69edf2a62052127bad03b4dbc51ff953" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_is_preview_requested</name></member>
+      <member refid="classgodot_1_1_vision_server_1ad825a376aba1970a9d3979671effdcd8" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>camera_owner</name></member>
+      <member refid="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_set_device_id</name></member>
+      <member refid="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_set_focal_length</name></member>
+      <member refid="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_set_fov</name></member>
+      <member refid="classgodot_1_1_vision_server_1a84b9f93d216f3e83c676636293f797e0" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_set_preview_requested</name></member>
+      <member refid="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_set_resolution</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_start</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_stop</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a36e6e72a35e880fc4ce94be169fd9ebe" prot="private" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_camera_current_frame</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_camera_current_texture</name></member>
+      <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1acb358611cd86c171b357adbb5e6d548b" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>inject_texture</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a1ccdbf4e7385c83935ae960cd86904db" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>MockVisionServer</name></member>
+      <member refid="classgodot_1_1_vision_server_1af619be7bc77c62ae1f1f1b68cf9216bf" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>VisionServer</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a2abca97bbda4fb1b898335b0f053cf16" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>~MockVisionServer</name></member>
+      <member refid="classgodot_1_1_vision_server_1a2ff6ccb65696aeb1e01df8be74e21765" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>~VisionServer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

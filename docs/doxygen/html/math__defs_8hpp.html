@@ -141,30 +141,102 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('math__defs_8hp
 <p>Zero-Dependency 3D/2D Vector and Matrix Math structures.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;type_traits&gt;</code><br />
+<code>#include &lt;cstdint&gt;</code><br />
 </div>
 <p><a href="math__defs_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:Gaze_3A_3AGazeVector2" id="r_Gaze_3A_3AGazeVector2"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2.html">Gaze::GazeVector2</a></td></tr>
+<tr class="memitem:Gaze_3A_3AGazeVector2_5F64f" id="r_Gaze_3A_3AGazeVector2_5F64f"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2__64f.html">Gaze::GazeVector2_64f</a></td></tr>
+<tr class="memitem:Gaze_3A_3AGazeVector2_5F32f" id="r_Gaze_3A_3AGazeVector2_5F32f"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2__32f.html">Gaze::GazeVector2_32f</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeVector2i" id="r_Gaze_3A_3AGazeVector2i"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector2i.html">Gaze::GazeVector2i</a></td></tr>
+<tr class="memitem:Gaze_3A_3AGazeRect" id="r_Gaze_3A_3AGazeRect"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_rect.html">Gaze::GazeRect</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeVector3" id="r_Gaze_3A_3AGazeVector3"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeBasis3D" id="r_Gaze_3A_3AGazeBasis3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">Gaze::GazeBasis3D</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeTransform3D" id="r_Gaze_3A_3AGazeTransform3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_transform3_d.html">Gaze::GazeTransform3D</a></td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a9d93b05168c9b3ccc4f44385fc1b28d8" id="r_a9d93b05168c9b3ccc4f44385fc1b28d8"><td class="memItemLeft"><a id="a9d93b05168c9b3ccc4f44385fc1b28d8" name="a9d93b05168c9b3ccc4f44385fc1b28d8"></a>
+using&#160;</td><td class="memItemRight"><b>Gaze::GazeVector2</b> = <a class="el" href="struct_gaze_1_1_gaze_vector2__64f.html">GazeVector2_64f</a></td></tr>
+<tr class="memitem:a3d31a87032651b03be341e302ed98ada" id="r_a3d31a87032651b03be341e302ed98ada"><td class="memItemLeft"><a id="a3d31a87032651b03be341e302ed98ada" name="a3d31a87032651b03be341e302ed98ada"></a>
+using&#160;</td><td class="memItemRight"><b>Gaze::GazePoint</b> = <a class="el" href="struct_gaze_1_1_gaze_vector2__64f.html">GazeVector2_64f</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ae6da62914f1bba3510e826b1d196e27f" id="r_ae6da62914f1bba3510e826b1d196e27f"><td class="memItemLeft"><a id="ae6da62914f1bba3510e826b1d196e27f" name="ae6da62914f1bba3510e826b1d196e27f"></a>
+void&#160;</td><td class="memItemRight"><b>Gaze::resize_bgr_to_rgb</b> (const uint8_t *src, int src_w, int src_h, uint8_t *dst, int dst_w, int dst_h)</td></tr>
+<tr class="memitem:a598ea344cf8ef8b3d9083dde52cd3197" id="r_a598ea344cf8ef8b3d9083dde52cd3197"><td class="memItemLeft"><a id="a598ea344cf8ef8b3d9083dde52cd3197" name="a598ea344cf8ef8b3d9083dde52cd3197"></a>
+double&#160;</td><td class="memItemRight"><b>Gaze::get_focal_length_px</b> (double width_px, double fov_degrees)</td></tr>
+<tr class="memitem:a61faa4b0cd24d89b41478d29adb054d6" id="r_a61faa4b0cd24d89b41478d29adb054d6"><td class="memItemLeft"><a id="a61faa4b0cd24d89b41478d29adb054d6" name="a61faa4b0cd24d89b41478d29adb054d6"></a>
+double&#160;</td><td class="memItemRight"><b>Gaze::get_focal_length_under_scaling</b> (double f_original, double original_dim, double new_dim)</td></tr>
+<tr class="memitem:aff4837e22126a78f320f88afafd46e6a" id="r_aff4837e22126a78f320f88afafd46e6a"><td class="memItemLeft"><a id="aff4837e22126a78f320f88afafd46e6a" name="aff4837e22126a78f320f88afafd46e6a"></a>
+double&#160;</td><td class="memItemRight"><b>Gaze::get_card_width_px</b> (double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm=85.603)</td></tr>
+<tr class="memitem:ab5f0997d3b9b2bc468cba03eb7909257" id="r_ab5f0997d3b9b2bc468cba03eb7909257"><td class="memItemLeft"><a id="ab5f0997d3b9b2bc468cba03eb7909257" name="ab5f0997d3b9b2bc468cba03eb7909257"></a>
+double&#160;</td><td class="memItemRight"><b>Gaze::diagonal_to_horizontal_fov</b> (double diagonal_fov_degrees, double width, double height)</td></tr>
 <tr class="memitem:a956327787e5b5bf19a5c91d0ec705d3e" id="r_a956327787e5b5bf19a5c91d0ec705d3e"><td class="memItemLeft"><a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">GazeBasis3D</a>&#160;</td><td class="memItemRight"><a class="el" href="#a956327787e5b5bf19a5c91d0ec705d3e">Gaze::rodrigues_to_basis</a> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;r)</td></tr>
 <tr class="memdesc:a956327787e5b5bf19a5c91d0ec705d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a 3D rotation vector (Rodrigues vector) to a 3x3 rotation basis.  <br /></td></tr>
+<tr class="memitem:affe895852483e031ecf8b552a96fdc65" id="r_affe895852483e031ecf8b552a96fdc65"><td class="memItemLeft"><a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><a class="el" href="#affe895852483e031ecf8b552a96fdc65">Gaze::basis_to_rodrigues</a> (const <a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">GazeBasis3D</a> &amp;basis)</td></tr>
+<tr class="memdesc:affe895852483e031ecf8b552a96fdc65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts a 3x3 rotation basis to a 3D rotation vector (Rodrigues vector).  <br /></td></tr>
 <tr class="memitem:a91a0aaace63d1f6598a11964186621a4" id="r_a91a0aaace63d1f6598a11964186621a4"><td class="memItemLeft"><a id="a91a0aaace63d1f6598a11964186621a4" name="a91a0aaace63d1f6598a11964186621a4"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::get_head_forward_in_camera_space</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;rotation_deg)</td></tr>
 <tr class="memitem:a7f79b5b50d0012fbba68f3bd6f4b5eaa" id="r_a7f79b5b50d0012fbba68f3bd6f4b5eaa"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7f79b5b50d0012fbba68f3bd6f4b5eaa">Gaze::intersect_ray_plane</a> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;ray_origin, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;ray_dir, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;plane_normal, double plane_d, double &amp;out_t)</td></tr>
 <tr class="memdesc:a7f79b5b50d0012fbba68f3bd6f4b5eaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Intersects a 3D ray with a plane in 3D space.  <br /></td></tr>
+<tr class="memitem:ad93a5bce0845264d135053937ec1b70b" id="r_ad93a5bce0845264d135053937ec1b70b"><td class="memItemLeft"><a id="ad93a5bce0845264d135053937ec1b70b" name="ad93a5bce0845264d135053937ec1b70b"></a>
+<a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::apply_3d_bias_vector</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;raw_gaze_dir, const GazeVector2 &amp;bias_pitch_yaw, const GazeVector2 &amp;scale_pitch_yaw=GazeVector2(1.0, 1.0))</td></tr>
+<tr class="memdesc:ad93a5bce0845264d135053937ec1b70b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies pitch and yaw bias corrections (and scaling) to a raw 3D gaze vector. <br /></td></tr>
+<tr class="memitem:a38517b7bb8c677200c9e70a259b1c0eb" id="r_a38517b7bb8c677200c9e70a259b1c0eb"><td class="memItemLeft"><a id="a38517b7bb8c677200c9e70a259b1c0eb" name="a38517b7bb8c677200c9e70a259b1c0eb"></a>
+bool&#160;</td><td class="memItemRight"><b>Gaze::project_ray_to_screen_mm</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;dir_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;camera_offset, double camera_tilt_deg, const GazeVector2 &amp;screen_size_mm, GazeVector2 &amp;out_pos_mm)</td></tr>
+<tr class="memdesc:a38517b7bb8c677200c9e70a259b1c0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a camera-space gaze ray onto a tilted screen plane in millimeters. <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aa2ee9b2a748b67b2671c7b2593354e7b" id="r_aa2ee9b2a748b67b2671c7b2593354e7b"><td class="memItemLeft"><a id="aa2ee9b2a748b67b2671c7b2593354e7b" name="aa2ee9b2a748b67b2671c7b2593354e7b"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::LEFT</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(-1.0f, 0.0f, 0.0f)</td></tr>
+<tr class="memitem:a3850de92768808b77ec00435e858c221" id="r_a3850de92768808b77ec00435e858c221"><td class="memItemLeft"><a id="a3850de92768808b77ec00435e858c221" name="a3850de92768808b77ec00435e858c221"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::RIGHT</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(1.0f, 0.0f, 0.0f)</td></tr>
+<tr class="memitem:a2a6e9a2568a4df7baf0a0934ed440a3c" id="r_a2a6e9a2568a4df7baf0a0934ed440a3c"><td class="memItemLeft"><a id="a2a6e9a2568a4df7baf0a0934ed440a3c" name="a2a6e9a2568a4df7baf0a0934ed440a3c"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::UP</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 1.0f, 0.0f)</td></tr>
+<tr class="memitem:ab519933c46967fdd02c2c9a5eeee59af" id="r_ab519933c46967fdd02c2c9a5eeee59af"><td class="memItemLeft"><a id="ab519933c46967fdd02c2c9a5eeee59af" name="ab519933c46967fdd02c2c9a5eeee59af"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::DOWN</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, -1.0f, 0.0f)</td></tr>
+<tr class="memitem:a953d4066052741c25ffbdc3ba465aa86" id="r_a953d4066052741c25ffbdc3ba465aa86"><td class="memItemLeft"><a id="a953d4066052741c25ffbdc3ba465aa86" name="a953d4066052741c25ffbdc3ba465aa86"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::FORWARD</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 0.0f, -1.0f)</td></tr>
+<tr class="memitem:a26700d1d40341f351a4cf40b001c793d" id="r_a26700d1d40341f351a4cf40b001c793d"><td class="memItemLeft"><a id="a26700d1d40341f351a4cf40b001c793d" name="a26700d1d40341f351a4cf40b001c793d"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::BACK</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 0.0f, 1.0f)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Zero-Dependency 3D/2D Vector and Matrix Math structures. </p>
 <p>Implements lightweight vector (GazeVector2, GazeVector3), basis (GazeBasis3D), and transform (GazeTransform3D) structs. Includes utilities for Euler angle decompositions, Rodrigues rotation conversions, and gaze-space forward vector computations. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="affe895852483e031ecf8b552a96fdc65" name="affe895852483e031ecf8b552a96fdc65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affe895852483e031ecf8b552a96fdc65">&#9670;&#160;</a></span>basis_to_rodrigues()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GazeVector3 Gaze::basis_to_rodrigues </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">GazeBasis3D</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>basis</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Converts a 3x3 rotation basis to a 3D rotation vector (Rodrigues vector). </p>
+<p>Inverse of rodrigues_to_basis, matching OpenCV's cv::Rodrigues convention. </p>
+
+</div>
+</div>
 <a id="a7f79b5b50d0012fbba68f3bd6f4b5eaa" name="a7f79b5b50d0012fbba68f3bd6f4b5eaa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7f79b5b50d0012fbba68f3bd6f4b5eaa">&#9670;&#160;</a></span>intersect_ray_plane()</h2>
 
@@ -253,7 +325,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>src</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a href="math__defs_8hpp.html">math_defs.hpp</a></li>
+    <li class="navelem"><b>src</b></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="math__defs_8hpp.html">math_defs.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

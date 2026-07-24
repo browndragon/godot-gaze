@@ -1,0 +1,169 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_atomic_mailbox" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::AtomicMailbox</compoundname>
+    <includes refid="atomic__mailbox_8hpp" local="no">atomic_mailbox.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_atomic_mailbox_1aa76b4e1e08d597e33195890fe2eb06cb" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex Gaze::AtomicMailbox&lt; T &gt;::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <qualifiedname>Gaze::AtomicMailbox::mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="18" column="24" bodyfile="src/core/atomic_mailbox.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_atomic_mailbox_1ac2e00d1da35d746e3d4a2b4bf1470789" prot="private" static="no" mutable="no">
+        <type>T</type>
+        <definition>T Gaze::AtomicMailbox&lt; T &gt;::slot</definition>
+        <argsstring></argsstring>
+        <name>slot</name>
+        <qualifiedname>Gaze::AtomicMailbox::slot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="19" column="7" bodyfile="src/core/atomic_mailbox.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_atomic_mailbox_1a5b906901a3642be93f01dbfe72457c25" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::AtomicMailbox&lt; T &gt;::pending</definition>
+        <argsstring></argsstring>
+        <name>pending</name>
+        <qualifiedname>Gaze::AtomicMailbox::pending</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="20" column="10" bodyfile="src/core/atomic_mailbox.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1ac30945e773145f1a179a358eba3558e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::AtomicMailbox&lt; T &gt;::AtomicMailbox</definition>
+        <argsstring>()=default</argsstring>
+        <name>AtomicMailbox</name>
+        <qualifiedname>Gaze::AtomicMailbox::AtomicMailbox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1adb7d6e88854133d0ab0b1e94d7e356a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::AtomicMailbox&lt; T &gt;::~AtomicMailbox</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AtomicMailbox</name>
+        <qualifiedname>Gaze::AtomicMailbox::~AtomicMailbox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="24" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1a699c2f9cc2302d0ea807389450d0bfb8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::AtomicMailbox&lt; T &gt;::put</definition>
+        <argsstring>(T value)</argsstring>
+        <name>put</name>
+        <qualifiedname>Gaze::AtomicMailbox::put</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="27" column="10" bodyfile="src/core/atomic_mailbox.hpp" bodystart="27" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1ad22681c18cd218c01ed89343c1d623e2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::AtomicMailbox&lt; T &gt;::take</definition>
+        <argsstring>(T &amp;out_value)</argsstring>
+        <name>take</name>
+        <qualifiedname>Gaze::AtomicMailbox::take</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>out_value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="34" column="10" bodyfile="src/core/atomic_mailbox.hpp" bodystart="34" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1aeef2d9855e44aea557e9ca240e96e4f3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::AtomicMailbox&lt; T &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>Gaze::AtomicMailbox::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="45" column="10" bodyfile="src/core/atomic_mailbox.hpp" bodystart="45" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_atomic_mailbox_1a92883f9aee40343b48e53c2437d254ea" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::AtomicMailbox&lt; T &gt;::is_pending</definition>
+        <argsstring>() const</argsstring>
+        <name>is_pending</name>
+        <qualifiedname>Gaze::AtomicMailbox::is_pending</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/atomic_mailbox.hpp" line="52" column="10" bodyfile="src/core/atomic_mailbox.hpp" bodystart="52" bodyend="55"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Thread-safe single-slot mailbox for latest-value handoffs. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Implements a single-element buffer where a new &apos;put&apos; overwrites the previous value, and &apos;take&apos; moves the value out and clears the pending state. Useful for decoupling threads where only the latest state is relevant (e.g. camera frames and tracking results). </para>
+    </detaileddescription>
+    <location file="src/core/atomic_mailbox.hpp" line="16" column="1" bodyfile="src/core/atomic_mailbox.hpp" bodystart="16" bodyend="56"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_atomic_mailbox_1ac30945e773145f1a179a358eba3558e9" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>AtomicMailbox</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1aeef2d9855e44aea557e9ca240e96e4f3" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>clear</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1a92883f9aee40343b48e53c2437d254ea" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>is_pending</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1aa76b4e1e08d597e33195890fe2eb06cb" prot="private" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>mutex</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1a5b906901a3642be93f01dbfe72457c25" prot="private" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>pending</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1a699c2f9cc2302d0ea807389450d0bfb8" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>put</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1ac2e00d1da35d746e3d4a2b4bf1470789" prot="private" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>slot</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1ad22681c18cd218c01ed89343c1d623e2" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>take</name></member>
+      <member refid="class_gaze_1_1_atomic_mailbox_1adb7d6e88854133d0ab0b1e94d7e356a3" prot="public" virt="non-virtual"><scope>Gaze::AtomicMailbox</scope><name>~AtomicMailbox</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

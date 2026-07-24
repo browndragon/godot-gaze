@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="79" column="5" bodyfile="src/godot/gaze_tracker.hpp" bodystart="79" bodyend="85"/>
+        <location file="src/godot/gaze_tracker.hpp" line="68" column="5" bodyfile="src/godot/gaze_tracker.hpp" bodystart="68" bodyend="74"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-attrib">
@@ -72,7 +72,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="74" column="29" bodyfile="src/godot/gaze_tracker.hpp" bodystart="74" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="63" column="29" bodyfile="src/godot/gaze_tracker.hpp" bodystart="63" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a2b3a08cdf57058010ce3be0c43580081" prot="public" static="yes" constexpr="yes" mutable="no">
         <type>double</type>
@@ -87,22 +87,22 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="75" column="29" bodyfile="src/godot/gaze_tracker.hpp" bodystart="75" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="64" column="29" bodyfile="src/godot/gaze_tracker.hpp" bodystart="64" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a39268252753b5f51779f89ed86534c02" prot="public" static="yes" constexpr="yes" mutable="no">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">Gaze::GazeVector2</ref></type>
+        <type>Gaze::GazeVector2</type>
         <definition>Gaze::GazeVector2 godot::GazeTracker::DEFAULT_SCREEN_SIZE_MM</definition>
         <argsstring></argsstring>
         <name>DEFAULT_SCREEN_SIZE_MM</name>
         <qualifiedname>godot::GazeTracker::DEFAULT_SCREEN_SIZE_MM</qualifiedname>
-        <initializer>= <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">Gaze::GazeVector2</ref>(345.0, 215.0)</initializer>
+        <initializer>= Gaze::GazeVector2(345.0, 215.0)</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="76" column="40" bodyfile="src/godot/gaze_tracker.hpp" bodystart="76" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="65" column="40" bodyfile="src/godot/gaze_tracker.hpp" bodystart="65" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a9b63961ee93b8d5664ad9ca9819fd3cd" prot="public" static="yes" constexpr="yes" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector2i" kindref="compound">Gaze::GazeVector2i</ref></type>
@@ -117,7 +117,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="77" column="41" bodyfile="src/godot/gaze_tracker.hpp" bodystart="77" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="66" column="41" bodyfile="src/godot/gaze_tracker.hpp" bodystart="66" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-attrib">
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="88" column="18" bodyfile="src/godot/gaze_tracker.hpp" bodystart="88" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="77" column="18" bodyfile="src/godot/gaze_tracker.hpp" bodystart="77" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a293f337292a3e7e77edb03eddb0dc0dd" prot="private" static="no" mutable="no">
         <type><ref refid="classgodot_1_1_face_estimator" kindref="compound">FaceEstimator</ref> *</type>
@@ -149,7 +149,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="89" column="19" bodyfile="src/godot/gaze_tracker.hpp" bodystart="89" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="78" column="19" bodyfile="src/godot/gaze_tracker.hpp" bodystart="78" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ab79072c0411daacf6276f4bd41cc66df" prot="private" static="no" mutable="no">
         <type><ref refid="classgodot_1_1_eye_estimator" kindref="compound">EyeEstimator</ref> *</type>
@@ -164,7 +164,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="90" column="18" bodyfile="src/godot/gaze_tracker.hpp" bodystart="90" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="79" column="18" bodyfile="src/godot/gaze_tracker.hpp" bodystart="79" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ae47682af3b167ee352178a82c70d47d5" prot="private" static="no" mutable="no">
         <type>Ref&lt; <ref refid="classgodot_1_1_smoother" kindref="compound">Smoother</ref> &gt;</type>
@@ -178,7 +178,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="92" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="92" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="81" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="81" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a72cdd14439fe8fe6b6d5c2c841a777a2" prot="private" static="no" mutable="no">
         <type>Array</type>
@@ -192,7 +192,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="93" column="11" bodyfile="src/godot/gaze_tracker.hpp" bodystart="93" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="82" column="11" bodyfile="src/godot/gaze_tracker.hpp" bodystart="82" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a29b7f4014eefed7ea0d5fe3d4c26b354" prot="private" static="no" mutable="no">
         <type><ref refid="class_gaze_1_1_projection_engine" kindref="compound">Gaze::ProjectionEngine</ref></type>
@@ -206,35 +206,35 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="96" column="28" bodyfile="src/godot/gaze_tracker.hpp" bodystart="96" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="85" column="28" bodyfile="src/godot/gaze_tracker.hpp" bodystart="85" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a1b98c466d80f468927789614a46084eb" prot="private" static="no" mutable="no">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt;</type>
-        <definition>Ref&lt;GazeCalibration&gt; godot::GazeTracker::calibration_resource</definition>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a8d81c9131759c48765bc8e015b7df2d5" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt;DeviceCalibration&gt; godot::GazeTracker::device_calibration</definition>
         <argsstring></argsstring>
-        <name>calibration_resource</name>
-        <qualifiedname>godot::GazeTracker::calibration_resource</qualifiedname>
+        <name>device_calibration</name>
+        <qualifiedname>godot::GazeTracker::device_calibration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="99" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="99" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="88" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="88" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a1eec51bb4d2bfe3216be746844117565" prot="private" static="no" mutable="no">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt;</type>
-        <definition>Ref&lt;GazePipelineConfig&gt; godot::GazeTracker::pipeline_config</definition>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ac4a8af1b3382d6cd95058e1ac84ee1e2" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_bio_calibration" kindref="compound">BioCalibration</ref> &gt;</type>
+        <definition>Ref&lt;BioCalibration&gt; godot::GazeTracker::bio_calibration</definition>
         <argsstring></argsstring>
-        <name>pipeline_config</name>
-        <qualifiedname>godot::GazeTracker::pipeline_config</qualifiedname>
+        <name>bio_calibration</name>
+        <qualifiedname>godot::GazeTracker::bio_calibration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="100" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="100" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="89" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="89" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a9ef460b35cbd8ee6e2b8bf6efd59e31a" prot="private" static="no" mutable="no">
         <type>Ref&lt; <ref refid="classgodot_1_1_display_profile" kindref="compound">DisplayProfile</ref> &gt;</type>
@@ -248,21 +248,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="101" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="101" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a1a63c23f8f2cc182bea682f15b5083be" prot="private" static="no" mutable="no">
-        <type><ref refid="structgodot_1_1_platform_geometry" kindref="compound">PlatformGeometry</ref></type>
-        <definition>PlatformGeometry godot::GazeTracker::overrides</definition>
-        <argsstring></argsstring>
-        <name>overrides</name>
-        <qualifiedname>godot::GazeTracker::overrides</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="102" column="22" bodyfile="src/godot/gaze_tracker.hpp" bodystart="102" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="90" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="90" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a766d73428c4cc45ffe15648e78656138" prot="private" static="no" mutable="no">
         <type>int</type>
@@ -277,7 +263,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="103" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="103" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="91" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="91" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ac51f11da3a24202f30d26fc49d35040b" prot="private" static="no" mutable="no">
         <type>int</type>
@@ -292,7 +278,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="104" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="104" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="92" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="92" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a8cf6f45440a7019de6971b0bfd66e2a3" prot="private" static="no" mutable="no">
         <type>int</type>
@@ -307,7 +293,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="105" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="105" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="93" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="93" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a39bd05d715a2c5690d27b157e17e4af8" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -322,7 +308,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="106" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="106" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="94" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="94" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a2be5425c1035630272bf8cbcb3a0bd77" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -337,7 +323,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="107" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="107" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="95" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="95" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a08dbb97432ef419a5780563f1b2c2263" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -351,7 +337,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="110" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="110" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="98" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="98" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a8dfaec64c443f730d73467d2220ce160" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -365,7 +351,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="111" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="111" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="99" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="99" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a24d032b6c95935bcf9442c4933bdefac" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -380,7 +366,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="112" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="112" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="100" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="100" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ac11bf286be2d50539267a9bb42ba28da" prot="private" static="no" mutable="no">
         <type>GazeLifecycle</type>
@@ -395,7 +381,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="113" column="19" bodyfile="src/godot/gaze_tracker.hpp" bodystart="113" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="101" column="19" bodyfile="src/godot/gaze_tracker.hpp" bodystart="101" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1aadefb445729a52654ef0b06cc71479d7" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -410,7 +396,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="114" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="114" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="102" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="102" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a8f1154001f559c1f7d17330e3ac0a9aa" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -425,7 +411,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="116" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="116" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="105" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="105" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a8824b35a16827246c3382222246fbb87" prot="private" static="no" mutable="no">
         <type>uint64_t</type>
@@ -440,7 +426,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="117" column="14" bodyfile="src/godot/gaze_tracker.hpp" bodystart="117" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="106" column="14" bodyfile="src/godot/gaze_tracker.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a1cbd4a10fca39017db5719220e643764" prot="private" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref></type>
@@ -455,7 +441,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="118" column="23" bodyfile="src/godot/gaze_tracker.hpp" bodystart="118" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="107" column="23" bodyfile="src/godot/gaze_tracker.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a77df98a2867a5d0d71332517eb62229f" prot="private" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref></type>
@@ -470,7 +456,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="119" column="23" bodyfile="src/godot/gaze_tracker.hpp" bodystart="119" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="108" column="23" bodyfile="src/godot/gaze_tracker.hpp" bodystart="108" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1ab663a69de8ee274618ab592b07e998e7" prot="private" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">Gaze::EyeCrops</ref></type>
@@ -484,7 +470,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="120" column="20" bodyfile="src/godot/gaze_tracker.hpp" bodystart="120" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="109" column="20" bodyfile="src/godot/gaze_tracker.hpp" bodystart="109" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a7780304ac70318a4a7206827536bf096" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -499,7 +485,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="122" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="122" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="111" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a3d3293aff5862da1bc88dde1cf245638" prot="private" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeTracker::last_window_pos</definition>
+        <argsstring></argsstring>
+        <name>last_window_pos</name>
+        <qualifiedname>godot::GazeTracker::last_window_pos</qualifiedname>
+        <initializer>= Vector2()</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="112" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a0d81b338c62ff05e292a7514c173f8e5" prot="private" static="no" mutable="no">
+        <type>Transform2D</type>
+        <definition>Transform2D godot::GazeTracker::last_vp_xform</definition>
+        <argsstring></argsstring>
+        <name>last_vp_xform</name>
+        <qualifiedname>godot::GazeTracker::last_vp_xform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="113" column="17" bodyfile="src/godot/gaze_tracker.hpp" bodystart="113" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1aacaab9ac4e028e05c19e4a2e220fd96f" prot="private" static="no" mutable="no">
         <type>void *</type>
@@ -514,7 +529,63 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="123" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="123" bodyend="-1"/>
+        <location file="src/godot/gaze_tracker.hpp" line="114" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a19499958c8e51487f321ed00090e1b32" prot="private" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeTracker::display_rid</definition>
+        <argsstring></argsstring>
+        <name>display_rid</name>
+        <qualifiedname>godot::GazeTracker::display_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="115" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a669147ad62f61be53450224e295bce59" prot="private" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeTracker::camera_gaze_rid</definition>
+        <argsstring></argsstring>
+        <name>camera_gaze_rid</name>
+        <qualifiedname>godot::GazeTracker::camera_gaze_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="116" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a2927fbf9936164132903ce5b8a9fc61b" prot="private" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeTracker::face_gaze_rid</definition>
+        <argsstring></argsstring>
+        <name>face_gaze_rid</name>
+        <qualifiedname>godot::GazeTracker::face_gaze_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="117" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a08a6ddb0bddffb085b7f0a044a686b1f" prot="private" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeTracker::eye_gaze_rid</definition>
+        <argsstring></argsstring>
+        <name>eye_gaze_rid</name>
+        <qualifiedname>godot::GazeTracker::eye_gaze_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="118" column="9" bodyfile="src/godot/gaze_tracker.hpp" bodystart="118" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -536,7 +607,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="71" column="5"/>
+        <location file="src/godot/gaze_tracker.hpp" line="60" column="5"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aa5325598337acd229671ae33cc0f0894" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -554,21 +625,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="115" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="151" bodyend="156"/>
+        <location file="src/godot/gaze_tracker.hpp" line="103" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="179" bodyend="184"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1abc34028b4fff9c08980e1b5bb29dbc46" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazeTracker::update_projection_parameters</definition>
-        <argsstring>()</argsstring>
-        <name>update_projection_parameters</name>
-        <qualifiedname>godot::GazeTracker::update_projection_parameters</qualifiedname>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a02ee2fb1b583d5adf26bef74a728d0ec" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeTracker::get_window_scale</definition>
+        <argsstring>() const</argsstring>
+        <name>get_window_scale</name>
+        <qualifiedname>godot::GazeTracker::get_window_scale</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="125" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="452" bodyend="497"/>
+        <location file="src/godot/gaze_tracker.hpp" line="104" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="547" bodyend="563"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aac06c4c3ea2cfe7e4ce3335f7a900c16" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::_on_gaze_data_ready</definition>
+        <argsstring>(RID p_rid)</argsstring>
+        <name>_on_gaze_data_ready</name>
+        <qualifiedname>godot::GazeTracker::_on_gaze_data_ready</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_rid</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="120" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="875" bodyend="915"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a155b2ebd5cf3ded4f96578fb3781d16d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -582,79 +671,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="126" column="10"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ab3662b603e61f4be999ea6ba66f3b49b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazeTracker::update_pipeline_config</definition>
-        <argsstring>()</argsstring>
-        <name>update_pipeline_config</name>
-        <qualifiedname>godot::GazeTracker::update_pipeline_config</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="127" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="789" bodyend="802"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a5e3f23febc7432e40aac6287a4e41a81" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>String</type>
-        <definition>String godot::GazeTracker::copy_model_to_user_dir</definition>
-        <argsstring>(const String &amp;res_path)</argsstring>
-        <name>copy_model_to_user_dir</name>
-        <qualifiedname>godot::GazeTracker::copy_model_to_user_dir</qualifiedname>
-        <param>
-          <type>const String &amp;</type>
-          <declname>res_path</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="128" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="237" bodyend="264"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a905a1938c5cc69dd5afb22e4428ea826" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazeTracker::copy_individual_file</definition>
-        <argsstring>(const String &amp;src, const String &amp;dest)</argsstring>
-        <name>copy_individual_file</name>
-        <qualifiedname>godot::GazeTracker::copy_individual_file</qualifiedname>
-        <param>
-          <type>const String &amp;</type>
-          <declname>src</declname>
-        </param>
-        <param>
-          <type>const String &amp;</type>
-          <declname>dest</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="129" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="266" bodyend="306"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1af7bc9215b75111294cc2a97b3d80063b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::vector&lt; uint8_t &gt;</type>
-        <definition>std::vector&lt; uint8_t &gt; godot::GazeTracker::load_file_buffer</definition>
-        <argsstring>(const String &amp;path)</argsstring>
-        <name>load_file_buffer</name>
-        <qualifiedname>godot::GazeTracker::load_file_buffer</qualifiedname>
-        <param>
-          <type>const String &amp;</type>
-          <declname>path</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="130" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="216" bodyend="235"/>
+        <location file="src/godot/gaze_tracker.hpp" line="122" column="10"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1af7694352c050f4a0325f89d635e726de" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Transform2D</type>
@@ -668,7 +685,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="131" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="804" bodyend="810"/>
+        <location file="src/godot/gaze_tracker.hpp" line="123" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="803" bodyend="809"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a54454d1765d3f93005a59f58134e6f4f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -682,7 +699,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="134" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="21" bodyend="45"/>
+        <location file="src/godot/gaze_tracker.hpp" line="126" column="10" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="21" bodyend="45"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a61b710b02319d6c7615eb8dd27398956" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -696,7 +713,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="135" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="47" bodyend="48"/>
+        <location file="src/godot/gaze_tracker.hpp" line="127" column="10" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="47" bodyend="48"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a4ef73dc66e682f43e20d567422838cc8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -714,7 +731,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="136" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="50" bodyend="137"/>
+        <location file="src/godot/gaze_tracker.hpp" line="128" column="10" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="50" bodyend="52"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a263fb181a540d9660f08d16d066c7d10" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -732,7 +749,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="137" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="139" bodyend="154"/>
+        <location file="src/godot/gaze_tracker.hpp" line="129" column="10" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="54" bodyend="69"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a0a970caedd81052d9499036d2e7e5db5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -746,7 +763,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="138" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="156" bodyend="163"/>
+        <location file="src/godot/gaze_tracker.hpp" line="130" column="10" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="71" bodyend="78"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -762,7 +779,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="143" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="37" bodyend="121"/>
+        <location file="src/godot/gaze_tracker.hpp" line="135" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="44" bodyend="132"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-func">
@@ -782,7 +799,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="144" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="170" bodyend="196"/>
+        <location file="src/godot/gaze_tracker.hpp" line="136" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="198" bodyend="238"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -798,7 +815,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="147" column="5" bodyfile="src/godot/gaze_tracker.cpp" bodystart="123" bodyend="125"/>
+        <location file="src/godot/gaze_tracker.hpp" line="139" column="5" bodyfile="src/godot/gaze_tracker.cpp" bodystart="134" bodyend="137"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ab41c830039e50b8fcc714f90957a3b97" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -812,7 +829,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="148" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="127" bodyend="128"/>
+        <location file="src/godot/gaze_tracker.hpp" line="140" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="138" bodyend="146"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1abc34028b4fff9c08980e1b5bb29dbc46" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::update_projection_parameters</definition>
+        <argsstring>()</argsstring>
+        <name>update_projection_parameters</name>
+        <qualifiedname>godot::GazeTracker::update_projection_parameters</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="142" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="409" bodyend="506"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a51b2ad7aad517cb2d86b6cfc4fe11920" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -826,7 +857,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="151" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="130" bodyend="134"/>
+        <location file="src/godot/gaze_tracker.hpp" line="145" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="148" bodyend="152"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a733de09bb6a48643398803deee5f583a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -844,16 +875,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="152" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="136" bodyend="149"/>
+        <location file="src/godot/gaze_tracker.hpp" line="146" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="154" bodyend="177"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a875df127fa340856d785960dfd111fd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ab1953b1aca2a4e73331d063d41f70d78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
-        <definition>bool godot::GazeTracker::initialize_tracker</definition>
+        <definition>bool godot::GazeTracker::start_tracker</definition>
         <argsstring>()</argsstring>
-        <name>initialize_tracker</name>
-        <qualifiedname>godot::GazeTracker::initialize_tracker</qualifiedname>
+        <name>start_tracker</name>
+        <qualifiedname>godot::GazeTracker::start_tracker</qualifiedname>
         <briefdescription>
-<para>Initializes the gaze tracker, setting up camera and models. </para>
+<para>Starts the gaze tracker, setting up camera and models. </para>
         </briefdescription>
         <detaileddescription>
 <para><simplesect kind="return"><para>True if initialized successfully, false otherwise. </para>
@@ -862,7 +893,23 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="159" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="308" bodyend="389"/>
+        <location file="src/godot/gaze_tracker.hpp" line="153" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="261" bodyend="314"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a875df127fa340856d785960dfd111fd3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeTracker::initialize_tracker</definition>
+        <argsstring>()</argsstring>
+        <name>initialize_tracker</name>
+        <qualifiedname>godot::GazeTracker::initialize_tracker</qualifiedname>
+        <briefdescription>
+<para>[DEPRECATED] Backward-compatible alias for <ref refid="classgodot_1_1_gaze_tracker_1ab1953b1aca2a4e73331d063d41f70d78" kindref="member">start_tracker()</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Use <ref refid="classgodot_1_1_gaze_tracker_1ab1953b1aca2a4e73331d063d41f70d78" kindref="member">start_tracker()</ref> instead. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="157" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="157" bodyend="157"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a911ec38d4f0c14db02406e8d41bb422b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -892,7 +939,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="164" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="392" bodyend="416"/>
+        <location file="src/godot/gaze_tracker.hpp" line="162" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="316" bodyend="368"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a3b905acf0a094ccc9ec8a9af91e85968" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -906,7 +953,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="165" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="227" bodyend="279"/>
+        <location file="src/godot/gaze_tracker.hpp" line="163" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="832" bodyend="873"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a3bc16a319adc7c9c2db8709281efab62" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -920,7 +967,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="166" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="198" bodyend="200"/>
+        <location file="src/godot/gaze_tracker.hpp" line="164" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="240" bodyend="242"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a9adf23ae2a2b25ff3117f89f5a18ee51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -938,7 +985,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="167" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="202" bodyend="214"/>
+        <location file="src/godot/gaze_tracker.hpp" line="165" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="244" bodyend="255"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ae0f1cc66d5c2cf65595d21e43883d1b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -953,7 +1000,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="174" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="418" bodyend="422"/>
+        <location file="src/godot/gaze_tracker.hpp" line="172" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="370" bodyend="380"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ac7365493d66d53350f5e3ee7d63909e9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -984,7 +1031,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="180" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="812" bodyend="830"/>
+        <location file="src/godot/gaze_tracker.hpp" line="178" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="811" bodyend="821"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aac3804e601c511b17726227b4e4596bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -1015,7 +1062,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="186" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="832" bodyend="846"/>
+        <location file="src/godot/gaze_tracker.hpp" line="184" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="823" bodyend="830"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ac765619951568b95fbc3e0d4d8f11011" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1068,43 +1115,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="195" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="424" bodyend="450"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a43c876808cc5aecd16cd81c57ec6dd51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazeTracker::feed_gaze_web_raw</definition>
-        <argsstring>(const Array &amp;args)</argsstring>
-        <name>feed_gaze_web_raw</name>
-        <qualifiedname>godot::GazeTracker::feed_gaze_web_raw</qualifiedname>
-        <param>
-          <type>const Array &amp;</type>
-          <declname>args</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="196" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="282" bodyend="282"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a798b8634e92865af404feb6551ca0277" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazeTracker::on_sidecar_ready</definition>
-        <argsstring>(const Array &amp;args)</argsstring>
-        <name>on_sidecar_ready</name>
-        <qualifiedname>godot::GazeTracker::on_sidecar_ready</qualifiedname>
-        <param>
-          <type>const Array &amp;</type>
-          <declname>args</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="197" column="10" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="283" bodyend="283"/>
+        <location file="src/godot/gaze_tracker.hpp" line="193" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="382" bodyend="407"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a8ea3a2ed2fd225a1e1556e46b9607e94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="classgodot_1_1_camera_sensor" kindref="compound">CameraSensor</ref> *</type>
@@ -1118,7 +1129,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="199" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="765" bodyend="765"/>
+        <location file="src/godot/gaze_tracker.hpp" line="198" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="786" bodyend="786"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1adb7e961041b74e9c108aa287b3c7e059" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="classgodot_1_1_face_estimator" kindref="compound">FaceEstimator</ref> *</type>
@@ -1132,7 +1143,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="200" column="19" bodyfile="src/godot/gaze_tracker.cpp" bodystart="766" bodyend="766"/>
+        <location file="src/godot/gaze_tracker.hpp" line="199" column="19" bodyfile="src/godot/gaze_tracker.cpp" bodystart="787" bodyend="787"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1af21cf3434234c4a7682cace47c2ae048" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="classgodot_1_1_eye_estimator" kindref="compound">EyeEstimator</ref> *</type>
@@ -1146,7 +1157,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="201" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="767" bodyend="767"/>
+        <location file="src/godot/gaze_tracker.hpp" line="200" column="18" bodyfile="src/godot/gaze_tracker.cpp" bodystart="788" bodyend="788"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ad301a3a8ae8b362a0bafa60cde0d8543" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1164,7 +1175,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="203" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="769" bodyend="774"/>
+        <location file="src/godot/gaze_tracker.hpp" line="202" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="790" bodyend="795"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a7d0bc5b0b4e8c465bb9c4dd596f14373" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Ref&lt; <ref refid="classgodot_1_1_smoother" kindref="compound">Smoother</ref> &gt;</type>
@@ -1178,7 +1189,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="204" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="776" bodyend="778"/>
+        <location file="src/godot/gaze_tracker.hpp" line="203" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="797" bodyend="799"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1af5d7eeceae7bfdf0a5f287ac741c2804" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -1192,7 +1203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="207" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="158" bodyend="160"/>
+        <location file="src/godot/gaze_tracker.hpp" line="206" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="186" bodyend="188"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a115ec5e472e7707fea12cff579a6c72f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1210,7 +1221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="208" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="162" bodyend="164"/>
+        <location file="src/godot/gaze_tracker.hpp" line="207" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="190" bodyend="192"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ad212f9fb5b44379f21628ae38dfc46b2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -1224,16 +1235,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="209" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="166" bodyend="168"/>
+        <location file="src/godot/gaze_tracker.hpp" line="208" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="194" bodyend="196"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1abdfbfe884504e8a9ea0948824c9fbddd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a9986dfbab328d257ad5f14d3ec13d5d4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::GazeTracker::set_pipeline_config</definition>
-        <argsstring>(const Ref&lt; GazePipelineConfig &gt; &amp;res)</argsstring>
-        <name>set_pipeline_config</name>
-        <qualifiedname>godot::GazeTracker::set_pipeline_config</qualifiedname>
+        <definition>void godot::GazeTracker::set_device_calibration</definition>
+        <argsstring>(const Ref&lt; DeviceCalibration &gt; &amp;res)</argsstring>
+        <name>set_device_calibration</name>
+        <qualifiedname>godot::GazeTracker::set_device_calibration</qualifiedname>
         <param>
-          <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt; &amp;</type>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt; &amp;</type>
           <declname>res</declname>
         </param>
         <briefdescription>
@@ -1242,30 +1253,30 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="211" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="780" bodyend="783"/>
+        <location file="src/godot/gaze_tracker.hpp" line="212" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="508" bodyend="517"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a4a70c89daf466ed4df58758c02e1d930" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt;</type>
-        <definition>Ref&lt; GazePipelineConfig &gt; godot::GazeTracker::get_pipeline_config</definition>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a464d3c0394b0f30836f8cd559b2b3e1c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt; DeviceCalibration &gt; godot::GazeTracker::get_device_calibration</definition>
         <argsstring>() const</argsstring>
-        <name>get_pipeline_config</name>
-        <qualifiedname>godot::GazeTracker::get_pipeline_config</qualifiedname>
+        <name>get_device_calibration</name>
+        <qualifiedname>godot::GazeTracker::get_device_calibration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="212" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="785" bodyend="787"/>
+        <location file="src/godot/gaze_tracker.hpp" line="213" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="519" bodyend="521"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aed07abeb9c3f7e3e83822c509e1aaaaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a2624f8bd96a5ad39bb5a8a5656cf1aeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::GazeTracker::set_calibration_resource</definition>
-        <argsstring>(const Ref&lt; GazeCalibration &gt; &amp;res)</argsstring>
-        <name>set_calibration_resource</name>
-        <qualifiedname>godot::GazeTracker::set_calibration_resource</qualifiedname>
+        <definition>void godot::GazeTracker::set_bio_calibration</definition>
+        <argsstring>(const Ref&lt; BioCalibration &gt; &amp;res)</argsstring>
+        <name>set_bio_calibration</name>
+        <qualifiedname>godot::GazeTracker::set_bio_calibration</qualifiedname>
         <param>
-          <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt; &amp;</type>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_bio_calibration" kindref="compound">BioCalibration</ref> &gt; &amp;</type>
           <declname>res</declname>
         </param>
         <briefdescription>
@@ -1274,21 +1285,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="214" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="500" bodyend="503"/>
+        <location file="src/godot/gaze_tracker.hpp" line="215" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="523" bodyend="532"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aeab989cfd09819eba97766f5e12da1ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt;</type>
-        <definition>Ref&lt; GazeCalibration &gt; godot::GazeTracker::get_calibration_resource</definition>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a6d464b4c1eaa83f02bf19d6826bb4e8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_bio_calibration" kindref="compound">BioCalibration</ref> &gt;</type>
+        <definition>Ref&lt; BioCalibration &gt; godot::GazeTracker::get_bio_calibration</definition>
         <argsstring>() const</argsstring>
-        <name>get_calibration_resource</name>
-        <qualifiedname>godot::GazeTracker::get_calibration_resource</qualifiedname>
+        <name>get_bio_calibration</name>
+        <qualifiedname>godot::GazeTracker::get_bio_calibration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="215" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="505" bodyend="507"/>
+        <location file="src/godot/gaze_tracker.hpp" line="216" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="534" bodyend="536"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a58ecda1aae971528ccb0e13fb10f9b3c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1306,7 +1317,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="217" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="509" bodyend="512"/>
+        <location file="src/godot/gaze_tracker.hpp" line="218" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="538" bodyend="541"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a29690dc1c66ea749e9965a992d6e3fe3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Ref&lt; <ref refid="classgodot_1_1_display_profile" kindref="compound">DisplayProfile</ref> &gt;</type>
@@ -1320,7 +1331,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="218" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="514" bodyend="516"/>
+        <location file="src/godot/gaze_tracker.hpp" line="219" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="543" bodyend="545"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a82e29e8c86e5e1867e708d37199283e3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="structgodot_1_1_platform_geometry" kindref="compound">PlatformGeometry</ref></type>
@@ -1334,7 +1345,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="220" column="22" bodyfile="src/native/gaze_tracker_native.cpp" bodystart="165" bodyend="225"/>
+        <location file="src/godot/gaze_tracker.hpp" line="221" column="22" bodyfile="src/godot/gaze_tracker_native.cpp" bodystart="80" bodyend="115"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1adaa134215a0d66ae4243658428279d85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1352,7 +1363,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="222" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="575" bodyend="578"/>
+        <location file="src/godot/gaze_tracker.hpp" line="223" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="633" bodyend="636"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a568a14be88a4596c8da44659837b2acd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -1366,7 +1377,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="223" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="580" bodyend="582"/>
+        <location file="src/godot/gaze_tracker.hpp" line="224" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="638" bodyend="640"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a7b846c9e46192c65e8a77129fe692e64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1384,7 +1395,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="225" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="558" bodyend="560"/>
+        <location file="src/godot/gaze_tracker.hpp" line="226" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="605" bodyend="610"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a5c4780caec4adbcf8b7b89077034568c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -1398,7 +1409,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="226" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="562" bodyend="564"/>
+        <location file="src/godot/gaze_tracker.hpp" line="227" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="612" bodyend="614"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a16208e28244a6606b3215f276d5b648f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -1416,7 +1427,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="228" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="566" bodyend="569"/>
+        <location file="src/godot/gaze_tracker.hpp" line="229" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="616" bodyend="619"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a30a6144a80bad40db4ccd015a1d8d7ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -1430,7 +1441,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="229" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="571" bodyend="573"/>
+        <location file="src/godot/gaze_tracker.hpp" line="230" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="621" bodyend="623"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a0a2f1fbef006ab39b26f36896f4b2478" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::set_verbosity</definition>
+        <argsstring>(int level)</argsstring>
+        <name>set_verbosity</name>
+        <qualifiedname>godot::GazeTracker::set_verbosity</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="232" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="625" bodyend="627"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a90b6b5378744b1b19384f9567e052d0d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::GazeTracker::get_verbosity</definition>
+        <argsstring>() const</argsstring>
+        <name>get_verbosity</name>
+        <qualifiedname>godot::GazeTracker::get_verbosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="233" column="9" bodyfile="src/godot/gaze_tracker.cpp" bodystart="629" bodyend="631"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aafbe61aea6c1d44254e521c90cc752d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Vector2</type>
@@ -1444,7 +1487,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="231" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="231" bodyend="231"/>
+        <location file="src/godot/gaze_tracker.hpp" line="235" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="235" bodyend="235"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a38a8f2b6dab63f63f2eec55c86bc29e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Vector2</type>
@@ -1458,7 +1501,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="232" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="232" bodyend="232"/>
+        <location file="src/godot/gaze_tracker.hpp" line="236" column="13" bodyfile="src/godot/gaze_tracker.hpp" bodystart="236" bodyend="236"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a7bbf3bad963e91c47119652040b92179" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -1472,7 +1515,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="233" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="233" bodyend="233"/>
+        <location file="src/godot/gaze_tracker.hpp" line="237" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="237" bodyend="237"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ac5efcd36617739369fcda57dd6c4bf16" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Transform3D</type>
@@ -1486,7 +1529,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="235" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="584" bodyend="602"/>
+        <location file="src/godot/gaze_tracker.hpp" line="239" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="642" bodyend="645"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a63c68c37f7c47d474dc00ff8cadc8b61" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Transform3D</type>
@@ -1500,7 +1543,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="236" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="604" bodyend="653"/>
+        <location file="src/godot/gaze_tracker.hpp" line="240" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="647" bodyend="696"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ae95f891f40e93283cb254c01ad4b7cfc" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
@@ -1514,7 +1557,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="237" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="518" bodyend="530"/>
+        <location file="src/godot/gaze_tracker.hpp" line="241" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="565" bodyend="577"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1adea6621eb07bad4032f0ca563d0bb7c9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -1528,7 +1571,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="238" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="532" bodyend="541"/>
+        <location file="src/godot/gaze_tracker.hpp" line="242" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="579" bodyend="588"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ade9db1b03142eeb8cf49fbf8f61c3975" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -1542,7 +1585,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="239" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="543" bodyend="556"/>
+        <location file="src/godot/gaze_tracker.hpp" line="243" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="590" bodyend="603"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a40d1fb37fdb83e32aed8a1ba422e0a58" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
@@ -1556,7 +1599,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="240" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="722" bodyend="727"/>
+        <location file="src/godot/gaze_tracker.hpp" line="244" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="731" bodyend="736"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aa7b80daa0034d2ebf30b10e866df1810" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
@@ -1575,37 +1618,37 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="241" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="729" bodyend="735"/>
+        <location file="src/godot/gaze_tracker.hpp" line="245" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="738" bodyend="749"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a4d42f7ec45c3e16c50201305ad5bc4d9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a437589ce689084964876350e6c7e5558" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
-        <definition>Vector3 godot::GazeTracker::get_head_rotation_opencv_space</definition>
+        <definition>Vector3 godot::GazeTracker::get_head_rotation_inference_space</definition>
         <argsstring>() const</argsstring>
-        <name>get_head_rotation_opencv_space</name>
-        <qualifiedname>godot::GazeTracker::get_head_rotation_opencv_space</qualifiedname>
+        <name>get_head_rotation_inference_space</name>
+        <qualifiedname>godot::GazeTracker::get_head_rotation_inference_space</qualifiedname>
         <briefdescription>
-<para>Gets the current head rotation in OpenCV Camera Space (Euler angles in degrees). </para>
+<para>Gets the current head rotation in Inference Camera Space (Euler angles in degrees). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="246" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="737" bodyend="747"/>
+        <location file="src/godot/gaze_tracker.hpp" line="250" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="751" bodyend="756"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a0f18b207755b23eb8873f9cc2998f121" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a5c203cd3cbd51a83b760e939f9264d1b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
-        <definition>Vector3 godot::GazeTracker::get_head_translation_opencv_space</definition>
+        <definition>Vector3 godot::GazeTracker::get_head_translation_inference_space</definition>
         <argsstring>() const</argsstring>
-        <name>get_head_translation_opencv_space</name>
-        <qualifiedname>godot::GazeTracker::get_head_translation_opencv_space</qualifiedname>
+        <name>get_head_translation_inference_space</name>
+        <qualifiedname>godot::GazeTracker::get_head_translation_inference_space</qualifiedname>
         <briefdescription>
-<para>Gets the current head translation in OpenCV Camera Space (in millimeters). </para>
+<para>Gets the current head translation in Inference Camera Space (in millimeters). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="251" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="749" bodyend="751"/>
+        <location file="src/godot/gaze_tracker.hpp" line="255" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="758" bodyend="763"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a3e53379df04d01ab81abd5032ef2d00c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
@@ -1619,7 +1662,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="252" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="655" bodyend="664"/>
+        <location file="src/godot/gaze_tracker.hpp" line="256" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="698" bodyend="700"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ac956e55e8f9445fbd92cf80ad075b499" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
@@ -1633,7 +1676,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="253" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="666" bodyend="676"/>
+        <location file="src/godot/gaze_tracker.hpp" line="257" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="702" bodyend="704"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ae3e8acf31fbdcd82680ef0c7b66b5c5e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -1681,52 +1724,52 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="265" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="678" bodyend="720"/>
+        <location file="src/godot/gaze_tracker.hpp" line="269" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="706" bodyend="729"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ae92c1710fc0744585bc135510c85b1d0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a502c4e8894085d527277e5ea160c9a8f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
-        <definition>Vector3 godot::GazeTracker::get_left_eye_center_opencv_space</definition>
+        <definition>Vector3 godot::GazeTracker::get_left_eye_center_inference_space</definition>
         <argsstring>() const</argsstring>
-        <name>get_left_eye_center_opencv_space</name>
-        <qualifiedname>godot::GazeTracker::get_left_eye_center_opencv_space</qualifiedname>
+        <name>get_left_eye_center_inference_space</name>
+        <qualifiedname>godot::GazeTracker::get_left_eye_center_inference_space</qualifiedname>
         <briefdescription>
-<para>Gets the left eye center position in OpenCV Camera Space (in millimeters). </para>
+<para>Gets the left eye center position in Inference Camera Space (in millimeters). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="270" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="753" bodyend="755"/>
+        <location file="src/godot/gaze_tracker.hpp" line="274" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="765" bodyend="770"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aba0e94086b19ba8f2f92f7d4af937982" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ad080bbaf152ced2cf674e830eb19b488" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
-        <definition>Vector3 godot::GazeTracker::get_right_eye_center_opencv_space</definition>
+        <definition>Vector3 godot::GazeTracker::get_right_eye_center_inference_space</definition>
         <argsstring>() const</argsstring>
-        <name>get_right_eye_center_opencv_space</name>
-        <qualifiedname>godot::GazeTracker::get_right_eye_center_opencv_space</qualifiedname>
+        <name>get_right_eye_center_inference_space</name>
+        <qualifiedname>godot::GazeTracker::get_right_eye_center_inference_space</qualifiedname>
         <briefdescription>
-<para>Gets the right eye center position in OpenCV Camera Space (in millimeters). </para>
+<para>Gets the right eye center position in Inference Camera Space (in millimeters). </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="275" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="757" bodyend="759"/>
+        <location file="src/godot/gaze_tracker.hpp" line="279" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="772" bodyend="777"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aef2d59122b4486b30d21c5ffdbbee470" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a61b537a1bc8537669af7637814de0547" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector3</type>
-        <definition>Vector3 godot::GazeTracker::get_gaze_direction_opencv_space</definition>
+        <definition>Vector3 godot::GazeTracker::get_gaze_direction_inference_space</definition>
         <argsstring>() const</argsstring>
-        <name>get_gaze_direction_opencv_space</name>
-        <qualifiedname>godot::GazeTracker::get_gaze_direction_opencv_space</qualifiedname>
+        <name>get_gaze_direction_inference_space</name>
+        <qualifiedname>godot::GazeTracker::get_gaze_direction_inference_space</qualifiedname>
         <briefdescription>
-<para>Gets the gaze direction unit vector in OpenCV Camera Space. </para>
+<para>Gets the gaze direction unit vector in Inference Camera Space. </para>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="280" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="761" bodyend="763"/>
+        <location file="src/godot/gaze_tracker.hpp" line="284" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="779" bodyend="784"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a21a762b148e464251ce235744a13ddf0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>const <ref refid="class_gaze_1_1_projection_engine" kindref="compound">Gaze::ProjectionEngine</ref> &amp;</type>
@@ -1740,14 +1783,20 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.hpp" line="282" column="34" bodyfile="src/godot/gaze_tracker.hpp" bodystart="282" bodyend="282"/>
+        <location file="src/godot/gaze_tracker.hpp" line="286" column="34" bodyfile="src/godot/gaze_tracker.hpp" bodystart="286" bodyend="286"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
 <para>Godot Node coordinating camera tracking, model inference, and gaze coordinate projection. </para>
     </briefdescription>
     <detaileddescription>
-<para><ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> handles camera acquisition (via <ref refid="classgodot_1_1_camera_sensor" kindref="compound">CameraSensor</ref>), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels). </para>
+<para><ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> handles camera acquisition (via <ref refid="classgodot_1_1_camera_sensor" kindref="compound">CameraSensor</ref>), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels).</para>
+<para>NOTE: The implementation of <ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> is split across three platform layers:<itemizedlist>
+<listitem><para>src/godot/gaze_tracker.cpp : Handles generic ClassDB binding, properties, signal routing, lifecycle, and projection math.</para>
+</listitem><listitem><para>src/native/gaze_tracker_native.cpp : Implements native camera/model initialization and tracking loop via <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> thread.</para>
+</listitem><listitem><para>src/web/gaze_tracker_web.cpp : Implements Web HTML5 JS/Emscripten tracking loop integration and sidecar message polling. </para>
+</listitem></itemizedlist>
+</para>
     </detaileddescription>
     <inheritancegraph>
       <node id="2">
@@ -1762,8 +1811,8 @@
     </inheritancegraph>
     <collaborationgraph>
       <node id="3">
-        <label>Gaze::GazeVector2</label>
-        <link refid="struct_gaze_1_1_gaze_vector2"/>
+        <label>Gaze::GazeVector2_64f</label>
+        <link refid="struct_gaze_1_1_gaze_vector2__64f"/>
       </node>
       <node id="4">
         <label>Gaze::GazeVector2i</label>
@@ -1785,68 +1834,75 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_tracker.hpp" line="70" column="1" bodyfile="src/godot/gaze_tracker.hpp" bodystart="70" bodyend="283"/>
+    <location file="src/godot/gaze_tracker.hpp" line="59" column="1" bodyfile="src/godot/gaze_tracker.hpp" bodystart="59" bodyend="287"/>
     <listofallmembers>
       <member refid="classgodot_1_1_gaze_tracker_1aa6deef3ea7f65ab1a84ede3b44be3d7c" prot="protected" virt="non-virtual"><scope>godot::GazeTracker</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a029baa3a0504c77e508ca8b7590cebff" prot="protected" virt="non-virtual"><scope>godot::GazeTracker</scope><name>_notification</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1aac06c4c3ea2cfe7e4ce3335f7a900c16" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>_on_gaze_data_ready</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a733de09bb6a48643398803deee5f583a" prot="public" virt="virtual"><scope>godot::GazeTracker</scope><name>_process</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a51b2ad7aad517cb2d86b6cfc4fe11920" prot="public" virt="virtual"><scope>godot::GazeTracker</scope><name>_ready</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aadefb445729a52654ef0b06cc71479d7" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>autostart</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a1b98c466d80f468927789614a46084eb" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>calibration_resource</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1ac4a8af1b3382d6cd95058e1ac84ee1e2" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>bio_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a766d73428c4cc45ffe15648e78656138" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>camera_device_id</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a669147ad62f61be53450224e295bce59" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>camera_gaze_rid</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1afc7795ece54eead94cc9973eac0856c9" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>camera_sensor</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ae0f1cc66d5c2cf65595d21e43883d1b1" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>clear_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a3b905acf0a094ccc9ec8a9af91e85968" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>complete_initialization</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a905a1938c5cc69dd5afb22e4428ea826" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>copy_individual_file</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a5e3f23febc7432e40aac6287a4e41a81" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>copy_model_to_user_dir</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a2b3a08cdf57058010ce3be0c43580081" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>CSS_PIXELS_PER_INCH</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a8cf6f45440a7019de6971b0bfd66e2a3" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>debug_log_frame_counter</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac51f11da3a24202f30d26fc49d35040b" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>debug_logging_frames</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a39268252753b5f51779f89ed86534c02" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>DEFAULT_SCREEN_SIZE_MM</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a9b63961ee93b8d5664ad9ca9819fd3cd" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>DEFAULT_SCREEN_SIZE_PIXELS</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a8d81c9131759c48765bc8e015b7df2d5" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>device_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a9ef460b35cbd8ee6e2b8bf6efd59e31a" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>display_profile</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a19499958c8e51487f321ed00090e1b32" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>display_rid</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ab79072c0411daacf6276f4bd41cc66df" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>eye_estimator</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a08a6ddb0bddffb085b7f0a044a686b1f" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>eye_gaze_rid</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a293f337292a3e7e77edb03eddb0dc0dd" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>face_estimator</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a2927fbf9936164132903ce5b8a9fc61b" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>face_gaze_rid</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac765619951568b95fbc3e0d4d8f11011" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>feed_gaze</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a43c876808cc5aecd16cd81c57ec6dd51" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>feed_gaze_web_raw</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aac3804e601c511b17726227b4e4596bf" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>filter_gaze_coordinate</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a423db82e9dc105bc8d5dd88f6629f991" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>GazeLifecycle</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a5436148345c5124f8c6a8a546a43b6c5" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>GazeTracker</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a728a1fb36d1726058a4c394453de58e4" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>GDCLASS</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1af7694352c050f4a0325f89d635e726de" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_adjusted_viewport_transform</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ad212f9fb5b44379f21628ae38dfc46b2" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_autostart</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1aeab989cfd09819eba97766f5e12da1ba" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_calibration_resource</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a6d464b4c1eaa83f02bf19d6826bb4e8c" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_bio_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a5c4780caec4adbcf8b7b89077034568c" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_camera_device_id</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a8ea3a2ed2fd225a1e1556e46b9607e94" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_camera_sensor</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a63c68c37f7c47d474dc00ff8cadc8b61" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_camera_to_screen_transform</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a568a14be88a4596c8da44659837b2acd" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_debug_logging_frames</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ae95f891f40e93283cb254c01ad4b7cfc" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_derived_camera_offset</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1adea6621eb07bad4032f0ca563d0bb7c9" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_derived_camera_tilt</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a464d3c0394b0f30836f8cd559b2b3e1c" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_device_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a29690dc1c66ea749e9965a992d6e3fe3" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_display_profile</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1af21cf3434234c4a7682cace47c2ae048" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_eye_estimator</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1adb7e961041b74e9c108aa287b3c7e059" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_face_estimator</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aa7b80daa0034d2ebf30b10e866df1810" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_gaze_direction</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1aef2d59122b4486b30d21c5ffdbbee470" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_gaze_direction_opencv_space</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a61b537a1bc8537669af7637814de0547" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_gaze_direction_inference_space</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a40d1fb37fdb83e32aed8a1ba422e0a58" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_gaze_origin</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac956e55e8f9445fbd92cf80ad075b499" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_forward</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a3e53379df04d01ab81abd5032ef2d00c" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_position</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a4d42f7ec45c3e16c50201305ad5bc4d9" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_rotation_opencv_space</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a437589ce689084964876350e6c7e5558" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_rotation_inference_space</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac5efcd36617739369fcda57dd6c4bf16" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_transform</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a0f18b207755b23eb8873f9cc2998f121" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_translation_opencv_space</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a5c203cd3cbd51a83b760e939f9264d1b" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_head_translation_inference_space</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a38a8f2b6dab63f63f2eec55c86bc29e5" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_latest_filtered_gaze</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aafbe61aea6c1d44254e521c90cc752d8" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_latest_projected_gaze</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1ae92c1710fc0744585bc135510c85b1d0" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_left_eye_center_opencv_space</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a502c4e8894085d527277e5ea160c9a8f" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_left_eye_center_inference_space</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1af5d7eeceae7bfdf0a5f287ac741c2804" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_lifecycle_state</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a4a70c89daf466ed4df58758c02e1d930" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_pipeline_config</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ade9db1b03142eeb8cf49fbf8f61c3975" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_pixel_size_mm</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a21a762b148e464251ce235744a13ddf0" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_projection_engine</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1aba0e94086b19ba8f2f92f7d4af937982" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_right_eye_center_opencv_space</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1ad080bbaf152ced2cf674e830eb19b488" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_right_eye_center_inference_space</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a7d0bc5b0b4e8c465bb9c4dd596f14373" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_screen_smooth</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a90b6b5378744b1b19384f9567e052d0d" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_verbosity</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a30a6144a80bad40db4ccd015a1d8d7ba" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_window_position_override</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a02ee2fb1b583d5adf26bef74a728d0ec" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>get_window_scale</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a875df127fa340856d785960dfd111fd3" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>initialize_tracker</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a7bbf3bad963e91c47119652040b92179" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>is_face_detected</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a8f1154001f559c1f7d17330e3ac0a9aa" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>is_face_tracked</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a8824b35a16827246c3382222246fbb87" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>last_frame_time</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a0d81b338c62ff05e292a7514c173f8e5" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>last_vp_xform</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a3d3293aff5862da1bc88dde1cf245638" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>last_window_pos</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ab663a69de8ee274618ab592b07e998e7" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>latest_crops</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a8dfaec64c443f730d73467d2220ce160" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>latest_filtered_gaze_px</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a77df98a2867a5d0d71332517eb62229f" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>latest_gaze_dir</name></member>
@@ -1858,15 +1914,11 @@
       <member refid="classgodot_1_1_gaze_tracker_1a423db82e9dc105bc8d5dd88f6629f991a18e958b8bc32c80ba51eae337cdb0c98" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>LIFECYCLE_RUNNING</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac11bf286be2d50539267a9bb42ba28da" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>lifecycle_state</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a423db82e9dc105bc8d5dd88f6629f991abb7aaade9fce92ec7ca4f317025ae257" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>LIFECYCLE_UNKNOWN</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1af7bc9215b75111294cc2a97b3d80063b" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>load_file_buffer</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a39bd05d715a2c5690d27b157e17e4af8" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>log_this_frame</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ac7365493d66d53350f5e3ee7d63909e9" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>map_viewport_to_screen</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ab0c242cc491c0c657e3c2b671c1f1c4e" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>MM_PER_INCH</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a9adf23ae2a2b25ff3117f89f5a18ee51" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>on_permission_result</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a798b8634e92865af404feb6551ca0277" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>on_sidecar_ready</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aacaab9ac4e028e05c19e4a2e220fd96f" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>opaque</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a1a63c23f8f2cc182bea682f15b5083be" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>overrides</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1a1eec51bb4d2bfe3216be746844117565" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>pipeline_config</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a82e29e8c86e5e1867e708d37199283e3" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>platform_get_geometry</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a54454d1765d3f93005a59f58134e6f4f" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>platform_initialize</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a263fb181a540d9660f08d16d066c7d10" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>platform_on_permission_result</name></member>
@@ -1877,21 +1929,22 @@
       <member refid="classgodot_1_1_gaze_tracker_1a29b7f4014eefed7ea0d5fe3d4c26b354" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>projection_engine</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ae47682af3b167ee352178a82c70d47d5" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>screen_smooth</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a115ec5e472e7707fea12cff579a6c72f" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_autostart</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1aed07abeb9c3f7e3e83822c509e1aaaaf" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_calibration_resource</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a2624f8bd96a5ad39bb5a8a5656cf1aeb" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_bio_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a7b846c9e46192c65e8a77129fe692e64" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_camera_device_id</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1adaa134215a0d66ae4243658428279d85" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_debug_logging_frames</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a9986dfbab328d257ad5f14d3ec13d5d4" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_device_calibration</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a58ecda1aae971528ccb0e13fb10f9b3c" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_display_profile</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1aa5325598337acd229671ae33cc0f0894" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_lifecycle_state</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1abdfbfe884504e8a9ea0948824c9fbddd" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_pipeline_config</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ad301a3a8ae8b362a0bafa60cde0d8543" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_screen_smooth</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a0a2f1fbef006ab39b26f36896f4b2478" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_verbosity</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a16208e28244a6606b3215f276d5b648f" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_window_position_override</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a72cdd14439fe8fe6b6d5c2c841a777a2" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>smoother_state</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1ab1953b1aca2a4e73331d063d41f70d78" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>start_tracker</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a911ec38d4f0c14db02406e8d41bb422b" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>stop_tracker</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a24d032b6c95935bcf9442c4933bdefac" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>tracker_initialized</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a3bc16a319adc7c9c2db8709281efab62" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>trigger_permission_request</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a155b2ebd5cf3ded4f96578fb3781d16d" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>update_filter_parameters</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1ab3662b603e61f4be999ea6ba66f3b49b" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>update_pipeline_config</name></member>
-      <member refid="classgodot_1_1_gaze_tracker_1abc34028b4fff9c08980e1b5bb29dbc46" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>update_projection_parameters</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1abc34028b4fff9c08980e1b5bb29dbc46" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>update_projection_parameters</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a7780304ac70318a4a7206827536bf096" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>web_canvas_pos</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1a2be5425c1035630272bf8cbcb3a0bd77" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>window_position_override</name></member>
       <member refid="classgodot_1_1_gaze_tracker_1ab41c830039e50b8fcc714f90957a3b97" prot="public" virt="virtual"><scope>godot::GazeTracker</scope><name>~GazeTracker</name></member>

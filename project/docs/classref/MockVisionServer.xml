@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MockVisionServer" inherits="godot::VisionServer">
+	<brief_description>Subclass of VisionServer enabling manual frame injection for unit testing and virtualization.</brief_description>
+	<description>MockVisionServer overrides camera capture logic to return manually injected textures rather than reading from a physical webcam.</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="camera_create">
+			<return type="RID"></return>
+			<description>Create a new camera resource and return its unique RID.</description>
+		</method>
+		<method name="camera_start">
+			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Start frame capture capture on the camera.
+
+True if started successfully, false otherwise.
+
+True if started successfully, false otherwise.</description>
+		</method>
+		<method name="camera_stop">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Stop frame capture and release hardware resources.</description>
+		</method>
+		<method name="get_camera_current_texture">
+			<return type="Ref&lt; Texture2D &gt;"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Retrieve the latest captured frame texture for Godot rendering.</description>
+		</method>
+		<method name="camera_get_current_image">
+			<return type="Ref&lt; Image &gt;"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Retrieve the latest captured CPU image resource.</description>
+		</method>
+		<method name="inject_texture">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_texture" type="const Ref&lt; Texture2D &gt; &amp;"></param>
+			<description>Manually inject a frame texture into the mock camera.
+
+p_camera
+The mock camera RID.
+p_texture
+The frame texture to inject.
+
+The mock camera RID.
+
+The frame texture to inject.</description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

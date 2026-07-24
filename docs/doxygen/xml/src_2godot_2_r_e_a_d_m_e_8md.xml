@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="src_2godot_2_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">/**</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>@dir<sp/>src/godot</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>@brief<sp/>Godot<sp/>GDExtension<sp/>Class<sp/>Bindings</highlight></codeline>
+<codeline><highlight class="normal">-</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>This<sp/>directory<sp/>contains<sp/>the<sp/>GDExtension<sp/>classes<sp/>and<sp/>ClassDB<sp/>registration<sp/>interfaces<sp/>that<sp/>bridge<sp/>the<sp/>core<sp/>C++<sp/>gaze<sp/>engine<sp/>to<sp/>Godot.</highlight></codeline>
+<codeline><highlight class="normal">-</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Classes<sp/>here<sp/>include:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`GazeTracker`:<sp/>Singleton<sp/>wrapping<sp/>the<sp/>asynchronous<sp/>pipeline,<sp/>filters,<sp/>and<sp/>display<sp/>projector.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`GazeServer`:<sp/>Background<sp/>thread<sp/>manager.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`CameraSensor`:<sp/>Frame<sp/>ingestion<sp/>and<sp/>camera<sp/>property<sp/>wrapper.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`FaceEstimator`:<sp/>YuNet<sp/>detector<sp/>bindings.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`EyeEstimator`:<sp/>Gaze<sp/>estimation<sp/>model<sp/>bindings.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`DeviceCalibration`/`BioCalibration`:<sp/>Serializable<sp/>Godot<sp/>Resource<sp/>classes.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`GazeCalibrationSession`:<sp/>Interactive<sp/>calibration<sp/>coordinator.</highlight></codeline>
+<codeline><highlight class="normal">-</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Ensure<sp/>all<sp/>public<sp/>methods<sp/>here<sp/>are<sp/>fully<sp/>documented<sp/>with<sp/>Doxygen<sp/>comments.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*/</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Godot<sp/>GDExtension<sp/>Layer</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Binds<sp/>the<sp/>underlying<sp/>C++<sp/>layers<sp/>to<sp/>the<sp/>Godot<sp/>Engine,<sp/>exposing<sp/>node<sp/>types,<sp/>resources,<sp/>and<sp/>methods<sp/>to<sp/>GDScript.</highlight></codeline>
+    </programlisting>
+    <location file="src/godot/README.md"/>
+  </compounddef>
+</doxygen>

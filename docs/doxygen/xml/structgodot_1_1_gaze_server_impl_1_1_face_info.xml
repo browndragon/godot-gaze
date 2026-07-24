@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_face_info" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::FaceInfo</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_face_info_1ae9899e8afe018ba22e312228439ed6f4" prot="public" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeServerImpl::FaceInfo::parent_camera_rid</definition>
+        <argsstring></argsstring>
+        <name>parent_camera_rid</name>
+        <qualifiedname>godot::GazeServerImpl::FaceInfo::parent_camera_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="52" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_face_info_1a3fec72d743c6e6ab00b1c8ec782122cd" prot="public" static="no" mutable="no">
+        <type>Transform3D</type>
+        <definition>Transform3D godot::GazeServerImpl::FaceInfo::relative_transform</definition>
+        <argsstring></argsstring>
+        <name>relative_transform</name>
+        <qualifiedname>godot::GazeServerImpl::FaceInfo::relative_transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="53" column="21" bodyfile="src/godot/gaze_server.cpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab9cc30dbdc6656a445292d03b5eb6e9a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServerImpl::FaceInfo::detected</definition>
+        <argsstring></argsstring>
+        <name>detected</name>
+        <qualifiedname>godot::GazeServerImpl::FaceInfo::detected</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="54" column="14" bodyfile="src/godot/gaze_server.cpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_face_info_1a08e5fee34549d10ce9f3eadd561d9567" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref></type>
+        <definition>Gaze::GazeVector3 godot::GazeServerImpl::FaceInfo::head_pose_translation</definition>
+        <argsstring></argsstring>
+        <name>head_pose_translation</name>
+        <qualifiedname>godot::GazeServerImpl::FaceInfo::head_pose_translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="56" column="27" bodyfile="src/godot/gaze_server.cpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab5f5ae0e827ddce37dd22212818285d9" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref></type>
+        <definition>Gaze::GazeVector3 godot::GazeServerImpl::FaceInfo::head_pose_rotation</definition>
+        <argsstring></argsstring>
+        <name>head_pose_rotation</name>
+        <qualifiedname>godot::GazeServerImpl::FaceInfo::head_pose_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="57" column="27" bodyfile="src/godot/gaze_server.cpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::GazeVector3</label>
+        <link refid="struct_gaze_1_1_gaze_vector3"/>
+      </node>
+      <node id="1">
+        <label>godot::GazeServerImpl::FaceInfo</label>
+        <link refid="structgodot_1_1_gaze_server_impl_1_1_face_info"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>head_pose_rotation</edgelabel>
+          <edgelabel>head_pose_translation</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_server.cpp" line="51" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="51" bodyend="58"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab9cc30dbdc6656a445292d03b5eb6e9a" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::FaceInfo</scope><name>detected</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab5f5ae0e827ddce37dd22212818285d9" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::FaceInfo</scope><name>head_pose_rotation</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1a08e5fee34549d10ce9f3eadd561d9567" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::FaceInfo</scope><name>head_pose_translation</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1ae9899e8afe018ba22e312228439ed6f4" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::FaceInfo</scope><name>parent_camera_rid</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1a3fec72d743c6e6ab00b1c8ec782122cd" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::FaceInfo</scope><name>relative_transform</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

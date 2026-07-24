@@ -2,6 +2,68 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="struct_gaze_1_1_eye_crops" kind="struct" language="C++" prot="public">
     <compoundname>Gaze::EyeCrops</compoundname>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a91c4c8c40bc443e3bd39fdef6f1b04df" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::EyeCrops::EYE_CROP_WIDTH</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_WIDTH</name>
+        <qualifiedname>Gaze::EyeCrops::EYE_CROP_WIDTH</qualifiedname>
+        <initializer>= 60</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="43" column="30" bodyfile="src/core/face_pipeline.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1af8e8740c3528e35f889aa8ad01faf334" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::EyeCrops::EYE_CROP_HEIGHT</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_HEIGHT</name>
+        <qualifiedname>Gaze::EyeCrops::EYE_CROP_HEIGHT</qualifiedname>
+        <initializer>= 60</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="44" column="30" bodyfile="src/core/face_pipeline.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1acfd36946a5df60b8dbc7338321b8474e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::EyeCrops::EYE_CROP_CHANNELS</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_CHANNELS</name>
+        <qualifiedname>Gaze::EyeCrops::EYE_CROP_CHANNELS</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="45" column="30" bodyfile="src/core/face_pipeline.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a7c93ebd79fe95cf26657b28a053fc1ae" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::EyeCrops::EYE_CROP_SIZE</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_SIZE</name>
+        <qualifiedname>Gaze::EyeCrops::EYE_CROP_SIZE</qualifiedname>
+        <initializer>= EYE_CROP_WIDTH * EYE_CROP_HEIGHT * EYE_CROP_CHANNELS</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="46" column="30" bodyfile="src/core/face_pipeline.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
     <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a62e865f186f915cd5106b0ea72fef51f" prot="public" static="no" mutable="no">
         <type>bool</type>
@@ -16,7 +78,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="18" column="10" bodyfile="src/core/face_pipeline.hpp" bodystart="18" bodyend="-1"/>
+        <location file="src/core/face_pipeline.hpp" line="48" column="14" bodyfile="src/core/face_pipeline.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a491e8247038388456f63d119480c6681" prot="public" static="no" mutable="no">
+        <type>GazePoint</type>
+        <definition>GazePoint Gaze::EyeCrops::landmarks[5]</definition>
+        <argsstring>[5]</argsstring>
+        <name>landmarks</name>
+        <qualifiedname>Gaze::EyeCrops::landmarks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="49" column="19" bodyfile="src/core/face_pipeline.hpp" bodystart="49" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1aa6f78453b65a3586a524588ef3c64f9b" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -30,7 +106,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="21" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="21" bodyend="-1"/>
+        <location file="src/core/face_pipeline.hpp" line="52" column="21" bodyfile="src/core/face_pipeline.hpp" bodystart="52" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a3cd9d347992ec92e80870a18c521fd20" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -44,12 +120,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="22" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="22" bodyend="-1"/>
+        <location file="src/core/face_pipeline.hpp" line="53" column="21" bodyfile="src/core/face_pipeline.hpp" bodystart="53" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a565d4aa2fdc4d1e4a6383103df3dd5a8" prot="public" static="no" mutable="no">
-        <type>unsigned char</type>
-        <definition>unsigned char Gaze::EyeCrops::left_eye_data[10800]</definition>
-        <argsstring>[10800]</argsstring>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1aff86609d8512c551e4de8bb29fb3ce51" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t Gaze::EyeCrops::left_eye_data[EYE_CROP_SIZE]</definition>
+        <argsstring>[EYE_CROP_SIZE]</argsstring>
         <name>left_eye_data</name>
         <qualifiedname>Gaze::EyeCrops::left_eye_data</qualifiedname>
         <initializer>= {0}</initializer>
@@ -59,12 +135,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="26" column="19" bodyfile="src/core/face_pipeline.hpp" bodystart="26" bodyend="26"/>
+        <location file="src/core/face_pipeline.hpp" line="56" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="56" bodyend="56"/>
       </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a37bb9aa12182f32ad3714837fadbbc0b" prot="public" static="no" mutable="no">
-        <type>unsigned char</type>
-        <definition>unsigned char Gaze::EyeCrops::right_eye_data[10800]</definition>
-        <argsstring>[10800]</argsstring>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a82b84f9adbad4d2a0526d09b9600ce38" prot="public" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t Gaze::EyeCrops::right_eye_data[EYE_CROP_SIZE]</definition>
+        <argsstring>[EYE_CROP_SIZE]</argsstring>
         <name>right_eye_data</name>
         <qualifiedname>Gaze::EyeCrops::right_eye_data</qualifiedname>
         <initializer>= {0}</initializer>
@@ -74,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="27" column="19" bodyfile="src/core/face_pipeline.hpp" bodystart="27" bodyend="27"/>
+        <location file="src/core/face_pipeline.hpp" line="57" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="57" bodyend="57"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1aee031d2b7b1f68e441d09a701b0702b2" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -88,7 +164,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="31" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="31" bodyend="-1"/>
+        <location file="src/core/face_pipeline.hpp" line="61" column="21" bodyfile="src/core/face_pipeline.hpp" bodystart="61" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a66f11e32929fe39de911bf3c1830072a" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -102,7 +178,67 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/face_pipeline.hpp" line="32" column="17" bodyfile="src/core/face_pipeline.hpp" bodystart="32" bodyend="-1"/>
+        <location file="src/core/face_pipeline.hpp" line="62" column="21" bodyfile="src/core/face_pipeline.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a2806008534a37f24bbb5908e0a88fe22" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::EyeCrops::left_eye_texture_handle</definition>
+        <argsstring></argsstring>
+        <name>left_eye_texture_handle</name>
+        <qualifiedname>Gaze::EyeCrops::left_eye_texture_handle</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="65" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1a401581507a63316dbf3fdcad324c4a34" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::EyeCrops::right_eye_texture_handle</definition>
+        <argsstring></argsstring>
+        <name>right_eye_texture_handle</name>
+        <qualifiedname>Gaze::EyeCrops::right_eye_texture_handle</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="66" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1ac338d2a5038e3280b3967c16a2648ee2" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::EyeCrops::left_eye_texture_rid_val</definition>
+        <argsstring></argsstring>
+        <name>left_eye_texture_rid_val</name>
+        <qualifiedname>Gaze::EyeCrops::left_eye_texture_rid_val</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="67" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_eye_crops_1acf021c19cb6dea266545d8fc9a6885a9" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::EyeCrops::right_eye_texture_rid_val</definition>
+        <argsstring></argsstring>
+        <name>right_eye_texture_rid_val</name>
+        <qualifiedname>Gaze::EyeCrops::right_eye_texture_rid_val</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="68" column="18" bodyfile="src/core/face_pipeline.hpp" bodystart="68" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -114,6 +250,9 @@
         <label>Gaze::EyeCrops</label>
         <link refid="struct_gaze_1_1_eye_crops"/>
         <childnode refid="2" relation="usage">
+          <edgelabel>landmarks</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
           <edgelabel>head_pose_rotation</edgelabel>
           <edgelabel>head_pose_translation</edgelabel>
           <edgelabel>left_eye_center_cam</edgelabel>
@@ -121,19 +260,32 @@
         </childnode>
       </node>
       <node id="2">
+        <label>Gaze::GazeVector2_64f</label>
+        <link refid="struct_gaze_1_1_gaze_vector2__64f"/>
+      </node>
+      <node id="3">
         <label>Gaze::GazeVector3</label>
         <link refid="struct_gaze_1_1_gaze_vector3"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/face_pipeline.hpp" line="17" column="1" bodyfile="src/core/face_pipeline.hpp" bodystart="17" bodyend="33"/>
+    <location file="src/core/face_pipeline.hpp" line="41" column="5" bodyfile="src/core/face_pipeline.hpp" bodystart="42" bodyend="69"/>
     <listofallmembers>
+      <member refid="struct_gaze_1_1_eye_crops_1acfd36946a5df60b8dbc7338321b8474e" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>EYE_CROP_CHANNELS</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1af8e8740c3528e35f889aa8ad01faf334" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>EYE_CROP_HEIGHT</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a7c93ebd79fe95cf26657b28a053fc1ae" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>EYE_CROP_SIZE</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a91c4c8c40bc443e3bd39fdef6f1b04df" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>EYE_CROP_WIDTH</name></member>
       <member refid="struct_gaze_1_1_eye_crops_1a62e865f186f915cd5106b0ea72fef51f" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>face_detected</name></member>
       <member refid="struct_gaze_1_1_eye_crops_1aa6f78453b65a3586a524588ef3c64f9b" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>head_pose_rotation</name></member>
       <member refid="struct_gaze_1_1_eye_crops_1a3cd9d347992ec92e80870a18c521fd20" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>head_pose_translation</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a491e8247038388456f63d119480c6681" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>landmarks</name></member>
       <member refid="struct_gaze_1_1_eye_crops_1aee031d2b7b1f68e441d09a701b0702b2" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_center_cam</name></member>
-      <member refid="struct_gaze_1_1_eye_crops_1a565d4aa2fdc4d1e4a6383103df3dd5a8" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_data</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1aff86609d8512c551e4de8bb29fb3ce51" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_data</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a2806008534a37f24bbb5908e0a88fe22" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_texture_handle</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1ac338d2a5038e3280b3967c16a2648ee2" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>left_eye_texture_rid_val</name></member>
       <member refid="struct_gaze_1_1_eye_crops_1a66f11e32929fe39de911bf3c1830072a" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_center_cam</name></member>
-      <member refid="struct_gaze_1_1_eye_crops_1a37bb9aa12182f32ad3714837fadbbc0b" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_data</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a82b84f9adbad4d2a0526d09b9600ce38" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_data</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1a401581507a63316dbf3fdcad324c4a34" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_texture_handle</name></member>
+      <member refid="struct_gaze_1_1_eye_crops_1acf021c19cb6dea266545d8fc9a6885a9" prot="public" virt="non-virtual"><scope>Gaze::EyeCrops</scope><name>right_eye_texture_rid_val</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

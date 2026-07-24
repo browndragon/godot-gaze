@@ -4,12 +4,12 @@
     <compoundname>godot::FaceEstimator</compoundname>
     <basecompoundref prot="public" virt="non-virtual">Node3D</basecompoundref>
     <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="classgodot_1_1_face_estimator_1adc50e8d975a93274915cc0d1bd6f54bb" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="classgodot_1_1_face_estimator_1a8c9b7654929f57fd1ca3f48eead06e48" prot="private" static="no" mutable="no">
         <type>String</type>
-        <definition>String godot::FaceEstimator::yunet_model_path</definition>
+        <definition>String godot::FaceEstimator::yunet_model_prefix</definition>
         <argsstring></argsstring>
-        <name>yunet_model_path</name>
-        <qualifiedname>godot::FaceEstimator::yunet_model_path</qualifiedname>
+        <name>yunet_model_prefix</name>
+        <qualifiedname>godot::FaceEstimator::yunet_model_prefix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -24,7 +24,7 @@
         <argsstring></argsstring>
         <name>camera_focal_length_px</name>
         <qualifiedname>godot::FaceEstimator::camera_focal_length_px</qualifiedname>
-        <initializer>= 1000.0</initializer>
+        <initializer>= -1.0</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -32,6 +32,21 @@
         <inbodydescription>
         </inbodydescription>
         <location file="src/godot/face_estimator.hpp" line="15" column="12" bodyfile="src/godot/face_estimator.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_face_estimator_1a62d1a896fa53ac2b72663d4e722dd83c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::FaceEstimator::camera_fov_degrees</definition>
+        <argsstring></argsstring>
+        <name>camera_fov_degrees</name>
+        <qualifiedname>godot::FaceEstimator::camera_fov_degrees</qualifiedname>
+        <initializer>= 35.488537576579634</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/face_estimator.hpp" line="16" column="12" bodyfile="src/godot/face_estimator.hpp" bodystart="16" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_face_estimator_1a02bfa8ebdbe4cdcc345789b70a47bc1e" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -46,22 +61,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="16" column="10" bodyfile="src/godot/face_estimator.hpp" bodystart="16" bodyend="-1"/>
+        <location file="src/godot/face_estimator.hpp" line="17" column="10" bodyfile="src/godot/face_estimator.hpp" bodystart="17" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_face_estimator_1a5ebc32e071d026d55ac835d6ab91d80f" prot="private" static="no" mutable="no">
-        <type><ref refid="class_gaze_1_1_face_pipeline" kindref="compound">Gaze::FacePipeline</ref> *</type>
-        <definition>Gaze::FacePipeline* godot::FaceEstimator::pipeline</definition>
+      <memberdef kind="variable" id="classgodot_1_1_face_estimator_1ac004fe56f99102730fe2476ede30ec6f" prot="private" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::FaceEstimator::face_rid</definition>
         <argsstring></argsstring>
-        <name>pipeline</name>
-        <qualifiedname>godot::FaceEstimator::pipeline</qualifiedname>
-        <initializer>= nullptr</initializer>
+        <name>face_rid</name>
+        <qualifiedname>godot::FaceEstimator::face_rid</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="18" column="24" bodyfile="src/godot/face_estimator.hpp" bodystart="18" bodyend="-1"/>
+        <location file="src/godot/face_estimator.hpp" line="18" column="9" bodyfile="src/godot/face_estimator.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -99,7 +113,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="21" column="17" bodyfile="src/godot/face_estimator.cpp" bodystart="48" bodyend="65"/>
+        <location file="src/godot/face_estimator.hpp" line="21" column="17" bodyfile="src/godot/face_estimator.cpp" bodystart="10" bodyend="31"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -115,7 +129,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="24" column="5" bodyfile="src/godot/face_estimator.cpp" bodystart="67" bodyend="67"/>
+        <location file="src/godot/face_estimator.hpp" line="24" column="5" bodyfile="src/godot/face_estimator.cpp" bodystart="33" bodyend="33"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1abd99027302730821af33360c1057bc8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -129,7 +143,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="25" column="13" bodyfile="src/godot/face_estimator.cpp" bodystart="69" bodyend="71"/>
+        <location file="src/godot/face_estimator.hpp" line="25" column="13" bodyfile="src/godot/face_estimator.cpp" bodystart="35" bodyend="37"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1ad484450652e4d17f1ef3257c1d5d8d8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -143,7 +157,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="27" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="73" bodyend="89"/>
+        <location file="src/godot/face_estimator.hpp" line="27" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="39" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1acf5ff30dc86bfe7565cd8bd04bb1ace2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -157,36 +171,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="28" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="91" bodyend="97"/>
+        <location file="src/godot/face_estimator.hpp" line="28" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="48" bodyend="57"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_face_estimator_1ab594ff6ac3176672dff76b5624116c60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>bool</type>
-        <definition>bool godot::FaceEstimator::process_frame</definition>
-        <argsstring>(const Gaze::Frame &amp;frame, Gaze::EyeCrops &amp;out_crops)</argsstring>
-        <name>process_frame</name>
-        <qualifiedname>godot::FaceEstimator::process_frame</qualifiedname>
-        <param>
-          <type>const <ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref> &amp;</type>
-          <declname>frame</declname>
-        </param>
-        <param>
-          <type><ref refid="struct_gaze_1_1_eye_crops" kindref="compound">Gaze::EyeCrops</ref> &amp;</type>
-          <declname>out_crops</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="29" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="99" bodyend="117"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a101034d368b5affb8ac7f87040b173f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1af178a15cd3312d01c7d49e0f5f7f3d48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::FaceEstimator::set_yunet_model_path</definition>
+        <definition>void godot::FaceEstimator::set_yunet_model_prefix</definition>
         <argsstring>(String path)</argsstring>
-        <name>set_yunet_model_path</name>
-        <qualifiedname>godot::FaceEstimator::set_yunet_model_path</qualifiedname>
+        <name>set_yunet_model_prefix</name>
+        <qualifiedname>godot::FaceEstimator::set_yunet_model_prefix</qualifiedname>
         <param>
           <type>String</type>
           <declname>path</declname>
@@ -197,21 +189,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="31" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="119" bodyend="121"/>
+        <location file="src/godot/face_estimator.hpp" line="30" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="59" bodyend="63"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a120de9d76513bb6c9799711c9e586f50" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1aaf88126064118d87377249cd6f9dce8b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>String</type>
-        <definition>String godot::FaceEstimator::get_yunet_model_path</definition>
+        <definition>String godot::FaceEstimator::get_yunet_model_prefix</definition>
         <argsstring>() const</argsstring>
-        <name>get_yunet_model_path</name>
-        <qualifiedname>godot::FaceEstimator::get_yunet_model_path</qualifiedname>
+        <name>get_yunet_model_prefix</name>
+        <qualifiedname>godot::FaceEstimator::get_yunet_model_prefix</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="32" column="12" bodyfile="src/godot/face_estimator.cpp" bodystart="123" bodyend="125"/>
+        <location file="src/godot/face_estimator.hpp" line="31" column="12" bodyfile="src/godot/face_estimator.cpp" bodystart="65" bodyend="67"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1a88797491aff273243da45ede60ef3191" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -229,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="34" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="127" bodyend="132"/>
+        <location file="src/godot/face_estimator.hpp" line="33" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="69" bodyend="71"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1afe637690caf6bc9d7adfd27e2e9cf14a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -243,7 +235,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="35" column="12" bodyfile="src/godot/face_estimator.cpp" bodystart="134" bodyend="136"/>
+        <location file="src/godot/face_estimator.hpp" line="34" column="12" bodyfile="src/godot/face_estimator.cpp" bodystart="73" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1aedb4edbb16f58a5dc9a6df475d07413f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FaceEstimator::set_camera_fov</definition>
+        <argsstring>(double fov)</argsstring>
+        <name>set_camera_fov</name>
+        <qualifiedname>godot::FaceEstimator::set_camera_fov</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fov</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/face_estimator.hpp" line="36" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="77" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a2992117ea4934d240e6c97fc45e61ab7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FaceEstimator::get_camera_fov</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_fov</name>
+        <qualifiedname>godot::FaceEstimator::get_camera_fov</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/face_estimator.hpp" line="37" column="12" bodyfile="src/godot/face_estimator.cpp" bodystart="81" bodyend="83"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1a3f92d643bcb3dac5ae32aa30ca751d80" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -261,7 +285,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="37" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="138" bodyend="140"/>
+        <location file="src/godot/face_estimator.hpp" line="39" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="85" bodyend="87"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_face_estimator_1a16fb8e7a7ddc08927dfef4f851a3982c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -275,17 +299,31 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="38" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="142" bodyend="144"/>
+        <location file="src/godot/face_estimator.hpp" line="40" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="89" bodyend="91"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a7b852c1011e6d601ffa5cf0abbf9e192" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a6c0444ef7d04e4679514250154235892" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>RID</type>
+        <definition>RID godot::FaceEstimator::get_face_rid</definition>
+        <argsstring>() const</argsstring>
+        <name>get_face_rid</name>
+        <qualifiedname>godot::FaceEstimator::get_face_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/face_estimator.hpp" line="42" column="9" bodyfile="src/godot/face_estimator.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1a1ca99a2c2802fd5654a7703ba3e7617e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::FaceEstimator::set_pipeline_config</definition>
-        <argsstring>(const Gaze::PipelineConfig &amp;config)</argsstring>
-        <name>set_pipeline_config</name>
-        <qualifiedname>godot::FaceEstimator::set_pipeline_config</qualifiedname>
+        <definition>void godot::FaceEstimator::set_face_rid</definition>
+        <argsstring>(RID p_rid)</argsstring>
+        <name>set_face_rid</name>
+        <qualifiedname>godot::FaceEstimator::set_face_rid</qualifiedname>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref> &amp;</type>
-          <declname>config</declname>
+          <type>RID</type>
+          <declname>p_rid</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -293,25 +331,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="40" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="146" bodyend="150"/>
+        <location file="src/godot/face_estimator.hpp" line="43" column="10" bodyfile="src/godot/face_estimator.hpp" bodystart="43" bodyend="43"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_face_estimator_1ac5090f6b24a51d5fc0f14938c00babfa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_face_estimator_1afcbb5e40acbaf6af0bd9f1215d90eba3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::FaceEstimator::feed_pose_web</definition>
-        <argsstring>(bool detected, Vector3 translation, Vector3 rotation)</argsstring>
-        <name>feed_pose_web</name>
-        <qualifiedname>godot::FaceEstimator::feed_pose_web</qualifiedname>
+        <definition>void godot::FaceEstimator::_on_gaze_data_ready</definition>
+        <argsstring>(RID p_rid)</argsstring>
+        <name>_on_gaze_data_ready</name>
+        <qualifiedname>godot::FaceEstimator::_on_gaze_data_ready</qualifiedname>
         <param>
-          <type>bool</type>
-          <declname>detected</declname>
-        </param>
-        <param>
-          <type>Vector3</type>
-          <declname>translation</declname>
-        </param>
-        <param>
-          <type>Vector3</type>
-          <declname>rotation</declname>
+          <type>RID</type>
+          <declname>p_rid</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -319,7 +349,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/face_estimator.hpp" line="42" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="152" bodyend="167"/>
+        <location file="src/godot/face_estimator.hpp" line="45" column="10" bodyfile="src/godot/face_estimator.cpp" bodystart="93" bodyend="112"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -348,26 +378,29 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/face_estimator.hpp" line="10" column="1" bodyfile="src/godot/face_estimator.hpp" bodystart="10" bodyend="43"/>
+    <location file="src/godot/face_estimator.hpp" line="10" column="1" bodyfile="src/godot/face_estimator.hpp" bodystart="10" bodyend="46"/>
     <listofallmembers>
       <member refid="classgodot_1_1_face_estimator_1a9b897a917e4367e7b76ceb86f5df7522" prot="protected" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_face_estimator_1afcbb5e40acbaf6af0bd9f1215d90eba3" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>_on_gaze_data_ready</name></member>
       <member refid="classgodot_1_1_face_estimator_1aaae09983ad88f286ea76e5abaed84f80" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>camera_focal_length_px</name></member>
+      <member refid="classgodot_1_1_face_estimator_1a62d1a896fa53ac2b72663d4e722dd83c" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>camera_fov_degrees</name></member>
+      <member refid="classgodot_1_1_face_estimator_1ac004fe56f99102730fe2476ede30ec6f" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>face_rid</name></member>
       <member refid="classgodot_1_1_face_estimator_1a75c2920449319c4f66e08a9ba3c41d37" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>FaceEstimator</name></member>
-      <member refid="classgodot_1_1_face_estimator_1ac5090f6b24a51d5fc0f14938c00babfa" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>feed_pose_web</name></member>
       <member refid="classgodot_1_1_face_estimator_1a9f981e3e153cbb0049ce744d8c15bbe7" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_face_estimator_1a2992117ea4934d240e6c97fc45e61ab7" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_camera_fov</name></member>
+      <member refid="classgodot_1_1_face_estimator_1a6c0444ef7d04e4679514250154235892" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_face_rid</name></member>
       <member refid="classgodot_1_1_face_estimator_1afe637690caf6bc9d7adfd27e2e9cf14a" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_focal_length</name></member>
       <member refid="classgodot_1_1_face_estimator_1a16fb8e7a7ddc08927dfef4f851a3982c" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_has_detected_face</name></member>
-      <member refid="classgodot_1_1_face_estimator_1a120de9d76513bb6c9799711c9e586f50" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_yunet_model_path</name></member>
+      <member refid="classgodot_1_1_face_estimator_1aaf88126064118d87377249cd6f9dce8b" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>get_yunet_model_prefix</name></member>
       <member refid="classgodot_1_1_face_estimator_1a02bfa8ebdbe4cdcc345789b70a47bc1e" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>has_detected_face_val</name></member>
       <member refid="classgodot_1_1_face_estimator_1ad484450652e4d17f1ef3257c1d5d8d8a" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>initialize_estimator</name></member>
-      <member refid="classgodot_1_1_face_estimator_1a5ebc32e071d026d55ac835d6ab91d80f" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>pipeline</name></member>
-      <member refid="classgodot_1_1_face_estimator_1ab594ff6ac3176672dff76b5624116c60" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>process_frame</name></member>
+      <member refid="classgodot_1_1_face_estimator_1aedb4edbb16f58a5dc9a6df475d07413f" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_camera_fov</name></member>
+      <member refid="classgodot_1_1_face_estimator_1a1ca99a2c2802fd5654a7703ba3e7617e" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_face_rid</name></member>
       <member refid="classgodot_1_1_face_estimator_1a88797491aff273243da45ede60ef3191" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_focal_length</name></member>
       <member refid="classgodot_1_1_face_estimator_1a3f92d643bcb3dac5ae32aa30ca751d80" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_has_detected_face</name></member>
-      <member refid="classgodot_1_1_face_estimator_1a7b852c1011e6d601ffa5cf0abbf9e192" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_pipeline_config</name></member>
-      <member refid="classgodot_1_1_face_estimator_1a101034d368b5affb8ac7f87040b173f8" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_yunet_model_path</name></member>
+      <member refid="classgodot_1_1_face_estimator_1af178a15cd3312d01c7d49e0f5f7f3d48" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>set_yunet_model_prefix</name></member>
       <member refid="classgodot_1_1_face_estimator_1acf5ff30dc86bfe7565cd8bd04bb1ace2" prot="public" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>stop_estimator</name></member>
-      <member refid="classgodot_1_1_face_estimator_1adc50e8d975a93274915cc0d1bd6f54bb" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>yunet_model_path</name></member>
+      <member refid="classgodot_1_1_face_estimator_1a8c9b7654929f57fd1ca3f48eead06e48" prot="private" virt="non-virtual"><scope>godot::FaceEstimator</scope><name>yunet_model_prefix</name></member>
       <member refid="classgodot_1_1_face_estimator_1abd99027302730821af33360c1057bc8b" prot="public" virt="virtual"><scope>godot::FaceEstimator</scope><name>~FaceEstimator</name></member>
     </listofallmembers>
   </compounddef>

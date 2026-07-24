@@ -11,68 +11,80 @@
     <includes refid="smoother_8hpp" local="yes">smoother.hpp</includes>
     <includes refid="one__euro__smoother_8hpp" local="yes">one_euro_smoother.hpp</includes>
     <incdepgraph>
-      <node id="20">
+      <node id="13">
         <label>camera_interface.hpp</label>
         <link refid="camera__interface_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
       </node>
       <node id="24">
         <label>camera_placement.hpp</label>
         <link refid="camera__placement_8hpp"/>
-        <childnode refid="15" relation="include">
-        </childnode>
-      </node>
-      <node id="19">
-        <label>face_model_geometry.hpp</label>
-        <link refid="face__model__geometry_8hpp"/>
-      </node>
-      <node id="21">
-        <label>face_pipeline.hpp</label>
-        <link refid="face__pipeline_8hpp"/>
-        <childnode refid="20" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
         <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="14">
+      <node id="21">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="16">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
         <label>gaze_calibration.hpp</label>
         <link refid="gaze__calibration_8hpp"/>
-        <childnode refid="15" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
       <node id="22">
         <label>gaze_model.hpp</label>
         <link refid="gaze__model_8hpp"/>
-        <childnode refid="21" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
         </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
       </node>
-      <node id="27">
+      <node id="28">
         <label>log.hpp</label>
         <link refid="log_8hpp"/>
-        <childnode refid="28" relation="include">
-        </childnode>
         <childnode refid="29" relation="include">
         </childnode>
         <childnode refid="30" relation="include">
         </childnode>
         <childnode refid="31" relation="include">
         </childnode>
-      </node>
-      <node id="15">
-        <label>math_defs.hpp</label>
-        <link refid="math__defs_8hpp"/>
-        <childnode refid="16" relation="include">
+        <childnode refid="32" relation="include">
         </childnode>
       </node>
       <node id="18">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
         <label>pipeline_config.hpp</label>
         <link refid="pipeline__config_8hpp"/>
-        <childnode refid="19" relation="include">
+        <childnode refid="21" relation="include">
         </childnode>
       </node>
       <node id="23">
@@ -80,45 +92,45 @@
         <link refid="projection__engine_8hpp"/>
         <childnode refid="24" relation="include">
         </childnode>
-        <childnode refid="14" relation="include">
+        <childnode refid="25" relation="include">
         </childnode>
-        <childnode refid="15" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="32">
+      <node id="33">
         <label>camera_sensor.hpp</label>
         <link refid="camera__sensor_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="33" relation="include">
+        <childnode refid="34" relation="include">
         </childnode>
-        <childnode refid="20" relation="include">
+        <childnode refid="35" relation="include">
         </childnode>
       </node>
-      <node id="36">
+      <node id="38">
         <label>eye_estimator.hpp</label>
         <link refid="eye__estimator_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="33" relation="include">
+        <childnode refid="34" relation="include">
         </childnode>
-        <childnode refid="35" relation="include">
+        <childnode refid="37" relation="include">
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="22" relation="include">
+        <childnode refid="35" relation="include">
         </childnode>
       </node>
-      <node id="34">
+      <node id="36">
         <label>face_estimator.hpp</label>
         <link refid="face__estimator_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="35" relation="include">
+        <childnode refid="37" relation="include">
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="21" relation="include">
+        <childnode refid="35" relation="include">
         </childnode>
       </node>
       <node id="11">
@@ -130,17 +142,7 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="13" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-      </node>
-      <node id="17">
-        <label>gaze_pipeline_config.hpp</label>
-        <link refid="gaze__pipeline__config_8hpp"/>
-        <childnode refid="12" relation="include">
-        </childnode>
-        <childnode refid="18" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -164,37 +166,35 @@
         </childnode>
         <childnode refid="11" relation="include">
         </childnode>
-        <childnode refid="17" relation="include">
+        <childnode refid="13" relation="include">
         </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
-        <childnode refid="21" relation="include">
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="22" relation="include">
         </childnode>
         <childnode refid="23" relation="include">
         </childnode>
-        <childnode refid="25" relation="include">
-        </childnode>
         <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>one_euro_smoother.hpp</label>
+        <link refid="one__euro__smoother_8hpp_source"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
         </childnode>
       </node>
       <node id="39">
-        <label>one_euro_smoother.hpp</label>
-        <link refid="one__euro__smoother_8hpp_source"/>
-        <childnode refid="37" relation="include">
-        </childnode>
-        <childnode refid="40" relation="include">
-        </childnode>
-      </node>
-      <node id="37">
         <label>smoother.hpp</label>
         <link refid="smoother_8hpp_source"/>
         <childnode refid="12" relation="include">
         </childnode>
-        <childnode refid="25" relation="include">
+        <childnode refid="26" relation="include">
         </childnode>
-        <childnode refid="38" relation="include">
+        <childnode refid="40" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -202,28 +202,31 @@
         <link refid="gaze__tracker__web_8cpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="27" relation="include">
+        <childnode refid="28" relation="include">
         </childnode>
-        <childnode refid="15" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
-        <childnode refid="32" relation="include">
-        </childnode>
-        <childnode refid="34" relation="include">
+        <childnode refid="33" relation="include">
         </childnode>
         <childnode refid="36" relation="include">
         </childnode>
-        <childnode refid="37" relation="include">
+        <childnode refid="38" relation="include">
         </childnode>
         <childnode refid="39" relation="include">
         </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
       </node>
-      <node id="31">
+      <node id="32">
         <label>atomic</label>
       </node>
-      <node id="16">
+      <node id="19">
         <label>cmath</label>
       </node>
-      <node id="33">
+      <node id="14">
+        <label>cstdint</label>
+      </node>
+      <node id="34">
         <label>godot_cpp/classes/image.hpp</label>
       </node>
       <node id="3">
@@ -235,13 +238,16 @@
       <node id="12">
         <label>godot_cpp/classes/resource.hpp</label>
       </node>
-      <node id="25">
+      <node id="26">
         <label>godot_cpp/variant/array.hpp</label>
       </node>
       <node id="9">
         <label>godot_cpp/variant/basis.hpp</label>
       </node>
       <node id="35">
+        <label>godot_cpp/variant/rid.hpp</label>
+      </node>
+      <node id="37">
         <label>godot_cpp/variant/string.hpp</label>
       </node>
       <node id="8">
@@ -250,7 +256,7 @@
       <node id="7">
         <label>godot_cpp/variant/transform3d.hpp</label>
       </node>
-      <node id="38">
+      <node id="40">
         <label>godot_cpp/variant/variant.hpp</label>
       </node>
       <node id="4">
@@ -262,22 +268,25 @@
       <node id="6">
         <label>godot_cpp/variant/vector3.hpp</label>
       </node>
-      <node id="28">
+      <node id="29">
         <label>iostream</label>
       </node>
-      <node id="13">
+      <node id="17">
         <label>memory</label>
       </node>
-      <node id="40">
+      <node id="42">
         <label>one_euro_filter.hpp</label>
       </node>
-      <node id="29">
+      <node id="30">
         <label>sstream</label>
       </node>
-      <node id="30">
+      <node id="31">
         <label>string</label>
       </node>
-      <node id="26">
+      <node id="15">
+        <label>type_traits</label>
+      </node>
+      <node id="27">
         <label>vector</label>
       </node>
     </incdepgraph>
@@ -297,294 +306,125 @@
 <codeline lineno="9"><highlight class="normal"></highlight></codeline>
 <codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="web__binding__state_8hpp" kindref="compound">web_binding_state.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="web__gaze__model_8hpp" kindref="compound">web_gaze_model.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="godot__files_8hpp" kindref="compound">godot_files.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/java_script_bridge.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/display_server.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/viewport.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/file_access.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="18"><highlight class="normal"></highlight></codeline>
-<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot</highlight></codeline>
+<codeline lineno="20"><highlight class="normal">{</highlight></codeline>
 <codeline lineno="21"><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_initialize()<sp/>{</highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!opaque)<sp/>{</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WebBindingState*<sp/>state<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>WebBindingState();</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>opaque<sp/>=<sp/>state;</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;setup_callbacks(</highlight><highlight class="keyword">this</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>set_lifecycle_state(LIFECYCLE_INITIALIZING);</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>complete_initialization();</highlight></codeline>
-<codeline lineno="31"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_terminate()<sp/>{</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(opaque)<sp/>{</highlight></codeline>
-<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WebBindingState*<sp/>state<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">WebBindingState*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(opaque);</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;cleanup();</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal"><sp/>state;</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>opaque<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="40"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"></highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_process(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta)<sp/>{</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Web<sp/>handles<sp/>updates<sp/>asynchronously<sp/>via<sp/>callback,<sp/>so<sp/>no<sp/>CPU<sp/>polling<sp/>is<sp/>needed<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="44"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"></highlight></codeline>
-<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_on_permission_result(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>granted)<sp/>{</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>MediaDevices.getUserMedia<sp/>handles<sp/>browser<sp/>permission<sp/>prompts<sp/>asynchronously,<sp/>so<sp/>no-op<sp/>here</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"></highlight></codeline>
-<codeline lineno="50"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_trigger_permission_request()<sp/>{</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Handled<sp/>browser-side<sp/>via<sp/>standard<sp/>getUserMedia<sp/>prompt<sp/>when<sp/>starting<sp/>tracking<sp/>loop</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="52"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"></highlight></codeline>
-<codeline lineno="54"><highlight class="normal"><ref refid="structgodot_1_1_platform_geometry" kindref="compound">PlatformGeometry</ref><sp/>GazeTracker::platform_get_geometry()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>PlatformGeometry<sp/>geom;</highlight></codeline>
-<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>JavaScriptBridge<sp/>*js<sp/>=<sp/>JavaScriptBridge::get_singleton();</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(js)<sp/>{</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>w_lpix<sp/>=<sp/>js-&gt;eval(</highlight><highlight class="stringliteral">&quot;window.screen.width&quot;</highlight><highlight class="normal">).stringify().to_float();</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>h_lpix<sp/>=<sp/>js-&gt;eval(</highlight><highlight class="stringliteral">&quot;window.screen.height&quot;</highlight><highlight class="normal">).stringify().to_float();</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.screen_size_lpix<sp/>=<sp/>Vector2i((</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)w_lpix,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)h_lpix);</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"></highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>dpi_lpix<sp/>=<sp/>172.0<sp/>-<sp/>0.03<sp/>*<sp/>w_lpix;</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(dpi_lpix<sp/>&lt;<sp/>96.0)<sp/>{</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dpi_lpix<sp/>=<sp/>96.0;</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.screen_size_mm<sp/>=<sp/>Vector2((w_lpix<sp/>/<sp/>dpi_lpix)<sp/>*<sp/>MM_PER_INCH,<sp/>(h_lpix<sp/>/<sp/>dpi_lpix)<sp/>*<sp/>MM_PER_INCH);</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"></highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.window_position_px<sp/>=<sp/>web_canvas_pos;</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.window_position_px<sp/>=<sp/>web_canvas_pos;</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"></highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Merge<sp/>user<sp/>overrides</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>geom.merge_overrides(overrides);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_initialize()</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!opaque)</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;WebBindingState&gt;<sp/>state<sp/>=<sp/>memnew(WebBindingState);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;reference();<sp/></highlight><highlight class="comment">//<sp/>Increment<sp/>reference<sp/>count</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>opaque<sp/>=<sp/>state.ptr();</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;setup_callbacks(</highlight><highlight class="keyword">this</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>set_lifecycle_state(LIFECYCLE_INITIALIZING);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>complete_initialization();</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_terminate()</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(opaque)</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WebBindingState<sp/>*state<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">WebBindingState<sp/>*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(opaque);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;cleanup();</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;unreference();<sp/></highlight><highlight class="comment">//<sp/>Safely<sp/>decrement<sp/>reference<sp/>count<sp/>and<sp/>free</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>opaque<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_process(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>delta)</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Web<sp/>handles<sp/>updates<sp/>asynchronously<sp/>via<sp/>callback,<sp/>so<sp/>no<sp/>CPU<sp/>polling<sp/>is<sp/>needed<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_on_permission_result(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>granted)</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>MediaDevices.getUserMedia<sp/>handles<sp/>browser<sp/>permission<sp/>prompts<sp/>asynchronously,<sp/>so<sp/>no-op<sp/>here</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::platform_trigger_permission_request()</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Handled<sp/>browser-side<sp/>via<sp/>standard<sp/>getUserMedia<sp/>prompt<sp/>when<sp/>starting<sp/>tracking<sp/>loop</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="structgodot_1_1_platform_geometry" kindref="compound">PlatformGeometry</ref><sp/>GazeTracker::platform_get_geometry()</highlight><highlight class="keyword"><sp/>const</highlight></codeline>
+<codeline lineno="63"><highlight class="keyword"><sp/><sp/><sp/><sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PlatformGeometry<sp/>geom;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.window_position_px<sp/>=<sp/>web_canvas_pos;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(window_position_override.x<sp/>&gt;=<sp/>0.0<sp/>&amp;&amp;<sp/>window_position_override.y<sp/>&gt;=<sp/>0.0)</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.window_position_px<sp/>=<sp/>window_position_override;</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(log_this_frame)</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::log_info(4,<sp/></highlight><highlight class="stringliteral">&quot;GazeTracker_WebDebugGeometry&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;window_pos_x&quot;</highlight><highlight class="normal">,<sp/>geom.window_position_px.x,<sp/></highlight><highlight class="stringliteral">&quot;window_pos_y&quot;</highlight><highlight class="normal">,<sp/>geom.window_position_px.y);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="76"><highlight class="normal"></highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(window_position_override.x<sp/>&gt;=<sp/>0.0<sp/>&amp;&amp;<sp/>window_position_override.y<sp/>&gt;=<sp/>0.0)<sp/>{</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.window_position_px<sp/>=<sp/>window_position_override;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"></highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Enforce<sp/>sensible<sp/>logical<sp/>fallbacks<sp/>if<sp/>platform<sp/>queries<sp/>returned<sp/>invalid<sp/>data</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(geom.screen_size_lpix.x<sp/>&lt;=<sp/>0<sp/>||<sp/>geom.screen_size_lpix.y<sp/>&lt;=<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.screen_size_lpix<sp/>=<sp/>Vector2i(DEFAULT_SCREEN_SIZE_PIXELS.x,<sp/>DEFAULT_SCREEN_SIZE_PIXELS.y);</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>geom;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::on_sidecar_ready(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Array&amp;<sp/>args)</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(args.size()<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;JavaScriptObject&gt;<sp/>sidecar<sp/>=<sp/>args[0];</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(sidecar.is_null()<sp/>||<sp/>!sidecar.is_valid())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="85"><highlight class="normal"></highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(geom.screen_size_mm.x<sp/>&lt;=<sp/>0.0<sp/>||<sp/>geom.screen_size_mm.y<sp/>&lt;=<sp/>0.0)<sp/>{</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>geom.screen_size_mm<sp/>=<sp/>Vector2(DEFAULT_SCREEN_SIZE_MM.x,<sp/>DEFAULT_SCREEN_SIZE_MM.y);</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(log_this_frame)<sp/>{</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Web<sp/>Debug]<sp/>platform_get_geometry<sp/>return:<sp/>screen_size_lpix:<sp/>&quot;</highlight><highlight class="normal">,<sp/>geom.screen_size_lpix,</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="stringliteral">&quot;<sp/>|<sp/>window_pos_lpix:<sp/>&quot;</highlight><highlight class="normal">,<sp/>geom.window_position_px);</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"></highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>geom;</highlight></codeline>
-<codeline lineno="96"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"></highlight></codeline>
-<codeline lineno="98"><highlight class="normal"></highlight></codeline>
-<codeline lineno="99"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>GazeTracker::complete_initialization()<sp/>{</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!camera_sensor)<sp/>{</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera_sensor<sp/>=<sp/>memnew(CameraSensor);</highlight></codeline>
-<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera_sensor-&gt;set_name(</highlight><highlight class="stringliteral">&quot;CameraSensor&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>add_child(camera_sensor);</highlight></codeline>
-<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!face_estimator)<sp/>{</highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator<sp/>=<sp/>memnew(FaceEstimator);</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator-&gt;set_name(</highlight><highlight class="stringliteral">&quot;FaceEstimator&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera_sensor-&gt;add_child(face_estimator);</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!eye_estimator)<sp/>{</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>eye_estimator<sp/>=<sp/>memnew(EyeEstimator);</highlight></codeline>
-<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>eye_estimator-&gt;set_name(</highlight><highlight class="stringliteral">&quot;EyeEstimator&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator-&gt;add_child(eye_estimator);</highlight></codeline>
-<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight></codeline>
-<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>camera_sensor-&gt;set_camera_device_id(camera_device_id);</highlight></codeline>
-<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/>face_estimator-&gt;set_yunet_model_path(yunet_model_path);</highlight></codeline>
-<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/>face_estimator-&gt;set_focal_length(camera_focal_length_px);</highlight></codeline>
-<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_estimator-&gt;set_gaze_model_path(gaze_onnx_path);</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"></highlight></codeline>
-<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>resolved_yunet<sp/>=<sp/>yunet_model_path.is_empty()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;res://models/face_detection_yunet_2023mar.onnx&quot;</highlight><highlight class="normal"><sp/>:<sp/>yunet_model_path;</highlight></codeline>
-<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>resolved_gaze<sp/>=<sp/>gaze_onnx_path.is_empty()<sp/>?<sp/></highlight><highlight class="stringliteral">&quot;res://models/gaze-estimation-adas-0002.xml&quot;</highlight><highlight class="normal"><sp/>:<sp/>gaze_onnx_path;</highlight></codeline>
-<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_gaze.ends_with(</highlight><highlight class="stringliteral">&quot;.xml&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_gaze<sp/>=<sp/>resolved_gaze.replace(</highlight><highlight class="stringliteral">&quot;.xml&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;.onnx&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="126"><highlight class="normal"></highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_width<sp/>=<sp/>640;</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>desired_camera_height<sp/>=<sp/>480;</highlight></codeline>
-<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pipeline_config.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::PipelineConfig<sp/>core_cfg<sp/>=<sp/>pipeline_config-&gt;get_config();</highlight></codeline>
-<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>desired_camera_width<sp/>=<sp/>core_cfg.desired_camera_width;</highlight></codeline>
-<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>desired_camera_height<sp/>=<sp/>core_cfg.desired_camera_height;</highlight></codeline>
-<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera_sensor-&gt;set_resolution(desired_camera_width,<sp/>desired_camera_height);</highlight></codeline>
-<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator-&gt;set_pipeline_config(core_cfg);</highlight></codeline>
-<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>eye_estimator-&gt;set_pipeline_config(core_cfg);</highlight></codeline>
-<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="137"><highlight class="normal"></highlight></codeline>
-<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(opaque)<sp/>{</highlight></codeline>
-<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WebBindingState*<sp/>state<sp/>=<sp/></highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">WebBindingState*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(opaque);</highlight></codeline>
-<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>state-&gt;start_tracking_loop(</highlight><highlight class="keyword">this</highlight><highlight class="normal">,<sp/>resolved_yunet,<sp/>resolved_gaze,<sp/>desired_camera_width,<sp/>desired_camera_height);</highlight></codeline>
-<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="142"><highlight class="normal"></highlight></codeline>
-<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/>tracker_initialized<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>set_lifecycle_state(LIFECYCLE_RUNNING);</highlight></codeline>
-<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(</highlight><highlight class="stringliteral">&quot;GazeTrackerInitWebSuccess&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="147"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="148"><highlight class="normal"></highlight></codeline>
-<codeline lineno="149"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::feed_gaze_web_raw(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Array&amp;<sp/>args)<sp/>{</highlight></codeline>
-<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>log_this_frame<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(args.size()<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(debug_logging_frames<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>log_this_frame<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>debug_logging_frames--;</highlight></codeline>
-<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(debug_logging_frames<sp/>&lt;<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>debug_log_frame_counter++;</highlight></codeline>
-<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(debug_log_frame_counter<sp/>%<sp/>(-debug_logging_frames)<sp/>==<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>log_this_frame<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="160"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="162"><highlight class="normal"></highlight></codeline>
-<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>face_detected<sp/>=<sp/>args[0];</highlight></codeline>
-<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!face_detected)<sp/>{</highlight></codeline>
-<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(log_this_frame)<sp/>{</highlight></codeline>
-<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>========================================&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>[Web<sp/>Target]<sp/>Frame<sp/>Received&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Face<sp/>Detected:<sp/>FALSE&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>========================================&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(face_estimator)<sp/>{</highlight></codeline>
-<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator-&gt;feed_pose_web(</highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Vector3(),<sp/>Vector3());</highlight></codeline>
-<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_gaze_tracker_1ac765619951568b95fbc3e0d4d8f11011" kindref="member">feed_gaze</ref>(</highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Vector3(),<sp/>Vector3());</highlight></codeline>
-<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="177"><highlight class="normal"></highlight></codeline>
-<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(args.size()<sp/>&gt;=<sp/>18)<sp/>{</highlight></codeline>
-<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Unpack<sp/>raw<sp/>OpenCV<sp/>camera<sp/>space<sp/>coordinates<sp/>(in<sp/>mm)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>args[1..3]<sp/>is<sp/>lex<sp/>(anatomical<sp/>left<sp/>eye<sp/>/<sp/>viewer&apos;s<sp/>right)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>args[4..6]<sp/>is<sp/>rex<sp/>(anatomical<sp/>right<sp/>eye<sp/>/<sp/>viewer&apos;s<sp/>left)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>left_eye_cv(args[1],<sp/>args[2],<sp/>args[3]);</highlight></codeline>
-<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>right_eye_cv(args[4],<sp/>args[5],<sp/>args[6]);</highlight></codeline>
-<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>dir_cv(args[7],<sp/>args[8],<sp/>args[9]);</highlight></codeline>
-<codeline lineno="185"><highlight class="normal"></highlight></codeline>
-<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Midpoint<sp/>of<sp/>eyes<sp/>as<sp/>gaze<sp/>origin<sp/>in<sp/>OpenCV<sp/>camera<sp/>space</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>origin_cv<sp/>=<sp/>(left_eye_cv<sp/>+<sp/>right_eye_cv)<sp/>*<sp/>0.5;</highlight></codeline>
-<codeline lineno="188"><highlight class="normal"></highlight></codeline>
-<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Convert<sp/>eye<sp/>center<sp/>origin<sp/>and<sp/>raw<sp/>gaze<sp/>direction<sp/>to<sp/>Camera<sp/>Space<sp/>(180<sp/>deg<sp/>rotation<sp/>about<sp/>X:<sp/>X=X,<sp/>Y=-Y,<sp/>Z=-Z)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>origin_cam<sp/>=<sp/>projection_engine.opencv_to_camera_space(origin_cv);</highlight></codeline>
-<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>dir_cam<sp/>=<sp/>projection_engine.opencv_to_camera_space(dir_cv);</highlight></codeline>
-<codeline lineno="192"><highlight class="normal"></highlight></codeline>
-<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Also<sp/>populate<sp/>latest_crops<sp/>using<sp/>opencv<sp/>space<sp/>because<sp/>other<sp/>methods<sp/>like<sp/>get_head_transform()<sp/>expect<sp/>it</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latest_crops.face_detected<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latest_crops.left_eye_center_cam<sp/>=<sp/>left_eye_cv;</highlight></codeline>
-<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latest_crops.right_eye_center_cam<sp/>=<sp/>right_eye_cv;</highlight></codeline>
-<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latest_crops.head_pose_translation<sp/>=<sp/>Gaze::GazeVector3(args[10],<sp/>args[11],<sp/>args[12]);</highlight></codeline>
-<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>latest_crops.head_pose_rotation<sp/>=<sp/>Gaze::GazeVector3(args[13],<sp/>args[14],<sp/>args[15]);</highlight></codeline>
-<codeline lineno="199"><highlight class="normal"></highlight></codeline>
-<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Extract<sp/>canvas<sp/>screen<sp/>coordinates<sp/>(displacement<sp/>offset)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>web_canvas_pos<sp/>=<sp/>Vector2(args[16],<sp/>args[17]);</highlight></codeline>
-<codeline lineno="202"><highlight class="normal"></highlight></codeline>
-<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(face_estimator)<sp/>{</highlight></codeline>
-<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>face_estimator-&gt;feed_pose_web(</highlight><highlight class="keyword">true</highlight><highlight class="normal">,<sp/></highlight></codeline>
-<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector3(latest_crops.head_pose_translation.x,<sp/>latest_crops.head_pose_translation.y,<sp/>latest_crops.head_pose_translation.z),<sp/></highlight></codeline>
-<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector3(latest_crops.head_pose_rotation.x,<sp/>latest_crops.head_pose_rotation.y,<sp/>latest_crops.head_pose_rotation.z));</highlight></codeline>
-<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(eye_estimator)<sp/>{</highlight></codeline>
-<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>eye_estimator-&gt;feed_gaze_web(Vector3(dir_cv.x,<sp/>dir_cv.y,<sp/>dir_cv.z));</highlight></codeline>
-<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="211"><highlight class="normal"></highlight></codeline>
-<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(log_this_frame)<sp/>{</highlight></codeline>
-<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>========================================&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>[Web<sp/>Target]<sp/>Frame<sp/>Received&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Face<sp/>Detected:<sp/>TRUE&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>YuNet<sp/>Left<sp/>Eye<sp/>Landmark:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>left_eye_cv.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>left_eye_cv.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>left_eye_cv.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>YuNet<sp/>Right<sp/>Eye<sp/>Landmark:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>right_eye_cv.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>right_eye_cv.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>right_eye_cv.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeBasis3D<sp/>R_basis<sp/>=<sp/><ref refid="math__defs_8hpp_1a956327787e5b5bf19a5c91d0ec705d3e" kindref="member">Gaze::rodrigues_to_basis</ref>(latest_crops.head_pose_rotation);</highlight></codeline>
-<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::GazeVector3<sp/>euler<sp/>=<sp/>R_basis.<ref refid="struct_gaze_1_1_gaze_basis3_d_1afcf1681d911879f52d45445d4a436df9" kindref="member">get_euler_gaze_model_deg</ref>();</highlight></codeline>
-<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>PnP<sp/>Head<sp/>Translation<sp/>(mm):<sp/>(&quot;</highlight><highlight class="normal">,<sp/>latest_crops.head_pose_translation.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>latest_crops.head_pose_translation.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>latest_crops.head_pose_translation.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>PnP<sp/>Head<sp/>Euler<sp/>Rotation<sp/>(deg):<sp/>(&quot;</highlight><highlight class="normal">,<sp/>euler.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>euler.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>euler.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Gaze<sp/>Model<sp/>raw_gaze_dir_cv:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>dir_cv.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>dir_cv.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>dir_cv.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Camera<sp/>Space<sp/>Origin<sp/>(mm):<sp/>(&quot;</highlight><highlight class="normal">,<sp/>origin_cam.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>origin_cam.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>origin_cam.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="226"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Camera<sp/>Space<sp/>Direction:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>dir_cam.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>dir_cam.y,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>dir_cam.z,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PlatformGeometry<sp/>geom<sp/>=<sp/>platform_get_geometry();</highlight></codeline>
-<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Transform2D<sp/>vp_xform<sp/>=<sp/>get_adjusted_viewport_transform();</highlight></codeline>
-<codeline lineno="230"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
-<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Screen<sp/>Size<sp/>pixels:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>geom.screen_size_lpix.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>geom.screen_size_lpix.y,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Screen<sp/>Size<sp/>mm:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>geom.screen_size_mm.x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>geom.screen_size_mm.y,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>calculated_dpi<sp/>=<sp/>0.0;</highlight></codeline>
-<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(display_profile.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2<sp/>dpi_v<sp/>=<sp/>display_profile-&gt;get_dpi();</highlight></codeline>
-<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>calculated_dpi<sp/>=<sp/>dpi_v.x;</highlight></codeline>
-<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Screen<sp/>derived<sp/>DPI:<sp/>&quot;</highlight><highlight class="normal">,<sp/>calculated_dpi);</highlight></codeline>
-<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>Viewport<sp/>Scale:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>vp_xform.get_scale().x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>vp_xform.get_scale().y,<sp/></highlight><highlight class="stringliteral">&quot;)<sp/>Origin:<sp/>(&quot;</highlight><highlight class="normal">,<sp/>vp_xform.get_origin().x,<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal">,<sp/>vp_xform.get_origin().y,<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>UtilityFunctions::print(</highlight><highlight class="stringliteral">&quot;[GazeTracker<sp/>Telemetry]<sp/>========================================&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="242"><highlight class="normal"></highlight></codeline>
-<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_gaze_tracker_1ac765619951568b95fbc3e0d4d8f11011" kindref="member">feed_gaze</ref>(</highlight><highlight class="keyword">true</highlight><highlight class="normal">,<sp/>Vector3(origin_cam.x,<sp/>origin_cam.y,<sp/>origin_cam.z),<sp/>Vector3(dir_cam.x,<sp/>dir_cam.y,<sp/>dir_cam.z));</highlight></codeline>
-<codeline lineno="244"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="245"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="246"><highlight class="normal"></highlight></codeline>
-<codeline lineno="247"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeTracker::on_sidecar_ready(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Array&amp;<sp/>args)<sp/>{</highlight></codeline>
-<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(args.size()<sp/>==<sp/>0)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;JavaScriptObject&gt;<sp/>sidecar<sp/>=<sp/>args[0];</highlight></codeline>
-<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(sidecar.is_null()<sp/>||<sp/>!sidecar.is_valid())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="251"><highlight class="normal"></highlight></codeline>
-<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Load<sp/>yunet<sp/>bytes</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>resolved_yunet<sp/>=<sp/>face_estimator<sp/>?<sp/>face_estimator-&gt;get_yunet_model_path()<sp/>:<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_yunet.is_empty())<sp/>{</highlight></codeline>
-<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_yunet<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;res://models/face_detection_yunet_2023mar.onnx&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;FileAccess&gt;<sp/>f_yunet<sp/>=<sp/>FileAccess::open(resolved_yunet,<sp/>FileAccess::READ);</highlight></codeline>
-<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/>PackedByteArray<sp/>yunet_bytes;</highlight></codeline>
-<codeline lineno="259"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(f_yunet.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="260"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>yunet_bytes<sp/>=<sp/>f_yunet-&gt;get_buffer(f_yunet-&gt;get_length());</highlight></codeline>
-<codeline lineno="261"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
-<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::log_error(</highlight><highlight class="stringliteral">&quot;WebSidecarLoadModelFailed&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;path&quot;</highlight><highlight class="normal">,<sp/>resolved_yunet.utf8().get_data());</highlight></codeline>
-<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="264"><highlight class="normal"></highlight></codeline>
-<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Load<sp/>gaze<sp/>bytes<sp/>(web<sp/>target<sp/>requires<sp/>ONNX<sp/>format,<sp/>converting<sp/>.xml<sp/>suffix<sp/>to<sp/>.onnx)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>resolved_gaze<sp/>=<sp/>eye_estimator<sp/>?<sp/>eye_estimator-&gt;get_gaze_model_path()<sp/>:<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_gaze.is_empty())<sp/>{</highlight></codeline>
-<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_gaze<sp/>=<sp/></highlight><highlight class="stringliteral">&quot;res://models/gaze-estimation-adas-0002.xml&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_gaze.ends_with(</highlight><highlight class="stringliteral">&quot;.xml&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_gaze<sp/>=<sp/>resolved_gaze.replace(</highlight><highlight class="stringliteral">&quot;.xml&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;.onnx&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="273"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;FileAccess&gt;<sp/>f_gaze<sp/>=<sp/>FileAccess::open(resolved_gaze,<sp/>FileAccess::READ);</highlight></codeline>
-<codeline lineno="274"><highlight class="normal"><sp/><sp/><sp/><sp/>PackedByteArray<sp/>gaze_bytes;</highlight></codeline>
-<codeline lineno="275"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(f_gaze.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gaze_bytes<sp/>=<sp/>f_gaze-&gt;get_buffer(f_gaze-&gt;get_length());</highlight></codeline>
-<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
-<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::log_error(</highlight><highlight class="stringliteral">&quot;WebSidecarLoadModelFailed&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;path&quot;</highlight><highlight class="normal">,<sp/>resolved_gaze.utf8().get_data());</highlight></codeline>
-<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="280"><highlight class="normal"></highlight></codeline>
-<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>hex_yunet<sp/>=<sp/>yunet_bytes.hex_encode();</highlight></codeline>
-<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>hex_gaze<sp/>=<sp/>gaze_bytes.hex_encode();</highlight></codeline>
-<codeline lineno="283"><highlight class="normal"></highlight></codeline>
-<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>fd_width<sp/>=<sp/>160;</highlight></codeline>
-<codeline lineno="285"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>fd_height<sp/>=<sp/>128;</highlight></codeline>
-<codeline lineno="286"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pipeline_config.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="287"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::PipelineConfig<sp/>core_cfg<sp/>=<sp/>pipeline_config-&gt;get_config();</highlight></codeline>
-<codeline lineno="288"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fd_width<sp/>=<sp/>core_cfg.face_detect_width;</highlight></codeline>
-<codeline lineno="289"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>fd_height<sp/>=<sp/>core_cfg.face_detect_height;</highlight></codeline>
-<codeline lineno="290"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="291"><highlight class="normal"></highlight></codeline>
-<codeline lineno="292"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>focal<sp/>=<sp/>camera_sensor<sp/>?<sp/>camera_sensor-&gt;get_focal_length()<sp/>:<sp/>1000.0;</highlight></codeline>
-<codeline lineno="293"><highlight class="normal"></highlight></codeline>
-<codeline lineno="294"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Call<sp/>setModels<sp/>on<sp/>the<sp/>sidecar<sp/>JavaScriptObject</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="295"><highlight class="normal"><sp/><sp/><sp/><sp/>sidecar-&gt;call(</highlight><highlight class="stringliteral">&quot;setModels&quot;</highlight><highlight class="normal">,<sp/>hex_yunet,<sp/>hex_gaze,<sp/>fd_width,<sp/>fd_height,<sp/>focal);</highlight></codeline>
-<codeline lineno="296"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="297"><highlight class="normal"></highlight></codeline>
-<codeline lineno="298"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="299"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/>resolved_yunet<sp/>=<sp/>face_estimator<sp/>?<sp/>face_estimator-&gt;get_yunet_model_prefix()<sp/>:<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_yunet<sp/>=<sp/><ref refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kindref="member">resolve_model_path</ref>(resolved_yunet);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_yunet.is_empty())<sp/>{</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_yunet<sp/>=<sp/><ref refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kindref="member">resolve_model_path</ref>(</highlight><highlight class="stringliteral">&quot;face_detection_yunet_2023mar&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;FileAccess&gt;<sp/>f_yunet<sp/>=<sp/>FileAccess::open(resolved_yunet,<sp/>FileAccess::READ);</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PackedByteArray<sp/>yunet_bytes;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(f_yunet.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>yunet_bytes<sp/>=<sp/>f_yunet-&gt;get_buffer(f_yunet-&gt;get_length());</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/>resolved_gaze<sp/>=<sp/>eye_estimator<sp/>?<sp/>eye_estimator-&gt;get_gaze_model_prefix()<sp/>:<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_gaze<sp/>=<sp/><ref refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kindref="member">resolve_model_path</ref>(resolved_gaze);</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(resolved_gaze.is_empty())<sp/>{</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>resolved_gaze<sp/>=<sp/><ref refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kindref="member">resolve_model_path</ref>(</highlight><highlight class="stringliteral">&quot;gaze-estimation-adas-0002&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;FileAccess&gt;<sp/>f_gaze<sp/>=<sp/>FileAccess::open(resolved_gaze,<sp/>FileAccess::READ);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PackedByteArray<sp/>gaze_bytes;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(f_gaze.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gaze_bytes<sp/>=<sp/>f_gaze-&gt;get_buffer(f_gaze-&gt;get_length());</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/>hex_yunet<sp/>=<sp/>yunet_bytes.hex_encode();</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>String<sp/>hex_gaze<sp/>=<sp/>gaze_bytes.hex_encode();</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>focal<sp/>=<sp/>1000.0;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_sensor)<sp/>{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>f_val<sp/>=<sp/>camera_sensor-&gt;get_focal_length();</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(f_val<sp/>&gt;<sp/>0.0)<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>focal<sp/>=<sp/>f_val;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fov<sp/>=<sp/>camera_sensor-&gt;get_camera_fov();</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>cam_w<sp/>=<sp/>640;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;Image&gt;<sp/>img<sp/>=<sp/>camera_sensor-&gt;get_last_frame();</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(img.is_valid()<sp/>&amp;&amp;<sp/>img-&gt;get_width()<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cam_w<sp/>=<sp/>img-&gt;get_width();</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>focal<sp/>=<sp/>Gaze::get_focal_length_px(cam_w,<sp/>fov);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sidecar-&gt;call(</highlight><highlight class="stringliteral">&quot;setModels&quot;</highlight><highlight class="normal">,<sp/>hex_yunet,<sp/>hex_gaze,<sp/>focal);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="129"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
     </programlisting>
     <location file="src/web/gaze_tracker_web.cpp"/>
   </compounddef>

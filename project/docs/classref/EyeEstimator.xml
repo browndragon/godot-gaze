@@ -12,24 +12,13 @@
 			<return type="void"></return>
 			<description></description>
 		</method>
-		<method name="opencv_gaze">
-			<return type="bool"></return>
-			<param index="0" name="crops" type="const Gaze::EyeCrops &amp;"></param>
-			<param index="1" name="out_gaze_dir" type="Gaze::GazeVector3 &amp;"></param>
-			<description></description>
-		</method>
-		<method name="set_gaze_model_path">
+		<method name="set_gaze_model_prefix">
 			<return type="void"></return>
 			<param index="0" name="path" type="String"></param>
 			<description></description>
 		</method>
-		<method name="get_gaze_model_path">
+		<method name="get_gaze_model_prefix">
 			<return type="String"></return>
-			<description></description>
-		</method>
-		<method name="set_pipeline_config">
-			<return type="void"></return>
-			<param index="0" name="config" type="const Gaze::PipelineConfig &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_left_eye_crop">
@@ -40,9 +29,13 @@
 			<return type="Ref&lt; Image &gt;"></return>
 			<description></description>
 		</method>
-		<method name="feed_gaze_web">
+		<method name="get_eye_rid">
+			<return type="RID"></return>
+			<description></description>
+		</method>
+		<method name="set_eye_rid">
 			<return type="void"></return>
-			<param index="0" name="direction" type="Vector3"></param>
+			<param index="0" name="p_rid" type="RID"></param>
 			<description></description>
 		</method>
 	</methods>

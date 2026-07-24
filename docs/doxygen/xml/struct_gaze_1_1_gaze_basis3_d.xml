@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="135" column="17" bodyfile="src/core/math_defs.hpp" bodystart="135" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="308" column="21" bodyfile="src/core/math_defs.hpp" bodystart="308" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_basis3_d_1ad1d8399f9cceb904afb310250f18eaa9" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="136" column="17" bodyfile="src/core/math_defs.hpp" bodystart="136" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="309" column="21" bodyfile="src/core/math_defs.hpp" bodystart="309" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_basis3_d_1a9758e68242053c8f413f0686ccd04d06" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -43,14 +43,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="137" column="17" bodyfile="src/core/math_defs.hpp" bodystart="137" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="310" column="21" bodyfile="src/core/math_defs.hpp" bodystart="310" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
-      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1adc71e85a3b966135c5a1846b9fea8112" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a9774db095504e31f67781c4ca2791dfe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>Gaze::GazeBasis3D::GazeBasis3D</definition>
-        <argsstring>()</argsstring>
+        <argsstring>()=default</argsstring>
         <name>GazeBasis3D</name>
         <qualifiedname>Gaze::GazeBasis3D::GazeBasis3D</qualifiedname>
         <briefdescription>
@@ -59,10 +59,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="139" column="5" bodyfile="src/core/math_defs.hpp" bodystart="139" bodyend="139"/>
+        <location file="src/core/math_defs.hpp" line="312" column="9"/>
       </memberdef>
-      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a1bbc516296b5dadae422277a0401c4d3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type></type>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1ad47251004ca2df80f8e6bd6eba7f20b5" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
         <definition>Gaze::GazeBasis3D::GazeBasis3D</definition>
         <argsstring>(const GazeVector3 &amp;px, const GazeVector3 &amp;py, const GazeVector3 &amp;pz)</argsstring>
         <name>GazeBasis3D</name>
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="140" column="5" bodyfile="src/core/math_defs.hpp" bodystart="140" bodyend="140"/>
+        <location file="src/core/math_defs.hpp" line="313" column="19" bodyfile="src/core/math_defs.hpp" bodystart="313" bodyend="313"/>
       </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1ae2310cd906a7587ea2bd1a7461899535" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -103,7 +103,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="142" column="17" bodyfile="src/core/math_defs.hpp" bodystart="142" bodyend="144"/>
+        <location file="src/core/math_defs.hpp" line="320" column="21" bodyfile="src/core/math_defs.hpp" bodystart="320" bodyend="323"/>
       </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1aa5f83be40ea4bf12cf2303e851a65927" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>GazeBasis3D</type>
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="146" column="17" bodyfile="src/core/math_defs.hpp" bodystart="146" bodyend="152"/>
+        <location file="src/core/math_defs.hpp" line="325" column="21" bodyfile="src/core/math_defs.hpp" bodystart="325" bodyend="331"/>
       </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a66f4348637e49660c7d8f794b119a06b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -137,7 +137,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="178" column="17" bodyfile="src/core/math_defs.hpp" bodystart="178" bodyend="194"/>
+        <location file="src/core/math_defs.hpp" line="357" column="21" bodyfile="src/core/math_defs.hpp" bodystart="357" bodyend="377"/>
       </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1afcf1681d911879f52d45445d4a436df9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref></type>
@@ -153,10 +153,24 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="203" column="17" bodyfile="src/core/math_defs.hpp" bodystart="203" bodyend="217"/>
+        <location file="src/core/math_defs.hpp" line="386" column="21" bodyfile="src/core/math_defs.hpp" bodystart="386" bodyend="404"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1aaca083a64b6f4234d3911e897ddc6868" prot="public" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GazeBasis3D</type>
+        <definition>static constexpr GazeBasis3D Gaze::GazeBasis3D::identity</definition>
+        <argsstring>()</argsstring>
+        <name>identity</name>
+        <qualifiedname>Gaze::GazeBasis3D::identity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="315" column="38" bodyfile="src/core/math_defs.hpp" bodystart="315" bodyend="318"/>
+      </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_basis3_d_1a56f072b4e44e4056d0b3cc6a171c3016" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>GazeBasis3D</type>
         <definition>static GazeBasis3D Gaze::GazeBasis3D::from_euler_zyx</definition>
@@ -181,7 +195,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="154" column="24" bodyfile="src/core/math_defs.hpp" bodystart="154" bodyend="166"/>
+        <location file="src/core/math_defs.hpp" line="333" column="28" bodyfile="src/core/math_defs.hpp" bodystart="333" bodyend="345"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -203,13 +217,14 @@
         <link refid="struct_gaze_1_1_gaze_vector3"/>
       </node>
     </collaborationgraph>
-    <location file="src/core/math_defs.hpp" line="134" column="1" bodyfile="src/core/math_defs.hpp" bodystart="134" bodyend="218"/>
+    <location file="src/core/math_defs.hpp" line="306" column="5" bodyfile="src/core/math_defs.hpp" bodystart="307" bodyend="405"/>
     <listofallmembers>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1a56f072b4e44e4056d0b3cc6a171c3016" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>from_euler_zyx</name></member>
-      <member refid="struct_gaze_1_1_gaze_basis3_d_1adc71e85a3b966135c5a1846b9fea8112" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
-      <member refid="struct_gaze_1_1_gaze_basis3_d_1a1bbc516296b5dadae422277a0401c4d3" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1a9774db095504e31f67781c4ca2791dfe" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1ad47251004ca2df80f8e6bd6eba7f20b5" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>GazeBasis3D</name></member>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1a66f4348637e49660c7d8f794b119a06b" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>get_euler_deg</name></member>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1afcf1681d911879f52d45445d4a436df9" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>get_euler_gaze_model_deg</name></member>
+      <member refid="struct_gaze_1_1_gaze_basis3_d_1aaca083a64b6f4234d3911e897ddc6868" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>identity</name></member>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1ae2310cd906a7587ea2bd1a7461899535" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>multiply_vector</name></member>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1aa5f83be40ea4bf12cf2303e851a65927" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>operator*</name></member>
       <member refid="struct_gaze_1_1_gaze_basis3_d_1a882a5f11f602fe4061a4ed5af68fa98d" prot="public" virt="non-virtual"><scope>Gaze::GazeBasis3D</scope><name>x</name></member>

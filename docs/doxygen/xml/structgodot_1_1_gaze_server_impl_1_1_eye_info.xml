@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_eye_info" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::EyeInfo</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1af79df2d58c4461e53b1c66fc18813409" prot="public" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeServerImpl::EyeInfo::parent_face_rid</definition>
+        <argsstring></argsstring>
+        <name>parent_face_rid</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::parent_face_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="61" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a0b15d0a03e9a85d171ac9efde2a62ca9" prot="public" static="no" mutable="no">
+        <type>Transform3D</type>
+        <definition>Transform3D godot::GazeServerImpl::EyeInfo::relative_transform</definition>
+        <argsstring></argsstring>
+        <name>relative_transform</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::relative_transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="62" column="21" bodyfile="src/godot/gaze_server.cpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a109db43bf4536a5e93b2a01e0561a45e" prot="public" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServerImpl::EyeInfo::gaze_origin_cam</definition>
+        <argsstring></argsstring>
+        <name>gaze_origin_cam</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::gaze_origin_cam</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="64" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a3b3df7b0c4e0835916ea0134dcc0992f" prot="public" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServerImpl::EyeInfo::gaze_direction_cam</definition>
+        <argsstring></argsstring>
+        <name>gaze_direction_cam</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::gaze_direction_cam</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="65" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1ae72941b2ad1a65481ebfbca92c1ef562" prot="public" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_smoother" kindref="compound">Smoother</ref> &gt;</type>
+        <definition>Ref&lt;Smoother&gt; godot::GazeServerImpl::EyeInfo::screen_smoother</definition>
+        <argsstring></argsstring>
+        <name>screen_smoother</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::screen_smoother</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="67" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1ae6e7124a42b1ff4f97394ff53a0ba19c" prot="public" static="no" mutable="no">
+        <type>Array</type>
+        <definition>Array godot::GazeServerImpl::EyeInfo::smoother_state</definition>
+        <argsstring></argsstring>
+        <name>smoother_state</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::smoother_state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="68" column="15" bodyfile="src/godot/gaze_server.cpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a81e1cecb4be986ae3b3793027b1b3208" prot="public" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServerImpl::EyeInfo::latest_projected_gaze</definition>
+        <argsstring></argsstring>
+        <name>latest_projected_gaze</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::latest_projected_gaze</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="70" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a54c0cfe8164f474bc777cd0dca2e5311" prot="public" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServerImpl::EyeInfo::latest_filtered_gaze</definition>
+        <argsstring></argsstring>
+        <name>latest_filtered_gaze</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::latest_filtered_gaze</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="71" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a051976553f5a3e91c1542d4083d7fb2c" prot="public" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::GazeServerImpl::EyeInfo::left_eye_crop</definition>
+        <argsstring></argsstring>
+        <name>left_eye_crop</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::left_eye_crop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="73" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a2853836d8ee8c511ee94dc5bf66de863" prot="public" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::GazeServerImpl::EyeInfo::right_eye_crop</definition>
+        <argsstring></argsstring>
+        <name>right_eye_crop</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::right_eye_crop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="74" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a1f098c7f55533bc74992da8c5c234818" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServerImpl::EyeInfo::crop_requested</definition>
+        <argsstring></argsstring>
+        <name>crop_requested</name>
+        <qualifiedname>godot::GazeServerImpl::EyeInfo::crop_requested</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="75" column="14" bodyfile="src/godot/gaze_server.cpp" bodystart="75" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="60" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="60" bodyend="76"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a1f098c7f55533bc74992da8c5c234818" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>crop_requested</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a3b3df7b0c4e0835916ea0134dcc0992f" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>gaze_direction_cam</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a109db43bf4536a5e93b2a01e0561a45e" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>gaze_origin_cam</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a54c0cfe8164f474bc777cd0dca2e5311" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>latest_filtered_gaze</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a81e1cecb4be986ae3b3793027b1b3208" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>latest_projected_gaze</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a051976553f5a3e91c1542d4083d7fb2c" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>left_eye_crop</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1af79df2d58c4461e53b1c66fc18813409" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>parent_face_rid</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a0b15d0a03e9a85d171ac9efde2a62ca9" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>relative_transform</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1a2853836d8ee8c511ee94dc5bf66de863" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>right_eye_crop</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1ae72941b2ad1a65481ebfbca92c1ef562" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>screen_smoother</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_eye_info_1ae6e7124a42b1ff4f97394ff53a0ba19c" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::EyeInfo</scope><name>smoother_state</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

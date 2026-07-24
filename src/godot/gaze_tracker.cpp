@@ -36,14 +36,13 @@ namespace Gaze { extern bool g_is_exiting; }
 namespace godot {
 
 static Ref<DeviceCalibration> get_default_device_calibration() {
-    GazeDeviceEstimatedCalibration* sing = Object::cast_to<GazeDeviceEstimatedCalibration>(Engine::get_singleton()->get_singleton("GazeDeviceEstimatedCalibration"));
-    if (sing) {
-        return sing->get_calibration();
-    }
-    return Ref<DeviceCalibration>();
+    Ref<DefaultDeviceCalibration> def_dev;
+    def_dev.instantiate();
+    return def_dev;
 }
 
 void GazeTracker::_bind_methods() {
+    ClassDB::bind_method(D_METHOD("start_tracker"), &GazeTracker::start_tracker);
     ClassDB::bind_method(D_METHOD("initialize_tracker"), &GazeTracker::initialize_tracker);
     ClassDB::bind_method(D_METHOD("stop_tracker", "emit_signal"), &GazeTracker::stop_tracker, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("complete_initialization"), &GazeTracker::complete_initialization);
@@ -148,7 +147,7 @@ GazeTracker::~GazeTracker() {
 
 void GazeTracker::_ready() {
     if (autostart && !Engine::get_singleton()->is_editor_hint()) {
-        initialize_tracker();
+        start_tracker();
     }
 }
 
@@ -198,13 +197,22 @@ bool GazeTracker::get_autostart() const {
 
 void GazeTracker::_notification(int p_what) {
     switch (p_what) {
+        case NOTIFICATION_ENTER_TREE: {
+            if (autostart && !Engine::get_singleton()->is_editor_hint() && !tracker_initialized) {
+                start_tracker();
+            }
+            break;
+        }
         case NOTIFICATION_EXIT_TREE: {
-            stop_tracker(true);
+            // Defer stop_tracker(false) to allow an incoming scene's _enter_tree() to claim the active GazeServer session.
+            // Note: In godot-cpp (C++), Object::call_deferred(StringName, Variant...) is the native C++ API method on Object/Node.
+            call_deferred("stop_tracker", false);
             break;
         }
         case NOTIFICATION_WM_CLOSE_REQUEST:
-        case NOTIFICATION_WM_GO_BACK_REQUEST: {
-            Gaze::log_info("GazeTracker_Notification_WM_Close_Or_GoBack");
+        case NOTIFICATION_WM_GO_BACK_REQUEST:
+        case NOTIFICATION_PREDELETE: {
+            Gaze::log_info("GazeTracker_Notification_Shutdown_Immediate_Stop");
             stop_tracker(false);
             break;
         }
@@ -250,8 +258,8 @@ void GazeTracker::on_permission_result(bool granted) {
 
 
 
-bool GazeTracker::initialize_tracker() {
-    if (lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
+bool GazeTracker::start_tracker() {
+    if (tracker_initialized || lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
     GazeServer *gs = GazeServer::get_singleton();
     if (!gs) return false;
@@ -307,6 +315,11 @@ bool GazeTracker::initialize_tracker() {
 
 void GazeTracker::stop_tracker(bool p_emit_signal) {
     Gaze::log_info(2, "GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal);
+    if (!tracker_initialized && !display_rid.is_valid()) {
+        Gaze::log_info(2, "GazeTracker_StopTracker_AlreadyStopped");
+        return;
+    }
+
     tracker_initialized = false;
     is_face_tracked = false;
 
@@ -339,11 +352,6 @@ void GazeTracker::stop_tracker(bool p_emit_signal) {
         }
     }
 
-    if (camera_sensor && ObjectDB::get_instance(camera_sensor->get_instance_id())) {
-        Gaze::log_info(2, "GazeTracker_StopTracker_CameraSensorStop_Began");
-        camera_sensor->stop_sensor();
-        Gaze::log_info(2, "GazeTracker_StopTracker_CameraSensorStop_Finished");
-    }
     if (face_estimator && ObjectDB::get_instance(face_estimator->get_instance_id())) {
         face_estimator->stop_estimator();
     }

@@ -5,6 +5,7 @@
 #include <godot_cpp/classes/resource_loader.hpp>
 #include <godot_cpp/classes/file_access.hpp>
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include "display_profile.hpp"
 #include "../core/math_defs.hpp"
 
@@ -162,6 +163,14 @@ Ref<DeviceCalibration> DefaultDeviceCalibration::get_actual_calibration() const 
                 return cached_calibration;
             }
         }
+    }
+    GazeDeviceEstimatedCalibration* sing = Object::cast_to<GazeDeviceEstimatedCalibration>(Engine::get_singleton()->get_singleton("GazeDeviceEstimatedCalibration"));
+    if (sing && sing->get_calibration().is_valid()) {
+        cached_calibration = sing->get_calibration();
+        if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"))) {
+            cached_calibration->connect("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"));
+        }
+        return cached_calibration;
     }
     Ref<GuessDeviceCalibration> guess;
     guess.instantiate();

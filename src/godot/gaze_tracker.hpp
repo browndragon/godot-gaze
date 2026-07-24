@@ -147,10 +147,14 @@ public:
 
     // Tracker control
     /**
-     * @brief Initializes the gaze tracker, setting up camera and models.
+     * @brief Starts the gaze tracker, setting up camera and models.
      * @return True if initialized successfully, false otherwise.
      */
-    bool initialize_tracker();
+    bool start_tracker();
+    /**
+     * @brief [DEPRECATED] Backward-compatible alias for start_tracker(). Use start_tracker() instead.
+     */
+    bool initialize_tracker() { return start_tracker(); }
     /**
      * @brief Stops camera acquisition and model inference pipelines.
      * @param p_emit_signal Whether to emit lifecycle status change signals.

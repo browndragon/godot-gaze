@@ -42,6 +42,11 @@ If you are developing this plugin locally and want to test changes in your own G
    - `camera_tilt`: Downtilted angle of the camera in degrees.
    - `screen_size_pixels`: Monitor resolution in pixels.
    - `screen_size_mm`: Physical display dimensions in millimeters.
+4. Default Calibration Resources:
+   The plugin registers project settings that specify where user calibration resources are automatically loaded:
+   - `gaze/calibration/device_calibration_path` (defaults to `user://calibrations/device_calibration.tres`)
+   - `gaze/calibration/bio_calibration_path` (defaults to `user://calibrations/bio_calibration.tres`)
+   When `GazeTracker` initializes, it automatically attempts to load custom `.tres` resources from these paths, seamlessly applying device and biological corrections.
 3. Model weights (`.ort` format) are pre-bundled inside the addon's `models/` folder.
 
 ### 3. Basic GDScript Usage
@@ -60,8 +65,8 @@ func _ready():
     gaze_tracker.gaze_updated.connect(_on_gaze_updated)
     gaze_tracker.face_detected.connect(_on_face_detected)
 
-    # Start the tracker
-    if gaze_tracker.initialize_tracker():
+    # Start the tracker (automatically starts when autostart == true on entering tree)
+    if gaze_tracker.start_tracker():
         print("Gaze Tracker Started.")
 
 func _on_gaze_updated(screen_pixel: Vector2):

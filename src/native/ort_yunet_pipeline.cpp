@@ -185,10 +185,10 @@ namespace Gaze
 
         // Apply roll compensation rotation if tracking
         double roll_angle_to_apply = 0.0;
-        bool use_roll = has_last_roll && (std::abs(last_roll_rad) > 1e-4);
+        bool use_roll = tracking_state.is_tracking && (std::abs(tracking_state.last_roll_rad) > 1e-4);
         if (use_roll)
         {
-            roll_angle_to_apply = last_roll_rad;
+            roll_angle_to_apply = tracking_state.last_roll_rad;
             std::vector<unsigned char> rotated_bgr(model_w * model_h * 3);
             rotate_image_bgr(resized_bgr.data(), model_w, model_h, rotated_bgr.data(), -roll_angle_to_apply);
             resized_bgr = std::move(rotated_bgr);
@@ -385,9 +385,13 @@ namespace Gaze
 
             if (keep.empty())
             {
-                if (use_roll)
+                tracking_state.missing_frames_count++;
+                if (tracking_state.missing_frames_count > 5)
                 {
-                    reset_tracking_state();
+                    tracking_state.reset();
+                }
+                if (use_roll && tracking_state.missing_frames_count > 5)
+                {
                     return process_frame(frame, out_crops);
                 }
                 out_crops.face_detected = false;
@@ -437,8 +441,8 @@ namespace Gaze
             // Update tracking state for next frame
             double roll_dx = final_ldm[1].x - final_ldm[0].x;
             double roll_dy = final_ldm[1].y - final_ldm[0].y;
-            last_roll_rad = std::atan2(roll_dy, roll_dx);
-            has_last_roll = true;
+            double roll_angle_rad = std::atan2(roll_dy, roll_dx);
+
             log_info(3, "ORTYuNetPipelineLandmarks",
                      "x0", final_ldm[0].x, "y0", final_ldm[0].y,
                      "x1", final_ldm[1].x, "y1", final_ldm[1].y,
@@ -484,10 +488,14 @@ namespace Gaze
             double cy = height / 2.0;
             double fx = (camera_focal_length_px > 0.0) ? camera_focal_length_px : get_focal_length_px(width, camera_fov_degrees);
 
-            double roll_angle_rad = last_roll_rad;
-
             GazeVector3 rvec(0.0, 0.0, roll_angle_rad);
             GazeVector3 tvec(0.0, 0.0, 700.0);
+            if (tracking_state.is_tracking)
+            {
+                rvec = tracking_state.last_rvec;
+                tvec = tracking_state.last_tvec;
+            }
+
             bool pnp_success = false;
             try
             {
@@ -500,6 +508,12 @@ namespace Gaze
 
             if (pnp_success)
             {
+                tracking_state.is_tracking = true;
+                tracking_state.last_rvec = rvec;
+                tracking_state.last_tvec = tvec;
+                tracking_state.last_roll_rad = roll_angle_rad;
+                tracking_state.missing_frames_count = 0;
+
                 GazeBasis3D R = rodrigues_to_basis(rvec);
 
                 out_crops.head_pose_rotation = rvec;

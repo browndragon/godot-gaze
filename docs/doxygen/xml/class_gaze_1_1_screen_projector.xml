@@ -4,7 +4,7 @@
     <compoundname>Gaze::ScreenProjector</compoundname>
     <sectiondef kind="public-attrib">
       <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1a81d3e955a5f87b33a613877ca9edf189" prot="public" static="no" mutable="no">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <type>GazeVector2</type>
         <definition>GazeVector2 Gaze::ScreenProjector::window_position_px</definition>
         <argsstring></argsstring>
         <name>window_position_px</name>
@@ -15,10 +15,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="14" column="17" bodyfile="src/core/screen_projector.hpp" bodystart="14" bodyend="-1"/>
+        <location file="src/core/screen_projector.hpp" line="17" column="21" bodyfile="src/core/screen_projector.hpp" bodystart="17" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1ae57ee875f528c744a0866fb7bbe40bb8" prot="public" static="no" mutable="no">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <type>GazeVector2</type>
         <definition>GazeVector2 Gaze::ScreenProjector::viewport_scale</definition>
         <argsstring></argsstring>
         <name>viewport_scale</name>
@@ -29,10 +29,10 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="15" column="17" bodyfile="src/core/screen_projector.hpp" bodystart="15" bodyend="-1"/>
+        <location file="src/core/screen_projector.hpp" line="18" column="21" bodyfile="src/core/screen_projector.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1a8664324aa388f511a1558fa8a217bab7" prot="public" static="no" mutable="no">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <type>GazeVector2</type>
         <definition>GazeVector2 Gaze::ScreenProjector::viewport_offset_px</definition>
         <argsstring></argsstring>
         <name>viewport_offset_px</name>
@@ -43,7 +43,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="16" column="17" bodyfile="src/core/screen_projector.hpp" bodystart="16" bodyend="-1"/>
+        <location file="src/core/screen_projector.hpp" line="19" column="21" bodyfile="src/core/screen_projector.hpp" bodystart="19" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="18" column="5"/>
+        <location file="src/core/screen_projector.hpp" line="21" column="9"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a7bcb2adb89ecda46e330e850bd131dc1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type></type>
@@ -68,15 +68,15 @@
         <name>ScreenProjector</name>
         <qualifiedname>Gaze::ScreenProjector::ScreenProjector</qualifiedname>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>win_pos_px</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>vp_scale</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>vp_offset_px</declname>
         </param>
         <briefdescription>
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="19" column="5" bodyfile="src/core/screen_projector.hpp" bodystart="19" bodyend="20"/>
+        <location file="src/core/screen_projector.hpp" line="22" column="9" bodyfile="src/core/screen_projector.hpp" bodystart="22" bodyend="23"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_screen_projector_1ab8a56d0572220997b79d531a15c7d132" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -106,7 +106,7 @@
           <declname>dir_cam</declname>
         </param>
         <param>
-          <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>GazeVector2 &amp;</type>
           <declname>out_viewport_pixel</declname>
         </param>
         <briefdescription>
@@ -115,16 +115,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="34" column="10" bodyfile="src/core/screen_projector.cpp" bodystart="30" bodyend="56"/>
+        <location file="src/core/screen_projector.hpp" line="35" column="14" bodyfile="src/core/screen_projector.cpp" bodystart="30" bodyend="56"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a94501426ffbbe9f108fd63af615dc300" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref></type>
+        <type>GazeVector2</type>
         <definition>GazeVector2 Gaze::ScreenProjector::map_viewport_to_screen_px</definition>
         <argsstring>(const GazeVector2 &amp;logical_pixel) const</argsstring>
         <name>map_viewport_to_screen_px</name>
         <qualifiedname>Gaze::ScreenProjector::map_viewport_to_screen_px</qualifiedname>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>logical_pixel</declname>
         </param>
         <briefdescription>
@@ -133,7 +133,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="41" column="17" bodyfile="src/core/screen_projector.cpp" bodystart="58" bodyend="63"/>
+        <location file="src/core/screen_projector.hpp" line="41" column="21" bodyfile="src/core/screen_projector.cpp" bodystart="58" bodyend="63"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
@@ -144,15 +144,15 @@
         <name>derive_configuration</name>
         <qualifiedname>Gaze::ScreenProjector::derive_configuration</qualifiedname>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>win_pos_px</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>vp_scale</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>vp_origin</declname>
         </param>
         <briefdescription>
@@ -161,7 +161,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="22" column="28" bodyfile="src/core/screen_projector.cpp" bodystart="10" bodyend="16"/>
+        <location file="src/core/screen_projector.hpp" line="25" column="32" bodyfile="src/core/screen_projector.cpp" bodystart="10" bodyend="16"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a0c2fecd890bba009303cf9968078bc10" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>ScreenProjector</type>
@@ -170,15 +170,15 @@
         <name>from_godot_geometry</name>
         <qualifiedname>Gaze::ScreenProjector::from_godot_geometry</qualifiedname>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>window_pos_logical</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>viewport_scale_logical</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>viewport_offset_logical</declname>
         </param>
         <briefdescription>
@@ -187,7 +187,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/screen_projector.hpp" line="28" column="28" bodyfile="src/core/screen_projector.cpp" bodystart="18" bodyend="28"/>
+        <location file="src/core/screen_projector.hpp" line="30" column="32" bodyfile="src/core/screen_projector.cpp" bodystart="18" bodyend="28"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -196,8 +196,8 @@
     </detaileddescription>
     <collaborationgraph>
       <node id="2">
-        <label>Gaze::GazeVector2</label>
-        <link refid="struct_gaze_1_1_gaze_vector2"/>
+        <label>Gaze::GazeVector2_64f</label>
+        <link refid="struct_gaze_1_1_gaze_vector2__64f"/>
       </node>
       <node id="1">
         <label>Gaze::ScreenProjector</label>
@@ -209,7 +209,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/core/screen_projector.hpp" line="12" column="1" bodyfile="src/core/screen_projector.hpp" bodystart="12" bodyend="42"/>
+    <location file="src/core/screen_projector.hpp" line="14" column="5" bodyfile="src/core/screen_projector.hpp" bodystart="15" bodyend="42"/>
     <listofallmembers>
       <member refid="class_gaze_1_1_screen_projector_1a0b36b72ffaeb8dcceab81c6f7805872e" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>derive_configuration</name></member>
       <member refid="class_gaze_1_1_screen_projector_1a0c2fecd890bba009303cf9968078bc10" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>from_godot_geometry</name></member>

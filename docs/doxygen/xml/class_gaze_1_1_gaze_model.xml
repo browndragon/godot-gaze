@@ -2,8 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="class_gaze_1_1_gaze_model" kind="class" language="C++" prot="public" abstract="yes">
     <compoundname>Gaze::GazeModel</compoundname>
-    <derivedcompoundref refid="class_gaze_1_1_open_c_v_gaze_model" prot="public" virt="non-virtual">Gaze::OpenCVGazeModel</derivedcompoundref>
-    <derivedcompoundref refid="class_gaze_1_1_web_gaze_model" prot="public" virt="non-virtual">Gaze::WebGazeModel</derivedcompoundref>
+    <derivedcompoundref refid="class_gaze_1_1_o_r_t_gaze_model" prot="public" virt="non-virtual">Gaze::ORTGazeModel</derivedcompoundref>
     <sectiondef kind="public-func">
       <memberdef kind="function" id="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -25,8 +24,7 @@
         <argsstring>()=0</argsstring>
         <name>initialize</name>
         <qualifiedname>Gaze::GazeModel::initialize</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1a715ddd569d4a3580e3e632d466c47687">initialize</reimplementedby>
-        <reimplementedby refid="class_gaze_1_1_web_gaze_model_1a6f63c37e461cd6a18e641a80d080cd9f">initialize</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_gaze_model_1a3e605a670506add0f7a4b4aa916d5060">initialize</reimplementedby>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
@@ -41,8 +39,7 @@
         <argsstring>(const EyeCrops &amp;crops, GazeVector3 &amp;out_gaze_dir_cv)=0</argsstring>
         <name>estimate_raw_gaze</name>
         <qualifiedname>Gaze::GazeModel::estimate_raw_gaze</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1a1c6f1435328c811f7192401a79891a40">estimate_raw_gaze</reimplementedby>
-        <reimplementedby refid="class_gaze_1_1_web_gaze_model_1a0ca18aaad8a0c8edc021693040c48496">estimate_raw_gaze</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_gaze_model_1a8baef8f34356e926e1b4649092352dc3">estimate_raw_gaze</reimplementedby>
         <param>
           <type>const <ref refid="struct_gaze_1_1_eye_crops" kindref="compound">EyeCrops</ref> &amp;</type>
           <declname>crops</declname>
@@ -65,7 +62,7 @@
         <argsstring>(const PipelineConfig &amp;config)</argsstring>
         <name>set_config</name>
         <qualifiedname>Gaze::GazeModel::set_config</qualifiedname>
-        <reimplementedby refid="class_gaze_1_1_open_c_v_gaze_model_1ae6c1e63050c4c8eb6dca6f3a2c5111a6">set_config</reimplementedby>
+        <reimplementedby refid="class_gaze_1_1_o_r_t_gaze_model_1a90a87379c8b415212f8abc4349386087">set_config</reimplementedby>
         <param>
           <type>const <ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref> &amp;</type>
           <declname>config</declname>
@@ -89,14 +86,8 @@
         <link refid="class_gaze_1_1_gaze_model"/>
       </node>
       <node id="2">
-        <label>Gaze::OpenCVGazeModel</label>
-        <link refid="class_gaze_1_1_open_c_v_gaze_model"/>
-        <childnode refid="1" relation="public-inheritance">
-        </childnode>
-      </node>
-      <node id="3">
-        <label>Gaze::WebGazeModel</label>
-        <link refid="class_gaze_1_1_web_gaze_model"/>
+        <label>Gaze::ORTGazeModel</label>
+        <link refid="class_gaze_1_1_o_r_t_gaze_model"/>
         <childnode refid="1" relation="public-inheritance">
         </childnode>
       </node>

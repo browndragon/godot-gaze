@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_c_p_u_image_warper" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::CPUImageWarper</compoundname>
+    <basecompoundref refid="class_gaze_1_1_image_warper" prot="public" virt="non-virtual">Gaze::ImageWarper</basecompoundref>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_c_p_u_image_warper_1a466ab81c0edd44f9a44bc78112ac2697" prot="private" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>static double Gaze::CPUImageWarper::get_gray_pixel</definition>
+        <argsstring>(const uint8_t *src_data, int x, int y, int width, int height, int channels)</argsstring>
+        <name>get_gray_pixel</name>
+        <qualifiedname>Gaze::CPUImageWarper::get_gray_pixel</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src_data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>x</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>y</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>channels</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/cpu_image_warper.hpp" line="11" column="26" bodyfile="src/core/cpu_image_warper.hpp" bodystart="11" bodyend="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_c_p_u_image_warper_1a0034d4b03bfe3060d753a33fd9a479dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::CPUImageWarper::warp</definition>
+        <argsstring>(const uint8_t *src_data, int src_width, int src_height, int src_channels, const GazeVector2 &amp;eye_center, double angle_deg, double scale, uint8_t *out_bgr_buffer) override</argsstring>
+        <name>warp</name>
+        <qualifiedname>Gaze::CPUImageWarper::warp</qualifiedname>
+        <reimplements refid="class_gaze_1_1_image_warper_1a425f5552fd1a189ff70ebb5d0efdce26">warp</reimplements>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src_data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_channels</declname>
+        </param>
+        <param>
+          <type>const GazeVector2 &amp;</type>
+          <declname>eye_center</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>angle_deg</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>scale</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>out_bgr_buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/cpu_image_warper.hpp" line="23" column="18" bodyfile="src/core/cpu_image_warper.hpp" bodystart="23" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Gaze::CPUImageWarper</label>
+        <link refid="class_gaze_1_1_c_p_u_image_warper"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::ImageWarper</label>
+        <link refid="class_gaze_1_1_image_warper"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::CPUImageWarper</label>
+        <link refid="class_gaze_1_1_c_p_u_image_warper"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::ImageWarper</label>
+        <link refid="class_gaze_1_1_image_warper"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/cpu_image_warper.hpp" line="9" column="1" bodyfile="src/core/cpu_image_warper.hpp" bodystart="9" bodyend="75"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_c_p_u_image_warper_1a466ab81c0edd44f9a44bc78112ac2697" prot="private" virt="non-virtual"><scope>Gaze::CPUImageWarper</scope><name>get_gray_pixel</name></member>
+      <member refid="class_gaze_1_1_image_warper_1a2f2cee9ed586c287b35eb3dede5b9201" prot="public" virt="virtual"><scope>Gaze::CPUImageWarper</scope><name>increment_frame_number</name></member>
+      <member refid="class_gaze_1_1_image_warper_1a70542bc7b08c5c67457687292c2c6cd4" prot="public" virt="virtual"><scope>Gaze::CPUImageWarper</scope><name>submit_and_sync</name></member>
+      <member refid="class_gaze_1_1_c_p_u_image_warper_1a0034d4b03bfe3060d753a33fd9a479dc" prot="public" virt="virtual"><scope>Gaze::CPUImageWarper</scope><name>warp</name></member>
+      <member refid="class_gaze_1_1_image_warper_1ad0e36d3e0a1d6f11c6818c73a0732af6" prot="public" virt="virtual"><scope>Gaze::CPUImageWarper</scope><name>~ImageWarper</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

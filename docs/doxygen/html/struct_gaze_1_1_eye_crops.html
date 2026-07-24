@@ -142,18 +142,39 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('struct_gaze_1_
 Public Attributes</h2></td></tr>
 <tr class="memitem:a62e865f186f915cd5106b0ea72fef51f" id="r_a62e865f186f915cd5106b0ea72fef51f"><td class="memItemLeft"><a id="a62e865f186f915cd5106b0ea72fef51f" name="a62e865f186f915cd5106b0ea72fef51f"></a>
 bool&#160;</td><td class="memItemRight"><b>face_detected</b> = false</td></tr>
+<tr class="memitem:a491e8247038388456f63d119480c6681" id="r_a491e8247038388456f63d119480c6681"><td class="memItemLeft"><a id="a491e8247038388456f63d119480c6681" name="a491e8247038388456f63d119480c6681"></a>
+GazePoint&#160;</td><td class="memItemRight"><b>landmarks</b> [5]</td></tr>
 <tr class="memitem:aa6f78453b65a3586a524588ef3c64f9b" id="r_aa6f78453b65a3586a524588ef3c64f9b"><td class="memItemLeft"><a id="aa6f78453b65a3586a524588ef3c64f9b" name="aa6f78453b65a3586a524588ef3c64f9b"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>head_pose_rotation</b></td></tr>
 <tr class="memitem:a3cd9d347992ec92e80870a18c521fd20" id="r_a3cd9d347992ec92e80870a18c521fd20"><td class="memItemLeft"><a id="a3cd9d347992ec92e80870a18c521fd20" name="a3cd9d347992ec92e80870a18c521fd20"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>head_pose_translation</b></td></tr>
-<tr class="memitem:a565d4aa2fdc4d1e4a6383103df3dd5a8" id="r_a565d4aa2fdc4d1e4a6383103df3dd5a8"><td class="memItemLeft"><a id="a565d4aa2fdc4d1e4a6383103df3dd5a8" name="a565d4aa2fdc4d1e4a6383103df3dd5a8"></a>
-unsigned char&#160;</td><td class="memItemRight"><b>left_eye_data</b> [10800] = {0}</td></tr>
-<tr class="memitem:a37bb9aa12182f32ad3714837fadbbc0b" id="r_a37bb9aa12182f32ad3714837fadbbc0b"><td class="memItemLeft"><a id="a37bb9aa12182f32ad3714837fadbbc0b" name="a37bb9aa12182f32ad3714837fadbbc0b"></a>
-unsigned char&#160;</td><td class="memItemRight"><b>right_eye_data</b> [10800] = {0}</td></tr>
+<tr class="memitem:aff86609d8512c551e4de8bb29fb3ce51" id="r_aff86609d8512c551e4de8bb29fb3ce51"><td class="memItemLeft"><a id="aff86609d8512c551e4de8bb29fb3ce51" name="aff86609d8512c551e4de8bb29fb3ce51"></a>
+uint8_t&#160;</td><td class="memItemRight"><b>left_eye_data</b> [EYE_CROP_SIZE] = {0}</td></tr>
+<tr class="memitem:a82b84f9adbad4d2a0526d09b9600ce38" id="r_a82b84f9adbad4d2a0526d09b9600ce38"><td class="memItemLeft"><a id="a82b84f9adbad4d2a0526d09b9600ce38" name="a82b84f9adbad4d2a0526d09b9600ce38"></a>
+uint8_t&#160;</td><td class="memItemRight"><b>right_eye_data</b> [EYE_CROP_SIZE] = {0}</td></tr>
 <tr class="memitem:aee031d2b7b1f68e441d09a701b0702b2" id="r_aee031d2b7b1f68e441d09a701b0702b2"><td class="memItemLeft"><a id="aee031d2b7b1f68e441d09a701b0702b2" name="aee031d2b7b1f68e441d09a701b0702b2"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>left_eye_center_cam</b></td></tr>
 <tr class="memitem:a66f11e32929fe39de911bf3c1830072a" id="r_a66f11e32929fe39de911bf3c1830072a"><td class="memItemLeft"><a id="a66f11e32929fe39de911bf3c1830072a" name="a66f11e32929fe39de911bf3c1830072a"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>right_eye_center_cam</b></td></tr>
+<tr class="memitem:a2806008534a37f24bbb5908e0a88fe22" id="r_a2806008534a37f24bbb5908e0a88fe22"><td class="memItemLeft"><a id="a2806008534a37f24bbb5908e0a88fe22" name="a2806008534a37f24bbb5908e0a88fe22"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>left_eye_texture_handle</b> = 0</td></tr>
+<tr class="memitem:a401581507a63316dbf3fdcad324c4a34" id="r_a401581507a63316dbf3fdcad324c4a34"><td class="memItemLeft"><a id="a401581507a63316dbf3fdcad324c4a34" name="a401581507a63316dbf3fdcad324c4a34"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>right_eye_texture_handle</b> = 0</td></tr>
+<tr class="memitem:ac338d2a5038e3280b3967c16a2648ee2" id="r_ac338d2a5038e3280b3967c16a2648ee2"><td class="memItemLeft"><a id="ac338d2a5038e3280b3967c16a2648ee2" name="ac338d2a5038e3280b3967c16a2648ee2"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>left_eye_texture_rid_val</b> = 0</td></tr>
+<tr class="memitem:acf021c19cb6dea266545d8fc9a6885a9" id="r_acf021c19cb6dea266545d8fc9a6885a9"><td class="memItemLeft"><a id="acf021c19cb6dea266545d8fc9a6885a9" name="acf021c19cb6dea266545d8fc9a6885a9"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>right_eye_texture_rid_val</b> = 0</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a91c4c8c40bc443e3bd39fdef6f1b04df" id="r_a91c4c8c40bc443e3bd39fdef6f1b04df"><td class="memItemLeft"><a id="a91c4c8c40bc443e3bd39fdef6f1b04df" name="a91c4c8c40bc443e3bd39fdef6f1b04df"></a>
+static constexpr int&#160;</td><td class="memItemRight"><b>EYE_CROP_WIDTH</b> = 60</td></tr>
+<tr class="memitem:af8e8740c3528e35f889aa8ad01faf334" id="r_af8e8740c3528e35f889aa8ad01faf334"><td class="memItemLeft"><a id="af8e8740c3528e35f889aa8ad01faf334" name="af8e8740c3528e35f889aa8ad01faf334"></a>
+static constexpr int&#160;</td><td class="memItemRight"><b>EYE_CROP_HEIGHT</b> = 60</td></tr>
+<tr class="memitem:acfd36946a5df60b8dbc7338321b8474e" id="r_acfd36946a5df60b8dbc7338321b8474e"><td class="memItemLeft"><a id="acfd36946a5df60b8dbc7338321b8474e" name="acfd36946a5df60b8dbc7338321b8474e"></a>
+static constexpr int&#160;</td><td class="memItemRight"><b>EYE_CROP_CHANNELS</b> = 3</td></tr>
+<tr class="memitem:a7c93ebd79fe95cf26657b28a053fc1ae" id="r_a7c93ebd79fe95cf26657b28a053fc1ae"><td class="memItemLeft"><a id="a7c93ebd79fe95cf26657b28a053fc1ae" name="a7c93ebd79fe95cf26657b28a053fc1ae"></a>
+static constexpr int&#160;</td><td class="memItemRight"><b>EYE_CROP_SIZE</b> = EYE_CROP_WIDTH * EYE_CROP_HEIGHT * EYE_CROP_CHANNELS</td></tr>
 </table>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li>src/core/<a class="el" href="face__pipeline_8hpp_source.html">face_pipeline.hpp</a></li>

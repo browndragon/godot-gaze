@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['6_20real_20time_20depth_20triangulation_20z_20engine_0',['6. Real-Time Depth Triangulation (Z Engine)',['../md_docs_2gaze__math__physical__model.html#autotoc_md33',1,'']]]
+  ['developer_20guidelines_20compiling_0',['Developer Guidelines &amp;amp; Compiling',['../index.html#autotoc_md17',1,'']]],
+  ['development_20symlinking_20for_20contributors_1',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]]
 ];

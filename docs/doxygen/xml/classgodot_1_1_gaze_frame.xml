@@ -1,0 +1,753 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_frame" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeFrame</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Object</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1aea9ad4eb2ed8ce5bfe555945410c7b77" prot="private" static="no" mutable="no">
+        <type>PackedByteArray</type>
+        <definition>PackedByteArray godot::GazeFrame::left_eye_bytes</definition>
+        <argsstring></argsstring>
+        <name>left_eye_bytes</name>
+        <qualifiedname>godot::GazeFrame::left_eye_bytes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="14" column="21" bodyfile="src/godot/gaze_frame.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1a7f331fd5546ae9d6794acdc805319872" prot="private" static="no" mutable="no">
+        <type>PackedByteArray</type>
+        <definition>PackedByteArray godot::GazeFrame::right_eye_bytes</definition>
+        <argsstring></argsstring>
+        <name>right_eye_bytes</name>
+        <qualifiedname>godot::GazeFrame::right_eye_bytes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="15" column="21" bodyfile="src/godot/gaze_frame.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1abfd7da1c42cc08e1591a3df64a24da0e" prot="private" static="no" mutable="no">
+        <type>PackedByteArray</type>
+        <definition>PackedByteArray godot::GazeFrame::full_crop_bytes</definition>
+        <argsstring></argsstring>
+        <name>full_crop_bytes</name>
+        <qualifiedname>godot::GazeFrame::full_crop_bytes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="16" column="21" bodyfile="src/godot/gaze_frame.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1ae0f1a4ead1fba5dde8e9be63b4fd8394" prot="private" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::GazeFrame::left_eye_image</definition>
+        <argsstring></argsstring>
+        <name>left_eye_image</name>
+        <qualifiedname>godot::GazeFrame::left_eye_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="18" column="9" bodyfile="src/godot/gaze_frame.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1af7a0e61978626df8c0eadc15338ee9e7" prot="private" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::GazeFrame::right_eye_image</definition>
+        <argsstring></argsstring>
+        <name>right_eye_image</name>
+        <qualifiedname>godot::GazeFrame::right_eye_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="19" column="9" bodyfile="src/godot/gaze_frame.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1ac7969b35fa964390c1a9b0b9bfe60381" prot="private" static="no" mutable="no">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt;Image&gt; godot::GazeFrame::full_crop_image</definition>
+        <argsstring></argsstring>
+        <name>full_crop_image</name>
+        <qualifiedname>godot::GazeFrame::full_crop_image</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="20" column="9" bodyfile="src/godot/gaze_frame.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1a1cd657bba2c148302a4e06280c5943e4" prot="private" static="no" mutable="no">
+        <type>Vector2i</type>
+        <definition>Vector2i godot::GazeFrame::camera_size</definition>
+        <argsstring></argsstring>
+        <name>camera_size</name>
+        <qualifiedname>godot::GazeFrame::camera_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="22" column="14" bodyfile="src/godot/gaze_frame.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1a10982267ce8033854ea2afb6ffa96c26" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeFrame::timestamp</definition>
+        <argsstring></argsstring>
+        <name>timestamp</name>
+        <qualifiedname>godot::GazeFrame::timestamp</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="23" column="12" bodyfile="src/godot/gaze_frame.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1a3396e2ba8b2ffcabbb4bf9dfb73d35b8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeFrame::face_detected</definition>
+        <argsstring></argsstring>
+        <name>face_detected</name>
+        <qualifiedname>godot::GazeFrame::face_detected</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="24" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1aee7597fe4fd052369f8d16e9fe936df8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeFrame::gaze_success</definition>
+        <argsstring></argsstring>
+        <name>gaze_success</name>
+        <qualifiedname>godot::GazeFrame::gaze_success</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="25" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1ad9d9abf966fda7107b3fc01a14ae6890" prot="private" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::head_translation</definition>
+        <argsstring></argsstring>
+        <name>head_translation</name>
+        <qualifiedname>godot::GazeFrame::head_translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="27" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1ab6de49626d42fb7338847bad83f46d92" prot="private" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::head_rotation</definition>
+        <argsstring></argsstring>
+        <name>head_rotation</name>
+        <qualifiedname>godot::GazeFrame::head_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="28" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1ab52bafb0210fa7a543ec683d1b988b52" prot="private" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::gaze_origin</definition>
+        <argsstring></argsstring>
+        <name>gaze_origin</name>
+        <qualifiedname>godot::GazeFrame::gaze_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="29" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_frame_1a50a0f1388de7b30a67514ffb4b0a5842" prot="private" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::gaze_direction</definition>
+        <argsstring></argsstring>
+        <name>gaze_direction</name>
+        <qualifiedname>godot::GazeFrame::gaze_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="30" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1aa95237e5d42b2b1f410e5af30d145dc7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeFrame::GDCLASS</definition>
+        <argsstring>(GazeFrame, Object)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeFrame::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeFrame</type>
+        </param>
+        <param>
+          <type>Object</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="11" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1ab9ff352e10eb9c5eb18e0e238a5ffb3d" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeFrame::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="33" column="17" bodyfile="src/godot/gaze_frame.cpp" bodystart="7" bodyend="30"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a10d8d4c99eba663d7d270e694b1f14c3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeFrame::GazeFrame</definition>
+        <argsstring>()</argsstring>
+        <name>GazeFrame</name>
+        <qualifiedname>godot::GazeFrame::GazeFrame</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="36" column="5" bodyfile="src/godot/gaze_frame.cpp" bodystart="32" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1aa96ab426d6e2bf0f60115d40204f816e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::GazeFrame::~GazeFrame</definition>
+        <argsstring>()</argsstring>
+        <name>~GazeFrame</name>
+        <qualifiedname>godot::GazeFrame::~GazeFrame</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="37" column="13" bodyfile="src/godot/gaze_frame.cpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1ad5f9b2cab6271d33b7b50f514cc68a57" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::initialize_buffers</definition>
+        <argsstring>()</argsstring>
+        <name>initialize_buffers</name>
+        <qualifiedname>godot::GazeFrame::initialize_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="39" column="10" bodyfile="src/godot/gaze_frame.cpp" bodystart="38" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a2c0a2316399124577716616ab228e41b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::post_process</definition>
+        <argsstring>()</argsstring>
+        <name>post_process</name>
+        <qualifiedname>godot::GazeFrame::post_process</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="40" column="10" bodyfile="src/godot/gaze_frame.cpp" bodystart="61" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1ac993d112db74d4101615c3b01a480d4b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::GazeFrame::get_left_eye_crop</definition>
+        <argsstring>() const</argsstring>
+        <name>get_left_eye_crop</name>
+        <qualifiedname>godot::GazeFrame::get_left_eye_crop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="44" column="9" bodyfile="src/godot/gaze_frame.cpp" bodystart="73" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1aab6e494869214cf676c8c24200c48b25" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::GazeFrame::get_right_eye_crop</definition>
+        <argsstring>() const</argsstring>
+        <name>get_right_eye_crop</name>
+        <qualifiedname>godot::GazeFrame::get_right_eye_crop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="45" column="9" bodyfile="src/godot/gaze_frame.cpp" bodystart="77" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a8bb537511a970cda3256f9277e453818" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::GazeFrame::get_full_crop</definition>
+        <argsstring>() const</argsstring>
+        <name>get_full_crop</name>
+        <qualifiedname>godot::GazeFrame::get_full_crop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="46" column="9" bodyfile="src/godot/gaze_frame.cpp" bodystart="81" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a55d6494c2da899a398ab4f6a3d7d4200" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * godot::GazeFrame::get_left_eye_buffer_ptr</definition>
+        <argsstring>()</argsstring>
+        <name>get_left_eye_buffer_ptr</name>
+        <qualifiedname>godot::GazeFrame::get_left_eye_buffer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="49" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1af1df0d728e5353354141230186a99d6a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * godot::GazeFrame::get_right_eye_buffer_ptr</definition>
+        <argsstring>()</argsstring>
+        <name>get_right_eye_buffer_ptr</name>
+        <qualifiedname>godot::GazeFrame::get_right_eye_buffer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="50" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a2245e6cd32a0ecac8d666b51a1f5fad3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * godot::GazeFrame::get_full_crop_buffer_ptr</definition>
+        <argsstring>()</argsstring>
+        <name>get_full_crop_buffer_ptr</name>
+        <qualifiedname>godot::GazeFrame::get_full_crop_buffer_ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="51" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1ade82b3e21b39cf0d799010634cf17c55" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>size_t</type>
+        <definition>size_t godot::GazeFrame::get_full_crop_bytes_size</definition>
+        <argsstring>() const</argsstring>
+        <name>get_full_crop_bytes_size</name>
+        <qualifiedname>godot::GazeFrame::get_full_crop_bytes_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="52" column="12" bodyfile="src/godot/gaze_frame.hpp" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a7a2fde7902db8c3f392d5185190cd3dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::resize_full_crop</definition>
+        <argsstring>(int width, int height)</argsstring>
+        <name>resize_full_crop</name>
+        <qualifiedname>godot::GazeFrame::resize_full_crop</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="54" column="10" bodyfile="src/godot/gaze_frame.cpp" bodystart="54" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a2891bb0a5e1703f41db33e976ff952f8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_camera_size</definition>
+        <argsstring>(Vector2i size)</argsstring>
+        <name>set_camera_size</name>
+        <qualifiedname>godot::GazeFrame::set_camera_size</qualifiedname>
+        <param>
+          <type>Vector2i</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="56" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a29327920673b54f7f73a4cdfc2fd0f9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector2i</type>
+        <definition>Vector2i godot::GazeFrame::get_camera_size</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_size</name>
+        <qualifiedname>godot::GazeFrame::get_camera_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="57" column="14" bodyfile="src/godot/gaze_frame.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a6c7b13a36428ea73bc5f9c12bdcb4f09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_timestamp</definition>
+        <argsstring>(double t)</argsstring>
+        <name>set_timestamp</name>
+        <qualifiedname>godot::GazeFrame::set_timestamp</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="59" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a21584f7180a8c5bfdb578c3badcdc9c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeFrame::get_timestamp</definition>
+        <argsstring>() const</argsstring>
+        <name>get_timestamp</name>
+        <qualifiedname>godot::GazeFrame::get_timestamp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="60" column="12" bodyfile="src/godot/gaze_frame.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1aa2d7a906c7b6843fb6e439c18a284899" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_face_detected</definition>
+        <argsstring>(bool d)</argsstring>
+        <name>set_face_detected</name>
+        <qualifiedname>godot::GazeFrame::set_face_detected</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="62" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a0fcc2031c2cc598140a8a30cdc7bdd0b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeFrame::get_face_detected</definition>
+        <argsstring>() const</argsstring>
+        <name>get_face_detected</name>
+        <qualifiedname>godot::GazeFrame::get_face_detected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="63" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1ae4fc51b8bae62f9b23d2341946e53dc9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_gaze_success</definition>
+        <argsstring>(bool s)</argsstring>
+        <name>set_gaze_success</name>
+        <qualifiedname>godot::GazeFrame::set_gaze_success</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="65" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1abd5a3fee3169ded1baab291e6c22a14b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeFrame::get_gaze_success</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_success</name>
+        <qualifiedname>godot::GazeFrame::get_gaze_success</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="66" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="66" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a7d4b7780b8f56b7d7648c995594a3ef3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_head_translation</definition>
+        <argsstring>(Vector3 t)</argsstring>
+        <name>set_head_translation</name>
+        <qualifiedname>godot::GazeFrame::set_head_translation</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="68" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a6914cdfafbbfe15ad84572c8efe10860" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::get_head_translation</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_translation</name>
+        <qualifiedname>godot::GazeFrame::get_head_translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="69" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a77526ee32a390471d42e2c0f54987dee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_head_rotation</definition>
+        <argsstring>(Vector3 r)</argsstring>
+        <name>set_head_rotation</name>
+        <qualifiedname>godot::GazeFrame::set_head_rotation</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="71" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="71" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a8723f2fbfb5eb37bfab9bef37bedacc4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::get_head_rotation</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_rotation</name>
+        <qualifiedname>godot::GazeFrame::get_head_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="72" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="72" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a6ba9e64d80ad7dba5ae2b1abdd517153" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_gaze_origin</definition>
+        <argsstring>(Vector3 o)</argsstring>
+        <name>set_gaze_origin</name>
+        <qualifiedname>godot::GazeFrame::set_gaze_origin</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="74" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="74" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1abeabeae6ed06a6344b84b7ee9921b8f1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::get_gaze_origin</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_origin</name>
+        <qualifiedname>godot::GazeFrame::get_gaze_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="75" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="75" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a1fbc3ad8626e03635a6daa4bfd95d88a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeFrame::set_gaze_direction</definition>
+        <argsstring>(Vector3 d)</argsstring>
+        <name>set_gaze_direction</name>
+        <qualifiedname>godot::GazeFrame::set_gaze_direction</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="77" column="10" bodyfile="src/godot/gaze_frame.hpp" bodystart="77" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_frame_1a303ea7c86675a67931e9c020983f2097" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeFrame::get_gaze_direction</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_direction</name>
+        <qualifiedname>godot::GazeFrame::get_gaze_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_frame.hpp" line="78" column="13" bodyfile="src/godot/gaze_frame.hpp" bodystart="78" bodyend="78"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeFrame</label>
+        <link refid="classgodot_1_1_gaze_frame"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeFrame</label>
+        <link refid="classgodot_1_1_gaze_frame"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_frame.hpp" line="10" column="1" bodyfile="src/godot/gaze_frame.hpp" bodystart="10" bodyend="79"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_frame_1ab9ff352e10eb9c5eb18e0e238a5ffb3d" prot="protected" virt="non-virtual"><scope>godot::GazeFrame</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a1cd657bba2c148302a4e06280c5943e4" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>camera_size</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a3396e2ba8b2ffcabbb4bf9dfb73d35b8" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>face_detected</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1abfd7da1c42cc08e1591a3df64a24da0e" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>full_crop_bytes</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ac7969b35fa964390c1a9b0b9bfe60381" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>full_crop_image</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a50a0f1388de7b30a67514ffb4b0a5842" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>gaze_direction</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ab52bafb0210fa7a543ec683d1b988b52" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>gaze_origin</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aee7597fe4fd052369f8d16e9fe936df8" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>gaze_success</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a10d8d4c99eba663d7d270e694b1f14c3" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>GazeFrame</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aa95237e5d42b2b1f410e5af30d145dc7" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a29327920673b54f7f73a4cdfc2fd0f9b" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_camera_size</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a0fcc2031c2cc598140a8a30cdc7bdd0b" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_face_detected</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a8bb537511a970cda3256f9277e453818" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_full_crop</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a2245e6cd32a0ecac8d666b51a1f5fad3" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_full_crop_buffer_ptr</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ade82b3e21b39cf0d799010634cf17c55" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_full_crop_bytes_size</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a303ea7c86675a67931e9c020983f2097" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_gaze_direction</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1abeabeae6ed06a6344b84b7ee9921b8f1" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_gaze_origin</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1abd5a3fee3169ded1baab291e6c22a14b" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_gaze_success</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a8723f2fbfb5eb37bfab9bef37bedacc4" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_head_rotation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a6914cdfafbbfe15ad84572c8efe10860" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_head_translation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a55d6494c2da899a398ab4f6a3d7d4200" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_left_eye_buffer_ptr</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ac993d112db74d4101615c3b01a480d4b" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_left_eye_crop</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1af1df0d728e5353354141230186a99d6a" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_right_eye_buffer_ptr</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aab6e494869214cf676c8c24200c48b25" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_right_eye_crop</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a21584f7180a8c5bfdb578c3badcdc9c1" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>get_timestamp</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ab6de49626d42fb7338847bad83f46d92" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>head_rotation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ad9d9abf966fda7107b3fc01a14ae6890" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>head_translation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ad5f9b2cab6271d33b7b50f514cc68a57" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>initialize_buffers</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aea9ad4eb2ed8ce5bfe555945410c7b77" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>left_eye_bytes</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ae0f1a4ead1fba5dde8e9be63b4fd8394" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>left_eye_image</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a2c0a2316399124577716616ab228e41b" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>post_process</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a7a2fde7902db8c3f392d5185190cd3dc" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>resize_full_crop</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a7f331fd5546ae9d6794acdc805319872" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>right_eye_bytes</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1af7a0e61978626df8c0eadc15338ee9e7" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>right_eye_image</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a2891bb0a5e1703f41db33e976ff952f8" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_camera_size</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aa2d7a906c7b6843fb6e439c18a284899" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_face_detected</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a1fbc3ad8626e03635a6daa4bfd95d88a" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_gaze_direction</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a6ba9e64d80ad7dba5ae2b1abdd517153" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_gaze_origin</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1ae4fc51b8bae62f9b23d2341946e53dc9" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_gaze_success</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a77526ee32a390471d42e2c0f54987dee" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_head_rotation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a7d4b7780b8f56b7d7648c995594a3ef3" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_head_translation</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a6c7b13a36428ea73bc5f9c12bdcb4f09" prot="public" virt="non-virtual"><scope>godot::GazeFrame</scope><name>set_timestamp</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1a10982267ce8033854ea2afb6ffa96c26" prot="private" virt="non-virtual"><scope>godot::GazeFrame</scope><name>timestamp</name></member>
+      <member refid="classgodot_1_1_gaze_frame_1aa96ab426d6e2bf0f60115d40204f816e" prot="public" virt="virtual"><scope>godot::GazeFrame</scope><name>~GazeFrame</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

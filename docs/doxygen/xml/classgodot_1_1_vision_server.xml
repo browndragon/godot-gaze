@@ -1,0 +1,543 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_vision_server" kind="class" language="C++" prot="public">
+    <compoundname>godot::VisionServer</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Object</basecompoundref>
+    <derivedcompoundref refid="classgodot_1_1_mock_vision_server" prot="public" virt="non-virtual">godot::MockVisionServer</derivedcompoundref>
+    <includes refid="vision__server_8hpp" local="no">vision_server.hpp</includes>
+    <innerclass refid="structgodot_1_1_vision_server_1_1_camera_data" prot="protected">godot::VisionServer::CameraData</innerclass>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_vision_server_1a7a1389b92b31d84e11984e29e933e645" prot="private" static="yes" mutable="no">
+        <type>VisionServer *</type>
+        <definition>VisionServer * godot::VisionServer::singleton</definition>
+        <argsstring></argsstring>
+        <name>singleton</name>
+        <qualifiedname>godot::VisionServer::singleton</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="31" column="25" bodyfile="src/godot/vision_server.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_vision_server_1ad825a376aba1970a9d3979671effdcd8" prot="protected" static="no" mutable="no">
+        <type>RID_PtrOwner&lt; <ref refid="structgodot_1_1_vision_server_1_1_camera_data" kindref="compound">CameraData</ref>, true &gt;</type>
+        <definition>RID_PtrOwner&lt;CameraData, true&gt; godot::VisionServer::camera_owner</definition>
+        <argsstring></argsstring>
+        <name>camera_owner</name>
+        <qualifiedname>godot::VisionServer::camera_owner</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="52" column="18" bodyfile="src/godot/vision_server.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_vision_server_1ac3fa98a823c4e2f8428a6dfa5f059254" prot="protected" static="no" mutable="no">
+        <type>std::vector&lt; RID &gt;</type>
+        <definition>std::vector&lt;RID&gt; godot::VisionServer::allocated_cameras</definition>
+        <argsstring></argsstring>
+        <name>allocated_cameras</name>
+        <qualifiedname>godot::VisionServer::allocated_cameras</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="53" column="17" bodyfile="src/godot/vision_server.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a1470dcd371ff8005d56978151553bffd" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::VisionServer::GDCLASS</definition>
+        <argsstring>(VisionServer, Object)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::VisionServer::GDCLASS</qualifiedname>
+        <param>
+          <type>VisionServer</type>
+        </param>
+        <param>
+          <type>Object</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="28" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a4ae566b3463da96a5592ef7a36486d17" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::VisionServer::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="34" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="19" bodyend="34"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1af619be7bc77c62ae1f1f1b68cf9216bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::VisionServer::VisionServer</definition>
+        <argsstring>()</argsstring>
+        <name>VisionServer</name>
+        <qualifiedname>godot::VisionServer::VisionServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="56" column="5" bodyfile="src/godot/vision_server.cpp" bodystart="36" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a2ff6ccb65696aeb1e01df8be74e21765" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::VisionServer::~VisionServer</definition>
+        <argsstring>()</argsstring>
+        <name>~VisionServer</name>
+        <qualifiedname>godot::VisionServer::~VisionServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="57" column="13" bodyfile="src/godot/vision_server.cpp" bodystart="42" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>RID</type>
+        <definition>RID godot::VisionServer::camera_create</definition>
+        <argsstring>()</argsstring>
+        <name>camera_create</name>
+        <qualifiedname>godot::VisionServer::camera_create</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775">camera_create</reimplementedby>
+        <briefdescription>
+<para>Create a new camera resource and return its unique RID. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="67" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="65" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_set_device_id</definition>
+        <argsstring>(RID p_camera, int p_device_id)</argsstring>
+        <name>camera_set_device_id</name>
+        <qualifiedname>godot::VisionServer::camera_set_device_id</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>p_device_id</declname>
+        </param>
+        <briefdescription>
+<para>Set the hardware device ID index to capture from. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="72" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="73" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_set_resolution</definition>
+        <argsstring>(RID p_camera, int p_width, int p_height)</argsstring>
+        <name>camera_set_resolution</name>
+        <qualifiedname>godot::VisionServer::camera_set_resolution</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>p_width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>p_height</declname>
+        </param>
+        <briefdescription>
+<para>Set target camera capture resolution. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="77" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="79" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_set_focal_length</definition>
+        <argsstring>(RID p_camera, double p_focal_length)</argsstring>
+        <name>camera_set_focal_length</name>
+        <qualifiedname>godot::VisionServer::camera_set_focal_length</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_focal_length</declname>
+        </param>
+        <briefdescription>
+<para>Set camera lens focal length parameter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="82" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="86" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::VisionServer::camera_get_focal_length</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_get_focal_length</name>
+        <qualifiedname>godot::VisionServer::camera_get_focal_length</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Get the camera lens focal length parameter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="87" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="92" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_set_fov</definition>
+        <argsstring>(RID p_camera, double p_fov)</argsstring>
+        <name>camera_set_fov</name>
+        <qualifiedname>godot::VisionServer::camera_set_fov</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_fov</declname>
+        </param>
+        <briefdescription>
+<para>Set camera lens fov parameter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="92" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="98" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::VisionServer::camera_get_fov</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_get_fov</name>
+        <qualifiedname>godot::VisionServer::camera_get_fov</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Get the camera lens fov parameter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="97" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="104" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a6a077be45fb502ef66adbd69a9b1baf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool godot::VisionServer::camera_start</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_start</name>
+        <qualifiedname>godot::VisionServer::camera_start</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b">camera_start</reimplementedby>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Start frame capture capture on the camera. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>True if started successfully, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="103" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="23" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1acfd359215cca0d1bd9c86a2832b883bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_stop</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_stop</name>
+        <qualifiedname>godot::VisionServer::camera_stop</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b">camera_stop</reimplementedby>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Stop frame capture and release hardware resources. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="108" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="52" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; Texture2D &gt;</type>
+        <definition>Ref&lt; Texture2D &gt; godot::VisionServer::get_camera_current_texture</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>get_camera_current_texture</name>
+        <qualifiedname>godot::VisionServer::get_camera_current_texture</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4">get_camera_current_texture</reimplementedby>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the latest captured frame texture for Godot rendering. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="113" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="149" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; Image &gt;</type>
+        <definition>Ref&lt; Image &gt; godot::VisionServer::camera_get_current_image</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_get_current_image</name>
+        <qualifiedname>godot::VisionServer::camera_get_current_image</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809">camera_get_current_image</reimplementedby>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the latest captured CPU image resource. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="118" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="155" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a84b9f93d216f3e83c676636293f797e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_set_preview_requested</definition>
+        <argsstring>(RID p_camera, bool p_requested)</argsstring>
+        <name>camera_set_preview_requested</name>
+        <qualifiedname>godot::VisionServer::camera_set_preview_requested</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>p_requested</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="120" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="110" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a69edf2a62052127bad03b4dbc51ff953" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool godot::VisionServer::camera_is_preview_requested</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_is_preview_requested</name>
+        <qualifiedname>godot::VisionServer::camera_is_preview_requested</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="121" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="128" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::VisionServer::camera_free</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_free</name>
+        <qualifiedname>godot::VisionServer::camera_free</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+<para>Free the camera resource. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="126" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="134" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool godot::VisionServer::get_camera_current_frame</definition>
+        <argsstring>(RID p_camera, Gaze::Frame &amp;r_frame)</argsstring>
+        <name>get_camera_current_frame</name>
+        <qualifiedname>godot::VisionServer::get_camera_current_frame</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref> &amp;</type>
+          <declname>r_frame</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the raw frame data for <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> or background pipeline threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera RID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r_frame</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Frame structure to populate. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if a new frame was grabbed successfully, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="134" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="76" bodyend="136"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VisionServer *</type>
+        <definition>static VisionServer * godot::VisionServer::get_singleton</definition>
+        <argsstring>()</argsstring>
+        <name>get_singleton</name>
+        <qualifiedname>godot::VisionServer::get_singleton</qualifiedname>
+        <briefdescription>
+<para>Get the <ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> global singleton instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="62" column="25" bodyfile="src/godot/vision_server.hpp" bodystart="62" bodyend="62"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Singleton server coordinating all platform camera configurations and image capture operations. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> manages raw camera feeds (OpenCV or platform-specific drivers) using an RID-based resource model. It provides double-buffered frame texture cache queries to GDScript client nodes and supports virtual camera injection.</para>
+<para>NOTE: The implementation of <ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> is split across three platform layers:<itemizedlist>
+<listitem><para>src/godot/vision_server.cpp : Handles generic ClassDB binding, lifecycle, RID registration, and virtual cameras.</para>
+</listitem><listitem><para>src/native/vision_server.cpp : Implements native OpenCV camera capture and frame grabbing.</para>
+</listitem><listitem><para>src/web/vision_server.cpp : Implements Web HTML5 JS/Emscripten canvas capture callbacks. </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="3">
+        <label>godot::MockVisionServer</label>
+        <link refid="classgodot_1_1_mock_vision_server"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>godot::VisionServer</label>
+        <link refid="classgodot_1_1_vision_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::VisionServer</label>
+        <link refid="classgodot_1_1_vision_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/vision_server.hpp" line="27" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="27" bodyend="135"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_vision_server_1a4ae566b3463da96a5592ef7a36486d17" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_vision_server_1ac3fa98a823c4e2f8428a6dfa5f059254" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>allocated_cameras</name></member>
+      <member refid="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_create</name></member>
+      <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_free</name></member>
+      <member refid="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_current_image</name></member>
+      <member refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_focal_length</name></member>
+      <member refid="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_fov</name></member>
+      <member refid="classgodot_1_1_vision_server_1a69edf2a62052127bad03b4dbc51ff953" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_is_preview_requested</name></member>
+      <member refid="classgodot_1_1_vision_server_1ad825a376aba1970a9d3979671effdcd8" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>camera_owner</name></member>
+      <member refid="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_set_device_id</name></member>
+      <member refid="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_set_focal_length</name></member>
+      <member refid="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_set_fov</name></member>
+      <member refid="classgodot_1_1_vision_server_1a84b9f93d216f3e83c676636293f797e0" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_set_preview_requested</name></member>
+      <member refid="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_set_resolution</name></member>
+      <member refid="classgodot_1_1_vision_server_1a6a077be45fb502ef66adbd69a9b1baf0" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_start</name></member>
+      <member refid="classgodot_1_1_vision_server_1acfd359215cca0d1bd9c86a2832b883bc" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_stop</name></member>
+      <member refid="classgodot_1_1_vision_server_1a1470dcd371ff8005d56978151553bffd" prot="private" virt="non-virtual"><scope>godot::VisionServer</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>get_camera_current_frame</name></member>
+      <member refid="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>get_camera_current_texture</name></member>
+      <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" virt="non-virtual"><scope>godot::VisionServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_vision_server_1a7a1389b92b31d84e11984e29e933e645" prot="private" virt="non-virtual"><scope>godot::VisionServer</scope><name>singleton</name></member>
+      <member refid="classgodot_1_1_vision_server_1af619be7bc77c62ae1f1f1b68cf9216bf" prot="public" virt="non-virtual"><scope>godot::VisionServer</scope><name>VisionServer</name></member>
+      <member refid="classgodot_1_1_vision_server_1a2ff6ccb65696aeb1e01df8be74e21765" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>~VisionServer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

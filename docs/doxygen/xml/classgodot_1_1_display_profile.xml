@@ -71,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="24" column="17" bodyfile="src/godot/display_profile.cpp" bodystart="6" bodyend="15"/>
+        <location file="src/godot/display_profile.hpp" line="24" column="17" bodyfile="src/godot/display_profile.cpp" bodystart="19" bodyend="33"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -87,7 +87,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="27" column="5" bodyfile="src/godot/display_profile.cpp" bodystart="17" bodyend="17"/>
+        <location file="src/godot/display_profile.hpp" line="27" column="5" bodyfile="src/godot/display_profile.cpp" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a1fe0e5846900a263f4f56bcbff358d6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -101,7 +101,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="28" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="19" bodyend="19"/>
+        <location file="src/godot/display_profile.hpp" line="28" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="84" bodyend="84"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1affcdcacf14e9dad1d9f5e90ed5d1caf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="30" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="21" bodyend="23"/>
+        <location file="src/godot/display_profile.hpp" line="30" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="86" bodyend="88"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1ad910e19d60fcf5c62eaad5c21e0b695c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2i</type>
@@ -133,7 +133,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="31" column="14" bodyfile="src/godot/display_profile.cpp" bodystart="25" bodyend="27"/>
+        <location file="src/godot/display_profile.hpp" line="31" column="14" bodyfile="src/godot/display_profile.cpp" bodystart="90" bodyend="92"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1ab8fdde3b0ce7bfa9c83e5fbfdf0bc967" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -151,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="33" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="29" bodyend="31"/>
+        <location file="src/godot/display_profile.hpp" line="33" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="94" bodyend="96"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1abc78184ef9001b8bb4f63215dd0d5c72" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -165,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="34" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="33" bodyend="35"/>
+        <location file="src/godot/display_profile.hpp" line="34" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="98" bodyend="100"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a05c10f4f3c5b99a7469e5919e652b82f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -179,7 +179,65 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="36" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="37" bodyend="45"/>
+        <location file="src/godot/display_profile.hpp" line="36" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="102" bodyend="110"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_display_profile_1a6e3166e12f42422af8cd62cb76af1c8c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; DisplayProfile &gt;</type>
+        <definition>Ref&lt; DisplayProfile &gt; godot::DisplayProfile::estimate_from_os</definition>
+        <argsstring>()</argsstring>
+        <name>estimate_from_os</name>
+        <qualifiedname>godot::DisplayProfile::estimate_from_os</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/display_profile.hpp" line="38" column="16" bodyfile="src/godot/display_profile.cpp" bodystart="35" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_display_profile_1a63e978bcd7b9ae49d70c3ef5403c098c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DisplayProfile::get_screen_scale</definition>
+        <argsstring>()</argsstring>
+        <name>get_screen_scale</name>
+        <qualifiedname>godot::DisplayProfile::get_screen_scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/display_profile.hpp" line="39" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="112" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_display_profile_1acb229e8512363e385aac73f1527cae13" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DisplayProfile::get_screen_size_logical</definition>
+        <argsstring>()</argsstring>
+        <name>get_screen_size_logical</name>
+        <qualifiedname>godot::DisplayProfile::get_screen_size_logical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/display_profile.hpp" line="40" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="128" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_display_profile_1a1ce25443266a1d178a9c0ac0f5e2f4ee" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DisplayProfile::get_window_size_logical</definition>
+        <argsstring>()</argsstring>
+        <name>get_window_size_logical</name>
+        <qualifiedname>godot::DisplayProfile::get_window_size_logical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/display_profile.hpp" line="41" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="149" bodyend="180"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -210,14 +268,18 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/display_profile.hpp" line="16" column="1" bodyfile="src/godot/display_profile.hpp" bodystart="16" bodyend="37"/>
+    <location file="src/godot/display_profile.hpp" line="16" column="1" bodyfile="src/godot/display_profile.hpp" bodystart="16" bodyend="42"/>
     <listofallmembers>
       <member refid="classgodot_1_1_display_profile_1ad085dae746ff3bed7ccb7b8532d895f8" prot="protected" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_display_profile_1aca2b7a47b28140c9be0277a0b1abc4fc" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>DisplayProfile</name></member>
+      <member refid="classgodot_1_1_display_profile_1a6e3166e12f42422af8cd62cb76af1c8c" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>estimate_from_os</name></member>
       <member refid="classgodot_1_1_display_profile_1ade3cf86d2036f46b974b72e0337bacbc" prot="private" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>GDCLASS</name></member>
       <member refid="classgodot_1_1_display_profile_1a05c10f4f3c5b99a7469e5919e652b82f" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_dpi</name></member>
       <member refid="classgodot_1_1_display_profile_1ad910e19d60fcf5c62eaad5c21e0b695c" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_logical_size_px</name></member>
       <member refid="classgodot_1_1_display_profile_1abc78184ef9001b8bb4f63215dd0d5c72" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_physical_size_mm</name></member>
+      <member refid="classgodot_1_1_display_profile_1a63e978bcd7b9ae49d70c3ef5403c098c" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_screen_scale</name></member>
+      <member refid="classgodot_1_1_display_profile_1acb229e8512363e385aac73f1527cae13" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_screen_size_logical</name></member>
+      <member refid="classgodot_1_1_display_profile_1a1ce25443266a1d178a9c0ac0f5e2f4ee" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>get_window_size_logical</name></member>
       <member refid="classgodot_1_1_display_profile_1ab23715dc8be14f70778b9f7f42cccd6c" prot="private" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>logical_size_px</name></member>
       <member refid="classgodot_1_1_display_profile_1a788bf3032804dd11cb246d73db3e6f3d" prot="private" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>physical_size_mm</name></member>
       <member refid="classgodot_1_1_display_profile_1affcdcacf14e9dad1d9f5e90ed5d1caf3" prot="public" virt="non-virtual"><scope>godot::DisplayProfile</scope><name>set_logical_size_px</name></member>

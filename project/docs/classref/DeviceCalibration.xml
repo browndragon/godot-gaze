@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="DeviceCalibration" inherits="Resource">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_pixel_size_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_offset">
+			<return type="Vector3"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt">
+			<return type="double"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm_bind">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_offset_bind">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt_bind">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_pixel_size_mm">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_offset">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_tilt">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_focal_length_under_scaling_static">
+			<return type="double"></return>
+			<param index="0" name="f_original" type="double"></param>
+			<param index="1" name="original_dim" type="double"></param>
+			<param index="2" name="new_dim" type="double"></param>
+			<description></description>
+		</method>
+		<method name="get_card_width_px_static">
+			<return type="double"></return>
+			<param index="0" name="fov_degrees" type="double"></param>
+			<param index="1" name="card_distance_mm" type="double"></param>
+			<param index="2" name="frame_width" type="double"></param>
+			<param index="3" name="card_width_mm" type="double"></param>
+			<description></description>
+		</method>
+		<method name="diagonal_to_horizontal_fov_static">
+			<return type="double"></return>
+			<param index="0" name="diagonal_fov_degrees" type="double"></param>
+			<param index="1" name="width" type="double"></param>
+			<param index="2" name="height" type="double"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

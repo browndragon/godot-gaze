@@ -122,59 +122,108 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('face__pipeline
 <a href="face__pipeline_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;<a class="code" href="camera__interface_8hpp.html">camera_interface.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="pipeline__config_8hpp.html">pipeline_config.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">namespace </span>Gaze {</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="camera__interface_8hpp.html">camera_interface.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#include &quot;<a class="code" href="pipeline__config_8hpp.html">pipeline_config.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_eye_crops.html">   17</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a> {</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">bool</span> face_detected = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keyword">namespace </span>Gaze</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>{</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// Estimated head pose vectors relative to camera (in mm and radians)</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> head_pose_rotation;    <span class="comment">// Rotational angles (pitch, yaw, roll)</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> head_pose_translation; <span class="comment">// Position of the head</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">// Left and right eye crops (standardized to 60x60 px, 3-channel BGR)</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">// BGR buffer (60 * 60 * 3 = 10800 bytes)</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> left_eye_data[10800] = {0};</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> right_eye_data[10800] = {0};</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="comment">// 3D coordinates of left and right eye centers in camera space (in mm)</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">// Used to calculate Z distance based on IPD (Interpupillary Distance)</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> left_eye_center_cam;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> right_eye_center_cam;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>};</div>
+<div class="foldopen" id="foldopen00020" data-start="{" data-end="};">
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno"><a class="line" href="class_gaze_1_1_image_warper.html">   20</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_image_warper.html">ImageWarper</a></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    {</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keyword">virtual</span> <a class="code hl_class" href="class_gaze_1_1_image_warper.html">~ImageWarper</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>        </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="comment">// Warps a patch around the eye center using bilinear interpolation on the CPU,</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="comment">// and converts the source (RGB/BGR/Gray) image data to a normalized BGR output buffer.</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> warp(</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>            <span class="keyword">const</span> uint8_t *src_data,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>            <span class="keywordtype">int</span> src_width,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>            <span class="keywordtype">int</span> src_height,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <span class="keywordtype">int</span> src_channels,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>            <span class="keyword">const</span> GazeVector2 &amp;eye_center,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>            <span class="keywordtype">double</span> angle_deg,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>            <span class="keywordtype">double</span> scale,</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>            uint8_t *out_bgr_buffer) = 0;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> submit_and_sync() {}</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> increment_frame_number() {}</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    };</div>
 </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_pipeline.html">   35</a></span><span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_face_pipeline.html">FacePipeline</a> {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">virtual</span> <a class="code hl_class" href="class_gaze_1_1_face_pipeline.html">~FacePipeline</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="comment">// Load models (e.g. YuNet face detector) and initialize pipeline</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> initialize() = 0;</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="comment">// Process frame, detect faces, estimate head pose, and crop eyes</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_frame(<span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_frame.html">Frame</a>&amp; frame, <a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a>&amp; out_crops) = 0;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="comment">// Configure camera focal length</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_camera_focal_length_px(<span class="keywordtype">double</span> f) {}</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="foldopen" id="foldopen00041" data-start="{" data-end="};">
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_eye_crops.html">   41</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    {</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> EYE_CROP_WIDTH = 60;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> EYE_CROP_HEIGHT = 60;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> EYE_CROP_CHANNELS = 3;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> EYE_CROP_SIZE = EYE_CROP_WIDTH * EYE_CROP_HEIGHT * EYE_CROP_CHANNELS; <span class="comment">// 10800 bytes</span></div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="comment">// Configure pipeline settings</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_config(<span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_pipeline_config.html">PipelineConfig</a>&amp; config) {}</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>};</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordtype">bool</span> face_detected = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        GazePoint landmarks[5];</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">// Estimated head pose vectors relative to camera (in mm and radians)</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> head_pose_rotation;    <span class="comment">// Rotational angles (pitch, yaw, roll)</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> head_pose_translation; <span class="comment">// Position of the head</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <span class="comment">// Left and right eye crop buffers (60x60 px, 3-channel BGR)</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        uint8_t left_eye_data[EYE_CROP_SIZE] = {0};</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        uint8_t right_eye_data[EYE_CROP_SIZE] = {0};</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="comment">// 3D coordinates of left and right eye centers in camera space (in mm)</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="comment">// Used to calculate Z distance based on IPD (Interpupillary Distance)</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> left_eye_center_cam;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> right_eye_center_cam;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// TODO: Does it make sense to have both a texture_handle, rid_val, _AND_ our own inline storage buffer? I&#39;d think if we&#39;re using handles, they&#39;d provide the storage location? IDK.</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        uint64_t left_eye_texture_handle = 0;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        uint64_t right_eye_texture_handle = 0;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        uint64_t left_eye_texture_rid_val = 0;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        uint64_t right_eye_texture_rid_val = 0;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    };</div>
 </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="foldopen" id="foldopen00071" data-start="{" data-end="};">
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_pipeline.html">   71</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_face_pipeline.html">FacePipeline</a></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>        std::shared_ptr&lt;ImageWarper&gt; warper;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>        <span class="keyword">virtual</span> <a class="code hl_class" href="class_gaze_1_1_face_pipeline.html">~FacePipeline</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <span class="comment">// Load models (e.g. YuNet face detector) and initialize pipeline</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> initialize() = 0;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>        <span class="comment">// Process frame, detect faces, estimate head pose, and crop eyes</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keyword">virtual</span> <span class="keywordtype">bool</span> process_frame(<span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_frame.html">Frame</a> &amp;frame, <a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a> &amp;out_crops) = 0;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="comment">// Configure camera focal length</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_camera_focal_length_px(<span class="keywordtype">double</span> f) {}</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="comment">// Configure camera horizontal field of view in degrees</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_camera_fov_degrees(<span class="keywordtype">double</span> fov) {}</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="comment">// Configure pipeline settings</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_config(<span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_pipeline_config.html">PipelineConfig</a> &amp;config) {}</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_image_warper(std::shared_ptr&lt;ImageWarper&gt; p_warper) { warper = p_warper; }</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keyword">virtual</span> std::shared_ptr&lt;ImageWarper&gt; get_image_warper()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> warper; }</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    };</div>
+</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>} <span class="comment">// namespace Gaze</span></div>
 <div class="ttc" id="acamera__interface_8hpp_html"><div class="ttname"><a href="camera__interface_8hpp.html">camera_interface.hpp</a></div><div class="ttdoc">Frame Ingestion Interface (Layer 1).</div></div>
-<div class="ttc" id="aclass_gaze_1_1_face_pipeline_html"><div class="ttname"><a href="class_gaze_1_1_face_pipeline.html">Gaze::FacePipeline</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:35</div></div>
+<div class="ttc" id="aclass_gaze_1_1_face_pipeline_html"><div class="ttname"><a href="class_gaze_1_1_face_pipeline.html">Gaze::FacePipeline</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:72</div></div>
+<div class="ttc" id="aclass_gaze_1_1_image_warper_html"><div class="ttname"><a href="class_gaze_1_1_image_warper.html">Gaze::ImageWarper</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:21</div></div>
 <div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency 3D/2D Vector and Matrix Math structures.</div></div>
 <div class="ttc" id="apipeline__config_8hpp_html"><div class="ttname"><a href="pipeline__config_8hpp.html">pipeline_config.hpp</a></div><div class="ttdoc">Pipeline Configurations configuration struct (Layer 2).</div></div>
-<div class="ttc" id="astruct_gaze_1_1_eye_crops_html"><div class="ttname"><a href="struct_gaze_1_1_eye_crops.html">Gaze::EyeCrops</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:17</div></div>
-<div class="ttc" id="astruct_gaze_1_1_frame_html"><div class="ttname"><a href="struct_gaze_1_1_frame.html">Gaze::Frame</a></div><div class="ttdef"><b>Definition</b> camera_interface.hpp:13</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:61</div></div>
+<div class="ttc" id="astruct_gaze_1_1_eye_crops_html"><div class="ttname"><a href="struct_gaze_1_1_eye_crops.html">Gaze::EyeCrops</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:42</div></div>
+<div class="ttc" id="astruct_gaze_1_1_frame_html"><div class="ttname"><a href="struct_gaze_1_1_frame.html">Gaze::Frame</a></div><div class="ttdef"><b>Definition</b> camera_interface.hpp:17</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:191</div></div>
 <div class="ttc" id="astruct_gaze_1_1_pipeline_config_html"><div class="ttname"><a href="struct_gaze_1_1_pipeline_config.html">Gaze::PipelineConfig</a></div><div class="ttdef"><b>Definition</b> pipeline_config.hpp:14</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
@@ -182,7 +231,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('face__pipeline
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>src</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a href="face__pipeline_8hpp.html">face_pipeline.hpp</a></li>
+    <li class="navelem"><b>src</b></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="face__pipeline_8hpp.html">face_pipeline.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

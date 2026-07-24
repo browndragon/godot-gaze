@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor" kind="struct" language="C++" prot="private">
+    <compoundname>Gaze::ORTYuNetPipeline::Anchor</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a42b4d40d6170103c5c36ed37dfe3cbb1" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::Anchor::cx</definition>
+        <argsstring></argsstring>
+        <name>cx</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::Anchor::cx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="35" column="19" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a3ca6386073f2a569b428d5da03f4eda6" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::Anchor::cy</definition>
+        <argsstring></argsstring>
+        <name>cy</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::Anchor::cy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="35" column="22" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a196a6f74ddc347b84b71016452d3c3b6" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::Anchor::stride_x</definition>
+        <argsstring></argsstring>
+        <name>stride_x</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::Anchor::stride_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="36" column="19" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a89178ce228eae1bae20e1d79502aeba8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetPipeline::Anchor::stride_y</definition>
+        <argsstring></argsstring>
+        <name>stride_y</name>
+        <qualifiedname>Gaze::ORTYuNetPipeline::Anchor::stride_y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_pipeline.hpp" line="36" column="28" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/native/ort_yunet_pipeline.hpp" line="33" column="9" bodyfile="src/native/ort_yunet_pipeline.hpp" bodystart="34" bodyend="37"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a42b4d40d6170103c5c36ed37dfe3cbb1" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline::Anchor</scope><name>cx</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a3ca6386073f2a569b428d5da03f4eda6" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline::Anchor</scope><name>cy</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a196a6f74ddc347b84b71016452d3c3b6" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline::Anchor</scope><name>stride_x</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_pipeline_1_1_anchor_1a89178ce228eae1bae20e1d79502aeba8" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetPipeline::Anchor</scope><name>stride_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

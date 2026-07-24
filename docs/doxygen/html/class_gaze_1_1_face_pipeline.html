@@ -146,8 +146,19 @@ virtual bool&#160;</td><td class="memItemRight"><b>initialize</b> ()=0</td></tr>
 virtual bool&#160;</td><td class="memItemRight"><b>process_frame</b> (const <a class="el" href="struct_gaze_1_1_frame.html">Frame</a> &amp;frame, <a class="el" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a> &amp;out_crops)=0</td></tr>
 <tr class="memitem:ae3ec72e95ecbe68f9318e1062df15bc9" id="r_ae3ec72e95ecbe68f9318e1062df15bc9"><td class="memItemLeft"><a id="ae3ec72e95ecbe68f9318e1062df15bc9" name="ae3ec72e95ecbe68f9318e1062df15bc9"></a>
 virtual void&#160;</td><td class="memItemRight"><b>set_camera_focal_length_px</b> (double f)</td></tr>
+<tr class="memitem:a88885e9fb8a11900a2cc2121eb6326fa" id="r_a88885e9fb8a11900a2cc2121eb6326fa"><td class="memItemLeft"><a id="a88885e9fb8a11900a2cc2121eb6326fa" name="a88885e9fb8a11900a2cc2121eb6326fa"></a>
+virtual void&#160;</td><td class="memItemRight"><b>set_camera_fov_degrees</b> (double fov)</td></tr>
 <tr class="memitem:a1049cdc1bace7ad121cbfd2cde0b2f99" id="r_a1049cdc1bace7ad121cbfd2cde0b2f99"><td class="memItemLeft"><a id="a1049cdc1bace7ad121cbfd2cde0b2f99" name="a1049cdc1bace7ad121cbfd2cde0b2f99"></a>
 virtual void&#160;</td><td class="memItemRight"><b>set_config</b> (const <a class="el" href="struct_gaze_1_1_pipeline_config.html">PipelineConfig</a> &amp;config)</td></tr>
+<tr class="memitem:a915d5d9fd8ba14e84e9f981860b2a909" id="r_a915d5d9fd8ba14e84e9f981860b2a909"><td class="memItemLeft"><a id="a915d5d9fd8ba14e84e9f981860b2a909" name="a915d5d9fd8ba14e84e9f981860b2a909"></a>
+virtual void&#160;</td><td class="memItemRight"><b>set_image_warper</b> (std::shared_ptr&lt; <a class="el" href="class_gaze_1_1_image_warper.html">ImageWarper</a> &gt; p_warper)</td></tr>
+<tr class="memitem:a4e880a2386aa3fc57c9a0ef9ada2051e" id="r_a4e880a2386aa3fc57c9a0ef9ada2051e"><td class="memItemLeft"><a id="a4e880a2386aa3fc57c9a0ef9ada2051e" name="a4e880a2386aa3fc57c9a0ef9ada2051e"></a>
+virtual std::shared_ptr&lt; <a class="el" href="class_gaze_1_1_image_warper.html">ImageWarper</a> &gt;&#160;</td><td class="memItemRight"><b>get_image_warper</b> () const</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a60043e5e081b565042318c0996234d37" id="r_a60043e5e081b565042318c0996234d37"><td class="memItemLeft"><a id="a60043e5e081b565042318c0996234d37" name="a60043e5e081b565042318c0996234d37"></a>
+std::shared_ptr&lt; <a class="el" href="class_gaze_1_1_image_warper.html">ImageWarper</a> &gt;&#160;</td><td class="memItemRight"><b>warper</b></td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/core/<a class="el" href="face__pipeline_8hpp_source.html">face_pipeline.hpp</a></li>

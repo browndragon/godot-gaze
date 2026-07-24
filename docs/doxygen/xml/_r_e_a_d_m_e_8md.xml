@@ -9,128 +9,103 @@
     <programlisting>
 <codeline><highlight class="normal">#<sp/>godot-gaze</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">A<sp/>high-frequency,<sp/>real-time<sp/>3D<sp/>gaze<sp/>estimation<sp/>and<sp/>expression<sp/>tracking<sp/>GDExtension<sp/>plugin<sp/>for<sp/>Godot<sp/>4.7+.</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">Optimized<sp/>for<sp/>cross-platform<sp/>games,<sp/>this<sp/>library<sp/>provides<sp/>precise<sp/>gaze<sp/>ray<sp/>projection<sp/>onto<sp/>the<sp/>screen<sp/>using<sp/>configurable<sp/>display<sp/>geometries,<sp/>customizable<sp/>calibration,<sp/>and<sp/>adaptive<sp/>signal<sp/>filtering.</highlight></codeline>
+<codeline><highlight class="normal">A<sp/>high-frequency,<sp/>real-time<sp/>3D<sp/>gaze<sp/>estimation<sp/>&amp;<sp/>projecting<sp/>GDExtension<sp/>plugin<sp/>for<sp/>Godot<sp/>4.7+.</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">##<sp/>Key<sp/>Features</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">-<sp/>**Cross-Platform<sp/>Delivery<sp/>(Native<sp/>vs<sp/>Web<sp/>Split)**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Native<sp/>Desktop/Mobile/iOS**:<sp/>Uses<sp/>an<sp/>OpenCV<sp/>(`cv::dnn`)<sp/>pipeline<sp/>for<sp/>face<sp/>detection<sp/>(YuNet)<sp/>and<sp/>gaze<sp/>estimation.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**WebAssembly<sp/>(WASM)**:<sp/>Leverages<sp/>browser-native<sp/>**ONNX<sp/>Runtime<sp/>Web**<sp/>(utilizing<sp/>WebGPU/WebGL<sp/>acceleration)<sp/>and<sp/>**Google<sp/>MediaPipe<sp/>Face<sp/>Landmarker<sp/>JS**<sp/>to<sp/>run<sp/>inference<sp/>outside<sp/>WebAssembly,<sp/>passing<sp/>payloads<sp/>back<sp/>via<sp/>Godot&apos;s<sp/>Emscripten<sp/>JS<sp/>Bridge.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**3D<sp/>Projection<sp/>Math**:<sp/>Resolves<sp/>3D<sp/>ray-plane<sp/>intersections<sp/>accounting<sp/>for<sp/>camera<sp/>tilt,<sp/>offset<sp/>from<sp/>screen<sp/>center,<sp/>and<sp/>display<sp/>scale.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**Dual<sp/>Calibration<sp/>System**:<sp/>Provides<sp/>both<sp/>a<sp/>**3D<sp/>spherical<sp/>angular<sp/>correction**<sp/>(pitch/yaw<sp/>biases<sp/>applied<sp/>directly<sp/>to<sp/>the<sp/>raw<sp/>gaze<sp/>vector)<sp/>and<sp/>**2D<sp/>pixel-space<sp/>shifts**<sp/>for<sp/>biological<sp/>error<sp/>correction.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**Adaptive<sp/>Smoothing**:<sp/>Implements<sp/>a<sp/>**1<sp/>Euro<sp/>Filter**<sp/>to<sp/>suppress<sp/>high-frequency<sp/>saccadic<sp/>jitter<sp/>during<sp/>slow<sp/>movements<sp/>without<sp/>introducing<sp/>lag<sp/>during<sp/>rapid<sp/>saccades.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Cross-Platform<sp/>Gaze<sp/>Tracking**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Native<sp/>Desktop<sp/>&amp;<sp/>Mobile<sp/>(macOS,<sp/>Windows,<sp/>Linux,<sp/>iOS,<sp/>Android)**:<sp/>Runs<sp/>an<sp/>optimized<sp/>CPU-based<sp/>**ONNX<sp/>Runtime<sp/>(CPU/XNNPACK)**<sp/>pipeline<sp/>for<sp/>face<sp/>detection<sp/>(YuNet)<sp/>and<sp/>gaze<sp/>estimation.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**WebAssembly<sp/>(WASM)**:<sp/>Leverages<sp/>browser-native<sp/>**ONNX<sp/>Runtime<sp/>Web**<sp/>(WebGPU/WebGL<sp/>accelerated)<sp/>and<sp/>MediaPipe<sp/>Face<sp/>Landmarker<sp/>JS<sp/>to<sp/>process<sp/>gaze<sp/>outside<sp/>the<sp/>WebAssembly<sp/>runtime,<sp/>passing<sp/>tracking<sp/>data<sp/>back<sp/>to<sp/>Godot.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Background<sp/>Thread<sp/>Inference**:<sp/>All<sp/>ML<sp/>model<sp/>estimation<sp/>runs<sp/>in<sp/>a<sp/>background<sp/>worker<sp/>thread<sp/>(`GazeTrackingPipeline`)<sp/>to<sp/>keep<sp/>Godot&apos;s<sp/>main<sp/>thread<sp/>smooth<sp/>and<sp/>responsive.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Principled<sp/>3D<sp/>Spherical<sp/>Calibration**:<sp/>Corrects<sp/>biological<sp/>user<sp/>differences<sp/>using<sp/>3D<sp/>angular<sp/>biases<sp/>(pitch/yaw)<sp/>applied<sp/>directly<sp/>to<sp/>the<sp/>estimated<sp/>3D<sp/>gaze<sp/>vector.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Adaptive<sp/>Smoothing**:<sp/>Implements<sp/>a<sp/>**1<sp/>Euro<sp/>Filter**<sp/>to<sp/>suppress<sp/>saccadic<sp/>jitter<sp/>during<sp/>steady<sp/>gaze<sp/>while<sp/>preserving<sp/>low<sp/>latency<sp/>during<sp/>rapid<sp/>eye<sp/>movements.</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Project<sp/>Structure</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Getting<sp/>Started</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">```</highlight></codeline>
-<codeline><highlight class="normal">godot-gaze/</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>SConstruct<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>SCons<sp/>compilation<sp/>file</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>LICENSE.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>License<sp/>agreements</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>README.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Main<sp/>project<sp/>guide</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>CONTRIBUTING.md<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Coding<sp/>standards<sp/>and<sp/>logging<sp/>rules</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>docs/</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>gaze_math_physical_model.md<sp/><sp/><sp/><sp/>#<sp/>Gaze<sp/>math<sp/>derivations<sp/>and<sp/>physics<sp/>reference</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>scripts/</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>download_opencv.sh<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Dependency<sp/>installer<sp/>(macOS/Android/iOS)</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>thirdparty/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>External<sp/>dependency<sp/>directories</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>doctest/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>C++<sp/>unit<sp/>testing</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>one_euro_filter/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>1<sp/>Euro<sp/>filter<sp/>code</highlight></codeline>
-<codeline><highlight class="normal">├──<sp/>src/</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>core/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Pure<sp/>C++<sp/>engine<sp/>(OpenCV/Godot<sp/>independent)</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>native/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Native<sp/>OpenCV<sp/>capture<sp/>and<sp/>DNN<sp/>inference</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>├──<sp/>web/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>WASM<sp/>browser<sp/>sidecar<sp/>bridge<sp/>setters</highlight></codeline>
-<codeline><highlight class="normal">│<sp/><sp/><sp/>└──<sp/>godot/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Godot<sp/>GDExtension<sp/>node<sp/>bindings</highlight></codeline>
-<codeline><highlight class="normal">└──<sp/>project/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Godot<sp/>Project<sp/>directory</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>└──<sp/>addons/</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>└──<sp/>godot-gaze/</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>├──<sp/>gaze.gdextension<sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>GDExtension<sp/>library<sp/>mapping<sp/>metadata</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>└──<sp/>tests/<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Integration<sp/>test<sp/>scene</highlight></codeline>
-<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>1.<sp/>Installation</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">---</highlight></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>install<sp/>`godot-gaze`<sp/>using<sp/>one<sp/>of<sp/>the<sp/>following<sp/>methods:</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Getting<sp/>Started<sp/>&amp;<sp/>Build<sp/>Instructions</highlight></codeline>
+<codeline><highlight class="normal">####<sp/>A.<sp/>From<sp/>Pre-compiled<sp/>Release<sp/>(Recommended)</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>Download<sp/>the<sp/>latest<sp/>`godot-gaze.zip`<sp/>from<sp/>the<sp/>[GitHub<sp/>Releases](https://github.com/browndragon/godot-gaze/releases)<sp/>page.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Extract<sp/>the<sp/>archive<sp/>and<sp/>copy<sp/>the<sp/>`addons/godot-gaze`<sp/>directory<sp/>directly<sp/>into<sp/>your<sp/>Godot<sp/>project&apos;s<sp/>root<sp/>`addons/`<sp/>directory.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Open<sp/>your<sp/>project<sp/>in<sp/>the<sp/>Godot<sp/>Editor,<sp/>navigate<sp/>to<sp/>**Project<sp/>Settings<sp/>&gt;<sp/>Plugins**,<sp/>and<sp/>enable<sp/>the<sp/>`Godot<sp/>Gaze`<sp/>plugin.</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">If<sp/>you&apos;re<sp/>building<sp/>from<sp/>source,<sp/>see<sp/>[CONTRIBUTING.md](CONTRIBUTING.md).</highlight></codeline>
+<codeline><highlight class="normal">####<sp/>B.<sp/>Local<sp/>Development<sp/>Symlinking<sp/>(For<sp/>Contributors)</highlight></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>are<sp/>developing<sp/>this<sp/>plugin<sp/>locally<sp/>and<sp/>want<sp/>to<sp/>test<sp/>changes<sp/>in<sp/>your<sp/>own<sp/>Godot<sp/>project<sp/>without<sp/>repeatedly<sp/>copying<sp/>files:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>Create<sp/>a<sp/>symbolic<sp/>link<sp/>from<sp/>your<sp/>project&apos;s<sp/>`addons`<sp/>directory<sp/>back<sp/>to<sp/>this<sp/>repository&apos;s<sp/>addon<sp/>folder:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```bash</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>ln<sp/>-s<sp/>/path/to/godot-gaze/project/addons/godot-gaze<sp/>/path/to/your-project/addons/godot-gaze</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>When<sp/>you<sp/>run<sp/>`scons`<sp/>to<sp/>rebuild<sp/>any<sp/>template<sp/>(e.g.<sp/>`scons<sp/>platform=macos<sp/>target=editor`),<sp/>the<sp/>compiled<sp/>binaries<sp/>in<sp/>`project/addons/godot-gaze/bin`<sp/>are<sp/>instantly<sp/>available<sp/>and<sp/>loaded<sp/>by<sp/>your<sp/>target<sp/>project.</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">###<sp/>1.<sp/>Build<sp/>the<sp/>GDExtension<sp/>Binary</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>2.<sp/>Basic<sp/>Setup</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">SCons<sp/>is<sp/>used<sp/>to<sp/>compile<sp/>the<sp/>library.<sp/>Adjust<sp/>the<sp/>`platform`<sp/>parameter<sp/>as<sp/>required:</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">```bash</highlight></codeline>
-<codeline><highlight class="normal">#<sp/>Build<sp/>for<sp/>macOS</highlight></codeline>
-<codeline><highlight class="normal">scons<sp/>platform=macos<sp/>target=template_debug</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">#<sp/>Build<sp/>for<sp/>Windows</highlight></codeline>
-<codeline><highlight class="normal">scons<sp/>platform=windows<sp/>target=template_debug</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">#<sp/>Build<sp/>for<sp/>WebAssembly<sp/>(WASM)</highlight></codeline>
-<codeline><highlight class="normal">scons<sp/>platform=javascript<sp/>target=template_debug</highlight></codeline>
-<codeline><highlight class="normal">```</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">###<sp/>2.<sp/>Integration<sp/>inside<sp/>Godot</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>Copy<sp/>the<sp/>`addons/godot-gaze/`<sp/>folder<sp/>into<sp/>your<sp/>Godot<sp/>project&apos;s<sp/>`addons/`<sp/>directory.</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>In<sp/>your<sp/>Godot<sp/>Scene,<sp/>add<sp/>a<sp/>**GazeTracker**<sp/>node.</highlight></codeline>
-<codeline><highlight class="normal">3.<sp/>Configure<sp/>the<sp/>physical<sp/>constants<sp/>on<sp/>the<sp/>node<sp/>in<sp/>the<sp/>Inspector:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`camera_offset`:<sp/>Camera<sp/>mount<sp/>position<sp/>relative<sp/>to<sp/>screen<sp/>center<sp/>in<sp/>millimeters<sp/>(e.g.<sp/>`(0,<sp/>-148,<sp/>10)`<sp/>for<sp/>top-center<sp/>of<sp/>a<sp/>24-inch<sp/>screen).</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`camera_tilt`:<sp/>Angle<sp/>in<sp/>degrees<sp/>tilted<sp/>downwards<sp/>(e.g.,<sp/>`15.0`).</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`screen_size_pixels`:<sp/>Native<sp/>viewport<sp/>resolution.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`screen_size_mm`:<sp/>Physical<sp/>display<sp/>dimensions<sp/>(e.g.<sp/>`(527,<sp/>296)`).</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`yunet_model_path`<sp/>&amp;<sp/>`gaze_onnx_path`:<sp/>Paths<sp/>to<sp/>your<sp/>local<sp/>model<sp/>weights.</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>In<sp/>your<sp/>Godot<sp/>Scene,<sp/>add<sp/>a<sp/>**GazeTracker**<sp/>node.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>The<sp/>tracker<sp/>automatically<sp/>attempts<sp/>to<sp/>guess<sp/>the<sp/>camera<sp/>offsets,<sp/>screen<sp/>resolution,<sp/>and<sp/>physical<sp/>display<sp/>characteristics.<sp/>You<sp/>can<sp/>also<sp/>customize<sp/>these<sp/>properties<sp/>on<sp/>the<sp/>node<sp/>in<sp/>the<sp/>Inspector<sp/>if<sp/>needed:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`camera_offset`:<sp/>Camera<sp/>mount<sp/>position<sp/>relative<sp/>to<sp/>the<sp/>screen<sp/>center<sp/>in<sp/>millimeters.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`camera_tilt`:<sp/>Downtilted<sp/>angle<sp/>of<sp/>the<sp/>camera<sp/>in<sp/>degrees.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`screen_size_pixels`:<sp/>Monitor<sp/>resolution<sp/>in<sp/>pixels.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`screen_size_mm`:<sp/>Physical<sp/>display<sp/>dimensions<sp/>in<sp/>millimeters.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>Default<sp/>Calibration<sp/>Resources:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>The<sp/>plugin<sp/>registers<sp/>project<sp/>settings<sp/>that<sp/>specify<sp/>where<sp/>user<sp/>calibration<sp/>resources<sp/>are<sp/>automatically<sp/>loaded:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/calibration/device_calibration_path`<sp/>(defaults<sp/>to<sp/>`user://calibrations/device_calibration.tres`)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/calibration/bio_calibration_path`<sp/>(defaults<sp/>to<sp/>`user://calibrations/bio_calibration.tres`)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>When<sp/>`GazeTracker`<sp/>initializes,<sp/>it<sp/>automatically<sp/>attempts<sp/>to<sp/>load<sp/>custom<sp/>`.tres`<sp/>resources<sp/>from<sp/>these<sp/>paths,<sp/>seamlessly<sp/>applying<sp/>device<sp/>and<sp/>biological<sp/>corrections.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Model<sp/>weights<sp/>(`.ort`<sp/>format)<sp/>are<sp/>pre-bundled<sp/>inside<sp/>the<sp/>addon&apos;s<sp/>`models/`<sp/>folder.</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">###<sp/>3.<sp/>Basic<sp/>GDScript<sp/>Usage</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">Attach<sp/>a<sp/>script<sp/>to<sp/>your<sp/>scene<sp/>root<sp/>node:</highlight></codeline>
+<codeline><highlight class="normal">Attach<sp/>a<sp/>script<sp/>to<sp/>your<sp/>scene<sp/>root<sp/>node<sp/>to<sp/>start<sp/>receiving<sp/>tracking<sp/>data:</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">```gdscript</highlight></codeline>
 <codeline><highlight class="normal">extends<sp/>Node2D</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">@onready<sp/>var<sp/>gaze_tracker<sp/>=<sp/>$GazeTracker</highlight></codeline>
+<codeline><highlight class="normal">@onready<sp/>var<sp/>gaze_tracker:<sp/>GazeTracker<sp/>=<sp/>$GazeTracker</highlight></codeline>
+<codeline><highlight class="normal">@onready<sp/>var<sp/>cursor:<sp/>Node2D<sp/>=<sp/>$Cursor</highlight></codeline>
+<codeline><highlight class="normal">@onready<sp/>var<sp/>status:<sp/>Label<sp/>=<sp/>$Status</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">func<sp/>_ready():</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Connect<sp/>signals</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>gaze_tracker.gaze_updated.connect(_on_gaze_updated)</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>gaze_tracker.face_detected.connect(_on_face_detected)</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Start<sp/>tracker</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>gaze_tracker.initialize_tracker():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Start<sp/>the<sp/>tracker<sp/>(automatically<sp/>starts<sp/>when<sp/>autostart<sp/>==<sp/>true<sp/>on<sp/>entering<sp/>tree)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>gaze_tracker.start_tracker():</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>print(&quot;Gaze<sp/>Tracker<sp/>Started.&quot;)</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">func<sp/>_on_gaze_updated(screen_pixel:<sp/>Vector2):</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Move<sp/>custom<sp/>cursor<sp/>node</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>$Cursor.global_position<sp/>=<sp/>screen_pixel</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>cursor.global_position<sp/>=<sp/>screen_pixel</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">func<sp/>_on_face_detected(detected:<sp/>bool):</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>$Status.text<sp/>=<sp/>&quot;Face<sp/>Tracked&quot;<sp/>if<sp/>detected<sp/>else<sp/>&quot;Face<sp/>Lost&quot;</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">func<sp/>_input(event):</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Calibrate<sp/>at<sp/>current<sp/>cursor<sp/>target<sp/>(e.g.,<sp/>center<sp/>of<sp/>screen)</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event.is_action_pressed(&quot;ui_select&quot;):</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gaze_tracker.calibrate_3d(Vector2(960,<sp/>540))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Face<sp/>Tracked&quot;<sp/>if<sp/>detected<sp/>else<sp/>&quot;Face<sp/>Lost&quot;</highlight></codeline>
 <codeline><highlight class="normal">```</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Web<sp/>/<sp/>HTML5<sp/>Export<sp/>Integration</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Web<sp/>/<sp/>HTML5<sp/>Export<sp/>Guidelines</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">When<sp/>exporting<sp/>for<sp/>Web/WASM:</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>exporting<sp/>your<sp/>project<sp/>to<sp/>the<sp/>Web,<sp/>keep<sp/>the<sp/>following<sp/>considerations<sp/>in<sp/>mind:</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>SCons<sp/>compiles<sp/>out<sp/>OpenCV<sp/>libraries<sp/>and<sp/>links<sp/>a<sp/>lightweight<sp/>data<sp/>bridge.</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>Load<sp/>`opencv.js`<sp/>and<sp/>`onnxruntime-web`<sp/>in<sp/>your<sp/>HTML<sp/>page<sp/>shell.</highlight></codeline>
-<codeline><highlight class="normal">3.<sp/>Run<sp/>eye<sp/>extraction<sp/>on<sp/>a<sp/>canvas<sp/>and<sp/>feed<sp/>crops<sp/>to<sp/>ONNX<sp/>Runtime<sp/>Web.</highlight></codeline>
-<codeline><highlight class="normal">4.<sp/>Pass<sp/>the<sp/>calculated<sp/>3D<sp/>gaze<sp/>vector<sp/>back<sp/>into<sp/>Godot&apos;s<sp/>WebAssembly<sp/>loop<sp/>using<sp/>the<sp/>JavaScript<sp/>bridge:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>```javascript</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>//<sp/>JavaScript<sp/>sidecar</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>const<sp/>gazeTracker<sp/>=<sp/>godot.engine.get_singleton(&quot;GazeTracker&quot;);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>gazeTracker.feed_gaze_web(originVector3,<sp/>directionVector3);</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**Automatic<sp/>Sidecar<sp/>Export**:<sp/>The<sp/>Gaze<sp/>Tracker<sp/>plugin<sp/>includes<sp/>an<sp/>editor<sp/>export<sp/>plugin<sp/>(`export_plugin.gd`)<sp/>that<sp/>automatically<sp/>copies<sp/>`gaze_sidecar.js`<sp/>to<sp/>your<sp/>HTML5<sp/>export<sp/>folder.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Cross-Origin<sp/>Isolation<sp/>Requirements<sp/>(For<sp/>Threaded<sp/>Exports)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Godot&apos;s<sp/>WebAssembly<sp/>export<sp/>template<sp/>supports<sp/>multi-threading<sp/>via<sp/>SharedArrayBuffer.<sp/>If<sp/>you<sp/>enable<sp/>**Thread<sp/>Support**<sp/>in<sp/>your<sp/>Godot<sp/>Web<sp/>Export<sp/>Preset<sp/>options,<sp/>the<sp/>hosting<sp/>server<sp/>**must**<sp/>serve<sp/>your<sp/>game<sp/>with<sp/>the<sp/>following<sp/>HTTP<sp/>response<sp/>headers:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>```http</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>Cross-Origin-Opener-Policy:<sp/>same-origin</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>Cross-Origin-Embedder-Policy:<sp/>require-corp</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>These<sp/>headers<sp/>are<sp/>standard<sp/>browser<sp/>security<sp/>requirements<sp/>for<sp/>SharedArrayBuffer<sp/>(not<sp/>specific<sp/>to<sp/>this<sp/>plugin).<sp/>If<sp/>your<sp/>hosting<sp/>environment<sp/>(e.g.<sp/>itch.io,<sp/>GitHub<sp/>Pages,<sp/>or<sp/>corporate<sp/>intranet)<sp/>does<sp/>not<sp/>allow<sp/>you<sp/>to<sp/>configure<sp/>these<sp/>custom<sp/>headers,<sp/>you<sp/>**must<sp/>disable<sp/>Thread<sp/>Support**<sp/>in<sp/>your<sp/>Godot<sp/>export<sp/>preset,<sp/>which<sp/>falls<sp/>back<sp/>to<sp/>the<sp/>non-threaded<sp/>WebAssembly<sp/>template.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Developer<sp/>Guidelines<sp/>&amp;<sp/>Compiling</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>guidelines<sp/>on<sp/>compiling<sp/>the<sp/>plugin<sp/>from<sp/>source,<sp/>running<sp/>tests,<sp/>or<sp/>contributing,<sp/>please<sp/>refer<sp/>to<sp/>[CONTRIBUTING.md](CONTRIBUTING.md).</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>detailed<sp/>design<sp/>and<sp/>math<sp/>specifications,<sp/>refer<sp/>to<sp/>the<sp/>[Mathematical<sp/>&amp;<sp/>Physical<sp/>Model<sp/>Guide](docs/mathematical_model.md)<sp/>and<sp/>the<sp/>[Architecture<sp/>&amp;<sp/>Layout<sp/>section<sp/>of<sp/>CONTRIBUTING.md](CONTRIBUTING.md#1-directory-layout--architecture-layers).</highlight></codeline>
     </programlisting>
     <location file="README.md"/>
   </compounddef>

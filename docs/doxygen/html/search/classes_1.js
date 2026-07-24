@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['devicecalibration_0',['DeviceCalibration',['../class_gaze_1_1_device_calibration.html',1,'Gaze']]],
-  ['displayprofile_1',['DisplayProfile',['../classgodot_1_1_display_profile.html',1,'godot']]]
+  ['biocalibration_0',['BioCalibration',['../classgodot_1_1_bio_calibration.html',1,'godot']]],
+  ['biocalibrationdata_1',['BioCalibrationData',['../structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data.html',1,'godot::GazeServerImpl::DisplayInfo']]]
 ];

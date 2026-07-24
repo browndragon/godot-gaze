@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_pool" kind="class" language="C++" prot="public">
+    <compoundname>Pool</compoundname>
+    <innerclass refid="struct_pool_1_1_item" prot="private">Pool::Item</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>size_t</type>
+        <declname>SZ</declname>
+        <defname>SZ</defname>
+        <defval>2</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_pool_1a0e36f73f7c5aac540aaab013c2517532" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Item, SZ &gt;</type>
+        <definition>std::array&lt;Item, SZ&gt; Pool&lt; T, SZ &gt;::items</definition>
+        <argsstring></argsstring>
+        <name>items</name>
+        <qualifiedname>Pool::items</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="16" column="16" bodyfile="src/core/pool.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_pool_1a1e4bbb359330bf59a15a78ecce3fa01f" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex Pool&lt; T, SZ &gt;::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <qualifiedname>Pool::mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="17" column="16" bodyfile="src/core/pool.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_pool_1a145a79e627366832a3119e488a038646" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Pool&lt; T, SZ &gt;::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>Pool::size</qualifiedname>
+        <initializer>= SZ</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="20" column="29" bodyfile="src/core/pool.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_pool_1a27ae71779a80476385d5fab8f785bafd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Pool&lt; T, SZ &gt;::Pool</definition>
+        <argsstring>()=default</argsstring>
+        <name>Pool</name>
+        <qualifiedname>Pool::Pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="22" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_pool_1af777be11857e15563899895409525b53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Pool&lt; T, SZ &gt;::~Pool</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Pool</name>
+        <qualifiedname>Pool::~Pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_pool_1a45b08f3b186b5f7d9401e3e4406df944" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Pool&lt; T, SZ &gt;::take</definition>
+        <argsstring>()</argsstring>
+        <name>take</name>
+        <qualifiedname>Pool::take</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="26" column="7" bodyfile="src/core/pool.hpp" bodystart="26" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="class_pool_1a8a2fd89e985e6fbf903391a179b4a527" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Pool&lt; T, SZ &gt;::release</definition>
+        <argsstring>(const T *instance)</argsstring>
+        <name>release</name>
+        <qualifiedname>Pool::release</qualifiedname>
+        <param>
+          <type>const T *</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="41" column="10" bodyfile="src/core/pool.hpp" bodystart="41" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="class_pool_1a417d692ae5877fcba4d7665fa2ed7c0d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Pool&lt; T, SZ &gt;::get_frame</definition>
+        <argsstring>(size_t idx)</argsstring>
+        <name>get_frame</name>
+        <qualifiedname>Pool::get_frame</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="50" column="7" bodyfile="src/core/pool.hpp" bodystart="50" bodyend="55"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/pool.hpp" line="8" column="1" bodyfile="src/core/pool.hpp" bodystart="9" bodyend="56"/>
+    <listofallmembers>
+      <member refid="class_pool_1a417d692ae5877fcba4d7665fa2ed7c0d" prot="public" virt="non-virtual"><scope>Pool</scope><name>get_frame</name></member>
+      <member refid="class_pool_1a0e36f73f7c5aac540aaab013c2517532" prot="private" virt="non-virtual"><scope>Pool</scope><name>items</name></member>
+      <member refid="class_pool_1a1e4bbb359330bf59a15a78ecce3fa01f" prot="private" virt="non-virtual"><scope>Pool</scope><name>mutex</name></member>
+      <member refid="class_pool_1a27ae71779a80476385d5fab8f785bafd" prot="public" virt="non-virtual"><scope>Pool</scope><name>Pool</name></member>
+      <member refid="class_pool_1a8a2fd89e985e6fbf903391a179b4a527" prot="public" virt="non-virtual"><scope>Pool</scope><name>release</name></member>
+      <member refid="class_pool_1a145a79e627366832a3119e488a038646" prot="public" virt="non-virtual"><scope>Pool</scope><name>size</name></member>
+      <member refid="class_pool_1a45b08f3b186b5f7d9401e3e4406df944" prot="public" virt="non-virtual"><scope>Pool</scope><name>take</name></member>
+      <member refid="class_pool_1af777be11857e15563899895409525b53" prot="public" virt="non-virtual"><scope>Pool</scope><name>~Pool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

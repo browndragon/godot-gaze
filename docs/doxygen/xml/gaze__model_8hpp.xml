@@ -5,16 +5,18 @@
     <includes refid="face__pipeline_8hpp" local="yes">face_pipeline.hpp</includes>
     <includes refid="math__defs_8hpp" local="yes">math_defs.hpp</includes>
     <includes refid="pipeline__config_8hpp" local="yes">pipeline_config.hpp</includes>
-    <includedby refid="eye__estimator_8hpp" local="yes">src/godot/eye_estimator.hpp</includedby>
     <includedby refid="gaze__tracker_8hpp" local="yes">src/godot/gaze_tracker.hpp</includedby>
-    <includedby refid="opencv__gaze__model_8hpp" local="yes">src/native/opencv_gaze_model.hpp</includedby>
-    <includedby refid="web__gaze__model_8hpp" local="yes">src/web/web_gaze_model.hpp</includedby>
+    <includedby refid="ort__gaze__model_8hpp" local="yes">src/native/ort_gaze_model.hpp</includedby>
     <incdepgraph>
-      <node id="3">
+      <node id="5">
         <label>camera_interface.hpp</label>
         <link refid="camera__interface_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
       </node>
-      <node id="7">
+      <node id="10">
         <label>face_model_geometry.hpp</label>
         <link refid="face__model__geometry_8hpp"/>
       </node>
@@ -25,7 +27,11 @@
         </childnode>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -33,25 +39,38 @@
         <link refid="gaze__model_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-      </node>
-      <node id="4">
-        <label>math_defs.hpp</label>
-        <link refid="math__defs_8hpp"/>
-        <childnode refid="5" relation="include">
+        <childnode refid="4" relation="include">
         </childnode>
       </node>
-      <node id="6">
+      <node id="9">
         <label>pipeline_config.hpp</label>
         <link refid="pipeline__config_8hpp"/>
-        <childnode refid="7" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
       </node>
-      <node id="5">
+      <node id="8">
         <label>cmath</label>
+      </node>
+      <node id="4">
+        <label>cstdint</label>
+      </node>
+      <node id="3">
+        <label>memory</label>
+      </node>
+      <node id="6">
+        <label>type_traits</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
@@ -60,40 +79,34 @@
         <link refid="gaze__model_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="4" relation="include">
         </childnode>
       </node>
-      <node id="2">
-        <label>src/godot/eye_estimator.hpp</label>
-        <link refid="eye__estimator_8hpp_source"/>
-      </node>
-      <node id="4">
-        <label>src/godot/gaze_calibration_resource.cpp</label>
-        <link refid="gaze__calibration__resource_8cpp"/>
-      </node>
-      <node id="5">
+      <node id="3">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
       </node>
-      <node id="3">
+      <node id="6">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+      </node>
+      <node id="2">
         <label>src/godot/gaze_tracker.hpp</label>
         <link refid="gaze__tracker_8hpp"/>
-        <childnode refid="4" relation="include">
+        <childnode refid="3" relation="include">
         </childnode>
+      </node>
+      <node id="5">
+        <label>src/native/gaze_tracking_pipeline.hpp</label>
+        <link refid="gaze__tracking__pipeline_8hpp_source"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/native/ort_gaze_model.hpp</label>
+        <link refid="ort__gaze__model_8hpp_source"/>
         <childnode refid="5" relation="include">
         </childnode>
-      </node>
-      <node id="6">
-        <label>src/native/opencv_gaze_model.hpp</label>
-        <link refid="opencv__gaze__model_8hpp"/>
-      </node>
-      <node id="7">
-        <label>src/web/web_gaze_model.hpp</label>
-        <link refid="web__gaze__model_8hpp"/>
       </node>
     </invincdepgraph>
     <innerclass refid="class_gaze_1_1_gaze_model" prot="public">Gaze::GazeModel</innerclass>

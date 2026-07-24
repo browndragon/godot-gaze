@@ -20,7 +20,7 @@
 			<description></description>
 		</method>
 		<method name="calculate_calibration">
-			<return type="Ref&lt; GazeCalibration &gt;"></return>
+			<return type="Dictionary"></return>
 			<param index="0" name="tracker" type="GazeTracker *"></param>
 			<description></description>
 		</method>

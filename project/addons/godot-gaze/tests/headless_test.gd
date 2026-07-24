@@ -694,6 +694,35 @@ func run_tests():
 			return
 		print("Engine singleton verified: ", sing)
 		
+	# Test start_tracker symmetry and idempotency
+	var scene_tracker = GazeTracker.new()
+	scene_tracker.autostart = true
+	root.add_child(scene_tracker)
+	if not scene_tracker.start_tracker():
+		printerr("FAIL: start_tracker failed on scene_tracker")
+		quit(1)
+		return
+	
+	# Verify idempotency of start_tracker
+	if not scene_tracker.start_tracker():
+		printerr("FAIL: start_tracker second call failed")
+		quit(1)
+		return
+
+	# Verify idempotency of stop_tracker
+	scene_tracker.stop_tracker()
+	scene_tracker.stop_tracker() # second call must not fail or crash
+	
+	# Verify restart
+	if not scene_tracker.start_tracker():
+		printerr("FAIL: start_tracker after stop_tracker failed")
+		quit(1)
+		return
+
+	root.remove_child(scene_tracker)
+	scene_tracker.free()
+	print("PASS: start_tracker / stop_tracker symmetry & idempotency verified.")
+		
 	print("PASS: F3 CI/CD Release Validation E2E verification complete.")
  
 	camera_sensor.stop_sensor()

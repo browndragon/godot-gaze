@@ -1,6 +1,24 @@
 var searchData=
 [
-  ['pipelineconfig_0',['PipelineConfig',['../struct_gaze_1_1_pipeline_config.html',1,'Gaze']]],
-  ['platformgeometry_1',['PlatformGeometry',['../structgodot_1_1_platform_geometry.html',1,'godot']]],
-  ['projectionengine_2',['ProjectionEngine',['../class_gaze_1_1_projection_engine.html',1,'Gaze']]]
+  ['gazebasis3d_0',['GazeBasis3D',['../struct_gaze_1_1_gaze_basis3_d.html',1,'Gaze']]],
+  ['gazecalibration_1',['GazeCalibration',['../struct_gaze_1_1_gaze_calibration.html',1,'Gaze']]],
+  ['gazecalibrationsession_2',['GazeCalibrationSession',['../classgodot_1_1_gaze_calibration_session.html',1,'godot']]],
+  ['gazedeviceestimatedcalibration_3',['GazeDeviceEstimatedCalibration',['../classgodot_1_1_gaze_device_estimated_calibration.html',1,'godot']]],
+  ['gazeframe_4',['GazeFrame',['../classgodot_1_1_gaze_frame.html',1,'godot']]],
+  ['gazeframedata_5',['GazeFrameData',['../struct_gaze_1_1_gaze_frame_data.html',1,'Gaze']]],
+  ['gazemodel_6',['GazeModel',['../class_gaze_1_1_gaze_model.html',1,'Gaze']]],
+  ['gazepipelineconfig_7',['GazePipelineConfig',['../classgodot_1_1_gaze_pipeline_config.html',1,'godot']]],
+  ['gazerect_8',['GazeRect',['../struct_gaze_1_1_gaze_rect.html',1,'Gaze']]],
+  ['gazeserver_9',['GazeServer',['../classgodot_1_1_gaze_server.html',1,'godot']]],
+  ['gazeserverimpl_10',['GazeServerImpl',['../structgodot_1_1_gaze_server_impl.html',1,'godot']]],
+  ['gazetracker_11',['GazeTracker',['../classgodot_1_1_gaze_tracker.html',1,'godot']]],
+  ['gazetrackingpipeline_12',['GazeTrackingPipeline',['../class_gaze_1_1_gaze_tracking_pipeline.html',1,'Gaze']]],
+  ['gazetransform3d_13',['GazeTransform3D',['../struct_gaze_1_1_gaze_transform3_d.html',1,'Gaze']]],
+  ['gazevector2_5f32f_14',['GazeVector2_32f',['../struct_gaze_1_1_gaze_vector2__32f.html',1,'Gaze']]],
+  ['gazevector2_5f64f_15',['GazeVector2_64f',['../struct_gaze_1_1_gaze_vector2__64f.html',1,'Gaze']]],
+  ['gazevector2i_16',['GazeVector2i',['../struct_gaze_1_1_gaze_vector2i.html',1,'Gaze']]],
+  ['gazevector3_17',['GazeVector3',['../struct_gaze_1_1_gaze_vector3.html',1,'Gaze']]],
+  ['godotcamera_18',['GodotCamera',['../class_gaze_1_1_godot_camera.html',1,'Gaze']]],
+  ['guessbiocalibration_19',['GuessBioCalibration',['../classgodot_1_1_guess_bio_calibration.html',1,'godot']]],
+  ['guessdevicecalibration_20',['GuessDeviceCalibration',['../classgodot_1_1_guess_device_calibration.html',1,'godot']]]
 ];

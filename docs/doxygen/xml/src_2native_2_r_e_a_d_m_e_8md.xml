@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="src_2native_2_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">/**</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>@dir<sp/>src/native</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>@brief<sp/>Platform-native<sp/>dependencies,<sp/>ML<sp/>pipelines,<sp/>and<sp/>model<sp/>definitions.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>This<sp/>directory<sp/>contains<sp/>the<sp/>platform-agnostic<sp/>native<sp/>implementations<sp/>of<sp/>ONNX<sp/>Runtime</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>model<sp/>pipeline<sp/>wrappers<sp/>and<sp/>platform<sp/>capture<sp/>drivers.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*/</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Native<sp/>Layer</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>Native<sp/>layer<sp/>hosts<sp/>the<sp/>ONNX<sp/>Runtime<sp/>machine<sp/>learning<sp/>pipelines<sp/>for<sp/>face<sp/>detection<sp/>(YuNet)<sp/>and<sp/>gaze<sp/>estimation.</highlight></codeline>
+    </programlisting>
+    <location file="src/native/README.md"/>
+  </compounddef>
+</doxygen>

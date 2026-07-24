@@ -125,79 +125,88 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__calibrat
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>Gaze {</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_calibration_sample.html">   12</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_calibration_sample.html">CalibrationSample</a> {</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> gaze_origin;      <span class="comment">// Eye center in camera space, mm</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> gaze_direction;   <span class="comment">// Raw gaze direction unit vector in camera space</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a> target_pos_mm;    <span class="comment">// Target position in screen millimeters (relative to center: +X right, +Y up)</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>};</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>Gaze</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_calibration_sample.html">   13</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_calibration_sample.html">CalibrationSample</a></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    {</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> gaze_origin;    <span class="comment">// Eye center in camera space, mm</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> gaze_direction; <span class="comment">// Raw gaze direction unit vector in camera space</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        GazeVector2 target_pos_mm;  <span class="comment">// Target position in screen millimeters (relative to center: +X right, +Y up)</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    };</div>
 </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="foldopen" id="foldopen00018" data-start="{" data-end="};">
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_calibration_weights.html">   18</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a> {</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="comment">// Prior weights (regularization factors)</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// Locked to 1e9 to prevent physical parameters from shifting during calibration</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordtype">double</span> offset_x = 1e9;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">double</span> offset_y = 1e9;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">double</span> offset_z = 1e9;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">double</span> tilt = 1e9;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">double</span> bias = 10.0;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">// Solver parameter boundaries</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">double</span> max_camera_offset_x = 300.0;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">double</span> min_camera_offset_y = -150.0;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">double</span> max_camera_offset_y = 400.0;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">double</span> min_camera_offset_z = -100.0;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">double</span> max_camera_offset_z = 300.0;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">double</span> max_camera_tilt = 75.0;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">double</span> max_bias = 0.6;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="comment">// Initial simplex step sizes</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">double</span> step_camera_offset = 10.0;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">double</span> step_camera_tilt = 3.0;</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">double</span> step_bias = 0.03;</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="comment">// Solver execution parameters</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">int</span> max_iterations = 3000;</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">double</span> convergence_threshold = 1e-5;</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">double</span> penalty_multiplier = 1e6;</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>};</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="comment">// TODO: Is this code still on the critical path/in use in our code?</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">// I don&#39;t love it: many of these values either seem automatically derivable or otherwise kind of weird.</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="comment">// For instance, on macos we could examine the AVCaptureDevice for `position` == `front`, then use the display info to calculate information abt the notch on the screen to know about the camera.</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="comment">// We&#39;re already writing our own windows equivalent, which should behave similarly. On android &amp; ios, we can just _assume_ a connected/notched webcam.</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="comment">// etc etc; the need to &quot;solve for&quot; camera offset xyz and tilt feels VERY bad to me.</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="comment">// The one case we definitely do still need it has to do with browsers, where we know very little about the underlying machine.</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="comment">// In those cases, we already MUST do display calibration for good results. Is it possible to do some sort of webcam calibration at the same time?</span></div>
+<div class="foldopen" id="foldopen00027" data-start="{" data-end="};">
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_calibration_weights.html">   27</a></span>    <span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    {</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="comment">// Prior weights (regularization factors)</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="comment">// Locked to 1e9 to prevent physical parameters from shifting during calibration</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        <span class="keywordtype">double</span> offset_x = 1e9;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        <span class="keywordtype">double</span> offset_y = 1e9;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordtype">double</span> offset_z = 1e9;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        <span class="keywordtype">double</span> tilt = 1e9;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        <span class="keywordtype">double</span> bias = 10.0;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="comment">// Solver parameter boundaries</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        <span class="keywordtype">double</span> max_camera_offset_x = 300.0;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        <span class="keywordtype">double</span> min_camera_offset_y = -150.0;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="keywordtype">double</span> max_camera_offset_y = 400.0;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="keywordtype">double</span> min_camera_offset_z = -100.0;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordtype">double</span> max_camera_offset_z = 300.0;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keywordtype">double</span> max_camera_tilt = 75.0;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keywordtype">double</span> max_bias = 0.6;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="comment">// Initial simplex step sizes</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordtype">double</span> step_camera_offset = 10.0;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordtype">double</span> step_camera_tilt = 3.0;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="keywordtype">double</span> step_bias = 0.03;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">// Solver execution parameters</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keywordtype">int</span> max_iterations = 3000;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordtype">double</span> convergence_threshold = 1e-5;</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordtype">double</span> penalty_multiplier = 1e6;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    };</div>
 </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="foldopen" id="foldopen00047" data-start="{" data-end="};">
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="class_gaze_1_1_calibration_estimator.html">   47</a></span><span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_calibration_estimator.html">CalibrationEstimator</a> {</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> estimate(</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="keyword">const</span> std::vector&lt;CalibrationSample&gt;&amp; samples,</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector2.html">GazeVector2</a>&amp; screen_size_mm,</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&amp; initial_camera_offset,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordtype">double</span> initial_camera_tilt_deg,</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordtype">bool</span> freeze_camera_params,</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&amp; out_camera_offset,</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        <span class="keywordtype">double</span>&amp; out_camera_tilt_deg,</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordtype">double</span>&amp; out_bias_pitch,</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <span class="keywordtype">double</span>&amp; out_bias_yaw,</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a>&amp; weights = <a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a>()</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    );</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>};</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="foldopen" id="foldopen00057" data-start="{" data-end="};">
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_gaze_1_1_calibration_estimator.html">   57</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_calibration_estimator.html">CalibrationEstimator</a></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <span class="keyword">static</span> <span class="keywordtype">bool</span> estimate(</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <span class="keyword">const</span> std::vector&lt;CalibrationSample&gt; &amp;samples,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            <span class="keyword">const</span> GazeVector2 &amp;screen_size_mm,</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>            <span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;initial_camera_offset,</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>            <span class="keywordtype">double</span> initial_camera_tilt_deg,</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            <span class="keywordtype">bool</span> freeze_camera_params,</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>            <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;out_camera_offset,</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>            <span class="keywordtype">double</span> &amp;out_camera_tilt_deg,</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>            <span class="keywordtype">double</span> &amp;out_bias_pitch,</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>            <span class="keywordtype">double</span> &amp;out_bias_yaw,</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            <span class="keyword">const</span> <a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a> &amp;weights = <a class="code hl_struct" href="struct_gaze_1_1_calibration_weights.html">CalibrationWeights</a>());</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    };</div>
 </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>} <span class="comment">// namespace Gaze</span></div>
-<div class="ttc" id="aclass_gaze_1_1_calibration_estimator_html"><div class="ttname"><a href="class_gaze_1_1_calibration_estimator.html">Gaze::CalibrationEstimator</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:47</div></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="ttc" id="aclass_gaze_1_1_calibration_estimator_html"><div class="ttname"><a href="class_gaze_1_1_calibration_estimator.html">Gaze::CalibrationEstimator</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:58</div></div>
 <div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency 3D/2D Vector and Matrix Math structures.</div></div>
-<div class="ttc" id="astruct_gaze_1_1_calibration_sample_html"><div class="ttname"><a href="struct_gaze_1_1_calibration_sample.html">Gaze::CalibrationSample</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:12</div></div>
-<div class="ttc" id="astruct_gaze_1_1_calibration_weights_html"><div class="ttname"><a href="struct_gaze_1_1_calibration_weights.html">Gaze::CalibrationWeights</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:18</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_vector2_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector2.html">Gaze::GazeVector2</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:21</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:61</div></div>
+<div class="ttc" id="astruct_gaze_1_1_calibration_sample_html"><div class="ttname"><a href="struct_gaze_1_1_calibration_sample.html">Gaze::CalibrationSample</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:14</div></div>
+<div class="ttc" id="astruct_gaze_1_1_calibration_weights_html"><div class="ttname"><a href="struct_gaze_1_1_calibration_weights.html">Gaze::CalibrationWeights</a></div><div class="ttdef"><b>Definition</b> gaze_calibration_estimator.hpp:28</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:191</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>src</b></li><li class="navelem"><b>core</b></li><li class="navelem"><a href="gaze__calibration__estimator_8hpp.html">gaze_calibration_estimator.hpp</a></li>
+    <li class="navelem"><b>src</b></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="gaze__calibration__estimator_8hpp.html">gaze_calibration_estimator.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

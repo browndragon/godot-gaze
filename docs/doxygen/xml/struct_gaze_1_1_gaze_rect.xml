@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_rect" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeRect</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_rect_1a5c9aab1e503d77b7156b949cbcf26e0c" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeRect::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeRect::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="176" column="15" bodyfile="src/core/math_defs.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_rect_1af8b64244f4338e4c02f70b14be2ff71e" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeRect::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeRect::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="177" column="15" bodyfile="src/core/math_defs.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_rect_1afc51daa93d7368f1f02f929d7e06629f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeRect::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>Gaze::GazeRect::width</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="178" column="15" bodyfile="src/core/math_defs.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_rect_1a36888dd0773f754ad4887bde95afc293" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeRect::height</definition>
+        <argsstring></argsstring>
+        <name>height</name>
+        <qualifiedname>Gaze::GazeRect::height</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="179" column="15" bodyfile="src/core/math_defs.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_rect_1a9d7d4c749e90ab8d21269a28204523cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::GazeRect::GazeRect</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeRect</name>
+        <qualifiedname>Gaze::GazeRect::GazeRect</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="181" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_rect_1aed9650822855ffb78d77c48498b95095" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::GazeRect::GazeRect</definition>
+        <argsstring>(float px, float py, float pw, float ph)</argsstring>
+        <name>GazeRect</name>
+        <qualifiedname>Gaze::GazeRect::GazeRect</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>py</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>pw</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>ph</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="182" column="19" bodyfile="src/core/math_defs.hpp" bodystart="182" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_rect_1a02a1da3cd1fbf53c5fc8f598a9c2ca67" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::GazeRect::area</definition>
+        <argsstring>() const</argsstring>
+        <name>area</name>
+        <qualifiedname>Gaze::GazeRect::area</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="184" column="15" bodyfile="src/core/math_defs.hpp" bodystart="184" bodyend="187"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/math_defs.hpp" line="174" column="5" bodyfile="src/core/math_defs.hpp" bodystart="175" bodyend="188"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_rect_1a02a1da3cd1fbf53c5fc8f598a9c2ca67" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>area</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1a9d7d4c749e90ab8d21269a28204523cf" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>GazeRect</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1aed9650822855ffb78d77c48498b95095" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>GazeRect</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1a36888dd0773f754ad4887bde95afc293" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>height</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1afc51daa93d7368f1f02f929d7e06629f" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>width</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1a5c9aab1e503d77b7156b949cbcf26e0c" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_rect_1af8b64244f4338e4c02f70b14be2ff71e" prot="public" virt="non-virtual"><scope>Gaze::GazeRect</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

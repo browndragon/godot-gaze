@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_vector2__32f" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeVector2_32f</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_vector2__32f_1a8f44704cc5fd38c6ebd6fd290b1e296a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeVector2_32f::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeVector2_32f::x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="145" column="15" bodyfile="src/core/math_defs.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_vector2__32f_1ae7a4f9c3b17901e715ee002e88e5148b" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeVector2_32f::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeVector2_32f::y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="146" column="15" bodyfile="src/core/math_defs.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2__32f_1a27bbe92e817d529d3e84d530dadfda61" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::GazeVector2_32f::GazeVector2_32f</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeVector2_32f</name>
+        <qualifiedname>Gaze::GazeVector2_32f::GazeVector2_32f</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="148" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2__32f_1abaf9ada38f36317ff6b2df1606763496" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::GazeVector2_32f::GazeVector2_32f</definition>
+        <argsstring>(float px, float py)</argsstring>
+        <name>GazeVector2_32f</name>
+        <qualifiedname>Gaze::GazeVector2_32f::GazeVector2_32f</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>py</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="149" column="19" bodyfile="src/core/math_defs.hpp" bodystart="149" bodyend="149"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/math_defs.hpp" line="143" column="5" bodyfile="src/core/math_defs.hpp" bodystart="144" bodyend="150"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_vector2__32f_1a27bbe92e817d529d3e84d530dadfda61" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>GazeVector2_32f</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2__32f_1abaf9ada38f36317ff6b2df1606763496" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>GazeVector2_32f</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2__32f_1a8f44704cc5fd38c6ebd6fd290b1e296a" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_vector2__32f_1ae7a4f9c3b17901e715ee002e88e5148b" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

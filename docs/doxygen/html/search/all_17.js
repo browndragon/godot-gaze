@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['ray_20plane_20intersection_0',['3. 3D Ray-Plane Intersection',['../md_docs_2gaze__math__physical__model.html#autotoc_md24',1,'']]],
-  ['real_20time_20depth_20triangulation_20z_20engine_1',['6. Real-Time Depth Triangulation (Z Engine)',['../md_docs_2gaze__math__physical__model.html#autotoc_md33',1,'']]],
-  ['register_5ftypes_2ehpp_2',['register_types.hpp',['../register__types_8hpp.html',1,'']]],
-  ['rodrigues_5fto_5fbasis_3',['rodrigues_to_basis',['../math__defs_8hpp.html#a956327787e5b5bf19a5c91d0ec705d3e',1,'Gaze']]]
+  ['web_20html5_20export_20guidelines_0',['Web / HTML5 Export Guidelines',['../index.html#autotoc_md15',1,'']]],
+  ['web_20platform_20layer_1',['Web Platform Layer',['../dir_0d4dde2834ed44e47b6207c19e4aac26.html#autotoc_md3',1,'']]],
+  ['web_5fbinding_5fstate_2ehpp_2',['web_binding_state.hpp',['../web__binding__state_8hpp.html',1,'']]]
 ];

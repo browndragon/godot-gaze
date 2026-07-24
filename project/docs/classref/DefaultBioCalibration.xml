@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="DefaultBioCalibration" inherits="godot::BioCalibration">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_actual_calibration">
+			<return type="Ref&lt; BioCalibration &gt;"></return>
+			<description></description>
+		</method>
+		<method name="clear_cache">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="get_bias_pitch">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="get_bias_yaw">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="get_scale_pitch">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="get_scale_yaw">
+			<return type="double"></return>
+			<description></description>
+		</method>
+		<method name="set_bias_pitch">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="set_bias_yaw">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="set_scale_pitch">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+		<method name="set_scale_yaw">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

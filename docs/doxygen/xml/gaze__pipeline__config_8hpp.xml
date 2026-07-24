@@ -5,7 +5,7 @@
     <includes local="no">godot_cpp/classes/resource.hpp</includes>
     <includes refid="pipeline__config_8hpp" local="yes">pipeline_config.hpp</includes>
     <includedby refid="gaze__pipeline__config_8cpp" local="yes">src/godot/gaze_pipeline_config.cpp</includedby>
-    <includedby refid="gaze__tracker_8hpp" local="yes">src/godot/gaze_tracker.hpp</includedby>
+    <includedby refid="gaze__server_8hpp" local="yes">src/godot/gaze_server.hpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
     <incdepgraph>
       <node id="4">
@@ -31,14 +31,6 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
-      <node id="3">
-        <label>src/godot/gaze_calibration_resource.cpp</label>
-        <link refid="gaze__calibration__resource_8cpp"/>
-      </node>
-      <node id="4">
-        <label>src/godot/gaze_calibration_session.cpp</label>
-        <link refid="gaze__calibration__session_8cpp"/>
-      </node>
       <node id="1">
         <label>src/godot/gaze_pipeline_config.hpp</label>
         <link refid="gaze__pipeline__config_8hpp"/>
@@ -46,12 +38,8 @@
         </childnode>
       </node>
       <node id="2">
-        <label>src/godot/gaze_tracker.hpp</label>
-        <link refid="gaze__tracker_8hpp"/>
-        <childnode refid="3" relation="include">
-        </childnode>
-        <childnode refid="4" relation="include">
-        </childnode>
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
       </node>
     </invincdepgraph>
     <innerclass refid="classgodot_1_1_gaze_pipeline_config" prot="public">godot::GazePipelineConfig</innerclass>
@@ -92,19 +80,18 @@
 <codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_ipd_mm(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>val);</highlight></codeline>
 <codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>get_ipd_mm()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="36"><highlight class="normal"></highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_face_detect_width(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>val);</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>get_face_detect_width()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_face_detect_height(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>val);</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>get_face_detect_height()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_desired_camera_size(Vector2i<sp/>size);</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2i<sp/>get_desired_camera_size()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"></highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref><sp/>get_config()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config;<sp/>}</highlight></codeline>
-<codeline lineno="47"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"></highlight></codeline>
-<codeline lineno="49"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_desired_camera_size(Vector2i<sp/>size);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2i<sp/>get_desired_camera_size()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_debug_image_throttle_interval(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>val);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>get_debug_image_throttle_interval()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref><sp/>get_config()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>config;<sp/>}</highlight></codeline>
+<codeline lineno="46"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/gaze_pipeline_config.hpp"/>
   </compounddef>

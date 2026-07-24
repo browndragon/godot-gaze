@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_image_warper" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>Gaze::ImageWarper</compoundname>
+    <derivedcompoundref refid="class_gaze_1_1_c_p_u_image_warper" prot="public" virt="non-virtual">Gaze::CPUImageWarper</derivedcompoundref>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_image_warper_1ad0e36d3e0a1d6f11c6818c73a0732af6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual Gaze::ImageWarper::~ImageWarper</definition>
+        <argsstring>()=default</argsstring>
+        <name>~ImageWarper</name>
+        <qualifiedname>Gaze::ImageWarper::~ImageWarper</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="23" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_image_warper_1a425f5552fd1a189ff70ebb5d0efdce26" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type>bool</type>
+        <definition>virtual bool Gaze::ImageWarper::warp</definition>
+        <argsstring>(const uint8_t *src_data, int src_width, int src_height, int src_channels, const GazeVector2 &amp;eye_center, double angle_deg, double scale, uint8_t *out_bgr_buffer)=0</argsstring>
+        <name>warp</name>
+        <qualifiedname>Gaze::ImageWarper::warp</qualifiedname>
+        <reimplementedby refid="class_gaze_1_1_c_p_u_image_warper_1a0034d4b03bfe3060d753a33fd9a479dc">warp</reimplementedby>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src_data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_width</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_height</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_channels</declname>
+        </param>
+        <param>
+          <type>const GazeVector2 &amp;</type>
+          <declname>eye_center</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>angle_deg</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>scale</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>out_bgr_buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="27" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_image_warper_1a70542bc7b08c5c67457687292c2c6cd4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::ImageWarper::submit_and_sync</definition>
+        <argsstring>()</argsstring>
+        <name>submit_and_sync</name>
+        <qualifiedname>Gaze::ImageWarper::submit_and_sync</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="37" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_image_warper_1a2f2cee9ed586c287b35eb3dede5b9201" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void Gaze::ImageWarper::increment_frame_number</definition>
+        <argsstring>()</argsstring>
+        <name>increment_frame_number</name>
+        <qualifiedname>Gaze::ImageWarper::increment_frame_number</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_pipeline.hpp" line="38" column="22" bodyfile="src/core/face_pipeline.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::CPUImageWarper</label>
+        <link refid="class_gaze_1_1_c_p_u_image_warper"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Gaze::ImageWarper</label>
+        <link refid="class_gaze_1_1_image_warper"/>
+      </node>
+    </inheritancegraph>
+    <location file="src/core/face_pipeline.hpp" line="20" column="5" bodyfile="src/core/face_pipeline.hpp" bodystart="21" bodyend="39"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_image_warper_1a2f2cee9ed586c287b35eb3dede5b9201" prot="public" virt="virtual"><scope>Gaze::ImageWarper</scope><name>increment_frame_number</name></member>
+      <member refid="class_gaze_1_1_image_warper_1a70542bc7b08c5c67457687292c2c6cd4" prot="public" virt="virtual"><scope>Gaze::ImageWarper</scope><name>submit_and_sync</name></member>
+      <member refid="class_gaze_1_1_image_warper_1a425f5552fd1a189ff70ebb5d0efdce26" prot="public" virt="pure-virtual"><scope>Gaze::ImageWarper</scope><name>warp</name></member>
+      <member refid="class_gaze_1_1_image_warper_1ad0e36d3e0a1d6f11c6818c73a0732af6" prot="public" virt="virtual"><scope>Gaze::ImageWarper</scope><name>~ImageWarper</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

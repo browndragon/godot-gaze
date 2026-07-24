@@ -1,0 +1,317 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_default_bio_calibration" kind="class" language="C++" prot="public">
+    <compoundname>godot::DefaultBioCalibration</compoundname>
+    <basecompoundref refid="classgodot_1_1_bio_calibration" prot="public" virt="non-virtual">godot::BioCalibration</basecompoundref>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_default_bio_calibration_1ac438168b52e293170bc07c708ae85cba" prot="protected" static="no" mutable="yes">
+        <type>Ref&lt; BioCalibration &gt;</type>
+        <definition>Ref&lt;BioCalibration&gt; godot::DefaultBioCalibration::cached_calibration</definition>
+        <argsstring></argsstring>
+        <name>cached_calibration</name>
+        <qualifiedname>godot::DefaultBioCalibration::cached_calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="147" column="17" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a611a66248543991d0748dd38c9034a1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::DefaultBioCalibration::GDCLASS</definition>
+        <argsstring>(DefaultBioCalibration, BioCalibration)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::DefaultBioCalibration::GDCLASS</qualifiedname>
+        <param>
+          <type>DefaultBioCalibration</type>
+        </param>
+        <param>
+          <type>BioCalibration</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="144" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a2b293d24dbe146a520ecf50266602c50" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::DefaultBioCalibration::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="148" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="239" bodyend="241"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1af50200a6dff3c8fd496b7503c43c7f10" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::DefaultBioCalibration::DefaultBioCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>DefaultBioCalibration</name>
+        <qualifiedname>godot::DefaultBioCalibration::DefaultBioCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="151" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a8bdbd2b59195a24230e13d5ca96139d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::DefaultBioCalibration::~DefaultBioCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>~DefaultBioCalibration</name>
+        <qualifiedname>godot::DefaultBioCalibration::~DefaultBioCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="152" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1ae10704c1a99ab64bbb63923cff335b7d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; BioCalibration &gt;</type>
+        <definition>Ref&lt; BioCalibration &gt; godot::DefaultBioCalibration::get_actual_calibration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_actual_calibration</name>
+        <qualifiedname>godot::DefaultBioCalibration::get_actual_calibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="154" column="9" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="243" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a44b3407aff1c4f7c483bae1c9aaf56af" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::clear_cache</definition>
+        <argsstring>()</argsstring>
+        <name>clear_cache</name>
+        <qualifiedname>godot::DefaultBioCalibration::clear_cache</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="156" column="10" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="271" bodyend="279"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a72b3b8b1c3cb3d7664cbeb6a91257637" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::DefaultBioCalibration::get_bias_pitch</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_pitch</name>
+        <qualifiedname>godot::DefaultBioCalibration::get_bias_pitch</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1a113a7b9baa22a02f461cd98c391a0fa5">get_bias_pitch</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="158" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="281" bodyend="283"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1aa66b025c29f1d875c463f564f1cf4f11" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::DefaultBioCalibration::get_bias_yaw</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_bias_yaw</name>
+        <qualifiedname>godot::DefaultBioCalibration::get_bias_yaw</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1a3ad5fde80d288e7200c9add34d70a3f4">get_bias_yaw</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="159" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="285" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a3bed42b88e2a1bc2690d68f949e25738" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::DefaultBioCalibration::get_scale_pitch</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_scale_pitch</name>
+        <qualifiedname>godot::DefaultBioCalibration::get_scale_pitch</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1a9bfc9bdca00180582c9a43b42d0fe041">get_scale_pitch</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="160" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="289" bodyend="291"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1ad769c138989cd4d51cac723de4a8aa61" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::DefaultBioCalibration::get_scale_yaw</definition>
+        <argsstring>() const override</argsstring>
+        <name>get_scale_yaw</name>
+        <qualifiedname>godot::DefaultBioCalibration::get_scale_yaw</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1a0a8b88237c081422819893666f2a99fc">get_scale_yaw</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="161" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="293" bodyend="295"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a3828aef464be3ffa042d5dfb2f0f37de" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::set_bias_pitch</definition>
+        <argsstring>(double val) override</argsstring>
+        <name>set_bias_pitch</name>
+        <qualifiedname>godot::DefaultBioCalibration::set_bias_pitch</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1aa82f1206e6c15b1895699e30560bb953">set_bias_pitch</reimplements>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="163" column="18" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="297" bodyend="299"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a6e5e3dc7e19b2db60611cde880e434e3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::set_bias_yaw</definition>
+        <argsstring>(double val) override</argsstring>
+        <name>set_bias_yaw</name>
+        <qualifiedname>godot::DefaultBioCalibration::set_bias_yaw</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1aef238bdf44c7cee6b86ed8fae4926503">set_bias_yaw</reimplements>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="164" column="18" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="301" bodyend="303"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1ad2a6023aed84ce848a0a146488436d57" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::set_scale_pitch</definition>
+        <argsstring>(double val) override</argsstring>
+        <name>set_scale_pitch</name>
+        <qualifiedname>godot::DefaultBioCalibration::set_scale_pitch</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1aa2035d5d05753844b96ac163b40276e1">set_scale_pitch</reimplements>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="165" column="18" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="305" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_default_bio_calibration_1a594558cc61c09dc85eb77e0fc7ee8951" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::DefaultBioCalibration::set_scale_yaw</definition>
+        <argsstring>(double val) override</argsstring>
+        <name>set_scale_yaw</name>
+        <qualifiedname>godot::DefaultBioCalibration::set_scale_yaw</qualifiedname>
+        <reimplements refid="classgodot_1_1_bio_calibration_1a5e8a47c7d83f219989394aee783b00a3">set_scale_yaw</reimplements>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="166" column="18" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="309" bodyend="311"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>Resource</label>
+      </node>
+      <node id="2">
+        <label>godot::BioCalibration</label>
+        <link refid="classgodot_1_1_bio_calibration"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>godot::DefaultBioCalibration</label>
+        <link refid="classgodot_1_1_default_bio_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>Resource</label>
+      </node>
+      <node id="2">
+        <label>godot::BioCalibration</label>
+        <link refid="classgodot_1_1_bio_calibration"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>godot::DefaultBioCalibration</label>
+        <link refid="classgodot_1_1_default_bio_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_calibration_resource.hpp" line="143" column="1" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="143" bodyend="167"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_default_bio_calibration_1a2b293d24dbe146a520ecf50266602c50" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1a1a6a17bf278113ff48cb4df8612f5dbf" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>bias_pitch</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1a2ecab6682eb0377a9c414cd2d033b8cd" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>bias_yaw</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1aecf9f982a6bf1fabc2f34e012bc9dbd7" prot="public" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>BioCalibration</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1ac438168b52e293170bc07c708ae85cba" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>cached_calibration</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a44b3407aff1c4f7c483bae1c9aaf56af" prot="public" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>clear_cache</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1af50200a6dff3c8fd496b7503c43c7f10" prot="public" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>DefaultBioCalibration</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a611a66248543991d0748dd38c9034a1f" prot="private" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1ae10704c1a99ab64bbb63923cff335b7d" prot="public" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>get_actual_calibration</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a72b3b8b1c3cb3d7664cbeb6a91257637" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>get_bias_pitch</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1aa66b025c29f1d875c463f564f1cf4f11" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>get_bias_yaw</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a3bed42b88e2a1bc2690d68f949e25738" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>get_scale_pitch</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1ad769c138989cd4d51cac723de4a8aa61" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>get_scale_yaw</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1ab28066534435c648f0a487585e4b80c8" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>scale_pitch</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1a8e44968fc4a5727ef931fa9b3e1df68a" prot="protected" virt="non-virtual"><scope>godot::DefaultBioCalibration</scope><name>scale_yaw</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a3828aef464be3ffa042d5dfb2f0f37de" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>set_bias_pitch</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a6e5e3dc7e19b2db60611cde880e434e3" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>set_bias_yaw</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1ad2a6023aed84ce848a0a146488436d57" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>set_scale_pitch</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a594558cc61c09dc85eb77e0fc7ee8951" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>set_scale_yaw</name></member>
+      <member refid="classgodot_1_1_bio_calibration_1a5d5cc239bf04f2483a889a2057827b0b" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>~BioCalibration</name></member>
+      <member refid="classgodot_1_1_default_bio_calibration_1a8bdbd2b59195a24230e13d5ca96139d6" prot="public" virt="virtual"><scope>godot::DefaultBioCalibration</scope><name>~DefaultBioCalibration</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

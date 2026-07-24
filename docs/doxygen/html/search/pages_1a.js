@@ -1,4 +1,0 @@
-var searchData=
-[
-  ['usage_0',['3. Basic GDScript Usage',['../index.html#autotoc_md9',1,'']]]
-];

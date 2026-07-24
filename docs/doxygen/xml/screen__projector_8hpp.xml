@@ -7,13 +7,13 @@
     <includedby refid="screen__projector_8cpp" local="yes">src/core/screen_projector.cpp</includedby>
     <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
     <incdepgraph>
-      <node id="5">
+      <node id="7">
         <label>camera_placement.hpp</label>
         <link refid="camera__placement_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
       </node>
-      <node id="6">
+      <node id="8">
         <label>gaze_calibration.hpp</label>
         <link refid="gaze__calibration_8hpp"/>
         <childnode refid="2" relation="include">
@@ -24,13 +24,17 @@
         <link refid="math__defs_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-      </node>
-      <node id="4">
-        <label>projection_engine.hpp</label>
-        <link refid="projection__engine_8hpp"/>
+        <childnode refid="4" relation="include">
+        </childnode>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
+      </node>
+      <node id="6">
+        <label>projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
         </childnode>
         <childnode refid="2" relation="include">
         </childnode>
@@ -40,11 +44,17 @@
         <link refid="screen__projector_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
+        <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="3">
         <label>cmath</label>
+      </node>
+      <node id="5">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>type_traits</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
@@ -62,50 +72,50 @@
     <innerclass refid="class_gaze_1_1_screen_projector" prot="public">Gaze::ScreenProjector</innerclass>
     <innernamespace refid="namespace_gaze">Gaze</innernamespace>
     <briefdescription>
-<para>Decoupled component to map projected physical screen coordinates to viewport coordinates (Layer 4). </para>
+<para>Maps projected physical screen coordinates to viewport coordinates (Layer 4). </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="math__defs_8hpp" kindref="compound">math_defs.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="projection__engine_8hpp" kindref="compound">projection_engine.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight></codeline>
-<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
-<codeline lineno="11"><highlight class="normal"></highlight></codeline>
-<codeline lineno="12" refid="class_gaze_1_1_screen_projector" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">ScreenProjector<sp/>{</highlight></codeline>
-<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref><sp/>window_position_px;<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Logical<sp/>screen<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref><sp/>viewport_scale;<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Maps<sp/>logical<sp/>viewport<sp/>units<sp/>to<sp/>window<sp/>logical<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref><sp/>viewport_offset_px;<sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Viewport<sp/>offset<sp/>(origin)<sp/>in<sp/>window<sp/>logical<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="17"><highlight class="normal"></highlight></codeline>
-<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>ScreenProjector()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ScreenProjector(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>win_pos_px,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>vp_scale,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>vp_offset_px)</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>window_position_px(win_pos_px),<sp/>viewport_scale(vp_scale),<sp/>viewport_offset_px(vp_offset_px)<sp/>{}</highlight></codeline>
-<codeline lineno="21"><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>ScreenProjector<sp/>derive_configuration(</highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>win_pos_px,</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>vp_scale,</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>vp_origin</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>ScreenProjector<sp/>from_godot_geometry(</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>window_pos_logical,</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>viewport_scale_logical,</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>viewport_offset_logical</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight></codeline>
-<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>project_to_viewport(</highlight></codeline>
-<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_projection_engine" kindref="compound">ProjectionEngine</ref>&amp;<sp/>engine,</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>&amp;<sp/>origin_cam,</highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>&amp;<sp/>dir_cam,</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>out_viewport_pixel</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="comment">//<sp/>TODO:<sp/>method<sp/>docs.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="math__defs_8hpp" kindref="compound">math_defs.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="projection__engine_8hpp" kindref="compound">projection_engine.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze</highlight></codeline>
+<codeline lineno="12"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14" refid="class_gaze_1_1_screen_projector" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">ScreenProjector</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeVector2<sp/>window_position_px;<sp/></highlight><highlight class="comment">//<sp/>Logical<sp/>screen<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeVector2<sp/>viewport_scale;<sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Maps<sp/>logical<sp/>viewport<sp/>units<sp/>to<sp/>window<sp/>logical<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeVector2<sp/>viewport_offset_px;<sp/></highlight><highlight class="comment">//<sp/>Viewport<sp/>offset<sp/>(origin)<sp/>in<sp/>window<sp/>logical<sp/>pixels</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ScreenProjector()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ScreenProjector(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;win_pos_px,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;vp_scale,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;vp_offset_px)</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>:<sp/>window_position_px(win_pos_px),<sp/>viewport_scale(vp_scale),<sp/>viewport_offset_px(vp_offset_px)<sp/>{}</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>ScreenProjector<sp/>derive_configuration(</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;win_pos_px,</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;vp_scale,</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;vp_origin);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>ScreenProjector<sp/>from_godot_geometry(</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;window_pos_logical,</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;viewport_scale_logical,</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;viewport_offset_logical);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>project_to_viewport(</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_projection_engine" kindref="compound">ProjectionEngine</ref><sp/>&amp;engine,</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>&amp;origin_cam,</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>&amp;dir_cam,</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeVector2<sp/>&amp;out_viewport_pixel)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="40"><highlight class="normal"></highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref><sp/>map_viewport_to_screen_px(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref>&amp;<sp/>logical_pixel)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="42"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeVector2<sp/>map_viewport_to_screen_px(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeVector2<sp/>&amp;logical_pixel)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
 <codeline lineno="43"><highlight class="normal"></highlight></codeline>
 <codeline lineno="44"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>

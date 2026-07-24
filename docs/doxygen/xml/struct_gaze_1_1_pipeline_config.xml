@@ -78,36 +78,6 @@
         </inbodydescription>
         <location file="src/core/pipeline_config.hpp" line="22" column="12" bodyfile="src/core/pipeline_config.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1ada273d0e2d553ebc6f63733c10284db7" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int Gaze::PipelineConfig::face_detect_width</definition>
-        <argsstring></argsstring>
-        <name>face_detect_width</name>
-        <qualifiedname>Gaze::PipelineConfig::face_detect_width</qualifiedname>
-        <initializer>= 160</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/pipeline_config.hpp" line="25" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="25" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a2bcb65e865898404af270d3a4381c983" prot="public" static="no" mutable="no">
-        <type>int</type>
-        <definition>int Gaze::PipelineConfig::face_detect_height</definition>
-        <argsstring></argsstring>
-        <name>face_detect_height</name>
-        <qualifiedname>Gaze::PipelineConfig::face_detect_height</qualifiedname>
-        <initializer>= 128</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/core/pipeline_config.hpp" line="26" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="26" bodyend="-1"/>
-      </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1a1c9b354cbc738ea1947478839cc2bfed" prot="public" static="no" mutable="no">
         <type>int</type>
         <definition>int Gaze::PipelineConfig::desired_camera_width</definition>
@@ -121,7 +91,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pipeline_config.hpp" line="29" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="29" bodyend="-1"/>
+        <location file="src/core/pipeline_config.hpp" line="27" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1aaee25596e0592ad97674cf2762ee8490" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -136,19 +106,33 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pipeline_config.hpp" line="30" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="30" bodyend="-1"/>
+        <location file="src/core/pipeline_config.hpp" line="28" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_pipeline_config_1aa1f01bffcfbd3b7d7b2ad144b4e9a4e6" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::PipelineConfig::debug_image_throttle_interval</definition>
+        <argsstring></argsstring>
+        <name>debug_image_throttle_interval</name>
+        <qualifiedname>Gaze::PipelineConfig::debug_image_throttle_interval</qualifiedname>
+        <initializer>= 1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pipeline_config.hpp" line="31" column="9" bodyfile="src/core/pipeline_config.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/pipeline_config.hpp" line="14" column="1" bodyfile="src/core/pipeline_config.hpp" bodystart="14" bodyend="31"/>
+    <location file="src/core/pipeline_config.hpp" line="14" column="1" bodyfile="src/core/pipeline_config.hpp" bodystart="14" bodyend="32"/>
     <listofallmembers>
+      <member refid="struct_gaze_1_1_pipeline_config_1aa1f01bffcfbd3b7d7b2ad144b4e9a4e6" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>debug_image_throttle_interval</name></member>
       <member refid="struct_gaze_1_1_pipeline_config_1aaee25596e0592ad97674cf2762ee8490" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>desired_camera_height</name></member>
       <member refid="struct_gaze_1_1_pipeline_config_1a1c9b354cbc738ea1947478839cc2bfed" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>desired_camera_width</name></member>
-      <member refid="struct_gaze_1_1_pipeline_config_1a2bcb65e865898404af270d3a4381c983" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>face_detect_height</name></member>
-      <member refid="struct_gaze_1_1_pipeline_config_1ada273d0e2d553ebc6f63733c10284db7" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>face_detect_width</name></member>
       <member refid="struct_gaze_1_1_pipeline_config_1acbaac2ac7f6017d28407733ff4c2fded" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>ipd_mm</name></member>
       <member refid="struct_gaze_1_1_pipeline_config_1a567bda07664640fe1a13575cae12390c" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>nose_y</name></member>
       <member refid="struct_gaze_1_1_pipeline_config_1a1189ca8edfb86dbc1b886852e9321954" prot="public" virt="non-virtual"><scope>Gaze::PipelineConfig</scope><name>nose_z</name></member>

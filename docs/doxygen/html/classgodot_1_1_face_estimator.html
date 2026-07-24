@@ -144,24 +144,28 @@ Public Member Functions</h2></td></tr>
 bool&#160;</td><td class="memItemRight"><b>initialize_estimator</b> ()</td></tr>
 <tr class="memitem:acf5ff30dc86bfe7565cd8bd04bb1ace2" id="r_acf5ff30dc86bfe7565cd8bd04bb1ace2"><td class="memItemLeft"><a id="acf5ff30dc86bfe7565cd8bd04bb1ace2" name="acf5ff30dc86bfe7565cd8bd04bb1ace2"></a>
 void&#160;</td><td class="memItemRight"><b>stop_estimator</b> ()</td></tr>
-<tr class="memitem:ab594ff6ac3176672dff76b5624116c60" id="r_ab594ff6ac3176672dff76b5624116c60"><td class="memItemLeft"><a id="ab594ff6ac3176672dff76b5624116c60" name="ab594ff6ac3176672dff76b5624116c60"></a>
-bool&#160;</td><td class="memItemRight"><b>process_frame</b> (const <a class="el" href="struct_gaze_1_1_frame.html">Gaze::Frame</a> &amp;frame, <a class="el" href="struct_gaze_1_1_eye_crops.html">Gaze::EyeCrops</a> &amp;out_crops)</td></tr>
-<tr class="memitem:a101034d368b5affb8ac7f87040b173f8" id="r_a101034d368b5affb8ac7f87040b173f8"><td class="memItemLeft"><a id="a101034d368b5affb8ac7f87040b173f8" name="a101034d368b5affb8ac7f87040b173f8"></a>
-void&#160;</td><td class="memItemRight"><b>set_yunet_model_path</b> (String path)</td></tr>
-<tr class="memitem:a120de9d76513bb6c9799711c9e586f50" id="r_a120de9d76513bb6c9799711c9e586f50"><td class="memItemLeft"><a id="a120de9d76513bb6c9799711c9e586f50" name="a120de9d76513bb6c9799711c9e586f50"></a>
-String&#160;</td><td class="memItemRight"><b>get_yunet_model_path</b> () const</td></tr>
+<tr class="memitem:af178a15cd3312d01c7d49e0f5f7f3d48" id="r_af178a15cd3312d01c7d49e0f5f7f3d48"><td class="memItemLeft"><a id="af178a15cd3312d01c7d49e0f5f7f3d48" name="af178a15cd3312d01c7d49e0f5f7f3d48"></a>
+void&#160;</td><td class="memItemRight"><b>set_yunet_model_prefix</b> (String path)</td></tr>
+<tr class="memitem:aaf88126064118d87377249cd6f9dce8b" id="r_aaf88126064118d87377249cd6f9dce8b"><td class="memItemLeft"><a id="aaf88126064118d87377249cd6f9dce8b" name="aaf88126064118d87377249cd6f9dce8b"></a>
+String&#160;</td><td class="memItemRight"><b>get_yunet_model_prefix</b> () const</td></tr>
 <tr class="memitem:a88797491aff273243da45ede60ef3191" id="r_a88797491aff273243da45ede60ef3191"><td class="memItemLeft"><a id="a88797491aff273243da45ede60ef3191" name="a88797491aff273243da45ede60ef3191"></a>
 void&#160;</td><td class="memItemRight"><b>set_focal_length</b> (double focal)</td></tr>
 <tr class="memitem:afe637690caf6bc9d7adfd27e2e9cf14a" id="r_afe637690caf6bc9d7adfd27e2e9cf14a"><td class="memItemLeft"><a id="afe637690caf6bc9d7adfd27e2e9cf14a" name="afe637690caf6bc9d7adfd27e2e9cf14a"></a>
 double&#160;</td><td class="memItemRight"><b>get_focal_length</b> () const</td></tr>
+<tr class="memitem:aedb4edbb16f58a5dc9a6df475d07413f" id="r_aedb4edbb16f58a5dc9a6df475d07413f"><td class="memItemLeft"><a id="aedb4edbb16f58a5dc9a6df475d07413f" name="aedb4edbb16f58a5dc9a6df475d07413f"></a>
+void&#160;</td><td class="memItemRight"><b>set_camera_fov</b> (double fov)</td></tr>
+<tr class="memitem:a2992117ea4934d240e6c97fc45e61ab7" id="r_a2992117ea4934d240e6c97fc45e61ab7"><td class="memItemLeft"><a id="a2992117ea4934d240e6c97fc45e61ab7" name="a2992117ea4934d240e6c97fc45e61ab7"></a>
+double&#160;</td><td class="memItemRight"><b>get_camera_fov</b> () const</td></tr>
 <tr class="memitem:a3f92d643bcb3dac5ae32aa30ca751d80" id="r_a3f92d643bcb3dac5ae32aa30ca751d80"><td class="memItemLeft"><a id="a3f92d643bcb3dac5ae32aa30ca751d80" name="a3f92d643bcb3dac5ae32aa30ca751d80"></a>
 void&#160;</td><td class="memItemRight"><b>set_has_detected_face</b> (bool detected)</td></tr>
 <tr class="memitem:a16fb8e7a7ddc08927dfef4f851a3982c" id="r_a16fb8e7a7ddc08927dfef4f851a3982c"><td class="memItemLeft"><a id="a16fb8e7a7ddc08927dfef4f851a3982c" name="a16fb8e7a7ddc08927dfef4f851a3982c"></a>
 bool&#160;</td><td class="memItemRight"><b>get_has_detected_face</b> () const</td></tr>
-<tr class="memitem:a7b852c1011e6d601ffa5cf0abbf9e192" id="r_a7b852c1011e6d601ffa5cf0abbf9e192"><td class="memItemLeft"><a id="a7b852c1011e6d601ffa5cf0abbf9e192" name="a7b852c1011e6d601ffa5cf0abbf9e192"></a>
-void&#160;</td><td class="memItemRight"><b>set_pipeline_config</b> (const <a class="el" href="struct_gaze_1_1_pipeline_config.html">Gaze::PipelineConfig</a> &amp;config)</td></tr>
-<tr class="memitem:ac5090f6b24a51d5fc0f14938c00babfa" id="r_ac5090f6b24a51d5fc0f14938c00babfa"><td class="memItemLeft"><a id="ac5090f6b24a51d5fc0f14938c00babfa" name="ac5090f6b24a51d5fc0f14938c00babfa"></a>
-void&#160;</td><td class="memItemRight"><b>feed_pose_web</b> (bool detected, Vector3 translation, Vector3 rotation)</td></tr>
+<tr class="memitem:a6c0444ef7d04e4679514250154235892" id="r_a6c0444ef7d04e4679514250154235892"><td class="memItemLeft"><a id="a6c0444ef7d04e4679514250154235892" name="a6c0444ef7d04e4679514250154235892"></a>
+RID&#160;</td><td class="memItemRight"><b>get_face_rid</b> () const</td></tr>
+<tr class="memitem:a1ca99a2c2802fd5654a7703ba3e7617e" id="r_a1ca99a2c2802fd5654a7703ba3e7617e"><td class="memItemLeft"><a id="a1ca99a2c2802fd5654a7703ba3e7617e" name="a1ca99a2c2802fd5654a7703ba3e7617e"></a>
+void&#160;</td><td class="memItemRight"><b>set_face_rid</b> (RID p_rid)</td></tr>
+<tr class="memitem:afcbb5e40acbaf6af0bd9f1215d90eba3" id="r_afcbb5e40acbaf6af0bd9f1215d90eba3"><td class="memItemLeft"><a id="afcbb5e40acbaf6af0bd9f1215d90eba3" name="afcbb5e40acbaf6af0bd9f1215d90eba3"></a>
+void&#160;</td><td class="memItemRight"><b>_on_gaze_data_ready</b> (RID p_rid)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>

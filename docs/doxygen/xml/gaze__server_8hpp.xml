@@ -1,0 +1,535 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__server_8hpp" kind="file" language="C++">
+    <compoundname>gaze_server.hpp</compoundname>
+    <includes local="no">godot_cpp/classes/object.hpp</includes>
+    <includes local="no">godot_cpp/classes/ref_counted.hpp</includes>
+    <includes local="no">godot_cpp/classes/project_settings.hpp</includes>
+    <includes local="no">godot_cpp/variant/rid.hpp</includes>
+    <includes local="no">godot_cpp/variant/transform3d.hpp</includes>
+    <includes local="no">godot_cpp/variant/vector2.hpp</includes>
+    <includes local="no">godot_cpp/variant/vector3.hpp</includes>
+    <includes local="no">godot_cpp/classes/image.hpp</includes>
+    <includes local="no">godot_cpp/templates/safe_refcount.hpp</includes>
+    <includes local="no">godot_cpp/classes/time.hpp</includes>
+    <includes refid="projection__engine_8hpp" local="yes">projection_engine.hpp</includes>
+    <includes refid="gaze__calibration__resource_8hpp" local="yes">gaze_calibration_resource.hpp</includes>
+    <includes refid="smoother_8hpp" local="yes">smoother.hpp</includes>
+    <includes refid="gaze__pipeline__config_8hpp" local="yes">gaze_pipeline_config.hpp</includes>
+    <includes refid="gaze__frame_8hpp" local="yes">gaze_frame.hpp</includes>
+    <includes refid="gaze__frame__data_8hpp" local="yes">../core/gaze_frame_data.hpp</includes>
+    <includes local="no">vector</includes>
+    <includes local="no">memory</includes>
+    <includes local="no">thread</includes>
+    <includes local="no">mutex</includes>
+    <includes local="no">condition_variable</includes>
+    <includes local="no">atomic</includes>
+    <includes refid="gaze__tracking__pipeline_8hpp" local="yes">../native/gaze_tracking_pipeline.hpp</includes>
+    <includedby refid="camera__sensor_8cpp" local="yes">src/godot/camera_sensor.cpp</includedby>
+    <includedby refid="eye__estimator_8cpp" local="yes">src/godot/eye_estimator.cpp</includedby>
+    <includedby refid="face__estimator_8cpp" local="yes">src/godot/face_estimator.cpp</includedby>
+    <includedby refid="gaze__server_8cpp" local="yes">src/godot/gaze_server.cpp</includedby>
+    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
+    <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
+    <includedby refid="web__binding__state_8cpp" local="yes">src/web/web_binding_state.cpp</includedby>
+    <incdepgraph>
+      <node id="40">
+        <label>../core/atomic_mailbox.hpp</label>
+        <link refid="atomic__mailbox_8hpp_source"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>../core/camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>camera_placement.hpp</label>
+        <link refid="camera__placement_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="46">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>gaze_calibration.hpp</label>
+        <link refid="gaze__calibration_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>../core/gaze_frame_data.hpp</label>
+        <link refid="gaze__frame__data_8hpp_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>../core/pool.hpp</label>
+        <link refid="pool_8hpp_source"/>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>gaze_calibration_resource.hpp</label>
+        <link refid="gaze__calibration__resource_8hpp"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>gaze_frame.hpp</label>
+        <link refid="gaze__frame_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>smoother.hpp</label>
+        <link refid="smoother_8hpp_source"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>../native/gaze_tracking_pipeline.hpp</label>
+        <link refid="gaze__tracking__pipeline_8hpp_source"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>ort_gaze_model.hpp</label>
+        <link refid="ort__gaze__model_8hpp_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>ort_yunet_pipeline.hpp</label>
+        <link refid="ort__yunet__pipeline_8hpp_source"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>array</label>
+      </node>
+      <node id="37">
+        <label>atomic</label>
+      </node>
+      <node id="15">
+        <label>cmath</label>
+      </node>
+      <node id="36">
+        <label>condition_variable</label>
+      </node>
+      <node id="44">
+        <label>cstddef</label>
+      </node>
+      <node id="17">
+        <label>cstdint</label>
+      </node>
+      <node id="9">
+        <label>godot_cpp/classes/image.hpp</label>
+      </node>
+      <node id="2">
+        <label>godot_cpp/classes/object.hpp</label>
+      </node>
+      <node id="4">
+        <label>godot_cpp/classes/project_settings.hpp</label>
+      </node>
+      <node id="21">
+        <label>godot_cpp/classes/ref.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/ref_counted.hpp</label>
+      </node>
+      <node id="20">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/time.hpp</label>
+      </node>
+      <node id="10">
+        <label>godot_cpp/templates/safe_refcount.hpp</label>
+      </node>
+      <node id="23">
+        <label>godot_cpp/variant/array.hpp</label>
+      </node>
+      <node id="29">
+        <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/variant/rid.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/variant/transform3d.hpp</label>
+      </node>
+      <node id="24">
+        <label>godot_cpp/variant/variant.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/variant/vector2.hpp</label>
+      </node>
+      <node id="30">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+      <node id="33">
+        <label>memory</label>
+      </node>
+      <node id="35">
+        <label>mutex</label>
+      </node>
+      <node id="47">
+        <label>onnxruntime_cxx_api.h</label>
+      </node>
+      <node id="48">
+        <label>string</label>
+      </node>
+      <node id="34">
+        <label>thread</label>
+      </node>
+      <node id="16">
+        <label>type_traits</label>
+      </node>
+      <node id="41">
+        <label>utility</label>
+      </node>
+      <node id="32">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classgodot_1_1_gaze_server" prot="public">godot::GazeServer</innerclass>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/object.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/ref_counted.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/project_settings.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/rid.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/transform3d.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/vector2.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/vector3.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/image.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/templates/safe_refcount.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/time.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="projection__engine_8hpp" kindref="compound">projection_engine.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gaze__calibration__resource_8hpp" kindref="compound">gaze_calibration_resource.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;smoother.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gaze__pipeline__config_8hpp" kindref="compound">gaze_pipeline_config.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;gaze_frame.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../core/gaze_frame_data.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;memory&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;thread&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;mutex&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;condition_variable&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;atomic&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../native/gaze_tracking_pipeline.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal"><ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref>;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structgodot_1_1_gaze_server_impl" kindref="compound">GazeServerImpl</ref>;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45" refid="classgodot_1_1_gaze_server" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">GazeServer<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Object<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(GazeServer,<sp/>Object);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>GazeServer<sp/>*singleton;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;GazeServerImpl&gt;<sp/>impl;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>std::unique_ptr&lt;Gaze::GazeTrackingPipeline&gt;<sp/>pipeline;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref><sp/>active_config;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">mutable</highlight><highlight class="normal"><sp/>std::recursive_mutex<sp/>state_mutex;</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>active_trackers<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_frame_data" kindref="compound">Gaze::GazeFrameData</ref>*<sp/>active_read_data<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>GazeServer();</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~GazeServer();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72" refid="classgodot_1_1_gaze_server_1ae0a3221c41f1ab000ff23e913709375a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>GazeServer<sp/>*<ref refid="classgodot_1_1_gaze_server_1ae0a3221c41f1ab000ff23e913709375a" kindref="member">get_singleton</ref>()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>singleton;<sp/>}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Server<sp/>Resource<sp/>Lifecycle<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>RID<sp/><ref refid="classgodot_1_1_gaze_server_1a4a2eb815380014da32c6908c22b28acd" kindref="member">display_create</ref>();</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1ae2d2f8120982424f8e792af03a05c200" kindref="member">display_set_geometry</ref>(RID<sp/>p_display,<sp/>Vector2<sp/>p_logical_size,<sp/>Vector2<sp/>p_physical_size);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a5e5f04a75cb5620a6316757b33300ec5" kindref="member">display_set_device_calibration</ref>(RID<sp/>p_display,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;DeviceCalibration&gt;&amp;<sp/>p_calibration);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a024155d6cd88759efec167eace0b381b" kindref="member">display_set_bio_calibration</ref>(RID<sp/>p_display,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;BioCalibration&gt;&amp;<sp/>p_calibration);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a70a23e1414cadf71796cc537329577cc" kindref="member">display_set_window_parameters</ref>(RID<sp/>p_display,<sp/>Vector2<sp/>p_window_pos,<sp/>Transform2D<sp/>p_viewport_transform);</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a99a498a0c7e817dd0d499fc64e5202ff" kindref="member">display_free</ref>(RID<sp/>p_display);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>RID<sp/><ref refid="classgodot_1_1_gaze_server_1aae51e92781d922fe2e1ec3cc9530b1af" kindref="member">camera_create</ref>(RID<sp/>p_display);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1aa96b6e64bf638a679490c85bd693f723" kindref="member">camera_set_offsets</ref>(RID<sp/>p_camera,<sp/>Vector3<sp/>p_offset,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_tilt);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1ae7ef89c32f134cf1205e12ddcf5ca130" kindref="member">camera_set_vision_rid</ref>(RID<sp/>p_camera,<sp/>RID<sp/>p_vision_camera);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a9e232e0e90853e532c406caf51982f5a" kindref="member">camera_free</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>RID<sp/><ref refid="classgodot_1_1_gaze_server_1a1f8ab3ef22979c5b71a78de463b6f46a" kindref="member">face_tracker_create</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a3a00f75bfed23efc532549959d6a8c32" kindref="member">face_tracker_set_pose</ref>(RID<sp/>p_face,<sp/>Vector3<sp/>p_translation,<sp/>Vector3<sp/>p_rotation,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_detected);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a5145ce12942b3b048ec1a873e8029c87" kindref="member">face_tracker_free</ref>(RID<sp/>p_face);</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"></highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/><ref refid="classgodot_1_1_gaze_server_1a467124adf7284bd00feb0a048cf95655" kindref="member">get_head_rotation_from_face_tracker</ref>(RID<sp/>p_face)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/>get_head_translation_from_face_tracker(RID<sp/>p_face)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>RID<sp/><ref refid="classgodot_1_1_gaze_server_1ab68ff375da1762ec2faeffeee4d88232" kindref="member">eye_tracker_create</ref>(RID<sp/>p_face);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1aff48543d51bcabd9f772c1c71a11617e" kindref="member">eye_tracker_set_gaze</ref>(RID<sp/>p_eye,<sp/>Vector3<sp/>p_origin_cam,<sp/>Vector3<sp/>p_direction_cam);</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a09c06320c6350fc431f14bb73ceaba73" kindref="member">eye_tracker_set_smoother</ref>(RID<sp/>p_eye,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;Smoother&gt;&amp;<sp/>p_smoother);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>eye_tracker_set_crop_requested(RID<sp/>p_eye,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_requested);</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>eye_tracker_is_crop_requested(RID<sp/>p_eye);</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/>Array<sp/><ref refid="classgodot_1_1_gaze_server_1a1af8b3127c711c1d52871f907c5424d9" kindref="member">tracker_get_eye_crops</ref>(RID<sp/>p_eye);</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1aec2c36ffda592e0681debe3c2ae9b19d" kindref="member">eye_tracker_free</ref>(RID<sp/>p_eye);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/><ref refid="classgodot_1_1_gaze_server_1af2129828efb865b7aec8e80143004829" kindref="member">get_gaze_origin_from_eye_tracker</ref>(RID<sp/>p_eye)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/>get_gaze_direction_from_eye_tracker(RID<sp/>p_eye)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1ad6f95fb083460a40b5740e67d46b7fc3" kindref="member">set_crops_on_eye_tracker</ref>(RID<sp/>p_eye,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;&amp;<sp/>p_left_crop,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;&amp;<sp/>p_right_crop);</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a5871479299d688d0798ccaac9aea0bc1" kindref="member">reset_eye_tracker</ref>(RID<sp/>p_eye);</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"></highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a16b55bce0b64ed6f4cce27f65cfa1649" kindref="member">emit_camera_frame_ready</ref>(RID<sp/>p_vision_camera);</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Core<sp/>transform<sp/>and<sp/>gaze<sp/>retrieval<sp/>APIs<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="213"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_gaze_server_1a214f23f4e06a07b2e9119ec4de738c42" kindref="member">get_relative_transform</ref>(RID<sp/>p_entity);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"></highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/><ref refid="classgodot_1_1_gaze_server_1a689bee74b07f945a3a3873562e03419c" kindref="member">get_gaze_screen</ref>(RID<sp/>p_display,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_smoothed<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"></highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a2b974a0514692071b50ef3f626828b8d" kindref="member">is_face_detected</ref>(RID<sp/>p_face);</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>---<sp/>Pipeline<sp/>Configuration<sp/>&amp;<sp/>Processing<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="232"><highlight class="normal"></highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a6c5dece3b44bcea175d4cc179b409560" kindref="member">set_pipeline_config</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;GazePipelineConfig&gt;&amp;<sp/>p_config);</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"></highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a9d81a069fba97ef90f81c4651c905221" kindref="member">trigger_process</ref>();</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a26c611815fc3e9d8d5844b350c1f00e4" kindref="member">start_processing</ref>();</highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_server_1a068ee3727ded8f206a8898d284bb7ca2" kindref="member">stop_processing</ref>();</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"></highlight></codeline>
+<codeline lineno="253"><highlight class="normal"></highlight><highlight class="preprocessor">#ifdef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>feed_gaze_web_raw(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Array&amp;<sp/>args);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="256"><highlight class="normal"></highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_verbosity(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>level);</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>get_verbosity()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="259"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_server.hpp"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="VisionServer" inherits="Object">
+	<brief_description>Singleton server coordinating all platform camera configurations and image capture operations.</brief_description>
+	<description>VisionServer manages raw camera feeds (OpenCV or platform-specific drivers) using an RID-based resource model. It provides double-buffered frame texture cache queries to GDScript client nodes and supports virtual camera injection.
+
+NOTE: The implementation of VisionServer is split across three platform layers:src/godot/vision_server.cpp : Handles generic ClassDB binding, lifecycle, RID registration, and virtual cameras.src/native/vision_server.cpp : Implements native OpenCV camera capture and frame grabbing.src/web/vision_server.cpp : Implements Web HTML5 JS/Emscripten canvas capture callbacks.
+
+src/godot/vision_server.cpp : Handles generic ClassDB binding, lifecycle, RID registration, and virtual cameras.
+
+src/native/vision_server.cpp : Implements native OpenCV camera capture and frame grabbing.
+
+src/web/vision_server.cpp : Implements Web HTML5 JS/Emscripten canvas capture callbacks.</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="camera_create">
+			<return type="RID"></return>
+			<description>Create a new camera resource and return its unique RID.</description>
+		</method>
+		<method name="camera_set_device_id">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_device_id" type="int"></param>
+			<description>Set the hardware device ID index to capture from.</description>
+		</method>
+		<method name="camera_set_resolution">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_width" type="int"></param>
+			<param index="2" name="p_height" type="int"></param>
+			<description>Set target camera capture resolution.</description>
+		</method>
+		<method name="camera_set_focal_length">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_focal_length" type="double"></param>
+			<description>Set camera lens focal length parameter.</description>
+		</method>
+		<method name="camera_get_focal_length">
+			<return type="double"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Get the camera lens focal length parameter.</description>
+		</method>
+		<method name="camera_set_fov">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_fov" type="double"></param>
+			<description>Set camera lens fov parameter.</description>
+		</method>
+		<method name="camera_get_fov">
+			<return type="double"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Get the camera lens fov parameter.</description>
+		</method>
+		<method name="camera_start">
+			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Start frame capture capture on the camera.
+
+True if started successfully, false otherwise.
+
+True if started successfully, false otherwise.</description>
+		</method>
+		<method name="camera_stop">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Stop frame capture and release hardware resources.</description>
+		</method>
+		<method name="get_camera_current_texture">
+			<return type="Ref&lt; Texture2D &gt;"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Retrieve the latest captured frame texture for Godot rendering.</description>
+		</method>
+		<method name="camera_get_current_image">
+			<return type="Ref&lt; Image &gt;"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Retrieve the latest captured CPU image resource.</description>
+		</method>
+		<method name="camera_set_preview_requested">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_requested" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="camera_is_preview_requested">
+			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="camera_free">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Free the camera resource.</description>
+		</method>
+		<method name="get_camera_current_frame">
+			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="r_frame" type="Gaze::Frame &amp;"></param>
+			<description>Retrieve the raw frame data for GazeServer or background pipeline threads.
+
+p_camera
+The camera RID.
+r_frame
+Frame structure to populate.
+True if a new frame was grabbed successfully, false otherwise.
+
+The camera RID.
+
+Frame structure to populate.
+
+True if a new frame was grabbed successfully, false otherwise.</description>
+		</method>
+		<method name="get_singleton">
+			<return type="VisionServer *"></return>
+			<description>Get the VisionServer global singleton instance.</description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

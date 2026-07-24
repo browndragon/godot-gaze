@@ -1,0 +1,203 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="vision__server_8hpp" kind="file" language="C++">
+    <compoundname>vision_server.hpp</compoundname>
+    <includes local="no">godot_cpp/classes/object.hpp</includes>
+    <includes local="no">godot_cpp/classes/texture2d.hpp</includes>
+    <includes local="no">godot_cpp/classes/image_texture.hpp</includes>
+    <includes local="no">godot_cpp/classes/image.hpp</includes>
+    <includes local="no">godot_cpp/variant/rid.hpp</includes>
+    <includes local="no">godot_cpp/templates/rid_owner.hpp</includes>
+    <includes refid="camera__interface_8hpp" local="yes">camera_interface.hpp</includes>
+    <includes refid="math__defs_8hpp" local="yes">../core/math_defs.hpp</includes>
+    <includes local="no">vector</includes>
+    <includedby refid="camera__sensor_8cpp" local="yes">src/godot/camera_sensor.cpp</includedby>
+    <includedby refid="gaze__server_8cpp" local="yes">src/godot/gaze_server.cpp</includedby>
+    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
+    <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
+    <includedby refid="vision__server_8cpp" local="yes">src/godot/vision_server.cpp</includedby>
+    <includedby refid="vision__server__native_8cpp" local="yes">src/godot/vision_server_native.cpp</includedby>
+    <includedby refid="vision__server__web_8cpp" local="yes">src/godot/vision_server_web.cpp</includedby>
+    <incdepgraph>
+      <node id="8">
+        <label>camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>../core/math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/godot/vision_server.hpp</label>
+        <link refid="vision__server_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdint</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/classes/image.hpp</label>
+      </node>
+      <node id="4">
+        <label>godot_cpp/classes/image_texture.hpp</label>
+      </node>
+      <node id="2">
+        <label>godot_cpp/classes/object.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/texture2d.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/templates/rid_owner.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/variant/rid.hpp</label>
+      </node>
+      <node id="10">
+        <label>type_traits</label>
+      </node>
+      <node id="13">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classgodot_1_1_vision_server" prot="public">godot::VisionServer</innerclass>
+    <innerclass refid="structgodot_1_1_vision_server_1_1_camera_data" prot="protected">godot::VisionServer::CameraData</innerclass>
+    <innerclass refid="classgodot_1_1_mock_vision_server" prot="public">godot::MockVisionServer</innerclass>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/object.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/texture2d.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/image_texture.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/image.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/rid.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/templates/rid_owner.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="camera__interface_8hpp" kindref="compound">camera_interface.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="math__defs_8hpp" kindref="compound">../core/math_defs.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;vector&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27" refid="classgodot_1_1_vision_server" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">VisionServer<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Object<sp/>{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(VisionServer,<sp/>Object);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>VisionServer<sp/>*singleton;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36" refid="structgodot_1_1_vision_server_1_1_camera_data" refkind="compound"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structgodot_1_1_vision_server_1_1_camera_data" kindref="compound">CameraData</ref><sp/>{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>device_id<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width<sp/>=<sp/>640;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height<sp/>=<sp/>480;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>focal_length<sp/>=<sp/>1000.0;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>camera_fov<sp/>=<sp/>Gaze::DEFAULT_CAMERA_FOV_DEGREES;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="class_gaze_1_1_camera_interface" kindref="compound">Gaze::CameraInterface</ref><sp/>*camera<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;ImageTexture&gt;<sp/>current_texture;</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Ref&lt;Image&gt;<sp/>current_image;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_active<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>preview_requested<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref><sp/>last_frame;</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::vector&lt;unsigned<sp/>char&gt;<sp/>last_frame_data;<sp/></highlight><highlight class="comment">//<sp/>Thread-safe<sp/>back<sp/>buffer<sp/>copy</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>RID_PtrOwner&lt;CameraData,<sp/>true&gt;<sp/>camera_owner;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;RID&gt;<sp/>allocated_cameras;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>VisionServer();</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~VisionServer();</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62" refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>VisionServer<sp/>*<ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">get_singleton</ref>()<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>singleton;<sp/>}</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>RID<sp/><ref refid="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e" kindref="member">camera_create</ref>();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" kindref="member">camera_set_device_id</ref>(RID<sp/>p_camera,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_device_id);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" kindref="member">camera_set_resolution</ref>(RID<sp/>p_camera,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_height);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" kindref="member">camera_set_focal_length</ref>(RID<sp/>p_camera,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_focal_length);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" kindref="member">camera_get_focal_length</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"></highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" kindref="member">camera_set_fov</ref>(RID<sp/>p_camera,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_fov);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" kindref="member">camera_get_fov</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1a6a077be45fb502ef66adbd69a9b1baf0" kindref="member">camera_start</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1acfd359215cca0d1bd9c86a2832b883bc" kindref="member">camera_stop</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Ref&lt;Texture2D&gt;<sp/><ref refid="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8" kindref="member">get_camera_current_texture</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;<sp/><ref refid="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" kindref="member">camera_get_current_image</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>camera_set_preview_requested(RID<sp/>p_camera,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_requested);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>camera_is_preview_requested(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" kindref="member">camera_free</ref>(RID<sp/>p_camera);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" kindref="member">get_camera_current_frame</ref>(RID<sp/>p_camera,<sp/><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref><sp/>&amp;r_frame);</highlight></codeline>
+<codeline lineno="135"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143" refid="classgodot_1_1_mock_vision_server" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">MockVisionServer<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>VisionServer<sp/>{</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(MockVisionServer,<sp/>VisionServer);</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"></highlight></codeline>
+<codeline lineno="149"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>MockVisionServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~MockVisionServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>RID<sp/><ref refid="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775" kindref="member">camera_create</ref>()<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" kindref="member">camera_start</ref>(RID<sp/>p_camera)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" kindref="member">camera_stop</ref>(RID<sp/>p_camera)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Ref&lt;Texture2D&gt;<sp/><ref refid="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" kindref="member">get_camera_current_texture</ref>(RID<sp/>p_camera)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;<sp/><ref refid="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" kindref="member">camera_get_current_image</ref>(RID<sp/>p_camera)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"></highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_vision_server_1acb358611cd86c171b357adbb5e6d548b" kindref="member">inject_texture</ref>(RID<sp/>p_camera,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;Texture2D&gt;<sp/>&amp;p_texture);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/vision_server.hpp"/>
+  </compounddef>
+</doxygen>

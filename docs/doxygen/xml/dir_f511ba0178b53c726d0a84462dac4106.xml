@@ -2,16 +2,26 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="dir_f511ba0178b53c726d0a84462dac4106" kind="dir">
     <compoundname>src/native</compoundname>
-    <innerfile refid="gaze__tracker__native_8cpp">gaze_tracker_native.cpp</innerfile>
-    <innerfile refid="opencv__camera_8cpp">opencv_camera.cpp</innerfile>
-    <innerfile refid="opencv__camera_8hpp">opencv_camera.hpp</innerfile>
-    <innerfile refid="opencv__gaze__model_8cpp">opencv_gaze_model.cpp</innerfile>
-    <innerfile refid="opencv__gaze__model_8hpp">opencv_gaze_model.hpp</innerfile>
-    <innerfile refid="yunet__pipeline_8cpp">yunet_pipeline.cpp</innerfile>
-    <innerfile refid="yunet__pipeline_8hpp">yunet_pipeline.hpp</innerfile>
+    <innerfile refid="gaze__tracking__pipeline_8cpp">gaze_tracking_pipeline.cpp</innerfile>
+    <innerfile refid="gaze__tracking__pipeline_8hpp">gaze_tracking_pipeline.hpp</innerfile>
+    <innerfile refid="ort__gaze__model_8cpp">ort_gaze_model.cpp</innerfile>
+    <innerfile refid="ort__gaze__model_8hpp">ort_gaze_model.hpp</innerfile>
+    <innerfile refid="ort__yunet__pipeline_8cpp">ort_yunet_pipeline.cpp</innerfile>
+    <innerfile refid="ort__yunet__pipeline_8hpp">ort_yunet_pipeline.hpp</innerfile>
+    <innerfile refid="platform__ort_8fallback_8cpp">platform_ort.fallback.cpp</innerfile>
+    <innerfile refid="platform__ort_8hpp">platform_ort.hpp</innerfile>
     <briefdescription>
+<para>Platform-native dependencies, ML pipelines, and model definitions. *. </para>
     </briefdescription>
     <detaileddescription>
+<para>/**<itemizedlist>
+<listitem></listitem><listitem><para>* This directory contains the platform-agnostic native implementations of ONNX Runtime</para>
+</listitem><listitem><para>model pipeline wrappers and platform capture drivers. */</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="dir_f511ba0178b53c726d0a84462dac4106_1autotoc_md2">
+<title>Native Layer</title><para>The Native layer hosts the ONNX Runtime machine learning pipelines for face detection (YuNet) and gaze estimation. </para>
+</sect1>
     </detaileddescription>
     <location file="src/native/"/>
   </compounddef>

@@ -14,7 +14,7 @@
           <declname>samples</declname>
         </param>
         <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector2" kindref="compound">GazeVector2</ref> &amp;</type>
+          <type>const GazeVector2 &amp;</type>
           <declname>screen_size_mm</declname>
         </param>
         <param>
@@ -56,14 +56,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_calibration_estimator.hpp" line="49" column="17" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="135" bodyend="289"/>
+        <location file="src/core/gaze_calibration_estimator.hpp" line="60" column="21" bodyfile="src/core/gaze_calibration_estimator.cpp" bodystart="110" bodyend="264"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/gaze_calibration_estimator.hpp" line="47" column="1" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="47" bodyend="61"/>
+    <location file="src/core/gaze_calibration_estimator.hpp" line="57" column="5" bodyfile="src/core/gaze_calibration_estimator.hpp" bodystart="58" bodyend="71"/>
     <listofallmembers>
       <member refid="class_gaze_1_1_calibration_estimator_1a2ee9e217843e6d14b7d660554dd7577b" prot="public" virt="non-virtual"><scope>Gaze::CalibrationEstimator</scope><name>estimate</name></member>
     </listofallmembers>

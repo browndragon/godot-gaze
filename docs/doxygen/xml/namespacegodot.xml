@@ -2,20 +2,89 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="namespacegodot" kind="namespace" language="C++">
     <compoundname>godot</compoundname>
+    <innerclass refid="classgodot_1_1_bio_calibration" prot="public">godot::BioCalibration</innerclass>
     <innerclass refid="classgodot_1_1_camera_sensor" prot="public">godot::CameraSensor</innerclass>
+    <innerclass refid="classgodot_1_1_default_bio_calibration" prot="public">godot::DefaultBioCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_default_device_calibration" prot="public">godot::DefaultDeviceCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_device_calibration" prot="public">godot::DeviceCalibration</innerclass>
     <innerclass refid="classgodot_1_1_display_profile" prot="public">godot::DisplayProfile</innerclass>
     <innerclass refid="classgodot_1_1_eye_estimator" prot="public">godot::EyeEstimator</innerclass>
     <innerclass refid="classgodot_1_1_face_estimator" prot="public">godot::FaceEstimator</innerclass>
-    <innerclass refid="classgodot_1_1_gaze_calibration" prot="public">godot::GazeCalibration</innerclass>
     <innerclass refid="classgodot_1_1_gaze_calibration_session" prot="public">godot::GazeCalibrationSession</innerclass>
-    <innerclass refid="classgodot_1_1_gaze_device_calibration" prot="public">godot::GazeDeviceCalibration</innerclass>
     <innerclass refid="classgodot_1_1_gaze_device_estimated_calibration" prot="public">godot::GazeDeviceEstimatedCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_gaze_frame" prot="public">godot::GazeFrame</innerclass>
     <innerclass refid="classgodot_1_1_gaze_pipeline_config" prot="public">godot::GazePipelineConfig</innerclass>
+    <innerclass refid="classgodot_1_1_gaze_server" prot="public">godot::GazeServer</innerclass>
+    <innerclass refid="structgodot_1_1_gaze_server_impl" prot="public">godot::GazeServerImpl</innerclass>
     <innerclass refid="classgodot_1_1_gaze_tracker" prot="public">godot::GazeTracker</innerclass>
+    <innerclass refid="classgodot_1_1_guess_bio_calibration" prot="public">godot::GuessBioCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_guess_device_calibration" prot="public">godot::GuessDeviceCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_mock_vision_server" prot="public">godot::MockVisionServer</innerclass>
     <innerclass refid="classgodot_1_1_one_euro_filter_state" prot="public">godot::OneEuroFilterState</innerclass>
     <innerclass refid="classgodot_1_1_one_euro_smoother" prot="public">godot::OneEuroSmoother</innerclass>
     <innerclass refid="structgodot_1_1_platform_geometry" prot="public">godot::PlatformGeometry</innerclass>
     <innerclass refid="classgodot_1_1_smoother" prot="public">godot::Smoother</innerclass>
+    <innerclass refid="classgodot_1_1_stored_bio_calibration" prot="public">godot::StoredBioCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_stored_device_calibration" prot="public">godot::StoredDeviceCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_vision_server" prot="public">godot::VisionServer</innerclass>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="gaze__server_8cpp_1a842b97b33af13de607e202287e25d4cb" prot="public" static="no">
+        <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_display_info" kindref="compound">GazeServerImpl::DisplayInfo</ref></type>
+        <definition>using godot::DisplayInfo = GazeServerImpl::DisplayInfo</definition>
+        <argsstring></argsstring>
+        <name>DisplayInfo</name>
+        <qualifiedname>godot::DisplayInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="124" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="gaze__server_8cpp_1ab070609219a178075b631f7a0e54dfe9" prot="public" static="no">
+        <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">GazeServerImpl::CameraInfo</ref></type>
+        <definition>using godot::CameraInfo = GazeServerImpl::CameraInfo</definition>
+        <argsstring></argsstring>
+        <name>CameraInfo</name>
+        <qualifiedname>godot::CameraInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="125" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="gaze__server_8cpp_1aa24283970a9aaa3091d657d00c57ad5c" prot="public" static="no">
+        <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">GazeServerImpl::FaceInfo</ref></type>
+        <definition>using godot::FaceInfo = GazeServerImpl::FaceInfo</definition>
+        <argsstring></argsstring>
+        <name>FaceInfo</name>
+        <qualifiedname>godot::FaceInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="126" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="gaze__server_8cpp_1aaa7ce825608ed8737c49e990b8d07885" prot="public" static="no">
+        <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">GazeServerImpl::EyeInfo</ref></type>
+        <definition>using godot::EyeInfo = GazeServerImpl::EyeInfo</definition>
+        <argsstring></argsstring>
+        <name>EyeInfo</name>
+        <qualifiedname>godot::EyeInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="127" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="127" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
     <sectiondef kind="var">
       <memberdef kind="variable" id="register__types_8cpp_1adcb7aa22e2f166b81c32e258438023e0" prot="public" static="yes" mutable="no">
         <type><ref refid="classgodot_1_1_gaze_device_estimated_calibration" kindref="compound">GazeDeviceEstimatedCalibration</ref> *</type>
@@ -30,81 +99,105 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="23" column="39" bodyfile="src/godot/register_types.cpp" bodystart="23" bodyend="-1"/>
+        <location file="src/godot/register_types.cpp" line="39" column="39" bodyfile="src/godot/register_types.cpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="register__types_8cpp_1afeeb9dfa64a26d3565a3b36580d7c043" prot="public" static="yes" mutable="no">
+        <type><ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> *</type>
+        <definition>VisionServer* godot::vision_server_singleton</definition>
+        <argsstring></argsstring>
+        <name>vision_server_singleton</name>
+        <qualifiedname>godot::vision_server_singleton</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="40" column="21" bodyfile="src/godot/register_types.cpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="register__types_8cpp_1a742bb3c63b2210a23496673ecab3c7de" prot="public" static="yes" mutable="no">
+        <type><ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> *</type>
+        <definition>GazeServer* godot::gaze_server_singleton</definition>
+        <argsstring></argsstring>
+        <name>gaze_server_singleton</name>
+        <qualifiedname>godot::gaze_server_singleton</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="41" column="19" bodyfile="src/godot/register_types.cpp" bodystart="41" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="eye__estimator_8cpp_1a2a68b00fcfaba63db606e9ad8f613a5a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::vector&lt; uint8_t &gt;</type>
-        <definition>static std::vector&lt; uint8_t &gt; godot::load_file_buffer</definition>
-        <argsstring>(const String &amp;path)</argsstring>
-        <name>load_file_buffer</name>
-        <qualifiedname>godot::load_file_buffer</qualifiedname>
-        <param>
-          <type>const String &amp;</type>
-          <declname>path</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/eye_estimator.cpp" line="15" column="20" bodyfile="src/godot/eye_estimator.cpp" bodystart="15" bodyend="34"/>
-      </memberdef>
-      <memberdef kind="function" id="face__estimator_8cpp_1a2a68b00fcfaba63db606e9ad8f613a5a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>std::vector&lt; uint8_t &gt;</type>
-        <definition>static std::vector&lt; uint8_t &gt; godot::load_file_buffer</definition>
-        <argsstring>(const String &amp;path)</argsstring>
-        <name>load_file_buffer</name>
-        <qualifiedname>godot::load_file_buffer</qualifiedname>
-        <param>
-          <type>const String &amp;</type>
-          <declname>path</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/face_estimator.cpp" line="13" column="20" bodyfile="src/godot/face_estimator.cpp" bodystart="13" bodyend="32"/>
-      </memberdef>
-      <memberdef kind="function" id="face__estimator_8cpp_1abca18aa0b97f060adf20c21ece9d0cc7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>Transform3D</type>
-        <definition>static Transform3D godot::get_head_transform_godot</definition>
-        <argsstring>(const Gaze::GazeVector3 &amp;translation, const Gaze::GazeVector3 &amp;rotation)</argsstring>
-        <name>get_head_transform_godot</name>
-        <qualifiedname>godot::get_head_transform_godot</qualifiedname>
-        <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref> &amp;</type>
-          <declname>translation</declname>
-        </param>
-        <param>
-          <type>const <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">Gaze::GazeVector3</ref> &amp;</type>
-          <declname>rotation</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/face_estimator.cpp" line="34" column="27" bodyfile="src/godot/face_estimator.cpp" bodystart="34" bodyend="46"/>
-      </memberdef>
-      <memberdef kind="function" id="gaze__tracker_8cpp_1a03767086db2e1fe2337ded98015e76fd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt;</type>
-        <definition>static Ref&lt; GazeCalibration &gt; godot::get_default_calibration</definition>
+      <memberdef kind="function" id="gaze__tracker_8cpp_1afaf1b1b3d6cda864b551161d1905fc32" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
+        <definition>static Ref&lt; DeviceCalibration &gt; godot::get_default_device_calibration</definition>
         <argsstring>()</argsstring>
-        <name>get_default_calibration</name>
-        <qualifiedname>godot::get_default_calibration</qualifiedname>
+        <name>get_default_device_calibration</name>
+        <qualifiedname>godot::get_default_device_calibration</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_tracker.cpp" line="29" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="29" bodyend="35"/>
+        <location file="src/godot/gaze_tracker.cpp" line="38" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="38" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>String</type>
+        <definition>String godot::resolve_model_path</definition>
+        <argsstring>(const String &amp;p_path)</argsstring>
+        <name>resolve_model_path</name>
+        <qualifiedname>godot::resolve_model_path</qualifiedname>
+        <param>
+          <type>const String &amp;</type>
+          <declname>p_path</declname>
+        </param>
+        <briefdescription>
+<para>Resolves a model path by searching configurable search paths. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_files.hpp" line="20" column="15" bodyfile="src/godot/godot_files.hpp" bodystart="20" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="godot__files_8hpp_1a438d87c72f03b6b817f49243709e71b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt; uint8_t &gt; godot::load_file_buffer</definition>
+        <argsstring>(const String &amp;path)</argsstring>
+        <name>load_file_buffer</name>
+        <qualifiedname>godot::load_file_buffer</qualifiedname>
+        <param>
+          <type>const String &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Reads a file at path into a C++ std::vector&lt;uint8_t&gt; buffer using Godot&apos;s FileAccess API. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_files.hpp" line="93" column="20" bodyfile="src/godot/godot_files.hpp" bodystart="93" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="register__types_8cpp_1ab47c55fc6efbb2b016683f73c317a77a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void godot::register_gaze_project_settings</definition>
+        <argsstring>()</argsstring>
+        <name>register_gaze_project_settings</name>
+        <qualifiedname>godot::register_gaze_project_settings</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="43" column="13" bodyfile="src/godot/register_types.cpp" bodystart="43" bodyend="169"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a5bdb7944917b948a595175b7dd080a38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -122,7 +215,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="25" column="6" bodyfile="src/godot/register_types.cpp" bodystart="25" bodyend="74" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="171" column="6" bodyfile="src/godot/register_types.cpp" bodystart="171" bodyend="263" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1aa63ec0122dad078a5d8132f4f93f9ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -140,7 +233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="76" column="6" bodyfile="src/godot/register_types.cpp" bodystart="76" bodyend="89" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="265" column="6" bodyfile="src/godot/register_types.cpp" bodystart="265" bodyend="296" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a26ba0015844c927077a2fdd22bf05f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>GDExtensionBool GDE_EXPORT</type>
@@ -166,7 +259,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="93" column="28" bodyfile="src/godot/register_types.cpp" bodystart="93" bodyend="105"/>
+        <location file="src/godot/register_types.cpp" line="300" column="28" bodyfile="src/godot/register_types.cpp" bodystart="300" bodyend="312"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

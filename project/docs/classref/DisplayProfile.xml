@@ -26,6 +26,22 @@
 			<return type="Vector2"></return>
 			<description></description>
 		</method>
+		<method name="estimate_from_os">
+			<return type="Ref&lt; DisplayProfile &gt;"></return>
+			<description></description>
+		</method>
+		<method name="get_screen_scale">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_screen_size_logical">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_window_size_logical">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
 	</methods>
 	<members></members>
 	<signals></signals>

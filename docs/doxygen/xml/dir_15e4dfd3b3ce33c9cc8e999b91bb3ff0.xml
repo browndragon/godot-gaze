@@ -14,19 +14,51 @@
     <innerfile refid="gaze__calibration__resource_8hpp">gaze_calibration_resource.hpp</innerfile>
     <innerfile refid="gaze__calibration__session_8cpp">gaze_calibration_session.cpp</innerfile>
     <innerfile refid="gaze__calibration__session_8hpp">gaze_calibration_session.hpp</innerfile>
+    <innerfile refid="gaze__frame_8cpp">gaze_frame.cpp</innerfile>
+    <innerfile refid="gaze__frame_8hpp">gaze_frame.hpp</innerfile>
     <innerfile refid="gaze__pipeline__config_8cpp">gaze_pipeline_config.cpp</innerfile>
     <innerfile refid="gaze__pipeline__config_8hpp">gaze_pipeline_config.hpp</innerfile>
+    <innerfile refid="gaze__server_8cpp">gaze_server.cpp</innerfile>
+    <innerfile refid="gaze__server_8hpp">gaze_server.hpp</innerfile>
     <innerfile refid="gaze__tracker_8cpp">gaze_tracker.cpp</innerfile>
     <innerfile refid="gaze__tracker_8hpp">gaze_tracker.hpp</innerfile>
+    <innerfile refid="gaze__tracker__native_8cpp">gaze_tracker_native.cpp</innerfile>
+    <innerfile refid="godot__camera_8cpp">godot_camera.cpp</innerfile>
+    <innerfile refid="godot__camera_8hpp">godot_camera.hpp</innerfile>
+    <innerfile refid="godot__files_8hpp">godot_files.hpp</innerfile>
     <innerfile refid="one__euro__smoother_8cpp">one_euro_smoother.cpp</innerfile>
     <innerfile refid="one__euro__smoother_8hpp">one_euro_smoother.hpp</innerfile>
     <innerfile refid="register__types_8cpp">register_types.cpp</innerfile>
     <innerfile refid="register__types_8hpp">register_types.hpp</innerfile>
     <innerfile refid="smoother_8cpp">smoother.cpp</innerfile>
     <innerfile refid="smoother_8hpp">smoother.hpp</innerfile>
+    <innerfile refid="vision__server_8cpp">vision_server.cpp</innerfile>
+    <innerfile refid="vision__server_8hpp">vision_server.hpp</innerfile>
+    <innerfile refid="vision__server__native_8cpp">vision_server_native.cpp</innerfile>
+    <innerfile refid="vision__server__web_8cpp">vision_server_web.cpp</innerfile>
     <briefdescription>
+<para>Godot GDExtension Class Bindings -. </para>
     </briefdescription>
     <detaileddescription>
+<para>/**</para>
+<para><itemizedlist>
+<listitem></listitem></itemizedlist>
+</para>
+<para>-- This directory contains the GDExtension classes and ClassDB registration interfaces that bridge the core C++ gaze engine to Godot.<itemizedlist>
+<listitem></listitem><listitem><para>Classes here include:</para>
+</listitem><listitem><para>- <computeroutput>GazeTracker</computeroutput>: Singleton wrapping the asynchronous pipeline, filters, and display projector.</para>
+</listitem><listitem><para>- <computeroutput>GazeServer</computeroutput>: Background thread manager.</para>
+</listitem><listitem><para>- <computeroutput>CameraSensor</computeroutput>: Frame ingestion and camera property wrapper.</para>
+</listitem><listitem><para>- <computeroutput>FaceEstimator</computeroutput>: YuNet detector bindings.</para>
+</listitem><listitem><para>- <computeroutput>EyeEstimator</computeroutput>: Gaze estimation model bindings.</para>
+</listitem><listitem><para>- <computeroutput>DeviceCalibration</computeroutput>/<computeroutput>BioCalibration</computeroutput>: Serializable Godot Resource classes.</para>
+</listitem><listitem><para>- <computeroutput>GazeCalibrationSession</computeroutput>: Interactive calibration coordinator.</para>
+</listitem><listitem></listitem><listitem><para>Ensure all public methods here are fully documented with Doxygen comments. */</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0_1autotoc_md1">
+<title>Godot GDExtension Layer</title><para>Binds the underlying C++ layers to the Godot Engine, exposing node types, resources, and methods to GDScript. </para>
+</sect1>
     </detaileddescription>
     <location file="src/godot/"/>
   </compounddef>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="DefaultDeviceCalibration" inherits="godot::DeviceCalibration">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_actual_calibration">
+			<return type="Ref&lt; DeviceCalibration &gt;"></return>
+			<description></description>
+		</method>
+		<method name="clear_cache">
+			<return type="void"></return>
+			<description></description>
+		</method>
+		<method name="get_pixel_size_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_offset">
+			<return type="Vector3"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_tilt">
+			<return type="double"></return>
+			<param index="0" name="tracker" type="Object *"></param>
+			<description></description>
+		</method>
+		<method name="set_pixel_size_mm">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_offset">
+			<return type="void"></return>
+			<param index="0" name="val" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_tilt">
+			<return type="void"></return>
+			<param index="0" name="val" type="double"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

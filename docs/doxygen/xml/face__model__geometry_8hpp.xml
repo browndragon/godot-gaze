@@ -3,8 +3,12 @@
   <compounddef id="face__model__geometry_8hpp" kind="file" language="C++">
     <compoundname>face_model_geometry.hpp</compoundname>
     <includedby refid="pipeline__config_8hpp" local="yes">src/core/pipeline_config.hpp</includedby>
-    <includedby refid="yunet__pipeline_8cpp" local="yes">src/native/yunet_pipeline.cpp</includedby>
+    <includedby refid="ort__yunet__pipeline_8cpp" local="yes">src/native/ort_yunet_pipeline.cpp</includedby>
     <invincdepgraph>
+      <node id="4">
+        <label>src/core/cpu_image_warper.hpp</label>
+        <link refid="cpu__image__warper_8hpp_source"/>
+      </node>
       <node id="1">
         <label>src/core/face_model_geometry.hpp</label>
         <link refid="face__model__geometry_8hpp"/>
@@ -16,23 +20,19 @@
         <link refid="face__pipeline_8hpp"/>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
-        <childnode refid="12" relation="include">
-        </childnode>
-      </node>
-      <node id="4">
-        <label>src/core/gaze_model.hpp</label>
-        <link refid="gaze__model_8hpp"/>
         <childnode refid="5" relation="include">
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="9" relation="include">
+        <childnode refid="11" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
+      </node>
+      <node id="5">
+        <label>src/core/gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -40,52 +40,50 @@
         <link refid="pipeline__config_8hpp"/>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="4" relation="include">
+        <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="13" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
-      </node>
-      <node id="5">
-        <label>src/godot/eye_estimator.hpp</label>
-        <link refid="eye__estimator_8hpp_source"/>
-      </node>
-      <node id="11">
-        <label>src/godot/face_estimator.hpp</label>
-        <link refid="face__estimator_8hpp_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
       </node>
       <node id="7">
-        <label>src/godot/gaze_calibration_resource.cpp</label>
-        <link refid="gaze__calibration__resource_8cpp"/>
-      </node>
-      <node id="8">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
       </node>
-      <node id="13">
+      <node id="12">
         <label>src/godot/gaze_pipeline_config.hpp</label>
         <link refid="gaze__pipeline__config_8hpp"/>
-        <childnode refid="6" relation="include">
+        <childnode refid="10" relation="include">
         </childnode>
+      </node>
+      <node id="10">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
       </node>
       <node id="6">
         <label>src/godot/gaze_tracker.hpp</label>
         <link refid="gaze__tracker_8hpp"/>
         <childnode refid="7" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
       </node>
       <node id="9">
-        <label>src/native/opencv_gaze_model.hpp</label>
-        <link refid="opencv__gaze__model_8hpp"/>
+        <label>src/native/gaze_tracking_pipeline.hpp</label>
+        <link refid="gaze__tracking__pipeline_8hpp_source"/>
+        <childnode refid="10" relation="include">
+        </childnode>
       </node>
-      <node id="12">
-        <label>src/native/yunet_pipeline.hpp</label>
-        <link refid="yunet__pipeline_8hpp"/>
+      <node id="8">
+        <label>src/native/ort_gaze_model.hpp</label>
+        <link refid="ort__gaze__model_8hpp_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
       </node>
-      <node id="10">
-        <label>src/web/web_gaze_model.hpp</label>
-        <link refid="web__gaze__model_8hpp"/>
+      <node id="11">
+        <label>src/native/ort_yunet_pipeline.hpp</label>
+        <link refid="ort__yunet__pipeline_8hpp_source"/>
+        <childnode refid="9" relation="include">
+        </childnode>
       </node>
     </invincdepgraph>
     <innerclass refid="struct_gaze_1_1_face_model_geometry" prot="public">Gaze::FaceModelGeometry</innerclass>

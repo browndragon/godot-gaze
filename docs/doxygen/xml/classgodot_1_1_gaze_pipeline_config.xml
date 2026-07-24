@@ -54,7 +54,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="20" column="17" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="6" bodyend="34"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="20" column="17" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="6" bodyend="32"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="25" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="36" bodyend="36"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="25" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="34" bodyend="34"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a36d27ff51dc43fdb2772883aea646d70" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -116,7 +116,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="26" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="37" bodyend="37"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="26" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="35" bodyend="35"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1ad47be66eea9d4b098abb9d72f0daaaf7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="28" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="39" bodyend="39"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="28" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="37" bodyend="37"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1aea1d7c9a98ec54e90e76fd8e8b30d429" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="29" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="40" bodyend="40"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="29" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="38" bodyend="38"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a60d68a23b844e4f0ceee2f6f554d3c4b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -166,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="31" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="42" bodyend="42"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="31" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="40" bodyend="40"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a973c36c1b072454acdf53b6b6c26e7ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="32" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="43" bodyend="43"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="32" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="41" bodyend="41"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a21207eeb4a02713da93ad26b2a4a27ee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -198,7 +198,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="34" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="45" bodyend="45"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="34" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a9b1757ebb73b330452cc2316b36660fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -212,71 +212,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="35" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="46" bodyend="46"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1ab5a6ce903e2befa8b334d3adf3933d04" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazePipelineConfig::set_face_detect_width</definition>
-        <argsstring>(int val)</argsstring>
-        <name>set_face_detect_width</name>
-        <qualifiedname>godot::GazePipelineConfig::set_face_detect_width</qualifiedname>
-        <param>
-          <type>int</type>
-          <declname>val</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="37" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="48" bodyend="48"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1ac47616c7bbc3caaac65f8bdca84d2d5c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>int</type>
-        <definition>int godot::GazePipelineConfig::get_face_detect_width</definition>
-        <argsstring>() const</argsstring>
-        <name>get_face_detect_width</name>
-        <qualifiedname>godot::GazePipelineConfig::get_face_detect_width</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="38" column="9" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="49" bodyend="49"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a75304970a56ebdccd7917a2700470cca" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::GazePipelineConfig::set_face_detect_height</definition>
-        <argsstring>(int val)</argsstring>
-        <name>set_face_detect_height</name>
-        <qualifiedname>godot::GazePipelineConfig::set_face_detect_height</qualifiedname>
-        <param>
-          <type>int</type>
-          <declname>val</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="40" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="51" bodyend="51"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1aef02c234408fe088583c42821caa0d94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
-        <type>int</type>
-        <definition>int godot::GazePipelineConfig::get_face_detect_height</definition>
-        <argsstring>() const</argsstring>
-        <name>get_face_detect_height</name>
-        <qualifiedname>godot::GazePipelineConfig::get_face_detect_height</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="41" column="9" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="52" bodyend="52"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="35" column="12" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="44" bodyend="44"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a296f11eb0223dfdf4beed9a016ecf577" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -294,7 +230,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="43" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="54" bodyend="57"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="39" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="48" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1aadc34335e6303754d68fbf4cc452c2d7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2i</type>
@@ -308,7 +244,39 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="44" column="14" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="59" bodyend="61"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="40" column="14" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="53" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1aeec3c1e201b40e54505c24126f6b7e9f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazePipelineConfig::set_debug_image_throttle_interval</definition>
+        <argsstring>(int val)</argsstring>
+        <name>set_debug_image_throttle_interval</name>
+        <qualifiedname>godot::GazePipelineConfig::set_debug_image_throttle_interval</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="42" column="10" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a74c56ae29b9dd4151d13b8b25621b734" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::GazePipelineConfig::get_debug_image_throttle_interval</definition>
+        <argsstring>() const</argsstring>
+        <name>get_debug_image_throttle_interval</name>
+        <qualifiedname>godot::GazePipelineConfig::get_debug_image_throttle_interval</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="43" column="9" bodyfile="src/godot/gaze_pipeline_config.cpp" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_pipeline_config_1a53d294b823e622f3bf4af870f8890a7f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref></type>
@@ -322,7 +290,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_pipeline_config.hpp" line="46" column="26" bodyfile="src/godot/gaze_pipeline_config.hpp" bodystart="46" bodyend="46"/>
+        <location file="src/godot/gaze_pipeline_config.hpp" line="45" column="26" bodyfile="src/godot/gaze_pipeline_config.hpp" bodystart="45" bodyend="45"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -351,23 +319,21 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_pipeline_config.hpp" line="15" column="1" bodyfile="src/godot/gaze_pipeline_config.hpp" bodystart="15" bodyend="47"/>
+    <location file="src/godot/gaze_pipeline_config.hpp" line="15" column="1" bodyfile="src/godot/gaze_pipeline_config.hpp" bodystart="15" bodyend="46"/>
     <listofallmembers>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a259c16d7f95e64721b41d2d6ba21ee79" prot="protected" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a0c1ad6611d203d2c4e09766e55b36d75" prot="private" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>config</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1ab71d1bf37f357ea809bb9a646f7d434a" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>GazePipelineConfig</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a9996da53f16bdde9d008cdf7b230be5a" prot="private" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>GDCLASS</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a53d294b823e622f3bf4af870f8890a7f" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_config</name></member>
+      <member refid="classgodot_1_1_gaze_pipeline_config_1a74c56ae29b9dd4151d13b8b25621b734" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_debug_image_throttle_interval</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1aadc34335e6303754d68fbf4cc452c2d7" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_desired_camera_size</name></member>
-      <member refid="classgodot_1_1_gaze_pipeline_config_1aef02c234408fe088583c42821caa0d94" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_face_detect_height</name></member>
-      <member refid="classgodot_1_1_gaze_pipeline_config_1ac47616c7bbc3caaac65f8bdca84d2d5c" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_face_detect_width</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a9b1757ebb73b330452cc2316b36660fb" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_ipd_mm</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a973c36c1b072454acdf53b6b6c26e7ba" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_nose_z</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a36d27ff51dc43fdb2772883aea646d70" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_pitch_t_gain</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1aea1d7c9a98ec54e90e76fd8e8b30d429" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>get_yaw_t_gain</name></member>
+      <member refid="classgodot_1_1_gaze_pipeline_config_1aeec3c1e201b40e54505c24126f6b7e9f" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_debug_image_throttle_interval</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a296f11eb0223dfdf4beed9a016ecf577" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_desired_camera_size</name></member>
-      <member refid="classgodot_1_1_gaze_pipeline_config_1a75304970a56ebdccd7917a2700470cca" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_face_detect_height</name></member>
-      <member refid="classgodot_1_1_gaze_pipeline_config_1ab5a6ce903e2befa8b334d3adf3933d04" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_face_detect_width</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a21207eeb4a02713da93ad26b2a4a27ee" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_ipd_mm</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a60d68a23b844e4f0ceee2f6f554d3c4b" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_nose_z</name></member>
       <member refid="classgodot_1_1_gaze_pipeline_config_1a194860cae58e4c270647bd0661ee5d95" prot="public" virt="non-virtual"><scope>godot::GazePipelineConfig</scope><name>set_pitch_t_gain</name></member>

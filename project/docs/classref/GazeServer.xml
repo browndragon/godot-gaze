@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeServer" inherits="Object">
+	<brief_description>Singleton coordinating display profiles, camera models, and thread-safe pipeline execution.</brief_description>
+	<description>GazeServer is the core architectural component of godot-gaze. It manages spatial entities (Displays, Cameras, Faces, Eye Trackers) using RIDs, executes processor pipelines on a background thread, applies calibration, projects gaze rays onto displays, and defer-emits signals to Godot clients.</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="display_create">
+			<return type="RID"></return>
+			<description>Create a display resource representation and return its unique RID.</description>
+		</method>
+		<method name="display_set_geometry">
+			<return type="void"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<param index="1" name="p_logical_size" type="Vector2"></param>
+			<param index="2" name="p_physical_size" type="Vector2"></param>
+			<description>Set display size geometry parameter tokens.
+
+p_display
+The display RID.
+p_logical_size
+Size of the screen in logical pixels.
+p_physical_size
+Physical width and height of the display in millimeters.
+
+The display RID.
+
+Size of the screen in logical pixels.
+
+Physical width and height of the display in millimeters.</description>
+		</method>
+		<method name="display_set_device_calibration">
+			<return type="void"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<param index="1" name="p_calibration" type="const Ref&lt; DeviceCalibration &gt; &amp;"></param>
+			<description>Set the active device calibration resource.</description>
+		</method>
+		<method name="display_set_bio_calibration">
+			<return type="void"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<param index="1" name="p_calibration" type="const Ref&lt; BioCalibration &gt; &amp;"></param>
+			<description>Set the active biological calibration resource.</description>
+		</method>
+		<method name="display_set_window_parameters">
+			<return type="void"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<param index="1" name="p_window_pos" type="Vector2"></param>
+			<param index="2" name="p_viewport_transform" type="Transform2D"></param>
+			<description>Set window location and viewport transformation tokens.
+
+p_display
+The display RID.
+p_window_pos
+Position of the window relative to primary screen top-left.
+p_viewport_transform
+Viewport scale and shift parameters.
+
+The display RID.
+
+Position of the window relative to primary screen top-left.
+
+Viewport scale and shift parameters.</description>
+		</method>
+		<method name="display_free">
+			<return type="void"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<description>Free the display resource.</description>
+		</method>
+		<method name="camera_create">
+			<return type="RID"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<description>Create a spatial camera model resource relative to a display.</description>
+		</method>
+		<method name="camera_set_offsets">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_offset" type="Vector3"></param>
+			<param index="2" name="p_tilt" type="double"></param>
+			<description>Set camera offset translation and tilt angle relative to display center-top.
+
+p_camera
+The camera RID.
+p_offset
+Offset position in millimeters.
+p_tilt
+Tilt angle in degrees (positive tilts down).
+
+The camera RID.
+
+Offset position in millimeters.
+
+Tilt angle in degrees (positive tilts down).</description>
+		</method>
+		<method name="camera_set_vision_rid">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<param index="1" name="p_vision_camera" type="RID"></param>
+			<description>Associate the camera model with a raw VisionServer camera capture stream.</description>
+		</method>
+		<method name="camera_free">
+			<return type="void"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Free the camera model resource.</description>
+		</method>
+		<method name="face_tracker_create">
+			<return type="RID"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description>Create a face tracker resource relative to a camera.</description>
+		</method>
+		<method name="face_tracker_set_pose">
+			<return type="void"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<param index="1" name="p_translation" type="Vector3"></param>
+			<param index="2" name="p_rotation" type="Vector3"></param>
+			<param index="3" name="p_detected" type="bool"></param>
+			<description>Set the current estimated head pose and detection status.
+
+p_face
+The face RID.
+p_translation
+Head translation vector in Camera Space (mm).
+p_rotation
+Head rodrigues rotation vector in Camera Space.
+p_detected
+True if face landmarking succeeded.
+
+The face RID.
+
+Head translation vector in Camera Space (mm).
+
+Head rodrigues rotation vector in Camera Space.
+
+True if face landmarking succeeded.</description>
+		</method>
+		<method name="face_tracker_free">
+			<return type="void"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<description>Free the face tracker resource.</description>
+		</method>
+		<method name="get_head_rotation_from_face_tracker">
+			<return type="Vector3"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<description>Retrieve head pose parameters in standard camera space.</description>
+		</method>
+		<method name="get_head_translation_from_face_tracker">
+			<return type="Vector3"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="eye_tracker_create">
+			<return type="RID"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<description>Create an eye tracker resource relative to a face.</description>
+		</method>
+		<method name="eye_tracker_set_gaze">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<param index="1" name="p_origin_cam" type="Vector3"></param>
+			<param index="2" name="p_direction_cam" type="Vector3"></param>
+			<description>Feed raw estimated gaze parameters in Camera Space and calculate screen intersections.
+
+p_eye
+The eye RID.
+p_origin_cam
+Gaze origin 3D vector in Camera Space (mm).
+p_direction_cam
+Gaze direction 3D unit vector in Camera Space.
+
+The eye RID.
+
+Gaze origin 3D vector in Camera Space (mm).
+
+Gaze direction 3D unit vector in Camera Space.</description>
+		</method>
+		<method name="eye_tracker_set_smoother">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<param index="1" name="p_smoother" type="const Ref&lt; Smoother &gt; &amp;"></param>
+			<description>Set a coordinate smoothing filter resource.</description>
+		</method>
+		<method name="eye_tracker_set_crop_requested">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<param index="1" name="p_requested" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="eye_tracker_is_crop_requested">
+			<return type="bool"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="tracker_get_eye_crops">
+			<return type="Array"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description>Retrieve eye crop images (left, right) for native UI display previews.</description>
+		</method>
+		<method name="eye_tracker_free">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description>Free the eye tracker resource.</description>
+		</method>
+		<method name="get_gaze_origin_from_eye_tracker">
+			<return type="Vector3"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description>Retrieve gaze origin and direction from eye tracker.</description>
+		</method>
+		<method name="get_gaze_direction_from_eye_tracker">
+			<return type="Vector3"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="set_crops_on_eye_tracker">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<param index="1" name="p_left_crop" type="const Ref&lt; Image &gt; &amp;"></param>
+			<param index="2" name="p_right_crop" type="const Ref&lt; Image &gt; &amp;"></param>
+			<description>Set eye crop preview images.</description>
+		</method>
+		<method name="reset_eye_tracker">
+			<return type="void"></return>
+			<param index="0" name="p_eye" type="RID"></param>
+			<description>Reset eye tracker coordinates and signal.</description>
+		</method>
+		<method name="emit_camera_frame_ready">
+			<return type="void"></return>
+			<param index="0" name="p_vision_camera" type="RID"></param>
+			<description>Emit gaze_data_ready for the VisionServer Camera RID.</description>
+		</method>
+		<method name="get_relative_transform">
+			<return type="Transform3D"></return>
+			<param index="0" name="p_entity" type="RID"></param>
+			<description>Retrieve the relative spatial Transform3D for display, camera, face, or eye.</description>
+		</method>
+		<method name="get_gaze_screen">
+			<return type="Vector2"></return>
+			<param index="0" name="p_display" type="RID"></param>
+			<param index="1" name="p_smoothed" type="bool"></param>
+			<description>Get the latest calculated gaze coordinate on the display in logical pixels.
+
+p_display
+The display RID.
+p_smoothed
+True to apply 1 Euro smoothing, false to return raw projection.
+
+The display RID.
+
+True to apply 1 Euro smoothing, false to return raw projection.</description>
+		</method>
+		<method name="is_face_detected">
+			<return type="bool"></return>
+			<param index="0" name="p_face" type="RID"></param>
+			<description>Query whether a face is actively detected on the tracker.</description>
+		</method>
+		<method name="set_pipeline_config">
+			<return type="void"></return>
+			<param index="0" name="p_config" type="const Ref&lt; GazePipelineConfig &gt; &amp;"></param>
+			<description>Update the server's pipeline configuration.</description>
+		</method>
+		<method name="trigger_process">
+			<return type="void"></return>
+			<description>Trigger processing of any pending frames on the main thread (poll results).</description>
+		</method>
+		<method name="start_processing">
+			<return type="void"></return>
+			<description>Start the background execution pipeline.</description>
+		</method>
+		<method name="stop_processing">
+			<return type="void"></return>
+			<description>Stop the background execution pipeline.</description>
+		</method>
+		<method name="set_verbosity">
+			<return type="void"></return>
+			<param index="0" name="level" type="int"></param>
+			<description></description>
+		</method>
+		<method name="get_verbosity">
+			<return type="int"></return>
+			<description></description>
+		</method>
+		<method name="get_singleton">
+			<return type="GazeServer *"></return>
+			<description>Get the GazeServer global singleton instance.</description>
+		</method>
+	</methods>
+	<members>
+		<member name="active_read_data" type="Gaze::GazeFrameData *" default="nullptr"></member>
+	</members>
+	<signals></signals>
+</class>

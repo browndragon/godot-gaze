@@ -1,4 +1,19 @@
 var searchData=
 [
-  ['rodrigues_5fto_5fbasis_0',['rodrigues_to_basis',['../math__defs_8hpp.html#a956327787e5b5bf19a5c91d0ec705d3e',1,'Gaze']]]
+  ['get_5fcamera_5fcurrent_5fframe_0',['get_camera_current_frame',['../classgodot_1_1_vision_server.html#ad9768aeaf47648743bff2c0b57b10735',1,'godot::VisionServer']]],
+  ['get_5fcamera_5fcurrent_5ftexture_1',['get_camera_current_texture',['../classgodot_1_1_vision_server.html#a89c29bb40ca0e5453d3faf6e636397b8',1,'godot::VisionServer::get_camera_current_texture()'],['../classgodot_1_1_mock_vision_server.html#aacade9a5fbef9962053deb89231cdcd4',1,'godot::MockVisionServer::get_camera_current_texture()']]],
+  ['get_5feuler_5fdeg_2',['get_euler_deg',['../struct_gaze_1_1_gaze_basis3_d.html#a66f4348637e49660c7d8f794b119a06b',1,'Gaze::GazeBasis3D']]],
+  ['get_5feuler_5fgaze_5fmodel_5fdeg_3',['get_euler_gaze_model_deg',['../struct_gaze_1_1_gaze_basis3_d.html#afcf1681d911879f52d45445d4a436df9',1,'Gaze::GazeBasis3D']]],
+  ['get_5fgaze_5fdirection_5finference_5fspace_4',['get_gaze_direction_inference_space',['../classgodot_1_1_gaze_tracker.html#a61b537a1bc8537669af7637814de0547',1,'godot::GazeTracker']]],
+  ['get_5fgaze_5forigin_5ffrom_5feye_5ftracker_5',['get_gaze_origin_from_eye_tracker',['../classgodot_1_1_gaze_server.html#af2129828efb865b7aec8e80143004829',1,'godot::GazeServer']]],
+  ['get_5fgaze_5fscreen_6',['get_gaze_screen',['../classgodot_1_1_gaze_server.html#a689bee74b07f945a3a3873562e03419c',1,'godot::GazeServer']]],
+  ['get_5fhead_5frotation_5ffrom_5fface_5ftracker_7',['get_head_rotation_from_face_tracker',['../classgodot_1_1_gaze_server.html#a467124adf7284bd00feb0a048cf95655',1,'godot::GazeServer']]],
+  ['get_5fhead_5frotation_5finference_5fspace_8',['get_head_rotation_inference_space',['../classgodot_1_1_gaze_tracker.html#a437589ce689084964876350e6c7e5558',1,'godot::GazeTracker']]],
+  ['get_5fhead_5ftransform_5fin_5fcamera_5fspace_9',['get_head_transform_in_camera_space',['../space__conversions_8hpp.html#a559d16811d9f570ba4583fd38db58e43',1,'Gaze::Inference']]],
+  ['get_5fhead_5ftranslation_5finference_5fspace_10',['get_head_translation_inference_space',['../classgodot_1_1_gaze_tracker.html#a5c203cd3cbd51a83b760e939f9264d1b',1,'godot::GazeTracker']]],
+  ['get_5fleft_5feye_5fcenter_5finference_5fspace_11',['get_left_eye_center_inference_space',['../classgodot_1_1_gaze_tracker.html#a502c4e8894085d527277e5ea160c9a8f',1,'godot::GazeTracker']]],
+  ['get_5fpitch_5fyaw_12',['get_pitch_yaw',['../struct_gaze_1_1_gaze_vector3.html#aff628a9be57c1dde3b69660e490c8b22',1,'Gaze::GazeVector3']]],
+  ['get_5frelative_5ftransform_13',['get_relative_transform',['../classgodot_1_1_gaze_server.html#a214f23f4e06a07b2e9119ec4de738c42',1,'godot::GazeServer']]],
+  ['get_5fright_5feye_5fcenter_5finference_5fspace_14',['get_right_eye_center_inference_space',['../classgodot_1_1_gaze_tracker.html#ad080bbaf152ced2cf674e830eb19b488',1,'godot::GazeTracker']]],
+  ['get_5fsingleton_15',['get_singleton',['../classgodot_1_1_gaze_server.html#ae0a3221c41f1ab000ff23e913709375a',1,'godot::GazeServer::get_singleton()'],['../classgodot_1_1_vision_server.html#a090d7a967b756eac3a0054e8132331b5',1,'godot::VisionServer::get_singleton()']]]
 ];

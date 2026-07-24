@@ -3,27 +3,127 @@
   <compounddef id="camera__sensor_8cpp" kind="file" language="C++">
     <compoundname>camera_sensor.cpp</compoundname>
     <includes refid="camera__sensor_8hpp" local="yes">camera_sensor.hpp</includes>
+    <includes refid="vision__server_8hpp" local="yes">vision_server.hpp</includes>
+    <includes refid="gaze__server_8hpp" local="yes">gaze_server.hpp</includes>
     <includes refid="log_8hpp" local="yes">log.hpp</includes>
-    <includes refid="opencv__camera_8hpp" local="yes">opencv_camera.hpp</includes>
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
     <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
-    <includes local="no">opencv2/imgproc.hpp</includes>
-    <includes local="no">opencv2/core.hpp</includes>
+    <includes local="no">godot_cpp/classes/rendering_server.hpp</includes>
+    <includes local="no">godot_cpp/classes/rendering_device.hpp</includes>
+    <includes local="no">godot_cpp/classes/texture2d.hpp</includes>
     <incdepgraph>
-      <node id="5">
+      <node id="47">
+        <label>../core/atomic_mailbox.hpp</label>
+        <link refid="atomic__mailbox_8hpp_source"/>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
         <label>camera_interface.hpp</label>
         <link refid="camera__interface_8hpp"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
       </node>
-      <node id="6">
+      <node id="26">
+        <label>camera_placement.hpp</label>
+        <link refid="camera__placement_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+      </node>
+      <node id="53">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>gaze_calibration.hpp</label>
+        <link refid="gaze__calibration_8hpp"/>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>../core/gaze_frame_data.hpp</label>
+        <link refid="gaze__frame__data_8hpp_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>gaze_model.hpp</label>
+        <link refid="gaze__model_8hpp"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="58">
         <label>log.hpp</label>
         <link refid="log_8hpp"/>
-        <childnode refid="7" relation="include">
+        <childnode refid="59" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="60" relation="include">
         </childnode>
-        <childnode refid="9" relation="include">
+        <childnode refid="55" relation="include">
         </childnode>
-        <childnode refid="10" relation="include">
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>../core/math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
+        <label>../core/pool.hpp</label>
+        <link refid="pool_8hpp_source"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -33,15 +133,19 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="16" relation="include">
-        </childnode>
         <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -54,50 +158,300 @@
         <childnode refid="5" relation="include">
         </childnode>
       </node>
-      <node id="11">
-        <label>opencv_camera.hpp</label>
-        <link refid="opencv__camera_8hpp"/>
-        <childnode refid="5" relation="include">
+      <node id="28">
+        <label>gaze_calibration_resource.hpp</label>
+        <link refid="gaze__calibration__resource_8hpp"/>
+        <childnode refid="29" relation="include">
         </childnode>
-        <childnode refid="12" relation="include">
+        <childnode refid="21" relation="include">
         </childnode>
-        <childnode refid="13" relation="include">
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
         </childnode>
       </node>
-      <node id="10">
+      <node id="37">
+        <label>gaze_frame.hpp</label>
+        <link refid="gaze__frame_8hpp_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>smoother.hpp</label>
+        <link refid="smoother_8hpp_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>vision_server.hpp</label>
+        <link refid="vision__server_8hpp_source"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="46">
+        <label>../native/gaze_tracking_pipeline.hpp</label>
+        <link refid="gaze__tracking__pipeline_8hpp_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>ort_gaze_model.hpp</label>
+        <link refid="ort__gaze__model_8hpp_source"/>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>ort_yunet_pipeline.hpp</label>
+        <link refid="ort__yunet__pipeline_8hpp_source"/>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>array</label>
+      </node>
+      <node id="45">
         <label>atomic</label>
+      </node>
+      <node id="15">
+        <label>cmath</label>
+      </node>
+      <node id="44">
+        <label>condition_variable</label>
+      </node>
+      <node id="51">
+        <label>cstddef</label>
+      </node>
+      <node id="12">
+        <label>cstdint</label>
       </node>
       <node id="4">
         <label>godot_cpp/classes/image.hpp</label>
       </node>
+      <node id="9">
+        <label>godot_cpp/classes/image_texture.hpp</label>
+      </node>
       <node id="3">
         <label>godot_cpp/classes/node3d.hpp</label>
       </node>
-      <node id="14">
-        <label>godot_cpp/core/class_db.hpp</label>
-      </node>
-      <node id="15">
-        <label>godot_cpp/variant/utility_functions.hpp</label>
-      </node>
       <node id="7">
-        <label>iostream</label>
+        <label>godot_cpp/classes/object.hpp</label>
       </node>
-      <node id="17">
-        <label>opencv2/core.hpp</label>
+      <node id="19">
+        <label>godot_cpp/classes/project_settings.hpp</label>
       </node>
-      <node id="16">
-        <label>opencv2/imgproc.hpp</label>
+      <node id="30">
+        <label>godot_cpp/classes/ref.hpp</label>
       </node>
-      <node id="12">
-        <label>opencv2/videoio.hpp</label>
+      <node id="18">
+        <label>godot_cpp/classes/ref_counted.hpp</label>
+      </node>
+      <node id="64">
+        <label>godot_cpp/classes/rendering_device.hpp</label>
+      </node>
+      <node id="63">
+        <label>godot_cpp/classes/rendering_server.hpp</label>
+      </node>
+      <node id="29">
+        <label>godot_cpp/classes/resource.hpp</label>
       </node>
       <node id="8">
+        <label>godot_cpp/classes/texture2d.hpp</label>
+      </node>
+      <node id="24">
+        <label>godot_cpp/classes/time.hpp</label>
+      </node>
+      <node id="61">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="10">
+        <label>godot_cpp/templates/rid_owner.hpp</label>
+      </node>
+      <node id="23">
+        <label>godot_cpp/templates/safe_refcount.hpp</label>
+      </node>
+      <node id="32">
+        <label>godot_cpp/variant/array.hpp</label>
+      </node>
+      <node id="38">
+        <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/variant/rid.hpp</label>
+      </node>
+      <node id="20">
+        <label>godot_cpp/variant/transform3d.hpp</label>
+      </node>
+      <node id="62">
+        <label>godot_cpp/variant/utility_functions.hpp</label>
+      </node>
+      <node id="33">
+        <label>godot_cpp/variant/variant.hpp</label>
+      </node>
+      <node id="21">
+        <label>godot_cpp/variant/vector2.hpp</label>
+      </node>
+      <node id="39">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
+      <node id="22">
+        <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+      <node id="59">
+        <label>iostream</label>
+      </node>
+      <node id="41">
+        <label>memory</label>
+      </node>
+      <node id="43">
+        <label>mutex</label>
+      </node>
+      <node id="54">
+        <label>onnxruntime_cxx_api.h</label>
+      </node>
+      <node id="60">
         <label>sstream</label>
       </node>
-      <node id="9">
+      <node id="55">
         <label>string</label>
       </node>
+      <node id="42">
+        <label>thread</label>
+      </node>
       <node id="13">
+        <label>type_traits</label>
+      </node>
+      <node id="48">
+        <label>utility</label>
+      </node>
+      <node id="16">
         <label>vector</label>
       </node>
     </incdepgraph>
@@ -108,108 +462,148 @@
     </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;camera_sensor.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="log_8hpp" kindref="compound">log.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="opencv__camera_8hpp" kindref="compound">opencv_camera.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;opencv2/imgproc.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;opencv2/core.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;vision_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;gaze_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="log_8hpp" kindref="compound">log.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/rendering_server.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/rendering_device.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/texture2d.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="10"><highlight class="normal"></highlight></codeline>
 <codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
 <codeline lineno="12"><highlight class="normal"></highlight></codeline>
 <codeline lineno="13"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;initialize_sensor&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::initialize_sensor);</highlight></codeline>
-<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;stop_sensor&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::stop_sensor);</highlight></codeline>
-<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_last_frame&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_last_frame);</highlight></codeline>
-<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_camera_device_id&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_camera_device_id);</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_camera_device_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;id&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_camera_device_id);</highlight></codeline>
-<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_resolution&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;width&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;height&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_resolution);</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_focal_length&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_focal_length);</highlight></codeline>
-<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_focal_length&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;focal&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_focal_length);</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;camera_device_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_camera_device_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_camera_device_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;focal_length&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_focal_length&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_focal_length&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_SIGNAL(MethodInfo(</highlight><highlight class="stringliteral">&quot;frame_ready&quot;</highlight><highlight class="normal">,<sp/>PropertyInfo(Variant::OBJECT,<sp/></highlight><highlight class="stringliteral">&quot;image&quot;</highlight><highlight class="normal">,<sp/>PROPERTY_HINT_RESOURCE_TYPE,<sp/></highlight><highlight class="stringliteral">&quot;Image&quot;</highlight><highlight class="normal">)));</highlight></codeline>
-<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal">CameraSensor::CameraSensor()<sp/>{}</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal">CameraSensor::~CameraSensor()<sp/>{</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>stop_sensor();</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;initialize_sensor&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::initialize_sensor);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;stop_sensor&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::stop_sensor);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_last_frame&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_last_frame);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_camera_device_id&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_camera_device_id);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_camera_device_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;id&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_camera_device_id);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_resolution&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;width&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;height&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_resolution);</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_focal_length&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_focal_length);</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_focal_length&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;focal&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_focal_length);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_camera_fov&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_camera_fov);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_camera_fov&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;fov&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::set_camera_fov);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_camera_rid&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::get_camera_rid);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;_on_gaze_data_ready&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rid&quot;</highlight><highlight class="normal">),<sp/>&amp;CameraSensor::_on_gaze_data_ready);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;camera_device_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_camera_device_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_camera_device_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;focal_length&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_focal_length&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_focal_length&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;camera_fov&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_camera_fov&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_camera_fov&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_SIGNAL(MethodInfo(</highlight><highlight class="stringliteral">&quot;frame_ready&quot;</highlight><highlight class="normal">,<sp/>PropertyInfo(Variant::OBJECT,<sp/></highlight><highlight class="stringliteral">&quot;image&quot;</highlight><highlight class="normal">,<sp/>PROPERTY_HINT_RESOURCE_TYPE,<sp/></highlight><highlight class="stringliteral">&quot;Image&quot;</highlight><highlight class="normal">)));</highlight></codeline>
 <codeline lineno="33"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>CameraSensor::initialize_sensor()<sp/>{</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>WEB_ENABLED</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!camera)<sp/>{</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera<sp/>=<sp/></highlight><highlight class="keyword">new</highlight><highlight class="normal"><sp/>Gaze::OpenCVCamera(camera_device_id);</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>camera-&gt;set_resolution(desired_width,<sp/>desired_height);</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>camera-&gt;initialize();</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="45"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"></highlight></codeline>
-<codeline lineno="47"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::stop_sensor()<sp/>{</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera)<sp/>{</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera-&gt;release();</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">delete</highlight><highlight class="normal"><sp/>camera;</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>last_frame.unref();</highlight></codeline>
-<codeline lineno="54"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="55"><highlight class="normal"></highlight></codeline>
-<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>CameraSensor::grab_frame(Gaze::Frame&amp;<sp/>out_frame)<sp/>{</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!camera)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>success<sp/>=<sp/>camera-&gt;grab_frame(out_frame);</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(success)<sp/>{</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Convert<sp/>captured<sp/>BGR<sp/>frame<sp/>to<sp/>RGB<sp/>Image<sp/>for<sp/>Godot</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cv::Mat<sp/>bgr(out_frame.height,<sp/>out_frame.width,<sp/>CV_8UC3,<sp/></highlight><highlight class="keyword">const_cast&lt;</highlight><highlight class="keywordtype">unsigned</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal">*</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(out_frame.data));</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cv::Mat<sp/>rgb;</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cv::cvtColor(bgr,<sp/>rgb,<sp/>cv::COLOR_BGR2RGB);</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PackedByteArray<sp/>img_data;</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>img_data.resize(rgb.total()<sp/>*<sp/>rgb.elemSize());</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::memcpy(img_data.ptrw(),<sp/>rgb.data,<sp/>img_data.size());</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"></highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>last_frame<sp/>=<sp/>Image::create_from_data(rgb.cols,<sp/>rgb.rows,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>img_data);</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>emit_signal(</highlight><highlight class="stringliteral">&quot;frame_ready&quot;</highlight><highlight class="normal">,<sp/>last_frame);</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>success;</highlight></codeline>
-<codeline lineno="73"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"></highlight></codeline>
-<codeline lineno="75"><highlight class="normal">Ref&lt;Image&gt;<sp/>CameraSensor::get_last_frame()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>last_frame;</highlight></codeline>
-<codeline lineno="77"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"></highlight></codeline>
-<codeline lineno="79"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_camera_device_id(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>camera_device_id<sp/>=<sp/>id;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">CameraSensor::CameraSensor()<sp/>{}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">CameraSensor::~CameraSensor()<sp/>{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_Destructor_Began&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>stop_sensor();</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_Destructor_Finished&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>CameraSensor::initialize_sensor()<sp/>{</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>VisionServer<sp/>*vs<sp/>=<sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>();</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!vs)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>camera_rid<sp/>=<sp/>vs-&gt;camera_create();</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>vs-&gt;camera_set_device_id(camera_rid,<sp/>camera_device_id);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>vs-&gt;camera_set_resolution(camera_rid,<sp/>desired_width,<sp/>desired_height);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>vs-&gt;camera_set_focal_length(camera_rid,<sp/>focal_length);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>vs-&gt;camera_set_fov(camera_rid,<sp/>camera_fov);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/><ref refid="classgodot_1_1_gaze_server_1ae0a3221c41f1ab000ff23e913709375a" kindref="member">GazeServer::get_singleton</ref>();</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(gs)<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gs-&gt;connect(</highlight><highlight class="stringliteral">&quot;gaze_data_ready&quot;</highlight><highlight class="normal">,<sp/>Callable(</highlight><highlight class="keyword">this</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;_on_gaze_data_ready&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vs-&gt;camera_start(camera_rid);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::stop_sensor()<sp/>{</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_StopSensor_Began&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/><ref refid="classgodot_1_1_gaze_server_1ae0a3221c41f1ab000ff23e913709375a" kindref="member">GazeServer::get_singleton</ref>();</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(gs<sp/>&amp;&amp;<sp/>gs-&gt;is_connected(</highlight><highlight class="stringliteral">&quot;gaze_data_ready&quot;</highlight><highlight class="normal">,<sp/>Callable(</highlight><highlight class="keyword">this</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;_on_gaze_data_ready&quot;</highlight><highlight class="normal">)))<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gs-&gt;disconnect(</highlight><highlight class="stringliteral">&quot;gaze_data_ready&quot;</highlight><highlight class="normal">,<sp/>Callable(</highlight><highlight class="keyword">this</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;_on_gaze_data_ready&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VisionServer<sp/>*vs<sp/>=<sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>();</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(vs)<sp/>{</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_StopSensor_CameraStop_Began&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vs-&gt;camera_stop(camera_rid);</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_StopSensor_CameraStop_Finished&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vs-&gt;camera_free(camera_rid);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera_rid<sp/>=<sp/>RID();</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(2,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_StopSensor_Finished&quot;</highlight><highlight class="normal">);</highlight></codeline>
 <codeline lineno="81"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="82"><highlight class="normal"></highlight></codeline>
-<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>CameraSensor::get_camera_device_id()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>camera_device_id;</highlight></codeline>
-<codeline lineno="85"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_resolution(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>h)<sp/>{</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>desired_width<sp/>=<sp/>w;</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>desired_height<sp/>=<sp/>h;</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera)<sp/>{</highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>camera-&gt;set_resolution(w,<sp/>h);</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="93"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"></highlight></codeline>
-<codeline lineno="95"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_focal_length(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>focal)<sp/>{</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>focal_length<sp/>=<sp/>focal;</highlight></codeline>
-<codeline lineno="97"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"></highlight></codeline>
-<codeline lineno="99"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>CameraSensor::get_focal_length()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>focal_length;</highlight></codeline>
-<codeline lineno="101"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="102"><highlight class="normal"></highlight></codeline>
-<codeline lineno="103"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal">Ref&lt;Image&gt;<sp/>CameraSensor::get_last_frame()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!camera_rid.is_valid())<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;();</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>VisionServer<sp/>*vs<sp/>=<sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>();</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(vs)<sp/>{</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>vs-&gt;camera_get_current_image(camera_rid);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Ref&lt;Image&gt;();</highlight></codeline>
+<codeline lineno="91"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_camera_device_id(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>camera_device_id<sp/>=<sp/>id;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>()-&gt;<ref refid="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" kindref="member">camera_set_device_id</ref>(camera_rid,<sp/></highlight><highlight class="keywordtype">id</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>CameraSensor::get_camera_device_id()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>camera_device_id;</highlight></codeline>
+<codeline lineno="102"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_resolution(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>w,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>h)<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>desired_width<sp/>=<sp/>w;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>desired_height<sp/>=<sp/>h;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>()-&gt;<ref refid="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" kindref="member">camera_set_resolution</ref>(camera_rid,<sp/>w,<sp/>h);</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="110"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"></highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_focal_length(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>focal)<sp/>{</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>focal_length<sp/>=<sp/>focal;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>()-&gt;<ref refid="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" kindref="member">camera_set_focal_length</ref>(camera_rid,<sp/>focal);</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>CameraSensor::get_focal_length()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>focal_length;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::set_camera_fov(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fov)<sp/>{</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>camera_fov<sp/>=<sp/>fov;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(camera_rid.is_valid())<sp/>{</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kindref="member">VisionServer::get_singleton</ref>()-&gt;<ref refid="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" kindref="member">camera_set_fov</ref>(camera_rid,<sp/>fov);</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="128"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>CameraSensor::get_camera_fov()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>camera_fov;</highlight></codeline>
+<codeline lineno="132"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>CameraSensor::_on_gaze_data_ready(RID<sp/>p_rid)<sp/>{</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::log_info(4,<sp/></highlight><highlight class="stringliteral">&quot;CameraSensor_GazeDataReady&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;p_rid&quot;</highlight><highlight class="normal">,<sp/>p_rid.get_id(),<sp/></highlight><highlight class="stringliteral">&quot;camera_rid&quot;</highlight><highlight class="normal">,<sp/>camera_rid.get_id());</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_rid<sp/>==<sp/>camera_rid)<sp/>{</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>emit_signal(</highlight><highlight class="stringliteral">&quot;frame_ready&quot;</highlight><highlight class="normal">,<sp/>get_last_frame());</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="139"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"></highlight></codeline>
+<codeline lineno="141"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"></highlight></codeline>
+<codeline lineno="143"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/camera_sensor.cpp"/>
   </compounddef>

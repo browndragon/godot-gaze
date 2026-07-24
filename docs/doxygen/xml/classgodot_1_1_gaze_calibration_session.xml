@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="22" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="22" bodyend="-1"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="21" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1a033d4f4eb7b162575b17fb0b0685d560" prot="private" static="no" mutable="no">
         <type>Array</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="23" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="23" bodyend="-1"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="22" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1aa4d9d69570daa5e1145b6947a77947e6" prot="private" static="no" mutable="no">
         <type>Array</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="24" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="24" bodyend="-1"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="23" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="23" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_gaze_calibration_session_1af5013ef92a1badbe0d80b2eea703cdb1" prot="private" static="no" mutable="no">
         <type>Array</type>
@@ -59,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="25" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="25" bodyend="-1"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="24" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -81,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="19" column="5"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="18" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -97,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="28" column="17" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="14" bodyend="35"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="27" column="17" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="16" bodyend="37"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -113,7 +113,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="31" column="5"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="30" column="5"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ad998acb9a5b1daee1cda0162a8661659" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -127,7 +127,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="32" column="13"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="31" column="13"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a6f47175da99f04eb166cb76e21f5544a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -153,7 +153,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="34" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="37" bodyend="41"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="33" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="39" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a4485e16b76a3eb95b0f7aa17361a09cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -167,7 +167,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="35" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="43" bodyend="47"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="34" column="10" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="45" bodyend="49"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a36a2c3186d93d2d379a12a3702e38c68" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>int</type>
@@ -181,11 +181,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="36" column="9" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="49" bodyend="51"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="35" column="9" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="51" bodyend="53"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1af64be64aada8da958b9f9f08211313fc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_calibration" kindref="compound">GazeCalibration</ref> &gt;</type>
-        <definition>Ref&lt; GazeCalibration &gt; godot::GazeCalibrationSession::calculate_calibration</definition>
+      <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a641b0c66c7cb5ba1cfa66258c1fd6f39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Dictionary</type>
+        <definition>Dictionary godot::GazeCalibrationSession::calculate_calibration</definition>
         <argsstring>(GazeTracker *tracker)</argsstring>
         <name>calculate_calibration</name>
         <qualifiedname>godot::GazeCalibrationSession::calculate_calibration</qualifiedname>
@@ -199,7 +199,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="38" column="9" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="53" bodyend="141"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="37" column="16" bodyfile="src/godot/gaze_calibration_session.cpp" bodystart="55" bodyend="155"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1aced309cd7980c5cb7fb30d50b3731bf1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -217,7 +217,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="41" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="41" bodyend="41"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="40" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="40" bodyend="40"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae1881b09b07a5011f03dca72dfd022c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -231,7 +231,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="42" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="42" bodyend="42"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="41" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="41" bodyend="41"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ab608393162510b89991524bd10dbac1f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -249,7 +249,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="44" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="44" bodyend="44"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="43" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="43" bodyend="43"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae8af9f0795f6a1e50b25d4dd178bc38d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Array</type>
@@ -263,7 +263,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="45" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="45" bodyend="45"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="44" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="44" bodyend="44"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ab2c792cb233bcc60b2f26d725037ac8c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -281,7 +281,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="47" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="47" bodyend="47"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="46" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1ae0a5e490a391f5ed4768368f7d2b9c22" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Array</type>
@@ -295,7 +295,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="48" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="48" bodyend="48"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="47" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="47" bodyend="47"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1a36f65f1f793b9148e350baf7e8f54702" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -313,7 +313,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="50" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="50" bodyend="50"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="49" column="10" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="49" bodyend="49"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_calibration_session_1abe4883669c53878d0a0c6a7d543c839d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Array</type>
@@ -327,7 +327,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_session.hpp" line="51" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="51" bodyend="51"/>
+        <location file="src/godot/gaze_calibration_session.hpp" line="50" column="11" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="50" bodyend="50"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -356,11 +356,11 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_calibration_session.hpp" line="18" column="1" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="18" bodyend="52"/>
+    <location file="src/godot/gaze_calibration_session.hpp" line="17" column="1" bodyfile="src/godot/gaze_calibration_session.hpp" bodystart="17" bodyend="51"/>
     <listofallmembers>
       <member refid="classgodot_1_1_gaze_calibration_session_1a75b96d8e7992cdf9f973bff72fdc2789" prot="protected" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_gaze_calibration_session_1a6f47175da99f04eb166cb76e21f5544a" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>add_sample</name></member>
-      <member refid="classgodot_1_1_gaze_calibration_session_1af64be64aada8da958b9f9f08211313fc" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>calculate_calibration</name></member>
+      <member refid="classgodot_1_1_gaze_calibration_session_1a641b0c66c7cb5ba1cfa66258c1fd6f39" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>calculate_calibration</name></member>
       <member refid="classgodot_1_1_gaze_calibration_session_1a4485e16b76a3eb95b0f7aa17361a09cd" prot="public" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>clear</name></member>
       <member refid="classgodot_1_1_gaze_calibration_session_1a5e11fe691bd05bcbc2232e0c29949918" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>freeze_camera_params</name></member>
       <member refid="classgodot_1_1_gaze_calibration_session_1af5013ef92a1badbe0d80b2eea703cdb1" prot="private" virt="non-virtual"><scope>godot::GazeCalibrationSession</scope><name>gaze_directions</name></member>

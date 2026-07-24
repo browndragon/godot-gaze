@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__frame_8cpp" kind="file" language="C++">
+    <compoundname>gaze_frame.cpp</compoundname>
+    <includes refid="gaze__frame_8hpp" local="yes">gaze_frame.hpp</includes>
+    <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>src/godot/gaze_frame.cpp</label>
+        <link refid="gaze__frame_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gaze_frame.hpp</label>
+        <link refid="gaze__frame_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>godot_cpp/classes/image.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/object.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="9">
+        <label>godot_cpp/variant/utility_functions.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;gaze_frame.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeFrame::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_left_eye_crop&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_left_eye_crop);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_right_eye_crop&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_right_eye_crop);</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_full_crop&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_full_crop);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_camera_size&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_camera_size);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_timestamp&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_timestamp);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_face_detected&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_face_detected);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_gaze_success&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_gaze_success);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_head_translation&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_head_translation);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_head_rotation&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_head_rotation);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_gaze_origin&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_gaze_origin);</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_gaze_direction&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeFrame::get_gaze_direction);</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Only<sp/>register<sp/>primitive<sp/>properties<sp/>to<sp/>avoid<sp/>ClassDB<sp/>&quot;Instantiated<sp/>Image<sp/>used<sp/>as<sp/>default<sp/>value&quot;<sp/>warnings</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I,<sp/></highlight><highlight class="stringliteral">&quot;camera_size&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_camera_size&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;timestamp&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_timestamp&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::BOOL,<sp/></highlight><highlight class="stringliteral">&quot;face_detected&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_face_detected&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::BOOL,<sp/></highlight><highlight class="stringliteral">&quot;gaze_success&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_gaze_success&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;head_translation&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_head_translation&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;head_rotation&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_head_rotation&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;gaze_origin&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_gaze_origin&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;gaze_direction&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_gaze_direction&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal">GazeFrame::GazeFrame()<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>initialize_buffers();</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal">GazeFrame::~GazeFrame()<sp/>{}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeFrame::initialize_buffers()<sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_bytes.resize(10800);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_bytes.resize(10800);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>full_crop_bytes.resize(160<sp/>*<sp/>128<sp/>*<sp/>3);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Initialize<sp/>images<sp/>using<sp/>dummy/separate<sp/>arrays<sp/>so<sp/>COW<sp/>is<sp/>not<sp/>triggered<sp/>on<sp/>the<sp/>real<sp/>buffers</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>PackedByteArray<sp/>dummy_bytes;</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>dummy_bytes.resize(10800);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_image<sp/>=<sp/>Image::create_from_data(60,<sp/>60,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>dummy_bytes);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_image<sp/>=<sp/>Image::create_from_data(60,<sp/>60,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>dummy_bytes);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>PackedByteArray<sp/>dummy_full;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>dummy_full.resize(160<sp/>*<sp/>128<sp/>*<sp/>3);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>full_crop_image<sp/>=<sp/>Image::create_from_data(160,<sp/>128,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>dummy_full);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeFrame::resize_full_crop(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>width,<sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>height)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>required_size<sp/>=<sp/>width<sp/>*<sp/>height<sp/>*<sp/>3;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(full_crop_bytes.size()<sp/>!=<sp/>required_size)<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>full_crop_bytes.resize(required_size);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="59"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeFrame::post_process()<sp/>{</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_image<sp/>=<sp/>Image::create_from_data(60,<sp/>60,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>left_eye_bytes);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_image<sp/>=<sp/>Image::create_from_data(60,<sp/>60,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>right_eye_bytes);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>full_width<sp/>=<sp/>160;</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>full_height<sp/>=<sp/>128;</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(full_crop_bytes.size()<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>full_height<sp/>=<sp/>full_crop_bytes.size()<sp/>/<sp/>(full_width<sp/>*<sp/>3);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>full_crop_image<sp/>=<sp/>Image::create_from_data(full_width,<sp/>full_height,<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">,<sp/>Image::FORMAT_RGB8,<sp/>full_crop_bytes);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal">Ref&lt;Image&gt;<sp/>GazeFrame::get_left_eye_crop()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>left_eye_image;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77"><highlight class="normal">Ref&lt;Image&gt;<sp/>GazeFrame::get_right_eye_crop()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>right_eye_image;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal">Ref&lt;Image&gt;<sp/>GazeFrame::get_full_crop()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>full_crop_image;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="85"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_frame.cpp"/>
+  </compounddef>
+</doxygen>

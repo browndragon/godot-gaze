@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a5b9ab1143e3f7043193ff30f28550522" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServerImpl::DisplayInfo::BioCalibrationData::is_valid</definition>
+        <argsstring></argsstring>
+        <name>is_valid</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData::is_valid</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="33" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1af3363e709a86b3e0677ff24bc3f06db2" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeServerImpl::DisplayInfo::BioCalibrationData::bias_pitch</definition>
+        <argsstring></argsstring>
+        <name>bias_pitch</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData::bias_pitch</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="34" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1aac2c86aedcd36bc5df422b89b1f88579" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeServerImpl::DisplayInfo::BioCalibrationData::bias_yaw</definition>
+        <argsstring></argsstring>
+        <name>bias_yaw</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData::bias_yaw</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="35" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a1b65c05d795b8bcf6295aa37df486cb3" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeServerImpl::DisplayInfo::BioCalibrationData::scale_yaw</definition>
+        <argsstring></argsstring>
+        <name>scale_yaw</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData::scale_yaw</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="36" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a4b28c3e37b18640e04da94d66d954886" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeServerImpl::DisplayInfo::BioCalibrationData::scale_pitch</definition>
+        <argsstring></argsstring>
+        <name>scale_pitch</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::BioCalibrationData::scale_pitch</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="37" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="32" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="32" bodyend="38"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1af3363e709a86b3e0677ff24bc3f06db2" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>bias_pitch</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1aac2c86aedcd36bc5df422b89b1f88579" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>bias_yaw</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a5b9ab1143e3f7043193ff30f28550522" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>is_valid</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a4b28c3e37b18640e04da94d66d954886" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>scale_pitch</name></member>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a1b65c05d795b8bcf6295aa37df486cb3" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>scale_yaw</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

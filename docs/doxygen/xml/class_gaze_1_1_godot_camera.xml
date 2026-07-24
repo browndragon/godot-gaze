@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_godot_camera" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::GodotCamera</compoundname>
+    <basecompoundref refid="class_gaze_1_1_camera_interface" prot="public" virt="non-virtual">Gaze::CameraInterface</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1afbd8c52d6bb23a845b43b872cf02cf4b" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GodotCamera::device_id</definition>
+        <argsstring></argsstring>
+        <name>device_id</name>
+        <qualifiedname>Gaze::GodotCamera::device_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="18" column="9" bodyfile="src/godot/godot_camera.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1aa9d407bfc45ee9f5fe760523cd98288e" prot="private" static="no" mutable="no">
+        <type>godot::Ref&lt; godot::CameraFeed &gt;</type>
+        <definition>godot::Ref&lt;godot::CameraFeed&gt; Gaze::GodotCamera::feed</definition>
+        <argsstring></argsstring>
+        <name>feed</name>
+        <qualifiedname>Gaze::GodotCamera::feed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="19" column="16" bodyfile="src/godot/godot_camera.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1ae5544884f75906ce0566cd030da41945" prot="private" static="no" mutable="no">
+        <type>godot::Ref&lt; godot::CameraTexture &gt;</type>
+        <definition>godot::Ref&lt;godot::CameraTexture&gt; Gaze::GodotCamera::camera_texture</definition>
+        <argsstring></argsstring>
+        <name>camera_texture</name>
+        <qualifiedname>Gaze::GodotCamera::camera_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="20" column="16" bodyfile="src/godot/godot_camera.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1af2f4d954444afa2b33a626ef05a3a92f" prot="private" static="no" mutable="no">
+        <type>godot::Ref&lt; godot::CameraTexture &gt;</type>
+        <definition>godot::Ref&lt;godot::CameraTexture&gt; Gaze::GodotCamera::y_texture</definition>
+        <argsstring></argsstring>
+        <name>y_texture</name>
+        <qualifiedname>Gaze::GodotCamera::y_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="21" column="16" bodyfile="src/godot/godot_camera.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1ad5ea0dcc327e9499e58bf0c34d35098a" prot="private" static="no" mutable="no">
+        <type>godot::Ref&lt; godot::CameraTexture &gt;</type>
+        <definition>godot::Ref&lt;godot::CameraTexture&gt; Gaze::GodotCamera::cbcr_texture</definition>
+        <argsstring></argsstring>
+        <name>cbcr_texture</name>
+        <qualifiedname>Gaze::GodotCamera::cbcr_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="22" column="16" bodyfile="src/godot/godot_camera.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1a49b03890630cc9433e07b59106e28af1" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::GodotCamera::is_ycbcr</definition>
+        <argsstring></argsstring>
+        <name>is_ycbcr</name>
+        <qualifiedname>Gaze::GodotCamera::is_ycbcr</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="23" column="10" bodyfile="src/godot/godot_camera.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1a84e09f22e2841033694ae75fb4c488e3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::GodotCamera::horizontal_flip</definition>
+        <argsstring></argsstring>
+        <name>horizontal_flip</name>
+        <qualifiedname>Gaze::GodotCamera::horizontal_flip</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="24" column="10" bodyfile="src/godot/godot_camera.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1ae3dba7d954b82054d61b82da5521adc1" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; unsigned char &gt;</type>
+        <definition>std::vector&lt;unsigned char&gt; Gaze::GodotCamera::frame_buffer</definition>
+        <argsstring></argsstring>
+        <name>frame_buffer</name>
+        <qualifiedname>Gaze::GodotCamera::frame_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="25" column="17" bodyfile="src/godot/godot_camera.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1a859683030696a452a766e1358cee8da8" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GodotCamera::start_time</definition>
+        <argsstring></argsstring>
+        <name>start_time</name>
+        <qualifiedname>Gaze::GodotCamera::start_time</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="26" column="12" bodyfile="src/godot/godot_camera.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1a222c51343fd8e206f339ccbec0f691bf" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GodotCamera::target_width</definition>
+        <argsstring></argsstring>
+        <name>target_width</name>
+        <qualifiedname>Gaze::GodotCamera::target_width</qualifiedname>
+        <initializer>= 640</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="27" column="9" bodyfile="src/godot/godot_camera.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_godot_camera_1ad3cd6f89762f5734cc89fad5c032dc39" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GodotCamera::target_height</definition>
+        <argsstring></argsstring>
+        <name>target_height</name>
+        <qualifiedname>Gaze::GodotCamera::target_height</qualifiedname>
+        <initializer>= 480</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="28" column="9" bodyfile="src/godot/godot_camera.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a36939af6f7faf6fd6eb772baaca1d7d0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::GodotCamera::GodotCamera</definition>
+        <argsstring>(int device=0)</argsstring>
+        <name>GodotCamera</name>
+        <qualifiedname>Gaze::GodotCamera::GodotCamera</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>device</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="31" column="5" bodyfile="src/godot/godot_camera.cpp" bodystart="10" bodyend="10"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1acd29c43588f15f5b18bcdc2021a8ce31" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>Gaze::GodotCamera::~GodotCamera</definition>
+        <argsstring>()</argsstring>
+        <name>~GodotCamera</name>
+        <qualifiedname>Gaze::GodotCamera::~GodotCamera</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="32" column="13" bodyfile="src/godot/godot_camera.cpp" bodystart="12" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a9790ab2213ea82bb77632fe6e765e150" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::GodotCamera::initialize</definition>
+        <argsstring>() override</argsstring>
+        <name>initialize</name>
+        <qualifiedname>Gaze::GodotCamera::initialize</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1ae668e7320344cb3019ce9e76611021b2">initialize</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="34" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="18" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a898f32280666255531b0fbf184107013" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::GodotCamera::set_resolution</definition>
+        <argsstring>(int w, int h) override</argsstring>
+        <name>set_resolution</name>
+        <qualifiedname>Gaze::GodotCamera::set_resolution</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1a45223e7aff6836dccd70cab88d3629e3">set_resolution</reimplements>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="35" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a1f5709064fc408789305988d04384325" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool Gaze::GodotCamera::grab_frame</definition>
+        <argsstring>(Frame &amp;out_frame) override</argsstring>
+        <name>grab_frame</name>
+        <qualifiedname>Gaze::GodotCamera::grab_frame</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1a1e579ab093b72058590d7be0dbefea3b">grab_frame</reimplements>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Frame</ref> &amp;</type>
+          <declname>out_frame</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="36" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="89" bodyend="269"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a8c1634ff2034399afb54fb07001bb3cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void Gaze::GodotCamera::release</definition>
+        <argsstring>() override</argsstring>
+        <name>release</name>
+        <qualifiedname>Gaze::GodotCamera::release</qualifiedname>
+        <reimplements refid="class_gaze_1_1_camera_interface_1ac4817a801844e75ed43e1550b6eb0e57">release</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/godot_camera.hpp" line="37" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="271" bodyend="299"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Gaze::CameraInterface</label>
+        <link refid="class_gaze_1_1_camera_interface"/>
+      </node>
+      <node id="1">
+        <label>Gaze::GodotCamera</label>
+        <link refid="class_gaze_1_1_godot_camera"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::CameraInterface</label>
+        <link refid="class_gaze_1_1_camera_interface"/>
+      </node>
+      <node id="1">
+        <label>Gaze::GodotCamera</label>
+        <link refid="class_gaze_1_1_godot_camera"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/godot_camera.hpp" line="16" column="1" bodyfile="src/godot/godot_camera.hpp" bodystart="16" bodyend="38"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_godot_camera_1ae5544884f75906ce0566cd030da41945" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>camera_texture</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1ad5ea0dcc327e9499e58bf0c34d35098a" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>cbcr_texture</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1afbd8c52d6bb23a845b43b872cf02cf4b" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>device_id</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1aa9d407bfc45ee9f5fe760523cd98288e" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>feed</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1ae3dba7d954b82054d61b82da5521adc1" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>frame_buffer</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a36939af6f7faf6fd6eb772baaca1d7d0" prot="public" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>GodotCamera</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a1f5709064fc408789305988d04384325" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>grab_frame</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a84e09f22e2841033694ae75fb4c488e3" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>horizontal_flip</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a9790ab2213ea82bb77632fe6e765e150" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a49b03890630cc9433e07b59106e28af1" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>is_ycbcr</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a8c1634ff2034399afb54fb07001bb3cd" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>release</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a898f32280666255531b0fbf184107013" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>set_resolution</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a859683030696a452a766e1358cee8da8" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>start_time</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1ad3cd6f89762f5734cc89fad5c032dc39" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>target_height</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1a222c51343fd8e206f339ccbec0f691bf" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>target_width</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1af2f4d954444afa2b33a626ef05a3a92f" prot="private" virt="non-virtual"><scope>Gaze::GodotCamera</scope><name>y_texture</name></member>
+      <member refid="class_gaze_1_1_camera_interface_1a8592a72f65f30714be103525af7fa010" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>~CameraInterface</name></member>
+      <member refid="class_gaze_1_1_godot_camera_1acd29c43588f15f5b18bcdc2021a8ce31" prot="public" virt="virtual"><scope>Gaze::GodotCamera</scope><name>~GodotCamera</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

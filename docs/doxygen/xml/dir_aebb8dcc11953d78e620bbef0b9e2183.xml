@@ -2,24 +2,40 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir">
     <compoundname>src/core</compoundname>
+    <innerfile refid="atomic__mailbox_8hpp">atomic_mailbox.hpp</innerfile>
     <innerfile refid="camera__interface_8hpp">camera_interface.hpp</innerfile>
     <innerfile refid="camera__placement_8hpp">camera_placement.hpp</innerfile>
+    <innerfile refid="cpu__image__warper_8hpp">cpu_image_warper.hpp</innerfile>
     <innerfile refid="face__model__geometry_8hpp">face_model_geometry.hpp</innerfile>
     <innerfile refid="face__pipeline_8hpp">face_pipeline.hpp</innerfile>
     <innerfile refid="gaze__calibration_8hpp">gaze_calibration.hpp</innerfile>
     <innerfile refid="gaze__calibration__estimator_8cpp">gaze_calibration_estimator.cpp</innerfile>
     <innerfile refid="gaze__calibration__estimator_8hpp">gaze_calibration_estimator.hpp</innerfile>
+    <innerfile refid="gaze__frame__data_8hpp">gaze_frame_data.hpp</innerfile>
     <innerfile refid="gaze__model_8hpp">gaze_model.hpp</innerfile>
     <innerfile refid="log_8hpp">log.hpp</innerfile>
     <innerfile refid="math__defs_8hpp">math_defs.hpp</innerfile>
     <innerfile refid="pipeline__config_8hpp">pipeline_config.hpp</innerfile>
+    <innerfile refid="pnp__solver_8cpp">pnp_solver.cpp</innerfile>
+    <innerfile refid="pnp__solver_8hpp">pnp_solver.hpp</innerfile>
+    <innerfile refid="pool_8hpp">pool.hpp</innerfile>
     <innerfile refid="projection__engine_8cpp">projection_engine.cpp</innerfile>
     <innerfile refid="projection__engine_8hpp">projection_engine.hpp</innerfile>
     <innerfile refid="screen__projector_8cpp">screen_projector.cpp</innerfile>
     <innerfile refid="screen__projector_8hpp">screen_projector.hpp</innerfile>
+    <innerfile refid="space__conversions_8hpp">space_conversions.hpp</innerfile>
     <briefdescription>
+<para>Core tracking logic and mathematical definitions. *. </para>
     </briefdescription>
     <detaileddescription>
+<para>/**<itemizedlist>
+<listitem></listitem><listitem><para>* This directory contains platform-agnostic, zero-dependency C++ definitions</para>
+</listitem><listitem><para>for gaze tracking, calibration, geometry, and utility helpers. */</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="dir_aebb8dcc11953d78e620bbef0b9e2183_1autotoc_md0">
+<title>Core Layer</title><para>The Core layer contains the mathematics, calibration algorithms, and interface definitions for the godot-gaze tracking pipeline. It is completely independent of the Godot engine and platform-specific windowing or capture systems. </para>
+</sect1>
     </detaileddescription>
     <location file="src/core/"/>
   </compounddef>

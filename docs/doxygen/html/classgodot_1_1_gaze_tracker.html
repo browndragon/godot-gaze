@@ -157,12 +157,16 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:abc34028b4fff9c08980e1b5bb29dbc46" id="r_abc34028b4fff9c08980e1b5bb29dbc46"><td class="memItemLeft"><a id="abc34028b4fff9c08980e1b5bb29dbc46" name="abc34028b4fff9c08980e1b5bb29dbc46"></a>
+void&#160;</td><td class="memItemRight"><b>update_projection_parameters</b> ()</td></tr>
 <tr class="memitem:a51b2ad7aad517cb2d86b6cfc4fe11920" id="r_a51b2ad7aad517cb2d86b6cfc4fe11920"><td class="memItemLeft"><a id="a51b2ad7aad517cb2d86b6cfc4fe11920" name="a51b2ad7aad517cb2d86b6cfc4fe11920"></a>
 virtual void&#160;</td><td class="memItemRight"><b>_ready</b> () override</td></tr>
 <tr class="memitem:a733de09bb6a48643398803deee5f583a" id="r_a733de09bb6a48643398803deee5f583a"><td class="memItemLeft"><a id="a733de09bb6a48643398803deee5f583a" name="a733de09bb6a48643398803deee5f583a"></a>
 virtual void&#160;</td><td class="memItemRight"><b>_process</b> (double delta) override</td></tr>
+<tr class="memitem:ab1953b1aca2a4e73331d063d41f70d78" id="r_ab1953b1aca2a4e73331d063d41f70d78"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ab1953b1aca2a4e73331d063d41f70d78">start_tracker</a> ()</td></tr>
+<tr class="memdesc:ab1953b1aca2a4e73331d063d41f70d78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Starts the gaze tracker, setting up camera and models.  <br /></td></tr>
 <tr class="memitem:a875df127fa340856d785960dfd111fd3" id="r_a875df127fa340856d785960dfd111fd3"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a875df127fa340856d785960dfd111fd3">initialize_tracker</a> ()</td></tr>
-<tr class="memdesc:a875df127fa340856d785960dfd111fd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes the gaze tracker, setting up camera and models.  <br /></td></tr>
+<tr class="memdesc:a875df127fa340856d785960dfd111fd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">[DEPRECATED] Backward-compatible alias for <a class="el" href="#ab1953b1aca2a4e73331d063d41f70d78" title="Starts the gaze tracker, setting up camera and models.">start_tracker()</a>.  <br /></td></tr>
 <tr class="memitem:a911ec38d4f0c14db02406e8d41bb422b" id="r_a911ec38d4f0c14db02406e8d41bb422b"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a911ec38d4f0c14db02406e8d41bb422b">stop_tracker</a> (bool p_emit_signal=true)</td></tr>
 <tr class="memdesc:a911ec38d4f0c14db02406e8d41bb422b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stops camera acquisition and model inference pipelines.  <br /></td></tr>
 <tr class="memitem:a3b905acf0a094ccc9ec8a9af91e85968" id="r_a3b905acf0a094ccc9ec8a9af91e85968"><td class="memItemLeft"><a id="a3b905acf0a094ccc9ec8a9af91e85968" name="a3b905acf0a094ccc9ec8a9af91e85968"></a>
@@ -180,10 +184,6 @@ void&#160;</td><td class="memItemRight"><b>clear_calibration</b> ()</td></tr>
 <tr class="memdesc:aac3804e601c511b17726227b4e4596bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filters raw gaze coordinates using configured smoothing algorithms.  <br /></td></tr>
 <tr class="memitem:ac765619951568b95fbc3e0d4d8f11011" id="r_ac765619951568b95fbc3e0d4d8f11011"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac765619951568b95fbc3e0d4d8f11011">feed_gaze</a> (bool face_detected, Vector3 origin, Vector3 direction)</td></tr>
 <tr class="memdesc:ac765619951568b95fbc3e0d4d8f11011"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually injects raw gaze origin and direction coordinates.  <br /></td></tr>
-<tr class="memitem:a43c876808cc5aecd16cd81c57ec6dd51" id="r_a43c876808cc5aecd16cd81c57ec6dd51"><td class="memItemLeft"><a id="a43c876808cc5aecd16cd81c57ec6dd51" name="a43c876808cc5aecd16cd81c57ec6dd51"></a>
-void&#160;</td><td class="memItemRight"><b>feed_gaze_web_raw</b> (const Array &amp;args)</td></tr>
-<tr class="memitem:a798b8634e92865af404feb6551ca0277" id="r_a798b8634e92865af404feb6551ca0277"><td class="memItemLeft"><a id="a798b8634e92865af404feb6551ca0277" name="a798b8634e92865af404feb6551ca0277"></a>
-void&#160;</td><td class="memItemRight"><b>on_sidecar_ready</b> (const Array &amp;args)</td></tr>
 <tr class="memitem:a8ea3a2ed2fd225a1e1556e46b9607e94" id="r_a8ea3a2ed2fd225a1e1556e46b9607e94"><td class="memItemLeft"><a id="a8ea3a2ed2fd225a1e1556e46b9607e94" name="a8ea3a2ed2fd225a1e1556e46b9607e94"></a>
 <a class="el" href="classgodot_1_1_camera_sensor.html">CameraSensor</a> *&#160;</td><td class="memItemRight"><b>get_camera_sensor</b> () const</td></tr>
 <tr class="memitem:adb7e961041b74e9c108aa287b3c7e059" id="r_adb7e961041b74e9c108aa287b3c7e059"><td class="memItemLeft"><a id="adb7e961041b74e9c108aa287b3c7e059" name="adb7e961041b74e9c108aa287b3c7e059"></a>
@@ -200,14 +200,14 @@ int&#160;</td><td class="memItemRight"><b>get_lifecycle_state</b> () const</td><
 void&#160;</td><td class="memItemRight"><b>set_autostart</b> (bool p_autostart)</td></tr>
 <tr class="memitem:ad212f9fb5b44379f21628ae38dfc46b2" id="r_ad212f9fb5b44379f21628ae38dfc46b2"><td class="memItemLeft"><a id="ad212f9fb5b44379f21628ae38dfc46b2" name="ad212f9fb5b44379f21628ae38dfc46b2"></a>
 bool&#160;</td><td class="memItemRight"><b>get_autostart</b> () const</td></tr>
-<tr class="memitem:abdfbfe884504e8a9ea0948824c9fbddd" id="r_abdfbfe884504e8a9ea0948824c9fbddd"><td class="memItemLeft"><a id="abdfbfe884504e8a9ea0948824c9fbddd" name="abdfbfe884504e8a9ea0948824c9fbddd"></a>
-void&#160;</td><td class="memItemRight"><b>set_pipeline_config</b> (const Ref&lt; <a class="el" href="classgodot_1_1_gaze_pipeline_config.html">GazePipelineConfig</a> &gt; &amp;res)</td></tr>
-<tr class="memitem:a4a70c89daf466ed4df58758c02e1d930" id="r_a4a70c89daf466ed4df58758c02e1d930"><td class="memItemLeft"><a id="a4a70c89daf466ed4df58758c02e1d930" name="a4a70c89daf466ed4df58758c02e1d930"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_gaze_pipeline_config.html">GazePipelineConfig</a> &gt;&#160;</td><td class="memItemRight"><b>get_pipeline_config</b> () const</td></tr>
-<tr class="memitem:aed07abeb9c3f7e3e83822c509e1aaaaf" id="r_aed07abeb9c3f7e3e83822c509e1aaaaf"><td class="memItemLeft"><a id="aed07abeb9c3f7e3e83822c509e1aaaaf" name="aed07abeb9c3f7e3e83822c509e1aaaaf"></a>
-void&#160;</td><td class="memItemRight"><b>set_calibration_resource</b> (const Ref&lt; <a class="el" href="classgodot_1_1_gaze_calibration.html">GazeCalibration</a> &gt; &amp;res)</td></tr>
-<tr class="memitem:aeab989cfd09819eba97766f5e12da1ba" id="r_aeab989cfd09819eba97766f5e12da1ba"><td class="memItemLeft"><a id="aeab989cfd09819eba97766f5e12da1ba" name="aeab989cfd09819eba97766f5e12da1ba"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_gaze_calibration.html">GazeCalibration</a> &gt;&#160;</td><td class="memItemRight"><b>get_calibration_resource</b> () const</td></tr>
+<tr class="memitem:a9986dfbab328d257ad5f14d3ec13d5d4" id="r_a9986dfbab328d257ad5f14d3ec13d5d4"><td class="memItemLeft"><a id="a9986dfbab328d257ad5f14d3ec13d5d4" name="a9986dfbab328d257ad5f14d3ec13d5d4"></a>
+void&#160;</td><td class="memItemRight"><b>set_device_calibration</b> (const Ref&lt; <a class="el" href="classgodot_1_1_device_calibration.html">DeviceCalibration</a> &gt; &amp;res)</td></tr>
+<tr class="memitem:a464d3c0394b0f30836f8cd559b2b3e1c" id="r_a464d3c0394b0f30836f8cd559b2b3e1c"><td class="memItemLeft"><a id="a464d3c0394b0f30836f8cd559b2b3e1c" name="a464d3c0394b0f30836f8cd559b2b3e1c"></a>
+Ref&lt; <a class="el" href="classgodot_1_1_device_calibration.html">DeviceCalibration</a> &gt;&#160;</td><td class="memItemRight"><b>get_device_calibration</b> () const</td></tr>
+<tr class="memitem:a2624f8bd96a5ad39bb5a8a5656cf1aeb" id="r_a2624f8bd96a5ad39bb5a8a5656cf1aeb"><td class="memItemLeft"><a id="a2624f8bd96a5ad39bb5a8a5656cf1aeb" name="a2624f8bd96a5ad39bb5a8a5656cf1aeb"></a>
+void&#160;</td><td class="memItemRight"><b>set_bio_calibration</b> (const Ref&lt; <a class="el" href="classgodot_1_1_bio_calibration.html">BioCalibration</a> &gt; &amp;res)</td></tr>
+<tr class="memitem:a6d464b4c1eaa83f02bf19d6826bb4e8c" id="r_a6d464b4c1eaa83f02bf19d6826bb4e8c"><td class="memItemLeft"><a id="a6d464b4c1eaa83f02bf19d6826bb4e8c" name="a6d464b4c1eaa83f02bf19d6826bb4e8c"></a>
+Ref&lt; <a class="el" href="classgodot_1_1_bio_calibration.html">BioCalibration</a> &gt;&#160;</td><td class="memItemRight"><b>get_bio_calibration</b> () const</td></tr>
 <tr class="memitem:a58ecda1aae971528ccb0e13fb10f9b3c" id="r_a58ecda1aae971528ccb0e13fb10f9b3c"><td class="memItemLeft"><a id="a58ecda1aae971528ccb0e13fb10f9b3c" name="a58ecda1aae971528ccb0e13fb10f9b3c"></a>
 void&#160;</td><td class="memItemRight"><b>set_display_profile</b> (const Ref&lt; <a class="el" href="classgodot_1_1_display_profile.html">DisplayProfile</a> &gt; &amp;profile)</td></tr>
 <tr class="memitem:a29690dc1c66ea749e9965a992d6e3fe3" id="r_a29690dc1c66ea749e9965a992d6e3fe3"><td class="memItemLeft"><a id="a29690dc1c66ea749e9965a992d6e3fe3" name="a29690dc1c66ea749e9965a992d6e3fe3"></a>
@@ -226,6 +226,10 @@ int&#160;</td><td class="memItemRight"><b>get_camera_device_id</b> () const</td>
 void&#160;</td><td class="memItemRight"><b>set_window_position_override</b> (Vector2 pos)</td></tr>
 <tr class="memitem:a30a6144a80bad40db4ccd015a1d8d7ba" id="r_a30a6144a80bad40db4ccd015a1d8d7ba"><td class="memItemLeft"><a id="a30a6144a80bad40db4ccd015a1d8d7ba" name="a30a6144a80bad40db4ccd015a1d8d7ba"></a>
 Vector2&#160;</td><td class="memItemRight"><b>get_window_position_override</b> () const</td></tr>
+<tr class="memitem:a0a2f1fbef006ab39b26f36896f4b2478" id="r_a0a2f1fbef006ab39b26f36896f4b2478"><td class="memItemLeft"><a id="a0a2f1fbef006ab39b26f36896f4b2478" name="a0a2f1fbef006ab39b26f36896f4b2478"></a>
+void&#160;</td><td class="memItemRight"><b>set_verbosity</b> (int level)</td></tr>
+<tr class="memitem:a90b6b5378744b1b19384f9567e052d0d" id="r_a90b6b5378744b1b19384f9567e052d0d"><td class="memItemLeft"><a id="a90b6b5378744b1b19384f9567e052d0d" name="a90b6b5378744b1b19384f9567e052d0d"></a>
+int&#160;</td><td class="memItemRight"><b>get_verbosity</b> () const</td></tr>
 <tr class="memitem:aafbe61aea6c1d44254e521c90cc752d8" id="r_aafbe61aea6c1d44254e521c90cc752d8"><td class="memItemLeft"><a id="aafbe61aea6c1d44254e521c90cc752d8" name="aafbe61aea6c1d44254e521c90cc752d8"></a>
 Vector2&#160;</td><td class="memItemRight"><b>get_latest_projected_gaze</b> () const</td></tr>
 <tr class="memitem:a38a8f2b6dab63f63f2eec55c86bc29e5" id="r_a38a8f2b6dab63f63f2eec55c86bc29e5"><td class="memItemLeft"><a id="a38a8f2b6dab63f63f2eec55c86bc29e5" name="a38a8f2b6dab63f63f2eec55c86bc29e5"></a>
@@ -246,27 +250,27 @@ Vector2&#160;</td><td class="memItemRight"><b>get_pixel_size_mm</b> () const</td
 Vector3&#160;</td><td class="memItemRight"><b>get_gaze_origin</b> () const</td></tr>
 <tr class="memitem:aa7b80daa0034d2ebf30b10e866df1810" id="r_aa7b80daa0034d2ebf30b10e866df1810"><td class="memItemLeft"><a id="aa7b80daa0034d2ebf30b10e866df1810" name="aa7b80daa0034d2ebf30b10e866df1810"></a>
 Vector3&#160;</td><td class="memItemRight"><b>get_gaze_direction</b> (bool apply_calibration=true) const</td></tr>
-<tr class="memitem:a4d42f7ec45c3e16c50201305ad5bc4d9" id="r_a4d42f7ec45c3e16c50201305ad5bc4d9"><td class="memItemLeft"><a id="a4d42f7ec45c3e16c50201305ad5bc4d9" name="a4d42f7ec45c3e16c50201305ad5bc4d9"></a>
-Vector3&#160;</td><td class="memItemRight"><b>get_head_rotation_opencv_space</b> () const</td></tr>
-<tr class="memdesc:a4d42f7ec45c3e16c50201305ad5bc4d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current head rotation in OpenCV Camera Space (Euler angles in degrees). <br /></td></tr>
-<tr class="memitem:a0f18b207755b23eb8873f9cc2998f121" id="r_a0f18b207755b23eb8873f9cc2998f121"><td class="memItemLeft"><a id="a0f18b207755b23eb8873f9cc2998f121" name="a0f18b207755b23eb8873f9cc2998f121"></a>
-Vector3&#160;</td><td class="memItemRight"><b>get_head_translation_opencv_space</b> () const</td></tr>
-<tr class="memdesc:a0f18b207755b23eb8873f9cc2998f121"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current head translation in OpenCV Camera Space (in millimeters). <br /></td></tr>
+<tr class="memitem:a437589ce689084964876350e6c7e5558" id="r_a437589ce689084964876350e6c7e5558"><td class="memItemLeft"><a id="a437589ce689084964876350e6c7e5558" name="a437589ce689084964876350e6c7e5558"></a>
+Vector3&#160;</td><td class="memItemRight"><b>get_head_rotation_inference_space</b> () const</td></tr>
+<tr class="memdesc:a437589ce689084964876350e6c7e5558"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current head rotation in Inference Camera Space (Euler angles in degrees). <br /></td></tr>
+<tr class="memitem:a5c203cd3cbd51a83b760e939f9264d1b" id="r_a5c203cd3cbd51a83b760e939f9264d1b"><td class="memItemLeft"><a id="a5c203cd3cbd51a83b760e939f9264d1b" name="a5c203cd3cbd51a83b760e939f9264d1b"></a>
+Vector3&#160;</td><td class="memItemRight"><b>get_head_translation_inference_space</b> () const</td></tr>
+<tr class="memdesc:a5c203cd3cbd51a83b760e939f9264d1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the current head translation in Inference Camera Space (in millimeters). <br /></td></tr>
 <tr class="memitem:a3e53379df04d01ab81abd5032ef2d00c" id="r_a3e53379df04d01ab81abd5032ef2d00c"><td class="memItemLeft"><a id="a3e53379df04d01ab81abd5032ef2d00c" name="a3e53379df04d01ab81abd5032ef2d00c"></a>
 Vector3&#160;</td><td class="memItemRight"><b>get_head_position</b> () const</td></tr>
 <tr class="memitem:ac956e55e8f9445fbd92cf80ad075b499" id="r_ac956e55e8f9445fbd92cf80ad075b499"><td class="memItemLeft"><a id="ac956e55e8f9445fbd92cf80ad075b499" name="ac956e55e8f9445fbd92cf80ad075b499"></a>
 Vector3&#160;</td><td class="memItemRight"><b>get_head_forward</b> () const</td></tr>
 <tr class="memitem:ae3e8acf31fbdcd82680ef0c7b66b5c5e" id="r_ae3e8acf31fbdcd82680ef0c7b66b5c5e"><td class="memItemLeft">Vector2&#160;</td><td class="memItemRight"><a class="el" href="#ae3e8acf31fbdcd82680ef0c7b66b5c5e">project_gaze_ray_to_viewport</a> (Vector3 origin, Vector3 direction, bool apply_calibration=true) const</td></tr>
 <tr class="memdesc:ae3e8acf31fbdcd82680ef0c7b66b5c5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a 3D ray in Camera Space (in millimeters) onto the physical screen plane, and maps it to viewport/window-local pixel coordinates by subtracting the window position.  <br /></td></tr>
-<tr class="memitem:ae92c1710fc0744585bc135510c85b1d0" id="r_ae92c1710fc0744585bc135510c85b1d0"><td class="memItemLeft"><a id="ae92c1710fc0744585bc135510c85b1d0" name="ae92c1710fc0744585bc135510c85b1d0"></a>
-Vector3&#160;</td><td class="memItemRight"><b>get_left_eye_center_opencv_space</b> () const</td></tr>
-<tr class="memdesc:ae92c1710fc0744585bc135510c85b1d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the left eye center position in OpenCV Camera Space (in millimeters). <br /></td></tr>
-<tr class="memitem:aba0e94086b19ba8f2f92f7d4af937982" id="r_aba0e94086b19ba8f2f92f7d4af937982"><td class="memItemLeft"><a id="aba0e94086b19ba8f2f92f7d4af937982" name="aba0e94086b19ba8f2f92f7d4af937982"></a>
-Vector3&#160;</td><td class="memItemRight"><b>get_right_eye_center_opencv_space</b> () const</td></tr>
-<tr class="memdesc:aba0e94086b19ba8f2f92f7d4af937982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the right eye center position in OpenCV Camera Space (in millimeters). <br /></td></tr>
-<tr class="memitem:aef2d59122b4486b30d21c5ffdbbee470" id="r_aef2d59122b4486b30d21c5ffdbbee470"><td class="memItemLeft"><a id="aef2d59122b4486b30d21c5ffdbbee470" name="aef2d59122b4486b30d21c5ffdbbee470"></a>
-Vector3&#160;</td><td class="memItemRight"><b>get_gaze_direction_opencv_space</b> () const</td></tr>
-<tr class="memdesc:aef2d59122b4486b30d21c5ffdbbee470"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the gaze direction unit vector in OpenCV Camera Space. <br /></td></tr>
+<tr class="memitem:a502c4e8894085d527277e5ea160c9a8f" id="r_a502c4e8894085d527277e5ea160c9a8f"><td class="memItemLeft"><a id="a502c4e8894085d527277e5ea160c9a8f" name="a502c4e8894085d527277e5ea160c9a8f"></a>
+Vector3&#160;</td><td class="memItemRight"><b>get_left_eye_center_inference_space</b> () const</td></tr>
+<tr class="memdesc:a502c4e8894085d527277e5ea160c9a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the left eye center position in Inference Camera Space (in millimeters). <br /></td></tr>
+<tr class="memitem:ad080bbaf152ced2cf674e830eb19b488" id="r_ad080bbaf152ced2cf674e830eb19b488"><td class="memItemLeft"><a id="ad080bbaf152ced2cf674e830eb19b488" name="ad080bbaf152ced2cf674e830eb19b488"></a>
+Vector3&#160;</td><td class="memItemRight"><b>get_right_eye_center_inference_space</b> () const</td></tr>
+<tr class="memdesc:ad080bbaf152ced2cf674e830eb19b488"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the right eye center position in Inference Camera Space (in millimeters). <br /></td></tr>
+<tr class="memitem:a61b537a1bc8537669af7637814de0547" id="r_a61b537a1bc8537669af7637814de0547"><td class="memItemLeft"><a id="a61b537a1bc8537669af7637814de0547" name="a61b537a1bc8537669af7637814de0547"></a>
+Vector3&#160;</td><td class="memItemRight"><b>get_gaze_direction_inference_space</b> () const</td></tr>
+<tr class="memdesc:a61b537a1bc8537669af7637814de0547"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the gaze direction unit vector in Inference Camera Space. <br /></td></tr>
 <tr class="memitem:a21a762b148e464251ce235744a13ddf0" id="r_a21a762b148e464251ce235744a13ddf0"><td class="memItemLeft"><a id="a21a762b148e464251ce235744a13ddf0" name="a21a762b148e464251ce235744a13ddf0"></a>
 const <a class="el" href="class_gaze_1_1_projection_engine.html">Gaze::ProjectionEngine</a> &amp;&#160;</td><td class="memItemRight"><b>get_projection_engine</b> () const</td></tr>
 </table><table class="memberdecls">
@@ -277,7 +281,7 @@ static constexpr double&#160;</td><td class="memItemRight"><b>MM_PER_INCH</b> = 
 <tr class="memitem:a2b3a08cdf57058010ce3be0c43580081" id="r_a2b3a08cdf57058010ce3be0c43580081"><td class="memItemLeft"><a id="a2b3a08cdf57058010ce3be0c43580081" name="a2b3a08cdf57058010ce3be0c43580081"></a>
 static constexpr double&#160;</td><td class="memItemRight"><b>CSS_PIXELS_PER_INCH</b> = 96.0</td></tr>
 <tr class="memitem:a39268252753b5f51779f89ed86534c02" id="r_a39268252753b5f51779f89ed86534c02"><td class="memItemLeft"><a id="a39268252753b5f51779f89ed86534c02" name="a39268252753b5f51779f89ed86534c02"></a>
-static constexpr <a class="el" href="struct_gaze_1_1_gaze_vector2.html">Gaze::GazeVector2</a>&#160;</td><td class="memItemRight"><b>DEFAULT_SCREEN_SIZE_MM</b> = <a class="el" href="struct_gaze_1_1_gaze_vector2.html">Gaze::GazeVector2</a>(345.0, 215.0)</td></tr>
+static constexpr Gaze::GazeVector2&#160;</td><td class="memItemRight"><b>DEFAULT_SCREEN_SIZE_MM</b> = Gaze::GazeVector2(345.0, 215.0)</td></tr>
 <tr class="memitem:a9b63961ee93b8d5664ad9ca9819fd3cd" id="r_a9b63961ee93b8d5664ad9ca9819fd3cd"><td class="memItemLeft"><a id="a9b63961ee93b8d5664ad9ca9819fd3cd" name="a9b63961ee93b8d5664ad9ca9819fd3cd"></a>
 static constexpr <a class="el" href="struct_gaze_1_1_gaze_vector2i.html">Gaze::GazeVector2i</a>&#160;</td><td class="memItemRight"><b>DEFAULT_SCREEN_SIZE_PIXELS</b> = <a class="el" href="struct_gaze_1_1_gaze_vector2i.html">Gaze::GazeVector2i</a>(1920, 1080)</td></tr>
 </table><table class="memberdecls">
@@ -293,7 +297,12 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Godot Node coordinating camera tracking, model inference, and gaze coordinate projection. </p>
-<p><a class="el" href="classgodot_1_1_gaze_tracker.html" title="Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.">GazeTracker</a> handles camera acquisition (via <a class="el" href="classgodot_1_1_camera_sensor.html" title="Node3D managing camera capture, resolution settings, and focal length configurations.">CameraSensor</a>), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels). </p>
+<p><a class="el" href="classgodot_1_1_gaze_tracker.html" title="Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.">GazeTracker</a> handles camera acquisition (via <a class="el" href="classgodot_1_1_camera_sensor.html" title="Node3D managing camera capture, resolution settings, and focal length configurations.">CameraSensor</a>), pipelines inputs through YuNet face detection and GazeNet estimation (via Face/Eye Estimators), smoothes projected points, and maps coordinates from camera space (millimeters) to viewport space (logical screen pixels).</p>
+<p>NOTE: The implementation of <a class="el" href="classgodot_1_1_gaze_tracker.html" title="Godot Node coordinating camera tracking, model inference, and gaze coordinate projection.">GazeTracker</a> is split across three platform layers:</p><ul>
+<li>src/godot/gaze_tracker.cpp : Handles generic ClassDB binding, properties, signal routing, lifecycle, and projection math.</li>
+<li>src/native/gaze_tracker_native.cpp : Implements native camera/model initialization and tracking loop via <a class="el" href="classgodot_1_1_gaze_server.html" title="Singleton coordinating display profiles, camera models, and thread-safe pipeline execution.">GazeServer</a> thread.</li>
+<li>src/web/gaze_tracker_web.cpp : Implements Web HTML5 JS/Emscripten tracking loop integration and sidecar message polling. </li>
+</ul>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="ac765619951568b95fbc3e0d4d8f11011" name="ac765619951568b95fbc3e0d4d8f11011"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac765619951568b95fbc3e0d4d8f11011">&#9670;&#160;</a></span>feed_gaze()</h2>
@@ -362,6 +371,9 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">bool godot::GazeTracker::initialize_tracker </td>
@@ -370,10 +382,15 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Initializes the gaze tracker, setting up camera and models. </p>
-<dl class="section return"><dt>Returns</dt><dd>True if initialized successfully, false otherwise. </dd></dl>
+<p>[DEPRECATED] Backward-compatible alias for <a class="el" href="#ab1953b1aca2a4e73331d063d41f70d78" title="Starts the gaze tracker, setting up camera and models.">start_tracker()</a>. </p>
+<p>Use <a class="el" href="#ab1953b1aca2a4e73331d063d41f70d78" title="Starts the gaze tracker, setting up camera and models.">start_tracker()</a> instead. </p>
 
 </div>
 </div>
@@ -439,6 +456,26 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 
 </div>
 </div>
+<a id="ab1953b1aca2a4e73331d063d41f70d78" name="ab1953b1aca2a4e73331d063d41f70d78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1953b1aca2a4e73331d063d41f70d78">&#9670;&#160;</a></span>start_tracker()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeTracker::start_tracker </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Starts the gaze tracker, setting up camera and models. </p>
+<dl class="section return"><dt>Returns</dt><dd>True if initialized successfully, false otherwise. </dd></dl>
+
+</div>
+</div>
 <a id="a911ec38d4f0c14db02406e8d41bb422b" name="a911ec38d4f0c14db02406e8d41bb422b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a911ec38d4f0c14db02406e8d41bb422b">&#9670;&#160;</a></span>stop_tracker()</h2>
 
@@ -467,7 +504,7 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/godot/<a class="el" href="gaze__tracker_8hpp_source.html">gaze_tracker.hpp</a></li>
 <li>src/godot/<b>gaze_tracker.cpp</b></li>
-<li>src/native/<b>gaze_tracker_native.cpp</b></li>
+<li>src/godot/<b>gaze_tracker_native.cpp</b></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

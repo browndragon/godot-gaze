@@ -4,9 +4,9 @@
     <compoundname>godot::GazeDeviceEstimatedCalibration</compoundname>
     <basecompoundref prot="public" virt="non-virtual">Object</basecompoundref>
     <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="classgodot_1_1_gaze_device_estimated_calibration_1ac36278baf3f09a244310cd70ab104527" prot="private" static="no" mutable="no">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_calibration" kindref="compound">GazeDeviceCalibration</ref> &gt;</type>
-        <definition>Ref&lt;GazeDeviceCalibration&gt; godot::GazeDeviceEstimatedCalibration::calibration</definition>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_estimated_calibration_1aee3b0e120ddbfea1eedd3599b31547d6" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt;DeviceCalibration&gt; godot::GazeDeviceEstimatedCalibration::calibration</definition>
         <argsstring></argsstring>
         <name>calibration</name>
         <qualifiedname>godot::GazeDeviceEstimatedCalibration::calibration</qualifiedname>
@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="83" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="83" bodyend="-1"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="173" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="173" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -38,7 +38,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="80" column="5"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="170" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -54,7 +54,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="86" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="272" bodyend="274"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="176" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="321" bodyend="323"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -70,7 +70,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="89" column="5" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="268" bodyend="270"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="179" column="5" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="315" bodyend="319"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1a61495db442a94dd7301abcf21e791758" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -84,11 +84,11 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="90" column="13"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="180" column="13"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1ab502158f381ac42b6cfd2e9809fec053" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_calibration" kindref="compound">GazeDeviceCalibration</ref> &gt;</type>
-        <definition>Ref&lt; GazeDeviceCalibration &gt; godot::GazeDeviceEstimatedCalibration::get_calibration</definition>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_estimated_calibration_1a682ec1a5ff860c56286b8addec19554a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
+        <definition>Ref&lt; DeviceCalibration &gt; godot::GazeDeviceEstimatedCalibration::get_calibration</definition>
         <argsstring>() const</argsstring>
         <name>get_calibration</name>
         <qualifiedname>godot::GazeDeviceEstimatedCalibration::get_calibration</qualifiedname>
@@ -98,7 +98,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="92" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="92" bodyend="92"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="182" column="9" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="182" bodyend="182"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -127,13 +127,13 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_calibration_resource.hpp" line="79" column="1" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="79" bodyend="93"/>
+    <location file="src/godot/gaze_calibration_resource.hpp" line="169" column="1" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="169" bodyend="183"/>
     <listofallmembers>
       <member refid="classgodot_1_1_gaze_device_estimated_calibration_1aad02db12f97a5f0d4661b017dcebb662" prot="protected" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>_bind_methods</name></member>
-      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1ac36278baf3f09a244310cd70ab104527" prot="private" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>calibration</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1aee3b0e120ddbfea1eedd3599b31547d6" prot="private" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>calibration</name></member>
       <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a15207000c9b11e6d5ef31b6b660fbd58" prot="public" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>GazeDeviceEstimatedCalibration</name></member>
       <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a3024576d296d302e4d472bf8c93b4dc1" prot="private" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>GDCLASS</name></member>
-      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1ab502158f381ac42b6cfd2e9809fec053" prot="public" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>get_calibration</name></member>
+      <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a682ec1a5ff860c56286b8addec19554a" prot="public" virt="non-virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>get_calibration</name></member>
       <member refid="classgodot_1_1_gaze_device_estimated_calibration_1a61495db442a94dd7301abcf21e791758" prot="public" virt="virtual"><scope>godot::GazeDeviceEstimatedCalibration</scope><name>~GazeDeviceEstimatedCalibration</name></member>
     </listofallmembers>
   </compounddef>

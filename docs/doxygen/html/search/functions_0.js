@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['clear_5fcalibration_0',['clear_calibration',['../classgodot_1_1_gaze_tracker.html#ae0f1cc66d5c2cf65595d21e43883d1b1',1,'godot::GazeTracker']]]
+  ['apply_5f3d_5fbias_5fvector_0',['apply_3d_bias_vector',['../math__defs_8hpp.html#ad93a5bce0845264d135053937ec1b70b',1,'Gaze']]]
 ];

@@ -1,0 +1,438 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_device_calibration" kind="class" language="C++" prot="public">
+    <compoundname>godot::DeviceCalibration</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Resource</basecompoundref>
+    <derivedcompoundref refid="classgodot_1_1_default_device_calibration" prot="public" virt="non-virtual">godot::DefaultDeviceCalibration</derivedcompoundref>
+    <derivedcompoundref refid="classgodot_1_1_guess_device_calibration" prot="public" virt="non-virtual">godot::GuessDeviceCalibration</derivedcompoundref>
+    <derivedcompoundref refid="classgodot_1_1_stored_device_calibration" prot="public" virt="non-virtual">godot::StoredDeviceCalibration</derivedcompoundref>
+    <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_device_calibration_1a07bbdad1cc307a4c79df4c707d9a7a10" prot="protected" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DeviceCalibration::pixel_size_mm</definition>
+        <argsstring></argsstring>
+        <name>pixel_size_mm</name>
+        <qualifiedname>godot::DeviceCalibration::pixel_size_mm</qualifiedname>
+        <initializer>= Vector2(-1.0, -1.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="18" column="13" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_device_calibration_1a858de0a955ed3c0f7c103b53c7c86333" prot="protected" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::DeviceCalibration::camera_offset</definition>
+        <argsstring></argsstring>
+        <name>camera_offset</name>
+        <qualifiedname>godot::DeviceCalibration::camera_offset</qualifiedname>
+        <initializer>= Vector3(-1000.0, -1000.0, -1000.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="19" column="13" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_device_calibration_1a54d4407374b484c0377b41c5c44ae494" prot="protected" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::camera_tilt</definition>
+        <argsstring></argsstring>
+        <name>camera_tilt</name>
+        <qualifiedname>godot::DeviceCalibration::camera_tilt</qualifiedname>
+        <initializer>= -1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="20" column="12" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1ad2947c0369137f6aa24c26e75920e86c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::DeviceCalibration::GDCLASS</definition>
+        <argsstring>(DeviceCalibration, Resource)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::DeviceCalibration::GDCLASS</qualifiedname>
+        <param>
+          <type>DeviceCalibration</type>
+        </param>
+        <param>
+          <type>Resource</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="15" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a75a7ef3e605fad0c1c375ebaedfadff8" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::DeviceCalibration::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::DeviceCalibration::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="22" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="17" bodyend="36"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a7f3326cc47994c2f142b7a5b3364c082" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::DeviceCalibration::DeviceCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>DeviceCalibration</name>
+        <qualifiedname>godot::DeviceCalibration::DeviceCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="25" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a5a3a829d4839faa8ea6eea821ac34abb" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::DeviceCalibration::~DeviceCalibration</definition>
+        <argsstring>()=default</argsstring>
+        <name>~DeviceCalibration</name>
+        <qualifiedname>godot::DeviceCalibration::~DeviceCalibration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="26" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a23626143d96b0fb1cfa33fdf6985d7d6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DeviceCalibration::get_pixel_size_mm</definition>
+        <argsstring>(Object *tracker=nullptr) const</argsstring>
+        <name>get_pixel_size_mm</name>
+        <qualifiedname>godot::DeviceCalibration::get_pixel_size_mm</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1a584587079397aacd5b51045196770a7e">get_pixel_size_mm</reimplementedby>
+        <reimplementedby refid="classgodot_1_1_guess_device_calibration_1a51fbf5166842d159c64d08340a083230">get_pixel_size_mm</reimplementedby>
+        <param>
+          <type>Object *</type>
+          <declname>tracker</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="28" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="38" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a065135aa7c60e2b9d96f5bce083831b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::DeviceCalibration::get_camera_offset</definition>
+        <argsstring>(Object *tracker=nullptr) const</argsstring>
+        <name>get_camera_offset</name>
+        <qualifiedname>godot::DeviceCalibration::get_camera_offset</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1a0b2ec939479df0899ff86b38fcd385e4">get_camera_offset</reimplementedby>
+        <reimplementedby refid="classgodot_1_1_guess_device_calibration_1ac72573bfa756d7baaa57a68fa0648be8">get_camera_offset</reimplementedby>
+        <param>
+          <type>Object *</type>
+          <declname>tracker</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="29" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="42" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1ac7737a8f09d656716ad80f9352ef2781" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::get_camera_tilt</definition>
+        <argsstring>(Object *tracker=nullptr) const</argsstring>
+        <name>get_camera_tilt</name>
+        <qualifiedname>godot::DeviceCalibration::get_camera_tilt</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1a215c39e15ff3a98c9461c6f00253cd0a">get_camera_tilt</reimplementedby>
+        <reimplementedby refid="classgodot_1_1_guess_device_calibration_1afb210200d6bda4211e9d411c46dbaec5">get_camera_tilt</reimplementedby>
+        <param>
+          <type>Object *</type>
+          <declname>tracker</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="30" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="46" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1acc50bc6f86624634e9ddf8fefb03dd3a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::DeviceCalibration::get_pixel_size_mm_bind</definition>
+        <argsstring>() const</argsstring>
+        <name>get_pixel_size_mm_bind</name>
+        <qualifiedname>godot::DeviceCalibration::get_pixel_size_mm_bind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="32" column="13" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1aa8996cd1531de5796c7a255740186a15" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::DeviceCalibration::get_camera_offset_bind</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_offset_bind</name>
+        <qualifiedname>godot::DeviceCalibration::get_camera_offset_bind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="33" column="13" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a85d716d4e231450de395cbf638ea5f7b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::get_camera_tilt_bind</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_tilt_bind</name>
+        <qualifiedname>godot::DeviceCalibration::get_camera_tilt_bind</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="34" column="12" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a91a517b0b32fd3ba8fc70c10b0a81622" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void godot::DeviceCalibration::set_pixel_size_mm</definition>
+        <argsstring>(Vector2 val)</argsstring>
+        <name>set_pixel_size_mm</name>
+        <qualifiedname>godot::DeviceCalibration::set_pixel_size_mm</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1a009ccd353c870d0802378cefc9356814">set_pixel_size_mm</reimplementedby>
+        <param>
+          <type>Vector2</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="36" column="18" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1aa905015b7e9a8674580b67abb107ccc2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void godot::DeviceCalibration::set_camera_offset</definition>
+        <argsstring>(Vector3 val)</argsstring>
+        <name>set_camera_offset</name>
+        <qualifiedname>godot::DeviceCalibration::set_camera_offset</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1ac860ef398160d4563a43e4d63d3dd737">set_camera_offset</reimplementedby>
+        <param>
+          <type>Vector3</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="37" column="18" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a3ad69c74db0ef6666557103a087ba860" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void godot::DeviceCalibration::set_camera_tilt</definition>
+        <argsstring>(double val)</argsstring>
+        <name>set_camera_tilt</name>
+        <qualifiedname>godot::DeviceCalibration::set_camera_tilt</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_default_device_calibration_1a0a7194167fa71025d6bcfc2c2e01814e">set_camera_tilt</reimplementedby>
+        <param>
+          <type>double</type>
+          <declname>val</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="38" column="18" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a0daa69b16101ef35d7cf17885e868704" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::get_focal_length_under_scaling_static</definition>
+        <argsstring>(double f_original, double original_dim, double new_dim)</argsstring>
+        <name>get_focal_length_under_scaling_static</name>
+        <qualifiedname>godot::DeviceCalibration::get_focal_length_under_scaling_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_original</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>original_dim</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>new_dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="40" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="50" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1a95f5b2a173cbba44b388b74affe325ca" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::get_card_width_px_static</definition>
+        <argsstring>(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm=85.603)</argsstring>
+        <name>get_card_width_px_static</name>
+        <qualifiedname>godot::DeviceCalibration::get_card_width_px_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_distance_mm</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>frame_width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_width_mm</declname>
+          <defval>85.603</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="41" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="54" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_device_calibration_1aeb45957361372715968072941da613fd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::DeviceCalibration::diagonal_to_horizontal_fov_static</definition>
+        <argsstring>(double diagonal_fov_degrees, double width, double height)</argsstring>
+        <name>diagonal_to_horizontal_fov_static</name>
+        <qualifiedname>godot::DeviceCalibration::diagonal_to_horizontal_fov_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>diagonal_fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="42" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="58" bodyend="60"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="3">
+        <label>godot::DefaultDeviceCalibration</label>
+        <link refid="classgodot_1_1_default_device_calibration"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>godot::DeviceCalibration</label>
+        <link refid="classgodot_1_1_device_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>godot::GuessDeviceCalibration</label>
+        <link refid="classgodot_1_1_guess_device_calibration"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>godot::StoredDeviceCalibration</label>
+        <link refid="classgodot_1_1_stored_device_calibration"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::DeviceCalibration</label>
+        <link refid="classgodot_1_1_device_calibration"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_calibration_resource.hpp" line="14" column="1" bodyfile="src/godot/gaze_calibration_resource.hpp" bodystart="14" bodyend="43"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_device_calibration_1a75a7ef3e605fad0c1c375ebaedfadff8" prot="protected" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a858de0a955ed3c0f7c103b53c7c86333" prot="protected" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>camera_offset</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a54d4407374b484c0377b41c5c44ae494" prot="protected" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>camera_tilt</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a7f3326cc47994c2f142b7a5b3364c082" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>DeviceCalibration</name></member>
+      <member refid="classgodot_1_1_device_calibration_1aeb45957361372715968072941da613fd" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>diagonal_to_horizontal_fov_static</name></member>
+      <member refid="classgodot_1_1_device_calibration_1ad2947c0369137f6aa24c26e75920e86c" prot="private" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a065135aa7c60e2b9d96f5bce083831b6" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>get_camera_offset</name></member>
+      <member refid="classgodot_1_1_device_calibration_1aa8996cd1531de5796c7a255740186a15" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>get_camera_offset_bind</name></member>
+      <member refid="classgodot_1_1_device_calibration_1ac7737a8f09d656716ad80f9352ef2781" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>get_camera_tilt</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a85d716d4e231450de395cbf638ea5f7b" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>get_camera_tilt_bind</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a95f5b2a173cbba44b388b74affe325ca" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>get_card_width_px_static</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a0daa69b16101ef35d7cf17885e868704" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>get_focal_length_under_scaling_static</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a23626143d96b0fb1cfa33fdf6985d7d6" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>get_pixel_size_mm</name></member>
+      <member refid="classgodot_1_1_device_calibration_1acc50bc6f86624634e9ddf8fefb03dd3a" prot="public" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>get_pixel_size_mm_bind</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a07bbdad1cc307a4c79df4c707d9a7a10" prot="protected" virt="non-virtual"><scope>godot::DeviceCalibration</scope><name>pixel_size_mm</name></member>
+      <member refid="classgodot_1_1_device_calibration_1aa905015b7e9a8674580b67abb107ccc2" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>set_camera_offset</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a3ad69c74db0ef6666557103a087ba860" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>set_camera_tilt</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a91a517b0b32fd3ba8fc70c10b0a81622" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>set_pixel_size_mm</name></member>
+      <member refid="classgodot_1_1_device_calibration_1a5a3a829d4839faa8ea6eea821ac34abb" prot="public" virt="virtual"><scope>godot::DeviceCalibration</scope><name>~DeviceCalibration</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

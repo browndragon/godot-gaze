@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['4_20monitor_20to_20viewport_20pixel_20mapping_0',['4. Monitor-to-Viewport Pixel Mapping',['../md_docs_2gaze__math__physical__model.html#autotoc_md26',1,'']]]
+  ['b_20local_20development_20symlinking_20for_20contributors_0',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]],
+  ['basic_20gdscript_20usage_1',['3. Basic GDScript Usage',['../index.html#autotoc_md13',1,'']]],
+  ['basic_20setup_2',['2. Basic Setup',['../index.html#autotoc_md12',1,'']]]
 ];

@@ -138,115 +138,101 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a></p>
-<p>A high-frequency, real-time 3D gaze estimation and expression tracking GDExtension plugin for Godot 4.7+.</p>
-<p>Optimized for cross-platform games, this library provides precise gaze ray projection onto the screen using configurable display geometries, customizable calibration, and adaptive signal filtering.</p>
+<p>A high-frequency, real-time 3D gaze estimation &amp; projecting GDExtension plugin for Godot 4.7+.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 Key Features</h1>
 <ul>
-<li><b>Cross-Platform Delivery (Native vs Web Split)</b>:<ul>
-<li><b>Native Desktop/Mobile/iOS</b>: Uses an OpenCV (<span class="tt">cv::dnn</span>) pipeline for face detection (YuNet) and gaze estimation.</li>
-<li><b>WebAssembly (WASM)</b>: Leverages browser-native <b>ONNX Runtime Web</b> (utilizing WebGPU/WebGL acceleration) and <b>Google MediaPipe Face Landmarker JS</b> to run inference outside WebAssembly, passing payloads back via Godot's Emscripten JS Bridge.</li>
+<li><b>Cross-Platform Gaze Tracking</b>:<ul>
+<li><b>Native Desktop &amp; Mobile (macOS, Windows, Linux, iOS, Android)</b>: Runs an optimized CPU-based <b>ONNX Runtime (CPU/XNNPACK)</b> pipeline for face detection (YuNet) and gaze estimation.</li>
+<li><b>WebAssembly (WASM)</b>: Leverages browser-native <b>ONNX Runtime Web</b> (WebGPU/WebGL accelerated) and MediaPipe Face Landmarker JS to process gaze outside the WebAssembly runtime, passing tracking data back to Godot.</li>
 </ul>
 </li>
-<li><b>3D Projection Math</b>: Resolves 3D ray-plane intersections accounting for camera tilt, offset from screen center, and display scale.</li>
-<li><b>Dual Calibration System</b>: Provides both a <b>3D spherical angular correction</b> (pitch/yaw biases applied directly to the raw gaze vector) and <b>2D pixel-space shifts</b> for biological error correction.</li>
-<li><b>Adaptive Smoothing</b>: Implements a <b>1 Euro Filter</b> to suppress high-frequency saccadic jitter during slow movements without introducing lag during rapid saccades.</li>
+<li><b>Background Thread Inference</b>: All ML model estimation runs in a background worker thread (<span class="tt">GazeTrackingPipeline</span>) to keep Godot's main thread smooth and responsive.</li>
+<li><b>Principled 3D Spherical Calibration</b>: Corrects biological user differences using 3D angular biases (pitch/yaw) applied directly to the estimated 3D gaze vector.</li>
+<li><b>Adaptive Smoothing</b>: Implements a <b>1 Euro Filter</b> to suppress saccadic jitter during steady gaze while preserving low latency during rapid eye movements.</li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md4"></a>
-Project Structure</h1>
-<div class="fragment"><div class="line">godot-gaze/</div>
-<div class="line">├── SConstruct                         # SCons compilation file</div>
-<div class="line">├── LICENSE.md                         # License agreements</div>
-<div class="line">├── README.md                          # Main project guide</div>
-<div class="line">├── CONTRIBUTING.md                    # Coding standards and logging rules</div>
-<div class="line">├── docs/</div>
-<div class="line">│   └── gaze_math_physical_model.md    # Gaze math derivations and physics reference</div>
-<div class="line">├── scripts/</div>
-<div class="line">│   └── download_opencv.sh             # Dependency installer (macOS/Android/iOS)</div>
-<div class="line">├── thirdparty/                        # External dependency directories</div>
-<div class="line">│   ├── doctest/                       # C++ unit testing</div>
-<div class="line">│   └── one_euro_filter/               # 1 Euro filter code</div>
-<div class="line">├── src/</div>
-<div class="line">│   ├── core/                          # Pure C++ engine (OpenCV/Godot independent)</div>
-<div class="line">│   ├── native/                        # Native OpenCV capture and DNN inference</div>
-<div class="line">│   ├── web/                           # WASM browser sidecar bridge setters</div>
-<div class="line">│   └── godot/                         # Godot GDExtension node bindings</div>
-<div class="line">└── project/                           # Godot Project directory</div>
-<div class="line">    └── addons/</div>
-<div class="line">        └── godot-gaze/</div>
-<div class="line">            ├── gaze.gdextension       # GDExtension library mapping metadata</div>
-<div class="line">            └── tests/                 # Integration test scene</div>
-</div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
-Getting Started &amp; Build Instructions</h1>
-<p>If you're building from source, see CONTRIBUTING.md.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
-1. Build the GDExtension Binary</h2>
-<p>SCons is used to compile the library. Adjust the <span class="tt">platform</span> parameter as required:</p>
-<div class="fragment"><div class="line"># Build for macOS</div>
-<div class="line">scons platform=macos target=template_debug</div>
-<div class="line"> </div>
-<div class="line"># Build for Windows</div>
-<div class="line">scons platform=windows target=template_debug</div>
-<div class="line"> </div>
-<div class="line"># Build for WebAssembly (WASM)</div>
-<div class="line">scons platform=javascript target=template_debug</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
-2. Integration inside Godot</h2>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
+Getting Started</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+1. Installation</h2>
+<p>You can install <span class="tt">godot-gaze</span> using one of the following methods:</p>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+A. From Pre-compiled Release (Recommended)</h3>
 <ol type="1">
-<li>Copy the <span class="tt">addons/godot-gaze/</span> folder into your Godot project's <span class="tt">addons/</span> directory.</li>
+<li>Download the latest <span class="tt">godot-gaze.zip</span> from the <a href="https://github.com/browndragon/godot-gaze/releases">GitHub Releases</a> page.</li>
+<li>Extract the archive and copy the <span class="tt">addons/godot-gaze</span> directory directly into your Godot project's root <span class="tt">addons/</span> directory.</li>
+<li>Open your project in the Godot Editor, navigate to <b>Project Settings &gt; Plugins</b>, and enable the <span class="tt">Godot Gaze</span> plugin.</li>
+</ol>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
+B. Local Development Symlinking (For Contributors)</h3>
+<p>If you are developing this plugin locally and want to test changes in your own Godot project without repeatedly copying files:</p><ol type="1">
+<li>Create a symbolic link from your project's <span class="tt">addons</span> directory back to this repository's addon folder: <div class="fragment"><div class="line">ln -s /path/to/godot-gaze/project/addons/godot-gaze /path/to/your-project/addons/godot-gaze</div>
+</div><!-- fragment --></li>
+<li>When you run <span class="tt">scons</span> to rebuild any template (e.g. <span class="tt">scons platform=macos target=editor</span>), the compiled binaries in <span class="tt">project/addons/godot-gaze/bin</span> are instantly available and loaded by your target project.</li>
+</ol>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+2. Basic Setup</h2>
+<ol type="1">
 <li>In your Godot Scene, add a <b>GazeTracker</b> node.</li>
-<li>Configure the physical constants on the node in the Inspector:<ul>
-<li><span class="tt">camera_offset</span>: Camera mount position relative to screen center in millimeters (e.g. <span class="tt">(0, -148, 10)</span> for top-center of a 24-inch screen).</li>
-<li><span class="tt">camera_tilt</span>: Angle in degrees tilted downwards (e.g., <span class="tt">15.0</span>).</li>
-<li><span class="tt">screen_size_pixels</span>: Native viewport resolution.</li>
-<li><span class="tt">screen_size_mm</span>: Physical display dimensions (e.g. <span class="tt">(527, 296)</span>).</li>
-<li><span class="tt">yunet_model_path</span> &amp; <span class="tt">gaze_onnx_path</span>: Paths to your local model weights.</li>
+<li>The tracker automatically attempts to guess the camera offsets, screen resolution, and physical display characteristics. You can also customize these properties on the node in the Inspector if needed:<ul>
+<li><span class="tt">camera_offset</span>: Camera mount position relative to the screen center in millimeters.</li>
+<li><span class="tt">camera_tilt</span>: Downtilted angle of the camera in degrees.</li>
+<li><span class="tt">screen_size_pixels</span>: Monitor resolution in pixels.</li>
+<li><span class="tt">screen_size_mm</span>: Physical display dimensions in millimeters.</li>
+</ul>
+</li>
+<li>Default Calibration Resources: The plugin registers project settings that specify where user calibration resources are automatically loaded:<ul>
+<li><span class="tt">gaze/calibration/device_calibration_path</span> (defaults to <span class="tt">user://calibrations/device_calibration.tres</span>)</li>
+<li><span class="tt">gaze/calibration/bio_calibration_path</span> (defaults to <span class="tt">user://calibrations/bio_calibration.tres</span>) When <span class="tt">GazeTracker</span> initializes, it automatically attempts to load custom <span class="tt">.tres</span> resources from these paths, seamlessly applying device and biological corrections.</li>
 </ul>
 </li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
+<ol type="1">
+<li>Model weights (<span class="tt">.ort</span> format) are pre-bundled inside the addon's <span class="tt">models/</span> folder.</li>
+</ol>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 3. Basic GDScript Usage</h2>
-<p>Attach a script to your scene root node:</p>
+<p>Attach a script to your scene root node to start receiving tracking data:</p>
 <div class="fragment"><div class="line">extends Node2D</div>
 <div class="line"> </div>
-<div class="line">@onready var gaze_tracker = $GazeTracker</div>
+<div class="line">@onready var gaze_tracker: GazeTracker = $GazeTracker</div>
+<div class="line">@onready var cursor: Node2D = $Cursor</div>
+<div class="line">@onready var status: Label = $Status</div>
 <div class="line"> </div>
 <div class="line">func _ready():</div>
 <div class="line">    # Connect signals</div>
 <div class="line">    gaze_tracker.gaze_updated.connect(_on_gaze_updated)</div>
 <div class="line">    gaze_tracker.face_detected.connect(_on_face_detected)</div>
 <div class="line"> </div>
-<div class="line">    # Start tracker</div>
-<div class="line">    if gaze_tracker.initialize_tracker():</div>
+<div class="line">    # Start the tracker (automatically starts when autostart == true on entering tree)</div>
+<div class="line">    if gaze_tracker.start_tracker():</div>
 <div class="line">        print(&quot;Gaze Tracker Started.&quot;)</div>
 <div class="line"> </div>
 <div class="line">func _on_gaze_updated(screen_pixel: Vector2):</div>
-<div class="line">    # Move custom cursor node</div>
-<div class="line">    $Cursor.global_position = screen_pixel</div>
+<div class="line">    cursor.global_position = screen_pixel</div>
 <div class="line"> </div>
 <div class="line">func _on_face_detected(detected: bool):</div>
-<div class="line">    $Status.text = &quot;Face Tracked&quot; if detected else &quot;Face Lost&quot;</div>
-<div class="line"> </div>
-<div class="line">func _input(event):</div>
-<div class="line">    # Calibrate at current cursor target (e.g., center of screen)</div>
-<div class="line">    if event.is_action_pressed(&quot;ui_select&quot;):</div>
-<div class="line">        gaze_tracker.calibrate_3d(Vector2(960, 540))</div>
+<div class="line">    status.text = &quot;Face Tracked&quot; if detected else &quot;Face Lost&quot;</div>
 </div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
-Web / HTML5 Export Integration</h1>
-<p>When exporting for Web/WASM:</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+Web / HTML5 Export Guidelines</h1>
+<p>When exporting your project to the Web, keep the following considerations in mind:</p>
 <ol type="1">
-<li>SCons compiles out OpenCV libraries and links a lightweight data bridge.</li>
-<li>Load <span class="tt">opencv.js</span> and <span class="tt">onnxruntime-web</span> in your HTML page shell.</li>
-<li>Run eye extraction on a canvas and feed crops to ONNX Runtime Web.</li>
-<li>Pass the calculated 3D gaze vector back into Godot's WebAssembly loop using the JavaScript bridge: <div class="fragment"><div class="line">// JavaScript sidecar</div>
-<div class="line">const gazeTracker = godot.engine.get_singleton(&quot;GazeTracker&quot;);</div>
-<div class="line">gazeTracker.feed_gaze_web(originVector3, directionVector3);</div>
-</div><!-- fragment --> </li>
+<li><b>Automatic Sidecar Export</b>: The Gaze Tracker plugin includes an editor export plugin (<span class="tt">export_plugin.gd</span>) that automatically copies <span class="tt">gaze_sidecar.js</span> to your HTML5 export folder.</li>
+<li><b>Cross-Origin Isolation Requirements (For Threaded Exports)</b>:<ul>
+<li>Godot's WebAssembly export template supports multi-threading via SharedArrayBuffer. If you enable <b>Thread Support</b> in your Godot Web Export Preset options, the hosting server <b>must</b> serve your game with the following HTTP response headers: <div class="fragment"><div class="line">Cross-Origin-Opener-Policy: same-origin</div>
+<div class="line">Cross-Origin-Embedder-Policy: require-corp</div>
+</div><!-- fragment --></li>
+<li>These headers are standard browser security requirements for SharedArrayBuffer (not specific to this plugin). If your hosting environment (e.g. itch.io, GitHub Pages, or corporate intranet) does not allow you to configure these custom headers, you <b>must disable Thread Support</b> in your Godot export preset, which falls back to the non-threaded WebAssembly template.</li>
+</ul>
+</li>
 </ol>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+Developer Guidelines &amp; Compiling</h1>
+<p>For guidelines on compiling the plugin from source, running tests, or contributing, please refer to CONTRIBUTING.md. For detailed design and math specifications, refer to the Mathematical &amp; Physical Model Guide and the <a href="CONTRIBUTING.md#1-directory-layout--architecture-layers">Architecture &amp; Layout section of CONTRIBUTING.md</a>. </p>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->

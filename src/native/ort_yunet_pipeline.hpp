@@ -27,8 +27,25 @@ namespace Gaze
         double camera_fov_degrees = DEFAULT_CAMERA_FOV_DEGREES;
         PipelineConfig config;
 
-        double last_roll_rad = 0.0;
-        bool has_last_roll = false;
+        struct FrameTrackingState
+        {
+            bool is_tracking = false;
+            GazeVector3 last_rvec{0.0, 0.0, 0.0};
+            GazeVector3 last_tvec{0.0, 0.0, 700.0};
+            double last_roll_rad = 0.0;
+            int missing_frames_count = 0;
+
+            void reset()
+            {
+                is_tracking = false;
+                last_rvec = GazeVector3(0.0, 0.0, 0.0);
+                last_tvec = GazeVector3(0.0, 0.0, 700.0);
+                last_roll_rad = 0.0;
+                missing_frames_count = 0;
+            }
+        };
+
+        FrameTrackingState tracking_state;
 
         struct Anchor
         {
@@ -62,8 +79,9 @@ namespace Gaze
         virtual void set_camera_fov_degrees(double fov) override { camera_fov_degrees = fov; }
         virtual void set_config(const PipelineConfig &cfg) override { config = cfg; }
 
-        void set_roll_hint(double angle_rad) { last_roll_rad = angle_rad; has_last_roll = true; }
-        void reset_tracking_state() { last_roll_rad = 0.0; has_last_roll = false; }
+        void set_roll_hint(double angle_rad) { tracking_state.last_roll_rad = angle_rad; tracking_state.is_tracking = true; }
+        void reset_tracking_state() { tracking_state.reset(); }
+        const FrameTrackingState &get_tracking_state() const { return tracking_state; }
     };
 
 } // namespace Gaze

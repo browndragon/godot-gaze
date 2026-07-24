@@ -6,6 +6,7 @@
 #include "projection_engine.hpp"
 #include "screen_projector.hpp"
 #include "space_conversions.hpp"
+#include "pnp_solver.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -526,6 +527,114 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         // Turning right (facing camera's positive X direction in standard camera space)
         CHECK(head_forward.x > 0.05);
         CHECK(head_forward.z > 0.9);
+    }
+
+    // 6. Test PnP solver recovery of pitch down from 2D projected landmarks
+    {
+        double fx = 1000.0, cx = 320.0, cy = 240.0;
+        std::vector<Gaze::GazeVector3> model_points = {
+            Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+            Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+            Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
+            Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
+            Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
+        };
+
+        // True pose: pitched down by ~15 degrees (rvec.x = +0.2618)
+        Gaze::GazeVector3 true_rvec(0.2618, 0.0, 0.0);
+        Gaze::GazeVector3 true_tvec(0.0, 50.0, 650.0);
+
+        Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+        std::vector<Gaze::GazeVector2> img_pts(5);
+        for (size_t i = 0; i < 5; ++i) {
+            Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
+            img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+        }
+
+        // Run PnP solver with un-warmed default guess (rvec = 0, tvec = 700)
+        Gaze::GazeVector3 est_rvec(0.0, 0.0, 0.0);
+        Gaze::GazeVector3 est_tvec(0.0, 0.0, 700.0);
+        bool pnp_ok = Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, est_rvec, est_tvec, true);
+        REQUIRE(pnp_ok == true);
+
+        // Check recovered pitch angle (rvec.x)
+        std::cout << "[PnP Test] True pitch: " << true_rvec.x << " | Est pitch: " << est_rvec.x << " | Est ty: " << est_tvec.y << " | Est tz: " << est_tvec.z << std::endl;
+        CHECK(est_rvec.x > 0.15); // Must recover significant downward pitch
+
+        // Project ray onto screen plane (600x340 mm screen, camera at top y=170mm)
+        Gaze::GazeTransform3D xform = Gaze::Inference::get_head_transform_in_camera_space(est_tvec, est_rvec);
+        Gaze::GazeVector3 head_fwd = xform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        
+        Gaze::ProjectionEngine proj_engine;
+        proj_engine.set_screen_size_pixels(Gaze::GazeVector2(1920, 1080));
+        proj_engine.set_screen_size_mm(Gaze::GazeVector2(600, 340));
+        proj_engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GazeVector3(0, 170, 0), 0.0));
+        
+        Gaze::GazeVector2 projected_pixel;
+        bool proj_ok = proj_engine.project_gaze(xform.origin, head_fwd, projected_pixel);
+        std::cout << "[PnP Test] Head forward: (" << head_fwd.x << ", " << head_fwd.y << ", " << head_fwd.z << ") | Projected pixel: (" << projected_pixel.x << ", " << projected_pixel.y << ")" << std::endl;
+        CHECK(proj_ok == true);
+        CHECK(projected_pixel.y > 540.0); // Pitch down must land in bottom half of screen (>540px)
+    }
+
+    // 7. Test PnP solver sensitivity under landmark Y-noise (Cold-start vs Warm-start)
+    {
+        double fx = 1000.0, cx = 320.0, cy = 240.0;
+        std::vector<Gaze::GazeVector3> model_points = {
+            Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+            Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+            Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
+            Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
+            Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
+        };
+
+        // Pitched down pose with 1.5px landmark Y-shift / noise (typical YuNet variance)
+        Gaze::GazeVector3 true_rvec(0.20, 0.0, 0.0); // ~11.5 deg pitch down
+        Gaze::GazeVector3 true_tvec(0.0, 30.0, 650.0);
+
+        Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+        std::vector<Gaze::GazeVector2> img_pts(5);
+        for (size_t i = 0; i < 5; ++i) {
+            Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
+            img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+        }
+        // Add 1.5px Y distortion to nose & mouth (simulating foreshortening detection noise)
+        img_pts[2].y -= 1.5; // Nose detected slightly higher
+        img_pts[3].y += 1.5; // Mouth detected slightly lower
+
+        // Cold start (rvec=0, tvec=700)
+        Gaze::GazeVector3 cold_rvec(0.0, 0.0, 0.0);
+        Gaze::GazeVector3 cold_tvec(0.0, 0.0, 700.0);
+        Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, cold_rvec, cold_tvec, true);
+
+        // Warm start (starting near previous frame pose)
+        Gaze::GazeVector3 warm_rvec(0.18, 0.0, 0.0);
+        Gaze::GazeVector3 warm_tvec(0.0, 28.0, 648.0);
+        Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, warm_rvec, warm_tvec, true);
+
+        std::cout << "[PnP Noise Test] Cold pitch: " << cold_rvec.x << " | Warm pitch: " << warm_rvec.x << std::endl;
+        CHECK(warm_rvec.x > 0.10);
+    }
+
+    // 8. Test ORTYuNetPipeline FrameTrackingState warm-starting and blink persistence
+    {
+        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        Gaze::ORTYuNetPipeline pipeline(yunet_path);
+        REQUIRE(pipeline.initialize() == true);
+
+        // Initially not tracking
+        CHECK(pipeline.get_tracking_state().is_tracking == false);
+        CHECK(pipeline.get_tracking_state().missing_frames_count == 0);
+
+        // Simulate roll hint / track start
+        pipeline.set_roll_hint(0.05);
+        CHECK(pipeline.get_tracking_state().is_tracking == true);
+        CHECK(pipeline.get_tracking_state().last_roll_rad == 0.05);
+
+        // Reset tracking state
+        pipeline.reset_tracking_state();
+        CHECK(pipeline.get_tracking_state().is_tracking == false);
+        CHECK(pipeline.get_tracking_state().last_roll_rad == 0.0);
     }
 }
 

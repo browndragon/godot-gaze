@@ -80,10 +80,20 @@ def run_command_and_log(target, source, env):
     else:
         run_env["LD_LIBRARY_PATH"] = bin_dir
         
+    import shutil
+    resolved_cmd = list(cmd)
+    if resolved_cmd and not os.path.isabs(resolved_cmd[0]):
+        which_path = shutil.which(resolved_cmd[0], path=run_env.get("PATH"))
+        if which_path:
+            resolved_cmd[0] = which_path
+        elif resolved_cmd[0] == "node" and sys.platform != "win32":
+            resolved_cmd = ["/usr/bin/env", "node"] + resolved_cmd[1:]
+
     try:
         process = subprocess.Popen(
-            cmd,
+            resolved_cmd,
             env=run_env,
+            cwd=os.path.abspath("."),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True

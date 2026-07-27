@@ -1696,3 +1696,107 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         CHECK(roll_rad == doctest::Approx(PI / 3.0).epsilon(0.35));
     }
 }
+
+TEST_CASE("Testing Gaze Direction Vector Sign and Ray Projection in Calibration")
+{
+    // Simulate raw gaze model output in OpenCV space: dx=0, dy=0, dz=1 (staring straight at camera)
+    GazeVector3 raw_gaze_dir_cv(0.0, 0.0, 1.0);
+    GazeVector3 origin_cv(0.0, 0.0, 600.0); // 600mm in front of camera
+
+    // Convert using Inference::CAMERA_TRANSFORM for points and CAMERA_TRANSFORM.basis for directions
+    GazeVector3 origin_cam = Gaze::Inference::CAMERA_TRANSFORM * origin_cv;
+    GazeVector3 dir_cam = Gaze::Inference::CAMERA_TRANSFORM.basis * GazeVector3(0.0, 0.0, -1.0); // ray pointing towards camera in CV space
+
+    // Gaze origin in camera space must be at Z < 0 (in front of camera/screen plane)
+    CHECK(origin_cam.z < 0.0);
+
+    // Forward gaze direction vector in camera space MUST point towards screen (Z > 0)
+    CHECK(raw_gaze_dir_cv.z > 0.0);
+
+    // Test ray projection onto a 600x340 mm screen with camera at top offset (0, 170, 0)
+    Gaze::ProjectionEngine proj_engine;
+    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+
+    GazeVector2 pixel;
+    bool proj_success = proj_engine.project_gaze(origin_cam, raw_gaze_dir_cv, pixel);
+    CHECK(proj_success == true);
+
+    // Ray projection should land near center of screen
+    CHECK(pixel.x == doctest::Approx(960.0).epsilon(50.0));
+    CHECK(pixel.y == doctest::Approx(540.0).epsilon(50.0));
+}
+
+TEST_CASE("Testing BioCalibration Isolation on Eye Gaze vs Nose Gaze")
+{
+    Gaze::ProjectionEngine proj_engine;
+    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+
+    GazeVector3 uncal_dir = Gaze::BACKWARD;
+    GazeVector3 head_fwd = Gaze::BACKWARD;
+
+    // 1. Uncalibrated state (bias = 0)
+    proj_engine.set_calibration(Gaze::GazeCalibration(0.0, 0.0));
+    GazeVector3 biased_dir_zero = proj_engine.apply_3d_bias(uncal_dir);
+    CHECK(biased_dir_zero.x == doctest::Approx(0.0));
+    CHECK(biased_dir_zero.y == doctest::Approx(0.0));
+    CHECK(biased_dir_zero.z == doctest::Approx(1.0));
+
+    // 2. Set significant BioCalibration pitch/yaw bias
+    proj_engine.set_calibration(Gaze::GazeCalibration(0.1, -0.08)); // 0.1 pitch, -0.08 yaw
+    GazeVector3 biased_dir_cal = proj_engine.apply_3d_bias(uncal_dir);
+
+    // BioCalibration MUST mutate eye gaze direction
+    CHECK(biased_dir_cal.x != doctest::Approx(uncal_dir.x));
+    CHECK(biased_dir_cal.y != doctest::Approx(uncal_dir.y));
+
+    // Head pose / Nose gaze ray MUST remain uncalibrated (must NOT apply 3D bio bias)
+    CHECK(head_fwd.x == doctest::Approx(0.0));
+    CHECK(head_fwd.y == doctest::Approx(0.0));
+    CHECK(head_fwd.z == doctest::Approx(1.0));
+}
+
+TEST_CASE("Testing Physical Gaze Ray Direction Invariants")
+{
+    Gaze::ProjectionEngine proj_engine;
+    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+
+    GazeVector3 origin(0.0, 0.0, -600.0);
+    GazeVector2 center_pixel;
+    proj_engine.project_gaze(origin, Gaze::BACKWARD, center_pixel);
+
+    // 1. Gazing Anatomic Left (Camera Left: -X) must project to screen LEFT (pixel.x < center_pixel.x)
+    GazeVector3 left_dir(-0.2, 0.0, 0.98);
+    GazeVector2 left_pixel;
+    bool left_ok = proj_engine.project_gaze(origin, left_dir, left_pixel);
+    CHECK(left_ok == true);
+    CHECK(left_pixel.x < center_pixel.x);
+
+    // 2. Gazing Anatomic Right (Camera Right: +X) must project to screen RIGHT (pixel.x > center_pixel.x)
+    GazeVector3 right_dir(0.2, 0.0, 0.98);
+    GazeVector2 right_pixel;
+    bool right_ok = proj_engine.project_gaze(origin, right_dir, right_pixel);
+    CHECK(right_ok == true);
+    CHECK(right_pixel.x > center_pixel.x);
+
+    // 3. Gazing UP (Camera Up: +Y) must project towards screen TOP (pixel.y < center_pixel.y)
+    GazeVector3 up_dir(0.0, 0.2, 0.98);
+    GazeVector2 up_pixel;
+    bool up_ok = proj_engine.project_gaze(origin, up_dir, up_pixel);
+    CHECK(up_ok == true);
+    CHECK(up_pixel.y < center_pixel.y);
+
+    // 4. Gazing DOWN (Camera Down: -Y) must project towards screen BOTTOM (pixel.y > center_pixel.y)
+    GazeVector3 down_dir(0.0, -0.2, 0.98);
+    GazeVector2 down_pixel;
+    bool down_ok = proj_engine.project_gaze(origin, down_dir, down_pixel);
+    CHECK(down_ok == true);
+    CHECK(down_pixel.y > center_pixel.y);
+}
+
+

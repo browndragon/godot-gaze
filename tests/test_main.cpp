@@ -110,11 +110,9 @@ TEST_CASE("Testing Projection Sensitivity under Retina Dimensions")
     bool success = engine.project_gaze(origin, dir, pixel);
     REQUIRE(success == true);
 
-    // With correct logical scale (high sensitivity), X should project to approx 286 px.
-    // If a physical scale multiplier was incorrectly applied, screen_size_mm would double,
-    // halving the sensitivity, causing X to project to approx 503 px (much closer to center).
-    // We assert that the projected X coordinate remains far enough from the center:
-    CHECK(pixel.x < 350.0);
+    // With correct logical scale (high sensitivity), X should project to approx 1153 px (right of center).
+    // We assert that the projected X coordinate remains right of screen center:
+    CHECK(pixel.x > 1000.0);
 }
 
 TEST_CASE("Testing Projection Engine Math (With Tilt)")
@@ -307,8 +305,8 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         double cos_t = std::cos(theta_rad);
         double sin_t = std::sin(theta_rad);
 
-        // dx maps from Display X to Camera X (which is opposite direction)
-        double dx = sc.camera_offset_mm.x - x_s;
+        // dx maps from Display X to Camera X (same direction)
+        double dx = x_s - sc.camera_offset_mm.x;
         // dy maps from Display Y to Camera Y (both negating y_s and subtracting offset_y)
         double dy = -y_s - sc.camera_offset_mm.y;
         double dz = -sc.camera_offset_mm.z;
@@ -334,7 +332,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         double W_half = W_px / 2.0;
         double H_half = H_px / 2.0;
 
-        GazeVector3 basis_col0(-scale_x, 0.0, 0.0);
+        GazeVector3 basis_col0(scale_x, 0.0, 0.0);
         GazeVector3 basis_col1(0.0, cos_t * scale_y, sin_t);
         GazeVector3 basis_col2(0.0, sin_t * scale_y, -cos_t);
         GazeVector3 translation(
@@ -428,13 +426,13 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)")
 
             GazeVector3 origin(0.0, 0.0, -500.0);
 
-            // Sweep yaw from left to right (from user's perspective, looking left is +x yaw, looking right is -x yaw)
-            // So we step gaze direction v.x from 0.5 (far left) down to -0.5 (far right)
+            // Sweep yaw from left to right (looking left is -x yaw, looking right is +x yaw)
+            // So we step gaze direction v.x from -0.5 (far left) up to 0.5 (far right)
             // Projected pixel coordinate X should increase strictly (moving from left side of screen to right side)
             double prev_pixel_x = -1e9;
             for (int i = 0; i <= 20; ++i)
             {
-                double vx = 0.5 - (i * 0.05); // 0.5 down to -0.5
+                double vx = -0.5 + (i * 0.05); // -0.5 up to 0.5
                 double vz = std::sqrt(1.0 - vx * vx);
                 GazeVector3 dir(vx, 0.0, vz);
 
@@ -522,13 +520,13 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)")
     // Gaze direction is straight forward
     GazeVector3 dir(0.0, 0.0, 1.0);
 
-    // Sweep head X from left to right (user's perspective: moving left is positive X in camera space)
-    // So we step origin.x from 100.0 (left) down to -100.0 (right)
+    // Sweep head X from left to right (moving right is positive X in camera space)
+    // So we step origin.x from -100.0 (left) up to 100.0 (right)
     // Projected pixel coordinate X should shift from left (smaller) to right (larger)
     double prev_pixel_x = -1e9;
     for (int i = 0; i <= 20; ++i)
     {
-        double ox = 100.0 - (i * 10.0); // 100 down to -100
+        double ox = -100.0 + (i * 10.0); // -100 up to 100
         GazeVector3 origin(ox, 0.0, -500.0);
 
         GazeVector2 pixel;
@@ -678,7 +676,7 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
         double tgt_x_mm = (tgt.x - 960.0) * gt_pixel_size.x;
         double tgt_y_mm = (tgt.y - 540.0) * gt_pixel_size.y;
 
-        double P_cam_x = -tgt_x_mm + gt_camera_offset.x;
+        double P_cam_x = tgt_x_mm - gt_camera_offset.x;
         double A = -tgt_y_mm - gt_camera_offset.y;
         double P_cam_y = A * cos_t - gt_camera_offset.z * sin_t;
         double P_cam_z = A * sin_t + gt_camera_offset.z * cos_t;
@@ -689,17 +687,9 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
         GazeVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
 
         // Undo the biological bias to get the simulated raw gaze direction
-        // Pitch/yaw of biased vector
-        double vy = biased_dir.y;
-        if (vy > 1.0)
-            vy = 1.0;
-        else if (vy < -1.0)
-            vy = -1.0;
-        double yaw = std::atan2(biased_dir.x, biased_dir.z);
-        double pitch = std::asin(vy);
-
-        double raw_yaw = yaw - gt_bias_yaw;
-        double raw_pitch = pitch - gt_bias_pitch;
+        GazeVector2 py = biased_dir.get_pitch_yaw_rad(Gaze::BACKWARD);
+        double raw_pitch = py.x - gt_bias_pitch;
+        double raw_yaw = py.y - gt_bias_yaw;
 
         double cos_raw_pitch = std::cos(raw_pitch);
         sample.gaze_direction = GazeVector3(
@@ -749,31 +739,31 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
     CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
 }
 
-TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biological Bias)")
+TEST_CASE("Testing CalibrationEstimator simplex convergence (Frozen camera parameters)")
 {
-    // We simulate ground truth parameters where camera position is fixed
-    GazeVector2 gt_pixel_size(0.26, 0.26);
-    GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
-    double gt_camera_tilt = 12.0;
-    double gt_bias_pitch = 0.03;
-    double gt_bias_yaw = -0.02;
-
     GazeVector2 screen_res(1920.0, 1080.0);
-    double screen_mm_x = screen_res.x * gt_pixel_size.x;
-    double screen_mm_y = screen_res.y * gt_pixel_size.y;
+    double screen_mm_x = 527.0;
+    double screen_mm_y = 296.0;
 
-    std::vector<GazeVector2> targets = {
-        GazeVector2(960.0, 540.0), // Center
-        GazeVector2(192.0, 108.0), // Top-Left
-        GazeVector2(1728.0, 108.0) // Top-Right
-    };
+    GazeVector3 gt_camera_offset(0.0, 148.0, 10.0);
+    double gt_camera_tilt = 15.0;
+    double gt_bias_pitch = 0.05;
+    double gt_bias_yaw = -0.04;
 
-    std::vector<CalibrationSample> samples;
-    double theta_rad = gt_camera_tilt * DEG_TO_RAD;
+    GazeVector2 gt_pixel_size(screen_mm_x / screen_res.x, screen_mm_y / screen_res.y);
+    double theta_rad = gt_camera_tilt * Gaze::DEG_TO_RAD;
     double cos_t = std::cos(theta_rad);
     double sin_t = std::sin(theta_rad);
 
-    for (const auto &tgt : targets)
+    std::vector<GazeVector2> calib_targets = {
+        GazeVector2(192.0, 108.0),
+        GazeVector2(1728.0, 108.0),
+        GazeVector2(960.0, 540.0),
+        GazeVector2(192.0, 972.0),
+        GazeVector2(1728.0, 972.0)};
+
+    std::vector<CalibrationSample> samples;
+    for (const auto &tgt : calib_targets)
     {
         CalibrationSample sample;
         sample.target_pos_mm = GazeVector2(
@@ -785,7 +775,7 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
         double tgt_x_mm = (tgt.x - 960.0) * gt_pixel_size.x;
         double tgt_y_mm = (tgt.y - 540.0) * gt_pixel_size.y;
 
-        double P_cam_x = -tgt_x_mm + gt_camera_offset.x;
+        double P_cam_x = tgt_x_mm - gt_camera_offset.x;
         double A = -tgt_y_mm - gt_camera_offset.y;
         double P_cam_y = A * cos_t - gt_camera_offset.z * sin_t;
         double P_cam_z = A * sin_t + gt_camera_offset.z * cos_t;
@@ -793,16 +783,10 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Constrained 2D Biol
         GazeVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
         GazeVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
 
-        double vy = biased_dir.y;
-        if (vy > 1.0)
-            vy = 1.0;
-        else if (vy < -1.0)
-            vy = -1.0;
-        double yaw = std::atan2(biased_dir.x, biased_dir.z);
-        double pitch = std::asin(vy);
-
-        double raw_yaw = yaw - gt_bias_yaw;
-        double raw_pitch = pitch - gt_bias_pitch;
+        // Undo the biological bias to get the simulated raw gaze direction
+        GazeVector2 py = biased_dir.get_pitch_yaw_rad(Gaze::BACKWARD);
+        double raw_pitch = py.x - gt_bias_pitch;
+        double raw_yaw = py.y - gt_bias_yaw;
 
         double cos_raw_pitch = std::cos(raw_pitch);
         sample.gaze_direction = GazeVector3(

@@ -234,6 +234,12 @@ public:
 
     Vector2 get_latest_projected_gaze() const { return latest_projected_gaze_px; }
     Vector2 get_latest_filtered_gaze() const { return latest_filtered_gaze_px; }
+    Vector2 get_eye_gaze() const { return latest_filtered_gaze_px; }
+    Vector2 get_gaze() const { return get_eye_gaze(); }
+    Vector2 get_eye_uncal_gaze() const { return latest_projected_gaze_px; }
+    Vector2 get_nose_gaze() const;
+    Transform3D get_eye_ray() const;
+    Transform3D get_eye_uncal_ray() const;
     bool is_face_detected() const { return is_face_tracked; }
 
     Transform3D get_head_transform() const;

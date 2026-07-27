@@ -225,8 +225,8 @@ namespace Gaze
                             {
                                 data->gaze_success = true;
                                 GazeVector3 origin_cv = (crops.left_eye_center_cam + crops.right_eye_center_cam) * 0.5f;
-                                GazeVector3 origin_cam_gaze = Inference::to_camera_space(origin_cv);
-                                GazeVector3 dir_cam_gaze = Inference::to_camera_space(raw_gaze_dir_cam);
+                                GazeVector3 origin_cam_gaze = Inference::CAMERA_TRANSFORM * origin_cv;
+                                GazeVector3 dir_cam_gaze = raw_gaze_dir_cam;
 
                                 data->gaze_origin = origin_cam_gaze;
                                 data->gaze_direction = dir_cam_gaze;

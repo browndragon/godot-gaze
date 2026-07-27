@@ -106,6 +106,21 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeTracker::get_gaze_origin);
     ClassDB::bind_method(D_METHOD("get_gaze_direction", "apply_calibration"), &GazeTracker::get_gaze_direction, DEFVAL(true));
 
+    ClassDB::bind_method(D_METHOD("get_eye_gaze"), &GazeTracker::get_eye_gaze);
+    ClassDB::bind_method(D_METHOD("get_gaze"), &GazeTracker::get_gaze);
+    ClassDB::bind_method(D_METHOD("get_eye_uncal_gaze"), &GazeTracker::get_eye_uncal_gaze);
+    ClassDB::bind_method(D_METHOD("get_nose_gaze"), &GazeTracker::get_nose_gaze);
+    ClassDB::bind_method(D_METHOD("get_eye_ray"), &GazeTracker::get_eye_ray);
+    ClassDB::bind_method(D_METHOD("get_eye_uncal_ray"), &GazeTracker::get_eye_uncal_ray);
+
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_gaze"), "", "get_eye_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "gaze"), "", "get_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_uncal_gaze"), "", "get_eye_uncal_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "nose_gaze"), "", "get_nose_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "", "get_head_transform");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_ray"), "", "get_eye_ray");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_uncal_ray"), "", "get_eye_uncal_ray");
+
     ClassDB::bind_method(D_METHOD("get_head_rotation_inference_space"), &GazeTracker::get_head_rotation_inference_space);
     ClassDB::bind_method(D_METHOD("get_head_translation_inference_space"), &GazeTracker::get_head_translation_inference_space);
     ClassDB::bind_method(D_METHOD("get_head_position"), &GazeTracker::get_head_position);
@@ -701,6 +716,30 @@ Vector3 GazeTracker::get_head_position() const {
 
 Vector3 GazeTracker::get_head_forward() const {
     return get_head_transform().basis.get_column(2).normalized();
+}
+
+Vector2 GazeTracker::get_nose_gaze() const {
+    return project_gaze_ray_to_viewport(get_head_position(), get_head_forward(), false);
+}
+
+Transform3D GazeTracker::get_eye_ray() const {
+    Vector3 origin = get_gaze_origin();
+    Vector3 forward = get_gaze_direction(true).normalized();
+    Vector3 up(0.0, 1.0, 0.0);
+    Vector3 right = up.cross(forward).normalized();
+    up = forward.cross(right).normalized();
+    Basis b(right, up, forward);
+    return Transform3D(b, origin);
+}
+
+Transform3D GazeTracker::get_eye_uncal_ray() const {
+    Vector3 origin = get_gaze_origin();
+    Vector3 forward = get_gaze_direction(false).normalized();
+    Vector3 up(0.0, 1.0, 0.0);
+    Vector3 right = up.cross(forward).normalized();
+    up = forward.cross(right).normalized();
+    Basis b(right, up, forward);
+    return Transform3D(b, origin);
 }
 
 Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration) const {

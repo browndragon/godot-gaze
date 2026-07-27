@@ -18,12 +18,19 @@ namespace Gaze
     {
 
         /**
-         * @brief Map Inference Camera Space coordinates to standard Camera Space
+         * @brief Standard 180-degree X-axis rotation transformation matrix mapping OpenCV Camera Space to Godot Camera Space.
+         * Position points P: CAMERA_TRANSFORM * P (applies rotation and origin translation).
+         * Direction vectors V: CAMERA_TRANSFORM.basis * V (applies orientation matrix only).
          */
-        inline GazeVector3 to_camera_space(const GazeVector3 &v_cv)
-        {
-            return GazeVector3(v_cv.x, -v_cv.y, -v_cv.z);
-        }
+        inline const GazeTransform3D CAMERA_TRANSFORM = GazeTransform3D(
+            GazeBasis3D(
+                GazeVector3(1.0, 0.0, 0.0),
+                GazeVector3(0.0, -1.0, 0.0),
+                GazeVector3(0.0, 0.0, -1.0)
+            ),
+            GazeVector3(0.0, 0.0, 0.0)
+        );
+
 
         /**
          * @brief Map Inference Face-to-Camera translation and rotation to standard Camera Space GazeTransform3D
@@ -45,7 +52,6 @@ namespace Gaze
             GazeTransform3D T_cv_face_to_cv_cam(R_cv, inference_translation);
 
             // 3. T_ggaze_face_to_cv_face = Transform(R_X(180), zero)
-            // R_X(180) = diag(1, -1, -1)
             GazeBasis3D r_x_180_face(
                 GazeVector3(1, 0, 0),
                 GazeVector3(0, -1, 0),

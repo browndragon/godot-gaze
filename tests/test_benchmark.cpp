@@ -229,14 +229,13 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
     auto project_ray_to_screen = [&engine](const GazeVector3 &origin_cam, const GazeVector3 &dir_cam) -> GazeVector2
     {
         GazeVector2 pixel;
-        if (engine.project_gaze(origin_cam, dir_cam, pixel))
+        bool proj_ok = engine.project_gaze(origin_cam, dir_cam, pixel);
+        if (!proj_ok)
         {
-            // Map the output screen pixel (0 to 3024, 0 to 1964) back to physical millimeters (relative to center)
-            double x_s = (pixel.x - 1512.0) * (301.5 / 3024.0);
-            double y_s = (pixel.y - 982.0) * (188.5 / 1964.0);
-            return GazeVector2(x_s, y_s);
+            std::cerr << "[Benchmark Error] Ray projection failed to intersect screen plane!" << std::endl;
+            return GazeVector2(-9999.0, -9999.0); // Fail loudly instead of returning (0,0)
         }
-        return GazeVector2(0.0, 0.0);
+        return engine.pixel_to_millimeter(pixel);
     };
 
     std::cout << "\n=== Running Gaze Integration Tests on Real Images ===" << std::endl;
@@ -379,10 +378,10 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
             GazeVector3 gaze_dir_cv;
             if (model.estimate_raw_gaze(crops, gaze_dir_cv))
             {
-                sd.gaze_dir = Gaze::Inference::to_camera_space(gaze_dir_cv);
+                sd.gaze_dir = gaze_dir_cv;
 
                 GazeVector3 eye_center_cv = (sd.left_eye + sd.right_eye) * 0.5;
-                GazeVector3 eye_center_cam = Gaze::Inference::to_camera_space(eye_center_cv);
+                GazeVector3 eye_center_cam = Gaze::Inference::CAMERA_TRANSFORM * eye_center_cv;
 
                 std::cout << "DEBUG for " << sd.filename << ":\n"
                           << "  sd.left_eye: (" << sd.left_eye.x << ", " << sd.left_eye.y << ", " << sd.left_eye.z << ")\n"

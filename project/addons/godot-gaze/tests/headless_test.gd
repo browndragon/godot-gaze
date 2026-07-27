@@ -126,9 +126,9 @@ func run_tests():
 	tracker.window_position_override = Vector2(0, 0)
 	var proj_img = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
 	print("Realistic self_center.jpg projected coordinate: ", proj_img)
-	# Check that the coordinate matches the exact expected uncalibrated projection value (-162.6, 444.2)
+	# Check that the coordinate matches the exact expected uncalibrated projection value (1945.87, 444.2)
 	var scale_proj = DisplayProfile.get_screen_scale()
-	var expected_proj = Vector2(-162.6095, 444.239) * (scale_proj / tracker.get_adjusted_viewport_transform().get_scale())
+	var expected_proj = Vector2(2082.61, 444.239) * (scale_proj / tracker.get_adjusted_viewport_transform().get_scale())
 	if abs(proj_img.x - expected_proj.x) > 0.5 or abs(proj_img.y - expected_proj.y) > 0.5:
 		printerr("FAIL: Realistic image gaze projection did not match expected: ", proj_img, " vs ", expected_proj)
 		quit(1)

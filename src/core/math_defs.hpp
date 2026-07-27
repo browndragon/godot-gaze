@@ -271,23 +271,7 @@ namespace Gaze
         }
 
         GazeVector2 get_pitch_yaw_rad() const;
-        GazeVector2 get_pitch_yaw_rad(const GazeVector3 &relative_to) const
-        {
-            GazeVector3 n = normalized();
-            double pitch_rad = std::asin(static_cast<double>(n.y));
-
-            double yaw_rad = std::atan2(static_cast<double>(-n.x), static_cast<double>(-n.z));
-            double rel_yaw_rad = std::atan2(static_cast<double>(-relative_to.x), static_cast<double>(-relative_to.z));
-            double yaw_diff = yaw_rad - rel_yaw_rad;
-            while (yaw_diff > PI)
-                yaw_diff -= TAU;
-            while (yaw_diff < -PI)
-                yaw_diff += TAU;
-
-            return GazeVector2(
-                pitch_rad,
-                yaw_diff);
-        }
+        GazeVector2 get_pitch_yaw_rad(const GazeVector3 &relative_to) const;
     };
 
     // Common direction constants
@@ -296,11 +280,29 @@ namespace Gaze
     inline constexpr GazeVector3 UP = GazeVector3(0.0f, 1.0f, 0.0f);
     inline constexpr GazeVector3 DOWN = GazeVector3(0.0f, -1.0f, 0.0f);
     inline constexpr GazeVector3 FORWARD = GazeVector3(0.0f, 0.0f, -1.0f);
-    inline constexpr GazeVector3 BACK = GazeVector3(0.0f, 0.0f, 1.0f);
+    inline constexpr GazeVector3 BACKWARD = GazeVector3(0.0f, 0.0f, 1.0f);
 
     inline GazeVector2 GazeVector3::get_pitch_yaw_rad() const
     {
         return get_pitch_yaw_rad(FORWARD);
+    }
+
+    inline GazeVector2 GazeVector3::get_pitch_yaw_rad(const GazeVector3 &relative_to) const
+    {
+        GazeVector3 n = normalized();
+        double pitch_rad = std::asin(static_cast<double>(n.y));
+
+        double yaw_rad = std::atan2(static_cast<double>(n.x), static_cast<double>(n.z));
+        double rel_yaw_rad = std::atan2(static_cast<double>(relative_to.x), static_cast<double>(relative_to.z));
+        double yaw_diff = yaw_rad - rel_yaw_rad;
+        while (yaw_diff > PI)
+            yaw_diff -= TAU;
+        while (yaw_diff < -PI)
+            yaw_diff += TAU;
+
+        return GazeVector2(
+            pitch_rad,
+            yaw_diff);
     }
 
     struct GazeBasis3D
@@ -320,6 +322,11 @@ namespace Gaze
         GazeVector3 multiply_vector(const GazeVector3 &v) const
         {
             return x * v.x + y * v.y + z * v.z;
+        }
+
+        GazeVector3 operator*(const GazeVector3 &v) const
+        {
+            return multiply_vector(v);
         }
 
         GazeBasis3D operator*(const GazeBasis3D &other) const
@@ -415,6 +422,16 @@ namespace Gaze
         static constexpr GazeTransform3D identity()
         {
             return GazeTransform3D(GazeBasis3D::identity(), GazeVector3(0.0, 0.0, 0.0));
+        }
+
+        GazeVector3 multiply_point(const GazeVector3 &p) const
+        {
+            return basis * p + origin;
+        }
+
+        GazeVector3 operator*(const GazeVector3 &p) const
+        {
+            return multiply_point(p);
         }
 
         GazeTransform3D operator*(const GazeTransform3D &other) const
@@ -577,15 +594,16 @@ namespace Gaze
         const GazeVector2 &bias_pitch_yaw,
         const GazeVector2 &scale_pitch_yaw = GazeVector2(1.0, 1.0))
     {
-        GazeVector2 py = raw_gaze_dir.get_pitch_yaw_rad();
+        // The user's gaze is towards the camera/screen plane, which is BACKWARD (+Z) in this camera frame.
+        GazeVector2 py = raw_gaze_dir.get_pitch_yaw_rad(BACKWARD);
         double calib_yaw = py.y * scale_pitch_yaw.y + bias_pitch_yaw.y;
         double calib_pitch = py.x * scale_pitch_yaw.x + bias_pitch_yaw.x;
 
         double cos_pitch = std::cos(calib_pitch);
         return GazeVector3(
-                   -std::sin(calib_yaw) * cos_pitch,
+                   std::sin(calib_yaw) * cos_pitch,
                    std::sin(calib_pitch),
-                   -std::cos(calib_yaw) * cos_pitch)
+                   std::cos(calib_yaw) * cos_pitch)
             .normalized();
     }
 
@@ -621,10 +639,10 @@ namespace Gaze
         double W_half = screen_size_mm.x * 0.5;
         double H_half = screen_size_mm.y * 0.5;
 
-        double O_disp_x = -origin_cam.x + camera_offset.x + W_half;
+        double O_disp_x = origin_cam.x + camera_offset.x + W_half;
         double O_disp_y = -(cos_t * origin_cam.y + sin_t * origin_cam.z + camera_offset.y) + H_half;
 
-        double v_disp_x = -dir_cam.x;
+        double v_disp_x = dir_cam.x;
         double v_disp_y = -(cos_t * dir_cam.y + sin_t * dir_cam.z);
 
         out_pos_mm.x = O_disp_x + v_disp_x * t;

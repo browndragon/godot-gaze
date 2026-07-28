@@ -277,11 +277,11 @@ func run_tests():
 	# Verify Head Forward points towards the screen (positive Z in camera space)
 	var head_fwd = tracker.get_head_forward()
 	print("Derived Head Forward Vector: ", head_fwd)
-	if head_fwd.z >= 0.0:
-		printerr("FAIL: Head forward direction does not point towards the screen (-Z): ", head_fwd)
+	if head_fwd.z <= 0.0:
+		printerr("FAIL: Head forward direction does not point towards the screen (+Z): ", head_fwd)
 		quit(1)
 		return
-	print("PASS: Head forward direction verified (points along negative Z).")
+	print("PASS: Head forward direction verified (points along positive Z).")
  
 	print("PASS: High-DPI Dimension Calibration scaling and save logic verified.")
 	

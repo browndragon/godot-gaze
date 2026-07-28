@@ -387,6 +387,6 @@ env.Alias("tests", local_tests)
 # Run all E2E targets
 all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
 if env["platform"] != "javascript":
-    all_tests.append("tests/native")
+    all_tests.extend(["tests/native", "tests/benchmark"])
 env.Alias("tests/all", all_tests)
 

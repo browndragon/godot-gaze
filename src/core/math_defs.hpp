@@ -337,6 +337,21 @@ namespace Gaze
                 multiply_vector(other.z));
         }
 
+        double determinant() const
+        {
+            return x.x * (y.y * z.z - y.z * z.y) -
+                   x.y * (y.x * z.z - y.z * z.x) +
+                   x.z * (y.x * z.y - y.y * z.x);
+        }
+
+        GazeBasis3D transposed() const
+        {
+            return GazeBasis3D(
+                GazeVector3(x.x, y.x, z.x),
+                GazeVector3(x.y, y.y, z.y),
+                GazeVector3(x.z, y.z, z.z));
+        }
+
         static GazeBasis3D from_euler_zyx(double pitch_deg, double yaw_deg, double roll_deg)
         {
             double p = pitch_deg * DEG_TO_RAD;

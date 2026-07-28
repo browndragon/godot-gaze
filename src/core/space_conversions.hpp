@@ -18,11 +18,11 @@ namespace Gaze
     {
 
         /**
-         * @brief Standard 180-degree X-axis rotation transformation matrix mapping OpenCV Camera Space to Godot Camera Space.
-         * Position points P: CAMERA_TRANSFORM * P (applies rotation and origin translation).
-         * Direction vectors V: CAMERA_TRANSFORM.basis * V (applies orientation matrix only).
+         * @brief Standard transformation matrix mapping OpenCV Camera Space (+X right, +Y down, +Z into scene)
+         * to Godot Camera Space (+X right, +Y up, +Z towards screen plane / camera front).
+         * Matrix: diag(1, -1, -1)
          */
-        inline const GazeTransform3D CAMERA_TRANSFORM = GazeTransform3D(
+        inline const GazeTransform3D OPENCV_CAM_TO_GODOT_CAM = GazeTransform3D(
             GazeBasis3D(
                 GazeVector3(1.0, 0.0, 0.0),
                 GazeVector3(0.0, -1.0, 0.0),
@@ -31,6 +31,32 @@ namespace Gaze
             GazeVector3(0.0, 0.0, 0.0)
         );
 
+        inline const GazeTransform3D CAMERA_TRANSFORM = OPENCV_CAM_TO_GODOT_CAM;
+
+        /**
+         * @brief Transformation matrix mapping Godot Face Local Space (+X anatomic right, +Y up, -Z forward)
+         * to OpenCV Face Model Space (+X anatomic left eye, +Y down to mouth, +Z out of face).
+         * Matrix: diag(-1, -1, 1)
+         */
+        inline const GazeTransform3D GODOT_FACE_TO_OPENCV_FACE = GazeTransform3D(
+            GazeBasis3D(
+                GazeVector3(-1.0, 0.0, 0.0),
+                GazeVector3(0.0, -1.0, 0.0),
+                GazeVector3(0.0, 0.0, 1.0)
+            ),
+            GazeVector3(0.0, 0.0, 0.0)
+        );
+
+        /**
+         * @brief Basis mapping OpenVINO ONNX Gaze Model Output Vector (+x subject right, +y up, -z into scene)
+         * to Godot Camera Space (+X right, +Y up, +Z towards screen plane).
+         * Basis: diag(1, 1, -1)
+         */
+        inline const GazeBasis3D ONNX_GAZE_TO_GODOT_CAM = GazeBasis3D(
+            GazeVector3(1.0, 0.0, 0.0),
+            GazeVector3(0.0, 1.0, 0.0),
+            GazeVector3(0.0, 0.0, -1.0)
+        );
 
         /**
          * @brief Map Inference Face-to-Camera translation and rotation to standard Camera Space GazeTransform3D
@@ -39,27 +65,12 @@ namespace Gaze
             const GazeVector3 &inference_translation,
             const GazeVector3 &inference_rvec)
         {
-            // 1. T_cv_cam_to_ggaze_cam = Transform(R_X(180), zero)
-            // R_X(180) = diag(1, -1, -1)
-            GazeBasis3D r_x_180(
-                GazeVector3(1, 0, 0),
-                GazeVector3(0, -1, 0),
-                GazeVector3(0, 0, -1));
-            GazeTransform3D T_cv_cam_to_ggaze_cam(r_x_180, GazeVector3(0, 0, 0));
-
-            // 2. T_cv_face_to_cv_cam = Transform(R_cv, t_cv)
+            // T_cv_face_to_cv_cam = Transform(R_cv, t_cv)
             GazeBasis3D R_cv = rodrigues_to_basis(inference_rvec);
             GazeTransform3D T_cv_face_to_cv_cam(R_cv, inference_translation);
 
-            // 3. T_ggaze_face_to_cv_face = Transform(R_X(180), zero)
-            GazeBasis3D r_x_180_face(
-                GazeVector3(1, 0, 0),
-                GazeVector3(0, -1, 0),
-                GazeVector3(0, 0, -1));
-            GazeTransform3D T_ggaze_face_to_cv_face(r_x_180_face, GazeVector3(0, 0, 0));
-
-            // Chain: T_ggaze_face_to_ggaze_cam = T_cv_cam_to_ggaze_cam * T_cv_face_to_cv_cam * T_ggaze_face_to_cv_face
-            return T_cv_cam_to_ggaze_cam * T_cv_face_to_cv_cam * T_ggaze_face_to_cv_face;
+            // Chain: T_ggaze_face_to_ggaze_cam = OPENCV_CAM_TO_GODOT_CAM * T_cv_face_to_cv_cam * GODOT_FACE_TO_OPENCV_FACE
+            return OPENCV_CAM_TO_GODOT_CAM * T_cv_face_to_cv_cam * GODOT_FACE_TO_OPENCV_FACE;
         }
 
     } // namespace Inference

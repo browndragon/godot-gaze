@@ -433,11 +433,11 @@ func _perform_drawing():
 	# TODO: Don't inline this here. We should be pulling this from hardcoded well-known modeling.
 	# Model points to project (in Godot space, standardized to YuNet native layout: Right Eye, Left Eye, Nose, Right Mouth, Left Mouth):
 	var model_points = [
-		Vector3(-30.0, 28.676, 0.0),     # Right eye center (0)
-		Vector3(30.0, 28.676, 0.0),      # Left eye center (1)
-		Vector3(0.0, 0.5, 52.0),         # Nose tip (2)
-		Vector3(-18.462, -31.712, 4.55), # Mouth right corner (3)
-		Vector3(18.462, -31.712, 4.55)   # Mouth left corner (4)
+		Vector3(30.0, 28.676, 0.0),      # Right eye center (anatomic right +X)
+		Vector3(-30.0, 28.676, 0.0),     # Left eye center (anatomic left -X)
+		Vector3(0.0, 0.5, -52.0),        # Nose tip (forward -Z)
+		Vector3(18.462, -31.712, -4.55), # Mouth right corner (+X, -Z)
+		Vector3(-18.462, -31.712, -4.55) # Mouth left corner (-X, -Z)
 	]
 
 	var projected_pts = []

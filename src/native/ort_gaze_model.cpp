@@ -1,6 +1,7 @@
 #include "ort_gaze_model.hpp"
 #include "log.hpp"
 #include "platform_ort.hpp"
+#include "../core/space_conversions.hpp"
 #include <cmath>
 #include <cstring>
 #include <algorithm>
@@ -166,11 +167,8 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
             double dz = std::cos(yaw) * cos_pitch;
             out_gaze_dir_cv = GazeVector3(dx, -dy, -dz).normalized();
         } else if (num_elements == 3) {
-            out_gaze_dir_cv = GazeVector3(
-                -out_data[0], // Flip X so subject's left (screen left) maps to -X_cam
-                -out_data[1], // Negate Y so looking up maps to +Y_cam (up in Godot camera space)
-                -out_data[2]  // Negate Z so ray points towards screen plane (+Z) in Godot camera space
-            ).normalized();
+            GazeVector3 raw_onnx_gaze(out_data[0], out_data[1], out_data[2]);
+            out_gaze_dir_cv = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_onnx_gaze).normalized();
         } else {
             return false;
         }

@@ -178,7 +178,7 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
 
     // Verify head forward vector direction in standard Camera Space
     GazeTransform3D head_transform = Gaze::Inference::get_head_transform_in_camera_space(crops.head_pose_translation, crops.head_pose_rotation);
-    GazeVector3 head_forward = head_transform.basis.multiply_vector(GazeVector3(0, 0, 1));
+    GazeVector3 head_forward = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
 
     // For a forward-facing head, the forward vector should point towards the screen (+Z_cam in Godot camera space)
     CHECK(head_forward.z > 0.8);
@@ -473,7 +473,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_straight(0.0, 0.0, 0.0);
         Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_straight);
-        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
 
         // Z points towards the screen (positive Z in Godot camera space)
         CHECK(head_forward.z > 0.9);
@@ -486,7 +486,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_up(-0.15, 0.0, 0.0); // ~8.6 degrees up
         Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_up);
-        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
 
         // Pitch up must produce a positive Y component in camera space
         CHECK(head_forward.y > 0.05);
@@ -498,7 +498,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_down(0.15, 0.0, 0.0); // ~8.6 degrees down
         Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_down);
-        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
 
         // Pitch down must produce a negative Y component in camera space
         CHECK(head_forward.y < -0.05);
@@ -508,9 +508,9 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     // 4. Head turned left (yaw rotation around Y is positive in OpenCV: rvec.y > 0)
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_left(0.0, 0.2, 0.0); // ~11.5 degrees left (camera right)
+        Gaze::GazeVector3 rotation_left(0.0, 0.15, 0.0); // ~8.6 degrees left
         Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_left);
-        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
 
         // Turning left (facing camera's negative X direction in standard camera space)
         CHECK(head_forward.x < -0.05);
@@ -520,9 +520,9 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     // 5. Head turned right (yaw rotation around Y is negative in OpenCV: rvec.y < 0)
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_right(0.0, -0.2, 0.0); // ~11.5 degrees right (camera left)
+        Gaze::GazeVector3 rotation_right(0.0, -0.15, 0.0); // ~8.6 degrees right
         Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_right);
-        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_forward = transform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
 
         // Turning right (facing camera's positive X direction in standard camera space)
         CHECK(head_forward.x > 0.05);
@@ -563,7 +563,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
 
         // Project ray onto screen plane (600x340 mm screen, camera at top y=170mm)
         Gaze::GazeTransform3D xform = Gaze::Inference::get_head_transform_in_camera_space(est_tvec, est_rvec);
-        Gaze::GazeVector3 head_fwd = xform.basis.multiply_vector(Gaze::GazeVector3(0, 0, 1));
+        Gaze::GazeVector3 head_fwd = xform.basis.multiply_vector(Gaze::GazeVector3(0, 0, -1));
         
         Gaze::ProjectionEngine proj_engine;
         proj_engine.set_screen_size_pixels(Gaze::GazeVector2(1920, 1080));
@@ -1798,5 +1798,75 @@ TEST_CASE("Testing Physical Gaze Ray Direction Invariants")
     CHECK(down_ok == true);
     CHECK(down_pixel.y > center_pixel.y);
 }
+
+TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vector Mappings")
+{
+    // 1. OPENCV_CAM_TO_GODOT_CAM Matrix Basis Properties
+    GazeBasis3D r_cam = Gaze::Inference::OPENCV_CAM_TO_GODOT_CAM.basis;
+    CHECK(r_cam.determinant() == doctest::Approx(1.0));
+    // Verify orthogonality R^T * R = I
+    GazeBasis3D r_cam_t = r_cam.transposed();
+    GazeBasis3D r_cam_prod = r_cam_t * r_cam;
+    CHECK(r_cam_prod.x.x == doctest::Approx(1.0));
+    CHECK(r_cam_prod.y.y == doctest::Approx(1.0));
+    CHECK(r_cam_prod.z.z == doctest::Approx(1.0));
+
+    // 2. GODOT_FACE_TO_OPENCV_FACE Matrix Basis Properties
+    GazeBasis3D r_face = Gaze::Inference::GODOT_FACE_TO_OPENCV_FACE.basis;
+    CHECK(r_face.determinant() == doctest::Approx(1.0));
+    GazeBasis3D r_face_t = r_face.transposed();
+    GazeBasis3D r_face_prod = r_face_t * r_face;
+    CHECK(r_face_prod.x.x == doctest::Approx(1.0));
+    CHECK(r_face_prod.y.y == doctest::Approx(1.0));
+    CHECK(r_face_prod.z.z == doctest::Approx(1.0));
+
+    // 3. ONNX_GAZE_TO_GODOT_CAM Matrix Basis Properties
+    GazeBasis3D r_onnx = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM;
+    CHECK(r_onnx.determinant() == doctest::Approx(-1.0)); // Reflection matrix converting left-hand to right-hand
+    
+    // Test canonical gaze direction vector mapping:
+    // Looking anatomic right (+x_onnx) -> +X_cam (screen right)
+    GazeVector3 right_gaze = r_onnx.multiply_vector(GazeVector3(0.5, 0.0, -0.866));
+    CHECK(right_gaze.x > 0.0);
+    CHECK(right_gaze.z > 0.0); // Points towards display screen plane (+Z)
+
+    // Looking anatomic left (-x_onnx) -> -X_cam (screen left)
+    GazeVector3 left_gaze = r_onnx.multiply_vector(GazeVector3(-0.5, 0.0, -0.866));
+    CHECK(left_gaze.x < 0.0);
+    CHECK(left_gaze.z > 0.0);
+
+    // Looking UP (+y_onnx) -> +Y_cam (screen top)
+    GazeVector3 up_gaze = r_onnx.multiply_vector(GazeVector3(0.0, 0.5, -0.866));
+    CHECK(up_gaze.y > 0.0);
+    CHECK(up_gaze.z > 0.0);
+
+    // Looking DOWN (-y_onnx) -> -Y_cam (screen bottom)
+    GazeVector3 down_gaze = r_onnx.multiply_vector(GazeVector3(0.0, -0.5, -0.866));
+    CHECK(down_gaze.y < 0.0);
+    CHECK(down_gaze.z > 0.0);
+
+    // 4. Head Transform Chain Vector Mapping Test
+    // For unrotated head (rvec = 0), face forward vector in Godot face space is -Z (0, 0, -1)
+    GazeVector3 translation(0.0, 0.0, 800.0);
+    GazeVector3 rotation_zero(0.0, 0.0, 0.0);
+    GazeTransform3D transform_zero = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_zero);
+    GazeVector3 fwd_zero = transform_zero.basis.multiply_vector(GazeVector3(0.0, 0.0, -1.0));
+    CHECK(fwd_zero.z > 0.9); // Points towards display screen plane (+Z_cam)
+
+    // Head turned anatomic left (rvec.y > 0 in OpenCV PnP solver)
+    GazeVector3 rotation_left(0.0, 0.15, 0.0);
+    GazeTransform3D transform_left = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_left);
+    GazeVector3 fwd_left = transform_left.basis.multiply_vector(GazeVector3(0.0, 0.0, -1.0));
+    CHECK(fwd_left.x < -0.05); // Must point towards screen left (-X_cam)
+    CHECK(fwd_left.z > 0.9);
+
+    // Head turned anatomic right (rvec.y < 0 in OpenCV PnP solver)
+    GazeVector3 rotation_right(0.0, -0.15, 0.0);
+    GazeTransform3D transform_right = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_right);
+    GazeVector3 fwd_right = transform_right.basis.multiply_vector(GazeVector3(0.0, 0.0, -1.0));
+    CHECK(fwd_right.x > 0.05); // Must point towards screen right (+X_cam)
+    CHECK(fwd_right.z > 0.9);
+}
+
 
 

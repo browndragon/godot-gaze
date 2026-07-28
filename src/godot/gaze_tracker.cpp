@@ -715,7 +715,7 @@ Vector3 GazeTracker::get_head_position() const {
 }
 
 Vector3 GazeTracker::get_head_forward() const {
-    return get_head_transform().basis.get_column(2).normalized();
+    return -get_head_transform().basis.get_column(2).normalized();
 }
 
 Vector2 GazeTracker::get_nose_gaze() const {

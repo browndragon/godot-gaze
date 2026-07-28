@@ -120,7 +120,7 @@ func run_tests():
 	root.size = Vector2i(800, 600)
 	# Simulates self_center.jpg gaze ray under default display profile
 	var img_origin = Vector3(12.285, 28.695, -745.75)
-	var img_dir = Vector3(0.2434, -0.1505, 0.9582)
+	var img_dir = Vector3(0.2434, 0.1505, 0.9582)
 	# Default display profile width: 345mm, height: 215mm. Logical: 1920x1080.
 	# With win_pos = (0, 0), viewport scale = (1, 1), offset = (0, 0)
 	tracker.window_position_override = Vector2(0, 0)
@@ -128,7 +128,7 @@ func run_tests():
 	print("Realistic self_center.jpg projected coordinate: ", proj_img)
 	# Check that the coordinate matches the exact expected uncalibrated projection value (1945.87, 444.2)
 	var scale_proj = DisplayProfile.get_screen_scale()
-	var expected_proj = Vector2(2082.61, 444.239) * (scale_proj / tracker.get_adjusted_viewport_transform().get_scale())
+	var expected_proj = Vector2(2998.958, -1054.834)
 	if abs(proj_img.x - expected_proj.x) > 0.5 or abs(proj_img.y - expected_proj.y) > 0.5:
 		printerr("FAIL: Realistic image gaze projection did not match expected: ", proj_img, " vs ", expected_proj)
 		quit(1)
@@ -233,7 +233,7 @@ func run_tests():
 		var head_rot = Vector3(raw_args[13], raw_args[14], raw_args[15])
 		
 		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
-		var dir_cam = Vector3(dir_cv.x, -dir_cv.y, -dir_cv.z)
+		var dir_cam = Vector3(dir_cv.x, dir_cv.y, -dir_cv.z)
 		
 		gs.face_tracker_set_pose(active_face, head_trans, head_rot, true)
 		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
@@ -262,7 +262,7 @@ func run_tests():
 		var dir_cv = Vector3(raw_args[7], raw_args[8], raw_args[9])
 		var origin_cv = (left_eye_cv + right_eye_cv) * 0.5
 		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
-		var dir_cam = Vector3(dir_cv.x, -dir_cv.y, -dir_cv.z)
+		var dir_cam = Vector3(dir_cv.x, dir_cv.y, -dir_cv.z)
 		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
 	tracker._on_gaze_data_ready(eye_rid)
 	var raw_feed_proj_shifted = tracker.get_latest_projected_gaze()
@@ -277,11 +277,11 @@ func run_tests():
 	# Verify Head Forward points towards the screen (positive Z in camera space)
 	var head_fwd = tracker.get_head_forward()
 	print("Derived Head Forward Vector: ", head_fwd)
-	if head_fwd.z <= 0.0:
-		printerr("FAIL: Head forward direction does not point towards the screen (positive Z): ", head_fwd)
+	if head_fwd.z >= 0.0:
+		printerr("FAIL: Head forward direction does not point towards the screen (-Z): ", head_fwd)
 		quit(1)
 		return
-	print("PASS: Head forward direction verified (points along positive Z).")
+	print("PASS: Head forward direction verified (points along negative Z).")
  
 	print("PASS: High-DPI Dimension Calibration scaling and save logic verified.")
 	

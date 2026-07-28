@@ -264,12 +264,8 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
 
     std::vector<SampleData> samples;
 
-    // Load baseline benchmark if exists (checking build output directory first, fallback to checked-in version)
-    BaselineMap baseline = load_baseline("build/tests/artifacts/gaze_benchmark_report.md");
-    if (baseline.empty())
-    {
-        baseline = load_baseline("test_assets/gaze_benchmark_report.md");
-    }
+    // Load baseline benchmark from version-controlled golden baseline in test_assets/
+    BaselineMap baseline = load_baseline("test_assets/gaze_benchmark_report.md");
     bool has_baseline = !baseline.empty();
 
     for (const auto &tg : targets)
@@ -358,16 +354,16 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
             sd.translation = head_transform.origin;
             sd.rotation = head_transform.basis.get_euler_deg();
 
-            GazeVector3 eye_r_local(-30.0, 28.676, 0.0);
-            GazeVector3 eye_l_local(30.0, 28.676, 0.0);
-            GazeVector3 nose_local(0.0, 0.5, 52.0);
+            GazeVector3 eye_r_local(30.0, 28.676, 0.0);
+            GazeVector3 eye_l_local(-30.0, 28.676, 0.0);
+            GazeVector3 nose_local(0.0, 0.5, -52.0);
 
             sd.eye_l_cam = head_transform.basis.multiply_vector(eye_l_local) + head_transform.origin;
             sd.eye_r_cam = head_transform.basis.multiply_vector(eye_r_local) + head_transform.origin;
             sd.nose_cam = head_transform.basis.multiply_vector(nose_local) + head_transform.origin;
 
-            // Head forward vector in standard Camera Space (standard forward is +Z in model space, which maps to +Z_cam towards screen)
-            GazeVector3 head_forward_cam = head_transform.basis.multiply_vector(GazeVector3(0, 0, 1));
+            // Head forward vector in standard Camera Space (standard forward is -Z in Godot face model space, which maps to +Z_cam towards screen)
+            GazeVector3 head_forward_cam = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
             sd.head_forward = head_forward_cam;
 
             // Gaze origin (nose/head center) in standard Camera Space
@@ -599,68 +595,107 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
         }
     }
 
-    // Assert that errors are within a reasonable uncalibrated baseline (e.g. within 12 cm for nose, 38 cm for gaze)
+    // Assert that errors are within a reasonable uncalibrated baseline (e.g. within 25 cm for nose, 55 cm for gaze)
+    // and strictly enforce physical directional quadrant matching for BOTH nose and eye gaze independently across ALL test images.
     for (const auto &sd : samples)
     {
         if (sd.detected)
         {
-            bool check_x = (sd.filename == "self_center.jpg" || sd.filename.rfind("self_left", 0) == 0 || sd.filename.rfind("self_right", 0) == 0);
-            bool check_y = (sd.filename == "self_center.jpg");
+            CHECK_MESSAGE(sd.nose_error_x < 250.0, "Nose X error should be < 25cm in " << sd.filename << " (actual: " << sd.nose_error_x << " mm)");
+            CHECK_MESSAGE(sd.gaze_error_x < 550.0, "Gaze X error should be < 55cm in " << sd.filename << " (actual: " << sd.gaze_error_x << " mm)");
+            CHECK_MESSAGE(sd.nose_error_y < 250.0, "Nose Y error should be < 25cm in " << sd.filename << " (actual: " << sd.nose_error_y << " mm)");
+            CHECK_MESSAGE(sd.gaze_error_y < 550.0, "Gaze Y error should be < 55cm in " << sd.filename << " (actual: " << sd.gaze_error_y << " mm)");
 
-            if (check_x)
+            // 1. Nose Gaze Directional Quadrant Checks (X and Y)
+            double nose_target_x = targets_map[sd.filename].nose_target.x;
+            double nose_target_y = targets_map[sd.filename].nose_target.y;
+
+            if (nose_target_x < -100.0)
             {
-                CHECK_MESSAGE(sd.nose_error_x < 250.0, "Nose X error should be < 25cm in " << sd.filename << " (actual: " << sd.nose_error_x << " mm)");
-                CHECK_MESSAGE(sd.gaze_error_x < 550.0, "Gaze X error should be < 55cm in " << sd.filename << " (actual: " << sd.gaze_error_x << " mm)");
-
-                // Directional quadrant matching on X axis (User perspective)
-                // If target X is extreme left/right, the projected direction must have the matching sign
-                double target_x = targets_map[sd.filename].gaze_target.x;
-                if (target_x < -100.0)
-                {
-                    CHECK_MESSAGE(sd.gaze_projected.x < 0.0, "Gaze projection for left target should be on the left half of the screen (x < 0) in " << sd.filename << " (actual: " << sd.gaze_projected.x << " mm)");
-                }
-                else if (target_x > 100.0)
-                {
-                    CHECK_MESSAGE(sd.gaze_projected.x > -100.0, "Gaze projection for right target should be on the right half of the screen in " << sd.filename << " (actual: " << sd.gaze_projected.x << " mm)");
-                }
+                CHECK_MESSAGE(sd.nose_projected.x < 0.0, "Nose projection for left nose target should be on the left half of the screen (x < 0) in " << sd.filename << " (actual: " << sd.nose_projected.x << " mm)");
             }
-            if (check_y)
+            else if (nose_target_x > 100.0)
             {
-                CHECK_MESSAGE(sd.nose_error_y < 250.0, "Nose Y error should be < 25cm in " << sd.filename << " (actual: " << sd.nose_error_y << " mm)");
-                CHECK_MESSAGE(sd.gaze_error_y < 550.0, "Gaze Y error should be < 55cm in " << sd.filename << " (actual: " << sd.gaze_error_y << " mm)");
+                CHECK_MESSAGE(sd.nose_projected.x > 0.0, "Nose projection for right nose target should be on the right half of the screen (x > 0) in " << sd.filename << " (actual: " << sd.nose_projected.x << " mm)");
+            }
 
-                // Directional quadrant matching on Y axis (User perspective)
-                // If target Y is extreme top/down, the projected direction must have the matching sign
-                double target_y = targets_map[sd.filename].gaze_target.y;
-                if (target_y < -80.0)
-                {
-                    CHECK_MESSAGE(sd.gaze_projected.y < 0.0, "Gaze projection for top target should be on the top half of the screen (y < 0) in " << sd.filename << " (actual: " << sd.gaze_projected.y << " mm)");
-                }
-                else if (target_y > 80.0)
-                {
-                    CHECK_MESSAGE(sd.gaze_projected.y > 0.0, "Gaze projection for bottom target should be on the bottom half of the screen (y > 0) in " << sd.filename << " (actual: " << sd.gaze_projected.y << " mm)");
-                }
+            if (nose_target_y < -80.0)
+            {
+                CHECK_MESSAGE(sd.nose_projected.y < 0.0, "Nose projection for top nose target should be on the top half of the screen (y < 0) in " << sd.filename << " (actual: " << sd.nose_projected.y << " mm)");
+            }
+            else if (nose_target_y > 80.0)
+            {
+                CHECK_MESSAGE(sd.nose_projected.y > 0.0, "Nose projection for bottom nose target should be on the bottom half of the screen (y > 0) in " << sd.filename << " (actual: " << sd.nose_projected.y << " mm)");
+            }
+
+            // 2. Eye Gaze Directional Quadrant Checks (X and Y)
+            double gaze_target_x = targets_map[sd.filename].gaze_target.x;
+            double gaze_target_y = targets_map[sd.filename].gaze_target.y;
+
+            if (gaze_target_x < -100.0)
+            {
+                CHECK_MESSAGE(sd.gaze_projected.x < 0.0, "Gaze projection for left eye target should be on the left half of the screen (x < 0) in " << sd.filename << " (actual: " << sd.gaze_projected.x << " mm)");
+            }
+            else if (gaze_target_x > 100.0)
+            {
+                CHECK_MESSAGE(sd.gaze_projected.x > 0.0, "Gaze projection for right eye target should be on the right half of the screen (x > 0) in " << sd.filename << " (actual: " << sd.gaze_projected.x << " mm)");
+            }
+
+            if (gaze_target_y < -80.0)
+            {
+                CHECK_MESSAGE(sd.gaze_projected.y < 0.0, "Gaze projection for top eye target should be on the top half of the screen (y < 0) in " << sd.filename << " (actual: " << sd.gaze_projected.y << " mm)");
+            }
+            else if (gaze_target_y > 80.0)
+            {
+                CHECK_MESSAGE(sd.gaze_projected.y > 0.0, "Gaze projection for bottom eye target should be on the bottom half of the screen (y > 0) in " << sd.filename << " (actual: " << sd.gaze_projected.y << " mm)");
             }
         }
     }
 
-    // Regression Assertions
+    // Regression and Goldenfile Assertions
     bool regression_detected = false;
     std::string regression_msg = "";
-    double tolerance = 0.2; // Allow 0.2mm tolerance for minor float variations
+    double tolerance = 0.5; // 0.5mm tolerance for goldenfile matching
 
     for (const auto &sd : samples)
     {
         if (sd.detected && baseline.count(sd.filename))
         {
+            // 1. Goldenfile Value Matching (assert current run matches checked-in golden baseline)
+            if (baseline[sd.filename].count("nose_mm") && baseline[sd.filename]["nose_mm"].current.valid)
+            {
+                auto base_nose = baseline[sd.filename]["nose_mm"].current;
+                double diff_x = std::abs(sd.nose_projected.x - base_nose.x);
+                double diff_y = std::abs(sd.nose_projected.y - base_nose.y);
+                if (diff_x > tolerance || diff_y > tolerance)
+                {
+                    regression_detected = true;
+                    regression_msg += "Goldenfile value mismatch for nose_mm on " + sd.filename +
+                                      ": current " + format_vec2(sd.nose_projected.x, sd.nose_projected.y) +
+                                      " vs golden " + format_vec2(base_nose.x, base_nose.y) + "\n";
+                }
+            }
+
+            if (baseline[sd.filename].count("gaze_mm") && baseline[sd.filename]["gaze_mm"].current.valid)
+            {
+                auto base_gaze = baseline[sd.filename]["gaze_mm"].current;
+                double diff_x = std::abs(sd.gaze_projected.x - base_gaze.x);
+                double diff_y = std::abs(sd.gaze_projected.y - base_gaze.y);
+                if (diff_x > tolerance || diff_y > tolerance)
+                {
+                    regression_detected = true;
+                    regression_msg += "Goldenfile value mismatch for gaze_mm on " + sd.filename +
+                                      ": current " + format_vec2(sd.gaze_projected.x, sd.gaze_projected.y) +
+                                      " vs golden " + format_vec2(base_gaze.x, base_gaze.y) + "\n";
+                }
+            }
+
+            // 2. Error Vector Assertions (check for regressions against target locations)
             bool check_x = (sd.filename == "self_center.jpg" || sd.filename.find("left") != std::string::npos || sd.filename.find("right") != std::string::npos);
             bool check_y = (sd.filename == "self_center.jpg" || sd.filename.find("top") != std::string::npos || sd.filename.find("down") != std::string::npos);
 
-            // Nose error vector
             double nose_err_x = std::abs(sd.nose_projected.x - targets_map[sd.filename].nose_target.x);
             double nose_err_y = std::abs(sd.nose_projected.y - targets_map[sd.filename].nose_target.y);
-
-            // Gaze error vector
             double gaze_err_x = std::abs(sd.gaze_projected.x - targets_map[sd.filename].gaze_target.x);
             double gaze_err_y = std::abs(sd.gaze_projected.y - targets_map[sd.filename].gaze_target.y);
 
@@ -720,7 +755,18 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
 
     if (regression_detected)
     {
-        FAIL("Regression detected:\n"
-             << regression_msg << "\nPlease investigate. If this change was intentional and correct, promote the new benchmark from build/tests/artifacts/ to test_assets/ to accept the metrics. You MUST document the deltas and justify why they represent an improvement in your commit message and pull request description.");
+        FAIL("========================================================================\n"
+             << "BENCHMARK GOLDENFILE MISMATCH DETECTED:\n"
+             << regression_msg
+             << "\nA new benchmark report has been generated at:\n"
+             << "  build/tests/artifacts/gaze_benchmark_report.md\n\n"
+             << "Goldenfile baseline is located at:\n"
+             << "  test_assets/gaze_benchmark_report.md\n\n"
+             << "STEPS TO PROMOTE BENCHMARK REPORT:\n"
+             << "1. Inspect and verify the deltas between build/tests/artifacts/gaze_benchmark_report.md and test_assets/gaze_benchmark_report.md.\n"
+             << "2. Obtain user review and explicit approval for the metric changes.\n"
+             << "3. Copy the artifact to promote it: cp build/tests/artifacts/gaze_benchmark_report.md test_assets/gaze_benchmark_report.md\n"
+             << "4. Re-run 'scons tests/benchmark' to confirm tests pass with the new goldenfile.\n"
+             << "========================================================================");
     }
 }

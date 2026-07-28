@@ -141,9 +141,9 @@ func _init():
 	print("Tracker Head Transform: ", xform)
 	
 	# TODO: Pull from a well-known constant exposed by our library.
-	var nose_pos = xform * Vector3(0.0, 0.5, 52.0)
-	var eye_l_pos = xform * Vector3(30.0, 28.676, 0.0)
-	var eye_r_pos = xform * Vector3(-30.0, 28.676, 0.0)
+	var nose_pos = xform * Vector3(0.0, 0.5, -52.0)
+	var eye_l_pos = xform * Vector3(-30.0, 28.676, 0.0)
+	var eye_r_pos = xform * Vector3(30.0, 28.676, 0.0)
 	
 	print("Nose position: ", nose_pos, " | Left eye position: ", eye_l_pos, " | Right eye position: ", eye_r_pos)
 	
@@ -160,7 +160,7 @@ func _init():
 		return
 		
 	# Head forward vector direction assertion: must point generally towards the screen (+Z direction)
-	var head_forward = xform.basis.z.normalized()
+	var head_forward = -xform.basis.z.normalized()
 	if head_forward.z <= 0.5:
 		printerr("FAIL: Shaders/Crops - Head forward vector points away from the screen! head_forward = ", head_forward)
 		quit(1)

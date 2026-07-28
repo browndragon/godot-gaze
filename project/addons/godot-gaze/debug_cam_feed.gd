@@ -269,7 +269,10 @@ func update_diagnostics_ui():
 			var xform = face_estimator.get("transform")
 			if xform:
 				head_pos = xform.origin
-				head_rot = xform.basis.get_euler() * (180.0 / PI)
+				if tracker.has_method("get_head_rotation_inference_space"):
+					head_rot = tracker.call("get_head_rotation_inference_space")
+				else:
+					head_rot = xform.basis.get_euler() * (180.0 / PI)
 
 	var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3.ZERO
 	var dev_cal = tracker.get("device_calibration")

@@ -354,6 +354,8 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
             sd.translation = head_transform.origin;
             sd.rotation = head_transform.basis.get_euler_deg();
 
+            CHECK_MESSAGE(crops.head_pose_translation.z >= 300.0 && crops.head_pose_translation.z <= 1200.0, "Head pose Z depth out of reasonable physical range for " << tg.filename);
+
             GazeVector3 eye_r_local(30.0, 28.676, 0.0);
             GazeVector3 eye_l_local(-30.0, 28.676, 0.0);
             GazeVector3 nose_local(0.0, 0.5, -52.0);

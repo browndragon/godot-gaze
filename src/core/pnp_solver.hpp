@@ -20,6 +20,13 @@ namespace Gaze {
  * @param use_extrinsic_guess If true, uses the input values of rvec/tvec as initial guess.
  * @return true if the solver converged successfully, false otherwise.
  */
+bool solve_pnp_dlt(
+    const std::vector<GazeVector3>& model_points,
+    const std::vector<GazeVector2>& image_points,
+    double fx, double fy, double cx, double cy,
+    GazeVector3& rvec, GazeVector3& tvec
+);
+
 bool solve_pnp_lm(
     const std::vector<GazeVector3>& model_points,
     const std::vector<GazeVector2>& image_points,

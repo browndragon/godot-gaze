@@ -1863,10 +1863,77 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver)
     GazeVector3 rotation_right(0.0, 0.15, 0.0);
     GazeTransform3D transform_right = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_right);
-    GazeVector3 fwd_right = transform_right.basis.multiply_vector(GazeVector3(0.0, 0.0, -1.0));
+        GazeVector3 fwd_right = transform_right.basis.multiply_vector(GazeVector3(0.0, 0.0, -1.0));
     CHECK(fwd_right.x > 0.05); // Must point towards screen right (+X_cam)
     CHECK(fwd_right.z > 0.9);
 }
 
+TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
+{
+    double fx = 1000.0, cx = 320.0, cy = 240.0;
 
+    std::vector<Gaze::GazeVector3> model_points = {
+        Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
+        Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
+        Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
+    };
+
+    // Simulate real 2D landmark foreshortening of a face tilting back by +30 deg (+0.523 rad) at Z=700mm
+    Gaze::GazeVector3 true_rvec(0.523, 0.0, 0.0); // +30 deg pitch up
+    Gaze::GazeVector3 true_tvec(0.0, 0.0, 700.0);
+    Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+
+    std::vector<Gaze::GazeVector2> img_pts(5);
+    for (size_t i = 0; i < 5; ++i) {
+        Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
+        img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+    }
+
+    // Measure IPD in 2D image
+    double eye_dist_px = std::hypot(img_pts[1].x - img_pts[0].x, img_pts[1].y - img_pts[0].y);
+    double ipd_3d = 2.0 * Gaze::FaceModelGeometry::EYE_X;
+    double z_ipd = (ipd_3d * fx) / eye_dist_px;
+
+    // Run unconstrained PnP
+    Gaze::GazeVector3 unconstrained_rvec(0.0, 0.0, 0.0);
+    Gaze::GazeVector3 unconstrained_tvec(0.0, 0.0, 700.0);
+    Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, unconstrained_rvec, unconstrained_tvec, false);
+
+    std::cout << "[PnP Foreshortening Test] True Pitch: " << true_rvec.x << " rad (" << true_rvec.x * 57.2958 << " deg)" << std::endl;
+    std::cout << "  Unconstrained PnP Pitch: " << unconstrained_rvec.x << " rad (" << unconstrained_rvec.x * 57.2958 << " deg) | Z: " << unconstrained_tvec.z << " mm" << std::endl;
+    std::cout << "  IPD-Calculated Z Depth: " << z_ipd << " mm" << std::endl;
+
+    CHECK(z_ipd == doctest::Approx(685.677).epsilon(0.01));
+}
+
+TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
+{
+    double fx = 1000.0, cx = 320.0, cy = 240.0;
+    std::vector<Gaze::GazeVector3> model_points = {
+        Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
+        Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
+        Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
+    };
+
+    Gaze::GazeVector3 true_rvec(0.15, -0.10, 0.05);
+    Gaze::GazeVector3 true_tvec(20.0, -10.0, 680.0);
+    Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+
+    std::vector<Gaze::GazeVector2> img_pts(5);
+    for (size_t i = 0; i < 5; ++i) {
+        Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
+        img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+    }
+
+    Gaze::GazeVector3 dlt_rvec, dlt_tvec;
+    bool dlt_ok = Gaze::solve_pnp_dlt(model_points, img_pts, fx, fx, cx, cy, dlt_rvec, dlt_tvec);
+    REQUIRE(dlt_ok == true);
+
+    CHECK(dlt_tvec.z == doctest::Approx(680.0).epsilon(0.05));
+    CHECK(dlt_rvec.z == doctest::Approx(0.05).epsilon(0.05));
+}
 

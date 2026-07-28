@@ -448,7 +448,7 @@ func _perform_drawing():
 		if depth <= 0.01:
 			projected_pts.append(Vector2.INF)
 		else:
-			var px = (p_cam.x / depth) * focal_len + cx
+			var px = (-p_cam.x / depth) * focal_len + cx
 			var py = (-p_cam.y / depth) * focal_len + cy
 			var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
@@ -488,7 +488,7 @@ func _perform_drawing():
 	var start_depth = -start_cv.z
 	if abs(start_depth) < 0.0001:
 		start_depth = 0.0001
-	var start_px = (start_cv.x / start_depth) * focal_len + cx
+	var start_px = (-start_cv.x / start_depth) * focal_len + cx
 	var start_py = (-start_cv.y / start_depth) * focal_len + cy
 	var start_local = Vector2(start_px * drawn_rect.size.x / img_w, start_py * drawn_rect.size.y / img_h) + drawn_rect.position
 	var start_pt = rect.global_position + start_local - active_canvas.global_position
@@ -496,7 +496,7 @@ func _perform_drawing():
 	var end_depth = -end_cv.z
 	if abs(end_depth) < 0.0001:
 		end_depth = 0.0001
-	var end_px = (end_cv.x / end_depth) * focal_len + cx
+	var end_px = (-end_cv.x / end_depth) * focal_len + cx
 	var end_py = (-end_cv.y / end_depth) * focal_len + cy
 	var end_local = Vector2(end_px * drawn_rect.size.x / img_w, end_py * drawn_rect.size.y / img_h) + drawn_rect.position
 	var end_pt = rect.global_position + end_local - active_canvas.global_position

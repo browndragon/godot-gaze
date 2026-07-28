@@ -24,7 +24,7 @@ namespace Gaze
          */
         inline const GazeTransform3D OPENCV_CAM_TO_GODOT_CAM = GazeTransform3D(
             GazeBasis3D(
-                GazeVector3(1.0, 0.0, 0.0),
+                GazeVector3(-1.0, 0.0, 0.0),
                 GazeVector3(0.0, -1.0, 0.0),
                 GazeVector3(0.0, 0.0, -1.0)
             ),
@@ -49,11 +49,11 @@ namespace Gaze
 
         /**
          * @brief Basis mapping OpenVINO ONNX Gaze Model Output Vector (+x subject right, +y up, -z into scene)
-         * to Godot Camera Space (+X right, +Y up, +Z towards screen plane).
-         * Basis: diag(1, 1, -1)
+         * to Godot Camera Space (-X left, +Y up, +Z towards screen plane).
+         * Basis: diag(-1, 1, -1)
          */
         inline const GazeBasis3D ONNX_GAZE_TO_GODOT_CAM = GazeBasis3D(
-            GazeVector3(1.0, 0.0, 0.0),
+            GazeVector3(-1.0, 0.0, 0.0),
             GazeVector3(0.0, 1.0, 0.0),
             GazeVector3(0.0, 0.0, -1.0)
         );

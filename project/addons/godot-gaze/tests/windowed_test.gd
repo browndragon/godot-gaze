@@ -153,8 +153,8 @@ func _init():
 		quit(1)
 		return
 		
-	# X-axis left-right coordinate alignment assertion: Left eye X must be greater than Right eye X
-	if eye_l_pos.x <= eye_r_pos.x:
+	# X-axis left-right coordinate alignment assertion: Left eye X must be less than Right eye X (-X screen-left)
+	if eye_l_pos.x >= eye_r_pos.x:
 		printerr("FAIL: Shaders/Crops - Coordinate system X-axis is inverted! eye_l.x = ", eye_l_pos.x, " eye_r.x = ", eye_r_pos.x)
 		quit(1)
 		return

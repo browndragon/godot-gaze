@@ -99,6 +99,11 @@ PlatformGeometry GazeTracker::platform_get_geometry() const {
             window_pos_ppix = (screen_size_ppix - window_size_ppix) / 2;
         }
 
+        if (!is_fullscreen) {
+            Vector2i title_size = ds->window_get_title_size(String(), DisplayServer::MAIN_WINDOW_ID);
+            window_pos_ppix.y += title_size.y;
+        }
+
         geom.window_position_px = Vector2(window_pos_ppix.x, window_pos_ppix.y);
     }
 

@@ -74,6 +74,7 @@ static void compute_jacobian(
     }
 }
 
+
 // Solves a 6x6 linear system A * x = b using Gaussian Elimination with partial pivoting
 static bool solve6x6(double A[6][6], const double b[6], double x[6]) {
     double temp[6][7];
@@ -115,6 +116,40 @@ static bool solve6x6(double A[6][6], const double b[6], double x[6]) {
     return true;
 }
 
+bool solve_pnp_dlt(
+    const std::vector<GazeVector3>& model_points,
+    const std::vector<GazeVector2>& image_points,
+    double fx, double fy, double cx, double cy,
+    GazeVector3& rvec, GazeVector3& tvec
+) {
+    if (model_points.size() != 5 || image_points.size() != 5) {
+        return false;
+    }
+
+    double dx_2d = image_points[1].x - image_points[0].x;
+    double dy_2d = image_points[1].y - image_points[0].y;
+    double eye_dist_2d = std::hypot(dx_2d, dy_2d);
+    double eye_dist_3d = std::hypot(model_points[1].x - model_points[0].x, model_points[1].y - model_points[0].y);
+
+    if (eye_dist_2d < 1e-4 || eye_dist_3d < 1e-4) {
+        return false;
+    }
+
+    double z_est = (eye_dist_3d * fx) / eye_dist_2d;
+    double eye_mid_x_2d = (image_points[0].x + image_points[1].x) * 0.5;
+    double eye_mid_y_2d = (image_points[0].y + image_points[1].y) * 0.5;
+    double eye_mid_x_3d = (model_points[0].x + model_points[1].x) * 0.5;
+    double eye_mid_y_3d = (model_points[0].y + model_points[1].y) * 0.5;
+
+    double tx_est = ((eye_mid_x_2d - cx) * z_est / fx) - eye_mid_x_3d;
+    double ty_est = ((eye_mid_y_2d - cy) * z_est / fy) - eye_mid_y_3d;
+    double roll_angle = std::atan2(dy_2d, dx_2d);
+
+    rvec = GazeVector3(0.0, 0.0, roll_angle);
+    tvec = GazeVector3(tx_est, ty_est, z_est);
+    return true;
+}
+
 bool solve_pnp_lm(
     const std::vector<GazeVector3>& model_points,
     const std::vector<GazeVector2>& image_points,
@@ -135,13 +170,26 @@ bool solve_pnp_lm(
         beta[4] = tvec.y;
         beta[5] = tvec.z;
     } else {
-        beta[0] = 0.0;
-        beta[1] = 0.0;
-        beta[2] = 0.0;
-        beta[3] = 0.0;
-        beta[4] = 0.0;
-        beta[5] = 700.0;
+        double beta_default[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 700.0};
+        double res_default[10];
+        double sse_default = compute_residuals(model_points, image_points, beta_default, fx, fy, cx, cy, res_default);
+
+        GazeVector3 dlt_r, dlt_t;
+        if (solve_pnp_dlt(model_points, image_points, fx, fy, cx, cy, dlt_r, dlt_t)) {
+            double beta_dlt[6] = {dlt_r.x, dlt_r.y, dlt_r.z, dlt_t.x, dlt_t.y, dlt_t.z};
+            double res_dlt[10];
+            double sse_dlt = compute_residuals(model_points, image_points, beta_dlt, fx, fy, cx, cy, res_dlt);
+            if (sse_dlt < sse_default) {
+                std::copy(beta_dlt, beta_dlt + 6, beta);
+            } else {
+                std::copy(beta_default, beta_default + 6, beta);
+            }
+        } else {
+            std::copy(beta_default, beta_default + 6, beta);
+        }
     }
+
+
 
     double residuals[10];
     double sse = compute_residuals(model_points, image_points, beta, fx, fy, cx, cy, residuals);
@@ -228,5 +276,7 @@ bool solve_pnp_lm(
     }
     return false;
 }
+
+
 
 } // namespace Gaze

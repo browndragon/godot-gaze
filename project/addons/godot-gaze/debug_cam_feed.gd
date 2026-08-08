@@ -51,6 +51,9 @@ func _ready():
 		else:
 			print("[DebugHUD] WARNING: GazeTracker NOT found in scene tree!")
 
+var preview_requested: bool = false
+var crop_requested: bool = false
+
 func _process(delta):
 	if not Engine.is_editor_hint():
 		if not is_instance_valid(tracker) and is_inside_tree():
@@ -75,6 +78,10 @@ func _process(delta):
 			elif current_eye_valid != target_eye_valid or (current_eye_valid and eye_estimator != t_eye_estimator):
 				is_different = true
 			elif current_face_valid != target_face_valid or (current_face_valid and face_estimator != t_face_estimator):
+				is_different = true
+			elif current_cam_valid and not preview_requested:
+				is_different = true
+			elif current_eye_valid and not crop_requested:
 				is_different = true
 				
 			if is_different:
@@ -120,6 +127,8 @@ func disconnect_tracker_signals():
 			if gs:
 				gs.eye_tracker_set_crop_requested(eye_rid, false)
 	
+	preview_requested = false
+	crop_requested = false
 	camera_sensor = null
 	eye_estimator = null
 	face_estimator = null
@@ -139,6 +148,7 @@ func connect_tracker_signals():
 			var vs = Engine.get_singleton("VisionServer")
 			if vs:
 				vs.camera_set_preview_requested(cam_rid, true)
+				preview_requested = true
 	if is_instance_valid(eye_estimator):
 		if not eye_estimator.is_connected("eye_crops_ready", _on_eye_crops_ready):
 			eye_estimator.connect("eye_crops_ready", _on_eye_crops_ready)
@@ -149,6 +159,7 @@ func connect_tracker_signals():
 			var gs = Engine.get_singleton("GazeServer")
 			if gs:
 				gs.eye_tracker_set_crop_requested(eye_rid, true)
+				crop_requested = true
 
 func get_texture_rect(node_name: String) -> TextureRect:
 	var node = get_node_or_null(node_name)

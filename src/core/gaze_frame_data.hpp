@@ -19,6 +19,8 @@ struct GazeFrameData {
 
     bool face_detected = false;
     bool gaze_success = false;
+    float left_eye_openness = 1.0f;
+    float right_eye_openness = 1.0f;
 
     GazeVector3 head_translation;
     GazeVector3 head_rotation;

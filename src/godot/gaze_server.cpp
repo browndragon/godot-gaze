@@ -70,6 +70,9 @@ struct GazeServerImpl {
         Vector2 latest_projected_gaze;
         Vector2 latest_filtered_gaze;
 
+        float left_eye_openness = 1.0f;
+        float right_eye_openness = 1.0f;
+
         Ref<Image> left_eye_crop;
         Ref<Image> right_eye_crop;
         bool crop_requested = false;
@@ -356,7 +359,7 @@ RID GazeServer::face_tracker_create(RID p_camera) {
 void GazeServer::face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector3 p_rotation, bool p_detected) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     FaceInfo *face = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(face);
+    if (!face) return;
 
     bool pose_changed = (face->detected != p_detected);
     face->detected = p_detected;
@@ -425,7 +428,7 @@ RID GazeServer::eye_tracker_create(RID p_face) {
 void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p_direction_cam) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
+    if (!eye) return;
 
     eye->gaze_origin_cam = p_origin_cam;
     eye->gaze_direction_cam = p_direction_cam;
@@ -493,6 +496,27 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
     }
 
     call_deferred("emit_signal", "gaze_data_ready", p_eye);
+}
+
+void GazeServer::eye_tracker_set_openness(RID p_eye, float p_left, float p_right) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
+    if (eye) {
+        eye->left_eye_openness = p_left;
+        eye->right_eye_openness = p_right;
+    }
+}
+
+float GazeServer::get_left_eye_openness(RID p_eye) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
+    return eye ? eye->left_eye_openness : 1.0f;
+}
+
+float GazeServer::get_right_eye_openness(RID p_eye) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
+    return eye ? eye->right_eye_openness : 1.0f;
 }
 
 void GazeServer::eye_tracker_set_smoother(RID p_eye, const Ref<Smoother>& p_smoother) {
@@ -713,10 +737,17 @@ void GazeServer::start_processing() {
                 gaze_path = resolve_model_path("gaze-estimation-adas-0002");
             }
 
+            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("eye_openness");
+            eye_openness_path = resolve_model_path(eye_openness_path);
+            if (eye_openness_path.is_empty()) {
+                eye_openness_path = resolve_model_path("eye_openness");
+            }
+
             std::vector<uint8_t> yunet_buffer = load_file_buffer(yunet_path);
             std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
+            std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
 
-            pipeline->initialize(yunet_buffer, gaze_buffer);
+            pipeline->initialize(yunet_buffer, gaze_buffer, eye_openness_buffer);
         }
         pipeline->set_config(active_config);
         pipeline->start();
@@ -744,6 +775,19 @@ void GazeServer::stop_processing() {
     Gaze::log_info(2, "GazeServer_StopProcessing_Finished");
 }
 
+void GazeServer::ref_tracker() {
+    start_processing();
+}
+
+void GazeServer::unref_tracker() {
+    stop_processing();
+}
+
+int GazeServer::get_active_tracker_count() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return active_trackers;
+}
+
 void GazeServer::trigger_process() {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
 
@@ -756,6 +800,8 @@ void GazeServer::trigger_process() {
             // Copy coordinates/metrics from native GazeFrameData to the wrapper GazeFrame
             gaze_frame->set_face_detected(completed_data->face_detected);
             gaze_frame->set_gaze_success(completed_data->gaze_success);
+            gaze_frame->set_left_eye_openness(completed_data->left_eye_openness);
+            gaze_frame->set_right_eye_openness(completed_data->right_eye_openness);
             gaze_frame->set_timestamp(completed_data->timestamp);
 
             const Vector3& head_t = reinterpret_cast<const Vector3&>(completed_data->head_translation);
@@ -777,14 +823,24 @@ void GazeServer::trigger_process() {
             RID eye_rid;
             std::memcpy(&eye_rid, &completed_data->eye_rid_val, sizeof(uint64_t));
 
-            if (completed_data->face_detected) {
-                face_tracker_set_pose(face_rid, head_t, head_r, true);
-                if (completed_data->gaze_success) {
-                    eye_tracker_set_gaze(eye_rid, gaze_o, gaze_d);
+            if (face_rid.is_valid()) {
+                if (completed_data->face_detected) {
+                    face_tracker_set_pose(face_rid, head_t, head_r, true);
+                } else {
+                    face_tracker_set_pose(face_rid, Vector3(), Vector3(), false);
                 }
-            } else {
-                face_tracker_set_pose(face_rid, Vector3(), Vector3(), false);
-                reset_eye_tracker(eye_rid);
+            }
+            if (eye_rid.is_valid()) {
+                if (completed_data->face_detected) {
+                    eye_tracker_set_openness(eye_rid, completed_data->left_eye_openness, completed_data->right_eye_openness);
+                    if (completed_data->gaze_success) {
+                        eye_tracker_set_gaze(eye_rid, gaze_o, gaze_d);
+                    } else {
+                        reset_eye_tracker(eye_rid);
+                    }
+                } else {
+                    reset_eye_tracker(eye_rid);
+                }
             }
 
             // Emit the began signal (internal node processing updates begin)

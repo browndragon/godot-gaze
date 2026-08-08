@@ -8,6 +8,8 @@
 #include "../core/gaze_frame_data.hpp"
 #include "ort_yunet_pipeline.hpp"
 #include "ort_gaze_model.hpp"
+#include "onnx_eye_blink_estimator.hpp"
+#include "heuristic_eye_blink_estimator.hpp"
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -23,6 +25,7 @@ namespace Gaze
     private:
         std::unique_ptr<ORTYuNetPipeline> face_detector;
         std::unique_ptr<ORTGazeModel> gaze_estimator;
+        std::unique_ptr<EyeBlinkEstimator> blink_estimator;
 
         std::thread worker_thread;
         std::atomic<bool> thread_running{false};
@@ -47,7 +50,7 @@ namespace Gaze
         GazeTrackingPipeline() = default;
         ~GazeTrackingPipeline();
 
-        bool initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data);
+        bool initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data = {});
         void start();
         void stop();
 

@@ -112,11 +112,15 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_nose_gaze"), &GazeTracker::get_nose_gaze);
     ClassDB::bind_method(D_METHOD("get_eye_ray"), &GazeTracker::get_eye_ray);
     ClassDB::bind_method(D_METHOD("get_eye_uncal_ray"), &GazeTracker::get_eye_uncal_ray);
+    ClassDB::bind_method(D_METHOD("get_left_eye_openness"), &GazeTracker::get_left_eye_openness);
+    ClassDB::bind_method(D_METHOD("get_right_eye_openness"), &GazeTracker::get_right_eye_openness);
 
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_gaze"), "", "get_eye_gaze");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "gaze"), "", "get_gaze");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_uncal_gaze"), "", "get_eye_uncal_gaze");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "nose_gaze"), "", "get_nose_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "left_eye_openness"), "", "get_left_eye_openness");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "right_eye_openness"), "", "get_right_eye_openness");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_ray"), "", "get_eye_ray");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_uncal_ray"), "", "get_eye_uncal_ray");
@@ -210,29 +214,86 @@ bool GazeTracker::get_autostart() const {
     return autostart;
 }
 
+void GazeTracker::acquire_gaze_ref() {
+    if (has_gaze_ref) return;
+    has_gaze_ref = true;
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        gs->ref_tracker();
+    }
+}
+
+void GazeTracker::release_gaze_ref() {
+    if (!has_gaze_ref) return;
+    has_gaze_ref = false;
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs) {
+        gs->unref_tracker();
+    }
+}
+
 void GazeTracker::_notification(int p_what) {
     switch (p_what) {
+        case NOTIFICATION_PROCESS: {
+            double delta = get_process_delta_time();
+            if (tracker_initialized) {
+                PlatformGeometry geom = platform_get_geometry();
+                Transform2D vp_xform = get_adjusted_viewport_transform();
+                if (geom.window_position_px != last_window_pos || vp_xform != last_vp_xform) {
+                    update_projection_parameters();
+                }
+
+                GazeServer *gs = GazeServer::get_singleton();
+                if (gs) {
+                    gs->trigger_process();
+                }
+
+                if (is_face_tracked) {
+                    uint64_t current_time = Time::get_singleton()->get_ticks_msec();
+                    if (current_time - last_frame_time > 1000) {
+                        is_face_tracked = false;
+                        emit_signal("face_detection_changed", false);
+                    }
+                }
+
+                platform_process(delta);
+            }
+            break;
+        }
         case NOTIFICATION_ENTER_TREE: {
+            acquire_gaze_ref();
             if (autostart && !Engine::get_singleton()->is_editor_hint() && !tracker_initialized) {
                 start_tracker();
             }
             break;
         }
         case NOTIFICATION_EXIT_TREE: {
-            // Defer stop_tracker(false) to allow an incoming scene's _enter_tree() to claim the active GazeServer session.
-            // Note: In godot-cpp (C++), Object::call_deferred(StringName, Variant...) is the native C++ API method on Object/Node.
+            release_gaze_ref();
             call_deferred("stop_tracker", false);
             break;
         }
         case NOTIFICATION_WM_CLOSE_REQUEST:
         case NOTIFICATION_WM_GO_BACK_REQUEST:
         case NOTIFICATION_PREDELETE: {
+            release_gaze_ref();
             Gaze::log_info("GazeTracker_Notification_Shutdown_Immediate_Stop");
+            stop_tracker(false);
+            break;
+        }
+        case NOTIFICATION_APPLICATION_PAUSED:
+        case NOTIFICATION_APPLICATION_FOCUS_OUT: {
+            release_gaze_ref();
             stop_tracker(false);
             break;
         }
         case NOTIFICATION_APPLICATION_FOCUS_IN:
         case NOTIFICATION_APPLICATION_RESUMED: {
+            if (is_inside_tree()) {
+                acquire_gaze_ref();
+                if (autostart && !Engine::get_singleton()->is_editor_hint() && !tracker_initialized) {
+                    start_tracker();
+                }
+            }
             if (lifecycle_state == LIFECYCLE_PERM_REQ) {
                 OS *os = OS::get_singleton();
                 if (os && os->has_feature("android")) {
@@ -269,11 +330,8 @@ void GazeTracker::on_permission_result(bool granted) {
     complete_initialization();
 }
 
-
-
-
-
 bool GazeTracker::start_tracker() {
+    acquire_gaze_ref();
     if (tracker_initialized || lifecycle_state == LIFECYCLE_RUNNING || lifecycle_state == LIFECYCLE_INITIALIZING) return true;
 
     GazeServer *gs = GazeServer::get_singleton();
@@ -329,9 +387,14 @@ bool GazeTracker::start_tracker() {
 }
 
 void GazeTracker::stop_tracker(bool p_emit_signal) {
-    Gaze::log_info(2, "GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal);
+    Gaze::log_info(2, "GazeTracker_StopTracker_Began", "p_emit_signal", p_emit_signal, "has_gaze_ref", has_gaze_ref);
     if (!tracker_initialized && !display_rid.is_valid()) {
         Gaze::log_info(2, "GazeTracker_StopTracker_AlreadyStopped");
+        return;
+    }
+
+    if (has_gaze_ref) {
+        Gaze::log_info(2, "GazeTracker_StopTracker_Skipped_StillHasGazeRef");
         return;
     }
 
@@ -951,6 +1014,22 @@ void GazeTracker::_on_gaze_data_ready(RID p_rid) {
             emit_signal("gaze_updated", latest_filtered_gaze_px);
         }
     }
+}
+
+float GazeTracker::get_left_eye_openness() const {
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs && eye_estimator) {
+        return gs->get_left_eye_openness(eye_estimator->get_eye_rid());
+    }
+    return 1.0f;
+}
+
+float GazeTracker::get_right_eye_openness() const {
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs && eye_estimator) {
+        return gs->get_right_eye_openness(eye_estimator->get_eye_rid());
+    }
+    return 1.0f;
 }
 
 } // namespace godot

@@ -98,8 +98,11 @@ private:
     Vector2 latest_projected_gaze_px;
     Vector2 latest_filtered_gaze_px;
     bool tracker_initialized = false;
+    bool has_gaze_ref = false;
     GazeLifecycle lifecycle_state = LIFECYCLE_UNKNOWN;
     bool autostart = true;
+    void acquire_gaze_ref();
+    void release_gaze_ref();
     void set_lifecycle_state(GazeLifecycle p_state);
     Vector2 get_window_scale() const;
     bool is_face_tracked = false;
@@ -241,6 +244,8 @@ public:
     Transform3D get_eye_ray() const;
     Transform3D get_eye_uncal_ray() const;
     bool is_face_detected() const { return is_face_tracked; }
+    float get_left_eye_openness() const;
+    float get_right_eye_openness() const;
 
     Transform3D get_head_transform() const;
     Transform3D get_camera_to_screen_transform() const;

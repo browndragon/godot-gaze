@@ -23,6 +23,8 @@ private:
     double timestamp = 0.0;
     bool face_detected = false;
     bool gaze_success = false;
+    float left_eye_openness = 1.0f;
+    float right_eye_openness = 1.0f;
 
     Vector3 head_translation;
     Vector3 head_rotation;
@@ -64,6 +66,12 @@ public:
 
     void set_gaze_success(bool s) { gaze_success = s; }
     bool get_gaze_success() const { return gaze_success; }
+
+    void set_left_eye_openness(float o) { left_eye_openness = o; }
+    float get_left_eye_openness() const { return left_eye_openness; }
+
+    void set_right_eye_openness(float o) { right_eye_openness = o; }
+    float get_right_eye_openness() const { return right_eye_openness; }
 
     void set_head_translation(Vector3 t) { head_translation = t; }
     Vector3 get_head_translation() const { return head_translation; }

@@ -29,13 +29,24 @@ namespace Gaze
         log_info(2, "GazeTrackingPipeline_Destructor_Finished");
     }
 
-    bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data)
+    bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data)
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         std::lock_guard<std::mutex> lock(state_mutex);
 
         face_detector = std::make_unique<ORTYuNetPipeline>(yunet_model_data);
         gaze_estimator = std::make_unique<ORTGazeModel>(gaze_model_data);
+
+        if (!eye_openness_model_data.empty()) {
+            auto onnx_estimator = std::make_unique<ONNXEyeBlinkEstimator>(eye_openness_model_data);
+            if (onnx_estimator->initialize()) {
+                blink_estimator = std::move(onnx_estimator);
+            } else {
+                blink_estimator = std::make_unique<HeuristicEyeBlinkEstimator>();
+            }
+        } else {
+            blink_estimator = std::make_unique<HeuristicEyeBlinkEstimator>();
+        }
 
         // Setup CPU image warper for eye cropping/alignment
         std::shared_ptr<ImageWarper> warper = std::make_shared<CPUImageWarper>();
@@ -220,6 +231,16 @@ namespace Gaze
                             bool gaze_success = gaze_estimator ? gaze_estimator->estimate_raw_gaze(crops, raw_gaze_dir_cam) : false;
                             auto end_gaze = std::chrono::steady_clock::now();
                             gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+
+                            if (blink_estimator)
+                            {
+                                blink_estimator->estimate_openness(
+                                    crops.left_eye_data,
+                                    crops.right_eye_data,
+                                    data->left_eye_openness,
+                                    data->right_eye_openness
+                                );
+                            }
 
                             if (gaze_success)
                             {

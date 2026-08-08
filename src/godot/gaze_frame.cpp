@@ -13,6 +13,8 @@ void GazeFrame::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_timestamp"), &GazeFrame::get_timestamp);
     ClassDB::bind_method(D_METHOD("get_face_detected"), &GazeFrame::get_face_detected);
     ClassDB::bind_method(D_METHOD("get_gaze_success"), &GazeFrame::get_gaze_success);
+    ClassDB::bind_method(D_METHOD("get_left_eye_openness"), &GazeFrame::get_left_eye_openness);
+    ClassDB::bind_method(D_METHOD("get_right_eye_openness"), &GazeFrame::get_right_eye_openness);
     ClassDB::bind_method(D_METHOD("get_head_translation"), &GazeFrame::get_head_translation);
     ClassDB::bind_method(D_METHOD("get_head_rotation"), &GazeFrame::get_head_rotation);
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeFrame::get_gaze_origin);
@@ -23,6 +25,8 @@ void GazeFrame::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "timestamp"), "", "get_timestamp");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "face_detected"), "", "get_face_detected");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "gaze_success"), "", "get_gaze_success");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "left_eye_openness"), "", "get_left_eye_openness");
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "right_eye_openness"), "", "get_right_eye_openness");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "head_translation"), "", "get_head_translation");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "head_rotation"), "", "get_head_rotation");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "gaze_origin"), "", "get_gaze_origin");

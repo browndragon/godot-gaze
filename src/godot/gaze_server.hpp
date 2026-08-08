@@ -169,6 +169,9 @@ public:
      * @param p_direction_cam Gaze direction 3D unit vector in Camera Space.
      */
     void eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p_direction_cam);
+    void eye_tracker_set_openness(RID p_eye, float p_left, float p_right);
+    float get_left_eye_openness(RID p_eye) const;
+    float get_right_eye_openness(RID p_eye) const;
 
     /**
      * @brief Set a coordinate smoothing filter resource.
@@ -249,6 +252,21 @@ public:
      * @brief Stop the background execution pipeline.
      */
     void stop_processing();
+
+    /**
+     * @brief Increment active tracker reference count.
+     */
+    void ref_tracker();
+
+    /**
+     * @brief Decrement active tracker reference count.
+     */
+    void unref_tracker();
+
+    /**
+     * @brief Get active tracker count.
+     */
+    int get_active_tracker_count() const;
 
 #ifdef WEB_ENABLED
     void feed_gaze_web_raw(const Array& args);

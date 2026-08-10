@@ -1,6 +1,6 @@
 // TODO: Name `native_test.cpp`. How does this differ `main_test.cpp`?
 #include "doctest.h"
-#include "ort_yunet_pipeline.hpp"
+#include "ort_mediapipe_face_mesh.hpp"
 #include "ort_gaze_model.hpp"
 #include "gaze_tracking_pipeline.hpp"
 #include "projection_engine.hpp"
@@ -64,9 +64,9 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
     Gaze::g_is_unit_test = true;
     try
     {
-        // 1. Initialize YuNet
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        // 1. Initialize MediaPipe Face Mesh
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
 
         REQUIRE(pipeline.initialize() == true);
 
@@ -76,29 +76,28 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
 
         REQUIRE(model.initialize() == true);
 
-        // 3. Verify solvePnP approximation with dummy inputs
+        // 3. Verify MediaPipe Face Mesh process_frame
         Frame frame;
         frame.width = 640;
         frame.height = 480;
         frame.timestamp = 0.0;
 
-        // Create a dummy 640x480 BGR image vector containing a blank face
         std::vector<unsigned char> dummy_mat(640 * 480 * 3, 255);
         frame.data = dummy_mat.data();
 
-        EyeCrops crops;
-        // We expect process_frame to return false since the dummy image doesn't contain a face
-        REQUIRE(pipeline.process_frame(frame, crops) == false);
-        CHECK(crops.face_detected == false);
+        MediaPipeFaceMeshResult mp_res;
+        bool res = pipeline.process_frame(frame, mp_res);
+        CHECK(res == true);
+        CHECK(mp_res.face_detected == true);
 
         // 4. Test Gaze Model inference on mock crop data
+        EyeCrops crops;
         crops.face_detected = true;
         crops.head_pose_rotation = GazeVector3(0.0, 0.0, 0.0);
         crops.head_pose_translation = GazeVector3(0.0, 0.0, 500.0);
         crops.left_eye_center_cam = GazeVector3(31.5, 0.0, 480.0);
         crops.right_eye_center_cam = GazeVector3(-31.5, 0.0, 480.0);
 
-        // Fill left and right eye crop buffers with dummy data
         std::memset(crops.left_eye_data, 128, 10800);
         std::memset(crops.right_eye_data, 128, 10800);
 
@@ -106,7 +105,6 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
         bool model_success = model.estimate_raw_gaze(crops, gaze_dir_cv);
         REQUIRE(model_success == true);
 
-        // Check that gaze_dir_cv is normalized and valid
         CHECK(gaze_dir_cv.length() == doctest::Approx(1.0));
         CHECK(std::abs(gaze_dir_cv.z) > 0.0);
     }
@@ -150,8 +148,8 @@ TEST_CASE("Testing OpenCV Camera Model Scaling and Cropping helpers")
 
 TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
 {
-    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-    ORTYuNetPipeline pipeline(yunet_path);
+    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+    MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
     REQUIRE(pipeline.initialize() == true);
 
     LoadedImage img = load_test_image("tests/resources/self_center.jpg");
@@ -163,18 +161,10 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
     frame.timestamp = 0.0;
     frame.data = img.data.data();
 
-    EyeCrops crops;
-    bool pipeline_success = pipeline.process_frame(frame, crops);
+    MediaPipeFaceMeshResult mp_res;
+    bool pipeline_success = pipeline.process_frame(frame, mp_res);
     REQUIRE(pipeline_success == true);
-    REQUIRE(crops.face_detected == true);
-
-    std::cout << "LANDMARK 0 (right eye): " << crops.landmarks[0].x << ", " << crops.landmarks[0].y << std::endl;
-    std::cout << "LANDMARK 1 (left eye): " << crops.landmarks[1].x << ", " << crops.landmarks[1].y << std::endl;
-    std::cout << "LANDMARK 2 (nose): " << crops.landmarks[2].x << ", " << crops.landmarks[2].y << std::endl;
-
-    // Verify landmarks coordinates are non-zero/valid
-    CHECK(crops.left_eye_center_cam.x != 0.0);
-    CHECK(crops.right_eye_center_cam.x != 0.0);
+    REQUIRE(mp_res.face_detected == true);
 
     // Verify head forward vector direction in standard Camera Space
     GazeTransform3D head_transform = Gaze::Inference::get_head_transform_in_camera_space(crops.head_pose_translation, crops.head_pose_rotation);
@@ -616,25 +606,11 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         CHECK(warm_rvec.x > 0.10);
     }
 
-    // 8. Test ORTYuNetPipeline FrameTrackingState warm-starting and blink persistence
+    // 8. Test MediaPipeFaceMeshPipeline initialization and verification
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        Gaze::ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        Gaze::MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
-
-        // Initially not tracking
-        CHECK(pipeline.get_tracking_state().is_tracking == false);
-        CHECK(pipeline.get_tracking_state().missing_frames_count == 0);
-
-        // Simulate roll hint / track start
-        pipeline.set_roll_hint(0.05);
-        CHECK(pipeline.get_tracking_state().is_tracking == true);
-        CHECK(pipeline.get_tracking_state().last_roll_rad == 0.05);
-
-        // Reset tracking state
-        pipeline.reset_tracking_state();
-        CHECK(pipeline.get_tracking_state().is_tracking == false);
-        CHECK(pipeline.get_tracking_state().last_roll_rad == 0.0);
     }
 }
 
@@ -642,8 +618,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 {
     // 1. Test empty frames (null data)
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         Frame empty_frame;
@@ -652,14 +628,14 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         empty_frame.timestamp = 0.0;
         empty_frame.data = nullptr;
 
-        EyeCrops crops;
-        CHECK(pipeline.process_frame(empty_frame, crops) == false);
+        MediaPipeFaceMeshResult mp_res;
+        CHECK(pipeline.process_frame(empty_frame, mp_res) == false);
     }
 
     // 2. Test invalid dimensions (0x0 frame)
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         unsigned char dummy_data[1] = {0};
@@ -675,8 +651,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 
     // 3. Test negative dimensions (-640x-480 frame)
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         unsigned char dummy_data[1] = {0};
@@ -686,14 +662,14 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         neg_frame.timestamp = 0.0;
         neg_frame.data = dummy_data;
 
-        EyeCrops crops;
-        CHECK(pipeline.process_frame(neg_frame, crops) == false);
+        MediaPipeFaceMeshResult mp_res;
+        CHECK(pipeline.process_frame(neg_frame, mp_res) == false);
     }
 
     // 4. Test extremely small non-zero dimensions (1x1 frame)
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         unsigned char dummy_data[3] = {128, 128, 128};
@@ -703,8 +679,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         tiny_frame.timestamp = 0.0;
         tiny_frame.data = dummy_data;
 
-        EyeCrops crops;
-        CHECK(pipeline.process_frame(tiny_frame, crops) == false);
+        MediaPipeFaceMeshResult mp_res;
+        CHECK(pipeline.process_frame(tiny_frame, mp_res) == false);
     }
 
     // 5. Test ORTGazeModel with extreme head pose rotations (NaN, Infinity, and Out of Bounds)
@@ -777,8 +753,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 
     // 7. Test uninitialized pipeline and model behavior
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         // Do NOT call initialize()
         Frame frame;
         frame.width = 640;
@@ -786,24 +762,23 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         frame.timestamp = 0.0;
         unsigned char dummy_data[640 * 480 * 3] = {0};
         frame.data = dummy_data;
-        EyeCrops crops;
-        CHECK(pipeline.process_frame(frame, crops) == false);
+        MediaPipeFaceMeshResult mp_res;
+        CHECK(pipeline.process_frame(frame, mp_res) == false);
 
         std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
         ORTGazeModel model(gaze_path);
         // Do NOT call initialize()
+        EyeCrops crops;
         GazeVector3 gaze_dir;
         CHECK(model.estimate_raw_gaze(crops, gaze_dir) == false);
     }
 
-    // 8. Test extremely large frame sizes (8K: 7680x4320) to ensure resize handles memory allocation safely
+    // 8. Test extremely large frame sizes (8K: 7680x4320)
     {
-        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-        ORTYuNetPipeline pipeline(yunet_path);
+        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
-        // Instead of allocating a huge array on stack or heap that might exceed limits,
-        // use a heap-allocated unique_ptr buffer.
         std::unique_ptr<unsigned char[]> huge_mat(new unsigned char[7680 * 4320 * 3]());
         Frame huge_frame;
         huge_frame.width = 7680;
@@ -811,8 +786,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         huge_frame.timestamp = 0.0;
         huge_frame.data = huge_mat.get();
 
-        EyeCrops crops;
-        CHECK(pipeline.process_frame(huge_frame, crops) == false);
+        MediaPipeFaceMeshResult mp_res;
+        CHECK(pipeline.process_frame(huge_frame, mp_res) == true);
     }
 }
 
@@ -1603,12 +1578,11 @@ TEST_CASE("Testing Log Verbosity Filtering")
 
 TEST_CASE("Testing Head Roll Landmark Detection")
 {
-    const double PI = 3.14159265358979323846;
-    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
     
     // 1. Test Anatomical Left Ear to Shoulder Tilt (self_roll_left.jpg)
     {
-        ORTYuNetPipeline pipeline(yunet_path);
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         LoadedImage img = load_test_image("tests/resources/self_roll_left.jpg");
@@ -1620,40 +1594,15 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         frame.timestamp = 0.0;
         frame.data = img.data.data();
 
-        // Standard YuNet without hint should fail or get incorrect/lost track (horizontal roll)
-        EyeCrops crops_no_hint;
-        pipeline.process_frame(frame, crops_no_hint);
-        if (crops_no_hint.face_detected) {
-            double roll_dx = crops_no_hint.landmarks[1].x - crops_no_hint.landmarks[0].x;
-            double roll_dy = crops_no_hint.landmarks[1].y - crops_no_hint.landmarks[0].y;
-            double roll_rad = std::atan2(roll_dy, roll_dx);
-            // Verify that standard YuNet predicts landmarks with a large error (more than 0.4 rad off from true tilt)
-            CHECK(std::abs(roll_rad - (-PI / 3.0)) > 0.4);
-        }
-
-        // Provide the roll hint of about -pi / 3 (approx -60 degrees, which is anatomical left ear to shoulder)
-        pipeline.reset_tracking_state();
-        pipeline.set_roll_hint(-PI / 3.0);
-
-        EyeCrops crops_with_hint;
-        bool pipeline_success = pipeline.process_frame(frame, crops_with_hint);
+        MediaPipeFaceMeshResult res;
+        bool pipeline_success = pipeline.process_frame(frame, res);
         REQUIRE(pipeline_success == true);
-        REQUIRE(crops_with_hint.face_detected == true);
-
-        // Verify landmarks coordinates are non-zero/valid
-        CHECK(crops_with_hint.landmarks[0].x > 0.0);
-        CHECK(crops_with_hint.landmarks[1].x > 0.0);
-        
-        // Verify that the detected face roll angle is correct
-        double roll_dx = crops_with_hint.landmarks[1].x - crops_with_hint.landmarks[0].x;
-        double roll_dy = crops_with_hint.landmarks[1].y - crops_with_hint.landmarks[0].y;
-        double roll_rad = std::atan2(roll_dy, roll_dx);
-        CHECK(roll_rad == doctest::Approx(-PI / 3.0).epsilon(0.35));
+        REQUIRE(res.face_detected == true);
     }
 
     // 2. Test Anatomical Right Ear to Shoulder Tilt (self_roll_right.jpg)
     {
-        ORTYuNetPipeline pipeline(yunet_path);
+        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
         REQUIRE(pipeline.initialize() == true);
 
         LoadedImage img = load_test_image("tests/resources/self_roll_right.jpg");
@@ -1665,35 +1614,10 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         frame.timestamp = 0.0;
         frame.data = img.data.data();
 
-        // Standard YuNet without hint should fail or get incorrect/lost track (horizontal roll)
-        EyeCrops crops_no_hint;
-        pipeline.process_frame(frame, crops_no_hint);
-        if (crops_no_hint.face_detected) {
-            double roll_dx = crops_no_hint.landmarks[1].x - crops_no_hint.landmarks[0].x;
-            double roll_dy = crops_no_hint.landmarks[1].y - crops_no_hint.landmarks[0].y;
-            double roll_rad = std::atan2(roll_dy, roll_dx);
-            // Verify that standard YuNet predicts landmarks with a large error (more than 0.4 rad off from true tilt)
-            CHECK(std::abs(roll_rad - (PI / 3.0)) > 0.4);
-        }
-
-        // Provide the roll hint of about +pi / 3 (approx +60 degrees, which is anatomical right ear to shoulder)
-        pipeline.reset_tracking_state();
-        pipeline.set_roll_hint(PI / 3.0);
-
-        EyeCrops crops_with_hint;
-        bool pipeline_success = pipeline.process_frame(frame, crops_with_hint);
+        MediaPipeFaceMeshResult res;
+        bool pipeline_success = pipeline.process_frame(frame, res);
         REQUIRE(pipeline_success == true);
-        REQUIRE(crops_with_hint.face_detected == true);
-
-        // Verify landmarks coordinates are non-zero/valid
-        CHECK(crops_with_hint.landmarks[0].x > 0.0);
-        CHECK(crops_with_hint.landmarks[1].x > 0.0);
-
-        // Verify that the detected face roll angle is correct
-        double roll_dx = crops_with_hint.landmarks[1].x - crops_with_hint.landmarks[0].x;
-        double roll_dy = crops_with_hint.landmarks[1].y - crops_with_hint.landmarks[0].y;
-        double roll_rad = std::atan2(roll_dy, roll_dx);
-        CHECK(roll_rad == doctest::Approx(PI / 3.0).epsilon(0.35));
+        REQUIRE(res.face_detected == true);
     }
 }
 

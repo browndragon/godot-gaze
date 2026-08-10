@@ -6,7 +6,7 @@
 #include "../core/atomic_mailbox.hpp"
 #include "../core/pool.hpp"
 #include "../core/gaze_frame_data.hpp"
-#include "ort_yunet_pipeline.hpp"
+#include "ort_mediapipe_face_mesh.hpp"
 #include "ort_gaze_model.hpp"
 #include "onnx_eye_blink_estimator.hpp"
 #include "heuristic_eye_blink_estimator.hpp"
@@ -23,7 +23,7 @@ namespace Gaze
     class GazeTrackingPipeline
     {
     private:
-        std::unique_ptr<ORTYuNetPipeline> face_detector;
+        std::unique_ptr<MediaPipeFaceMeshPipeline> face_detector;
         std::unique_ptr<ORTGazeModel> gaze_estimator;
         std::unique_ptr<EyeBlinkEstimator> blink_estimator;
 

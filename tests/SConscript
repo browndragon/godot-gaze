@@ -287,10 +287,20 @@ python_run = env.Command(
     "build/tests/logs/tests.python.log",
     [],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["pytest", "tests/gaze_test.py", "--junitxml=build/tests/artifacts/python_report.xml"]
+    TEST_CMD=["pytest", "tests/gaze_test.py", "tests/test_mediapipe_model.py", "-s", "--junitxml=build/tests/artifacts/python_report.xml"]
 )
 env.AlwaysBuild(python_run)
 env.Alias("tests/python", python_run)
+
+# MediaPipe model test target
+mediapipe_model_run = env.Command(
+    "build/tests/logs/tests.mediapipe_model.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["pytest", "tests/test_mediapipe_model.py", "-s"]
+)
+env.AlwaysBuild(mediapipe_model_run)
+env.Alias("tests/mediapipe_model", mediapipe_model_run)
 
 # Godot headless E2E test target
 godot_headless_run = env.Command(

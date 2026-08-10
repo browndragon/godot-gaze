@@ -1,22 +1,21 @@
 #include "doctest.h"
-#include "ort_yunet_pipeline.hpp"
-#include "onnx_eye_blink_estimator.hpp"
-#include "heuristic_eye_blink_estimator.hpp"
-#include "stb_image.h"
-#include <string>
+#include "ort_mediapipe_face_mesh.hpp"
+#include "gaze_frame_data.hpp"
+#include <fstream>
 #include <vector>
 #include <iostream>
 #include <memory>
 
 using namespace Gaze;
 
-namespace {
-
 struct ImageBuffer {
     int width = 0;
     int height = 0;
-    std::vector<unsigned char> bgr_data;
+    std::vector<uint8_t> bgr_data;
 };
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 inline ImageBuffer load_test_bgr(const std::string& filepath) {
     ImageBuffer res;
@@ -36,102 +35,91 @@ inline ImageBuffer load_test_bgr(const std::string& filepath) {
     return res;
 }
 
-bool process_fixture_crops(const std::string& filename, EyeCrops& out_crops) {
-    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
-    ORTYuNetPipeline pipeline(yunet_path);
-    if (!pipeline.initialize()) return false;
-
-    ImageBuffer img = load_test_bgr("tests/resources/" + filename);
-    if (img.bgr_data.empty()) {
-        img = load_test_bgr("../tests/resources/" + filename);
+std::unique_ptr<MediaPipeFaceMeshPipeline> create_test_pipeline() {
+    std::string model_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+    auto mp = std::make_unique<MediaPipeFaceMeshPipeline>(model_path);
+    if (mp->initialize()) {
+        return mp;
     }
-    if (img.bgr_data.empty()) return false;
-
-    Frame frame;
-    frame.width = img.width;
-    frame.height = img.height;
-    frame.data = img.bgr_data.data();
-
-    bool res = pipeline.process_frame(frame, out_crops);
-    if (res && out_crops.face_detected) {
-        std::string stem = filename.substr(0, filename.find_last_of('.'));
-        FILE* f_l = fopen(("tests/resources/extracted_crops/" + stem + "_left.raw").c_str(), "wb");
-        if (f_l) { fwrite(out_crops.left_eye_data, 1, 60*60*3, f_l); fclose(f_l); }
-        FILE* f_r = fopen(("tests/resources/extracted_crops/" + stem + "_right.raw").c_str(), "wb");
-        if (f_r) { fwrite(out_crops.right_eye_data, 1, 60*60*3, f_r); fclose(f_r); }
-    }
-    return res;
-}
-
-std::unique_ptr<EyeBlinkEstimator> create_test_estimator() {
-    std::string model_path = "project/addons/godot-gaze/models/eye_openness.ort";
-    auto onnx_est = std::make_unique<ONNXEyeBlinkEstimator>(model_path);
-    if (onnx_est->initialize()) {
-        return onnx_est;
-    }
-    return std::make_unique<HeuristicEyeBlinkEstimator>();
+    return nullptr;
 }
 
 } // namespace
 
-TEST_CASE("EyeBlinkEstimator - Both Eyes Open Fixture")
+TEST_CASE("MediaPipe Face Mesh - Both Eyes Open Fixture")
 {
-    EyeCrops crops;
-    REQUIRE_MESSAGE(process_fixture_crops("eyes_both_open.jpg", crops) == true, "Failed to load/process eyes_both_open.jpg");
-    REQUIRE(crops.face_detected == true);
+    auto pipeline = create_test_pipeline();
+    REQUIRE(pipeline != nullptr);
 
-    auto estimator = create_test_estimator();
-    float left_open = 0.0f, right_open = 0.0f;
-    estimator->estimate_openness(crops.left_eye_data, crops.right_eye_data, left_open, right_open);
+    ImageBuffer img = load_test_bgr("tests/resources/eyes_both_open.jpg");
+    REQUIRE(img.bgr_data.empty() == false);
 
-    std::cout << "[TestEyes] eyes_both_open.jpg -> Left Openness: " << left_open << " | Right Openness: " << right_open << "\n";
-    CHECK(left_open >= 0.70f);
-    CHECK(right_open >= 0.70f);
+    Frame frame{img.width, img.height, img.bgr_data.data(), 0};
+    MediaPipeFaceMeshResult res;
+    bool detected = pipeline->process_frame(frame, res);
+
+    std::cout << "[TestEyes] eyes_both_open.jpg -> Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    CHECK(detected == true);
+    CHECK(res.face_detected == true);
+    CHECK(res.left_eye_openness >= 0.70f);
+    CHECK(res.right_eye_openness >= 0.70f);
 }
 
-TEST_CASE("EyeBlinkEstimator - Both Eyes Closed (Blink) Fixture")
+TEST_CASE("MediaPipe Face Mesh - Both Eyes Closed (Blink) Fixture")
 {
-    EyeCrops crops;
-    REQUIRE_MESSAGE(process_fixture_crops("eyes_both_wink.jpg", crops) == true, "Failed to load/process eyes_both_wink.jpg");
-    REQUIRE(crops.face_detected == true);
+    auto pipeline = create_test_pipeline();
+    REQUIRE(pipeline != nullptr);
 
-    auto estimator = create_test_estimator();
-    float left_open = 0.0f, right_open = 0.0f;
-    estimator->estimate_openness(crops.left_eye_data, crops.right_eye_data, left_open, right_open);
+    ImageBuffer img = load_test_bgr("tests/resources/eyes_both_wink.jpg");
+    REQUIRE(img.bgr_data.empty() == false);
 
-    std::cout << "[TestEyes] eyes_both_wink.jpg -> Left Openness: " << left_open << " | Right Openness: " << right_open << "\n";
-    CHECK(left_open <= 0.20f);
-    CHECK(right_open <= 0.20f);
+    Frame frame{img.width, img.height, img.bgr_data.data(), 0};
+    MediaPipeFaceMeshResult res;
+    bool detected = pipeline->process_frame(frame, res);
+
+    std::cout << "[TestEyes] eyes_both_wink.jpg -> Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    CHECK(detected == true);
+    CHECK(res.face_detected == true);
+    CHECK(res.left_eye_openness <= 0.20f);
+    CHECK(res.right_eye_openness <= 0.20f);
 }
 
-TEST_CASE("EyeBlinkEstimator - Anatomical Left Eye Closed (Wink)")
+TEST_CASE("MediaPipe Face Mesh - Anatomical Left Wink Fixture")
 {
-    EyeCrops crops;
-    REQUIRE_MESSAGE(process_fixture_crops("eyes_anatomical_left_wink.jpg", crops) == true, "Failed to load/process eyes_anatomical_left_wink.jpg");
-    REQUIRE(crops.face_detected == true);
+    auto pipeline = create_test_pipeline();
+    REQUIRE(pipeline != nullptr);
 
-    auto estimator = create_test_estimator();
-    float left_open = 0.0f, right_open = 0.0f;
-    estimator->estimate_openness(crops.left_eye_data, crops.right_eye_data, left_open, right_open);
+    ImageBuffer img = load_test_bgr("tests/resources/eyes_anatomical_left_wink.jpg");
+    REQUIRE(img.bgr_data.empty() == false);
 
-    std::cout << "[TestEyes] eyes_anatomical_left_wink.jpg -> Left Openness: " << left_open << " | Right Openness: " << right_open << "\n";
-    CHECK(left_open <= 0.20f);
-    CHECK(right_open >= 0.70f);
+    Frame frame{img.width, img.height, img.bgr_data.data(), 0};
+    MediaPipeFaceMeshResult res;
+    bool detected = pipeline->process_frame(frame, res);
+
+    std::cout << "[TestEyes] eyes_anatomical_left_wink.jpg -> Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    CHECK(detected == true);
+    CHECK(res.face_detected == true);
+    CHECK(res.left_eye_openness <= 0.20f);
+    CHECK(res.right_eye_openness >= 0.70f);
 }
 
-TEST_CASE("EyeBlinkEstimator - Anatomical Right Eye Closed (Wink)")
+TEST_CASE("MediaPipe Face Mesh - Anatomical Right Wink Fixture")
 {
-    EyeCrops crops;
-    REQUIRE_MESSAGE(process_fixture_crops("eyes_anatomical_right_wink.jpg", crops) == true, "Failed to load/process eyes_anatomical_right_wink.jpg");
-    REQUIRE(crops.face_detected == true);
+    auto pipeline = create_test_pipeline();
+    REQUIRE(pipeline != nullptr);
 
-    auto estimator = create_test_estimator();
-    float left_open = 0.0f, right_open = 0.0f;
-    estimator->estimate_openness(crops.left_eye_data, crops.right_eye_data, left_open, right_open);
+    ImageBuffer img = load_test_bgr("tests/resources/eyes_anatomical_right_wink.jpg");
+    REQUIRE(img.bgr_data.empty() == false);
 
-    std::cout << "[TestEyes] eyes_anatomical_right_wink.jpg -> Right Openness: " << right_open << " | Left Openness: " << left_open << "\n";
-    CHECK(right_open <= 0.20f);
-    CHECK(left_open >= 0.70f);
+    Frame frame{img.width, img.height, img.bgr_data.data(), 0};
+    MediaPipeFaceMeshResult res;
+    bool detected = pipeline->process_frame(frame, res);
+
+    std::cout << "[TestEyes] eyes_anatomical_right_wink.jpg -> Right Openness: " << res.right_eye_openness << " | Left Openness: " << res.left_eye_openness << "\n";
+    CHECK(detected == true);
+    CHECK(res.face_detected == true);
+    CHECK(res.right_eye_openness <= 0.20f);
+    CHECK(res.left_eye_openness >= 0.70f);
 }
 
 TEST_CASE("EyeBlinkEstimator - Tilted Head Anatomical Right Wink")

@@ -725,13 +725,13 @@ void GazeServer::start_processing() {
     if (pipeline) {
         ProjectSettings *ps = ProjectSettings::get_singleton();
         if (ps) {
-            String yunet_path = ps->get_setting("gaze/models/yunet_prefix");
-            yunet_path = resolve_model_path(yunet_path);
-            if (yunet_path.is_empty()) {
-                yunet_path = resolve_model_path("face_detection_yunet_2023mar");
+            String face_mesh_path = ps->has_setting("gaze/models/face_mesh_prefix") ? (String)ps->get_setting("gaze/models/face_mesh_prefix") : String("mediapipe_face_mesh");
+            face_mesh_path = resolve_model_path(face_mesh_path);
+            if (face_mesh_path.is_empty()) {
+                face_mesh_path = resolve_model_path("mediapipe_face_mesh");
             }
 
-            String gaze_path = ps->get_setting("gaze/models/gaze_prefix");
+            String gaze_path = ps->has_setting("gaze/models/gaze_prefix") ? (String)ps->get_setting("gaze/models/gaze_prefix") : String("gaze-estimation-adas-0002");
             gaze_path = resolve_model_path(gaze_path);
             if (gaze_path.is_empty()) {
                 gaze_path = resolve_model_path("gaze-estimation-adas-0002");
@@ -739,15 +739,12 @@ void GazeServer::start_processing() {
 
             String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("eye_openness");
             eye_openness_path = resolve_model_path(eye_openness_path);
-            if (eye_openness_path.is_empty()) {
-                eye_openness_path = resolve_model_path("eye_openness");
-            }
 
-            std::vector<uint8_t> yunet_buffer = load_file_buffer(yunet_path);
+            std::vector<uint8_t> face_mesh_buffer = load_file_buffer(face_mesh_path);
             std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
             std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
 
-            pipeline->initialize(yunet_buffer, gaze_buffer, eye_openness_buffer);
+            pipeline->initialize(face_mesh_buffer, gaze_buffer, eye_openness_buffer);
         }
         pipeline->set_config(active_config);
         pipeline->start();

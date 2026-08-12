@@ -14,8 +14,9 @@ static bool file_exists_native(const std::string& path) {
     return f.good();
 }
 
-MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::string& model_path)
+MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::string& model_path, const std::string& detector_path)
     : model_path_(model_path),
+      detector_path_(detector_path),
       env(ORT_LOGGING_LEVEL_WARNING, "MediaPipeFaceMeshPipeline"),
       memory_info(Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault)) {
     session_options.SetIntraOpNumThreads(1);
@@ -68,6 +69,9 @@ bool MediaPipeFaceMeshPipeline::initialize() {
                 "project/addons/godot-gaze/models/mediapipe_face_detector.ort",
                 "../project/addons/godot-gaze/models/mediapipe_face_detector.ort"
             };
+            if (!detector_path_.empty()) {
+                candidate_paths.insert(candidate_paths.begin(), detector_path_);
+            }
             if (!model_path_.empty()) {
                 size_t last_slash = model_path_.find_last_of("/\\");
                 if (last_slash != std::string::npos) {
@@ -291,10 +295,10 @@ void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Fra
         }
     };
 
-    // Landmark 468 (Anatomical Left Eye / Viewer Right) -> left_eye_crop
-    // Landmark 473 (Anatomical Right Eye / Viewer Left) -> right_eye_crop
-    crop_eye(468 < 478 ? 468 : 362, out_result.left_eye_crop);
-    crop_eye(473 < 478 ? 473 : 33, out_result.right_eye_crop);
+    // Landmark 468 (Anatomical Right Eye / Viewer Left X=113) -> right_eye_crop
+    // Landmark 473 (Anatomical Left Eye / Viewer Right X=152) -> left_eye_crop
+    crop_eye(468 < 478 ? 468 : 33, out_result.right_eye_crop);
+    crop_eye(473 < 478 ? 473 : 362, out_result.left_eye_crop);
 
     double w = input_frame.width > 0 ? (double)input_frame.width : 640.0;
     double h = input_frame.height > 0 ? (double)input_frame.height : 480.0;

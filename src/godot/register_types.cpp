@@ -52,6 +52,15 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_search_paths);
         ps->set_initial_value("gaze/models/search_paths", "res://models,res://addons/godot-gaze/models");
 
+        if (!ps->has_setting("gaze/models/yunet_prefix")) {
+            ps->set_setting("gaze/models/yunet_prefix", "mediapipe_face_detector");
+        }
+        Dictionary prop_yunet;
+        prop_yunet["name"] = "gaze/models/yunet_prefix";
+        prop_yunet["type"] = Variant::STRING;
+        ps->add_property_info(prop_yunet);
+        ps->set_initial_value("gaze/models/yunet_prefix", "mediapipe_face_detector");
+
         if (!ps->has_setting("gaze/models/face_detector_prefix")) {
             ps->set_setting("gaze/models/face_detector_prefix", "mediapipe_face_detector");
         }

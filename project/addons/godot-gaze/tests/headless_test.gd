@@ -257,13 +257,7 @@ func run_tests():
 	tracker.update_projection_parameters()
 	if gs:
 		var active_eye = eye_estimator.get_eye_rid()
-		var left_eye_cv = Vector3(raw_args[1], raw_args[2], raw_args[3])
-		var right_eye_cv = Vector3(raw_args[4], raw_args[5], raw_args[6])
-		var dir_cv = Vector3(raw_args[7], raw_args[8], raw_args[9])
-		var origin_cv = (left_eye_cv + right_eye_cv) * 0.5
-		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
-		var dir_cam = Vector3(dir_cv.x, dir_cv.y, -dir_cv.z)
-		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
+		gs.eye_tracker_set_gaze(active_eye, img_origin, img_dir)
 	tracker._on_gaze_data_ready(eye_rid)
 	var raw_feed_proj_shifted = tracker.get_latest_projected_gaze()
 	var raw_project_ray_shifted = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)

@@ -43,7 +43,7 @@ struct MediaPipeFaceMeshResult {
 
 class MediaPipeFaceMeshPipeline {
 public:
-    MediaPipeFaceMeshPipeline(const std::string& model_path);
+    MediaPipeFaceMeshPipeline(const std::string& model_path, const std::string& detector_path = "");
     MediaPipeFaceMeshPipeline(const std::vector<uint8_t>& model_buffer, const std::vector<uint8_t>& detector_buffer = {});
     ~MediaPipeFaceMeshPipeline();
 
@@ -53,6 +53,7 @@ public:
 
 private:
     std::string model_path_;
+    std::string detector_path_;
     std::vector<uint8_t> model_buffer_;
     std::vector<uint8_t> detector_buffer_;
     Ort::Env env;

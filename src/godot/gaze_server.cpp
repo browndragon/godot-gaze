@@ -372,12 +372,12 @@ void GazeServer::face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector
             face->head_pose_rotation
         );
 
-        // Convert the core GazeTransform3D (using custom structs) to Godot's Basis and Transform3D.
-        // Godot Basis(Vector3, Vector3, Vector3) constructor takes the row vectors representing the X, Y, Z local axes.
+        // Convert the core GazeTransform3D to Godot's Basis and Transform3D.
+        // Godot Basis(Vector3, Vector3, Vector3) constructor takes column vectors (the X, Y, Z axes).
         Basis f_basis(
-            Vector3(core_xform.basis.x.x, core_xform.basis.x.y, core_xform.basis.x.z), // Row 0
-            Vector3(core_xform.basis.y.x, core_xform.basis.y.y, core_xform.basis.y.z), // Row 1
-            Vector3(core_xform.basis.z.x, core_xform.basis.z.y, core_xform.basis.z.z)  // Row 2
+            Vector3(core_xform.basis.x.x, core_xform.basis.y.x, core_xform.basis.z.x), // Column 0 (X axis)
+            Vector3(core_xform.basis.x.y, core_xform.basis.y.y, core_xform.basis.z.y), // Column 1 (Y axis)
+            Vector3(core_xform.basis.x.z, core_xform.basis.y.z, core_xform.basis.z.z)  // Column 2 (Z axis)
         );
         Vector3 translation_cam(core_xform.origin.x, core_xform.origin.y, core_xform.origin.z);
         face->relative_transform = Transform3D(f_basis, translation_cam);
@@ -467,9 +467,11 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
                 }
 
                 Gaze::GazeVector2 pos_mm;
+                Gaze::GazeVector3 origin_cv(p_origin_cam.x, -p_origin_cam.y, -p_origin_cam.z);
+                Gaze::GazeVector3 dir_cv(calibrated_dir.x, -calibrated_dir.y, -calibrated_dir.z);
                 if (Gaze::project_ray_to_screen_mm(
-                        Gaze::GazeVector3(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z),
-                        Gaze::GazeVector3(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z),
+                        origin_cv,
+                        dir_cv,
                         Gaze::GazeVector3(cam->offset.x, cam->offset.y, cam->offset.z),
                         cam->tilt,
                         Gaze::GazeVector2(disp->physical_size_mm.x, disp->physical_size_mm.y),

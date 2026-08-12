@@ -281,7 +281,7 @@ func update_diagnostics_ui():
 			if xform:
 				head_pos = xform.origin
 				if tracker.has_method("get_head_rotation_inference_space"):
-					head_rot = tracker.call("get_head_rotation_inference_space")
+					head_rot = tracker.call("get_head_rotation_inference_space") * (180.0 / PI)
 				else:
 					head_rot = xform.basis.get_euler() * (180.0 / PI)
 

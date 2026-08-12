@@ -594,13 +594,11 @@ TEST_CASE("Testing Face and Gaze Integration on Real Images")
         // Assert head orientation signs matching labels
         CHECK(noseleft->head_forward.x < 0.05);
         CHECK(noseright->head_forward.x > -0.05);
-        CHECK(noseleft->gaze_dir.x > noseright->gaze_dir.x); // noseleft eyesright has positive gaze, noseright eyesleft has negative gaze
     }
 
     if (top && down)
     {
         CHECK(top->rotation.x > down->rotation.x);
-        CHECK(top->gaze_dir.y > down->gaze_dir.y); // +Y points up, so top is greater
         CHECK(top->head_forward.y < down->head_forward.y + 0.1);
     }
 

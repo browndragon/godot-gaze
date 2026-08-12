@@ -77,13 +77,13 @@ func _process(_delta):
 		nose_gaze_pos = Vector2.ZERO
 		
 	# Draw cursor and coordinates
-	if eye_gaze_pos != Vector2.ZERO:
-		cursor.visible = true
-		cursor.global_position = eye_gaze_pos - cursor.size / 2.0
-		coords_label.text = "Gaze: (%d, %d)\nNose: (%d, %d)" % [
-			int(eye_gaze_pos.x), int(eye_gaze_pos.y),
-			int(nose_gaze_pos.x), int(nose_gaze_pos.y)
-		]
+	if tracker.is_face_detected() and (eye_gaze_pos != Vector2.ZERO or nose_gaze_pos != Vector2.ZERO):
+		cursor.visible = (eye_gaze_pos != Vector2.ZERO)
+		if eye_gaze_pos != Vector2.ZERO:
+			cursor.global_position = eye_gaze_pos - cursor.size / 2.0
+		var gaze_str = "(%d, %d)" % [int(eye_gaze_pos.x), int(eye_gaze_pos.y)] if eye_gaze_pos != Vector2.ZERO else "N/A"
+		var nose_str = "(%d, %d)" % [int(nose_gaze_pos.x), int(nose_gaze_pos.y)] if nose_gaze_pos != Vector2.ZERO else "N/A"
+		coords_label.text = "Gaze: %s\nNose: %s" % [gaze_str, nose_str]
 		coords_label.global_position = center_pos + Vector2(-80, 40)
 	else:
 		cursor.visible = false

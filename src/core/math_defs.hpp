@@ -12,6 +12,7 @@
 #include <cmath>
 #include <type_traits>
 #include <cstdint>
+#include <algorithm>
 
 namespace Gaze
 {
@@ -44,9 +45,32 @@ namespace Gaze
                                 e * (x_diff) * (y_diff);
 
                     // Write as RGB: destination index c is swapped for R/B (c=0 B -> RGB red; c=2 R -> RGB blue)
-                    int dst_c = 2 - c;
-                    dst[(i * dst_w + j) * 3 + dst_c] = (uint8_t)val;
+                    // BGR to RGB channel reversal
+                    dst[(i * dst_w + j) * 3 + (2 - c)] = (uint8_t)val;
                 }
+            }
+        }
+    }
+
+    inline void crop_and_resize_bgr_to_rgb(const uint8_t *src, int src_w, int src_h, float roi_x, float roi_y, float roi_w, float roi_h, uint8_t *dst, int dst_w, int dst_h)
+    {
+        if (roi_w <= 0.0f || roi_h <= 0.0f) {
+            resize_bgr_to_rgb(src, src_w, src_h, dst, dst_w, dst_h);
+            return;
+        }
+        float x_ratio = roi_w / dst_w;
+        float y_ratio = roi_h / dst_h;
+        for (int i = 0; i < dst_h; i++)
+        {
+            for (int j = 0; j < dst_w; j++)
+            {
+                int x = std::max(0, std::min(src_w - 1, (int)(roi_x + x_ratio * j)));
+                int y = std::max(0, std::min(src_h - 1, (int)(roi_y + y_ratio * i)));
+                int src_idx = (y * src_w + x) * 3;
+
+                dst[(i * dst_w + j) * 3 + 0] = src[src_idx + 2];
+                dst[(i * dst_w + j) * 3 + 1] = src[src_idx + 1];
+                dst[(i * dst_w + j) * 3 + 2] = src[src_idx + 0];
             }
         }
     }

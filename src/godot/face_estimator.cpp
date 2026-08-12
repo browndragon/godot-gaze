@@ -10,6 +10,10 @@ namespace godot {
 void FaceEstimator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("initialize_estimator"), &FaceEstimator::initialize_estimator);
     ClassDB::bind_method(D_METHOD("stop_estimator"), &FaceEstimator::stop_estimator);
+    ClassDB::bind_method(D_METHOD("get_face_detector_model_prefix"), &FaceEstimator::get_face_detector_model_prefix);
+    ClassDB::bind_method(D_METHOD("set_face_detector_model_prefix", "prefix"), &FaceEstimator::set_face_detector_model_prefix);
+    ClassDB::bind_method(D_METHOD("get_face_mesh_model_prefix"), &FaceEstimator::get_face_mesh_model_prefix);
+    ClassDB::bind_method(D_METHOD("set_face_mesh_model_prefix", "prefix"), &FaceEstimator::set_face_mesh_model_prefix);
     ClassDB::bind_method(D_METHOD("get_yunet_model_prefix"), &FaceEstimator::get_yunet_model_prefix);
     ClassDB::bind_method(D_METHOD("set_yunet_model_prefix", "prefix"), &FaceEstimator::set_yunet_model_prefix);
     ClassDB::bind_method(D_METHOD("get_focal_length"), &FaceEstimator::get_focal_length);
@@ -21,6 +25,8 @@ void FaceEstimator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_face_rid"), &FaceEstimator::get_face_rid);
     ClassDB::bind_method(D_METHOD("_on_gaze_data_ready", "rid"), &FaceEstimator::_on_gaze_data_ready);
 
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "face_detector_model_prefix", PROPERTY_HINT_FILE), "set_face_detector_model_prefix", "get_face_detector_model_prefix");
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "face_mesh_model_prefix", PROPERTY_HINT_FILE), "set_face_mesh_model_prefix", "get_face_mesh_model_prefix");
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "yunet_model_prefix", PROPERTY_HINT_FILE), "set_yunet_model_prefix", "get_yunet_model_prefix");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "focal_length"), "set_focal_length", "get_focal_length");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_fov"), "set_camera_fov", "get_camera_fov");
@@ -56,14 +62,31 @@ void FaceEstimator::stop_estimator() {
     has_detected_face_val = false;
 }
 
+void FaceEstimator::set_face_detector_model_prefix(String prefix) {
+    face_detector_model_prefix = prefix;
+    ProjectSettings::get_singleton()->set_setting("gaze/models/face_detector_prefix", prefix);
+}
+
+String FaceEstimator::get_face_detector_model_prefix() const {
+    return face_detector_model_prefix;
+}
+
+void FaceEstimator::set_face_mesh_model_prefix(String prefix) {
+    face_mesh_model_prefix = prefix;
+    ProjectSettings::get_singleton()->set_setting("gaze/models/face_mesh_prefix", prefix);
+}
+
+String FaceEstimator::get_face_mesh_model_prefix() const {
+    return face_mesh_model_prefix;
+}
+
 void FaceEstimator::set_yunet_model_prefix(String prefix) {
     yunet_model_prefix = prefix;
-    // Set in ProjectSettings directly so GazeServer picks it up
-    ProjectSettings::get_singleton()->set_setting("gaze/models/yunet_prefix", prefix);
+    set_face_detector_model_prefix(prefix);
 }
 
 String FaceEstimator::get_yunet_model_prefix() const {
-    return yunet_model_prefix;
+    return face_detector_model_prefix;
 }
 
 void FaceEstimator::set_focal_length(double focal) {
@@ -75,11 +98,11 @@ double FaceEstimator::get_focal_length() const {
 }
 
 void FaceEstimator::set_camera_fov(double fov) {
-    camera_fov_degrees = fov;
+    camera_fov_deg = fov;
 }
 
 double FaceEstimator::get_camera_fov() const {
-    return camera_fov_degrees;
+    return camera_fov_deg;
 }
 
 void FaceEstimator::set_has_detected_face(bool detected) {

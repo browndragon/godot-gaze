@@ -806,12 +806,11 @@ Transform3D GazeTracker::get_eye_uncal_ray() const {
 }
 
 Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration) const {
-    const_cast<GazeTracker*>(this)->update_projection_parameters();
-    const Gaze::GazeVector3& origin_cam = reinterpret_cast<const Gaze::GazeVector3&>(origin);
-    Gaze::GazeVector3 dir_cam = reinterpret_cast<const Gaze::GazeVector3&>(direction);
+    Gaze::GazeVector3 origin_cv(origin.x, -origin.y, -origin.z);
+    Gaze::GazeVector3 dir_cv(direction.x, -direction.y, -direction.z);
 
     if (apply_calibration) {
-        dir_cam = projection_engine.apply_3d_bias(dir_cam);
+        dir_cv = projection_engine.apply_3d_bias(dir_cv);
     }
 
     PlatformGeometry geom = platform_get_geometry();
@@ -824,7 +823,7 @@ Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direct
     );
 
     Gaze::GazeVector2 local_pixel;
-    if (projector.project_to_viewport(projection_engine, origin_cam, dir_cam, local_pixel)) {
+    if (projector.project_to_viewport(projection_engine, origin_cv, dir_cv, local_pixel)) {
         return Vector2(local_pixel.x, local_pixel.y);
     }
     return Vector2(INFINITY, INFINITY);

@@ -441,11 +441,10 @@ func _perform_drawing():
 	if xform == null:
 		xform = Transform3D()
 
-	if -xform.origin.z <= 0.01:
+	if abs(xform.origin.z) <= 0.01:
 		return
 
-	# TODO: Don't inline this here. We should be pulling this from hardcoded well-known modeling.
-	# Model points to project (in Godot space, standardized to YuNet native layout: Right Eye, Left Eye, Nose, Right Mouth, Left Mouth):
+	# Model points to project (in Godot space, standardized layout: Right Eye, Left Eye, Nose, Right Mouth, Left Mouth):
 	var model_points = [
 		Vector3(30.0, 28.676, 0.0),      # Right eye center (anatomic right +X)
 		Vector3(-30.0, 28.676, 0.0),     # Left eye center (anatomic left -X)
@@ -462,8 +461,8 @@ func _perform_drawing():
 		if depth <= 0.01:
 			projected_pts.append(Vector2.INF)
 		else:
-			var px = (-p_cam.x / depth) * focal_len + cx
-			var py = (-p_cam.y / depth) * focal_len + cy
+			var px = (p_cam.x / depth) * focal_len + cx
+			var py = cy - (p_cam.y / depth) * focal_len
 			var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 			projected_pts.append(screen_pt)
@@ -500,18 +499,18 @@ func _perform_drawing():
 
 	# Project both start and end
 	var start_depth = -start_cv.z
-	if abs(start_depth) < 0.0001:
+	if start_depth <= 0.0001:
 		start_depth = 0.0001
-	var start_px = (-start_cv.x / start_depth) * focal_len + cx
-	var start_py = (-start_cv.y / start_depth) * focal_len + cy
+	var start_px = (start_cv.x / start_depth) * focal_len + cx
+	var start_py = cy - (start_cv.y / start_depth) * focal_len
 	var start_local = Vector2(start_px * drawn_rect.size.x / img_w, start_py * drawn_rect.size.y / img_h) + drawn_rect.position
 	var start_pt = rect.global_position + start_local - active_canvas.global_position
 
 	var end_depth = -end_cv.z
-	if abs(end_depth) < 0.0001:
+	if end_depth <= 0.0001:
 		end_depth = 0.0001
-	var end_px = (-end_cv.x / end_depth) * focal_len + cx
-	var end_py = (-end_cv.y / end_depth) * focal_len + cy
+	var end_px = (end_cv.x / end_depth) * focal_len + cx
+	var end_py = cy - (end_cv.y / end_depth) * focal_len
 	var end_local = Vector2(end_px * drawn_rect.size.x / img_w, end_py * drawn_rect.size.y / img_h) + drawn_rect.position
 	var end_pt = rect.global_position + end_local - active_canvas.global_position
 

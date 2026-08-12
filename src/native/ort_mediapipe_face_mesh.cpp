@@ -1,17 +1,17 @@
 #include "ort_mediapipe_face_mesh.hpp"
+#include "../core/log.hpp"
+#include "../core/pnp_solver.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstring>
+#include <fstream>
 #include <iostream>
 
 namespace Gaze {
 
-static void log_info(const std::string& msg) {
-    std::cout << "[INFO] " << msg << std::endl;
-}
-
-static void log_error(const std::string& msg) {
-    std::cerr << "[ERROR] " << msg << std::endl;
+static bool file_exists_native(const std::string& path) {
+    std::ifstream f(path.c_str());
+    return f.good();
 }
 
 MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::string& model_path)
@@ -22,8 +22,9 @@ MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::string& model_pa
     session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_ALL);
 }
 
-MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::vector<uint8_t>& model_buffer)
+MediaPipeFaceMeshPipeline::MediaPipeFaceMeshPipeline(const std::vector<uint8_t>& model_buffer, const std::vector<uint8_t>& detector_buffer)
     : model_buffer_(model_buffer),
+      detector_buffer_(detector_buffer),
       env(ORT_LOGGING_LEVEL_WARNING, "MediaPipeFaceMeshPipeline"),
       memory_info(Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault)) {
     session_options.SetIntraOpNumThreads(1);
@@ -53,6 +54,42 @@ bool MediaPipeFaceMeshPipeline::initialize() {
             log_error("MediaPipeFaceMeshPipeline_InitFailedNoSource");
             return false;
         }
+
+        if (!detector_buffer_.empty()) {
+            auto det = std::make_unique<BlazeFaceDetector>(detector_buffer_);
+            if (det->initialize()) {
+                detector = std::move(det);
+            }
+        }
+
+        if (!detector) {
+            std::vector<std::string> candidate_paths = {
+                "addons/godot-gaze/models/mediapipe_face_detector.ort",
+                "project/addons/godot-gaze/models/mediapipe_face_detector.ort",
+                "../project/addons/godot-gaze/models/mediapipe_face_detector.ort"
+            };
+            if (!model_path_.empty()) {
+                size_t last_slash = model_path_.find_last_of("/\\");
+                if (last_slash != std::string::npos) {
+                    candidate_paths.insert(candidate_paths.begin(), model_path_.substr(0, last_slash + 1) + "mediapipe_face_detector.ort");
+                }
+            }
+
+            for (const auto& p : candidate_paths) {
+                if (!file_exists_native(p)) {
+                    continue;
+                }
+                auto det = std::make_unique<BlazeFaceDetector>(p);
+                if (det->initialize()) {
+                    detector = std::move(det);
+                    break;
+                }
+            }
+        }
+        if (!detector) {
+            log_warning("MediaPipeFaceMeshPipeline_DetectorInitFallback: no valid detector found in candidates");
+        }
+
         is_initialized = true;
         log_info("MediaPipeFaceMeshPipeline_InitSuccess");
         return true;
@@ -63,20 +100,46 @@ bool MediaPipeFaceMeshPipeline::initialize() {
 }
 
 bool MediaPipeFaceMeshPipeline::process_frame(const Frame& input_frame, MediaPipeFaceMeshResult& out_result) {
-    if (!is_initialized || !session || !input_frame.data) {
+    if (!is_initialized || !session || !input_frame.data || input_frame.width <= 0 || input_frame.height <= 0) {
         out_result.face_detected = false;
         return false;
+    }
+
+    if (!has_tracking_roi || roi_w <= 0.0f || roi_h <= 0.0f) {
+        if (detector) {
+            BlazeFaceDetection det;
+            if (detector->detect(input_frame, det) && det.face_detected) {
+                float pad_w = det.box_w * 0.25f;
+                float pad_h = det.box_h * 0.25f;
+                roi_x = std::max(0.0f, det.box_x - pad_w);
+                roi_y = std::max(0.0f, det.box_y - pad_h);
+                roi_w = std::min(input_frame.width - roi_x, det.box_w + 2.0f * pad_w);
+                roi_h = std::min(input_frame.height - roi_y, det.box_h + 2.0f * pad_h);
+                has_tracking_roi = true;
+            } else {
+                out_result.face_detected = false;
+                has_tracking_roi = false;
+                return true;
+            }
+        } else {
+            roi_x = 0.0f;
+            roi_y = 0.0f;
+            roi_w = static_cast<float>(input_frame.width);
+            roi_h = static_cast<float>(input_frame.height);
+        }
     }
 
     const int target_w = 256;
     const int target_h = 256;
     std::vector<float> input_tensor_values(1 * target_h * target_w * 3);
 
-    // Frame data: BGR 24-bit per pixel
+    // Frame data: Crop face ROI from input_frame -> RGB float 256x256
     for (int y = 0; y < target_h; y++) {
-        int src_y = y * input_frame.height / target_h;
+        float norm_y = static_cast<float>(y) / target_h;
+        int src_y = std::max(0, std::min(input_frame.height - 1, static_cast<int>(roi_y + norm_y * roi_h)));
         for (int x = 0; x < target_w; x++) {
-            int src_x = x * input_frame.width / target_w;
+            float norm_x = static_cast<float>(x) / target_w;
+            int src_x = std::max(0, std::min(input_frame.width - 1, static_cast<int>(roi_x + norm_x * roi_w)));
             int src_idx = (src_y * input_frame.width + src_x) * 3;
 
             float b = static_cast<float>(input_frame.data[src_idx + 0]);
@@ -84,9 +147,9 @@ bool MediaPipeFaceMeshPipeline::process_frame(const Frame& input_frame, MediaPip
             float r = static_cast<float>(input_frame.data[src_idx + 2]);
 
             int dst_spatial = (y * target_w + x) * 3;
-            input_tensor_values[dst_spatial + 0] = r;
-            input_tensor_values[dst_spatial + 1] = g;
-            input_tensor_values[dst_spatial + 2] = b;
+            input_tensor_values[dst_spatial + 0] = r / 255.0f;
+            input_tensor_values[dst_spatial + 1] = g / 255.0f;
+            input_tensor_values[dst_spatial + 2] = b / 255.0f;
         }
     }
 
@@ -123,33 +186,71 @@ bool MediaPipeFaceMeshPipeline::process_frame(const Frame& input_frame, MediaPip
 
         if (output_tensors.empty()) {
             out_result.face_detected = false;
+            has_tracking_roi = false;
             return false;
+        }
+
+        if (output_tensors.size() > 1) {
+            float presence_score = output_tensors[1].GetTensorData<float>()[0];
+            if (presence_score < 0.0f) {
+                out_result.face_detected = false;
+                has_tracking_roi = false;
+                return true;
+            }
         }
 
         const float* lm_raw = output_tensors[0].GetTensorData<float>();
-        float presence = (output_tensors.size() > 1) ? output_tensors[1].GetTensorData<float>()[0] : 1.0f;
-
-        if (presence < 0.0f && presence != 0.0f) {
-            out_result.face_detected = false;
-            return false;
-        }
-
         process_landmarks(lm_raw, input_frame, out_result);
+        out_result.roi_x = roi_x;
+        out_result.roi_y = roi_y;
+        out_result.roi_w = roi_w;
+        out_result.roi_h = roi_h;
         out_result.face_detected = true;
         return true;
     } catch (const std::exception& e) {
         log_error(std::string("MediaPipeFaceMeshPipeline_RunError: ") + e.what());
         out_result.face_detected = false;
+        has_tracking_roi = false;
         return false;
     }
 }
 
 void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Frame& input_frame, MediaPipeFaceMeshResult& out_result) {
-    out_result.landmarks_3d.assign(lm_raw, lm_raw + 478 * 3);
+    // Map raw 256x256 ROI landmarks to full image pixel space
+    std::vector<float> mapped(478 * 3);
+    float x_min = 1e9f, x_max = -1e9f, y_min = 1e9f, y_max = -1e9f;
 
-    // Eyelid landmark positions for EAR calculation
-    // Left eye: 159 (top), 145 (bot), 33 (left corner), 133 (right corner)
-    // Right eye: 386 (top), 374 (bot), 362 (left corner), 263 (right corner)
+    for (int i = 0; i < 478; i++) {
+        float lx = roi_x + (lm_raw[i * 3 + 0] / 256.0f) * roi_w;
+        float ly = roi_y + (lm_raw[i * 3 + 1] / 256.0f) * roi_h;
+        float lz = lm_raw[i * 3 + 2];
+
+        mapped[i * 3 + 0] = lx;
+        mapped[i * 3 + 1] = ly;
+        mapped[i * 3 + 2] = lz;
+
+        if (lx < x_min) x_min = lx;
+        if (lx > x_max) x_max = lx;
+        if (ly < y_min) y_min = ly;
+        if (ly > y_max) y_max = ly;
+    }
+
+    out_result.landmarks_3d = mapped;
+
+    // Update face ROI for next frame tracking with 25% padding
+    float face_w = x_max - x_min;
+    float face_h = y_max - y_min;
+    if (face_w > 10.0f && face_h > 10.0f) {
+        roi_x = std::max(0.0f, x_min - 0.20f * face_w);
+        roi_y = std::max(0.0f, y_min - 0.20f * face_h);
+        roi_w = std::min(input_frame.width - roi_x, face_w * 1.40f);
+        roi_h = std::min(input_frame.height - roi_y, face_h * 1.40f);
+        has_tracking_roi = true;
+    }
+
+    // MediaPipe Face Mesh indexing:
+    // Anatomical Right Eye (image left): 33 (outer), 133 (inner), 159 (top1), 145 (bot1), 158 (top2), 153 (bot2)
+    // Anatomical Left Eye (image right): 263 (outer), 362 (inner), 386 (top1), 374 (bot1), 385 (top2), 380 (bot2)
     auto dist_3d = [](const float* p1, const float* p2) {
         float dx = p1[0] - p2[0];
         float dy = p1[1] - p2[1];
@@ -157,34 +258,24 @@ void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Fra
         return std::sqrt(dx*dx + dy*dy + dz*dz);
     };
 
-    float l_v = dist_3d(&lm_raw[159 * 3], &lm_raw[145 * 3]);
-    float l_h = dist_3d(&lm_raw[33 * 3], &lm_raw[133 * 3]) + 1e-6f;
-    float l_ear = l_v / l_h;
+    float r_v1 = dist_3d(&lm_raw[159 * 3], &lm_raw[145 * 3]);
+    float r_v2 = dist_3d(&lm_raw[158 * 3], &lm_raw[153 * 3]);
+    float r_h = dist_3d(&lm_raw[33 * 3], &lm_raw[133 * 3]) + 1e-6f;
+    float r_ear = (r_v1 + r_v2) / (2.0f * r_h);
 
-    float r_v = dist_3d(&lm_raw[386 * 3], &lm_raw[374 * 3]);
-    float r_h = dist_3d(&lm_raw[362 * 3], &lm_raw[263 * 3]) + 1e-6f;
-    float r_ear = r_v / r_h;
+    float l_v1 = dist_3d(&lm_raw[386 * 3], &lm_raw[374 * 3]);
+    float l_v2 = dist_3d(&lm_raw[385 * 3], &lm_raw[380 * 3]);
+    float l_h = dist_3d(&lm_raw[362 * 3], &lm_raw[263 * 3]) + 1e-6f;
+    float l_ear = (l_v1 + l_v2) / (2.0f * l_h);
 
-    out_result.left_eye_openness = std::max(0.0f, std::min(1.0f, (l_ear - 0.15f) / 0.15f));
-    out_result.right_eye_openness = std::max(0.0f, std::min(1.0f, (r_ear - 0.15f) / 0.15f));
+    // EAR mapped to eye openness [0.0, 1.0] with threshold range [0.20, 0.30]
+    out_result.right_eye_openness = std::max(0.0f, std::min(1.0f, (r_ear - 0.20f) / 0.10f));
+    out_result.left_eye_openness = std::max(0.0f, std::min(1.0f, (l_ear - 0.20f) / 0.10f));
 
-    float yaw = std::atan2(lm_raw[1 * 3 + 0], -lm_raw[1 * 3 + 2]);
-    float pitch = std::atan2(lm_raw[1 * 3 + 1], -lm_raw[1 * 3 + 2]);
-    float roll = std::atan2(lm_raw[263 * 3 + 1] - lm_raw[33 * 3 + 1], lm_raw[263 * 3 + 0] - lm_raw[33 * 3 + 0]);
-
-    out_result.head_pose.pitch_rad = pitch;
-    out_result.head_pose.yaw_rad = yaw;
-    out_result.head_pose.roll_rad = roll;
-    out_result.head_pose.trans_x_mm = lm_raw[1 * 3 + 0];
-    out_result.head_pose.trans_y_mm = lm_raw[1 * 3 + 1];
-    out_result.head_pose.trans_z_mm = std::abs(lm_raw[1 * 3 + 2]) > 1.0f ? std::abs(lm_raw[1 * 3 + 2]) : 700.0f;
-
+    // Eye crop sampling from mapped full-image pixel coordinates
     auto crop_eye = [&](int center_idx, uint8_t* out_crop) {
-        float cx_norm = (lm_raw[center_idx * 3 + 0] + 128.0f) / 256.0f;
-        float cy_norm = (lm_raw[center_idx * 3 + 1] + 128.0f) / 256.0f;
-
-        int cx = static_cast<int>(cx_norm * input_frame.width);
-        int cy = static_cast<int>(cy_norm * input_frame.height);
+        int cx = static_cast<int>(mapped[center_idx * 3 + 0]);
+        int cy = static_cast<int>(mapped[center_idx * 3 + 1]);
 
         for (int y = 0; y < 60; y++) {
             int src_y = std::max(0, std::min(input_frame.height - 1, cy - 30 + y));
@@ -193,15 +284,55 @@ void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Fra
                 int src_idx = (src_y * input_frame.width + src_x) * 3;
                 int dst_idx = (y * 60 + x) * 3;
 
-                out_crop[dst_idx + 0] = input_frame.data[src_idx + 2];
+                out_crop[dst_idx + 0] = input_frame.data[src_idx + 0];
                 out_crop[dst_idx + 1] = input_frame.data[src_idx + 1];
-                out_crop[dst_idx + 2] = input_frame.data[src_idx + 0];
+                out_crop[dst_idx + 2] = input_frame.data[src_idx + 2];
             }
         }
     };
 
-    crop_eye(33, out_result.left_eye_crop);
-    crop_eye(263, out_result.right_eye_crop);
+    // Landmark 468 (Anatomical Left Eye / Viewer Right) -> left_eye_crop
+    // Landmark 473 (Anatomical Right Eye / Viewer Left) -> right_eye_crop
+    crop_eye(468 < 478 ? 468 : 362, out_result.left_eye_crop);
+    crop_eye(473 < 478 ? 473 : 33, out_result.right_eye_crop);
+
+    double w = input_frame.width > 0 ? (double)input_frame.width : 640.0;
+    double h = input_frame.height > 0 ? (double)input_frame.height : 480.0;
+    double focal = w * 1.5;
+    double cx = w / 2.0;
+    double cy = h / 2.0;
+
+    int r_idx = 473 < 478 ? 473 : 33;
+    int l_idx = 468 < 478 ? 468 : 362;
+    float r_x = mapped[r_idx * 3 + 0];
+    float r_y = mapped[r_idx * 3 + 1];
+    float l_x = mapped[l_idx * 3 + 0];
+    float l_y = mapped[l_idx * 3 + 1];
+    float n_x = mapped[1 * 3 + 0];
+    float n_y = mapped[1 * 3 + 1];
+
+    double eye_dist_px = std::sqrt((r_x - l_x)*(r_x - l_x) + (r_y - l_y)*(r_y - l_y)) + 1e-6;
+    double z_mm = (focal * 63.0) / eye_dist_px;
+    if (z_mm < 300.0) z_mm = 300.0;
+    if (z_mm > 1200.0) z_mm = 1200.0;
+
+    double nose_cx = (n_x - cx) / focal * z_mm;
+    double nose_cy = (n_y - cy) / focal * z_mm;
+
+    out_result.head_pose.trans_x_mm = static_cast<float>(nose_cx);
+    out_result.head_pose.trans_y_mm = static_cast<float>(nose_cy);
+    out_result.head_pose.trans_z_mm = static_cast<float>(z_mm);
+
+    float yaw = std::atan2(n_x - cx, focal);
+    float pitch = std::atan2(n_y - cy, focal);
+    float roll = std::atan2(r_y - l_y, r_x - l_x);
+
+    out_result.head_pose.pitch_rad = pitch;
+    out_result.head_pose.yaw_rad = yaw;
+    out_result.head_pose.roll_rad = roll;
+    out_result.head_pose.trans_x_mm = nose_cx;
+    out_result.head_pose.trans_y_mm = nose_cy;
+    out_result.head_pose.trans_z_mm = z_mm;
 }
 
 } // namespace Gaze

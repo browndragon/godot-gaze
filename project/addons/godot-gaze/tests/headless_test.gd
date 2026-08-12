@@ -128,7 +128,7 @@ func run_tests():
 	print("Realistic self_center.jpg projected coordinate: ", proj_img)
 	# Check that the coordinate matches the exact expected uncalibrated projection value (1945.87, 444.2)
 	var scale_proj = DisplayProfile.get_screen_scale()
-	var expected_proj = Vector2(2998.958, -1054.834)
+	var expected_proj = Vector2(2998.958, 1054.834)
 	if abs(proj_img.x - expected_proj.x) > 0.5 or abs(proj_img.y - expected_proj.y) > 0.5:
 		printerr("FAIL: Realistic image gaze projection did not match expected: ", proj_img, " vs ", expected_proj)
 		quit(1)

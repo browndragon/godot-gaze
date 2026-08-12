@@ -82,5 +82,6 @@ script = SubResource("GDScript_0ejwa")
 
 [node name="GazeTracker" type="GazeTracker" parent="." unique_id=1112781723]
 screen_smooth = SubResource("OneEuroSmoother_7a0ga")
+nose_gaze = Vector2(27.665195, -65.734116)
 
 [connection signal="full_screened" from="FullScreener" to="." method="_set_maximized"]

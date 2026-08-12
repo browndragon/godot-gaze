@@ -59,15 +59,21 @@ atexit.register(exit_summary)
 def run_command_and_log(target, source, env):
     import subprocess
     import sys
+    import shlex
     
     log_path = str(target[0])
     executed_tests.append(log_path)
     
-    cmd = env.get("TEST_CMD")
-    if not cmd:
+    cmd_raw = env.get("TEST_CMD")
+    if not cmd_raw:
         print("Error: TEST_CMD is missing in SCons command environment.")
         return 1
         
+    cmd = list(cmd_raw)
+    extra_args = env.get("args") or ARGUMENTS.get("args", "")
+    if extra_args:
+        cmd.extend(shlex.split(extra_args))
+
     print(f"\n[SCons Test] Executing: {' '.join(cmd)}")
     
     # Configure platform-specific library loading paths
@@ -223,6 +229,10 @@ if env["platform"] != "javascript":
     test_objs.append(core_env.Object(
         target="#" + os.path.join(gaze_variant_dir, "tests/test_eyes" + core_env["OBJSUFFIX"]),
         source="#tests/test_eyes.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_transforms" + core_env["OBJSUFFIX"]),
+        source="#tests/test_transforms.cpp"
     ))
     
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
@@ -394,9 +404,10 @@ env.Alias("tests/style", style_run)
 # Standard local quick tests run (native + python + headless + style)
 local_tests = ["tests/python", "tests/style"]
 if env["platform"] != "javascript":
-    local_tests.extend(["tests/native", "tests/godot/headless"])
+    local_tests.extend(["tests/native", "tests/benchmark", "tests/godot/headless"])
 
 env.Alias("tests", local_tests)
+env.Alias("test", local_tests)
 
 # Run all E2E targets
 all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]

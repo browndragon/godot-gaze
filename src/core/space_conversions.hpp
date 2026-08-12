@@ -24,7 +24,7 @@ namespace Gaze
          */
         inline const GazeTransform3D OPENCV_CAM_TO_GODOT_CAM = GazeTransform3D(
             GazeBasis3D(
-                GazeVector3(-1.0, 0.0, 0.0),
+                GazeVector3(1.0, 0.0, 0.0),
                 GazeVector3(0.0, -1.0, 0.0),
                 GazeVector3(0.0, 0.0, -1.0)
             ),

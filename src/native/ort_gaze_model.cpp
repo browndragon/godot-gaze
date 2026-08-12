@@ -8,8 +8,6 @@
 
 namespace Gaze {
 
-bool g_is_unit_test = false;
-
 ORTGazeModel::ORTGazeModel(const std::string& gaze_ort_path)
     : model_path(gaze_ort_path),
       memory_info(Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU)) {
@@ -103,10 +101,8 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
 
     // 1. Preprocess eye crops
     // Note: Model expectations matching OpenCV DNN
-    // "left_eye_image" receives anatomical right eye crop (crops.right_eye_data)
-    // "right_eye_image" receives anatomical left eye crop (crops.left_eye_data)
-    preprocess_eye_crop(crops.right_eye_data, left_eye_tensor_data.data());
-    preprocess_eye_crop(crops.left_eye_data, right_eye_tensor_data.data());
+    preprocess_eye_crop(crops.left_eye_data, left_eye_tensor_data.data());
+    preprocess_eye_crop(crops.right_eye_data, right_eye_tensor_data.data());
 
     // 2. Prepare head pose angles
     if (std::isnan(crops.head_pose_rotation.x) || std::isnan(crops.head_pose_rotation.y) || std::isnan(crops.head_pose_rotation.z) ||
@@ -116,8 +112,8 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
 
     GazeBasis3D R_basis = rodrigues_to_basis(crops.head_pose_rotation);
     GazeVector3 euler = R_basis.get_euler_gaze_model_deg();
-    head_pose_tensor_data[0] = static_cast<float>(-euler.y); // Yaw
-    head_pose_tensor_data[1] = static_cast<float>(euler.x);  // Pitch
+    head_pose_tensor_data[0] = static_cast<float>(euler.x);  // Pitch
+    head_pose_tensor_data[1] = static_cast<float>(euler.y);  // Yaw
     head_pose_tensor_data[2] = static_cast<float>(euler.z);  // Roll (OpenCV Z-roll is positive clockwise, matches model expectation)
 
     // 3. Create input tensors referencing staging buffers

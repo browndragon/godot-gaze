@@ -725,6 +725,12 @@ void GazeServer::start_processing() {
     if (pipeline) {
         ProjectSettings *ps = ProjectSettings::get_singleton();
         if (ps) {
+            String face_detector_path = ps->has_setting("gaze/models/face_detector_prefix") ? (String)ps->get_setting("gaze/models/face_detector_prefix") : String("mediapipe_face_detector");
+            face_detector_path = resolve_model_path(face_detector_path);
+            if (face_detector_path.is_empty()) {
+                face_detector_path = resolve_model_path("mediapipe_face_detector");
+            }
+
             String face_mesh_path = ps->has_setting("gaze/models/face_mesh_prefix") ? (String)ps->get_setting("gaze/models/face_mesh_prefix") : String("mediapipe_face_mesh");
             face_mesh_path = resolve_model_path(face_mesh_path);
             if (face_mesh_path.is_empty()) {
@@ -737,14 +743,15 @@ void GazeServer::start_processing() {
                 gaze_path = resolve_model_path("gaze-estimation-adas-0002");
             }
 
-            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("eye_openness");
-            eye_openness_path = resolve_model_path(eye_openness_path);
-
+            std::vector<uint8_t> face_detector_buffer = load_file_buffer(face_detector_path);
             std::vector<uint8_t> face_mesh_buffer = load_file_buffer(face_mesh_path);
             std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
-            std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
 
-            pipeline->initialize(face_mesh_buffer, gaze_buffer, eye_openness_buffer);
+            bool init_ok = pipeline->initialize(face_mesh_buffer, gaze_buffer, face_detector_buffer);
+            if (!init_ok) {
+                Gaze::log_error("GazeServer_StartProcessing_FailedModelInit");
+                return;
+            }
         }
         pipeline->set_config(active_config);
         pipeline->start();
@@ -813,7 +820,6 @@ void GazeServer::trigger_process() {
 
             gaze_frame->post_process();
 
-
             // Update spatial poses/coordinates for Godot's RID structures
             RID face_rid;
             std::memcpy(&face_rid, &completed_data->face_rid_val, sizeof(uint64_t));
@@ -830,6 +836,7 @@ void GazeServer::trigger_process() {
             if (eye_rid.is_valid()) {
                 if (completed_data->face_detected) {
                     eye_tracker_set_openness(eye_rid, completed_data->left_eye_openness, completed_data->right_eye_openness);
+                    set_crops_on_eye_tracker(eye_rid, gaze_frame->get_left_eye_crop(), gaze_frame->get_right_eye_crop());
                     if (completed_data->gaze_success) {
                         eye_tracker_set_gaze(eye_rid, gaze_o, gaze_d);
                     } else {

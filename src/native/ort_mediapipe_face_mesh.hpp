@@ -1,6 +1,7 @@
 #ifndef ORT_MEDIAPIPE_FACE_MESH_HPP
 #define ORT_MEDIAPIPE_FACE_MESH_HPP
 
+#include "ort_blazeface_detector.hpp"
 #include "../core/gaze_frame_data.hpp"
 #include "../core/camera_interface.hpp"
 #include "../core/pipeline_config.hpp"
@@ -20,11 +21,18 @@ struct HeadPose {
     float trans_z_mm = 600.0f;
 
     GazeVector3 translation() const { return GazeVector3(trans_x_mm, trans_y_mm, trans_z_mm); }
-    GazeVector3 rotation_matrix() const { return GazeVector3(pitch_rad, yaw_rad, roll_rad); }
+    GazeVector3 rotation_vector() const { return GazeVector3(pitch_rad, yaw_rad, roll_rad); }
+    GazeBasis3D rotation_matrix() const {
+        return GazeBasis3D::from_euler_zyx(pitch_rad * 180.0 / 3.141592653589793, yaw_rad * 180.0 / 3.141592653589793, roll_rad * 180.0 / 3.141592653589793);
+    }
 };
 
 struct MediaPipeFaceMeshResult {
     bool face_detected = false;
+    float roi_x = 0.0f;
+    float roi_y = 0.0f;
+    float roi_w = 0.0f;
+    float roi_h = 0.0f;
     std::vector<float> landmarks_3d; // 478 * 3 floats
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
@@ -36,7 +44,7 @@ struct MediaPipeFaceMeshResult {
 class MediaPipeFaceMeshPipeline {
 public:
     MediaPipeFaceMeshPipeline(const std::string& model_path);
-    MediaPipeFaceMeshPipeline(const std::vector<uint8_t>& model_buffer);
+    MediaPipeFaceMeshPipeline(const std::vector<uint8_t>& model_buffer, const std::vector<uint8_t>& detector_buffer = {});
     ~MediaPipeFaceMeshPipeline();
 
     bool initialize();
@@ -46,12 +54,20 @@ public:
 private:
     std::string model_path_;
     std::vector<uint8_t> model_buffer_;
+    std::vector<uint8_t> detector_buffer_;
     Ort::Env env;
     Ort::SessionOptions session_options;
     std::unique_ptr<Ort::Session> session;
     Ort::MemoryInfo memory_info;
     PipelineConfig active_config;
     bool is_initialized = false;
+    bool has_tracking_roi = false;
+    float roi_x = 0.0f;
+    float roi_y = 0.0f;
+    float roi_w = 0.0f;
+    float roi_h = 0.0f;
+
+    std::unique_ptr<BlazeFaceDetector> detector;
 
     void process_landmarks(const float* landmarks_raw, const Frame& input_frame, MediaPipeFaceMeshResult& out_result);
 };

@@ -34,19 +34,12 @@ namespace Gaze
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         std::lock_guard<std::mutex> lock(state_mutex);
 
-        face_detector = std::make_unique<MediaPipeFaceMeshPipeline>(face_mesh_model_data);
+        face_detector = std::make_unique<MediaPipeFaceMeshPipeline>(face_mesh_model_data, eye_openness_model_data);
         gaze_estimator = std::make_unique<ORTGazeModel>(gaze_model_data);
 
-        if (!eye_openness_model_data.empty()) {
-            auto onnx_estimator = std::make_unique<ONNXEyeBlinkEstimator>(eye_openness_model_data);
-            if (onnx_estimator->initialize()) {
-                blink_estimator = std::move(onnx_estimator);
-            } else {
-                blink_estimator = std::make_unique<HeuristicEyeBlinkEstimator>();
-            }
-        } else {
-            blink_estimator = std::make_unique<HeuristicEyeBlinkEstimator>();
-        }
+        // 2-Model Architecture: MediaPipe Face Mesh pipeline computes 3D EAR eye openness directly.
+        // No heuristic fallback is used.
+        blink_estimator = nullptr;
 
         gaze_estimator->set_config(active_config);
 
@@ -67,6 +60,11 @@ namespace Gaze
         std::lock_guard<std::mutex> lock(state_mutex);
         if (thread_running)
             return;
+        if (!initialized)
+        {
+            log_error("GazeTrackingPipeline_CannotStart_NotInitialized");
+            return;
+        }
 
         thread_running = true;
         worker_thread = std::thread(&GazeTrackingPipeline::_worker_loop, this);
@@ -194,30 +192,33 @@ namespace Gaze
                         if (data->face_detected)
                         {
                             data->head_translation = mp_res.head_pose.translation();
-                            data->head_rotation = mp_res.head_pose.rotation_matrix();
+                            data->head_rotation = mp_res.head_pose.rotation_vector();
                             data->left_eye_openness = mp_res.left_eye_openness;
                             data->right_eye_openness = mp_res.right_eye_openness;
 
                             if (data->left_eye_buffer)
                             {
-                                copy_rgb_to_gbr(mp_res.left_eye_crop, data->left_eye_buffer, EYE_CROP_SIZE * EYE_CROP_SIZE);
+                                std::memcpy(data->left_eye_buffer, mp_res.left_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
                             }
                             if (data->right_eye_buffer)
                             {
-                                copy_rgb_to_gbr(mp_res.right_eye_crop, data->right_eye_buffer, EYE_CROP_SIZE * EYE_CROP_SIZE);
+                                std::memcpy(data->right_eye_buffer, mp_res.right_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
                             }
 
                             if (data->full_crop_buffer && data->full_crop_bytes >= 160 * 128 * 3)
                             {
-                                resize_bgr_to_rgb(frame.data, frame.width, frame.height, data->full_crop_buffer, 160, 128);
+                                crop_and_resize_bgr_to_rgb(frame.data, frame.width, frame.height, mp_res.roi_x, mp_res.roi_y, mp_res.roi_w, mp_res.roi_h, data->full_crop_buffer, 160, 128);
                             }
 
                             EyeCrops crops;
                             crops.face_detected = true;
                             crops.head_pose_translation = mp_res.head_pose.translation();
-                            crops.head_pose_rotation = mp_res.head_pose.rotation_matrix();
-                            crops.left_eye_center_cam = mp_res.head_pose.translation();
-                            crops.right_eye_center_cam = mp_res.head_pose.translation();
+                            crops.head_pose_rotation = mp_res.head_pose.rotation_vector();
+
+                            GazeBasis3D head_rot = mp_res.head_pose.rotation_matrix();
+                            GazeVector3 head_trans = mp_res.head_pose.translation();
+                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(-30.0, 28.676, 0.0)) + head_trans;
+                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(30.0, 28.676, 0.0)) + head_trans;
                             std::memcpy(crops.left_eye_data, mp_res.left_eye_crop, 60*60*3);
                             std::memcpy(crops.right_eye_data, mp_res.right_eye_crop, 60*60*3);
 
@@ -230,7 +231,8 @@ namespace Gaze
                             if (gaze_success)
                             {
                                 data->gaze_success = true;
-                                data->gaze_origin = mp_res.head_pose.translation();
+                                GazeTransform3D head_xform = Gaze::Inference::get_head_transform_in_camera_space(mp_res.head_pose.translation(), mp_res.head_pose.rotation_vector());
+                                data->gaze_origin = head_xform.origin;
                                 data->gaze_direction = raw_gaze_dir_cam;
                             }
                         }

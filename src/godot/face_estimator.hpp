@@ -11,9 +11,11 @@ class FaceEstimator : public Node3D {
     GDCLASS(FaceEstimator, Node3D);
 
 private:
+    String face_detector_model_prefix;
+    String face_mesh_model_prefix;
     String yunet_model_prefix;
-    double camera_focal_length_px = -1.0;
-    double camera_fov_degrees = 35.488537576579634;
+    double camera_focal_length_px = 500.0;
+    double camera_fov_deg = 60.0;
     bool has_detected_face_val = false;
     RID face_rid;
 
@@ -22,10 +24,16 @@ protected:
 
 public:
     FaceEstimator();
-    virtual ~FaceEstimator();
+    ~FaceEstimator();
 
     bool initialize_estimator();
     void stop_estimator();
+
+    void set_face_detector_model_prefix(String path);
+    String get_face_detector_model_prefix() const;
+
+    void set_face_mesh_model_prefix(String path);
+    String get_face_mesh_model_prefix() const;
 
     void set_yunet_model_prefix(String path);
     String get_yunet_model_prefix() const;

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # scripts/download_models.sh
-# Automates the download of required pre-trained weights (YuNet face detector and Intel ADAS Gaze model).
+# Automates downloading and building required pre-trained weights (MediaPipe Face Mesh and Intel ADAS Gaze model).
 
 set -euo pipefail
 
@@ -10,23 +10,11 @@ MODELS_DIR="${BASE_DIR}/project/addons/godot-gaze/models"
 echo "=== Gaze Tracker Pre-trained Models Setup ==="
 mkdir -p "${MODELS_DIR}"
 
-# 1. Download YuNet Face Detector Model (using stable Hugging Face mirror to avoid raw Git LFS pointer text or 404s)
-YUNET_URL="https://huggingface.co/opencv/face_detection_yunet/resolve/main/face_detection_yunet_2023mar.onnx"
-YUNET_FILE="${MODELS_DIR}/face_detection_yunet_2023mar.onnx"
-
-# Remove corrupted or legacy 2024may HTML/ONNX file if present
-rm -f "${MODELS_DIR}/face_detection_yunet_2024may.onnx"
-
-if [ -f "${YUNET_FILE}" ]; then
-    echo "YuNet model already exists at: ${YUNET_FILE}"
-else
-    echo "Downloading YuNet face detector model..."
-    curl -L -o "${YUNET_FILE}" "${YUNET_URL}"
-    echo "YuNet model downloaded successfully."
-fi
+# 1. Download and convert MediaPipe Face Mesh model via export_mediapipe_model.py
+echo "Exporting MediaPipe Face Mesh model..."
+python3 "${BASE_DIR}/tools/export_mediapipe_model.py"
 
 # 2. Download Intel OpenVINO Gaze Estimation ADAS model (.xml and .bin)
-# OpenCV's cv::dnn module natively parses OpenVINO IR model files directly!
 XML_URL="https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/1/gaze-estimation-adas-0002/FP16/gaze-estimation-adas-0002.xml"
 BIN_URL="https://storage.openvinotoolkit.org/repositories/open_model_zoo/2022.1/models_bin/1/gaze-estimation-adas-0002/FP16/gaze-estimation-adas-0002.bin"
 

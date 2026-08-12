@@ -63,8 +63,19 @@ void GazeFrame::resize_full_crop(int width, int height) {
 }
 
 void GazeFrame::post_process() {
-    left_eye_image = Image::create_from_data(60, 60, false, Image::FORMAT_RGB8, left_eye_bytes);
-    right_eye_image = Image::create_from_data(60, 60, false, Image::FORMAT_RGB8, right_eye_bytes);
+    PackedByteArray left_rgb = left_eye_bytes.duplicate();
+    uint8_t* l_ptr = left_rgb.ptrw();
+    for (int i = 0; i < 60 * 60; i++) {
+        std::swap(l_ptr[i * 3 + 0], l_ptr[i * 3 + 2]);
+    }
+    left_eye_image = Image::create_from_data(60, 60, false, Image::FORMAT_RGB8, left_rgb);
+
+    PackedByteArray right_rgb = right_eye_bytes.duplicate();
+    uint8_t* r_ptr = right_rgb.ptrw();
+    for (int i = 0; i < 60 * 60; i++) {
+        std::swap(r_ptr[i * 3 + 0], r_ptr[i * 3 + 2]);
+    }
+    right_eye_image = Image::create_from_data(60, 60, false, Image::FORMAT_RGB8, right_rgb);
 
     int full_width = 160;
     int full_height = 128;

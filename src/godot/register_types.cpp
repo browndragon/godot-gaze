@@ -52,14 +52,23 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_search_paths);
         ps->set_initial_value("gaze/models/search_paths", "res://models,res://addons/godot-gaze/models");
 
-        if (!ps->has_setting("gaze/models/yunet_prefix")) {
-            ps->set_setting("gaze/models/yunet_prefix", "face_detection_yunet_2023mar");
+        if (!ps->has_setting("gaze/models/face_detector_prefix")) {
+            ps->set_setting("gaze/models/face_detector_prefix", "mediapipe_face_detector");
         }
-        Dictionary prop_yunet;
-        prop_yunet["name"] = "gaze/models/yunet_prefix";
-        prop_yunet["type"] = Variant::STRING;
-        ps->add_property_info(prop_yunet);
-        ps->set_initial_value("gaze/models/yunet_prefix", "face_detection_yunet_2023mar");
+        Dictionary prop_detector;
+        prop_detector["name"] = "gaze/models/face_detector_prefix";
+        prop_detector["type"] = Variant::STRING;
+        ps->add_property_info(prop_detector);
+        ps->set_initial_value("gaze/models/face_detector_prefix", "mediapipe_face_detector");
+
+        if (!ps->has_setting("gaze/models/face_mesh_prefix")) {
+            ps->set_setting("gaze/models/face_mesh_prefix", "mediapipe_face_mesh");
+        }
+        Dictionary prop_mesh;
+        prop_mesh["name"] = "gaze/models/face_mesh_prefix";
+        prop_mesh["type"] = Variant::STRING;
+        ps->add_property_info(prop_mesh);
+        ps->set_initial_value("gaze/models/face_mesh_prefix", "mediapipe_face_mesh");
 
         if (!ps->has_setting("gaze/models/gaze_prefix")) {
             ps->set_setting("gaze/models/gaze_prefix", "gaze-estimation-adas-0002");

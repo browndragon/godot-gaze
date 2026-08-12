@@ -87,6 +87,7 @@ opts.Add(BoolVariable("threads", "Enable threading support", False))
 opts.Add("arch", "Target architecture", "")
 opts.Add(BoolVariable("ios_simulator", "Build for iOS simulator", False))
 opts.Add(BoolVariable("build_tests", "Build native unit test suite", False))
+opts.Add("args", "Extra arguments to pass to test executables", "")
 opts.Add("IOS_SDK_PATH", "Path to the iOS SDK", "")
 opts.Add("IOS_TOOLCHAIN_PATH", "Path to iOS toolchain", "")
 
@@ -176,7 +177,7 @@ threads_suffix = "_threads" if env.get("threads", False) else "_nothreads"
 variant_path = f"build/godot-cpp/{env['platform']}_{env['target']}_{env['arch']}{sim_suffix}{threads_suffix}"
 
 # Clean up custom arguments to prevent warnings from the godot-cpp build system
-for custom_arg in ["build_tests"]:
+for custom_arg in ["build_tests", "args"]:
     if custom_arg in ARGUMENTS:
         del ARGUMENTS[custom_arg]
 
@@ -273,7 +274,9 @@ def setup_onnxruntime(env):
 
     models_to_convert = [
         ("face_detection_yunet_2023mar.onnx", "face_detection_yunet_2023mar.ort"),
-        ("gaze-estimation-adas-0002.onnx", "gaze-estimation-adas-0002.ort")
+        ("gaze-estimation-adas-0002.onnx", "gaze-estimation-adas-0002.ort"),
+        ("mediapipe_face_detector.onnx", "mediapipe_face_detector.ort"),
+        ("mediapipe_face_mesh.onnx", "mediapipe_face_mesh.ort")
     ]
 
     if not os.path.exists(clean_models_marker):
@@ -521,6 +524,7 @@ def setup_onnxruntime(env):
         if env["target"] != "template_debug":
             print(f"[SCons] Stripping local symbols from {dylib_path}...")
             subprocess.run(["strip", "-x", dylib_path], check=False)
+            subprocess.run(["codesign", "-s", "-", "--force", dylib_path], check=False)
     elif platform in ["linux", "android"]:
         if platform == "linux":
             env.Append(LINKFLAGS=["-Wl,-rpath,$ORIGIN"])

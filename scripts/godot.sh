@@ -133,6 +133,7 @@ if [[ $TIMEOUT -gt 0 ]]; then
     EXIT_CODE=$?
     set -e
     
+    pkill -P "$WATCHDOG_PID" 2>/dev/null || true
     kill "$WATCHDOG_PID" 2>/dev/null || true
     exit "$EXIT_CODE"
 else

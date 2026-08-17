@@ -112,16 +112,25 @@ TEST_CASE("ORT YuNet 5-Keypoint Extraction on Real Image self_center.jpg")
     REQUIRE(ok == true);
     REQUIRE(res.face_detected == true);
 
-    // Verify all 5 keypoints are non-zero and non-collapsed
-    CHECK(res.right_eye_px.x > 0.0f);
-    CHECK(res.left_eye_px.x > 0.0f);
-    CHECK(res.nose_tip_px.x > 0.0f);
-    CHECK(res.mouth_right_px.x > 0.0f);
-    CHECK(res.mouth_left_px.x > 0.0f);
+    // Lock exact numerical ground-truth keypoint values for self_center.jpg
+    CHECK(res.right_eye_px.x == doctest::Approx(684.0).epsilon(0.01));
+    CHECK(res.right_eye_px.y == doctest::Approx(399.0).epsilon(0.01));
 
-    // Right eye (image left, smaller X) vs Left eye (image right, larger X)
-    CHECK(res.right_eye_px.x < res.left_eye_px.x);
+    CHECK(res.left_eye_px.x == doctest::Approx(837.0).epsilon(0.01));
+    CHECK(res.left_eye_px.y == doctest::Approx(413.0).epsilon(0.01));
 
-    // Mouth corners must be distinct (mouth_right.x < mouth_left.x in image space)
-    CHECK(res.mouth_right_px.x < res.mouth_left_px.x);
+    CHECK(res.nose_tip_px.x == doctest::Approx(749.0).epsilon(0.01));
+    CHECK(res.nose_tip_px.y == doctest::Approx(495.0).epsilon(0.01));
+
+    CHECK(res.mouth_right_px.x == doctest::Approx(683.0).epsilon(0.01));
+    CHECK(res.mouth_right_px.y == doctest::Approx(571.0).epsilon(0.01));
+
+    CHECK(res.mouth_left_px.x == doctest::Approx(814.0).epsilon(0.01));
+    CHECK(res.mouth_left_px.y == doctest::Approx(584.0).epsilon(0.01));
+
+    // Verify 3D Head Pose translation & rotation solved by PnP for self_center.jpg
+    CHECK(res.head_pose.trans_z_mm == doctest::Approx(784.25).epsilon(0.01));
+    CHECK(res.head_pose.pitch_rad == doctest::Approx(-0.364).epsilon(0.01));
+    CHECK(res.head_pose.yaw_rad == doctest::Approx(0.0304).epsilon(0.01));
+    CHECK(res.head_pose.roll_rad == doctest::Approx(-3.059).epsilon(0.01));
 }

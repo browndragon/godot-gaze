@@ -242,6 +242,8 @@ namespace Gaze
         int model_h = input_height;
 
         float roll_rad = roll_deg * (3.141592653589793f / 180.0f);
+
+        // 1. Counter-rotate full frame FIRST by -roll_deg
         std::vector<unsigned char> frame_bgr;
         const unsigned char *src_data = frame.data;
 
@@ -252,46 +254,42 @@ namespace Gaze
             src_data = frame_bgr.data();
         }
 
-        float scale = std::min(static_cast<float>(model_w) / width, static_cast<float>(model_h) / height);
-        float new_w = static_cast<float>(width) * scale;
-        float new_h = static_cast<float>(height) * scale;
-        float pad_x = (model_w - new_w) / 2.0f;
-        float pad_y = (model_h - new_h) / 2.0f;
+        // 2. Extract Central 1:1 Square Box Crop (size = min(width, height), zero black bars!)
+        int crop_size = std::min(width, height);
+        int crop_x0 = (width - crop_size) / 2;
+        int crop_y0 = (height - crop_size) / 2;
 
-        int int_new_w = static_cast<int>(std::round(new_w));
-        int int_new_h = static_cast<int>(std::round(new_h));
-        int int_pad_x = static_cast<int>(std::round(pad_x));
-        int int_pad_y = static_cast<int>(std::round(pad_y));
-
-        std::vector<Anchor> anchors = generate_anchors(model_w, model_h);
-
-        std::vector<float> input_tensor_data(1 * 3 * model_h * model_w, 0.0f);
-        std::vector<unsigned char> resized_bgr(int_new_w * int_new_h * 3, 0);
-        bilinear_resize_direct(src_data, width, height, resized_bgr.data(), int_new_w, int_new_h);
-
-        std::vector<unsigned char> padded_bgr(model_w * model_h * 3, 0);
-        for (int y = 0; y < int_new_h; ++y)
+        std::vector<unsigned char> square_crop(crop_size * crop_size * 3, 0);
+        for (int y = 0; y < crop_size; ++y)
         {
-            int dst_y = y + int_pad_y;
-            if (dst_y >= model_h) continue;
-            for (int x = 0; x < int_new_w; ++x)
+            int src_y = crop_y0 + y;
+            if (src_y < 0 || src_y >= height) continue;
+            for (int x = 0; x < crop_size; ++x)
             {
-                int dst_x = x + int_pad_x;
-                if (dst_x >= model_w) continue;
-                int src_idx = (y * int_new_w + x) * 3;
-                int dst_idx = (dst_y * model_w + dst_x) * 3;
-                padded_bgr[dst_idx + 0] = resized_bgr[src_idx + 0];
-                padded_bgr[dst_idx + 1] = resized_bgr[src_idx + 1];
-                padded_bgr[dst_idx + 2] = resized_bgr[src_idx + 2];
+                int src_x = crop_x0 + x;
+                if (src_x < 0 || src_x >= width) continue;
+                int src_idx = (src_y * width + src_x) * 3;
+                int dst_idx = (y * crop_size + x) * 3;
+                square_crop[dst_idx + 0] = src_data[src_idx + 0];
+                square_crop[dst_idx + 1] = src_data[src_idx + 1];
+                square_crop[dst_idx + 2] = src_data[src_idx + 2];
             }
         }
+
+        // 3. Bilinear Resize 1:1 Square Crop -> 640x640 Model Input (100% face tensor!)
+        float scale = static_cast<float>(model_w) / static_cast<float>(crop_size);
+
+        std::vector<Anchor> anchors = generate_anchors(model_w, model_h);
+        std::vector<float> input_tensor_data(1 * 3 * model_h * model_w, 0.0f);
+        std::vector<unsigned char> resized_bgr(model_w * model_h * 3, 0);
+        bilinear_resize_direct(square_crop.data(), crop_size, crop_size, resized_bgr.data(), model_w, model_h);
 
         int channel_size = model_h * model_w;
         if (is_nhwc)
         {
             for (int i = 0; i < channel_size * 3; ++i)
             {
-                input_tensor_data[i] = static_cast<float>(padded_bgr[i]);
+                input_tensor_data[i] = static_cast<float>(resized_bgr[i]);
             }
         }
         else
@@ -303,9 +301,9 @@ namespace Gaze
                     int src_idx = (y * model_w + x) * 3;
                     int pixel_idx = y * model_w + x;
 
-                    float b = static_cast<float>(padded_bgr[src_idx + 0]);
-                    float g = static_cast<float>(padded_bgr[src_idx + 1]);
-                    float r = static_cast<float>(padded_bgr[src_idx + 2]);
+                    float b = static_cast<float>(resized_bgr[src_idx + 0]);
+                    float g = static_cast<float>(resized_bgr[src_idx + 1]);
+                    float r = static_cast<float>(resized_bgr[src_idx + 2]);
 
                     input_tensor_data[0 * channel_size + pixel_idx] = b;
                     input_tensor_data[1 * channel_size + pixel_idx] = g;
@@ -373,16 +371,16 @@ namespace Gaze
                         float x_left = cx - w / 2.0f;
                         float y_top = cy - h / 2.0f;
 
-                        // 4 Corners of predicted bbox in rotated frame space
-                        GazeVector2 c1_model((x_left - pad_x) / scale, (y_top - pad_y) / scale);
-                        GazeVector2 c2_model(((x_left + w) - pad_x) / scale, (y_top - pad_y) / scale);
-                        GazeVector2 c3_model(((x_left + w) - pad_x) / scale, ((y_top + h) - pad_y) / scale);
-                        GazeVector2 c4_model((x_left - pad_x) / scale, ((y_top + h) - pad_y) / scale);
+                        // 4 Corners of predicted bbox in rotated square crop space
+                        GazeVector2 c1_crop(x_left / scale + crop_x0, y_top / scale + crop_y0);
+                        GazeVector2 c2_crop((x_left + w) / scale + crop_x0, y_top / scale + crop_y0);
+                        GazeVector2 c3_crop((x_left + w) / scale + crop_x0, (y_top + h) / scale + crop_y0);
+                        GazeVector2 c4_crop(x_left / scale + crop_x0, (y_top + h) / scale + crop_y0);
 
-                        GazeVector2 c1_orig = rotate_point_back(c1_model, -roll_rad, width, height);
-                        GazeVector2 c2_orig = rotate_point_back(c2_model, -roll_rad, width, height);
-                        GazeVector2 c3_orig = rotate_point_back(c3_model, -roll_rad, width, height);
-                        GazeVector2 c4_orig = rotate_point_back(c4_model, -roll_rad, width, height);
+                        GazeVector2 c1_orig = rotate_point_back(c1_crop, -roll_rad, width, height);
+                        GazeVector2 c2_orig = rotate_point_back(c2_crop, -roll_rad, width, height);
+                        GazeVector2 c3_orig = rotate_point_back(c3_crop, -roll_rad, width, height);
+                        GazeVector2 c4_orig = rotate_point_back(c4_crop, -roll_rad, width, height);
 
                         float orig_xmin = std::min({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
                         float orig_ymin = std::min({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
@@ -395,10 +393,10 @@ namespace Gaze
                             float kx = kps_data[idx * 10 + j * 2 + 0] * anc.stride_x + anc.cx;
                             float ky = kps_data[idx * 10 + j * 2 + 1] * anc.stride_y + anc.cy;
 
-                            float rot_kx = (kx - pad_x) / scale;
-                            float rot_ky = (ky - pad_y) / scale;
+                            float crop_kx = kx / scale + crop_x0;
+                            float crop_ky = ky / scale + crop_y0;
 
-                            ldm[j] = rotate_point_back(GazeVector2(rot_kx, rot_ky), -roll_rad, width, height);
+                            ldm[j] = rotate_point_back(GazeVector2(crop_kx, crop_ky), -roll_rad, width, height);
                         }
 
                         candidate_bboxes.push_back(GazeRect(orig_xmin, orig_ymin, orig_xmax - orig_xmin, orig_ymax - orig_ymin));

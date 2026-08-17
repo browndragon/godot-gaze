@@ -114,9 +114,9 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
 
     GazeBasis3D R_basis = rodrigues_to_basis(crops.head_pose_rotation);
     GazeVector3 euler = R_basis.get_euler_gaze_model_deg();
-    head_pose_tensor_data[0] = static_cast<float>(euler.x);  // Pitch
-    head_pose_tensor_data[1] = static_cast<float>(euler.y);  // Yaw
-    head_pose_tensor_data[2] = static_cast<float>(euler.z);  // Roll (OpenCV Z-roll is positive clockwise, matches model expectation)
+    head_pose_tensor_data[0] = static_cast<float>(-euler.y); // Yaw (OpenVINO expects -yaw for head-left)
+    head_pose_tensor_data[1] = static_cast<float>(euler.x);  // Pitch
+    head_pose_tensor_data[2] = static_cast<float>(euler.z);  // Roll
 
     // 3. Create input tensors referencing staging buffers
     std::vector<int64_t> eye_shape = {1, 3, EyeCrops::EYE_CROP_WIDTH, EyeCrops::EYE_CROP_HEIGHT};

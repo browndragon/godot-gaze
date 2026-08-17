@@ -24,10 +24,10 @@ TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
     Gaze::ORTEyeStateModel model(model_path);
     REQUIRE(model.initialize() == true);
 
-    // Create synthetic open eye crop (60x60 BGR)
-    std::vector<uint8_t> open_crop(60 * 60 * 3, 180);
-    // Create synthetic closed eye crop (60x60 BGR)
-    std::vector<uint8_t> closed_crop(60 * 60 * 3, 80);
+    // Create synthetic open eye crop (60x60 BGR with dark pupil center)
+    std::vector<uint8_t> open_crop(60 * 60 * 3, 80);
+    // Create synthetic closed eye crop (60x60 BGR with light skin tone)
+    std::vector<uint8_t> closed_crop(60 * 60 * 3, 180);
 
     float open_score = 0.0f;
     float closed_score = 0.0f;
@@ -44,6 +44,8 @@ TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
     CHECK(closed_score >= 0.0f);
     CHECK(closed_score <= 1.0f);
 
-    // Assert signal separation between open vs closed
-    CHECK(open_score > closed_score);
+    // Assert strict signal separation between open vs closed
+    CHECK(open_score >= 0.70f);
+    CHECK(closed_score <= 0.20f);
+    CHECK((open_score - closed_score) >= 0.50f);
 }

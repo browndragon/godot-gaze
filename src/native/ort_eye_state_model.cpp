@@ -67,15 +67,19 @@ namespace Gaze
         float *g_plane = out_buffer + plane_size;
         float *b_plane = out_buffer + 2 * plane_size;
 
+        // ImageNet normalization: mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
+        constexpr float mean_r = 0.485f, mean_g = 0.456f, mean_b = 0.406f;
+        constexpr float std_r = 0.229f, std_g = 0.224f, std_b = 0.225f;
+
         for (int i = 0; i < plane_size; ++i)
         {
-            uint8_t b = raw_crop_bgr[i * 3 + 0];
-            uint8_t g = raw_crop_bgr[i * 3 + 1];
-            uint8_t r = raw_crop_bgr[i * 3 + 2];
+            float b = raw_crop_bgr[i * 3 + 0] / 255.0f;
+            float g = raw_crop_bgr[i * 3 + 1] / 255.0f;
+            float r = raw_crop_bgr[i * 3 + 2] / 255.0f;
 
-            r_plane[i] = r / 255.0f;
-            g_plane[i] = g / 255.0f;
-            b_plane[i] = b / 255.0f;
+            r_plane[i] = (r - mean_r) / std_r;
+            g_plane[i] = (g - mean_g) / std_g;
+            b_plane[i] = (b - mean_b) / std_b;
         }
     }
 
@@ -111,7 +115,8 @@ namespace Gaze
             }
 
             float *out_data = output_tensors[0].GetTensorMutableData<float>();
-            out_openness = std::clamp(out_data[0], 0.0f, 1.0f);
+            float blink_prob = out_data[0];
+            out_openness = std::clamp(1.0f - blink_prob, 0.0f, 1.0f);
             return true;
         }
         catch (const std::exception &e)

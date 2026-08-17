@@ -111,9 +111,8 @@ namespace Gaze
     static GazeVector2 rotate_point_back(const GazeVector2 &pt, float angle_rad, int w, int h)
     {
         if (std::abs(angle_rad) < 1e-4f) return pt;
-        float inv_angle = -angle_rad;
-        float cos_a = std::cos(inv_angle);
-        float sin_a = std::sin(inv_angle);
+        float cos_a = std::cos(angle_rad);
+        float sin_a = std::sin(angle_rad);
         float cx = w / 2.0f;
         float cy = h / 2.0f;
         float dx = pt.x - cx;

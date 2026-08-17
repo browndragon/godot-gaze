@@ -74,8 +74,8 @@ namespace Gaze
         std::vector<Anchor> generate_anchors(int width, int height);
 
     public:
-        ORTYuNetDetector(const std::string &p_model_path, float score_thresh = 0.35f, float nms_thresh = 0.3f);
-        ORTYuNetDetector(const std::vector<uint8_t> &p_model_buffer, float score_thresh = 0.35f, float nms_thresh = 0.3f);
+        ORTYuNetDetector(const std::string &p_model_path, float score_thresh = 0.25f, float nms_thresh = 0.3f);
+        ORTYuNetDetector(const std::vector<uint8_t> &p_model_buffer, float score_thresh = 0.25f, float nms_thresh = 0.3f);
         ~ORTYuNetDetector() = default;
 
         bool initialize();

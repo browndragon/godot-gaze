@@ -134,3 +134,67 @@ TEST_CASE("ORT YuNet 5-Keypoint Extraction on Real Image self_center.jpg")
     CHECK(res.head_pose.yaw_rad == doctest::Approx(0.0304).epsilon(0.01));
     CHECK(res.head_pose.roll_rad == doctest::Approx(-3.059).epsilon(0.01));
 }
+
+TEST_CASE("ORT YuNet Full Benchmark Image Suite Keypoint Invariants")
+{
+    std::string model_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    if (!yunet_file_exists(model_path)) {
+        model_path = "../project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    }
+
+    if (!yunet_file_exists(model_path)) {
+        MESSAGE("Skipping test: Model file not found");
+        return;
+    }
+
+    Gaze::ORTYuNetDetector detector(model_path);
+    REQUIRE(detector.initialize() == true);
+
+    struct BenchmarkExpectation {
+        std::string filename;
+        float roll_hint_rad;
+        float expected_r_eye_x;
+        float expected_r_eye_y;
+        float expected_l_eye_x;
+        float expected_l_eye_y;
+        float expected_nose_x;
+        float expected_nose_y;
+    };
+
+    std::vector<BenchmarkExpectation> suite = {
+        {"self_center.jpg", 0.0f, 684.0f, 399.0f, 837.0f, 413.0f, 749.0f, 495.0f},
+        {"self_left_left.jpg", 0.0f, 774.0f, 397.0f, 925.0f, 391.0f, 877.0f, 483.0f},
+        {"self_right_right.jpg", 0.0f, 615.0f, 396.0f, 772.0f, 408.0f, 650.0f, 507.0f},
+        {"self_top_top.jpg", 0.0f, 701.0f, 375.0f, 854.0f, 383.0f, 776.0f, 467.0f},
+        {"self_down_down.jpg", 0.0f, 707.0f, 422.0f, 864.0f, 433.0f, 779.0f, 524.0f},
+        {"self_roll_left.jpg", -45.0f * (3.14159265f / 180.0f), 496.0f, 245.0f, 577.0f, 315.0f, 495.0f, 329.0f},
+        {"self_roll_right.jpg", 45.0f * (3.14159265f / 180.0f), 465.0f, 202.0f, 548.0f, 120.0f, 554.0f, 215.0f}
+    };
+
+    for (const auto &item : suite) {
+        std::string img_path = "tests/resources/" + item.filename;
+        if (!yunet_file_exists(img_path)) {
+            img_path = "../tests/resources/" + item.filename;
+        }
+
+        TestImage img = load_yunet_test_image(img_path);
+        if (img.data.empty()) continue;
+
+        Gaze::Frame frame;
+        frame.width = img.width;
+        frame.height = img.height;
+        frame.data = img.data.data();
+
+        Gaze::YuNetResult res;
+        bool ok = detector.process_frame(frame, res, item.roll_hint_rad);
+        CHECK_MESSAGE(ok == true, "Failed on image: ", item.filename);
+        CHECK_MESSAGE(res.face_detected == true, "No face detected in: ", item.filename);
+
+        CHECK(res.right_eye_px.x == doctest::Approx(item.expected_r_eye_x).epsilon(0.02));
+        CHECK(res.right_eye_px.y == doctest::Approx(item.expected_r_eye_y).epsilon(0.02));
+        CHECK(res.left_eye_px.x == doctest::Approx(item.expected_l_eye_x).epsilon(0.02));
+        CHECK(res.left_eye_px.y == doctest::Approx(item.expected_l_eye_y).epsilon(0.02));
+        CHECK(res.nose_tip_px.x == doctest::Approx(item.expected_nose_x).epsilon(0.02));
+        CHECK(res.nose_tip_px.y == doctest::Approx(item.expected_nose_y).epsilon(0.02));
+    }
+}

@@ -1,5 +1,6 @@
 #include "doctest.h"
-#include "ort_mediapipe_face_mesh.hpp"
+#include "ort_yunet_detector.hpp"
+#include "ort_eye_state_model.hpp"
 #include "gaze_frame_data.hpp"
 #include <fstream>
 #include <vector>
@@ -42,115 +43,161 @@ inline ImageBuffer load_test_bgr(const std::string& filepath) {
     return res;
 }
 
-std::unique_ptr<MediaPipeFaceMeshPipeline> create_test_pipeline() {
-    std::string model_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-    auto mp = std::make_unique<MediaPipeFaceMeshPipeline>(model_path);
-    if (mp->initialize()) {
-        return mp;
+std::unique_ptr<ORTYuNetDetector> create_test_detector() {
+    std::string model_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    auto detector = std::make_unique<ORTYuNetDetector>(model_path);
+    if (detector->initialize()) {
+        return detector;
     }
     return nullptr;
 }
 
-TEST_CASE("MediaPipe Face Mesh - Both Eyes Open Fixture")
+TEST_CASE("YuNet Detector - Both Eyes Open Fixture")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
+
+    ORTEyeStateModel eye_state("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    REQUIRE(eye_state.initialize() == true);
 
     ImageBuffer img = load_test_bgr("tests/resources/self_center.jpg");
     REQUIRE(img.bgr_data.empty() == false);
 
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
 
-    std::cout << "[TestEyes] self_center.jpg -> Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    float l_open = 0.0f, r_open = 0.0f;
+    if (detected && res.face_detected) {
+        eye_state.estimate_openness(res.left_eye_crop, l_open);
+        eye_state.estimate_openness(res.right_eye_crop, r_open);
+    }
+
+    std::cout << "[TestEyes] self_center.jpg -> Left Openness: " << l_open << " | Right Openness: " << r_open << "\n";
     CHECK(detected == true);
     CHECK(res.face_detected == true);
-    CHECK(res.left_eye_openness >= 0.70f);
-    CHECK(res.right_eye_openness >= 0.70f);
+    CHECK(l_open >= 0.70f);
+    CHECK(r_open >= 0.70f);
 }
 
-TEST_CASE("MediaPipe Face Mesh - Both Eyes Closed (Blink) Fixture")
+TEST_CASE("YuNet Detector - Both Eyes Closed (Blink) Fixture")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
+
+    ORTEyeStateModel eye_state("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    REQUIRE(eye_state.initialize() == true);
 
     ImageBuffer img = load_test_bgr("tests/resources/eyes_both_wink.jpg");
     REQUIRE(img.bgr_data.empty() == false);
 
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
-    std::cout << "[TestEyes] eyes_both_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
+
+    float l_open = 0.0f, r_open = 0.0f;
+    if (detected && res.face_detected) {
+        eye_state.estimate_openness(res.left_eye_crop, l_open);
+        eye_state.estimate_openness(res.right_eye_crop, r_open);
+    }
+
+    std::cout << "[TestEyes] eyes_both_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Left Openness: " << l_open << " | Right Openness: " << r_open << "\n";
     CHECK(detected == true);
     CHECK(res.face_detected == true);
-    CHECK(res.right_eye_openness <= 0.50f);
-    CHECK(res.left_eye_openness <= 0.50f);
+    CHECK(r_open <= 0.50f);
+    CHECK(l_open <= 0.50f);
 }
 
-TEST_CASE("MediaPipe Face Mesh - Anatomical Left Wink Fixture")
+TEST_CASE("YuNet Detector - Anatomical Left Wink Fixture")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
+
+    ORTEyeStateModel eye_state("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    REQUIRE(eye_state.initialize() == true);
 
     ImageBuffer img = load_test_bgr("tests/resources/eyes_anatomical_left_wink.jpg");
     REQUIRE(img.bgr_data.empty() == false);
 
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
-    std::cout << "[TestEyes] eyes_anatomical_left_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Left Openness: " << res.left_eye_openness << " | Right Openness: " << res.right_eye_openness << "\n";
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
+
+    float l_open = 0.0f, r_open = 0.0f;
+    if (detected && res.face_detected) {
+        eye_state.estimate_openness(res.left_eye_crop, l_open);
+        eye_state.estimate_openness(res.right_eye_crop, r_open);
+    }
+
+    std::cout << "[TestEyes] eyes_anatomical_left_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Left Openness: " << l_open << " | Right Openness: " << r_open << "\n";
     CHECK(detected == true);
     CHECK(res.face_detected == true);
-    CHECK(res.left_eye_openness <= 0.80f);
+    CHECK(l_open <= 0.80f);
 }
 
-TEST_CASE("MediaPipe Face Mesh - Anatomical Right Wink Fixture")
+TEST_CASE("YuNet Detector - Anatomical Right Wink Fixture")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
+
+    ORTEyeStateModel eye_state("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    REQUIRE(eye_state.initialize() == true);
 
     ImageBuffer img = load_test_bgr("tests/resources/eyes_anatomical_right_wink.jpg");
     REQUIRE(img.bgr_data.empty() == false);
 
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
-    std::cout << "[TestEyes] eyes_anatomical_right_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Right Openness: " << res.right_eye_openness << " | Left Openness: " << res.left_eye_openness << "\n";
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
+
+    float l_open = 0.0f, r_open = 0.0f;
+    if (detected && res.face_detected) {
+        eye_state.estimate_openness(res.left_eye_crop, l_open);
+        eye_state.estimate_openness(res.right_eye_crop, r_open);
+    }
+
+    std::cout << "[TestEyes] eyes_anatomical_right_wink.jpg -> Detected: " << (detected ? "true" : "false") << " | Right Openness: " << r_open << " | Left Openness: " << l_open << "\n";
     CHECK(detected == true);
     CHECK(res.face_detected == true);
-    CHECK(res.right_eye_openness <= res.left_eye_openness);
+    CHECK(r_open <= l_open);
 }
 
-TEST_CASE("MediaPipe Face Mesh - Tilted Head Anatomical Right Wink")
+TEST_CASE("YuNet Detector - Tilted Head Anatomical Right Wink")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
+
+    ORTEyeStateModel eye_state("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    REQUIRE(eye_state.initialize() == true);
 
     ImageBuffer img = load_test_bgr("tests/resources/eyes_tilted_anatomical_right_wink.jpg");
     REQUIRE(img.bgr_data.empty() == false);
 
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
 
-    std::cout << "[TestEyes] eyes_tilted_anatomical_right_wink.jpg -> Right Openness: " << res.right_eye_openness << " | Left Openness: " << res.left_eye_openness << "\n";
+    float l_open = 0.0f, r_open = 0.0f;
+    if (detected && res.face_detected) {
+        eye_state.estimate_openness(res.left_eye_crop, l_open);
+        eye_state.estimate_openness(res.right_eye_crop, r_open);
+    }
+
+    std::cout << "[TestEyes] eyes_tilted_anatomical_right_wink.jpg -> Right Openness: " << r_open << " | Left Openness: " << l_open << "\n";
     CHECK(detected == true);
     CHECK(res.face_detected == true);
-    CHECK(res.right_eye_openness < res.left_eye_openness);
+    CHECK(r_open < l_open);
 }
 
 TEST_CASE("MediaPipe Face Mesh - Eye Crop Feature Intensity Variance and Pupil Content Verification")
 {
-    auto pipeline = create_test_pipeline();
-    REQUIRE(pipeline != nullptr);
+    auto detector = create_test_detector();
+    REQUIRE(detector != nullptr);
 
     ImageBuffer img = load_test_bgr("tests/resources/self_center.jpg");
-    REQUIRE(img.bgr_data.empty() == false);
-
     Frame frame{img.width, img.height, img.bgr_data.data(), 0};
-    MediaPipeFaceMeshResult res;
-    bool detected = pipeline->process_frame(frame, res);
+    YuNetResult res;
+    bool detected = detector->process_frame(frame, res);
     REQUIRE(detected == true);
 
     auto calc_crop_stats = [](const uint8_t* crop, double& out_mean, double& out_stddev, double& out_center_lum, double& out_outer_lum) {

@@ -500,13 +500,13 @@ namespace Gaze
             float half_s = dynamic_crop_size * 0.5f;
 
             crop_and_resize_bgr_to_rgb(
-                frame.data, width, height,
+                src_data, width, height,
                 out_result.left_eye_px.x - half_s, out_result.left_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.left_eye_crop, 60, 60
             );
 
             crop_and_resize_bgr_to_rgb(
-                frame.data, width, height,
+                src_data, width, height,
                 out_result.right_eye_px.x - half_s, out_result.right_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.right_eye_crop, 60, 60
             );

@@ -373,6 +373,22 @@ namespace Gaze
                         float x_left = cx - w / 2.0f;
                         float y_top = cy - h / 2.0f;
 
+                        // 4 Corners of predicted bbox in rotated frame space
+                        GazeVector2 c1_model((x_left - pad_x) / scale, (y_top - pad_y) / scale);
+                        GazeVector2 c2_model(((x_left + w) - pad_x) / scale, (y_top - pad_y) / scale);
+                        GazeVector2 c3_model(((x_left + w) - pad_x) / scale, ((y_top + h) - pad_y) / scale);
+                        GazeVector2 c4_model((x_left - pad_x) / scale, ((y_top + h) - pad_y) / scale);
+
+                        GazeVector2 c1_orig = rotate_point_back(c1_model, -roll_rad, width, height);
+                        GazeVector2 c2_orig = rotate_point_back(c2_model, -roll_rad, width, height);
+                        GazeVector2 c3_orig = rotate_point_back(c3_model, -roll_rad, width, height);
+                        GazeVector2 c4_orig = rotate_point_back(c4_model, -roll_rad, width, height);
+
+                        float orig_xmin = std::min({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
+                        float orig_ymin = std::min({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
+                        float orig_xmax = std::max({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
+                        float orig_ymax = std::max({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
+
                         std::vector<GazeVector2> ldm(5);
                         for (int j = 0; j < 5; ++j)
                         {
@@ -385,12 +401,7 @@ namespace Gaze
                             ldm[j] = rotate_point_back(GazeVector2(rot_kx, rot_ky), -roll_rad, width, height);
                         }
 
-                        float orig_x = (x_left - pad_x) / scale;
-                        float orig_y = (y_top - pad_y) / scale;
-                        float orig_w = w / scale;
-                        float orig_h = h / scale;
-
-                        candidate_bboxes.push_back(GazeRect(orig_x, orig_y, orig_w, orig_h));
+                        candidate_bboxes.push_back(GazeRect(orig_xmin, orig_ymin, orig_xmax - orig_xmin, orig_ymax - orig_ymin));
                         candidate_scores.push_back(score);
                         candidate_landmarks.push_back(ldm);
                     }

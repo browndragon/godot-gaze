@@ -493,15 +493,21 @@ namespace Gaze
             out_result.head_pose.trans_y_mm = static_cast<float>(tvec.y);
             out_result.head_pose.trans_z_mm = static_cast<float>(tvec.z);
 
+            float dx = out_result.left_eye_px.x - out_result.right_eye_px.x;
+            float dy = out_result.left_eye_px.y - out_result.right_eye_px.y;
+            float ipd_px = std::sqrt(dx * dx + dy * dy);
+            float dynamic_crop_size = std::max(50.0f, ipd_px * 0.75f);
+            float half_s = dynamic_crop_size * 0.5f;
+
             crop_and_resize_bgr_to_rgb(
                 frame.data, width, height,
-                out_result.left_eye_px.x - 30.0f, out_result.left_eye_px.y - 30.0f, 60.0f, 60.0f,
+                out_result.left_eye_px.x - half_s, out_result.left_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.left_eye_crop, 60, 60
             );
 
             crop_and_resize_bgr_to_rgb(
                 frame.data, width, height,
-                out_result.right_eye_px.x - 30.0f, out_result.right_eye_px.y - 30.0f, 60.0f, 60.0f,
+                out_result.right_eye_px.x - half_s, out_result.right_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.right_eye_crop, 60, 60
             );
 

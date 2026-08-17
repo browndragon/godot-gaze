@@ -24,12 +24,14 @@ static double compute_residuals(
     const std::vector<GazeVector2>& image_points,
     const double beta[6],
     double fx, double fy, double cx, double cy,
-    double residuals[10]
+    std::vector<double>& residuals
 ) {
     GazeVector3 r(beta[0], beta[1], beta[2]);
     GazeVector3 t(beta[3], beta[4], beta[5]);
     double sse = 0.0;
-    for (size_t i = 0; i < 5; ++i) {
+    size_t n = model_points.size();
+    residuals.resize(2 * n);
+    for (size_t i = 0; i < n; ++i) {
         GazeVector2 p_proj = project_point(model_points[i], r, t, fx, fy, cx, cy);
         residuals[2 * i] = image_points[i].x - p_proj.x;
         residuals[2 * i + 1] = image_points[i].y - p_proj.y;
@@ -43,37 +45,36 @@ static void compute_jacobian(
     const std::vector<GazeVector3>& model_points,
     const double beta[6],
     double fx, double fy, double cx, double cy,
-    double J[10][6]
+    std::vector<std::vector<double>>& J
 ) {
     const double eps = 1e-4;
+    size_t n = model_points.size();
+    J.assign(2 * n, std::vector<double>(6, 0.0));
+
     double perturbed_beta[6];
     for (int i = 0; i < 6; ++i) {
         perturbed_beta[i] = beta[i];
     }
     for (int j = 0; j < 6; ++j) {
-        // Perturb positively
         perturbed_beta[j] = beta[j] + eps;
         GazeVector3 r_pos(perturbed_beta[0], perturbed_beta[1], perturbed_beta[2]);
         GazeVector3 t_pos(perturbed_beta[3], perturbed_beta[4], perturbed_beta[5]);
 
-        // Perturb negatively
         perturbed_beta[j] = beta[j] - eps;
         GazeVector3 r_neg(perturbed_beta[0], perturbed_beta[1], perturbed_beta[2]);
         GazeVector3 t_neg(perturbed_beta[3], perturbed_beta[4], perturbed_beta[5]);
 
-        perturbed_beta[j] = beta[j]; // restore
+        perturbed_beta[j] = beta[j];
 
-        for (size_t i = 0; i < 5; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             GazeVector2 proj_pos = project_point(model_points[i], r_pos, t_pos, fx, fy, cx, cy);
             GazeVector2 proj_neg = project_point(model_points[i], r_neg, t_neg, fx, fy, cx, cy);
             
-            // Central difference for higher precision
             J[2 * i][j] = (proj_pos.x - proj_neg.x) / (2.0 * eps);
             J[2 * i + 1][j] = (proj_pos.y - proj_neg.y) / (2.0 * eps);
         }
     }
 }
-
 
 // Solves a 6x6 linear system A * x = b using Gaussian Elimination with partial pivoting
 static bool solve6x6(double A[6][6], const double b[6], double x[6]) {
@@ -122,24 +123,27 @@ bool solve_pnp_dlt(
     double fx, double fy, double cx, double cy,
     GazeVector3& rvec, GazeVector3& tvec
 ) {
-    if (model_points.size() != 5 || image_points.size() != 5) {
+    if (model_points.size() < 4 || image_points.size() != model_points.size()) {
         return false;
     }
 
-    double dx_2d = image_points[1].x - image_points[0].x;
-    double dy_2d = image_points[1].y - image_points[0].y;
+    size_t eye_r_idx = 0; // Right eye index in model_points (-X)
+    size_t eye_l_idx = 1; // Left eye index in model_points (+X)
+
+    double dx_2d = image_points[eye_l_idx].x - image_points[eye_r_idx].x;
+    double dy_2d = image_points[eye_l_idx].y - image_points[eye_r_idx].y;
     double eye_dist_2d = std::hypot(dx_2d, dy_2d);
-    double eye_dist_3d = std::hypot(model_points[1].x - model_points[0].x, model_points[1].y - model_points[0].y);
+    double eye_dist_3d = std::hypot(model_points[eye_l_idx].x - model_points[eye_r_idx].x, model_points[eye_l_idx].y - model_points[eye_r_idx].y);
 
     if (eye_dist_2d < 1e-4 || eye_dist_3d < 1e-4) {
         return false;
     }
 
     double z_est = (eye_dist_3d * fx) / eye_dist_2d;
-    double eye_mid_x_2d = (image_points[0].x + image_points[1].x) * 0.5;
-    double eye_mid_y_2d = (image_points[0].y + image_points[1].y) * 0.5;
-    double eye_mid_x_3d = (model_points[0].x + model_points[1].x) * 0.5;
-    double eye_mid_y_3d = (model_points[0].y + model_points[1].y) * 0.5;
+    double eye_mid_x_2d = (image_points[eye_r_idx].x + image_points[eye_l_idx].x) * 0.5;
+    double eye_mid_y_2d = (image_points[eye_r_idx].y + image_points[eye_l_idx].y) * 0.5;
+    double eye_mid_x_3d = (model_points[eye_r_idx].x + model_points[eye_l_idx].x) * 0.5;
+    double eye_mid_y_3d = (model_points[eye_r_idx].y + model_points[eye_l_idx].y) * 0.5;
 
     double tx_est = ((eye_mid_x_2d - cx) * z_est / fx) - eye_mid_x_3d;
     double ty_est = ((eye_mid_y_2d - cy) * z_est / fy) - eye_mid_y_3d;
@@ -157,7 +161,7 @@ bool solve_pnp_lm(
     GazeVector3& rvec, GazeVector3& tvec,
     bool use_extrinsic_guess
 ) {
-    if (model_points.size() != 5 || image_points.size() != 5) {
+    if (model_points.size() < 4 || image_points.size() != model_points.size()) {
         return false;
     }
 
@@ -170,14 +174,14 @@ bool solve_pnp_lm(
         beta[4] = tvec.y;
         beta[5] = tvec.z;
     } else {
-        double beta_default[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 700.0};
-        double res_default[10];
+        double beta_default[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 600.0};
+        std::vector<double> res_default;
         double sse_default = compute_residuals(model_points, image_points, beta_default, fx, fy, cx, cy, res_default);
 
         GazeVector3 dlt_r, dlt_t;
         if (solve_pnp_dlt(model_points, image_points, fx, fy, cx, cy, dlt_r, dlt_t)) {
             double beta_dlt[6] = {dlt_r.x, dlt_r.y, dlt_r.z, dlt_t.x, dlt_t.y, dlt_t.z};
-            double res_dlt[10];
+            std::vector<double> res_dlt;
             double sse_dlt = compute_residuals(model_points, image_points, beta_dlt, fx, fy, cx, cy, res_dlt);
             if (sse_dlt < sse_default) {
                 std::copy(beta_dlt, beta_dlt + 6, beta);
@@ -189,29 +193,29 @@ bool solve_pnp_lm(
         }
     }
 
-
-
-    double residuals[10];
+    std::vector<double> residuals;
     double sse = compute_residuals(model_points, image_points, beta, fx, fy, cx, cy, residuals);
 
+    size_t n_pts = model_points.size();
+    size_t n_res = 2 * n_pts;
     bool has_converged = (sse < 1.0);
     double lambda = 0.001;
     const int max_iter = 100;
 
     for (int iter = 0; iter < max_iter; ++iter) {
-        double J[10][6];
+        std::vector<std::vector<double>> J;
         compute_jacobian(model_points, beta, fx, fy, cx, cy, J);
 
         double JTJ[6][6];
         double JTe[6];
         for (int i = 0; i < 6; ++i) {
             JTe[i] = 0.0;
-            for (int r = 0; r < 10; ++r) {
+            for (size_t r = 0; r < n_res; ++r) {
                 JTe[i] += J[r][i] * residuals[r];
             }
             for (int j = 0; j < 6; ++j) {
                 JTJ[i][j] = 0.0;
-                for (int r = 0; r < 10; ++r) {
+                for (size_t r = 0; r < n_res; ++r) {
                     JTJ[i][j] += J[r][i] * J[r][j];
                 }
             }
@@ -221,7 +225,6 @@ bool solve_pnp_lm(
         double beta_new[6];
         double delta[6];
 
-        // LM Inner loop: try steps with increasing lambda until SSE decreases
         while (!solved && lambda < 1e10) {
             double A[6][6];
             for (int i = 0; i < 6; ++i) {
@@ -240,24 +243,21 @@ bool solve_pnp_lm(
                 beta_new[i] = beta[i] + delta[i];
             }
 
-            double residuals_new[10];
+            std::vector<double> residuals_new;
             double sse_new = compute_residuals(model_points, image_points, beta_new, fx, fy, cx, cy, residuals_new);
 
             if (sse_new < sse) {
-                // Step accepted
                 sse = sse_new;
-                std::copy(residuals_new, residuals_new + 10, residuals);
+                residuals = residuals_new;
                 std::copy(beta_new, beta_new + 6, beta);
                 lambda = std::max(1e-7, lambda / 10.0);
                 solved = true;
                 has_converged = true;
             } else {
-                // Step rejected, increase damping
                 lambda *= 10.0;
             }
         }
 
-        // Convergence criteria
         double delta_norm = 0.0;
         for (int i = 0; i < 6; ++i) {
             delta_norm += delta[i] * delta[i];

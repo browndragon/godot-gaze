@@ -138,6 +138,11 @@ public:
     RID face_tracker_create(RID p_camera);
 
     /**
+     * @brief Get authoritative canonical 3D face model points from C++ FaceModelGeometry.
+     */
+    PackedVector3Array get_face_model_points() const;
+
+    /**
      * @brief Set the current estimated head pose and detection status.
      * @param p_face The face RID.
      * @param p_translation Head translation vector in Camera Space (mm).
@@ -156,6 +161,8 @@ public:
      */
     Vector3 get_head_rotation_from_face_tracker(RID p_face) const;
     Vector3 get_head_translation_from_face_tracker(RID p_face) const;
+    Vector3 get_head_pose_origin_mm(RID p_face) const;
+    Vector3 get_head_pose_euler_deg(RID p_face) const;
 
     /**
      * @brief Create an eye tracker resource relative to a face.
@@ -196,6 +203,8 @@ public:
      */
     Vector3 get_gaze_origin_from_eye_tracker(RID p_eye) const;
     Vector3 get_gaze_direction_from_eye_tracker(RID p_eye) const;
+    Vector2 get_projected_gaze_from_eye_tracker(RID p_eye, bool p_smoothed = false) const;
+    Vector2 get_projected_gaze_mm_from_eye_tracker(RID p_eye, bool p_smoothed = false) const;
 
     /**
      * @brief Set eye crop preview images.

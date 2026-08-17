@@ -57,7 +57,7 @@ bool MediaPipeFaceMeshPipeline::initialize() {
         }
 
         if (!detector_buffer_.empty()) {
-            auto det = std::make_unique<BlazeFaceDetector>(detector_buffer_);
+            auto det = std::make_unique<ORTYuNetDetector>(detector_buffer_, 0.25f);
             if (det->initialize()) {
                 detector = std::move(det);
             }
@@ -65,9 +65,9 @@ bool MediaPipeFaceMeshPipeline::initialize() {
 
         if (!detector) {
             std::vector<std::string> candidate_paths = {
-                "addons/godot-gaze/models/mediapipe_face_detector.ort",
-                "project/addons/godot-gaze/models/mediapipe_face_detector.ort",
-                "../project/addons/godot-gaze/models/mediapipe_face_detector.ort"
+                "addons/godot-gaze/models/face_detection_yunet_2023mar.ort",
+                "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort",
+                "../project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort"
             };
             if (!detector_path_.empty()) {
                 candidate_paths.insert(candidate_paths.begin(), detector_path_);
@@ -75,7 +75,7 @@ bool MediaPipeFaceMeshPipeline::initialize() {
             if (!model_path_.empty()) {
                 size_t last_slash = model_path_.find_last_of("/\\");
                 if (last_slash != std::string::npos) {
-                    candidate_paths.insert(candidate_paths.begin(), model_path_.substr(0, last_slash + 1) + "mediapipe_face_detector.ort");
+                    candidate_paths.insert(candidate_paths.begin(), model_path_.substr(0, last_slash + 1) + "face_detection_yunet_2023mar.ort");
                 }
             }
 
@@ -83,7 +83,7 @@ bool MediaPipeFaceMeshPipeline::initialize() {
                 if (!file_exists_native(p)) {
                     continue;
                 }
-                auto det = std::make_unique<BlazeFaceDetector>(p);
+                auto det = std::make_unique<ORTYuNetDetector>(p, 0.25f);
                 if (det->initialize()) {
                     detector = std::move(det);
                     break;
@@ -111,14 +111,16 @@ bool MediaPipeFaceMeshPipeline::process_frame(const Frame& input_frame, MediaPip
 
     if (!has_tracking_roi || roi_w <= 0.0f || roi_h <= 0.0f) {
         if (detector) {
-            BlazeFaceDetection det;
-            if (detector->detect(input_frame, det) && det.face_detected) {
-                float pad_w = det.box_w * 0.25f;
-                float pad_h = det.box_h * 0.25f;
-                roi_x = std::max(0.0f, det.box_x - pad_w);
-                roi_y = std::max(0.0f, det.box_y - pad_h);
-                roi_w = std::min(input_frame.width - roi_x, det.box_w + 2.0f * pad_w);
-                roi_h = std::min(input_frame.height - roi_y, det.box_h + 2.0f * pad_h);
+            YuNetResult det;
+            if (detector->process_frame(input_frame, det) && det.face_detected) {
+                float center_x = det.roi_x + det.roi_w * 0.5f;
+                float center_y = det.roi_y + det.roi_h * 0.5f;
+                float face_size = std::max(det.roi_w, det.roi_h) * 1.1f;
+
+                roi_x = std::max(0.0f, center_x - face_size * 0.5f);
+                roi_y = std::max(0.0f, center_y - face_size * 0.5f);
+                roi_w = std::min((float)input_frame.width - roi_x, face_size);
+                roi_h = std::min((float)input_frame.height - roi_y, face_size);
                 has_tracking_roi = true;
             } else {
                 out_result.face_detected = false;
@@ -276,15 +278,18 @@ void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Fra
     out_result.right_eye_openness = std::max(0.0f, std::min(1.0f, (r_ear - 0.20f) / 0.10f));
     out_result.left_eye_openness = std::max(0.0f, std::min(1.0f, (l_ear - 0.20f) / 0.10f));
 
-    // Eye crop sampling from mapped full-image pixel coordinates
+    // Eye crop sampling scaled relative to normalized 256x256 face crop ROI
     auto crop_eye = [&](int center_idx, uint8_t* out_crop) {
-        int cx = static_cast<int>(mapped[center_idx * 3 + 0]);
-        int cy = static_cast<int>(mapped[center_idx * 3 + 1]);
+        float cx_norm = lm_raw[center_idx * 3 + 0];
+        float cy_norm = lm_raw[center_idx * 3 + 1];
+        float crop_radius = 24.0f; // 48x48 region in 256x256 normalized crop space
 
         for (int y = 0; y < 60; y++) {
-            int src_y = std::max(0, std::min(input_frame.height - 1, cy - 30 + y));
+            float src_y_norm = cy_norm - crop_radius + (y / 60.0f) * (2.0f * crop_radius);
+            int src_y = std::max(0, std::min(input_frame.height - 1, static_cast<int>(roi_y + (src_y_norm / 256.0f) * roi_h)));
             for (int x = 0; x < 60; x++) {
-                int src_x = std::max(0, std::min(input_frame.width - 1, cx - 30 + x));
+                float src_x_norm = cx_norm - crop_radius + (x / 60.0f) * (2.0f * crop_radius);
+                int src_x = std::max(0, std::min(input_frame.width - 1, static_cast<int>(roi_x + (src_x_norm / 256.0f) * roi_w)));
                 int src_idx = (src_y * input_frame.width + src_x) * 3;
                 int dst_idx = (y * 60 + x) * 3;
 
@@ -306,37 +311,44 @@ void MediaPipeFaceMeshPipeline::process_landmarks(const float* lm_raw, const Fra
     double cx = w / 2.0;
     double cy = h / 2.0;
 
-    int r_idx = 473 < 478 ? 473 : 33;
-    int l_idx = 468 < 478 ? 468 : 362;
-    float r_x = mapped[r_idx * 3 + 0];
-    float r_y = mapped[r_idx * 3 + 1];
-    float l_x = mapped[l_idx * 3 + 0];
-    float l_y = mapped[l_idx * 3 + 1];
-    float n_x = mapped[1 * 3 + 0];
-    float n_y = mapped[1 * 3 + 1];
+    // Official MediaPipe Canonical 3D Metric Face Model Points for SolvePnP (OpenCV Space: +X right, +Y down, +Z into face)
+    // Source: google/mediapipe/modules/face_geometry/data/canonical_face_model.obj (in metric mm relative to Nose Tip 4)
+    std::vector<GazeVector3> model_points = {
+        GazeVector3(0.0, 0.0, 0.0),          // Nose tip (4)
+        GazeVector3(0.0, 85.0, 30.7),        // Chin (152)
+        GazeVector3(-44.8, -33.4, 48.3),     // Right eye outer (33)
+        GazeVector3(44.8, -33.4, 48.3),      // Left eye outer (263)
+        GazeVector3(-24.2, 28.1, 23.3),      // Mouth right (61)
+        GazeVector3(24.2, 28.1, 23.3)        // Mouth left (291)
+    };
 
-    double eye_dist_px = std::sqrt((r_x - l_x)*(r_x - l_x) + (r_y - l_y)*(r_y - l_y)) + 1e-6;
-    double z_mm = (focal * 63.0) / eye_dist_px;
-    if (z_mm < 300.0) z_mm = 300.0;
-    if (z_mm > 1200.0) z_mm = 1200.0;
+    std::vector<GazeVector2> image_points = {
+        GazeVector2(mapped[4 * 3 + 0], mapped[4 * 3 + 1]),
+        GazeVector2(mapped[152 * 3 + 0], mapped[152 * 3 + 1]),
+        GazeVector2(mapped[33 * 3 + 0], mapped[33 * 3 + 1]),
+        GazeVector2(mapped[263 * 3 + 0], mapped[263 * 3 + 1]),
+        GazeVector2(mapped[61 * 3 + 0], mapped[61 * 3 + 1]),
+        GazeVector2(mapped[291 * 3 + 0], mapped[291 * 3 + 1])
+    };
 
-    double nose_cx = (n_x - cx) / focal * z_mm;
-    double nose_cy = (n_y - cy) / focal * z_mm;
+    GazeVector3 rvec(0, 0, 0);
+    GazeVector3 tvec(0, 0, 600.0);
+    if (!solve_pnp_lm(model_points, image_points, focal, focal, cx, cy, rvec, tvec, false)) {
+        solve_pnp_dlt(model_points, image_points, focal, focal, cx, cy, rvec, tvec);
+    }
 
-    out_result.head_pose.trans_x_mm = static_cast<float>(nose_cx);
-    out_result.head_pose.trans_y_mm = static_cast<float>(nose_cy);
-    out_result.head_pose.trans_z_mm = static_cast<float>(z_mm);
-
-    float yaw = std::atan2(n_x - cx, focal);
-    float pitch = std::atan2(n_y - cy, focal);
-    float roll = std::atan2(r_y - l_y, r_x - l_x);
+    GazeBasis3D R = rodrigues_to_basis(rvec);
+    double sy = std::sqrt(R.x.x * R.x.x + R.y.x * R.y.x);
+    float pitch = static_cast<float>(std::atan2(R.z.y, R.z.z));
+    float yaw   = static_cast<float>(std::atan2(-R.z.x, sy));
+    float roll  = static_cast<float>(std::atan2(R.y.x, R.x.x));
 
     out_result.head_pose.pitch_rad = pitch;
     out_result.head_pose.yaw_rad = yaw;
     out_result.head_pose.roll_rad = roll;
-    out_result.head_pose.trans_x_mm = nose_cx;
-    out_result.head_pose.trans_y_mm = nose_cy;
-    out_result.head_pose.trans_z_mm = z_mm;
+    out_result.head_pose.trans_x_mm = static_cast<float>(tvec.x);
+    out_result.head_pose.trans_y_mm = static_cast<float>(tvec.y);
+    out_result.head_pose.trans_z_mm = static_cast<float>(tvec.z);
 }
 
 } // namespace Gaze

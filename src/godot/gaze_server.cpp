@@ -69,6 +69,8 @@ struct GazeServerImpl {
         
         Vector2 latest_projected_gaze;
         Vector2 latest_filtered_gaze;
+        Vector2 latest_projected_gaze_mm;
+        Vector2 latest_filtered_gaze_mm;
 
         float left_eye_openness = 1.0f;
         float right_eye_openness = 1.0f;
@@ -145,10 +147,13 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_free", "camera_rid"), &GazeServer::camera_free);
 
     ClassDB::bind_method(D_METHOD("face_tracker_create", "camera_rid"), &GazeServer::face_tracker_create);
+    ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
     ClassDB::bind_method(D_METHOD("face_tracker_set_pose", "face_rid", "translation", "rotation", "detected"), &GazeServer::face_tracker_set_pose);
     ClassDB::bind_method(D_METHOD("face_tracker_free", "face_rid"), &GazeServer::face_tracker_free);
     ClassDB::bind_method(D_METHOD("get_head_rotation_from_face_tracker", "face_rid"), &GazeServer::get_head_rotation_from_face_tracker);
     ClassDB::bind_method(D_METHOD("get_head_translation_from_face_tracker", "face_rid"), &GazeServer::get_head_translation_from_face_tracker);
+    ClassDB::bind_method(D_METHOD("get_head_pose_origin_mm", "face_rid"), &GazeServer::get_head_pose_origin_mm);
+    ClassDB::bind_method(D_METHOD("get_head_pose_euler_deg", "face_rid"), &GazeServer::get_head_pose_euler_deg);
 
     ClassDB::bind_method(D_METHOD("eye_tracker_create", "face_rid"), &GazeServer::eye_tracker_create);
     ClassDB::bind_method(D_METHOD("eye_tracker_set_gaze", "eye_rid", "origin_cam", "direction_cam"), &GazeServer::eye_tracker_set_gaze);
@@ -159,6 +164,8 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("eye_tracker_free", "eye_rid"), &GazeServer::eye_tracker_free);
     ClassDB::bind_method(D_METHOD("get_gaze_origin_from_eye_tracker", "eye_rid"), &GazeServer::get_gaze_origin_from_eye_tracker);
     ClassDB::bind_method(D_METHOD("get_gaze_direction_from_eye_tracker", "eye_rid"), &GazeServer::get_gaze_direction_from_eye_tracker);
+    ClassDB::bind_method(D_METHOD("get_projected_gaze_from_eye_tracker", "eye_rid", "smoothed"), &GazeServer::get_projected_gaze_from_eye_tracker, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("get_projected_gaze_mm_from_eye_tracker", "eye_rid", "smoothed"), &GazeServer::get_projected_gaze_mm_from_eye_tracker, DEFVAL(false));
     ClassDB::bind_method(D_METHOD("set_crops_on_eye_tracker", "eye_rid", "left_crop", "right_crop"), &GazeServer::set_crops_on_eye_tracker);
     ClassDB::bind_method(D_METHOD("reset_eye_tracker", "eye_rid"), &GazeServer::reset_eye_tracker);
 
@@ -349,11 +356,24 @@ void GazeServer::camera_free(RID p_camera) {
 // Face RID Resource Management
 RID GazeServer::face_tracker_create(RID p_camera) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    CameraInfo *cam = impl->camera_owner.get_or_null(p_camera);
+    if (!cam) return RID();
+
     FaceInfo *info = memnew(FaceInfo);
     info->parent_camera_rid = p_camera;
     RID rid = impl->face_owner.make_rid(info);
     impl->allocated_faces.push_back(rid);
     return rid;
+}
+
+PackedVector3Array GazeServer::get_face_model_points() const {
+    PackedVector3Array pts;
+    auto godot_pts = Gaze::FaceModelGeometry::get_canonical_godot_model_points();
+    pts.resize(godot_pts.size());
+    for (size_t i = 0; i < godot_pts.size(); ++i) {
+        pts[i] = Vector3(godot_pts[i].x, godot_pts[i].y, godot_pts[i].z);
+    }
+    return pts;
 }
 
 void GazeServer::face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector3 p_rotation, bool p_detected) {
@@ -415,6 +435,29 @@ Vector3 GazeServer::get_head_translation_from_face_tracker(RID p_face) const {
     return Vector3(face->head_pose_translation.x, face->head_pose_translation.y, face->head_pose_translation.z);
 }
 
+Vector3 GazeServer::get_head_pose_origin_mm(RID p_face) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *face = impl->face_owner.get_or_null(p_face);
+    if (!face) return Vector3();
+    Gaze::GazeTransform3D core_xform = Gaze::Inference::get_head_transform_in_camera_space(
+        face->head_pose_translation,
+        face->head_pose_rotation
+    );
+    return Vector3(core_xform.origin.x, core_xform.origin.y, core_xform.origin.z);
+}
+
+Vector3 GazeServer::get_head_pose_euler_deg(RID p_face) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *face = impl->face_owner.get_or_null(p_face);
+    if (!face) return Vector3();
+    Gaze::GazeTransform3D core_xform = Gaze::Inference::get_head_transform_in_camera_space(
+        face->head_pose_translation,
+        face->head_pose_rotation
+    );
+    Gaze::GazeVector3 deg = core_xform.basis.get_euler_deg();
+    return Vector3(deg.x, deg.y, deg.z);
+}
+
 // Eye RID Resource Management
 RID GazeServer::eye_tracker_create(RID p_face) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
@@ -467,8 +510,8 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
                 }
 
                 Gaze::GazeVector2 pos_mm;
-                Gaze::GazeVector3 origin_cv(p_origin_cam.x, -p_origin_cam.y, -p_origin_cam.z);
-                Gaze::GazeVector3 dir_cv(calibrated_dir.x, -calibrated_dir.y, -calibrated_dir.z);
+                Gaze::GazeVector3 origin_cv(p_origin_cam.x, p_origin_cam.y, std::abs(p_origin_cam.z));
+                Gaze::GazeVector3 dir_cv(calibrated_dir.x, calibrated_dir.y, -std::abs(calibrated_dir.z));
                 if (Gaze::project_ray_to_screen_mm(
                         origin_cv,
                         dir_cv,
@@ -484,14 +527,23 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
                     px = disp->viewport_transform.affine_inverse().xform(px - disp->window_position_px);
 
                     eye->latest_projected_gaze = px;
+                    Vector2 pos_mm_center(pos_mm.x - disp->physical_size_mm.x * 0.5, pos_mm.y - disp->physical_size_mm.y * 0.5);
+                    eye->latest_projected_gaze_mm = pos_mm_center;
                     
                     if (eye->screen_smoother.is_valid()) {
                         auto now = std::chrono::steady_clock::now();
                         double tstamp = std::chrono::duration<double>(now.time_since_epoch()).count();
                         eye->latest_filtered_gaze = eye->screen_smoother->_smoother_next(eye->smoother_state, tstamp, px);
+                        eye->latest_filtered_gaze_mm = eye->latest_filtered_gaze;
                     } else {
                         eye->latest_filtered_gaze = px;
+                        eye->latest_filtered_gaze_mm = pos_mm_center;
                     }
+                } else {
+                    eye->latest_projected_gaze = Vector2(-9999.0, -9999.0);
+                    eye->latest_filtered_gaze = Vector2(-9999.0, -9999.0);
+                    eye->latest_projected_gaze_mm = Vector2(-9999.0, -9999.0);
+                    eye->latest_filtered_gaze_mm = Vector2(-9999.0, -9999.0);
                 }
             }
         }
@@ -596,6 +648,20 @@ Vector3 GazeServer::get_gaze_direction_from_eye_tracker(RID p_eye) const {
     EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
     if (!eye) return Vector3(0.0, 0.0, -1.0);
     return eye->gaze_direction_cam;
+}
+
+Vector2 GazeServer::get_projected_gaze_from_eye_tracker(RID p_eye, bool p_smoothed) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
+    if (!eye) return Vector2(-9999.0, -9999.0);
+    return p_smoothed ? eye->latest_filtered_gaze : eye->latest_projected_gaze;
+}
+
+Vector2 GazeServer::get_projected_gaze_mm_from_eye_tracker(RID p_eye, bool p_smoothed) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
+    if (!eye) return Vector2(-9999.0, -9999.0);
+    return p_smoothed ? eye->latest_filtered_gaze_mm : eye->latest_projected_gaze_mm;
 }
 
 void GazeServer::set_crops_on_eye_tracker(RID p_eye, const Ref<Image>& p_left_crop, const Ref<Image>& p_right_crop) {
@@ -733,10 +799,10 @@ void GazeServer::start_processing() {
                 face_detector_path = resolve_model_path("mediapipe_face_detector");
             }
 
-            String face_mesh_path = ps->has_setting("gaze/models/face_mesh_prefix") ? (String)ps->get_setting("gaze/models/face_mesh_prefix") : String("mediapipe_face_mesh");
-            face_mesh_path = resolve_model_path(face_mesh_path);
-            if (face_mesh_path.is_empty()) {
-                face_mesh_path = resolve_model_path("mediapipe_face_mesh");
+            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("mediapipe_eye_openness");
+            eye_openness_path = resolve_model_path(eye_openness_path);
+            if (eye_openness_path.is_empty()) {
+                eye_openness_path = resolve_model_path("mediapipe_eye_openness");
             }
 
             String gaze_path = ps->has_setting("gaze/models/gaze_prefix") ? (String)ps->get_setting("gaze/models/gaze_prefix") : String("gaze-estimation-adas-0002");
@@ -746,10 +812,10 @@ void GazeServer::start_processing() {
             }
 
             std::vector<uint8_t> face_detector_buffer = load_file_buffer(face_detector_path);
-            std::vector<uint8_t> face_mesh_buffer = load_file_buffer(face_mesh_path);
+            std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
             std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
 
-            bool init_ok = pipeline->initialize(face_mesh_buffer, gaze_buffer, face_detector_buffer);
+            bool init_ok = pipeline->initialize(face_detector_buffer, gaze_buffer, eye_openness_buffer);
             if (!init_ok) {
                 Gaze::log_error("GazeServer_StartProcessing_FailedModelInit");
                 return;

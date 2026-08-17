@@ -234,6 +234,26 @@ if env["platform"] != "javascript":
         target="#" + os.path.join(gaze_variant_dir, "tests/test_transforms" + core_env["OBJSUFFIX"]),
         source="#tests/test_transforms.cpp"
     ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_mediapipe_pipeline" + core_env["OBJSUFFIX"]),
+        source="#tests/test_mediapipe_pipeline.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_gaze_model" + core_env["OBJSUFFIX"]),
+        source="#tests/test_gaze_model.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_projection_engine" + core_env["OBJSUFFIX"]),
+        source="#tests/test_projection_engine.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_eye_state_model" + core_env["OBJSUFFIX"]),
+        source="#tests/test_eye_state_model.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_yunet_detector" + core_env["OBJSUFFIX"]),
+        source="#tests/test_yunet_detector.cpp"
+    ))
     
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
@@ -272,12 +292,12 @@ if env["platform"] != "javascript":
     env.AlwaysBuild(native_run)
     env.Alias("tests/native", native_run)
 
-    # Benchmark test runner target
+    # Benchmark test runner target (runs via Godot Headless through production GazeServer)
     benchmark_run = env.Command(
         "build/tests/logs/tests.benchmark.log",
-        [benchmark_program],
+        [library],
         Action(run_command_and_log, varlist=["TEST_CMD"]),
-        TEST_CMD=[benchmark_program[0].abspath]
+        TEST_CMD=["./scripts/godot.sh", "--headless", "addons/godot-gaze/tests/headless_benchmark.tscn"]
     )
     env.AlwaysBuild(benchmark_run)
     env.Alias("tests/benchmark", benchmark_run)

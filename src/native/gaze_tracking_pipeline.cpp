@@ -29,21 +29,22 @@ namespace Gaze
         log_info(2, "GazeTrackingPipeline_Destructor_Finished");
     }
 
-    bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &face_mesh_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data)
+    bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data)
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         std::lock_guard<std::mutex> lock(state_mutex);
 
-        face_detector = std::make_unique<MediaPipeFaceMeshPipeline>(face_mesh_model_data, eye_openness_model_data);
+        face_detector = std::make_unique<ORTYuNetDetector>(yunet_model_data);
+        eye_state_model = std::make_unique<ORTEyeStateModel>(eye_openness_model_data);
         gaze_estimator = std::make_unique<ORTGazeModel>(gaze_model_data);
-
-        // 2-Model Architecture: MediaPipe Face Mesh pipeline computes 3D EAR eye openness directly.
-        // No heuristic fallback is used.
-        blink_estimator = nullptr;
 
         gaze_estimator->set_config(active_config);
 
-        if (face_detector->initialize() && gaze_estimator->initialize())
+        bool face_ok = face_detector->initialize();
+        bool eye_ok = eye_state_model->initialize();
+        bool gaze_ok = gaze_estimator->initialize();
+
+        if (face_ok && eye_ok && gaze_ok)
         {
             initialized = true;
             log_info("GazeTrackingPipeline_Initialized");
@@ -179,48 +180,53 @@ namespace Gaze
                         frame.data = data->camera_raw_bgr.data();
                         frame.timestamp = data->timestamp;
 
-                        MediaPipeFaceMeshResult mp_res;
+                        YuNetResult yunet_res;
                         auto start_face = std::chrono::steady_clock::now();
-                        bool success = face_detector ? face_detector->process_frame(frame, mp_res) : false;
+                        bool success = face_detector ? face_detector->process_frame(frame, yunet_res) : false;
                         auto end_face = std::chrono::steady_clock::now();
                         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
                         double gaze_ms = 0.0;
-                        data->face_detected = success && mp_res.face_detected;
+                        data->face_detected = success && yunet_res.face_detected;
                         data->gaze_success = false;
 
                         if (data->face_detected)
                         {
-                            data->head_translation = mp_res.head_pose.translation();
-                            data->head_rotation = mp_res.head_pose.rotation_vector();
-                            data->left_eye_openness = mp_res.left_eye_openness;
-                            data->right_eye_openness = mp_res.right_eye_openness;
+                            data->head_translation = yunet_res.head_pose.translation();
+                            data->head_rotation = yunet_res.head_pose.rotation_vector();
+
+                            // Estimate Eye Openness for Left & Right eyes via ORTEyeStateModel
+                            if (eye_state_model)
+                            {
+                                eye_state_model->estimate_openness(yunet_res.left_eye_crop, data->left_eye_openness);
+                                eye_state_model->estimate_openness(yunet_res.right_eye_crop, data->right_eye_openness);
+                            }
 
                             if (data->left_eye_buffer)
                             {
-                                std::memcpy(data->left_eye_buffer, mp_res.left_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
+                                std::memcpy(data->left_eye_buffer, yunet_res.left_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
                             }
                             if (data->right_eye_buffer)
                             {
-                                std::memcpy(data->right_eye_buffer, mp_res.right_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
+                                std::memcpy(data->right_eye_buffer, yunet_res.right_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
                             }
 
                             if (data->full_crop_buffer && data->full_crop_bytes >= 160 * 128 * 3)
                             {
-                                crop_and_resize_bgr_to_rgb(frame.data, frame.width, frame.height, mp_res.roi_x, mp_res.roi_y, mp_res.roi_w, mp_res.roi_h, data->full_crop_buffer, 160, 128);
+                                crop_and_resize_bgr_to_rgb(frame.data, frame.width, frame.height, yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h, data->full_crop_buffer, 160, 128);
                             }
 
                             EyeCrops crops;
                             crops.face_detected = true;
-                            crops.head_pose_translation = mp_res.head_pose.translation();
-                            crops.head_pose_rotation = mp_res.head_pose.rotation_vector();
+                            crops.head_pose_translation = yunet_res.head_pose.translation();
+                            crops.head_pose_rotation = yunet_res.head_pose.rotation_vector();
 
-                            GazeBasis3D head_rot = mp_res.head_pose.rotation_matrix();
-                            GazeVector3 head_trans = mp_res.head_pose.translation();
-                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(-30.0, 28.676, 0.0)) + head_trans;
-                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(30.0, 28.676, 0.0)) + head_trans;
-                            std::memcpy(crops.left_eye_data, mp_res.left_eye_crop, 60*60*3);
-                            std::memcpy(crops.right_eye_data, mp_res.right_eye_crop, 60*60*3);
+                            GazeBasis3D head_rot = yunet_res.head_pose.rotation_matrix();
+                            GazeVector3 head_trans = yunet_res.head_pose.translation();
+                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5, -33.4, 18.0)) + head_trans;
+                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5, -33.4, 18.0)) + head_trans;
+                            std::memcpy(crops.left_eye_data, yunet_res.left_eye_crop, 60*60*3);
+                            std::memcpy(crops.right_eye_data, yunet_res.right_eye_crop, 60*60*3);
 
                             GazeVector3 raw_gaze_dir_cam;
                             auto start_gaze = std::chrono::steady_clock::now();
@@ -231,7 +237,7 @@ namespace Gaze
                             if (gaze_success)
                             {
                                 data->gaze_success = true;
-                                GazeTransform3D head_xform = Gaze::Inference::get_head_transform_in_camera_space(mp_res.head_pose.translation(), mp_res.head_pose.rotation_vector());
+                                GazeTransform3D head_xform = Gaze::Inference::get_head_transform_in_camera_space(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
                                 data->gaze_origin = head_xform.origin;
                                 data->gaze_direction = raw_gaze_dir_cam;
                             }

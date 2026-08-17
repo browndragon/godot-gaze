@@ -1,7 +1,7 @@
 #ifndef ORT_MEDIAPIPE_FACE_MESH_HPP
 #define ORT_MEDIAPIPE_FACE_MESH_HPP
 
-#include "ort_blazeface_detector.hpp"
+#include "ort_yunet_detector.hpp"
 #include "../core/gaze_frame_data.hpp"
 #include "../core/camera_interface.hpp"
 #include "../core/pipeline_config.hpp"
@@ -12,20 +12,7 @@
 
 namespace Gaze {
 
-struct HeadPose {
-    float pitch_rad = 0.0f;
-    float yaw_rad = 0.0f;
-    float roll_rad = 0.0f;
-    float trans_x_mm = 0.0f;
-    float trans_y_mm = 0.0f;
-    float trans_z_mm = 600.0f;
 
-    GazeVector3 translation() const { return GazeVector3(trans_x_mm, trans_y_mm, trans_z_mm); }
-    GazeVector3 rotation_vector() const { return GazeVector3(pitch_rad, yaw_rad, roll_rad); }
-    GazeBasis3D rotation_matrix() const {
-        return GazeBasis3D::from_euler_zyx(pitch_rad * 180.0 / 3.141592653589793, yaw_rad * 180.0 / 3.141592653589793, roll_rad * 180.0 / 3.141592653589793);
-    }
-};
 
 struct MediaPipeFaceMeshResult {
     bool face_detected = false;
@@ -68,7 +55,7 @@ private:
     float roi_w = 0.0f;
     float roi_h = 0.0f;
 
-    std::unique_ptr<BlazeFaceDetector> detector;
+    std::unique_ptr<ORTYuNetDetector> detector;
 
     void process_landmarks(const float* landmarks_raw, const Frame& input_frame, MediaPipeFaceMeshResult& out_result);
 };

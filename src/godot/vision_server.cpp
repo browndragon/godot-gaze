@@ -31,6 +31,46 @@ void VisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_free", "camera_rid"), &VisionServer::camera_free);
     ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "camera_rid", "requested"), &VisionServer::camera_set_preview_requested);
     ClassDB::bind_method(D_METHOD("camera_is_preview_requested", "camera_rid"), &VisionServer::camera_is_preview_requested);
+    ClassDB::bind_method(D_METHOD("inject_texture", "camera_rid", "texture"), &VisionServer::inject_texture);
+}
+
+void VisionServer::inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) {
+    CameraData *data = camera_owner.get_or_null(p_camera);
+    ERR_FAIL_NULL(data);
+    if (!data->is_active || p_texture.is_null()) return;
+
+    Ref<Image> image = p_texture->get_image();
+    if (image.is_null() || image->is_empty()) return;
+
+    // Convert Image to RGB8 format
+    Ref<Image> rgb_img = image->duplicate();
+    if (rgb_img->get_format() != Image::FORMAT_RGB8) {
+        rgb_img->convert(Image::FORMAT_RGB8);
+    }
+
+    int w = rgb_img->get_width();
+    int h = rgb_img->get_height();
+    
+    data->current_image = rgb_img;
+    data->current_texture = p_texture;
+
+    // Convert RGB8 to BGR raw buffer
+    PackedByteArray rgb_bytes = rgb_img->get_data();
+    data->last_frame_data.resize(w * h * 3);
+    
+    unsigned char *dest = data->last_frame_data.data();
+    const unsigned char *src = rgb_bytes.ptr();
+    
+    for (int i = 0; i < w * h; ++i) {
+        dest[i * 3 + 0] = src[i * 3 + 2];     // B
+        dest[i * 3 + 1] = src[i * 3 + 1];     // G
+        dest[i * 3 + 2] = src[i * 3 + 0];     // R
+    }
+
+    data->last_frame.width = w;
+    data->last_frame.height = h;
+    data->last_frame.data = data->last_frame_data.data();
+    data->last_frame.timestamp = (double)UtilityFunctions::snapped(0.001 * UtilityFunctions::randf(), 0.001); // Mock timestamp
 }
 
 VisionServer::VisionServer() {
@@ -201,49 +241,7 @@ Ref<Image> MockVisionServer::camera_get_current_image(RID p_camera) {
 }
 
 void MockVisionServer::inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) {
-    CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL(data);
-    if (!data->is_active || p_texture.is_null()) return;
-
-    Ref<Image> image = p_texture->get_image();
-    if (image.is_null() || image->is_empty()) return;
-
-    // Convert format to RGBA8 for GPU preprocessing compatibility
-    if (image->get_format() != Image::FORMAT_RGBA8) {
-        image = image->duplicate();
-        image->convert(Image::FORMAT_RGBA8);
-    }
-
-    int w = image->get_width();
-    int h = image->get_height();
-    
-    data->current_image = image;
-    
-    if (data->current_texture.is_null() || data->current_texture->get_size() != image->get_size()) {
-        data->current_texture = ImageTexture::create_from_image(image);
-    } else {
-        data->current_texture->set_image(image);
-    }
-
-
-
-    // Convert RGBA to BGR raw buffer
-    PackedByteArray rgba_data = image->get_data();
-    data->last_frame_data.resize(w * h * 3);
-    
-    unsigned char *dest = data->last_frame_data.data();
-    const unsigned char *src = rgba_data.ptr();
-    
-    for (int i = 0; i < w * h; ++i) {
-        dest[i * 3 + 0] = src[i * 4 + 2];     // B
-        dest[i * 3 + 1] = src[i * 4 + 1];     // G
-        dest[i * 3 + 2] = src[i * 4 + 0];     // R
-    }
-
-    data->last_frame.width = w;
-    data->last_frame.height = h;
-    data->last_frame.data = data->last_frame_data.data();
-    data->last_frame.timestamp = (double)UtilityFunctions::snapped(0.001 * UtilityFunctions::randf(), 0.001); // Mock timestamp
+    VisionServer::inject_texture(p_camera, p_texture);
 }
 
 } // namespace godot

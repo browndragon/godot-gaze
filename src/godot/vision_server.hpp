@@ -97,6 +97,13 @@ public:
     virtual double camera_get_fov(RID p_camera);
 
     /**
+     * @brief Manually inject a frame texture into the camera (supported on MockVisionServer).
+     * @param p_camera The camera RID.
+     * @param p_texture The frame texture to inject.
+     */
+    virtual void inject_texture(RID p_camera, const Ref<Texture2D> &p_texture);
+
+    /**
      * @brief Start frame capture capture on the camera.
      * @return True if started successfully, false otherwise.
      */
@@ -161,7 +168,7 @@ public:
      * @param p_camera The mock camera RID.
      * @param p_texture The frame texture to inject.
      */
-    void inject_texture(RID p_camera, const Ref<Texture2D> &p_texture);
+    void inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) override;
 };
 
 } // namespace godot

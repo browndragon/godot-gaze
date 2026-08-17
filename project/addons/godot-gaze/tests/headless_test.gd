@@ -75,7 +75,7 @@ func run_tests():
 	camera_sensor.rotation = Vector3(0.0, 0.0, 0.0)
 	camera_sensor.focal_length = 1000.0
 	
-	var simulated_origin = Vector3(0.0, 0.0, 800.0) # head center straight in front of screen center
+	var simulated_origin = Vector3(0.0, 0.0, -800.0) # head center straight in front of screen center in Godot camera space
 	var simulated_dir = Vector3(0.0, -0.134375, -0.99093) # pointing down-forward toward absolute screen y=0
 	
 	# First: Window pos override (100, 150), Root Viewport size (800, 600)
@@ -233,7 +233,7 @@ func run_tests():
 		var head_rot = Vector3(raw_args[13], raw_args[14], raw_args[15])
 		
 		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
-		var dir_cam = Vector3(dir_cv.x, dir_cv.y, -dir_cv.z)
+		var dir_cam = Vector3(dir_cv.x, dir_cv.y, dir_cv.z)
 		
 		gs.face_tracker_set_pose(active_face, head_trans, head_rot, true)
 		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)

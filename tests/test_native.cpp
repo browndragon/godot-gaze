@@ -1259,19 +1259,21 @@ inline std::vector<uint8_t> read_binary_file(const std::string &filepath)
 
 TEST_CASE("Testing GazeTrackingPipeline Concurrency and Multi-Frame Queue Stress")
 {
-    // 1. Read ONNX model data from standard model paths
-    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
 
-    std::vector<uint8_t> face_mesh_data = read_binary_file(face_mesh_path);
+    std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
     std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
+    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
 
-    REQUIRE_MESSAGE(!face_mesh_data.empty(), "Failed to read MediaPipe model data");
+    REQUIRE_MESSAGE(!yunet_data.empty(), "Failed to read YuNet model data");
     REQUIRE_MESSAGE(!gaze_data.empty(), "Failed to read Gaze model data");
+    REQUIRE_MESSAGE(!eye_data.empty(), "Failed to read Eye state model data");
 
     // 2. Instantiate and Initialize GazeTrackingPipeline
     GazeTrackingPipeline pipeline;
-    REQUIRE(pipeline.initialize(face_mesh_data, gaze_data) == true);
+    REQUIRE(pipeline.initialize(yunet_data, gaze_data, eye_data) == true);
 
     // 3. Set a sample config and start the worker thread
     PipelineConfig config;
@@ -1340,20 +1342,23 @@ TEST_CASE("Testing GazeTrackingPipeline Concurrency and Multi-Frame Queue Stress
 
 TEST_CASE("Testing GazeTrackingPipeline Thread-Safety and Race Conditions")
 {
-    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
 
-    std::vector<uint8_t> face_mesh_data = read_binary_file(face_mesh_path);
+    std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
     std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
+    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
 
-    REQUIRE(!face_mesh_data.empty());
+    REQUIRE(!yunet_data.empty());
     REQUIRE(!gaze_data.empty());
+    REQUIRE(!eye_data.empty());
 
     LoadedImage img = load_test_image("tests/resources/self_center.jpg");
     REQUIRE(!img.data.empty());
 
     GazeTrackingPipeline pipeline;
-    REQUIRE(pipeline.initialize(face_mesh_data, gaze_data) == true);
+    REQUIRE(pipeline.initialize(yunet_data, gaze_data, eye_data) == true);
 
     std::atomic<bool> run_test{true};
 
@@ -1412,7 +1417,7 @@ TEST_CASE("Testing GazeTrackingPipeline Thread-Safety and Race Conditions")
     std::thread init_thread([&]()
                             {
         while (run_test) {
-            pipeline.initialize(face_mesh_data, gaze_data);
+            pipeline.initialize(yunet_data, gaze_data, eye_data);
             std::this_thread::sleep_for(std::chrono::microseconds(100));
         } });
 
@@ -1570,7 +1575,7 @@ TEST_CASE("Testing Log Verbosity Filtering")
 TEST_CASE("Testing Head Roll Landmark Detection")
 {
     std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-    std::string face_detector_path = "project/addons/godot-gaze/models/mediapipe_face_detector.ort";
+    std::string face_detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     
     // 1. Test Anatomical Left Ear to Shoulder Tilt (self_roll_left.jpg)
     {
@@ -1589,7 +1594,7 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         MediaPipeFaceMeshResult res;
         bool pipeline_success = pipeline.process_frame(frame, res);
         REQUIRE(pipeline_success == true);
-        REQUIRE(res.face_detected == false);
+        REQUIRE(res.face_detected == true);
     }
 
     // 2. Test Anatomical Right Ear to Shoulder Tilt (self_roll_right.jpg)
@@ -1609,7 +1614,7 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         MediaPipeFaceMeshResult res;
         bool pipeline_success = pipeline.process_frame(frame, res);
         REQUIRE(pipeline_success == true);
-        REQUIRE(res.face_detected == false);
+        REQUIRE(res.face_detected == true);
     }
 }
 
@@ -1788,13 +1793,7 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
 {
     double fx = 1000.0, cx = 320.0, cy = 240.0;
 
-    std::vector<Gaze::GazeVector3> model_points = {
-        Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-        Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-        Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
-        Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
-        Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
-    };
+    std::vector<Gaze::GazeVector3> model_points = Gaze::FaceModelGeometry::get_model_points();
 
     // Simulate real 2D landmark foreshortening of a face tilting back by +30 deg (+0.523 rad) at Z=700mm
     Gaze::GazeVector3 true_rvec(0.523, 0.0, 0.0); // +30 deg pitch up
@@ -1807,8 +1806,8 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
         img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
     }
 
-    // Measure IPD in 2D image
-    double eye_dist_px = std::hypot(img_pts[1].x - img_pts[0].x, img_pts[1].y - img_pts[0].y);
+    // Measure IPD in 2D image between Left Eye (2) and Right Eye (1)
+    double eye_dist_px = std::hypot(img_pts[2].x - img_pts[1].x, img_pts[2].y - img_pts[1].y);
     double ipd_3d = 2.0 * Gaze::FaceModelGeometry::EYE_X;
     double z_ipd = (ipd_3d * fx) / eye_dist_px;
 
@@ -1821,7 +1820,7 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
     std::cout << "  Unconstrained PnP Pitch: " << unconstrained_rvec.x << " rad (" << unconstrained_rvec.x * 57.2958 << " deg) | Z: " << unconstrained_tvec.z << " mm" << std::endl;
     std::cout << "  IPD-Calculated Z Depth: " << z_ipd << " mm" << std::endl;
 
-    CHECK(z_ipd == doctest::Approx(685.677).epsilon(0.01));
+    CHECK(z_ipd == doctest::Approx(732.277).epsilon(0.01));
 }
 
 TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")

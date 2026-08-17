@@ -450,6 +450,23 @@ namespace Gaze
         }
     };
 
+    inline GazeBasis3D rodrigues_to_basis(const GazeVector3 &r);
+
+    struct HeadPose {
+        float pitch_rad = 0.0f;
+        float yaw_rad = 0.0f;
+        float roll_rad = 0.0f;
+        float trans_x_mm = 0.0f;
+        float trans_y_mm = 0.0f;
+        float trans_z_mm = 600.0f;
+
+        GazeVector3 translation() const { return GazeVector3(trans_x_mm, trans_y_mm, trans_z_mm); }
+        GazeVector3 rotation_vector() const { return GazeVector3(pitch_rad, yaw_rad, roll_rad); }
+        GazeBasis3D rotation_matrix() const {
+            return rodrigues_to_basis(rotation_vector());
+        }
+    };
+
     struct GazeTransform3D
     {
         GazeBasis3D basis;

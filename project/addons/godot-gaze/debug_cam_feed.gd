@@ -280,10 +280,7 @@ func update_diagnostics_ui():
 			var xform = face_estimator.get("transform")
 			if xform:
 				head_pos = xform.origin
-				if tracker.has_method("get_head_rotation_inference_space"):
-					head_rot = tracker.call("get_head_rotation_inference_space") * (180.0 / PI)
-				else:
-					head_rot = xform.basis.get_euler() * (180.0 / PI)
+				head_rot = xform.basis.get_euler() * (180.0 / PI)
 
 	var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3.ZERO
 	var dev_cal = tracker.get("device_calibration")
@@ -313,7 +310,7 @@ func update_diagnostics_ui():
 	
 	if is_face_detected:
 		lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
-		lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, head_rot.z])
+		lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
 	else:
 		lines.append("Head Trans (mm): [color=gray]N/A[/color]")
 		lines.append("Head Rot (deg): [color=gray]N/A[/color]")
@@ -444,14 +441,17 @@ func _perform_drawing():
 	if abs(xform.origin.z) <= 0.01:
 		return
 
-	# Model points to project (in Godot space, standardized layout: Right Eye, Left Eye, Nose, Right Mouth, Left Mouth):
-	var model_points = [
-		Vector3(30.0, 28.676, 0.0),      # Right eye center (anatomic right +X)
-		Vector3(-30.0, 28.676, 0.0),     # Left eye center (anatomic left -X)
-		Vector3(0.0, 0.5, -52.0),        # Nose tip (forward -Z)
-		Vector3(18.462, -31.712, -4.55), # Mouth right corner (+X, -Z)
-		Vector3(-18.462, -31.712, -4.55) # Mouth left corner (-X, -Z)
-	]
+	# Authoritative 6 3D Face Model Points exposed from C++ FaceModelGeometry / GazeServer
+	var model_points = tracker.call("get_face_model_points") if tracker.has_method("get_face_model_points") else []
+	if model_points.is_empty():
+		model_points = [
+			Vector3(0.0, 0.0, -18.7),       # 0: Nose Tip (4)
+			Vector3(0.0, -76.5, -7.0),      # 1: Chin (152)
+			Vector3(-33.0, 20.5, 0.0),      # 2: Right Eye Outer (33)
+			Vector3(33.0, 20.5, -6.8),      # 3: Left Eye Outer (263)
+			Vector3(-20.0, -37.4, -4.5),    # 4: Mouth Right Corner (61)
+			Vector3(20.0, -37.4, -8.8)      # 5: Mouth Left Corner (291)
+		]
 
 	var projected_pts = []
 
@@ -467,19 +467,22 @@ func _perform_drawing():
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 			projected_pts.append(screen_pt)
 
-	# Draws circles for dots at the 5 landmarks
+	# Draws circles for dots at the 6 landmarks
 	for pt in projected_pts:
 		if pt != Vector2.INF:
 			gd_draw_circle(pt, 4.0, Color.GREEN)
 
-	# Lines connecting them
+	# Lines connecting 6 face landmarks (Eyes, Nose, Chin, Mouth)
 	var connections = [
-		[0, 1], # Right eye to Left eye
-		[1, 2], # Left eye to Nose
-		[2, 0], # Nose to Right eye
-		[2, 3], # Nose to Mouth right
-		[2, 4], # Nose to Mouth left
-		[3, 4]  # Mouth right to Mouth left
+		[2, 3], # Right eye to Left eye
+		[2, 0], # Right eye to Nose
+		[3, 0], # Left eye to Nose
+		[0, 1], # Nose to Chin
+		[0, 4], # Nose to Mouth right
+		[0, 5], # Nose to Mouth left
+		[4, 5], # Mouth right to Mouth left
+		[4, 1], # Mouth right to Chin
+		[5, 1]  # Mouth left to Chin
 	]
 
 	for conn in connections:
@@ -492,9 +495,10 @@ func _perform_drawing():
 	var right_eye_center = xform * model_points[0]
 	var left_eye_center = xform * model_points[1]
 	var start_cv = (left_eye_center + right_eye_center) * 0.5
-	var gaze_direction = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
-	if gaze_direction == null:
-		gaze_direction = Vector3(0.0, 0.0, -1.0)
+	var raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
+	if raw_gaze == null:
+		raw_gaze = Vector3(0.0, 0.0, -1.0)
+	var gaze_direction = Vector3(raw_gaze.x, -raw_gaze.y, raw_gaze.z)
 	var end_cv = start_cv + gaze_direction * 150.0
 
 	# Project both start and end

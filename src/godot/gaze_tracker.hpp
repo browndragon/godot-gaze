@@ -201,6 +201,7 @@ public:
     CameraSensor* get_camera_sensor() const;
     FaceEstimator* get_face_estimator() const;
     EyeEstimator* get_eye_estimator() const;
+    PackedVector3Array get_face_model_points() const;
 
     void set_screen_smooth(const Ref<Smoother>& smoother);
     Ref<Smoother> get_screen_smooth() const;

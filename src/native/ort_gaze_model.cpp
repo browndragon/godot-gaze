@@ -86,9 +86,11 @@ bool ORTGazeModel::initialize() {
 void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop, float* out_buffer) {
     constexpr int channel_size = EyeCrops::EYE_CROP_WIDTH * EyeCrops::EYE_CROP_HEIGHT;
     for (int i = 0; i < channel_size; ++i) {
-        out_buffer[i] = static_cast<float>(raw_crop[3 * i]);                 // Blue
+        // raw_crop is RGB8 (Red at 0, Green at 1, Blue at 2)
+        // ADAS model expects BGR tensor: Channel 0 = Blue, Channel 1 = Green, Channel 2 = Red
+        out_buffer[i] = static_cast<float>(raw_crop[3 * i + 2]);                 // Blue
         out_buffer[channel_size + i] = static_cast<float>(raw_crop[3 * i + 1]);  // Green
-        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop[3 * i + 2]);  // Red
+        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop[3 * i]);  // Red
     }
 }
 
@@ -161,10 +163,11 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
             double dx = std::sin(yaw) * cos_pitch;
             double dy = std::sin(pitch);
             double dz = std::cos(yaw) * cos_pitch;
-            out_gaze_dir_cv = GazeVector3(dx, -dy, -dz).normalized();
+            out_gaze_dir_cv = GazeVector3(dx, -dy, dz).normalized();
         } else if (num_elements == 3) {
-            GazeVector3 raw_onnx_gaze(out_data[0], out_data[1], out_data[2]);
-            out_gaze_dir_cv = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_onnx_gaze).normalized();
+            // OpenVINO ADAS gaze model outputs 3D gaze vector (dx, dy, dz) in OpenCV frame:
+            // dx: Right (+X), dy: DOWN (+Y_cv -> -Y_godot UP), dz: Forward toward camera (+Z_cv -> +Z_godot)
+            out_gaze_dir_cv = GazeVector3(out_data[0], -out_data[1], out_data[2]).normalized();
         } else {
             return false;
         }

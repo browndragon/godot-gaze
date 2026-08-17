@@ -55,6 +55,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_camera_sensor"), &GazeTracker::get_camera_sensor);
     ClassDB::bind_method(D_METHOD("get_face_estimator"), &GazeTracker::get_face_estimator);
     ClassDB::bind_method(D_METHOD("get_eye_estimator"), &GazeTracker::get_eye_estimator);
+    ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeTracker::get_face_model_points);
     ClassDB::bind_method(D_METHOD("get_screen_smooth"), &GazeTracker::get_screen_smooth);
     ClassDB::bind_method(D_METHOD("set_screen_smooth", "smoother"), &GazeTracker::set_screen_smooth);
 
@@ -807,7 +808,12 @@ Transform3D GazeTracker::get_eye_uncal_ray() const {
 
 Vector2 GazeTracker::project_gaze_ray_to_viewport(Vector3 origin, Vector3 direction, bool apply_calibration) const {
     Gaze::GazeVector3 origin_cv(origin.x, -origin.y, -origin.z);
-    Gaze::GazeVector3 dir_cv(direction.x, -direction.y, -direction.z);
+    Gaze::GazeVector3 dir_cv;
+    if (direction.z < 0.0) {
+        dir_cv = Gaze::GazeVector3(direction.x, -direction.y, direction.z);
+    } else {
+        dir_cv = Gaze::GazeVector3(direction.x, -direction.y, -direction.z);
+    }
 
     if (apply_calibration) {
         dir_cv = projection_engine.apply_3d_bias(dir_cv);
@@ -854,6 +860,12 @@ Vector3 GazeTracker::get_head_rotation_inference_space() const {
     GazeServer *gs = GazeServer::get_singleton();
     if (!gs) return Vector3();
     return gs->get_head_rotation_from_face_tracker(face_gaze_rid);
+}
+
+PackedVector3Array GazeTracker::get_face_model_points() const {
+    GazeServer *gs = GazeServer::get_singleton();
+    if (!gs) return PackedVector3Array();
+    return gs->get_face_model_points();
 }
 
 Vector3 GazeTracker::get_head_translation_inference_space() const {

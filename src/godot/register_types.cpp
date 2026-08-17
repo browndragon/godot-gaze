@@ -70,14 +70,14 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_detector);
         ps->set_initial_value("gaze/models/face_detector_prefix", "mediapipe_face_detector");
 
-        if (!ps->has_setting("gaze/models/face_mesh_prefix")) {
-            ps->set_setting("gaze/models/face_mesh_prefix", "mediapipe_face_mesh");
+        if (!ps->has_setting("gaze/models/eye_openness_prefix")) {
+            ps->set_setting("gaze/models/eye_openness_prefix", "mediapipe_eye_openness");
         }
-        Dictionary prop_mesh;
-        prop_mesh["name"] = "gaze/models/face_mesh_prefix";
-        prop_mesh["type"] = Variant::STRING;
-        ps->add_property_info(prop_mesh);
-        ps->set_initial_value("gaze/models/face_mesh_prefix", "mediapipe_face_mesh");
+        Dictionary prop_openness;
+        prop_openness["name"] = "gaze/models/eye_openness_prefix";
+        prop_openness["type"] = Variant::STRING;
+        ps->add_property_info(prop_openness);
+        ps->set_initial_value("gaze/models/eye_openness_prefix", "mediapipe_eye_openness");
 
         if (!ps->has_setting("gaze/models/gaze_prefix")) {
             ps->set_setting("gaze/models/gaze_prefix", "gaze-estimation-adas-0002");

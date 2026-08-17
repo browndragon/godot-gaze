@@ -62,3 +62,39 @@ TEST_CASE("ORT Gaze Model Boundary Invariants and Directional Sensitivity")
     double norm_yaw = std::sqrt(gaze_dir_yaw_right.x * gaze_dir_yaw_right.x + gaze_dir_yaw_right.y * gaze_dir_yaw_right.y + gaze_dir_yaw_right.z * gaze_dir_yaw_right.z);
     CHECK(norm_yaw == doctest::Approx(1.0).epsilon(1e-4));
 }
+
+TEST_CASE("ORT Gaze Model Ground-Truth 3D Gaze Direction Invariants")
+{
+    std::string model_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    if (!gaze_file_exists(model_path)) {
+        model_path = "../project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    }
+
+    if (!gaze_file_exists(model_path)) {
+        MESSAGE("Skipping test: Model file not found");
+        return;
+    }
+
+    Gaze::ORTGazeModel gaze_model(model_path);
+    REQUIRE(gaze_model.initialize() == true);
+
+    Gaze::EyeCrops crops;
+    crops.face_detected = true;
+    std::memset(crops.left_eye_data, 128, sizeof(crops.left_eye_data));
+    std::memset(crops.right_eye_data, 128, sizeof(crops.right_eye_data));
+
+    // Pitch = -0.364 rad, Yaw = +0.0304 rad, Roll = -3.059 rad for self_center.jpg
+    crops.head_pose_rotation = Gaze::GazeVector3(-0.364, 0.0304, -3.059);
+    crops.head_pose_translation = Gaze::GazeVector3(9.2, 6.7, 784.25);
+
+    Gaze::GazeVector3 gaze_dir;
+    bool ok = gaze_model.estimate_raw_gaze(crops, gaze_dir);
+    REQUIRE(ok == true);
+
+    // Verify unit vector norm = 1.0
+    double norm = std::sqrt(gaze_dir.x * gaze_dir.x + gaze_dir.y * gaze_dir.y + gaze_dir.z * gaze_dir.z);
+    CHECK(norm == doctest::Approx(1.0).epsilon(1e-4));
+
+    // Verify forward gaze component -Z is dominant (-Z < -0.80)
+    CHECK(gaze_dir.z < -0.80);
+}

@@ -242,56 +242,51 @@ namespace Gaze
         int model_h = input_height;
 
         float roll_rad = roll_deg * (3.141592653589793f / 180.0f);
-        std::vector<unsigned char> frame_bgr;
-        const unsigned char *src_data = frame.data;
 
-        if (std::abs(roll_deg) > 1e-3f)
+        // Center Crop: extract square of size min(width, height)
+        int crop_size = std::min(width, height);
+        int crop_x0 = (width - crop_size) / 2;
+        int crop_y0 = (height - crop_size) / 2;
+
+        std::vector<unsigned char> square_crop(crop_size * crop_size * 3, 0);
+        for (int y = 0; y < crop_size; ++y)
         {
-            frame_bgr.resize(width * height * 3);
-            rotate_image_bgr(frame.data, width, height, frame_bgr.data(), -roll_rad);
-            src_data = frame_bgr.data();
-        }
-
-        float scale = std::min(static_cast<float>(model_w) / width, static_cast<float>(model_h) / height);
-        float new_w = static_cast<float>(width) * scale;
-        float new_h = static_cast<float>(height) * scale;
-        float pad_x = (model_w - new_w) / 2.0f;
-        float pad_y = (model_h - new_h) / 2.0f;
-
-        int int_new_w = static_cast<int>(std::round(new_w));
-        int int_new_h = static_cast<int>(std::round(new_h));
-        int int_pad_x = static_cast<int>(std::round(pad_x));
-        int int_pad_y = static_cast<int>(std::round(pad_y));
-
-        std::vector<Anchor> anchors = generate_anchors(model_w, model_h);
-
-        std::vector<float> input_tensor_data(1 * 3 * model_h * model_w, 0.0f);
-        std::vector<unsigned char> resized_bgr(int_new_w * int_new_h * 3, 0);
-        bilinear_resize_direct(src_data, width, height, resized_bgr.data(), int_new_w, int_new_h);
-
-        std::vector<unsigned char> padded_bgr(model_w * model_h * 3, 0);
-        for (int y = 0; y < int_new_h; ++y)
-        {
-            int dst_y = y + int_pad_y;
-            if (dst_y >= model_h) continue;
-            for (int x = 0; x < int_new_w; ++x)
+            int src_y = crop_y0 + y;
+            if (src_y < 0 || src_y >= height) continue;
+            for (int x = 0; x < crop_size; ++x)
             {
-                int dst_x = x + int_pad_x;
-                if (dst_x >= model_w) continue;
-                int src_idx = (y * int_new_w + x) * 3;
-                int dst_idx = (dst_y * model_w + dst_x) * 3;
-                padded_bgr[dst_idx + 0] = resized_bgr[src_idx + 0];
-                padded_bgr[dst_idx + 1] = resized_bgr[src_idx + 1];
-                padded_bgr[dst_idx + 2] = resized_bgr[src_idx + 2];
+                int src_x = crop_x0 + x;
+                if (src_x < 0 || src_x >= width) continue;
+                int src_idx = (src_y * width + src_x) * 3;
+                int dst_idx = (y * crop_size + x) * 3;
+                square_crop[dst_idx + 0] = frame.data[src_idx + 0];
+                square_crop[dst_idx + 1] = frame.data[src_idx + 1];
+                square_crop[dst_idx + 2] = frame.data[src_idx + 2];
             }
         }
+
+        std::vector<unsigned char> rotated_square;
+        const unsigned char *src_square = square_crop.data();
+        if (std::abs(roll_deg) > 1e-3f)
+        {
+            rotated_square.resize(crop_size * crop_size * 3, 0);
+            rotate_image_bgr(square_crop.data(), crop_size, crop_size, rotated_square.data(), -roll_rad);
+            src_square = rotated_square.data();
+        }
+
+        float scale = static_cast<float>(model_w) / static_cast<float>(crop_size);
+
+        std::vector<Anchor> anchors = generate_anchors(model_w, model_h);
+        std::vector<float> input_tensor_data(1 * 3 * model_h * model_w, 0.0f);
+        std::vector<unsigned char> resized_bgr(model_w * model_h * 3, 0);
+        bilinear_resize_direct(src_square, crop_size, crop_size, resized_bgr.data(), model_w, model_h);
 
         int channel_size = model_h * model_w;
         if (is_nhwc)
         {
             for (int i = 0; i < channel_size * 3; ++i)
             {
-                input_tensor_data[i] = static_cast<float>(padded_bgr[i]);
+                input_tensor_data[i] = static_cast<float>(resized_bgr[i]);
             }
         }
         else
@@ -300,33 +295,41 @@ namespace Gaze
             {
                 for (int x = 0; x < model_w; ++x)
                 {
+                    int src_idx = (y * model_w + x) * 3;
                     int pixel_idx = y * model_w + x;
-                    input_tensor_data[pixel_idx] = static_cast<float>(padded_bgr[pixel_idx * 3 + 0]);
-                    input_tensor_data[channel_size + pixel_idx] = static_cast<float>(padded_bgr[pixel_idx * 3 + 1]);
-                    input_tensor_data[2 * channel_size + pixel_idx] = static_cast<float>(padded_bgr[pixel_idx * 3 + 2]);
+
+                    float b = static_cast<float>(resized_bgr[src_idx + 0]);
+                    float g = static_cast<float>(resized_bgr[src_idx + 1]);
+                    float r = static_cast<float>(resized_bgr[src_idx + 2]);
+
+                    input_tensor_data[0 * channel_size + pixel_idx] = b;
+                    input_tensor_data[1 * channel_size + pixel_idx] = g;
+                    input_tensor_data[2 * channel_size + pixel_idx] = r;
                 }
             }
         }
 
-        std::vector<int64_t> input_shape = is_nhwc ? std::vector<int64_t>{1, model_h, model_w, 3} : std::vector<int64_t>{1, 3, model_h, model_w};
+        std::vector<int64_t> input_shape = {1, 3, model_h, model_w};
+        if (is_nhwc)
+        {
+            input_shape = {1, model_h, model_w, 3};
+        }
+
         Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
             memory_info, input_tensor_data.data(), input_tensor_data.size(),
             input_shape.data(), input_shape.size());
 
         try
         {
-            std::vector<Ort::Value> inputs;
-            inputs.push_back(std::move(input_tensor));
-
-            auto outputs = session->Run(
+            auto output_tensors = session->Run(
                 Ort::RunOptions{nullptr},
                 input_names.data(),
-                inputs.data(),
-                inputs.size(),
+                &input_tensor,
+                1,
                 output_names.data(),
                 output_names.size());
 
-            if (outputs.size() < 12)
+            if (output_tensors.size() < 12)
             {
                 return false;
             }
@@ -335,38 +338,32 @@ namespace Gaze
             std::vector<float> candidate_scores;
             std::vector<std::vector<GazeVector2>> candidate_landmarks;
 
-            size_t anchor_offset = 0;
+            int anchor_offset = 0;
             std::vector<int> strides = {8, 16, 32};
 
             for (size_t s = 0; s < strides.size(); ++s)
             {
-                Ort::Value &cls_tensor = outputs[s];
-                Ort::Value &obj_tensor = outputs[3 + s];
-                Ort::Value &bbox_tensor = outputs[6 + s];
-                Ort::Value &kps_tensor = outputs[9 + s];
+                int num_anchors_s = output_tensors[s].GetTensorTypeAndShapeInfo().GetShape()[1];
 
-                auto cls_shape = cls_tensor.GetTensorTypeAndShapeInfo().GetShape();
-                size_t num_anchors_s = cls_shape[1];
+                const float *cls_data = output_tensors[s].GetTensorData<float>();
+                const float *obj_data = output_tensors[3 + s].GetTensorData<float>();
+                const float *bbox_data = output_tensors[6 + s].GetTensorData<float>();
+                const float *kps_data = output_tensors[9 + s].GetTensorData<float>();
 
-                float *cls_data = cls_tensor.GetTensorMutableData<float>();
-                float *obj_data = obj_tensor.GetTensorMutableData<float>();
-                float *bbox_data = bbox_tensor.GetTensorMutableData<float>();
-                float *kps_data = kps_tensor.GetTensorMutableData<float>();
-
-                for (size_t idx = 0; idx < num_anchors_s; ++idx)
+                for (int idx = 0; idx < num_anchors_s; ++idx)
                 {
                     float score = cls_data[idx] * obj_data[idx];
                     if (score > score_threshold)
                     {
-                        size_t global_idx = anchor_offset + idx;
-                        if (global_idx >= anchors.size()) continue;
+                        int global_idx = anchor_offset + idx;
+                        if (global_idx >= static_cast<int>(anchors.size())) continue;
 
-                        const auto &anchor = anchors[global_idx];
+                        const auto &anc = anchors[global_idx];
 
-                        float cx = (bbox_data[idx * 4 + 0] * anchor.stride_x + anchor.cx);
-                        float cy = (bbox_data[idx * 4 + 1] * anchor.stride_y + anchor.cy);
-                        float w = std::exp(bbox_data[idx * 4 + 2]) * anchor.stride_x;
-                        float h = std::exp(bbox_data[idx * 4 + 3]) * anchor.stride_y;
+                        float cx = bbox_data[idx * 4 + 0] * anc.stride_x + anc.cx;
+                        float cy = bbox_data[idx * 4 + 1] * anc.stride_y + anc.cy;
+                        float w = std::exp(bbox_data[idx * 4 + 2]) * anc.stride_x;
+                        float h = std::exp(bbox_data[idx * 4 + 3]) * anc.stride_y;
 
                         float x_left = cx - w / 2.0f;
                         float y_top = cy - h / 2.0f;
@@ -374,17 +371,18 @@ namespace Gaze
                         std::vector<GazeVector2> ldm(5);
                         for (int j = 0; j < 5; ++j)
                         {
-                            float kx = (kps_data[idx * 10 + j * 2 + 0] * anchor.stride_x + anchor.cx);
-                            float ky = (kps_data[idx * 10 + j * 2 + 1] * anchor.stride_y + anchor.cy);
+                            float kx = kps_data[idx * 10 + j * 2 + 0] * anc.stride_x + anc.cx;
+                            float ky = kps_data[idx * 10 + j * 2 + 1] * anc.stride_y + anc.cy;
 
-                            float rot_kx = (kx - pad_x) / scale;
-                            float rot_ky = (ky - pad_y) / scale;
+                            float sq_rot_kx = kx / scale;
+                            float sq_rot_ky = ky / scale;
 
-                            ldm[j] = rotate_point_back(GazeVector2(rot_kx, rot_ky), -roll_rad, width, height);
+                            GazeVector2 sq_unrot = rotate_point_back(GazeVector2(sq_rot_kx, sq_rot_ky), -roll_rad, crop_size, crop_size);
+                            ldm[j] = GazeVector2(sq_unrot.x + crop_x0, sq_unrot.y + crop_y0);
                         }
 
-                        float orig_x = (x_left - pad_x) / scale;
-                        float orig_y = (y_top - pad_y) / scale;
+                        float orig_x = (x_left / scale) + crop_x0;
+                        float orig_y = (y_top / scale) + crop_y0;
                         float orig_w = w / scale;
                         float orig_h = h / scale;
 

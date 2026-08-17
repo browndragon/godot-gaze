@@ -164,6 +164,9 @@ TEST_CASE("ORT YuNet Full Benchmark Image Suite Keypoint Invariants")
     std::vector<BenchmarkExpectation> suite = {
         {"self_center.jpg", 0.0f, 684.0f, 399.0f, 837.0f, 413.0f, 749.0f, 495.0f},
         {"self_left_left.jpg", 0.0f, 774.0f, 397.0f, 925.0f, 391.0f, 877.0f, 483.0f},
+        // Note: self_right_right.jpg is heavily backlit with strong shadowing across the eyes and nose,
+        // causing YuNet landmark detection confidence to be relatively low (~0.79) with a 5-8px offset.
+        // These accepted baseline values are locked here so downstream pipeline stages account for this flawed initial landmark.
         {"self_right_right.jpg", 0.0f, 615.0f, 396.0f, 772.0f, 408.0f, 650.0f, 507.0f},
         {"self_top_top.jpg", 0.0f, 701.0f, 375.0f, 854.0f, 383.0f, 776.0f, 467.0f},
         {"self_down_down.jpg", 0.0f, 707.0f, 422.0f, 864.0f, 433.0f, 779.0f, 524.0f},

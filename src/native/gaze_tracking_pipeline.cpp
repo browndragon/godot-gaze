@@ -223,8 +223,8 @@ namespace Gaze
 
                             GazeBasis3D head_rot = yunet_res.head_pose.rotation_matrix();
                             GazeVector3 head_trans = yunet_res.head_pose.translation();
-                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5, -33.4, 18.0)) + head_trans;
-                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5, -33.4, 18.0)) + head_trans;
+                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5, 33.4, 18.0)) + head_trans;
+                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5, 33.4, 18.0)) + head_trans;
                             std::memcpy(crops.left_eye_data, yunet_res.left_eye_crop, 60*60*3);
                             std::memcpy(crops.right_eye_data, yunet_res.right_eye_crop, 60*60*3);
 

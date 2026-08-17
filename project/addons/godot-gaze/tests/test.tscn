@@ -40,6 +40,14 @@ func _input(event):
 
 [sub_resource type="OneEuroSmoother" id="OneEuroSmoother_7a0ga"]
 
+[sub_resource type="GDScript" id="GDScript_rhdqk"]
+resource_name = "Test"
+script/source = "extends Node
+func _ready():
+	print(not 1==1)
+	
+"
+
 [node name="TestScene" type="Control" unique_id=1183059267]
 layout_mode = 3
 anchors_preset = 15
@@ -82,6 +90,8 @@ script = SubResource("GDScript_0ejwa")
 
 [node name="GazeTracker" type="GazeTracker" parent="." unique_id=1112781723]
 screen_smooth = SubResource("OneEuroSmoother_7a0ga")
-nose_gaze = Vector2(27.665195, -65.734116)
+
+[node name="Node" type="Node" parent="." unique_id=232520022]
+script = SubResource("GDScript_rhdqk")
 
 [connection signal="full_screened" from="FullScreener" to="." method="_set_maximized"]

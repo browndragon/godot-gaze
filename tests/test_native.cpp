@@ -58,11 +58,11 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
 {
     try
     {
-        // 1. Initialize MediaPipe Face Mesh
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
+        // 1. Initialize YuNet Face Detector
+        std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(yunet_path);
 
-        REQUIRE(pipeline.initialize() == true);
+        REQUIRE(detector.initialize() == true);
 
         // 2. Initialize Gaze Model
         std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
@@ -70,7 +70,7 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
 
         REQUIRE(model.initialize() == true);
 
-        // 3. Verify MediaPipe Face Mesh process_frame
+        // 3. Verify YuNet process_frame
         Frame frame;
         frame.width = 640;
         frame.height = 480;
@@ -79,10 +79,9 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
         std::vector<unsigned char> dummy_mat(640 * 480 * 3, 255);
         frame.data = dummy_mat.data();
 
-        MediaPipeFaceMeshResult mp_res;
-        bool res = pipeline.process_frame(frame, mp_res);
-        CHECK(res == true);
-        CHECK(mp_res.face_detected == false);
+        YuNetResult yunet_res;
+        detector.process_frame(frame, yunet_res);
+        CHECK(yunet_res.face_detected == false);
 
         // 4. Test Gaze Model inference on mock crop data
         EyeCrops crops;
@@ -142,9 +141,9 @@ TEST_CASE("Testing OpenCV Camera Model Scaling and Cropping helpers")
 
 TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
 {
-    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-    MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-    REQUIRE(pipeline.initialize() == true);
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    ORTYuNetDetector detector(yunet_path);
+    REQUIRE(detector.initialize() == true);
 
     LoadedImage img = load_test_image("tests/resources/self_center.jpg");
     REQUIRE(!img.data.empty());
@@ -155,13 +154,13 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
     frame.timestamp = 0.0;
     frame.data = img.data.data();
 
-    MediaPipeFaceMeshResult mp_res;
-    bool pipeline_success = pipeline.process_frame(frame, mp_res);
+    YuNetResult yunet_res;
+    bool pipeline_success = detector.process_frame(frame, yunet_res);
     REQUIRE(pipeline_success == true);
-    REQUIRE(mp_res.face_detected == true);
+    REQUIRE(yunet_res.face_detected == true);
 
     // Verify head forward vector direction in standard Camera Space
-    GazeTransform3D head_transform = Gaze::Inference::get_head_transform_in_camera_space(mp_res.head_pose.translation(), mp_res.head_pose.rotation_vector());
+    GazeTransform3D head_transform = Gaze::Inference::get_head_transform_in_camera_space(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
     GazeVector3 head_forward = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
 
     // For a forward-facing head, the forward vector should point towards the screen (+Z_cam in Godot camera space)

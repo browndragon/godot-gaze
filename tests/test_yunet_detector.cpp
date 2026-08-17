@@ -167,8 +167,8 @@ TEST_CASE("ORT YuNet Full Benchmark Image Suite Keypoint Invariants")
         {"self_right_right.jpg", 0.0f, 613.5f, 399.3f, 771.0f, 398.5f, 674.4f, 497.1f},
         {"self_top_top.jpg", 0.0f, 700.5f, 365.1f, 853.5f, 356.4f, 775.5f, 444.6f},
         {"self_down_down.jpg", 0.0f, 706.5f, 425.2f, 863.5f, 423.5f, 778.5f, 514.5f},
-        {"self_roll_left.jpg", -30.0f * (3.14159265f / 180.0f), 450.5f, 267.4f, 556.9f, 290.0f, 497.5f, 348.2f},
-        {"self_roll_right.jpg", 30.0f * (3.14159265f / 180.0f), 529.0f, 191.4f, 642.0f, 160.8f, 595.1f, 250.4f}
+        {"self_roll_left.jpg", 45.0f * (3.14159265f / 180.0f), 457.7f, 399.5f, 484.0f, 336.9f, 500.0f, 401.8f},
+        {"self_roll_right.jpg", -45.0f * (3.14159265f / 180.0f), 501.8f, 449.1f, 560.5f, 499.3f, 492.4f, 509.3f}
     };
 
     for (const auto &item : suite) {

@@ -424,34 +424,24 @@ func _perform_drawing():
 	if img_w <= 0 or img_h <= 0:
 		return
 
-	var focal_len = camera_sensor.get("focal_length")
+	var focal_len = camera_sensor.get("focal_length") if is_instance_valid(camera_sensor) else -1.0
 	if focal_len == null or focal_len <= 0.0:
-		var fov = camera_sensor.get("camera_fov")
-		if fov == null:
-			fov = 35.488537576579634
-		focal_len = img_w / (2.0 * tan(fov * PI / 180.0 * 0.5))
+		focal_len = img_w
 		
 	var cx = img_w / 2.0
 	var cy = img_h / 2.0
 
-	var xform = face_estimator.get("transform")
+	var xform = face_estimator.get("transform") if is_instance_valid(face_estimator) else null
 	if xform == null:
 		xform = Transform3D()
 
 	if abs(xform.origin.z) <= 0.01:
 		return
 
-	# Authoritative 6 3D Face Model Points exposed from C++ FaceModelGeometry / GazeServer
+	# Authoritative canonical 3D Face Model Points exposed from C++ FaceModelGeometry / GazeServer
 	var model_points = tracker.call("get_face_model_points") if tracker.has_method("get_face_model_points") else []
 	if model_points.is_empty():
-		model_points = [
-			Vector3(0.0, 0.0, -18.7),       # 0: Nose Tip (4)
-			Vector3(0.0, -76.5, -7.0),      # 1: Chin (152)
-			Vector3(-33.0, 20.5, 0.0),      # 2: Right Eye Outer (33)
-			Vector3(33.0, 20.5, -6.8),      # 3: Left Eye Outer (263)
-			Vector3(-20.0, -37.4, -4.5),    # 4: Mouth Right Corner (61)
-			Vector3(20.0, -37.4, -8.8)      # 5: Mouth Left Corner (291)
-		]
+		return
 
 	var projected_pts = []
 
@@ -467,39 +457,41 @@ func _perform_drawing():
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 			projected_pts.append(screen_pt)
 
-	# Draws circles for dots at the 6 landmarks
+	# Draws landmark points
 	for pt in projected_pts:
 		if pt != Vector2.INF:
-			gd_draw_circle(pt, 4.0, Color.GREEN)
+			gd_draw_circle(pt, 3.0, Color.GREEN)
 
-	# Lines connecting 6 face landmarks (Eyes, Nose, Chin, Mouth)
-	var connections = [
-		[2, 3], # Right eye to Left eye
-		[2, 0], # Right eye to Nose
-		[3, 0], # Left eye to Nose
-		[0, 1], # Nose to Chin
-		[0, 4], # Nose to Mouth right
-		[0, 5], # Nose to Mouth left
-		[4, 5], # Mouth right to Mouth left
-		[4, 1], # Mouth right to Chin
-		[5, 1]  # Mouth left to Chin
-	]
+	# Connect 35-point facial landmark wireframe (jawline, eyebrows, nose, mouth, eyes)
+	var connections = []
+	if projected_pts.size() >= 35:
+		# Jawline contour (18..34)
+		for i in range(18, 34):
+			connections.append([i, i + 1])
+		# Eyebrows (12..14, 15..17)
+		connections.append_array([[12, 13], [13, 14], [15, 16], [16, 17]])
+		# Nose ridge and wings (4..7)
+		connections.append_array([[4, 5], [6, 7], [4, 6], [4, 7]])
+		# Mouth contours (8..11)
+		connections.append_array([[8, 10], [10, 9], [9, 11], [11, 8]])
+		# Eye canthi (0..3)
+		connections.append_array([[0, 1], [2, 3]])
 
 	for conn in connections:
-		var p1 = projected_pts[conn[0]]
-		var p2 = projected_pts[conn[1]]
-		if p1 != Vector2.INF and p2 != Vector2.INF:
-			gd_draw_line(p1, p2, Color.GREEN, 2.0)
+		if conn[0] < projected_pts.size() and conn[1] < projected_pts.size():
+			var p1 = projected_pts[conn[0]]
+			var p2 = projected_pts[conn[1]]
+			if p1 != Vector2.INF and p2 != Vector2.INF:
+				gd_draw_line(p1, p2, Color(0.2, 0.9, 0.3, 0.8), 2.0)
 
-	# Projects and draws the 3D gaze vector starting from the eye midpoint:
-	var right_eye_center = xform * model_points[0]
-	var left_eye_center = xform * model_points[1]
+	# Projects and draws the 3D gaze vector starting from the monocular eye midpoint:
+	var right_eye_center = xform * ((model_points[0] + model_points[1]) * 0.5)
+	var left_eye_center = xform * ((model_points[2] + model_points[3]) * 0.5)
 	var start_cv = (left_eye_center + right_eye_center) * 0.5
 	var raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
 	if raw_gaze == null:
-		raw_gaze = Vector3(0.0, 0.0, -1.0)
-	var gaze_direction = Vector3(raw_gaze.x, -raw_gaze.y, raw_gaze.z)
-	var end_cv = start_cv + gaze_direction * 150.0
+		raw_gaze = Vector3(0.0, 0.0, 1.0)
+	var end_cv = start_cv + raw_gaze * 150.0
 
 	# Project both start and end
 	var start_depth = -start_cv.z
@@ -518,7 +510,7 @@ func _perform_drawing():
 	var end_local = Vector2(end_px * drawn_rect.size.x / img_w, end_py * drawn_rect.size.y / img_h) + drawn_rect.position
 	var end_pt = rect.global_position + end_local - active_canvas.global_position
 
-	gd_draw_line(start_pt, end_pt, Color.RED, 3.0)
+	gd_draw_line(start_pt, end_pt, Color(1.0, 0.2, 0.2, 0.9), 3.0)
 
 func gd_draw_circle(pos: Vector2, radius: float, color: Color):
 	if active_canvas:

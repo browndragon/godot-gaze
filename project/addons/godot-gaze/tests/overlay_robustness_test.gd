@@ -33,10 +33,12 @@ class MockTracker extends Node:
 	var eye_estimator = null
 	var face_estimator = null
 	var gaze_direction = Vector3(0.0, 0.0, -1.0)
+	var face_model_points = []
 	func get_camera_sensor(): return camera_sensor
 	func get_eye_estimator(): return eye_estimator
 	func get_face_estimator(): return face_estimator
 	func get_gaze_direction(): return gaze_direction
+	func get_face_model_points(): return face_model_points
 
 # Mock subclass to capture drawing coordinates and prevent canvas errors in headless mode
 class MockDebugCamFeed extends "res://addons/godot-gaze/debug_cam_feed.gd":
@@ -411,10 +413,28 @@ func _init():
 		quit(1)
 		return
 
-	# Verify no crash on Happy Path (even if engine draws warn outside NOTIFICATION_DRAW)
+	# Subtest A1: Empty model points (safe early return, 0 draw calls)
 	test_feed.clear_draw_calls()
+	tracker.face_model_points = []
 	test_feed._draw()
-	print("    Subtest A PASSED.")
+	if test_feed.draw_circle_calls.size() != 0 or test_feed.draw_line_calls.size() != 0:
+		printerr("FAIL: Subtest A1 (Empty points) should return early with 0 draw calls")
+		quit(1)
+		return
+	print("    Subtest A1 (Empty points safe early return) PASSED.")
+
+	# Subtest A2: Canonical 35-point landmark model (35 circles + wireframe lines)
+	test_feed.clear_draw_calls()
+	var pts_35 = []
+	for i in range(35):
+		pts_35.append(Vector3(float(i - 17) * 2.0, float(i) * 1.5, -20.0))
+	tracker.face_model_points = pts_35
+	test_feed._draw()
+	if test_feed.draw_circle_calls.size() != 35:
+		printerr("FAIL: Subtest A2 (35-point canonical model) did not draw 35 landmark circles")
+		quit(1)
+		return
+	print("    Subtest A2 (35-point canonical model) PASSED. Draw calls: circles=", test_feed.draw_circle_calls.size(), " lines=", test_feed.draw_line_calls.size())
 
 	# Subtest B: Division by Zero Depth (Z = 0)
 	print("  Subtest B: Division by zero depth (Z = 0)...")

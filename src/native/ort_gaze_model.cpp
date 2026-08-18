@@ -83,14 +83,14 @@ bool ORTGazeModel::initialize() {
     return true;
 }
 
-void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop, float* out_buffer) {
+void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop_bgr, float* out_buffer) {
     constexpr int channel_size = EyeCrops::EYE_CROP_WIDTH * EyeCrops::EYE_CROP_HEIGHT;
     for (int i = 0; i < channel_size; ++i) {
-        // raw_crop is RGB8 (Red at 0, Green at 1, Blue at 2)
-        // ADAS model expects BGR tensor: Channel 0 = Blue, Channel 1 = Green, Channel 2 = Red
-        out_buffer[i] = static_cast<float>(raw_crop[3 * i + 2]);                 // Blue
-        out_buffer[channel_size + i] = static_cast<float>(raw_crop[3 * i + 1]);  // Green
-        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop[3 * i]);  // Red
+        // raw_crop_bgr is BGR8 (Blue at 0, Green at 1, Red at 2)
+        // ADAS model expects NCHW BGR tensor: Channel 0 = Blue, Channel 1 = Green, Channel 2 = Red
+        out_buffer[i] = static_cast<float>(raw_crop_bgr[3 * i + 0]);                 // Blue
+        out_buffer[channel_size + i] = static_cast<float>(raw_crop_bgr[3 * i + 1]);  // Green
+        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop_bgr[3 * i + 2]);  // Red
     }
 }
 

@@ -6,22 +6,25 @@
 
 TEST_CASE("MediaPipe Boundary Space Conversion Invariants")
 {
-    // Test 1: Canonical 3D face model points in Godot Camera Space
-    auto godot_pts = Gaze::FaceModelGeometry::get_canonical_godot_model_points();
-    REQUIRE(godot_pts.size() == 5);
+    // Test 1: Canonical 3D face model points
+    auto pts_5 = Gaze::FaceModelGeometry::get_5pt_model_points();
+    REQUIRE(pts_5.size() == 5);
 
     // Nose tip (0) is origin
-    CHECK(godot_pts[0].x == doctest::Approx(0.0));
-    CHECK(godot_pts[0].y == doctest::Approx(0.0));
-    CHECK(godot_pts[0].z == doctest::Approx(0.0));
+    CHECK(pts_5[0].x == doctest::Approx(0.0));
+    CHECK(pts_5[0].y == doctest::Approx(0.0));
+    CHECK(pts_5[0].z == doctest::Approx(0.0));
 
     // Right Eye (1) in Head Local Space has positive X (+31.5mm)
-    CHECK(godot_pts[1].x == doctest::Approx(31.5));
-    CHECK(godot_pts[1].y == doctest::Approx(33.4));
+    CHECK(pts_5[1].x == doctest::Approx(31.5));
+    CHECK(pts_5[1].y == doctest::Approx(33.4));
 
     // Left Eye (2) in Head Local Space has negative X (-31.5mm)
-    CHECK(godot_pts[2].x == doctest::Approx(-31.5));
-    CHECK(godot_pts[2].y == doctest::Approx(33.4));
+    CHECK(pts_5[2].x == doctest::Approx(-31.5));
+    CHECK(pts_5[2].y == doctest::Approx(33.4));
+
+    auto pts_35 = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
+    REQUIRE(pts_35.size() == 35);
 
     // Test 2: Pose Transformation Matrix in Godot Camera Space (+X right, +Y up, -Z forward)
     // Synthetic head at (0, 0, -650mm) facing camera

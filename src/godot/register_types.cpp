@@ -53,22 +53,22 @@ static void register_gaze_project_settings() {
         ps->set_initial_value("gaze/models/search_paths", "res://models,res://addons/godot-gaze/models");
 
         if (!ps->has_setting("gaze/models/yunet_prefix")) {
-            ps->set_setting("gaze/models/yunet_prefix", "mediapipe_face_detector");
+            ps->set_setting("gaze/models/yunet_prefix", "face_detection_yunet_2023mar");
         }
         Dictionary prop_yunet;
         prop_yunet["name"] = "gaze/models/yunet_prefix";
         prop_yunet["type"] = Variant::STRING;
         ps->add_property_info(prop_yunet);
-        ps->set_initial_value("gaze/models/yunet_prefix", "mediapipe_face_detector");
+        ps->set_initial_value("gaze/models/yunet_prefix", "face_detection_yunet_2023mar");
 
         if (!ps->has_setting("gaze/models/face_detector_prefix")) {
-            ps->set_setting("gaze/models/face_detector_prefix", "mediapipe_face_detector");
+            ps->set_setting("gaze/models/face_detector_prefix", "face_detection_yunet_2023mar");
         }
         Dictionary prop_detector;
         prop_detector["name"] = "gaze/models/face_detector_prefix";
         prop_detector["type"] = Variant::STRING;
         ps->add_property_info(prop_detector);
-        ps->set_initial_value("gaze/models/face_detector_prefix", "mediapipe_face_detector");
+        ps->set_initial_value("gaze/models/face_detector_prefix", "face_detection_yunet_2023mar");
 
         if (!ps->has_setting("gaze/models/eye_openness_prefix")) {
             ps->set_setting("gaze/models/eye_openness_prefix", "mediapipe_eye_openness");
@@ -87,6 +87,15 @@ static void register_gaze_project_settings() {
         prop_gaze["type"] = Variant::STRING;
         ps->add_property_info(prop_gaze);
         ps->set_initial_value("gaze/models/gaze_prefix", "gaze-estimation-adas-0002");
+
+        if (!ps->has_setting("gaze/models/landmarks_prefix")) {
+            ps->set_setting("gaze/models/landmarks_prefix", "facial-landmarks-35-adas-0002");
+        }
+        Dictionary prop_landmarks;
+        prop_landmarks["name"] = "gaze/models/landmarks_prefix";
+        prop_landmarks["type"] = Variant::STRING;
+        ps->add_property_info(prop_landmarks);
+        ps->set_initial_value("gaze/models/landmarks_prefix", "facial-landmarks-35-adas-0002");
 
         if (!ps->has_setting("gaze/models/acceptable_suffixes")) {
             PackedStringArray suffixes;

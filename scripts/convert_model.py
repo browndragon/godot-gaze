@@ -1,16 +1,24 @@
 #!/usr/bin/env python3
 import sys
+import os
+import subprocess
 import numpy as np
-
-# 1. Create a mock onnx.mapping module and register it in sys.modules
 from types import ModuleType
+
+# 1. Ensure required converter dependencies exist
+try:
+    import openvino2onnx
+except ImportError:
+    print("[convert_model] openvino2onnx not found. Installing via pip...")
+    subprocess.run([sys.executable, "-m", "pip", "install", "openvino2onnx"], check=True)
+
+# 2. Create a mock onnx.mapping module and register it in sys.modules for openvino2onnx compatibility
 mapping_mod = ModuleType("onnx.mapping")
 
 class DummyTypeInfo:
     def __init__(self, np_dtype):
         self.np_dtype = np_dtype
 
-# Map TensorProto element type enum integers to numpy types
 mapping_mod.TENSOR_TYPE_MAP = {
     1: DummyTypeInfo(np.dtype('float32')),
     2: DummyTypeInfo(np.dtype('uint8')),
@@ -32,11 +40,25 @@ mapping_mod.TENSOR_TYPE_MAP = {
 
 sys.modules["onnx.mapping"] = mapping_mod
 
-# 2. Now run the main conversion logic of openvino2onnx
+# 3. Run openvino2onnx for all declared models
 from openvino2onnx.__main__ import main
-sys.argv = [
-    "openvino2onnx",
-    "test_assets/models/gaze-estimation-adas-0002.xml",
-    "project/addons/godot-gaze/models/gaze-estimation-adas-0002.onnx"
+
+MODELS_TO_CONVERT = [
+    "gaze-estimation-adas-0002",
+    "facial-landmarks-35-adas-0002",
 ]
-main()
+
+for model_name in MODELS_TO_CONVERT:
+    xml_path = f"test_assets/models/{model_name}.xml"
+    onnx_path = f"project/addons/godot-gaze/models/{model_name}.onnx"
+    if os.path.exists(xml_path):
+        if os.path.exists(onnx_path):
+            print(f"Model already converted: {onnx_path}")
+            continue
+        print(f"Converting {xml_path} -> {onnx_path}...")
+        sys.argv = ["openvino2onnx", xml_path, onnx_path]
+        try:
+            main()
+            print(f"Successfully converted {xml_path} to {onnx_path}")
+        except Exception as e:
+            print(f"Error converting {xml_path}: {e}")

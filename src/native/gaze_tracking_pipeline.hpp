@@ -7,6 +7,7 @@
 #include "../core/pool.hpp"
 #include "../core/gaze_frame_data.hpp"
 #include "ort_yunet_detector.hpp"
+#include "ort_landmark_model.hpp"
 #include "ort_eye_state_model.hpp"
 #include "ort_gaze_model.hpp"
 #include <memory>
@@ -23,6 +24,7 @@ namespace Gaze
     {
     private:
         std::unique_ptr<ORTYuNetDetector> face_detector;
+        std::unique_ptr<ORTLandmarkModel> landmark_model;
         std::unique_ptr<ORTEyeStateModel> eye_state_model;
         std::unique_ptr<ORTGazeModel> gaze_estimator;
 
@@ -40,6 +42,7 @@ namespace Gaze
         bool initialized = false;
         bool config_dirty = false;
         std::atomic<bool> worker_busy{false};
+        float prev_roll_rad = 0.0f;
 
         void _worker_loop();
 
@@ -49,7 +52,11 @@ namespace Gaze
         GazeTrackingPipeline() = default;
         ~GazeTrackingPipeline();
 
-        bool initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data = {});
+        bool initialize(
+            const std::vector<uint8_t> &yunet_model_data,
+            const std::vector<uint8_t> &gaze_model_data,
+            const std::vector<uint8_t> &eye_openness_model_data = {},
+            const std::vector<uint8_t> &landmark_model_data = {});
         void start();
         void stop();
 

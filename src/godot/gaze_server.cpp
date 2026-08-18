@@ -510,8 +510,13 @@ void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p
                 }
 
                 Gaze::GazeVector2 pos_mm;
-                Gaze::GazeVector3 origin_cv(p_origin_cam.x, p_origin_cam.y, std::abs(p_origin_cam.z));
-                Gaze::GazeVector3 dir_cv(calibrated_dir.x, calibrated_dir.y, -std::abs(calibrated_dir.z));
+                Gaze::GazeVector3 origin_cv(p_origin_cam.x, -p_origin_cam.y, -p_origin_cam.z);
+                Gaze::GazeVector3 dir_cv;
+                if (calibrated_dir.z < 0.0) {
+                    dir_cv = Gaze::GazeVector3(calibrated_dir.x, -calibrated_dir.y, calibrated_dir.z);
+                } else {
+                    dir_cv = Gaze::GazeVector3(calibrated_dir.x, -calibrated_dir.y, -calibrated_dir.z);
+                }
                 if (Gaze::project_ray_to_screen_mm(
                         origin_cv,
                         dir_cv,
@@ -793,10 +798,10 @@ void GazeServer::start_processing() {
     if (pipeline) {
         ProjectSettings *ps = ProjectSettings::get_singleton();
         if (ps) {
-            String face_detector_path = ps->has_setting("gaze/models/face_detector_prefix") ? (String)ps->get_setting("gaze/models/face_detector_prefix") : String("mediapipe_face_detector");
+            String face_detector_path = ps->has_setting("gaze/models/face_detector_prefix") ? (String)ps->get_setting("gaze/models/face_detector_prefix") : String("face_detection_yunet_2023mar");
             face_detector_path = resolve_model_path(face_detector_path);
             if (face_detector_path.is_empty()) {
-                face_detector_path = resolve_model_path("mediapipe_face_detector");
+                face_detector_path = resolve_model_path("face_detection_yunet_2023mar");
             }
 
             String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("mediapipe_eye_openness");
@@ -811,11 +816,18 @@ void GazeServer::start_processing() {
                 gaze_path = resolve_model_path("gaze-estimation-adas-0002");
             }
 
+            String landmarks_path = ps->has_setting("gaze/models/landmarks_prefix") ? (String)ps->get_setting("gaze/models/landmarks_prefix") : String("facial-landmarks-35-adas-0002");
+            landmarks_path = resolve_model_path(landmarks_path);
+            if (landmarks_path.is_empty()) {
+                landmarks_path = resolve_model_path("facial-landmarks-35-adas-0002");
+            }
+
             std::vector<uint8_t> face_detector_buffer = load_file_buffer(face_detector_path);
             std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
             std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
+            std::vector<uint8_t> landmarks_buffer = load_file_buffer(landmarks_path);
 
-            bool init_ok = pipeline->initialize(face_detector_buffer, gaze_buffer, eye_openness_buffer);
+            bool init_ok = pipeline->initialize(face_detector_buffer, gaze_buffer, eye_openness_buffer, landmarks_buffer);
             if (!init_ok) {
                 Gaze::log_error("GazeServer_StartProcessing_FailedModelInit");
                 return;

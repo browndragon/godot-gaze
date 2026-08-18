@@ -275,6 +275,7 @@ def setup_onnxruntime(env):
     models_to_convert = [
         ("face_detection_yunet_2023mar.onnx", "face_detection_yunet_2023mar.ort"),
         ("gaze-estimation-adas-0002.onnx", "gaze-estimation-adas-0002.ort"),
+        ("facial-landmarks-35-adas-0002.onnx", "facial-landmarks-35-adas-0002.ort"),
         ("mediapipe_face_detector.onnx", "mediapipe_face_detector.ort"),
         ("mediapipe_face_mesh.onnx", "mediapipe_face_mesh.ort")
     ]
@@ -292,37 +293,22 @@ def setup_onnxruntime(env):
         with open(clean_models_marker, "w") as f:
             f.write("cleaned")
             
-    needed_conversion = False
+    import shutil
     for onnx_name, ort_name in models_to_convert:
-        if not os.path.exists(os.path.join(model_dir, ort_name)):
-            # Only trigger conversion if the source ONNX file actually exists.
-            if os.path.exists(os.path.join(model_dir, onnx_name)):
-                needed_conversion = True
-                break
-            
-    if needed_conversion:
-        print("[SCons] Converting ONNX models to ORT format...")
-        try:
-            import onnxruntime
-            import onnx
-        except ImportError:
-            print("[SCons] onnx or onnxruntime python package not found. Installing...")
-            subprocess.run([sys.executable, "-m", "pip", "install", "onnx", "onnxruntime"], check=False)
-        
-        conv_cmd = [
-            sys.executable,
-            "-m", "onnxruntime.tools.convert_onnx_models_to_ort",
-            "--optimization_style=Runtime",
-            model_dir
-        ]
-        print(f"[SCons] Running model conversion: {' '.join(conv_cmd)}")
-        subprocess.run(conv_cmd, check=True)
-        # Rename and filter config
-        import shutil
-        if os.path.exists(os.path.join(model_dir, "face_detection_yunet_2023mar.with_runtime_opt.ort")):
-            shutil.move(os.path.join(model_dir, "face_detection_yunet_2023mar.with_runtime_opt.ort"), os.path.join(model_dir, "face_detection_yunet_2023mar.ort"))
-        if os.path.exists(os.path.join(model_dir, "gaze-estimation-adas-0002.with_runtime_opt.ort")):
-            shutil.move(os.path.join(model_dir, "gaze-estimation-adas-0002.with_runtime_opt.ort"), os.path.join(model_dir, "gaze-estimation-adas-0002.ort"))
+        onnx_file = os.path.join(model_dir, onnx_name)
+        ort_file = os.path.join(model_dir, ort_name)
+        if not os.path.exists(ort_file) and os.path.exists(onnx_file) and onnx_name != "face_detection_yunet_2023mar.onnx":
+            print(f"[SCons] Converting {onnx_name} to {ort_name}...")
+            conv_cmd = [
+                sys.executable,
+                "-m", "onnxruntime.tools.convert_onnx_models_to_ort",
+                "--optimization_style=Runtime",
+                onnx_file
+            ]
+            subprocess.run(conv_cmd, check=True)
+            with_opt = onnx_file.replace(".onnx", ".with_runtime_opt.ort")
+            if os.path.exists(with_opt):
+                shutil.move(with_opt, ort_file)
         
         config_src = os.path.join(model_dir, "required_operators.with_runtime_opt.config")
         config_dst = os.path.join(model_dir, "required_operators.config")
@@ -339,7 +325,7 @@ def setup_onnxruntime(env):
     #       One way to decide if we can put this code in a thirdparty/SConstruct file is if it's reasonable to have multiple exposed targets in such a file (one per further child dir), each of which will have its own requirements and not all of which are used in any one build.
     #       Also, they'd need to be able to inherit/be-injected-with some of these variables cleanly (platform, arch, etc).
     ort_build_dir = f"build/ort/{platform}_{arch}"
-    clean_marker = os.path.join(ort_build_dir, ".clean_marker_v13")
+    clean_marker = os.path.join(ort_build_dir, ".clean_marker_v15")
     if not os.path.exists(clean_marker):
         print(f"[SCons] Cleaning old build directory {ort_build_dir} to clear CMakeCache...")
         import shutil
@@ -348,6 +334,15 @@ def setup_onnxruntime(env):
                 shutil.rmtree(ort_build_dir)
             except Exception as e:
                 print(f"[SCons] Failed to remove build dir: {e}")
+        # Clean stale dylib from target dir to prevent unwanted restoration of old operators
+        for bin_dir in ["project/addons/godot-gaze/bin", "build/tests"]:
+            for fname in ["libonnxruntime.dylib", "libonnxruntime.1.dylib"]:
+                p = os.path.join(bin_dir, fname)
+                if os.path.islink(p) or os.path.exists(p):
+                    try:
+                        os.remove(p)
+                    except Exception:
+                        pass
         os.makedirs(ort_build_dir, exist_ok=True)
         with open(clean_marker, "w") as f:
             f.write("cleaned")
@@ -513,13 +508,27 @@ def setup_onnxruntime(env):
         print(f"[SCons] Copied {expected_lib_path} to {out_dir}")
         subprocess.run(["codesign", "-s", "-", "--force", dylib_path], check=False)
         
-        # Copy to build/tests for macOS SIP/Gatekeeper validation compatibility
         test_dir = "build/tests"
         os.makedirs(test_dir, exist_ok=True)
         test_dylib = os.path.join(test_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
         shutil.copy2(expected_lib_path, test_dylib)
         subprocess.run(["codesign", "-s", "-", "--force", test_dylib], check=False)
         print(f"[SCons] Copied and signed {expected_lib_path} in {test_dir} for macOS SIP compliance")
+
+        # Ensure versioned dylib name libonnxruntime.1.dylib exists as symlink/copy for loader
+        for d in [out_dir, test_dir]:
+            v1_dylib = os.path.join(d, "libonnxruntime.1.dylib")
+            if os.path.islink(v1_dylib) or os.path.exists(v1_dylib):
+                try:
+                    os.remove(v1_dylib)
+                except Exception:
+                    pass
+            try:
+                os.symlink("libonnxruntime.dylib", v1_dylib)
+            except Exception:
+                shutil.copy2(expected_lib_path, v1_dylib)
+            subprocess.run(["codesign", "-s", "-", "--force", v1_dylib], check=False)
+            print(f"[SCons] Created and signed {v1_dylib}")
         
         if env["target"] != "template_debug":
             print(f"[SCons] Stripping local symbols from {dylib_path}...")

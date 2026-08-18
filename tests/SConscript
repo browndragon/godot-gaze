@@ -254,6 +254,15 @@ if env["platform"] != "javascript":
         target="#" + os.path.join(gaze_variant_dir, "tests/test_yunet_detector" + core_env["OBJSUFFIX"]),
         source="#tests/test_yunet_detector.cpp"
     ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_landmark_model" + core_env["OBJSUFFIX"]),
+        source="#tests/test_landmark_model.cpp"
+    ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_head_pose_pnp" + core_env["OBJSUFFIX"]),
+        source="#tests/test_head_pose_pnp.cpp"
+    ))
+
     
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
@@ -341,6 +350,16 @@ godot_headless_run = env.Command(
 )
 env.AlwaysBuild(godot_headless_run)
 env.Alias("tests/godot/headless", godot_headless_run)
+
+# Godot debug overlay robustness test target
+godot_overlay_run = env.Command(
+    "build/tests/logs/tests.godot.overlay.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tests/overlay_robustness_test.gd"]
+)
+env.AlwaysBuild(godot_overlay_run)
+env.Alias("tests/godot/overlay", godot_overlay_run)
 
 # Godot windowed E2E test target
 godot_windowed_run = env.Command(

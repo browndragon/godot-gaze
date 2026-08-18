@@ -2,9 +2,11 @@
 #include "../core/cpu_image_warper.hpp"
 #include "../core/space_conversions.hpp"
 #include "../core/math_defs.hpp"
+#include "../core/pnp_solver.hpp"
 #include "../core/log.hpp"
 #include <cstring>
 #include <chrono>
+#include <fstream>
 
 namespace Gaze
 {
@@ -29,7 +31,11 @@ namespace Gaze
         log_info(2, "GazeTrackingPipeline_Destructor_Finished");
     }
 
-    bool GazeTrackingPipeline::initialize(const std::vector<uint8_t> &yunet_model_data, const std::vector<uint8_t> &gaze_model_data, const std::vector<uint8_t> &eye_openness_model_data)
+    bool GazeTrackingPipeline::initialize(
+        const std::vector<uint8_t> &yunet_model_data,
+        const std::vector<uint8_t> &gaze_model_data,
+        const std::vector<uint8_t> &eye_openness_model_data,
+        const std::vector<uint8_t> &landmark_model_data)
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         std::lock_guard<std::mutex> lock(state_mutex);
@@ -38,11 +44,27 @@ namespace Gaze
         eye_state_model = std::make_unique<ORTEyeStateModel>(eye_openness_model_data);
         gaze_estimator = std::make_unique<ORTGazeModel>(gaze_model_data);
 
+        if (!landmark_model_data.empty())
+        {
+            landmark_model = std::make_unique<ORTLandmarkModel>(landmark_model_data);
+        }
+        else
+        {
+            std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+            std::ifstream f(lm_path.c_str());
+            if (!f.good()) lm_path = "../" + lm_path;
+            landmark_model = std::make_unique<ORTLandmarkModel>(lm_path);
+        }
+
         gaze_estimator->set_config(active_config);
 
         bool face_ok = face_detector->initialize();
         bool eye_ok = eye_state_model->initialize();
         bool gaze_ok = gaze_estimator->initialize();
+        if (landmark_model)
+        {
+            landmark_model->initialize();
+        }
 
         if (face_ok && eye_ok && gaze_ok)
         {
@@ -182,7 +204,7 @@ namespace Gaze
 
                         YuNetResult yunet_res;
                         auto start_face = std::chrono::steady_clock::now();
-                        bool success = face_detector ? face_detector->process_frame(frame, yunet_res) : false;
+                        bool success = face_detector ? face_detector->process_frame(frame, yunet_res, prev_roll_rad) : false;
                         auto end_face = std::chrono::steady_clock::now();
                         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
@@ -192,8 +214,62 @@ namespace Gaze
 
                         if (data->face_detected)
                         {
+                            std::vector<GazeVector2> landmarks_35;
+                            bool lm_ok = false;
+                            if (landmark_model)
+                            {
+                                GazeRect bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
+                                lm_ok = landmark_model->extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks_35, prev_roll_rad);
+                            }
+
+                            if (lm_ok && landmarks_35.size() == 35)
+                            {
+                                double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : static_cast<double>(frame.width);
+                                double cx = frame.width * 0.5;
+                                double cy = frame.height * 0.5;
+                                GazeVector3 rvec(0.0f, 0.0f, 0.0f);
+                                GazeVector3 tvec(0.0f, 0.0f, 600.0f);
+                                static const auto model_35pt = get_canonical_35pt_face_model();
+                                bool pnp_ok = solve_pnp_lm(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec, false);
+
+                                if (pnp_ok)
+                                {
+                                    yunet_res.head_pose.pitch_rad = rvec.x;
+                                    yunet_res.head_pose.yaw_rad = rvec.y;
+                                    yunet_res.head_pose.roll_rad = rvec.z;
+                                    yunet_res.head_pose.trans_x_mm = tvec.x;
+                                    yunet_res.head_pose.trans_y_mm = tvec.y;
+                                    yunet_res.head_pose.trans_z_mm = tvec.z;
+                                }
+
+                                // Extract dynamic eye crops centered at landmark canthi midpoints
+                                float r_cx = (landmarks_35[0].x + landmarks_35[1].x) * 0.5f;
+                                float r_cy = (landmarks_35[0].y + landmarks_35[1].y) * 0.5f;
+                                float r_dx = landmarks_35[0].x - landmarks_35[1].x;
+                                float r_dy = landmarks_35[0].y - landmarks_35[1].y;
+                                float r_w = std::sqrt(r_dx * r_dx + r_dy * r_dy);
+
+                                float l_cx = (landmarks_35[2].x + landmarks_35[3].x) * 0.5f;
+                                float l_cy = (landmarks_35[2].y + landmarks_35[3].y) * 0.5f;
+                                float l_dx = landmarks_35[2].x - landmarks_35[3].x;
+                                float l_dy = landmarks_35[2].y - landmarks_35[3].y;
+                                float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
+
+                                float r_box_s = std::max(20.0f, r_w * 1.5f);
+                                float l_box_s = std::max(20.0f, l_w * 1.5f);
+
+                                crop_and_resize_bgr(frame.data, frame.width, frame.height,
+                                                    r_cx - r_box_s * 0.5f, r_cy - r_box_s * 0.5f, r_box_s, r_box_s,
+                                                    yunet_res.right_eye_crop, 60, 60);
+
+                                crop_and_resize_bgr(frame.data, frame.width, frame.height,
+                                                    l_cx - l_box_s * 0.5f, l_cy - l_box_s * 0.5f, l_box_s, l_box_s,
+                                                    yunet_res.left_eye_crop, 60, 60);
+                            }
+
                             data->head_translation = yunet_res.head_pose.translation();
                             data->head_rotation = yunet_res.head_pose.rotation_vector();
+                            prev_roll_rad = yunet_res.head_pose.roll_rad;
 
                             // Estimate Eye Openness for Left & Right eyes via ORTEyeStateModel
                             if (eye_state_model)
@@ -223,8 +299,9 @@ namespace Gaze
 
                             GazeBasis3D head_rot = yunet_res.head_pose.rotation_matrix();
                             GazeVector3 head_trans = yunet_res.head_pose.translation();
-                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5, 33.4, 18.0)) + head_trans;
-                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5, 33.4, 18.0)) + head_trans;
+                            // Canonical 35-pt model: Right eye is at X = -30.5mm, Left eye is at X = +30.5mm, Y = -32.0mm, Z = -13.0mm
+                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-30.5, -32.0, -13.0)) + head_trans;
+                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(30.5, -32.0, -13.0)) + head_trans;
                             std::memcpy(crops.left_eye_data, yunet_res.left_eye_crop, 60*60*3);
                             std::memcpy(crops.right_eye_data, yunet_res.right_eye_crop, 60*60*3);
 
@@ -241,6 +318,10 @@ namespace Gaze
                                 data->gaze_origin = head_xform.origin;
                                 data->gaze_direction = raw_gaze_dir_cam;
                             }
+                        }
+                        else
+                        {
+                            prev_roll_rad = 0.0f; // Reset roll if face is lost
                         }
 
                         auto end_total = std::chrono::steady_clock::now();

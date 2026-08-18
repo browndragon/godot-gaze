@@ -219,30 +219,30 @@ func run_tests():
  
 	camera_sensor.position = Vector3(0.0, 107.5, 0.0)
 	tracker.window_position_override = Vector2(0, 0)
+
+	# Unpack raw Inference space coordinates (in mm)
+	var left_eye_cv = Vector3(raw_args[1], raw_args[2], raw_args[3])
+	var right_eye_cv = Vector3(raw_args[4], raw_args[5], raw_args[6])
+	var dir_cv = Vector3(raw_args[7], raw_args[8], raw_args[9])
+	var origin_cv = (left_eye_cv + right_eye_cv) * 0.5
+
+	var head_trans = Vector3(raw_args[10], raw_args[11], raw_args[12])
+	var head_rot = Vector3(raw_args[13], raw_args[14], raw_args[15])
+
+	var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
+	var dir_cam = Vector3(dir_cv.x, -dir_cv.y, -dir_cv.z)
+
 	if gs:
 		var active_face = face_estimator.get_face_rid()
 		var active_eye = eye_estimator.get_eye_rid()
-		
-		# Unpack raw Inference space coordinates (in mm)
-		var left_eye_cv = Vector3(raw_args[1], raw_args[2], raw_args[3])
-		var right_eye_cv = Vector3(raw_args[4], raw_args[5], raw_args[6])
-		var dir_cv = Vector3(raw_args[7], raw_args[8], raw_args[9])
-		var origin_cv = (left_eye_cv + right_eye_cv) * 0.5
-		
-		var head_trans = Vector3(raw_args[10], raw_args[11], raw_args[12])
-		var head_rot = Vector3(raw_args[13], raw_args[14], raw_args[15])
-		
-		var origin_cam = Vector3(origin_cv.x, -origin_cv.y, -origin_cv.z)
-		var dir_cam = Vector3(dir_cv.x, dir_cv.y, dir_cv.z)
-		
 		gs.face_tracker_set_pose(active_face, head_trans, head_rot, true)
 		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
-	
+
 	var eye_rid = eye_estimator.get_eye_rid()
 	tracker._on_gaze_data_ready(eye_rid)
 	
 	var raw_feed_proj = tracker.get_latest_projected_gaze()
-	var raw_project_ray = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
+	var raw_project_ray = tracker.project_gaze_ray_to_viewport(origin_cam, dir_cam)
 	print("Raw OpenCV fed projected coordinate: ", raw_feed_proj)
 	print("Projected gaze ray coordinate: ", raw_project_ray)
 	if abs(raw_feed_proj.x - raw_project_ray.x) > 0.5 or abs(raw_feed_proj.y - raw_project_ray.y) > 0.5:
@@ -257,10 +257,10 @@ func run_tests():
 	tracker.update_projection_parameters()
 	if gs:
 		var active_eye = eye_estimator.get_eye_rid()
-		gs.eye_tracker_set_gaze(active_eye, img_origin, img_dir)
+		gs.eye_tracker_set_gaze(active_eye, origin_cam, dir_cam)
 	tracker._on_gaze_data_ready(eye_rid)
 	var raw_feed_proj_shifted = tracker.get_latest_projected_gaze()
-	var raw_project_ray_shifted = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
+	var raw_project_ray_shifted = tracker.project_gaze_ray_to_viewport(origin_cam, dir_cam)
 	print("Shifted projected eye gaze coordinate: ", raw_feed_proj_shifted, " Ray: ", raw_project_ray_shifted)
 	if abs(raw_feed_proj_shifted.x - raw_project_ray_shifted.x) > 0.5 or abs(raw_feed_proj_shifted.y - raw_project_ray_shifted.y) > 0.5:
 		printerr("FAIL: Eye gaze projection did not shift correctly when window moved. Eye: ", raw_feed_proj_shifted, " Ray: ", raw_project_ray_shifted)
@@ -560,7 +560,26 @@ func run_tests():
 		return
 		
 	print("E2E signal binding successfully updated all textures.")
- 
+
+	# Verify active face drawing with canonical 35-point model and face transform
+	var face_estimator_node = tracker.get_face_estimator()
+	if face_estimator_node:
+		face_estimator_node.set("transform", Transform3D(Basis(), Vector3(0.0, 0.0, -500.0)))
+	overlay_instance._process(0.016)
+	overlay_instance._draw()
+	print("Overlay successfully executed _draw() with active detected face.")
+
+	# Verify drawing handles nonexistent / empty face model points safely
+	var orig_tracker = overlay_instance.tracker
+	var mock_empty_tracker = Node.new()
+	mock_empty_tracker.set_script(load("res://addons/godot-gaze/tests/overlay_robustness_test.gd").MockTracker)
+	mock_empty_tracker.set("face_model_points", [])
+	overlay_instance.tracker = mock_empty_tracker
+	overlay_instance._draw()
+	overlay_instance.tracker = orig_tracker
+	mock_empty_tracker.free()
+	print("Overlay safely executed _draw() with empty face model points.")
+
 	var test_rect = TextureRect.new()
 	test_rect.texture = mock_left
 	test_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -570,7 +589,7 @@ func run_tests():
 		quit(1)
 		return
 	test_rect.free()
- 
+
 	var second_tracker = GazeTracker.new()
 	second_tracker.camera_device_id = -1
 	root.add_child(second_tracker)

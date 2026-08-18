@@ -13,6 +13,7 @@
 #include <type_traits>
 #include <cstdint>
 #include <algorithm>
+#include <vector>
 
 namespace Gaze
 {
@@ -47,6 +48,51 @@ namespace Gaze
                     // Write as RGB: destination index c is swapped for R/B (c=0 B -> RGB red; c=2 R -> RGB blue)
                     // BGR to RGB channel reversal
                     dst[(i * dst_w + j) * 3 + (2 - c)] = (uint8_t)val;
+                }
+            }
+        }
+    }
+
+    inline void crop_and_resize_bgr(
+        const unsigned char *src, int src_w, int src_h,
+        float crop_x, float crop_y, float crop_w, float crop_h,
+        unsigned char *dst, int dst_w, int dst_h)
+    {
+        if (dst_w <= 0 || dst_h <= 0 || src_w <= 0 || src_h <= 0 || crop_w <= 0.0f || crop_h <= 0.0f) return;
+
+        float scale_x = crop_w / static_cast<float>(dst_w);
+        float scale_y = crop_h / static_cast<float>(dst_h);
+
+        for (int y = 0; y < dst_h; ++y)
+        {
+            float src_y = crop_y + (y + 0.5f) * scale_y - 0.5f;
+            src_y = std::max(0.0f, std::min(src_y, static_cast<float>(src_h - 1)));
+            int y0 = static_cast<int>(std::floor(src_y));
+            int y1 = std::min(y0 + 1, src_h - 1);
+            float dy = src_y - y0;
+
+            for (int x = 0; x < dst_w; ++x)
+            {
+                float src_x = crop_x + (x + 0.5f) * scale_x - 0.5f;
+                src_x = std::max(0.0f, std::min(src_x, static_cast<float>(src_w - 1)));
+                int x0 = static_cast<int>(std::floor(src_x));
+                int x1 = std::min(x0 + 1, src_w - 1);
+                float dx = src_x - x0;
+
+                for (int c = 0; c < 3; ++c)
+                {
+                    float corners[4] = {
+                        static_cast<float>(src[(y0 * src_w + x0) * 3 + c]),
+                        static_cast<float>(src[(y0 * src_w + x1) * 3 + c]),
+                        static_cast<float>(src[(y1 * src_w + x0) * 3 + c]),
+                        static_cast<float>(src[(y1 * src_w + x1) * 3 + c])
+                    };
+                    float val = (1.0f - dx) * (1.0f - dy) * corners[0] +
+                                dx * (1.0f - dy) * corners[1] +
+                                (1.0f - dx) * dy * corners[2] +
+                                dx * dy * corners[3];
+                    dst[(y * dst_w + x) * 3 + c] =
+                        static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
                 }
             }
         }
@@ -704,6 +750,52 @@ namespace Gaze
         out_pos_mm.x = O_disp_x + v_disp_x * t;
         out_pos_mm.y = O_disp_y + v_disp_y * t;
         return true;
+    }
+
+    /**
+     * @brief Canonical 35-point anthropometric 3D face model defined directly in camera rest frame
+     * (+X right, +Y down, +Z away from camera into scene, face facing camera at rvec = 0).
+     */
+    inline std::vector<GazeVector3> get_canonical_35pt_face_model()
+    {
+        std::vector<GazeVector3> pts(35);
+        // Eyes (IPD approx 63mm)
+        pts[0] = GazeVector3(-15.0f, -32.0f, -18.0f); // Right Eye Inner Canthus
+        pts[1] = GazeVector3(-46.0f, -32.0f,  -8.0f); // Right Eye Outer Canthus
+        pts[2] = GazeVector3( 15.0f, -32.0f, -18.0f); // Left Eye Inner Canthus
+        pts[3] = GazeVector3( 46.0f, -32.0f,  -8.0f); // Left Eye Outer Canthus
+
+        // Nose
+        pts[4] = GazeVector3(  0.0f, -22.0f, -25.0f); // Nose Bridge Top
+        pts[5] = GazeVector3(  0.0f,   0.0f, -35.0f); // Nose Tip (furthest forward towards camera)
+        pts[6] = GazeVector3(-16.0f,   6.0f, -20.0f); // Nose Right Wing
+        pts[7] = GazeVector3( 16.0f,   6.0f, -20.0f); // Nose Left Wing
+
+        // Mouth
+        pts[8]  = GazeVector3(-25.0f,  32.0f, -12.0f); // Mouth Right Corner
+        pts[9]  = GazeVector3( 25.0f,  32.0f, -12.0f); // Mouth Left Corner
+        pts[10] = GazeVector3(  0.0f,  26.0f, -20.0f); // Upper Lip Center
+        pts[11] = GazeVector3(  0.0f,  40.0f, -18.0f); // Lower Lip Center
+
+        // Eyebrows
+        pts[12] = GazeVector3(-50.0f, -48.0f,  -5.0f); // Right Eyebrow Outer
+        pts[13] = GazeVector3(-32.0f, -52.0f, -12.0f); // Right Eyebrow Mid
+        pts[14] = GazeVector3(-12.0f, -48.0f, -18.0f); // Right Eyebrow Inner
+        pts[15] = GazeVector3( 12.0f, -48.0f, -18.0f); // Left Eyebrow Inner
+        pts[16] = GazeVector3( 32.0f, -52.0f, -12.0f); // Left Eyebrow Mid
+        pts[17] = GazeVector3( 50.0f, -48.0f,  -5.0f); // Left Eyebrow Outer
+
+        // 17-point Jawline Contour (Pts 18..34) from Right Ear to Chin Apex (Pt 26) to Left Ear
+        float jaw_x[] = {-70.0f, -68.0f, -64.0f, -58.0f, -50.0f, -40.0f, -28.0f, -15.0f, 0.0f, 15.0f, 28.0f, 40.0f, 50.0f, 58.0f, 64.0f, 68.0f, 70.0f};
+        float jaw_y[] = {-35.0f, -20.0f,  -5.0f,  12.0f,  28.0f,  44.0f,  58.0f,  68.0f, 72.0f, 68.0f, 58.0f, 44.0f, 28.0f, 12.0f, -5.0f, -20.0f, -35.0f};
+        float jaw_z[] = { 40.0f,  35.0f,  28.0f,  18.0f,   8.0f,  -2.0f, -10.0f, -15.0f, -17.0f, -15.0f, -10.0f, -2.0f, 8.0f, 18.0f, 28.0f, 35.0f, 40.0f};
+
+        for (int i = 0; i < 17; ++i)
+        {
+            pts[18 + i] = GazeVector3(jaw_x[i], jaw_y[i], jaw_z[i]);
+        }
+
+        return pts;
     }
 
     // type_traits included at top

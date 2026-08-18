@@ -1792,7 +1792,7 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
 {
     double fx = 1000.0, cx = 320.0, cy = 240.0;
 
-    std::vector<Gaze::GazeVector3> model_points = Gaze::FaceModelGeometry::get_model_points();
+    std::vector<Gaze::GazeVector3> model_points = Gaze::FaceModelGeometry::get_5pt_model_points();
 
     // Simulate real 2D landmark foreshortening of a face tilting back by +30 deg (+0.523 rad) at Z=700mm
     Gaze::GazeVector3 true_rvec(0.523, 0.0, 0.0); // +30 deg pitch up

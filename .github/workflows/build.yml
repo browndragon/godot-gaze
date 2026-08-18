@@ -219,12 +219,18 @@ jobs:
         shell: bash
         run: bash scripts/download_models.sh
 
-      - name: Convert Gaze Model to ONNX and ORT
+      - name: Convert OpenVINO Models to ONNX and ORT
         shell: bash
         run: |
           python3 scripts/convert_model.py
-          python3 -m onnxruntime.tools.convert_onnx_models_to_ort --optimization_style=Runtime project/addons/godot-gaze/models/gaze-estimation-adas-0002.onnx
-          mv project/addons/godot-gaze/models/gaze-estimation-adas-0002.with_runtime_opt.ort project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort
+          for model in gaze-estimation-adas-0002 facial-landmarks-35-adas-0002; do
+            if [ -f "project/addons/godot-gaze/models/${model}.onnx" ]; then
+              python3 -m onnxruntime.tools.convert_onnx_models_to_ort --optimization_style=Runtime "project/addons/godot-gaze/models/${model}.onnx"
+              if [ -f "project/addons/godot-gaze/models/${model}.with_runtime_opt.ort" ]; then
+                mv "project/addons/godot-gaze/models/${model}.with_runtime_opt.ort" "project/addons/godot-gaze/models/${model}.ort"
+              fi
+            fi
+          done
           # Clean up config if needed
           if [ -f project/addons/godot-gaze/models/required_operators.with_runtime_opt.config ]; then
             grep -v "com.microsoft" project/addons/godot-gaze/models/required_operators.with_runtime_opt.config > project/addons/godot-gaze/models/required_operators.config

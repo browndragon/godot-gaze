@@ -117,7 +117,7 @@ namespace Gaze
         float cy = h / 2.0f;
         float dx = pt.x - cx;
         float dy = pt.y - cy;
-        return GazeVector2(cx + dx * cos_a - dy * sin_a, cy + dx * sin_a + dy * cos_a);
+        return GazeVector2(cx + dx * cos_a + dy * sin_a, cy - dx * sin_a + dy * cos_a);
     }
 
     ORTYuNetDetector::ORTYuNetDetector(const std::string &p_model_path, float score_thresh, float nms_thresh)
@@ -198,7 +198,7 @@ namespace Gaze
 
     std::vector<GazeVector3> ORTYuNetDetector::get_canonical_godot_model_points() const
     {
-        return FaceModelGeometry::get_model_points();
+        return FaceModelGeometry::get_5pt_model_points();
     }
 
     std::vector<ORTYuNetDetector::Anchor> ORTYuNetDetector::generate_anchors(int width, int height)
@@ -500,13 +500,13 @@ namespace Gaze
             float half_s = dynamic_crop_size * 0.5f;
 
             crop_and_resize_bgr_to_rgb(
-                src_data, width, height,
+                frame.data, width, height,
                 out_result.left_eye_px.x - half_s, out_result.left_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.left_eye_crop, 60, 60
             );
 
             crop_and_resize_bgr_to_rgb(
-                src_data, width, height,
+                frame.data, width, height,
                 out_result.right_eye_px.x - half_s, out_result.right_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.right_eye_crop, 60, 60
             );

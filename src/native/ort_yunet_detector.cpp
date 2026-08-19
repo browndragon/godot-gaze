@@ -254,7 +254,7 @@ namespace Gaze
             src_data = frame_bgr.data();
         }
 
-        // 2. Extract Central 1:1 Square Box Crop (size = min(width, height), zero black bars!)
+        // 2. Extract Central 1:1 Square Box Crop with replicate border clamping (supporting edge face clipping)
         int crop_size = std::min(width, height);
         int crop_x0 = (width - crop_size) / 2;
         int crop_y0 = (height - crop_size) / 2;
@@ -262,12 +262,10 @@ namespace Gaze
         std::vector<unsigned char> square_crop(crop_size * crop_size * 3, 0);
         for (int y = 0; y < crop_size; ++y)
         {
-            int src_y = crop_y0 + y;
-            if (src_y < 0 || src_y >= height) continue;
+            int src_y = std::max(0, std::min(height - 1, crop_y0 + y));
             for (int x = 0; x < crop_size; ++x)
             {
-                int src_x = crop_x0 + x;
-                if (src_x < 0 || src_x >= width) continue;
+                int src_x = std::max(0, std::min(width - 1, crop_x0 + x));
                 int src_idx = (src_y * width + src_x) * 3;
                 int dst_idx = (y * crop_size + x) * 3;
                 square_crop[dst_idx + 0] = src_data[src_idx + 0];

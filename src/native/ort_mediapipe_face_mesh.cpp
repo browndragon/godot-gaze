@@ -57,7 +57,7 @@ bool MediaPipeFaceMeshPipeline::initialize() {
         }
 
         if (!detector_buffer_.empty()) {
-            auto det = std::make_unique<ORTYuNetDetector>(detector_buffer_, 0.25f);
+            auto det = std::make_unique<ORTYuNetDetector>(detector_buffer_, 0.4f);
             if (det->initialize()) {
                 detector = std::move(det);
             }
@@ -83,7 +83,7 @@ bool MediaPipeFaceMeshPipeline::initialize() {
                 if (!file_exists_native(p)) {
                     continue;
                 }
-                auto det = std::make_unique<ORTYuNetDetector>(p, 0.25f);
+                auto det = std::make_unique<ORTYuNetDetector>(p, 0.4f);
                 if (det->initialize()) {
                     detector = std::move(det);
                     break;

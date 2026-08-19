@@ -55,7 +55,7 @@ namespace Gaze
         std::string model_path;
         std::vector<uint8_t> model_buffer;
         bool load_from_buffer = false;
-        float score_threshold = 0.6f;
+        float score_threshold = 0.25f;
         float nms_threshold = 0.3f;
 
         std::unique_ptr<Ort::Session> session;

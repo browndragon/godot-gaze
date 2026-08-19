@@ -198,3 +198,43 @@ TEST_CASE("ORT YuNet Full Benchmark Image Suite Keypoint Invariants")
         CHECK(res.nose_tip_px.y == doctest::Approx(item.expected_nose_y).epsilon(0.02));
     }
 }
+
+TEST_CASE("ORT YuNet Detection Robustness on Chin-Clipped Frames")
+{
+    std::string model_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    if (!yunet_file_exists(model_path)) {
+        model_path = "../project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    }
+    if (!yunet_file_exists(model_path)) {
+        MESSAGE("Skipping test: Model file not found");
+        return;
+    }
+
+    Gaze::ORTYuNetDetector detector(model_path);
+    REQUIRE(detector.initialize() == true);
+
+    std::string img_path = "tests/resources/self_center.jpg";
+    if (!yunet_file_exists(img_path)) {
+        img_path = "../tests/resources/self_center.jpg";
+    }
+
+    TestImage base_img = load_yunet_test_image(img_path);
+    REQUIRE(!base_img.data.empty());
+
+    // Test truncated frames where chin is clipped at bottom edge
+    // self_center.jpg baseline chin apex is at y ~ 679px
+    std::vector<int> test_heights = {650, 620, 590};
+    for (int h : test_heights) {
+        Gaze::Frame clipped_frame;
+        clipped_frame.width = base_img.width;
+        clipped_frame.height = h;
+        clipped_frame.data = base_img.data.data();
+
+        Gaze::YuNetResult res;
+        bool ok = detector.process_frame(clipped_frame, res, 0.0f);
+        CHECK_MESSAGE(ok == true, "Processing failed on clipped height: ", h);
+        CHECK_MESSAGE(res.face_detected == true, "Face detection lost on chin-clipped height: ", h);
+        CHECK_MESSAGE(res.score >= 0.30f, "Detection score too low on chin-clipped height: ", h);
+    }
+}
+

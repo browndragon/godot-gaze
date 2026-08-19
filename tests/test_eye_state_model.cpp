@@ -9,11 +9,15 @@ inline bool eye_state_file_exists(const std::string &filename) {
     return f.good();
 }
 
+#define STB_IMAGE_STATIC
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
 {
-    std::string model_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+    std::string model_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
     if (!eye_state_file_exists(model_path)) {
-        model_path = "../project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+        model_path = "../project/addons/godot-gaze/models/open_closed_eye.ort";
     }
 
     if (!eye_state_file_exists(model_path)) {
@@ -24,10 +28,36 @@ TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
     Gaze::ORTEyeStateModel model(model_path);
     REQUIRE(model.initialize() == true);
 
-    // Create synthetic open eye crop (60x60 BGR with dark pupil center)
-    std::vector<uint8_t> open_crop(60 * 60 * 3, 80);
-    // Create synthetic closed eye crop (60x60 BGR with light skin tone)
-    std::vector<uint8_t> closed_crop(60 * 60 * 3, 180);
+    auto load_crop = [](const std::string &path, int crop_x, int crop_y, int crop_s) -> std::vector<uint8_t> {
+        int w = 0, h = 0, c = 0;
+        unsigned char *data = stbi_load(path.c_str(), &w, &h, &c, 3);
+        if (!data) {
+            std::string fb = "../" + path;
+            data = stbi_load(fb.c_str(), &w, &h, &c, 3);
+        }
+        std::vector<uint8_t> out(60 * 60 * 3, 128);
+        if (!data) return out;
+
+        for (int y = 0; y < 60; ++y) {
+            int src_y = crop_y + (y * crop_s) / 60;
+            src_y = std::max(0, std::min(src_y, h - 1));
+            for (int x = 0; x < 60; ++x) {
+                int src_x = crop_x + (x * crop_s) / 60;
+                src_x = std::max(0, std::min(src_x, w - 1));
+                int src_idx = (src_y * w + src_x) * 3;
+                int dst_idx = (y * 60 + x) * 3;
+                out[dst_idx + 0] = data[src_idx + 2]; // B
+                out[dst_idx + 1] = data[src_idx + 1]; // G
+                out[dst_idx + 2] = data[src_idx + 0]; // R
+            }
+        }
+        stbi_image_free(data);
+        return out;
+    };
+
+    // Load open eye from eyes_both_open.jpg and closed eye from eyes_both_wink.jpg
+    auto open_crop = load_crop("tests/resources/eyes_both_open.jpg", 680, 420, 80);
+    auto closed_crop = load_crop("tests/resources/eyes_both_wink.jpg", 680, 420, 80);
 
     float open_score = 0.0f;
     float closed_score = 0.0f;

@@ -46,15 +46,15 @@ from openvino2onnx.__main__ import main
 MODELS_TO_CONVERT = [
     "gaze-estimation-adas-0002",
     "facial-landmarks-35-adas-0002",
+    "open_closed_eye",
 ]
 
 for model_name in MODELS_TO_CONVERT:
     xml_path = f"test_assets/models/{model_name}.xml"
     onnx_path = f"project/addons/godot-gaze/models/{model_name}.onnx"
-    if os.path.exists(xml_path):
-        if os.path.exists(onnx_path):
-            print(f"Model already converted: {onnx_path}")
-            continue
+    ort_path = f"project/addons/godot-gaze/models/{model_name}.ort"
+
+    if os.path.exists(xml_path) and not os.path.exists(onnx_path):
         print(f"Converting {xml_path} -> {onnx_path}...")
         sys.argv = ["openvino2onnx", xml_path, onnx_path]
         try:
@@ -62,3 +62,44 @@ for model_name in MODELS_TO_CONVERT:
             print(f"Successfully converted {xml_path} to {onnx_path}")
         except Exception as e:
             print(f"Error converting {xml_path}: {e}")
+
+    if os.path.exists(onnx_path):
+        try:
+            import onnx
+            from onnx import helper
+            model = onnx.load(onnx_path)
+            if model_name == "open_closed_eye" and len(model.graph.node) > 10:
+                new_nodes = list(model.graph.node[:9])
+                softmax_node = helper.make_node(
+                    'Softmax',
+                    inputs=['16'],
+                    outputs=['19'],
+                    axis=1,
+                    name='softmax'
+                )
+                new_nodes.append(softmax_node)
+                graph = helper.make_graph(
+                    new_nodes,
+                    model.graph.name,
+                    model.graph.input,
+                    model.graph.output,
+                    initializer=model.graph.initializer
+                )
+                new_model = helper.make_model(graph, opset_imports=[helper.make_opsetid('', 14)])
+                new_model.ir_version = 7
+                onnx.save(new_model, onnx_path)
+                print(f"Standardized {onnx_path} to opset 14 Softmax.")
+        except Exception as e:
+            print(f"Note: opset check for {onnx_path}: {e}")
+
+    if os.path.exists(onnx_path) and (not os.path.exists(ort_path) or os.path.getmtime(onnx_path) > os.path.getmtime(ort_path)):
+        print(f"Converting {onnx_path} -> {ort_path}...")
+        try:
+            subprocess.run([
+                sys.executable, "-m", "onnxruntime.tools.convert_onnx_models_to_ort",
+                onnx_path,
+                "--output_dir", "project/addons/godot-gaze/models"
+            ], check=True)
+            print(f"Successfully generated {ort_path}")
+        except Exception as e:
+            print(f"Error generating ORT for {onnx_path}: {e}")

@@ -1,8 +1,5 @@
-/**
- * @file ort_eye_state_model.cpp
- * @brief ONNX Runtime Eye Openness / Blink Classifier Implementation
- */
 #include "ort_eye_state_model.hpp"
+#include "platform_ort.hpp"
 #include "../core/log.hpp"
 #include <algorithm>
 #include <cmath>
@@ -34,7 +31,7 @@ namespace Gaze
                     log_error("ORTEyeStateModelInitFailed", "reason", "Buffer is empty");
                     return false;
                 }
-                session = std::make_unique<Ort::Session>(env, model_buffer.data(), model_buffer.size(), session_options);
+                session = platform_create_ort_session(env, model_buffer, &session_options);
             }
             else
             {
@@ -43,10 +40,23 @@ namespace Gaze
                     log_error("ORTEyeStateModelInitFailed", "reason", "Model path is empty");
                     return false;
                 }
-                session = std::make_unique<Ort::Session>(env, model_path.c_str(), session_options);
+                session = platform_create_ort_session(env, model_path, &session_options);
             }
 
-            log_info("ORTEyeStateModelInitSuccess");
+            if (!session)
+            {
+                log_error("ORTEyeStateModelSessionNull");
+                return false;
+            }
+
+            Ort::AllocatorWithDefaultOptions allocator;
+            auto in_name_alloc = session->GetInputNameAllocated(0, allocator);
+            input_name = in_name_alloc.get();
+
+            auto out_name_alloc = session->GetOutputNameAllocated(0, allocator);
+            output_name = out_name_alloc.get();
+
+            log_info("ORTEyeStateModelInitSuccess", "input", input_name.c_str(), "output", output_name.c_str());
             return true;
         }
         catch (const std::exception &e)
@@ -56,67 +66,98 @@ namespace Gaze
         }
     }
 
-    void ORTEyeStateModel::preprocess_eye_crop(const uint8_t *raw_crop_bgr, float *out_buffer)
+    void ORTEyeStateModel::preprocess_eye_crop_32(const uint8_t *raw_crop_60_bgr, float *out_buffer)
     {
-        // 60x60 BGR -> RGB normalized float [0.0, 1.0] in NCHW format [1, 3, 60, 60]
-        constexpr int width = 60;
-        constexpr int height = 60;
-        constexpr int plane_size = width * height;
+        // 32x32 BGR [1, 3, 32, 32] normalized as (pixel - 127.0f) / 255.0f
+        constexpr int dst_w = 32;
+        constexpr int dst_h = 32;
+        constexpr int src_w = 60;
+        constexpr int src_h = 60;
+        constexpr int plane_size = dst_w * dst_h;
 
-        float *r_plane = out_buffer;
+        float *b_plane = out_buffer;
         float *g_plane = out_buffer + plane_size;
-        float *b_plane = out_buffer + 2 * plane_size;
+        float *r_plane = out_buffer + 2 * plane_size;
 
-        // ImageNet normalization: mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]
-        constexpr float mean_r = 0.485f, mean_g = 0.456f, mean_b = 0.406f;
-        constexpr float std_r = 0.229f, std_g = 0.224f, std_b = 0.225f;
+        float scale_x = static_cast<float>(src_w) / dst_w;
+        float scale_y = static_cast<float>(src_h) / dst_h;
 
-        for (int i = 0; i < plane_size; ++i)
+        for (int y = 0; y < dst_h; ++y)
         {
-            float b = raw_crop_bgr[i * 3 + 0] / 255.0f;
-            float g = raw_crop_bgr[i * 3 + 1] / 255.0f;
-            float r = raw_crop_bgr[i * 3 + 2] / 255.0f;
+            float src_y = (y + 0.5f) * scale_y - 0.5f;
+            src_y = std::max(0.0f, std::min(src_y, static_cast<float>(src_h - 1)));
+            int y0 = static_cast<int>(std::floor(src_y));
+            int y1 = std::min(y0 + 1, src_h - 1);
+            float dy = src_y - y0;
 
-            r_plane[i] = (r - mean_r) / std_r;
-            g_plane[i] = (g - mean_g) / std_g;
-            b_plane[i] = (b - mean_b) / std_b;
+            for (int x = 0; x < dst_w; ++x)
+            {
+                float src_x = (x + 0.5f) * scale_x - 0.5f;
+                src_x = std::max(0.0f, std::min(src_x, static_cast<float>(src_w - 1)));
+                int x0 = static_cast<int>(std::floor(src_x));
+                int x1 = std::min(x0 + 1, src_w - 1);
+                float dx = src_x - x0;
+
+                int dst_idx = y * dst_w + x;
+                for (int c = 0; c < 3; ++c)
+                {
+                    float p00 = raw_crop_60_bgr[(y0 * src_w + x0) * 3 + c];
+                    float p10 = raw_crop_60_bgr[(y0 * src_w + x1) * 3 + c];
+                    float p01 = raw_crop_60_bgr[(y1 * src_w + x0) * 3 + c];
+                    float p11 = raw_crop_60_bgr[(y1 * src_w + x1) * 3 + c];
+
+                    float val = (1.0f - dx) * (1.0f - dy) * p00 +
+                                dx * (1.0f - dy) * p10 +
+                                (1.0f - dx) * dy * p01 +
+                                dx * dy * p11;
+
+                    float norm_val = (val - 127.0f) / 255.0f;
+                    if (c == 0) b_plane[dst_idx] = norm_val;
+                    else if (c == 1) g_plane[dst_idx] = norm_val;
+                    else if (c == 2) r_plane[dst_idx] = norm_val;
+                }
+            }
         }
     }
 
-    bool ORTEyeStateModel::estimate_openness(const uint8_t *raw_crop_bgr, float &out_openness)
+    bool ORTEyeStateModel::estimate_openness(const uint8_t *raw_crop_60_bgr, float &out_openness)
     {
         out_openness = 1.0f;
-        if (!session || !raw_crop_bgr)
+        if (!session || !raw_crop_60_bgr)
         {
             return false;
         }
 
-        std::vector<float> input_tensor_data(3 * 60 * 60);
-        preprocess_eye_crop(raw_crop_bgr, input_tensor_data.data());
+        std::vector<float> input_tensor_data(3 * 32 * 32);
+        preprocess_eye_crop_32(raw_crop_60_bgr, input_tensor_data.data());
 
-        std::vector<int64_t> input_shape = {1, 3, 60, 60};
+        std::vector<int64_t> input_shape = {1, 3, 32, 32};
         Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
             memory_info, input_tensor_data.data(), input_tensor_data.size(),
             input_shape.data(), input_shape.size());
 
         try
         {
+            const char *input_names_ptr[] = {input_name.c_str()};
+            const char *output_names_ptr[] = {output_name.c_str()};
+
             auto output_tensors = session->Run(
                 Ort::RunOptions{nullptr},
-                input_names.data(),
+                input_names_ptr,
                 &input_tensor,
                 1,
-                output_names.data(),
-                output_names.size());
+                output_names_ptr,
+                1);
 
             if (output_tensors.empty())
             {
                 return false;
             }
 
-            float *out_data = output_tensors[0].GetTensorMutableData<float>();
-            float blink_prob = out_data[0];
-            out_openness = std::clamp(1.0f - blink_prob, 0.0f, 1.0f);
+            const float *out_data = output_tensors[0].GetTensorData<float>();
+            // Output shape is [1, 2, 1, 1] or [1, 2]: Class 0 = Closed, Class 1 = Open
+            float open_score = out_data[1];
+            out_openness = std::clamp(open_score, 0.0f, 1.0f);
             return true;
         }
         catch (const std::exception &e)

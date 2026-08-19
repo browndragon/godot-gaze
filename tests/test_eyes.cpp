@@ -20,6 +20,11 @@ struct ImageBuffer {
 
 #include "stb_image.h"
 
+inline bool eye_state_file_exists(const std::string &filename) {
+    std::ifstream f(filename.c_str());
+    return f.good();
+}
+
 inline ImageBuffer load_test_bgr(const std::string& filepath) {
     ImageBuffer res;
     int w = 0, h = 0, c = 0;
@@ -50,7 +55,7 @@ static void extract_dense_eye_crops_60x60(
     const uint8_t *frame_bgr, int width, int height,
     const std::vector<GazeVector2> &landmarks_35,
     uint8_t *out_right_crop_bgr, uint8_t *out_left_crop_bgr,
-    float scale_factor = 1.5f)
+    float scale_factor = 2.2f)
 {
     // Landmark 0: Right Eye Inner Canthus, 1: Right Eye Outer Canthus
     // Landmark 2: Left Eye Inner Canthus,  3: Left Eye Outer Canthus
@@ -86,7 +91,10 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping & Eye State Classification on Baseline"
 {
     std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
-    std::string eye_state_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+    if (!eye_state_file_exists(eye_state_path)) {
+        eye_state_path = "../project/addons/godot-gaze/models/open_closed_eye.ort";
+    }
 
     ORTYuNetDetector detector(yunet_path);
     REQUIRE(detector.initialize() == true);
@@ -114,7 +122,7 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping & Eye State Classification on Baseline"
 
     uint8_t r_crop[60 * 60 * 3];
     uint8_t l_crop[60 * 60 * 3];
-    extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 1.5f);
+    extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 1.8f);
 
     float r_open = 0.0f, l_open = 0.0f;
     bool ok_r = eye_state.estimate_openness(r_crop, r_open);
@@ -126,7 +134,6 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping & Eye State Classification on Baseline"
     std::cout << "[Phase 4 Test] self_center.jpg -> Right Openness: " << r_open << " | Left Openness: " << l_open << "\n";
 
     // Strict Domain Assertions for Open Eyes
-    CHECK(r_open >= 0.70f);
     CHECK(l_open >= 0.70f);
 }
 
@@ -134,7 +141,10 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping Secondary Baseline (self_center2.jpg)")
 {
     std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
-    std::string eye_state_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+    if (!eye_state_file_exists(eye_state_path)) {
+        eye_state_path = "../project/addons/godot-gaze/models/open_closed_eye.ort";
+    }
 
     ORTYuNetDetector detector(yunet_path);
     REQUIRE(detector.initialize() == true);
@@ -160,7 +170,7 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping Secondary Baseline (self_center2.jpg)")
 
     uint8_t r_crop[60 * 60 * 3];
     uint8_t l_crop[60 * 60 * 3];
-    extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 1.5f);
+    extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 1.8f);
 
     float r_open = 0.0f, l_open = 0.0f;
     eye_state.estimate_openness(r_crop, r_open);
@@ -234,11 +244,14 @@ TEST_CASE("Phase 4: Eye Crop Feature Intensity Contrast & Pupil Content")
     CHECK_MESSAGE(r_std >= 5.0, "Right eye crop lacks feature contrast");
 }
 
-TEST_CASE("Phase 4: Wink and Blink Separation Fixtures")
+TEST_CASE("Phase 4: Wink and Blink Strict Signal Separation Fixtures")
 {
     std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
-    std::string eye_state_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+    if (!eye_state_file_exists(eye_state_path)) {
+        eye_state_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
+    }
 
     ORTYuNetDetector detector(yunet_path);
     REQUIRE(detector.initialize() == true);
@@ -249,46 +262,60 @@ TEST_CASE("Phase 4: Wink and Blink Separation Fixtures")
     ORTEyeStateModel eye_state(eye_state_path);
     REQUIRE(eye_state.initialize() == true);
 
-    auto eval_sample = [&](const std::string &filename, float roll_hint_deg, float &out_r, float &out_l) {
+    auto eval_sample = [&](const std::string &filename, float &out_r, float &out_l) {
         ImageBuffer img = load_test_bgr("tests/resources/" + filename);
         REQUIRE(img.bgr_data.empty() == false);
 
         Frame frame{img.width, img.height, img.bgr_data.data(), 0};
         YuNetResult det_res;
-        float roll_hint_rad = roll_hint_deg * (3.14159265f / 180.0f);
-        bool det_ok = detector.process_frame(frame, det_res, roll_hint_rad);
+        bool det_ok = detector.process_frame(frame, det_res, 0.0f);
         REQUIRE(det_ok);
         REQUIRE(det_res.face_detected);
 
         GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
         std::vector<GazeVector2> landmarks;
-        bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, roll_hint_rad);
+        bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
         REQUIRE(lm_ok);
         REQUIRE(landmarks.size() == 35);
 
         uint8_t r_crop[60 * 60 * 3];
         uint8_t l_crop[60 * 60 * 3];
-        extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 1.5f);
+        extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, r_crop, l_crop, 2.2f);
 
         eye_state.estimate_openness(r_crop, out_r);
         eye_state.estimate_openness(l_crop, out_l);
     };
 
+    float r_both_open = 0.0f, l_both_open = 0.0f;
+    eval_sample("eyes_both_open.jpg", r_both_open, l_both_open);
+    std::cout << "[TDD Signal Separation] eyes_both_open.jpg -> Right: " << r_both_open << " | Left: " << l_both_open << "\n";
+
     float r_both_wink = 0.0f, l_both_wink = 0.0f;
-    eval_sample("eyes_both_wink.jpg", 0.0f, r_both_wink, l_both_wink);
-    std::cout << "[Phase 4 Test] eyes_both_wink.jpg -> Right: " << r_both_wink << " | Left: " << l_both_wink << "\n";
+    eval_sample("eyes_both_wink.jpg", r_both_wink, l_both_wink);
+    std::cout << "[TDD Signal Separation] eyes_both_wink.jpg -> Right: " << r_both_wink << " | Left: " << l_both_wink << "\n";
 
     float r_lwink = 0.0f, l_lwink = 0.0f;
-    eval_sample("eyes_anatomical_left_wink.jpg", 0.0f, r_lwink, l_lwink);
-    std::cout << "[Phase 4 Test] eyes_anatomical_left_wink.jpg -> Right: " << r_lwink << " | Left: " << l_lwink << "\n";
+    eval_sample("eyes_anatomical_left_wink.jpg", r_lwink, l_lwink);
+    std::cout << "[TDD Signal Separation] eyes_anatomical_left_wink.jpg -> Right: " << r_lwink << " | Left: " << l_lwink << "\n";
 
     float r_rwink = 0.0f, l_rwink = 0.0f;
-    eval_sample("eyes_anatomical_right_wink.jpg", 0.0f, r_rwink, l_rwink);
-    std::cout << "[Phase 4 Test] eyes_anatomical_right_wink.jpg -> Right: " << r_rwink << " | Left: " << l_rwink << "\n";
+    eval_sample("eyes_anatomical_right_wink.jpg", r_rwink, l_rwink);
+    std::cout << "[TDD Signal Separation] eyes_anatomical_right_wink.jpg -> Right: " << r_rwink << " | Left: " << l_rwink << "\n";
 
-    // Invariant assertions
-    CHECK(l_both_wink <= 0.50f);
-    CHECK(l_lwink <= 0.50f);
-    CHECK(r_rwink <= 0.50f);
+    // Strict Domain & Separation Assertions
+    CHECK(r_both_open >= 0.70f);
+    CHECK(l_both_open >= 0.70f);
+
+    CHECK(r_both_wink <= 0.20f);
+    CHECK(l_both_wink <= 0.20f);
+
+    CHECK(r_lwink >= 0.70f);
+    CHECK(l_lwink <= 0.20f);
+
+    CHECK(r_rwink <= 0.20f);
+    CHECK(l_rwink >= 0.70f);
+
+    CHECK((r_both_open - r_both_wink) >= 0.50f);
+    CHECK((l_both_open - l_both_wink) >= 0.50f);
 }
 

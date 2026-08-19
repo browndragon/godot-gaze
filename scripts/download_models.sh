@@ -43,6 +43,15 @@ for entry in "${OPENVINO_MODELS[@]}"; do
     fi
 done
 
+# 3. Download open_closed_eye.onnx from OMZ
+OPEN_CLOSED_EYE_URL="https://storage.openvinotoolkit.org/repositories/open_model_zoo/public/2022.1/open-closed-eye-0001/open_closed_eye.onnx"
+OPEN_CLOSED_EYE_DST="${MODELS_DIR}/open_closed_eye.onnx"
+if [ ! -f "${OPEN_CLOSED_EYE_DST}" ]; then
+    echo "Downloading open_closed_eye.onnx..."
+    curl -sSL -H "User-Agent: Mozilla/5.0" -o "${OPEN_CLOSED_EYE_DST}" "${OPEN_CLOSED_EYE_URL}"
+    echo "Successfully downloaded open_closed_eye.onnx."
+fi
+
 # 3. Convert OpenVINO IR (.xml/.bin) to ONNX
 echo "Converting OpenVINO models to ONNX..."
 python3 "${BASE_DIR}/scripts/convert_model.py"

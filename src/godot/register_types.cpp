@@ -71,13 +71,13 @@ static void register_gaze_project_settings() {
         ps->set_initial_value("gaze/models/face_detector_prefix", "face_detection_yunet_2023mar");
 
         if (!ps->has_setting("gaze/models/eye_openness_prefix")) {
-            ps->set_setting("gaze/models/eye_openness_prefix", "mediapipe_eye_openness");
+            ps->set_setting("gaze/models/eye_openness_prefix", "open_closed_eye");
         }
         Dictionary prop_openness;
         prop_openness["name"] = "gaze/models/eye_openness_prefix";
         prop_openness["type"] = Variant::STRING;
         ps->add_property_info(prop_openness);
-        ps->set_initial_value("gaze/models/eye_openness_prefix", "mediapipe_eye_openness");
+        ps->set_initial_value("gaze/models/eye_openness_prefix", "open_closed_eye");
 
         if (!ps->has_setting("gaze/models/gaze_prefix")) {
             ps->set_setting("gaze/models/gaze_prefix", "gaze-estimation-adas-0002");

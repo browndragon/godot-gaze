@@ -1260,11 +1260,13 @@ TEST_CASE("Testing GazeTrackingPipeline Concurrency and Multi-Frame Queue Stress
 {
     std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
-    std::string eye_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
 
     std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
     std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
-    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
+    std::vector<uint8_t> eye_data = read_binary_file("project/addons/godot-gaze/models/open_closed_eye.ort");
+    if (eye_data.empty()) {
+        eye_data = read_binary_file("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    }
 
     REQUIRE_MESSAGE(!yunet_data.empty(), "Failed to read YuNet model data");
     REQUIRE_MESSAGE(!gaze_data.empty(), "Failed to read Gaze model data");
@@ -1343,11 +1345,13 @@ TEST_CASE("Testing GazeTrackingPipeline Thread-Safety and Race Conditions")
 {
     std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
-    std::string eye_path = "project/addons/godot-gaze/models/mediapipe_eye_openness.ort";
 
     std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
     std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
-    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
+    std::vector<uint8_t> eye_data = read_binary_file("project/addons/godot-gaze/models/open_closed_eye.ort");
+    if (eye_data.empty()) {
+        eye_data = read_binary_file("project/addons/godot-gaze/models/mediapipe_eye_openness.ort");
+    }
 
     REQUIRE(!yunet_data.empty());
     REQUIRE(!gaze_data.empty());

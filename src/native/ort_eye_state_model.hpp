@@ -24,10 +24,10 @@ namespace Gaze
         std::unique_ptr<Ort::Session> session;
         Ort::MemoryInfo memory_info{nullptr};
 
-        const std::vector<const char *> input_names = {"eye_image"};
-        const std::vector<const char *> output_names = {"openness"};
+        std::string input_name;
+        std::string output_name;
 
-        void preprocess_eye_crop(const uint8_t *raw_crop_bgr, float *out_buffer);
+        void preprocess_eye_crop_32(const uint8_t *raw_crop_60_bgr, float *out_buffer);
 
     public:
         ORTEyeStateModel(const std::string &model_path);
@@ -38,11 +38,11 @@ namespace Gaze
 
         /**
          * @brief Estimates eye openness probability [0.0, 1.0] for a 60x60 BGR eye crop.
-         * @param raw_crop_bgr Pointer to 60x60x3 BGR pixel data.
+         * @param raw_crop_60_bgr Pointer to 60x60x3 BGR pixel data.
          * @param out_openness Output float score [0.0 = closed, 1.0 = fully open].
          * @return True if inference succeeded.
          */
-        bool estimate_openness(const uint8_t *raw_crop_bgr, float &out_openness);
+        bool estimate_openness(const uint8_t *raw_crop_60_bgr, float &out_openness);
     };
 
 } // namespace Gaze

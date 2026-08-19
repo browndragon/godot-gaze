@@ -804,10 +804,10 @@ void GazeServer::start_processing() {
                 face_detector_path = resolve_model_path("face_detection_yunet_2023mar");
             }
 
-            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("mediapipe_eye_openness");
+            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("open_closed_eye");
             eye_openness_path = resolve_model_path(eye_openness_path);
             if (eye_openness_path.is_empty()) {
-                eye_openness_path = resolve_model_path("mediapipe_eye_openness");
+                eye_openness_path = resolve_model_path("open_closed_eye");
             }
 
             String gaze_path = ps->has_setting("gaze/models/gaze_prefix") ? (String)ps->get_setting("gaze/models/gaze_prefix") : String("gaze-estimation-adas-0002");

@@ -255,8 +255,8 @@ namespace Gaze
                                 float l_dy = landmarks_35[2].y - landmarks_35[3].y;
                                 float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
 
-                                float r_box_s = std::max(20.0f, r_w * 1.5f);
-                                float l_box_s = std::max(20.0f, l_w * 1.5f);
+                                float r_box_s = std::max(20.0f, r_w * 2.2f);
+                                float l_box_s = std::max(20.0f, l_w * 2.2f);
 
                                 crop_and_resize_bgr(frame.data, frame.width, frame.height,
                                                     r_cx - r_box_s * 0.5f, r_cy - r_box_s * 0.5f, r_box_s, r_box_s,

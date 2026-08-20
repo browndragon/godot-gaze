@@ -181,6 +181,18 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_overlay);
         ps->set_initial_value("gaze/debug/overlay_scene_path", "res://addons/godot-gaze/debug_cam_feed.tscn");
 
+        reg_double("gaze/blink/openness_threshold", 0.50);
+        if (!ps->has_setting("gaze/blink/allow_single_eye")) {
+            ps->set_setting("gaze/blink/allow_single_eye", true);
+        }
+        Dictionary prop_allow_single;
+        prop_allow_single["name"] = "gaze/blink/allow_single_eye";
+        prop_allow_single["type"] = Variant::BOOL;
+        ps->add_property_info(prop_allow_single);
+        ps->set_initial_value("gaze/blink/allow_single_eye", true);
+
+        reg_double("gaze/blink/min_duration", 0.05);
+
         if (!ps->has_setting("gaze/debug/verbosity")) {
             ps->set_setting("gaze/debug/verbosity", 1);
         }

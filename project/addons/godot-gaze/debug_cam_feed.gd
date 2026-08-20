@@ -305,6 +305,9 @@ func update_diagnostics_ui():
 	var state_name = state_names.get(lifecycle_val, "Unknown")
 	var state_color = state_colors.get(lifecycle_val, "gray")
 	
+	var build_info = tracker.call("get_build_info") if tracker.has_method("get_build_info") else ""
+	if build_info != "":
+		lines.append("Build: [color=aqua]%s[/color]" % build_info)
 	lines.append("Tracker State: [color=%s]%s[/color]" % [state_color, state_name])
 	lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
 	

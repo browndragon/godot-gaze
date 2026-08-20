@@ -296,6 +296,9 @@ public:
     Vector3 get_gaze_direction_inference_space() const;
 
     const Gaze::ProjectionEngine& get_projection_engine() const { return projection_engine; }
+
+    String get_build_info() const;
+    String get_build_timestamp() const;
 };
 
 } // namespace godot

@@ -283,6 +283,9 @@ public:
 
     void set_verbosity(int level);
     int get_verbosity() const;
+
+    static String get_build_info();
+    static String get_build_timestamp();
 };
 
 } // namespace godot

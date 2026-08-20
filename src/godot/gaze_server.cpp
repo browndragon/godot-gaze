@@ -186,6 +186,9 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_verbosity", "level"), &GazeServer::set_verbosity);
     ClassDB::bind_method(D_METHOD("get_verbosity"), &GazeServer::get_verbosity);
     ADD_PROPERTY(PropertyInfo(Variant::INT, "verbosity"), "set_verbosity", "get_verbosity");
+
+    ClassDB::bind_static_method("GazeServer", D_METHOD("get_build_info"), &GazeServer::get_build_info);
+    ClassDB::bind_static_method("GazeServer", D_METHOD("get_build_timestamp"), &GazeServer::get_build_timestamp);
 }
 
 
@@ -1083,6 +1086,22 @@ void GazeServer::set_verbosity(int level) {
 
 int GazeServer::get_verbosity() const {
     return Gaze::get_log_verbosity().load();
+}
+
+String GazeServer::get_build_info() {
+#if defined(__DATE__) && defined(__TIME__)
+    return String("godot-gaze (") + String(__DATE__) + " " + String(__TIME__) + ")";
+#else
+    return "godot-gaze";
+#endif
+}
+
+String GazeServer::get_build_timestamp() {
+#if defined(__DATE__) && defined(__TIME__)
+    return String(__DATE__) + " " + String(__TIME__);
+#else
+    return "unknown";
+#endif
 }
 
 } // namespace godot

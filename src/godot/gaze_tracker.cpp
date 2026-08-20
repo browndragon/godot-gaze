@@ -134,6 +134,9 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_left_eye_center_inference_space"), &GazeTracker::get_left_eye_center_inference_space);
     ClassDB::bind_method(D_METHOD("get_right_eye_center_inference_space"), &GazeTracker::get_right_eye_center_inference_space);
     ClassDB::bind_method(D_METHOD("get_gaze_direction_inference_space"), &GazeTracker::get_gaze_direction_inference_space);
+    ClassDB::bind_method(D_METHOD("get_build_info"), &GazeTracker::get_build_info);
+    ClassDB::bind_method(D_METHOD("get_build_timestamp"), &GazeTracker::get_build_timestamp);
+    ADD_PROPERTY(PropertyInfo(Variant::STRING, "build_info"), "", "get_build_info");
 
     BIND_ENUM_CONSTANT(LIFECYCLE_UNKNOWN);
     BIND_ENUM_CONSTANT(LIFECYCLE_PERM_REQ);
@@ -1041,6 +1044,14 @@ float GazeTracker::get_right_eye_openness() const {
         return gs->get_right_eye_openness(eye_estimator->get_eye_rid());
     }
     return 1.0f;
+}
+
+String GazeTracker::get_build_info() const {
+    return GazeServer::get_build_info();
+}
+
+String GazeTracker::get_build_timestamp() const {
+    return GazeServer::get_build_timestamp();
 }
 
 } // namespace godot

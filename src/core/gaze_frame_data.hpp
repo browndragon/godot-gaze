@@ -27,6 +27,9 @@ struct GazeFrameData {
     GazeVector3 gaze_origin;
     GazeVector3 gaze_direction;
 
+    bool has_landmarks_2d = false;
+    float landmarks_2d_px[35 * 2] = {0.0f};
+
     // Zero-copy pointers to Godot Image backing buffers
     uint8_t* left_eye_buffer = nullptr;
     uint8_t* right_eye_buffer = nullptr;

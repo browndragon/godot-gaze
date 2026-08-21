@@ -115,6 +115,7 @@ void GazeTracker::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_eye_uncal_ray"), &GazeTracker::get_eye_uncal_ray);
     ClassDB::bind_method(D_METHOD("get_left_eye_openness"), &GazeTracker::get_left_eye_openness);
     ClassDB::bind_method(D_METHOD("get_right_eye_openness"), &GazeTracker::get_right_eye_openness);
+    ClassDB::bind_method(D_METHOD("get_face_landmarks_2d"), &GazeTracker::get_face_landmarks_2d);
 
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_gaze"), "", "get_eye_gaze");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "gaze"), "", "get_gaze");
@@ -902,6 +903,13 @@ Vector3 GazeTracker::get_gaze_direction_inference_space() const {
 CameraSensor* GazeTracker::get_camera_sensor() const { return camera_sensor; }
 FaceEstimator* GazeTracker::get_face_estimator() const { return face_estimator; }
 EyeEstimator* GazeTracker::get_eye_estimator() const { return eye_estimator; }
+
+PackedVector2Array GazeTracker::get_face_landmarks_2d() const {
+    if (face_estimator) {
+        return face_estimator->get_face_landmarks_2d();
+    }
+    return PackedVector2Array();
+}
 
 void GazeTracker::set_screen_smooth(const Ref<Smoother>& smoother) {
     screen_smooth = smoother;

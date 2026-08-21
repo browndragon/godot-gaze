@@ -31,6 +31,8 @@ private:
     Vector3 gaze_origin;
     Vector3 gaze_direction;
 
+    PackedVector2Array landmarks_2d;
+
 protected:
     static void _bind_methods();
 
@@ -84,6 +86,9 @@ public:
 
     void set_gaze_direction(Vector3 d) { gaze_direction = d; }
     Vector3 get_gaze_direction() const { return gaze_direction; }
+
+    void set_face_landmarks_2d(const PackedVector2Array &l) { landmarks_2d = l; }
+    PackedVector2Array get_face_landmarks_2d() const { return landmarks_2d; }
 };
 
 } // namespace godot

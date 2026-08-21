@@ -446,28 +446,36 @@ func _perform_drawing():
 	if model_points.is_empty():
 		return
 
-	var projected_pts = []
+	var landmarks_2d = tracker.call("get_face_landmarks_2d") if tracker.has_method("get_face_landmarks_2d") else []
+	var drawn_pts = []
 
-	for p_face in model_points:
-		var p_cam = xform * p_face
-		var depth = -p_cam.z
-		if depth <= 0.01:
-			projected_pts.append(Vector2.INF)
-		else:
-			var px = (p_cam.x / depth) * focal_len + cx
-			var py = cy - (p_cam.y / depth) * focal_len
-			var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
+	if not landmarks_2d.is_empty() and landmarks_2d.size() == 35:
+		for pt_px in landmarks_2d:
+			var local_pt = Vector2(pt_px.x * drawn_rect.size.x / img_w, pt_px.y * drawn_rect.size.y / img_h) + drawn_rect.position
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
-			projected_pts.append(screen_pt)
+			drawn_pts.append(screen_pt)
+	else:
+		# Fallback to 3D projection if 2D landmarks not available
+		for p_face in model_points:
+			var p_cam = xform * p_face
+			var depth = -p_cam.z
+			if depth <= 0.01:
+				drawn_pts.append(Vector2.INF)
+			else:
+				var px = (p_cam.x / depth) * focal_len + cx
+				var py = cy - (p_cam.y / depth) * focal_len
+				var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
+				var screen_pt = rect.global_position + local_pt - active_canvas.global_position
+				drawn_pts.append(screen_pt)
 
-	# Draws landmark points
-	for pt in projected_pts:
+	# Draws high-fidelity landmark points (Cyan)
+	for pt in drawn_pts:
 		if pt != Vector2.INF:
-			gd_draw_circle(pt, 3.0, Color.GREEN)
+			gd_draw_circle(pt, 3.5, Color(0.0, 0.85, 1.0, 0.95))
 
 	# Connect 35-point facial landmark wireframe (jawline, eyebrows, nose, mouth, eyes)
 	var connections = []
-	if projected_pts.size() >= 35:
+	if drawn_pts.size() >= 35:
 		# Jawline contour (18..34)
 		for i in range(18, 34):
 			connections.append([i, i + 1])
@@ -481,11 +489,11 @@ func _perform_drawing():
 		connections.append_array([[0, 1], [2, 3]])
 
 	for conn in connections:
-		if conn[0] < projected_pts.size() and conn[1] < projected_pts.size():
-			var p1 = projected_pts[conn[0]]
-			var p2 = projected_pts[conn[1]]
+		if conn[0] < drawn_pts.size() and conn[1] < drawn_pts.size():
+			var p1 = drawn_pts[conn[0]]
+			var p2 = drawn_pts[conn[1]]
 			if p1 != Vector2.INF and p2 != Vector2.INF:
-				gd_draw_line(p1, p2, Color(0.2, 0.9, 0.3, 0.8), 2.0)
+				gd_draw_line(p1, p2, Color(0.0, 0.85, 1.0, 0.75), 2.0)
 
 	# Projects and draws the 3D gaze vector starting from the monocular eye midpoint:
 	var right_eye_center = xform * ((model_points[0] + model_points[1]) * 0.5)

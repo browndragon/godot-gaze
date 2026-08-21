@@ -128,68 +128,6 @@ namespace Gaze
         }
     }
 
-    static void rotate_image_bgr(const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)
-    {
-        float cos_a = std::cos(angle_rad);
-        float sin_a = std::sin(angle_rad);
-        float cx = w / 2.0f;
-        float cy = h / 2.0f;
-
-        for (int y = 0; y < h; ++y)
-        {
-            float dy = y - cy;
-            for (int x = 0; x < w; ++x)
-            {
-                float dx = x - cx;
-                float src_x = cx + dx * cos_a + dy * sin_a;
-                float src_y = cy - dx * sin_a + dy * cos_a;
-
-                int dst_idx = (y * w + x) * 3;
-                if (src_x >= 0.0f && src_x < w - 1.0f && src_y >= 0.0f && src_y < h - 1.0f)
-                {
-                    int x0 = static_cast<int>(std::floor(src_x));
-                    int y0 = static_cast<int>(std::floor(src_y));
-                    int x1 = x0 + 1;
-                    int y1 = y0 + 1;
-                    float tx = src_x - x0;
-                    float ty = src_y - y0;
-
-                    for (int c = 0; c < 3; ++c)
-                    {
-                        float p00 = src[(y0 * w + x0) * 3 + c];
-                        float p10 = src[(y0 * w + x1) * 3 + c];
-                        float p01 = src[(y1 * w + x0) * 3 + c];
-                        float p11 = src[(y1 * w + x1) * 3 + c];
-
-                        float val = (1.0f - tx) * (1.0f - ty) * p00 +
-                                    tx * (1.0f - ty) * p10 +
-                                    (1.0f - tx) * ty * p01 +
-                                    tx * ty * p11;
-                        dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
-                    }
-                }
-                else
-                {
-                    dst[dst_idx + 0] = 0;
-                    dst[dst_idx + 1] = 0;
-                    dst[dst_idx + 2] = 0;
-                }
-            }
-        }
-    }
-
-    static GazeVector2 rotate_point_back(const GazeVector2 &pt, float angle_rad, int w, int h)
-    {
-        if (std::abs(angle_rad) < 1e-4f) return pt;
-        float cos_a = std::cos(angle_rad);
-        float sin_a = std::sin(angle_rad);
-        float cx = w / 2.0f;
-        float cy = h / 2.0f;
-        float dx = pt.x - cx;
-        float dy = pt.y - cy;
-        return GazeVector2(cx + dx * cos_a + dy * sin_a, cy - dx * sin_a + dy * cos_a);
-    }
-
     static GazeRect adjust_bounding_box(const GazeRect &bbox)
     {
         float bx = bbox.x - 0.067f * bbox.width;
@@ -215,7 +153,13 @@ namespace Gaze
     bool ORTLandmarkModel::extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GazeVector2> &out_landmarks_px, float roll_hint_rad)
     {
         out_landmarks_px.clear();
-        if (!src_data || img_w <= 0 || img_h <= 0 || face_bbox.width <= 0.0f || face_bbox.height <= 0.0f)
+        if (!src_data || img_w <= 0 || img_h <= 0 || face_bbox.width < 20.0f || face_bbox.height < 20.0f)
+        {
+            return false;
+        }
+
+        float aspect_ratio = face_bbox.width / face_bbox.height;
+        if (aspect_ratio < 0.3f || aspect_ratio > 3.0f)
         {
             return false;
         }
@@ -232,7 +176,7 @@ namespace Gaze
 
             float cx = face_bbox.x + face_bbox.width * 0.5f;
             float cy = face_bbox.y + face_bbox.height * 0.5f;
-            GazeVector2 rot_center = rotate_point_back(GazeVector2(cx, cy), roll_hint_rad, img_w, img_h);
+            GazeVector2 rot_center = rotate_point_back(GazeVector2(cx, cy), -roll_hint_rad, img_w, img_h);
             working_bbox = GazeRect(rot_center.x - face_bbox.width * 0.5f, rot_center.y - face_bbox.height * 0.5f, face_bbox.width, face_bbox.height);
         }
 
@@ -259,7 +203,7 @@ namespace Gaze
             GazeVector2 pt(px_x, px_y);
             if (std::abs(roll_hint_rad) > 1e-4f)
             {
-                pt = rotate_point_back(pt, -roll_hint_rad, img_w, img_h);
+                pt = rotate_point_back(pt, roll_hint_rad, img_w, img_h);
             }
             out_landmarks_px[i] = pt;
         }

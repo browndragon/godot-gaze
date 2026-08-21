@@ -202,9 +202,20 @@ namespace Gaze
                         frame.data = data->camera_raw_bgr.data();
                         frame.timestamp = data->timestamp;
 
+                        // 1. Counter-rotate frame by -prev_roll_rad so face is presented upright in working_frame
+                        const unsigned char *working_data = frame.data;
+                        if (std::abs(prev_roll_rad) > 1e-4f)
+                        {
+                            rotated_frame_buffer.resize(frame.width * frame.height * 3);
+                            rotate_image_bgr(frame.data, frame.width, frame.height, rotated_frame_buffer.data(), -prev_roll_rad);
+                            working_data = rotated_frame_buffer.data();
+                        }
+                        Frame working_frame = frame;
+                        working_frame.data = const_cast<unsigned char *>(working_data);
+
                         YuNetResult yunet_res;
                         auto start_face = std::chrono::steady_clock::now();
-                        bool success = face_detector ? face_detector->process_frame(frame, yunet_res, prev_roll_rad) : false;
+                        bool success = face_detector ? face_detector->process_frame(working_frame, yunet_res, 0.0f) : false;
                         auto end_face = std::chrono::steady_clock::now();
                         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
@@ -219,14 +230,14 @@ namespace Gaze
                             if (landmark_model)
                             {
                                 GazeRect bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-                                lm_ok = landmark_model->extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks_35, prev_roll_rad);
+                                lm_ok = landmark_model->extract_landmarks(working_frame.data, working_frame.width, working_frame.height, bbox, landmarks_35, 0.0f);
                             }
 
                             if (lm_ok && landmarks_35.size() == 35)
                             {
-                                double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : static_cast<double>(frame.width);
-                                double cx = frame.width * 0.5;
-                                double cy = frame.height * 0.5;
+                                double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : static_cast<double>(working_frame.width);
+                                double cx = working_frame.width * 0.5;
+                                double cy = working_frame.height * 0.5;
                                 GazeVector3 rvec(0.0f, 0.0f, 0.0f);
                                 GazeVector3 tvec(0.0f, 0.0f, 600.0f);
                                 static const auto model_35pt = get_canonical_35pt_face_model();
@@ -234,15 +245,33 @@ namespace Gaze
 
                                 if (pnp_ok)
                                 {
-                                    yunet_res.head_pose.pitch_rad = rvec.x;
-                                    yunet_res.head_pose.yaw_rad = rvec.y;
-                                    yunet_res.head_pose.roll_rad = rvec.z;
-                                    yunet_res.head_pose.trans_x_mm = tvec.x;
-                                    yunet_res.head_pose.trans_y_mm = tvec.y;
-                                    yunet_res.head_pose.trans_z_mm = tvec.z;
+                                    if (std::abs(prev_roll_rad) > 1e-4f)
+                                    {
+                                        GazeBasis3D R_up = rodrigues_to_basis(rvec);
+                                        GazeBasis3D R_z = rodrigues_to_basis(GazeVector3(0.0, 0.0, prev_roll_rad));
+                                        GazeBasis3D R_orig = R_z * R_up;
+                                        GazeVector3 t_orig = R_z.multiply_vector(tvec);
+                                        GazeVector3 r_orig = basis_to_rodrigues(R_orig);
+
+                                        yunet_res.head_pose.pitch_rad = r_orig.x;
+                                        yunet_res.head_pose.yaw_rad = r_orig.y;
+                                        yunet_res.head_pose.roll_rad = r_orig.z;
+                                        yunet_res.head_pose.trans_x_mm = t_orig.x;
+                                        yunet_res.head_pose.trans_y_mm = t_orig.y;
+                                        yunet_res.head_pose.trans_z_mm = t_orig.z;
+                                    }
+                                    else
+                                    {
+                                        yunet_res.head_pose.pitch_rad = rvec.x;
+                                        yunet_res.head_pose.yaw_rad = rvec.y;
+                                        yunet_res.head_pose.roll_rad = rvec.z;
+                                        yunet_res.head_pose.trans_x_mm = tvec.x;
+                                        yunet_res.head_pose.trans_y_mm = tvec.y;
+                                        yunet_res.head_pose.trans_z_mm = tvec.z;
+                                    }
                                 }
 
-                                // Extract dynamic eye crops centered at landmark canthi midpoints
+                                // Extract dynamic eye crops directly from upright working_frame (naturally horizontal & centered)
                                 float r_cx = (landmarks_35[0].x + landmarks_35[1].x) * 0.5f;
                                 float r_cy = (landmarks_35[0].y + landmarks_35[1].y) * 0.5f;
                                 float r_dx = landmarks_35[0].x - landmarks_35[1].x;
@@ -258,13 +287,30 @@ namespace Gaze
                                 float r_box_s = std::max(20.0f, r_w * 2.2f);
                                 float l_box_s = std::max(20.0f, l_w * 2.2f);
 
-                                crop_and_resize_bgr(frame.data, frame.width, frame.height,
+                                crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
                                                     r_cx - r_box_s * 0.5f, r_cy - r_box_s * 0.5f, r_box_s, r_box_s,
                                                     yunet_res.right_eye_crop, 60, 60);
 
-                                crop_and_resize_bgr(frame.data, frame.width, frame.height,
+                                crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
                                                     l_cx - l_box_s * 0.5f, l_cy - l_box_s * 0.5f, l_box_s, l_box_s,
                                                     yunet_res.left_eye_crop, 60, 60);
+
+                                data->has_landmarks_2d = true;
+                                for (size_t i = 0; i < 35; ++i)
+                                {
+                                    GazeVector2 pt = landmarks_35[i];
+                                    if (std::abs(prev_roll_rad) > 1e-4f)
+                                    {
+                                        pt = rotate_point_back(pt, prev_roll_rad, frame.width, frame.height);
+                                    }
+                                    data->landmarks_2d_px[i * 2 + 0] = pt.x;
+                                    data->landmarks_2d_px[i * 2 + 1] = pt.y;
+                                }
+                            }
+                            else
+                            {
+                                data->has_landmarks_2d = false;
+                                yunet_res.head_pose.roll_rad = prev_roll_rad + yunet_res.head_pose.roll_rad;
                             }
 
                             data->head_translation = yunet_res.head_pose.translation();

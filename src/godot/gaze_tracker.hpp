@@ -247,6 +247,7 @@ public:
     bool is_face_detected() const { return is_face_tracked; }
     float get_left_eye_openness() const;
     float get_right_eye_openness() const;
+    PackedVector2Array get_face_landmarks_2d() const;
 
     Transform3D get_head_transform() const;
     Transform3D get_camera_to_screen_transform() const;

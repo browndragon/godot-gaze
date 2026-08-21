@@ -55,6 +55,7 @@ struct GazeServerImpl {
         
         Gaze::GazeVector3 head_pose_translation;
         Gaze::GazeVector3 head_pose_rotation;
+        PackedVector2Array landmarks_2d;
     };
 
     struct EyeInfo {
@@ -459,6 +460,21 @@ Vector3 GazeServer::get_head_pose_euler_deg(RID p_face) const {
     );
     Gaze::GazeVector3 deg = core_xform.basis.get_euler_deg();
     return Vector3(deg.x, deg.y, deg.z);
+}
+
+void GazeServer::face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    if (info) {
+        info->landmarks_2d = p_landmarks;
+    }
+}
+
+PackedVector2Array GazeServer::get_face_landmarks_2d(RID p_face) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    if (!info) return PackedVector2Array();
+    return info->landmarks_2d;
 }
 
 // Eye RID Resource Management
@@ -901,6 +917,15 @@ void GazeServer::trigger_process() {
             gaze_frame->set_gaze_origin(gaze_o);
             gaze_frame->set_gaze_direction(gaze_d);
 
+            PackedVector2Array lm_array;
+            if (completed_data->has_landmarks_2d) {
+                lm_array.resize(35);
+                for (int i = 0; i < 35; ++i) {
+                    lm_array[i] = Vector2(completed_data->landmarks_2d_px[i * 2 + 0], completed_data->landmarks_2d_px[i * 2 + 1]);
+                }
+            }
+            gaze_frame->set_face_landmarks_2d(lm_array);
+
             gaze_frame->post_process();
 
             // Update spatial poses/coordinates for Godot's RID structures
@@ -912,8 +937,10 @@ void GazeServer::trigger_process() {
             if (face_rid.is_valid()) {
                 if (completed_data->face_detected) {
                     face_tracker_set_pose(face_rid, head_t, head_r, true);
+                    face_tracker_set_landmarks_2d(face_rid, lm_array);
                 } else {
                     face_tracker_set_pose(face_rid, Vector3(), Vector3(), false);
+                    face_tracker_set_landmarks_2d(face_rid, PackedVector2Array());
                 }
             }
             if (eye_rid.is_valid()) {

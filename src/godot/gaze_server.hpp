@@ -163,6 +163,8 @@ public:
     Vector3 get_head_translation_from_face_tracker(RID p_face) const;
     Vector3 get_head_pose_origin_mm(RID p_face) const;
     Vector3 get_head_pose_euler_deg(RID p_face) const;
+    void face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks);
+    PackedVector2Array get_face_landmarks_2d(RID p_face) const;
 
     /**
      * @brief Create an eye tracker resource relative to a face.

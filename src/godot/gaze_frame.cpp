@@ -19,6 +19,7 @@ void GazeFrame::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_head_rotation"), &GazeFrame::get_head_rotation);
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeFrame::get_gaze_origin);
     ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeFrame::get_gaze_direction);
+    ClassDB::bind_method(D_METHOD("get_face_landmarks_2d"), &GazeFrame::get_face_landmarks_2d);
 
     // Only register primitive properties to avoid ClassDB "Instantiated Image used as default value" warnings
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2I, "camera_size"), "", "get_camera_size");
@@ -31,6 +32,7 @@ void GazeFrame::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "head_rotation"), "", "get_head_rotation");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "gaze_origin"), "", "get_gaze_origin");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "gaze_direction"), "", "get_gaze_direction");
+    ADD_PROPERTY(PropertyInfo(Variant::PACKED_VECTOR2_ARRAY, "landmarks_2d"), "", "get_face_landmarks_2d");
 }
 
 GazeFrame::GazeFrame() {

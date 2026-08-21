@@ -127,23 +127,43 @@ bool solve_pnp_dlt(
         return false;
     }
 
-    size_t eye_r_idx = 0; // Right eye index in model_points (-X)
-    size_t eye_l_idx = 1; // Left eye index in model_points (+X)
+    GazeVector2 r_mid_2d, l_mid_2d;
+    GazeVector3 r_mid_3d, l_mid_3d;
 
-    double dx_2d = image_points[eye_l_idx].x - image_points[eye_r_idx].x;
-    double dy_2d = image_points[eye_l_idx].y - image_points[eye_r_idx].y;
+    if (model_points.size() == 35) {
+        // 35-point model: Right Eye Inner (0), Outer (1); Left Eye Inner (2), Outer (3)
+        r_mid_2d = (image_points[0] + image_points[1]) * 0.5;
+        l_mid_2d = (image_points[2] + image_points[3]) * 0.5;
+        r_mid_3d = (model_points[0] + model_points[1]) * 0.5;
+        l_mid_3d = (model_points[2] + model_points[3]) * 0.5;
+    } else {
+        // Find the index of the point with minimum X (right in camera space) and maximum X (left in camera space)
+        size_t min_x_idx = 0;
+        size_t max_x_idx = 0;
+        for (size_t i = 1; i < model_points.size(); ++i) {
+            if (model_points[i].x < model_points[min_x_idx].x) min_x_idx = i;
+            if (model_points[i].x > model_points[max_x_idx].x) max_x_idx = i;
+        }
+        r_mid_2d = image_points[min_x_idx];
+        l_mid_2d = image_points[max_x_idx];
+        r_mid_3d = model_points[min_x_idx];
+        l_mid_3d = model_points[max_x_idx];
+    }
+
+    double dx_2d = l_mid_2d.x - r_mid_2d.x;
+    double dy_2d = l_mid_2d.y - r_mid_2d.y;
     double eye_dist_2d = std::hypot(dx_2d, dy_2d);
-    double eye_dist_3d = std::hypot(model_points[eye_l_idx].x - model_points[eye_r_idx].x, model_points[eye_l_idx].y - model_points[eye_r_idx].y);
+    double eye_dist_3d = std::hypot(l_mid_3d.x - r_mid_3d.x, l_mid_3d.y - r_mid_3d.y);
 
     if (eye_dist_2d < 1e-4 || eye_dist_3d < 1e-4) {
         return false;
     }
 
     double z_est = (eye_dist_3d * fx) / eye_dist_2d;
-    double eye_mid_x_2d = (image_points[eye_r_idx].x + image_points[eye_l_idx].x) * 0.5;
-    double eye_mid_y_2d = (image_points[eye_r_idx].y + image_points[eye_l_idx].y) * 0.5;
-    double eye_mid_x_3d = (model_points[eye_r_idx].x + model_points[eye_l_idx].x) * 0.5;
-    double eye_mid_y_3d = (model_points[eye_r_idx].y + model_points[eye_l_idx].y) * 0.5;
+    double eye_mid_x_2d = (r_mid_2d.x + l_mid_2d.x) * 0.5;
+    double eye_mid_y_2d = (r_mid_2d.y + l_mid_2d.y) * 0.5;
+    double eye_mid_x_3d = (r_mid_3d.x + l_mid_3d.x) * 0.5;
+    double eye_mid_y_3d = (r_mid_3d.y + l_mid_3d.y) * 0.5;
 
     double tx_est = ((eye_mid_x_2d - cx) * z_est / fx) - eye_mid_x_3d;
     double ty_est = ((eye_mid_y_2d - cy) * z_est / fy) - eye_mid_y_3d;

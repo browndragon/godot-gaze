@@ -43,6 +43,7 @@ namespace Gaze
         bool config_dirty = false;
         std::atomic<bool> worker_busy{false};
         float prev_roll_rad = 0.0f;
+        std::vector<unsigned char> rotated_frame_buffer;
 
         void _worker_loop();
 

@@ -23,6 +23,7 @@ void FaceEstimator::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_has_detected_face"), &FaceEstimator::get_has_detected_face);
     ClassDB::bind_method(D_METHOD("set_has_detected_face", "detected"), &FaceEstimator::set_has_detected_face);
     ClassDB::bind_method(D_METHOD("get_face_rid"), &FaceEstimator::get_face_rid);
+    ClassDB::bind_method(D_METHOD("get_face_landmarks_2d"), &FaceEstimator::get_face_landmarks_2d);
     ClassDB::bind_method(D_METHOD("_on_gaze_data_ready", "rid"), &FaceEstimator::_on_gaze_data_ready);
 
     ADD_PROPERTY(PropertyInfo(Variant::STRING, "face_detector_model_prefix", PROPERTY_HINT_FILE), "set_face_detector_model_prefix", "get_face_detector_model_prefix");
@@ -132,6 +133,14 @@ void FaceEstimator::_on_gaze_data_ready(RID p_rid) {
             }
         }
     }
+}
+
+PackedVector2Array FaceEstimator::get_face_landmarks_2d() const {
+    GazeServer *gs = GazeServer::get_singleton();
+    if (gs && face_rid.is_valid()) {
+        return gs->get_face_landmarks_2d(face_rid);
+    }
+    return PackedVector2Array();
 }
 
 } // namespace godot

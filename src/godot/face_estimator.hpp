@@ -50,6 +50,8 @@ public:
     RID get_face_rid() const { return face_rid; }
     void set_face_rid(RID p_rid) { face_rid = p_rid; }
 
+    PackedVector2Array get_face_landmarks_2d() const;
+
     void _on_gaze_data_ready(RID p_rid);
 };
 

@@ -798,6 +798,69 @@ namespace Gaze
         return pts;
     }
 
+    inline void rotate_image_bgr(const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)
+    {
+        float cos_a = std::cos(angle_rad);
+        float sin_a = std::sin(angle_rad);
+        float cx = w / 2.0f;
+        float cy = h / 2.0f;
+
+        for (int y = 0; y < h; ++y)
+        {
+            float dy = y - cy;
+            for (int x = 0; x < w; ++x)
+            {
+                float dx = x - cx;
+                float src_x = cx + dx * cos_a + dy * sin_a;
+                float src_y = cy - dx * sin_a + dy * cos_a;
+
+                int dst_idx = (y * w + x) * 3;
+
+                if (src_x >= 0.0f && src_x < w - 1 && src_y >= 0.0f && src_y < h - 1)
+                {
+                    int x0 = static_cast<int>(std::floor(src_x));
+                    int y0 = static_cast<int>(std::floor(src_y));
+                    int x1 = x0 + 1;
+                    int y1 = y0 + 1;
+                    float tx = src_x - x0;
+                    float ty = src_y - y0;
+
+                    for (int c = 0; c < 3; ++c)
+                    {
+                        float p00 = src[(y0 * w + x0) * 3 + c];
+                        float p10 = src[(y0 * w + x1) * 3 + c];
+                        float p01 = src[(y1 * w + x0) * 3 + c];
+                        float p11 = src[(y1 * w + x1) * 3 + c];
+
+                        float val = (1.0f - tx) * (1.0f - ty) * p00 +
+                                    tx * (1.0f - ty) * p10 +
+                                    (1.0f - tx) * ty * p01 +
+                                    tx * ty * p11;
+                        dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
+                    }
+                }
+                else
+                {
+                    dst[dst_idx + 0] = 0;
+                    dst[dst_idx + 1] = 0;
+                    dst[dst_idx + 2] = 0;
+                }
+            }
+        }
+    }
+
+    inline GazeVector2 rotate_point_back(const GazeVector2 &pt, float angle_rad, int w, int h)
+    {
+        if (std::abs(angle_rad) < 1e-4f) return pt;
+        float cos_a = std::cos(angle_rad);
+        float sin_a = std::sin(angle_rad);
+        float cx = w / 2.0f;
+        float cy = h / 2.0f;
+        float dx = pt.x - cx;
+        float dy = pt.y - cy;
+        return GazeVector2(cx + dx * cos_a + dy * sin_a, cy - dx * sin_a + dy * cos_a);
+    }
+
     // type_traits included at top
     static_assert(std::is_standard_layout<GazeVector2_64f>::value, "GazeVector2_64f must be standard-layout");
     static_assert(std::is_trivial<GazeVector2_64f>::value, "GazeVector2_64f must be trivial");

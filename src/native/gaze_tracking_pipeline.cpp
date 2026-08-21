@@ -301,7 +301,7 @@ namespace Gaze
                                     GazeVector2 pt = landmarks_35[i];
                                     if (std::abs(prev_roll_rad) > 1e-4f)
                                     {
-                                        pt = rotate_point_back(pt, prev_roll_rad, frame.width, frame.height);
+                                        pt = rotate_point_back(pt, -prev_roll_rad, frame.width, frame.height);
                                     }
                                     data->landmarks_2d_px[i * 2 + 0] = pt.x;
                                     data->landmarks_2d_px[i * 2 + 1] = pt.y;

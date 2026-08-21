@@ -37,8 +37,10 @@ class MockTracker extends Node:
 	func get_camera_sensor(): return camera_sensor
 	func get_eye_estimator(): return eye_estimator
 	func get_face_estimator(): return face_estimator
+	var face_landmarks_2d = []
 	func get_gaze_direction(): return gaze_direction
 	func get_face_model_points(): return face_model_points
+	func get_face_landmarks_2d(): return face_landmarks_2d
 
 # Mock subclass to capture drawing coordinates and prevent canvas errors in headless mode
 class MockDebugCamFeed extends "res://addons/godot-gaze/debug_cam_feed.gd":
@@ -479,6 +481,20 @@ func _init():
 	test_feed.clear_draw_calls()
 	test_feed._draw()
 	print("    Subtest D PASSED.")
+
+	# Subtest E: 2D Landmarks direct overlay drawing
+	print("  Subtest E: 2D Landmarks direct overlay drawing...")
+	test_feed.clear_draw_calls()
+	var lms_2d = []
+	for i in range(35):
+		lms_2d.append(Vector2(100.0 + float(i) * 5.0, 150.0 + float(i) * 3.0))
+	tracker.face_landmarks_2d = lms_2d
+	test_feed._draw()
+	if test_feed.draw_circle_calls.size() != 35:
+		printerr("FAIL: Subtest E did not draw 35 2D landmark circles")
+		quit(1)
+		return
+	print("    Subtest E PASSED. 2D Landmark circles drawn: ", test_feed.draw_circle_calls.size())
 
 	test_feed.free()
 	tracker.free()

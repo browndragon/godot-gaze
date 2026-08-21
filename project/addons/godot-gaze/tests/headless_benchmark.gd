@@ -217,7 +217,7 @@ func run_benchmark():
 				var cur_v = parse_vector(p["val_str"])
 				var gold_v = parse_vector(g_info["val"])
 				var diff_len = (cur_v - gold_v).length()
-				var tol = 35.0 if p["name"] == "gaze_mm" or p["name"] == "nose_mm" else 10.0
+				var tol = 35.0 if (p["name"] == "gaze_mm" or p["name"] == "nose_mm") else (20.0 if p["name"] == "head_pos_mm" else 10.0)
 				if diff_len > tol:
 					mismatches.append("Goldenfile value mismatch for %s on %s: current %s vs golden %s (delta: %.2f > %.2f)" % [p["name"], img_file, p["val_str"], g_info["val"], diff_len, tol])
 

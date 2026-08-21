@@ -339,6 +339,17 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
     float current_roll_hint_rad = 0.0f;
     std::vector<unsigned char> rot_frame(img.width * img.height * 3);
     std::vector<unsigned char> working_frame(img.width * img.height * 3);
+    // Extract ground truth base landmarks from the upright image
+    Gaze::Frame base_frame;
+    base_frame.width = img.width;
+    base_frame.height = img.height;
+    base_frame.data = img.data.data();
+    Gaze::YuNetResult base_yunet_res;
+    REQUIRE(detector.process_frame(base_frame, base_yunet_res, 0.0f));
+    Gaze::GazeRect base_bbox(base_yunet_res.roi_x, base_yunet_res.roi_y, base_yunet_res.roi_w, base_yunet_res.roi_h);
+    std::vector<Gaze::GazeVector2> base_landmarks;
+    REQUIRE(landmark_model.extract_landmarks(img.data.data(), img.width, img.height, base_bbox, base_landmarks, 0.0f));
+    REQUIRE(base_landmarks.size() == 35);
 
     for (int step = -15; step <= 15; ++step)
     {
@@ -379,6 +390,17 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
 
         float solved_roll_rad = r_orig.z;
         float solved_roll_deg = solved_roll_rad * (180.0f / 3.14159265f);
+
+        // Verify that 2D landmarks unrotated back to camera space align with ground truth rotated face position
+        for (size_t lm_idx : {0, 1, 2, 3, 30})
+        {
+            Gaze::GazeVector2 expected_pt = Gaze::rotate_point_back(base_landmarks[lm_idx], -true_roll_rad, img.width, img.height);
+            Gaze::GazeVector2 unrotated_pt = Gaze::rotate_point_back(landmarks_35[lm_idx], -current_roll_hint_rad, img.width, img.height);
+            float dx = unrotated_pt.x - expected_pt.x;
+            float dy = unrotated_pt.y - expected_pt.y;
+            float dist_px = std::sqrt(dx * dx + dy * dy);
+            CHECK(dist_px < 15.0f);
+        }
 
         // Update tracking feedback
         current_roll_hint_rad = solved_roll_rad;

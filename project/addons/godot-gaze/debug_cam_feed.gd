@@ -495,33 +495,80 @@ func _perform_drawing():
 			if p1 != Vector2.INF and p2 != Vector2.INF:
 				gd_draw_line(p1, p2, Color(0.0, 0.85, 1.0, 0.75), 2.0)
 
-	# Projects and draws the 3D gaze vector starting from the monocular eye midpoint:
-	var right_eye_center = xform * ((model_points[0] + model_points[1]) * 0.5)
-	var left_eye_center = xform * ((model_points[2] + model_points[3]) * 0.5)
-	var start_cv = (left_eye_center + right_eye_center) * 0.5
-	var raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
-	if raw_gaze == null:
+	# Helper to convert camera-space 3D point to overlay 2D screen coordinate
+	var cam_to_screen = func(p_cam: Vector3) -> Vector2:
+		if p_cam.z <= 0.01:
+			return Vector2.INF
+		var px = (p_cam.x / p_cam.z) * focal_len + cx
+		var py = cy - (p_cam.y / p_cam.z) * focal_len
+		var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
+		return rect.global_position + local_pt - active_canvas.global_position
+
+	# =========================================================================
+	# 1. NOSE / HEAD POSE 3-AXIS ORIENTATION INDICATOR (~10cm in camera basis)
+	# =========================================================================
+	var nose_origin_3d = xform.origin
+	var head_axis_len = 100.0 # 100 mm = 10 cm
+
+	var nose_x_3d = nose_origin_3d + xform.basis.x * head_axis_len
+	var nose_y_3d = nose_origin_3d + xform.basis.y * head_axis_len
+	var nose_fwd_3d = nose_origin_3d - xform.basis.z * head_axis_len # Local -Z is head forward
+
+	var pt_nose_org = cam_to_screen.call(nose_origin_3d)
+	var pt_nose_x = cam_to_screen.call(nose_x_3d)
+	var pt_nose_y = cam_to_screen.call(nose_y_3d)
+	var pt_nose_fwd = cam_to_screen.call(nose_fwd_3d)
+
+	if pt_nose_org != Vector2.INF:
+		# Transparent +X axis (Red, alpha ~0.35)
+		if pt_nose_x != Vector2.INF:
+			gd_draw_line(pt_nose_org, pt_nose_x, Color(1.0, 0.2, 0.2, 0.35), 2.0)
+		# Transparent +Y axis (Green, alpha ~0.35)
+		if pt_nose_y != Vector2.INF:
+			gd_draw_line(pt_nose_org, pt_nose_y, Color(0.2, 1.0, 0.2, 0.35), 2.0)
+		# Saturated -Z Head Forward vector (Cyan, alpha 1.0, thick line + tip circle)
+		if pt_nose_fwd != Vector2.INF:
+			gd_draw_line(pt_nose_org, pt_nose_fwd, Color(0.0, 0.95, 1.0, 1.0), 3.5)
+			gd_draw_circle(pt_nose_fwd, 4.5, Color(0.0, 0.95, 1.0, 1.0))
+
+	# =========================================================================
+	# 2. EYE GAZE 3-AXIS ORIENTATION INDICATOR (~10cm in camera basis)
+	# =========================================================================
+	var eye_mid_local = (model_points[0] + model_points[2]) * 0.5
+	var eye_origin_3d = xform * eye_mid_local
+	var raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3(0.0, 0.0, 1.0)
+	if raw_gaze.length_squared() < 0.001:
 		raw_gaze = Vector3(0.0, 0.0, 1.0)
-	var end_cv = start_cv + raw_gaze * 150.0
+	var eye_fwd = raw_gaze.normalized()
 
-	# Project both start and end
-	var start_depth = -start_cv.z
-	if start_depth <= 0.0001:
-		start_depth = 0.0001
-	var start_px = (start_cv.x / start_depth) * focal_len + cx
-	var start_py = cy - (start_cv.y / start_depth) * focal_len
-	var start_local = Vector2(start_px * drawn_rect.size.x / img_w, start_py * drawn_rect.size.y / img_h) + drawn_rect.position
-	var start_pt = rect.global_position + start_local - active_canvas.global_position
+	# Construct orthonormal orientation basis for eye gaze vector
+	var eye_up_ref = Vector3(0.0, 1.0, 0.0)
+	if abs(eye_fwd.dot(eye_up_ref)) > 0.95:
+		eye_up_ref = Vector3(1.0, 0.0, 0.0)
+	var eye_right_vec = eye_up_ref.cross(eye_fwd).normalized()
+	var eye_up_vec = eye_fwd.cross(eye_right_vec).normalized()
 
-	var end_depth = -end_cv.z
-	if end_depth <= 0.0001:
-		end_depth = 0.0001
-	var end_px = (end_cv.x / end_depth) * focal_len + cx
-	var end_py = cy - (end_cv.y / end_depth) * focal_len
-	var end_local = Vector2(end_px * drawn_rect.size.x / img_w, end_py * drawn_rect.size.y / img_h) + drawn_rect.position
-	var end_pt = rect.global_position + end_local - active_canvas.global_position
+	var eye_axis_len = 100.0 # 100 mm = 10 cm
+	var eye_x_3d = eye_origin_3d + eye_right_vec * (eye_axis_len * 0.6)
+	var eye_y_3d = eye_origin_3d + eye_up_vec * (eye_axis_len * 0.6)
+	var eye_fwd_3d = eye_origin_3d + eye_fwd * eye_axis_len
 
-	gd_draw_line(start_pt, end_pt, Color(1.0, 0.2, 0.2, 0.9), 3.0)
+	var pt_eye_org = cam_to_screen.call(eye_origin_3d)
+	var pt_eye_x = cam_to_screen.call(eye_x_3d)
+	var pt_eye_y = cam_to_screen.call(eye_y_3d)
+	var pt_eye_fwd = cam_to_screen.call(eye_fwd_3d)
+
+	if pt_eye_org != Vector2.INF:
+		# Transparent +X coordinate (Red, alpha ~0.35)
+		if pt_eye_x != Vector2.INF:
+			gd_draw_line(pt_eye_org, pt_eye_x, Color(1.0, 0.3, 0.3, 0.35), 2.0)
+		# Transparent +Y coordinate (Green, alpha ~0.35)
+		if pt_eye_y != Vector2.INF:
+			gd_draw_line(pt_eye_org, pt_eye_y, Color(0.3, 1.0, 0.3, 0.35), 2.0)
+		# Saturated forward Eye Gaze vector (Lime Green, alpha 1.0, thick line + diamond)
+		if pt_eye_fwd != Vector2.INF:
+			gd_draw_line(pt_eye_org, pt_eye_fwd, Color(0.2, 1.0, 0.1, 1.0), 3.5)
+			gd_draw_circle(pt_eye_fwd, 4.5, Color(0.2, 1.0, 0.1, 1.0))
 
 func gd_draw_circle(pos: Vector2, radius: float, color: Color):
 	if active_canvas:

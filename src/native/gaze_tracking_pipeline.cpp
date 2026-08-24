@@ -362,7 +362,7 @@ namespace Gaze
                                 data->gaze_success = true;
                                 GazeTransform3D head_xform = Gaze::Inference::get_head_transform_in_camera_space(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
                                 data->gaze_origin = head_xform.origin;
-                                data->gaze_direction = raw_gaze_dir_cam;
+                                data->gaze_direction = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_dir_cam);
                             }
                         }
                         else

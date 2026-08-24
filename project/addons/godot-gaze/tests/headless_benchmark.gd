@@ -91,6 +91,8 @@ func run_benchmark():
 	tracker.add_child(cam_sensor)
 
 	tracker.display_profile = dp
+	tracker.window_position_override = Vector2(0, 0)
+	root.size = Vector2i(3024, 1964)
 	root.add_child(tracker)
 
 	var ok = tracker.initialize_tracker()
@@ -165,10 +167,7 @@ func run_benchmark():
 		var head_trans = gs.get_head_pose_origin_mm(face_rid)
 		var head_rot = gs.get_head_pose_euler_deg(face_rid)
 
-		var head_xform = gs.get_relative_transform(face_rid)
-		var head_forward = head_xform.basis * Vector3(0, 0, -1)
-		var nose_proj_mm = project_ray_to_screen_mm(head_trans, head_forward)
-
+		var nose_proj_mm = px_to_mm(tracker.nose_gaze)
 		var gaze_proj_mm = gs.get_projected_gaze_mm_from_eye_tracker(eye_rid, false)
 
 		print("  -> Tracked Face: ", gs.is_face_detected(face_rid), " | Head Trans: ", head_trans, " | Head Rot: ", head_rot, " | Nose mm: ", nose_proj_mm, " | Gaze mm: ", gaze_proj_mm)

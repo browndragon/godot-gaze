@@ -271,6 +271,11 @@ namespace Gaze
             return x != 0.0f || y != 0.0f || z != 0.0f;
         }
 
+        constexpr GazeVector3 operator-() const
+        {
+            return GazeVector3(-x, -y, -z);
+        }
+
         GazeVector3 operator+(const GazeVector3 &other) const
         {
             return GazeVector3(x + other.x, y + other.y, z + other.z);
@@ -741,10 +746,12 @@ namespace Gaze
         double W_half = screen_size_mm.x * 0.5;
         double H_half = screen_size_mm.y * 0.5;
 
-        double O_disp_x = origin_cam.x + camera_offset.x + W_half;
+        // Camera faces opposite the screen plane normal:
+        // +X_cam (camera right / user left) maps to Screen Left (X < W_half)
+        double O_disp_x = W_half - (origin_cam.x + camera_offset.x);
         double O_disp_y = -(cos_t * origin_cam.y + sin_t * origin_cam.z + camera_offset.y) + H_half;
 
-        double v_disp_x = dir_cam.x;
+        double v_disp_x = -dir_cam.x;
         double v_disp_y = -(cos_t * dir_cam.y + sin_t * dir_cam.z);
 
         out_pos_mm.x = O_disp_x + v_disp_x * t;

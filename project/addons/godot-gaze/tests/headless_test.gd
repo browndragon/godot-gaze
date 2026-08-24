@@ -76,7 +76,7 @@ func run_tests():
 	camera_sensor.focal_length = 1000.0
 	
 	var simulated_origin = Vector3(0.0, 0.0, -800.0) # head center straight in front of screen center in Godot camera space
-	var simulated_dir = Vector3(0.0, -0.134375, -0.99093) # pointing down-forward toward absolute screen y=0
+	var simulated_dir = Vector3(0.0, -0.134375, 0.99093) # pointing down-forward toward absolute screen
 	
 	# First: Window pos override (100, 150), Root Viewport size (800, 600)
 	tracker.window_position_override = Vector2(100, 150)
@@ -126,9 +126,7 @@ func run_tests():
 	tracker.window_position_override = Vector2(0, 0)
 	var proj_img = tracker.project_gaze_ray_to_viewport(img_origin, img_dir)
 	print("Realistic self_center.jpg projected coordinate: ", proj_img)
-	# Check that the coordinate matches the exact expected uncalibrated projection value (1945.87, 444.2)
-	var scale_proj = DisplayProfile.get_screen_scale()
-	var expected_proj = Vector2(2998.958, 1054.834)
+	var expected_proj = Vector2(-234.1576, -1054.834)
 	if abs(proj_img.x - expected_proj.x) > 0.5 or abs(proj_img.y - expected_proj.y) > 0.5:
 		printerr("FAIL: Realistic image gaze projection did not match expected: ", proj_img, " vs ", expected_proj)
 		quit(1)
@@ -737,8 +735,115 @@ func run_tests():
 	print("PASS: start_tracker / stop_tracker symmetry & idempotency verified.")
 		
 	print("PASS: F3 CI/CD Release Validation E2E verification complete.")
- 
-	camera_sensor.stop_sensor()
+
+	# =================== E2E TEST: PHYSICAL DIRECTIONAL INVARIANTS (GODOT BINDING LAYER) ===================
+	print("=================== E2E TEST: PHYSICAL DIRECTIONAL INVARIANTS (GODOT BINDINGS) ===================")
+	tracker.window_position_override = Vector2(0, 0)
+	tracker.update_projection_parameters()
+
+	var e2e_cam_rid = camera_sensor.get_camera_rid()
+	vs.camera_start(e2e_cam_rid)
+
+	var run_fixture_e2e = func(img_name: String) -> Dictionary:
+		var path = "tests/resources/" + img_name
+		if not FileAccess.file_exists(path):
+			path = "../tests/resources/" + img_name
+		var img = Image.load_from_file(path)
+		if not img:
+			printerr("FAIL: E2E - Missing fixture: ", path)
+			return {}
+		var tex = ImageTexture.create_from_image(img)
+		vs.inject_texture(e2e_cam_rid, tex)
+		for k in range(10):
+			gs.trigger_process()
+			await get_tree().create_timer(0.04).timeout
+		var f_xform = tracker.get_head_transform()
+		var f_fwd = tracker.get_head_forward()
+		print("  -> Image: ", img_name, " | Head Forward: ", f_fwd, " | Nose: ", tracker.nose_gaze, " | Gaze: ", tracker.eye_gaze)
+		return {
+			"face_detected": tracker.is_face_detected(),
+			"nose_gaze": tracker.nose_gaze,
+			"eye_gaze": tracker.eye_gaze
+		}
+
+	var res_center = await run_fixture_e2e.call("self_center.jpg")
+	var res_left = await run_fixture_e2e.call("self_left_left.jpg")
+	var res_right = await run_fixture_e2e.call("self_right_right.jpg")
+	var res_top_top = await run_fixture_e2e.call("self_top_top.jpg")
+	var res_down_down = await run_fixture_e2e.call("self_down_down.jpg")
+	var res_top_down = await run_fixture_e2e.call("self_nosetop_eyesdown.jpg")
+	var res_nl_er = await run_fixture_e2e.call("self_noseleft_eyesright.jpg")
+
+	if not (res_center["face_detected"] and res_left["face_detected"] and res_right["face_detected"] and res_top_top["face_detected"] and res_down_down["face_detected"] and res_top_down["face_detected"] and res_nl_er["face_detected"]):
+		printerr("FAIL: E2E - One or more benchmark fixtures failed face detection")
+		quit(1)
+		return
+
+	var nose_c: Vector2 = res_center["nose_gaze"]
+	var gaze_c: Vector2 = res_center["eye_gaze"]
+	var nose_l: Vector2 = res_left["nose_gaze"]
+	var gaze_l: Vector2 = res_left["eye_gaze"]
+	var nose_r: Vector2 = res_right["nose_gaze"]
+	var gaze_r: Vector2 = res_right["eye_gaze"]
+	var nose_top: Vector2 = res_top_top["nose_gaze"]
+	var gaze_top: Vector2 = res_top_top["eye_gaze"]
+	var nose_down: Vector2 = res_down_down["nose_gaze"]
+	var gaze_down: Vector2 = res_down_down["eye_gaze"]
+	var nose_top_down: Vector2 = res_top_down["nose_gaze"]
+	var gaze_top_down: Vector2 = res_top_down["eye_gaze"]
+	var nose_nl: Vector2 = res_nl_er["nose_gaze"]
+	var gaze_er: Vector2 = res_nl_er["eye_gaze"]
+
+	print("E2E GDScript Measurements:")
+	print("  Center:     Nose=", nose_c, " Gaze=", gaze_c)
+	print("  Left/Left:  Nose=", nose_l, " Gaze=", gaze_l)
+	print("  Right/Right: Nose=", nose_r, " Gaze=", gaze_r)
+	print("  Top/Top:    Nose=", nose_top, " Gaze=", gaze_top)
+	print("  Down/Down:  Nose=", nose_down, " Gaze=", gaze_down)
+	print("  Top/Down:   Nose=", nose_top_down, " Gaze=", gaze_top_down)
+	print("  NL/ER:      Nose=", nose_nl, " Gaze=", gaze_er)
+
+	# 1. NOSEGAZE YAW: Turning head to user's left (screen left, smaller X) must project left of center (< center.x)
+	if not (nose_l.x < nose_c.x - 30.0 and nose_r.x > nose_c.x + 30.0):
+		printerr("FAIL: E2E - Nosegaze yaw invariant violated! Left X: ", nose_l.x, " Center X: ", nose_c.x, " Right X: ", nose_r.x)
+		quit(1)
+		return
+
+	# 2. NOSEGAZE PITCH: Pitching head UP must project towards screen top (smaller Y) than pitching DOWN
+	if not (nose_top.y < nose_down.y - 30.0):
+		printerr("FAIL: E2E - Nosegaze pitch invariant violated! Top Y: ", nose_top.y, " Down Y: ", nose_down.y)
+		quit(1)
+		return
+
+	# 3. EYEGAZE YAW: Gazing to user's left (screen left, smaller X) must project left of center (< center.x)
+	if not (gaze_l.x < gaze_c.x - 20.0 and gaze_r.x > gaze_c.x + 20.0):
+		printerr("FAIL: E2E - Eyegaze yaw invariant violated! Left X: ", gaze_l.x, " Center X: ", gaze_c.x, " Right X: ", gaze_r.x)
+		quit(1)
+		return
+
+	# 4. EYEGAZE PITCH: Gazing UP must project towards screen top (smaller Y) than gazing DOWN
+	if not (gaze_top.y < gaze_down.y - 20.0):
+		printerr("FAIL: E2E - Eyegaze pitch invariant violated! Top Y: ", gaze_top.y, " Down Y: ", gaze_down.y)
+		quit(1)
+		return
+
+	# 5. DISSOCIATED GAZE INVARIANTS:
+	# Eye gaze with eyes turned right (screen right) must be to the right of nose pointing left
+	if not (gaze_er.x > nose_nl.x + 50.0):
+		printerr("FAIL: E2E - Dissociated gaze yaw invariant violated! Gaze ER X: ", gaze_er.x, " Nose NL X: ", nose_nl.x)
+		quit(1)
+		return
+
+	# Eye gaze with eyes looking down while nose pointing up must be below nose gaze
+	if not (gaze_top_down.y > nose_top_down.y + 50.0):
+		printerr("FAIL: E2E - Dissociated gaze pitch invariant violated! Gaze Top/Down Y: ", gaze_top_down.y, " Nose Top/Down Y: ", nose_top_down.y)
+		quit(1)
+		return
+
+	print("PASS: All Physical Directional Invariants (Nose/Eye Yaw & Pitch) Verified in GDScript!")
+
+	print("PASS: Physical Directional Invariants in GDScript bindings verified.")
+
 	if gs:
 		gs.stop_processing()
  

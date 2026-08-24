@@ -165,9 +165,8 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
             double dz = std::cos(yaw) * cos_pitch;
             out_gaze_dir_cv = GazeVector3(dx, -dy, dz).normalized();
         } else if (num_elements == 3) {
-            // OpenVINO ADAS gaze model outputs 3D gaze vector (dx, dy, dz) in OpenCV frame:
-            // dx: Right (+X), dy: DOWN (+Y_cv -> -Y_godot UP), dz: Forward toward camera (+Z_cv -> +Z_godot)
-            out_gaze_dir_cv = GazeVector3(out_data[0], -out_data[1], out_data[2]).normalized();
+            // OpenVINO ADAS gaze model outputs 3D gaze vector (dx, dy, dz) in subject frame:
+            out_gaze_dir_cv = GazeVector3(out_data[0], out_data[1], out_data[2]).normalized();
         } else {
             return false;
         }

@@ -176,7 +176,7 @@ namespace Gaze
 
             float cx = face_bbox.x + face_bbox.width * 0.5f;
             float cy = face_bbox.y + face_bbox.height * 0.5f;
-            GazeVector2 rot_center = rotate_point_back(GazeVector2(cx, cy), -roll_hint_rad, img_w, img_h);
+            GazeVector2 rot_center = rotate_point_back(GazeVector2(cx, cy), roll_hint_rad, img_w, img_h);
             working_bbox = GazeRect(rot_center.x - face_bbox.width * 0.5f, rot_center.y - face_bbox.height * 0.5f, face_bbox.width, face_bbox.height);
         }
 
@@ -203,7 +203,7 @@ namespace Gaze
             GazeVector2 pt(px_x, px_y);
             if (std::abs(roll_hint_rad) > 1e-4f)
             {
-                pt = rotate_point_back(pt, roll_hint_rad, img_w, img_h);
+                pt = rotate_point_back(pt, -roll_hint_rad, img_w, img_h);
             }
             out_landmarks_px[i] = pt;
         }

@@ -14,11 +14,27 @@ def copy_js_sidecar():
         print(f"Error: {js_path} does not exist. Cannot copy JS sidecar.")
         return
     os.makedirs(os.path.dirname(dest_path), exist_ok=True)
+    if os.path.exists(dest_path):
+        try:
+            with open(js_path, "rb") as f1, open(dest_path, "rb") as f2:
+                if f1.read() == f2.read():
+                    return
+        except Exception:
+            pass
     print(f"[SCons] Copying {js_path} to {dest_path}...")
     import shutil
-    shutil.copy2(js_path, dest_path)
+    try:
+        shutil.copyfile(js_path, dest_path)
+    except Exception as e:
+        print(f"[SCons] Warning: copyfile failed ({e}), trying write...")
+        try:
+            with open(js_path, "rb") as f1, open(dest_path, "wb") as f2:
+                f2.write(f1.read())
+        except Exception as e2:
+            print(f"[SCons] Warning: could not copy {js_path} to {dest_path}: {e2}")
 
 copy_js_sidecar()
+
 
 
 
@@ -245,7 +261,7 @@ def setup_onnxruntime(env):
     # TODO: Again, is this standard? I'd expect something in setup/etc requiring the submodule. Now that the project exists and has the submodule, checking out our project automatically checks out the submodule, right?
     # TODO: So we shoud just delete this?!
     ort_dir = "thirdparty/onnxruntime"
-    if not os.path.exists(os.path.join(ort_dir, "CMakeLists.txt")):
+    if not (os.path.exists(os.path.join(ort_dir, "README.md")) or os.path.exists(os.path.join(ort_dir, "include")) or os.path.exists(os.path.join(ort_dir, "CMakeLists.txt")) or os.path.exists(os.path.join(ort_dir, "cmake/CMakeLists.txt"))):
         print("[SCons] Initializing onnxruntime submodule...")
         try:
             subprocess.run(["git", "submodule", "update", "--init", "--recursive", "--depth", "1", "thirdparty/onnxruntime"], check=True)
@@ -504,14 +520,28 @@ def setup_onnxruntime(env):
         out_dir = "project/addons/godot-gaze/bin"
         os.makedirs(out_dir, exist_ok=True)
         dylib_path = os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
-        shutil.copy2(expected_lib_path, dylib_path)
+        
+        def safe_copy_dylib(src, dst):
+            if os.path.exists(dst):
+                try:
+                    if os.path.getsize(src) == os.path.getsize(dst):
+                        return
+                    os.remove(dst)
+                except Exception:
+                    pass
+            try:
+                shutil.copyfile(src, dst)
+            except Exception:
+                pass
+
+        safe_copy_dylib(expected_lib_path, dylib_path)
         print(f"[SCons] Copied {expected_lib_path} to {out_dir}")
         subprocess.run(["codesign", "-s", "-", "--force", dylib_path], check=False)
         
         test_dir = "build/tests"
         os.makedirs(test_dir, exist_ok=True)
         test_dylib = os.path.join(test_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
-        shutil.copy2(expected_lib_path, test_dylib)
+        safe_copy_dylib(expected_lib_path, test_dylib)
         subprocess.run(["codesign", "-s", "-", "--force", test_dylib], check=False)
         print(f"[SCons] Copied and signed {expected_lib_path} in {test_dir} for macOS SIP compliance")
 
@@ -526,7 +556,7 @@ def setup_onnxruntime(env):
             try:
                 os.symlink("libonnxruntime.dylib", v1_dylib)
             except Exception:
-                shutil.copy2(expected_lib_path, v1_dylib)
+                safe_copy_dylib(expected_lib_path, v1_dylib)
             subprocess.run(["codesign", "-s", "-", "--force", v1_dylib], check=False)
             print(f"[SCons] Created and signed {v1_dylib}")
         

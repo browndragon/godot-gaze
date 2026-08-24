@@ -766,36 +766,36 @@ namespace Gaze
     inline std::vector<GazeVector3> get_canonical_35pt_face_model()
     {
         std::vector<GazeVector3> pts(35);
-        // Eyes (IPD approx 63mm)
-        pts[0] = GazeVector3(-15.0f, -32.0f, -18.0f); // Right Eye Inner Canthus
-        pts[1] = GazeVector3(-46.0f, -32.0f,  -8.0f); // Right Eye Outer Canthus
-        pts[2] = GazeVector3( 15.0f, -32.0f, -18.0f); // Left Eye Inner Canthus
-        pts[3] = GazeVector3( 46.0f, -32.0f,  -8.0f); // Left Eye Outer Canthus
+        // Eyes (IPD approx 63mm, standard anthropometric plane Z=0)
+        pts[0] = GazeVector3(-15.0f, -32.0f,   0.0f); // Right Eye Inner Canthus
+        pts[1] = GazeVector3(-46.0f, -32.0f,   8.0f); // Right Eye Outer Canthus
+        pts[2] = GazeVector3( 15.0f, -32.0f,   0.0f); // Left Eye Inner Canthus
+        pts[3] = GazeVector3( 46.0f, -32.0f,   8.0f); // Left Eye Outer Canthus
 
-        // Nose
-        pts[4] = GazeVector3(  0.0f, -22.0f, -25.0f); // Nose Bridge Top
+        // Nose (Protruding forward along -Z)
+        pts[4] = GazeVector3(  0.0f, -22.0f, -15.0f); // Nose Bridge Top
         pts[5] = GazeVector3(  0.0f,   0.0f, -35.0f); // Nose Tip (furthest forward towards camera)
-        pts[6] = GazeVector3(-16.0f,   6.0f, -20.0f); // Nose Right Wing
-        pts[7] = GazeVector3( 16.0f,   6.0f, -20.0f); // Nose Left Wing
+        pts[6] = GazeVector3(-16.0f,   6.0f, -15.0f); // Nose Right Wing
+        pts[7] = GazeVector3( 16.0f,   6.0f, -15.0f); // Nose Left Wing
 
         // Mouth
-        pts[8]  = GazeVector3(-25.0f,  32.0f, -12.0f); // Mouth Right Corner
-        pts[9]  = GazeVector3( 25.0f,  32.0f, -12.0f); // Mouth Left Corner
-        pts[10] = GazeVector3(  0.0f,  26.0f, -20.0f); // Upper Lip Center
-        pts[11] = GazeVector3(  0.0f,  40.0f, -18.0f); // Lower Lip Center
+        pts[8]  = GazeVector3(-25.0f,  32.0f,  -5.0f); // Mouth Right Corner
+        pts[9]  = GazeVector3( 25.0f,  32.0f,  -5.0f); // Mouth Left Corner
+        pts[10] = GazeVector3(  0.0f,  26.0f, -12.0f); // Upper Lip Center
+        pts[11] = GazeVector3(  0.0f,  40.0f,  -8.0f); // Lower Lip Center
 
         // Eyebrows
-        pts[12] = GazeVector3(-50.0f, -48.0f,  -5.0f); // Right Eyebrow Outer
-        pts[13] = GazeVector3(-32.0f, -52.0f, -12.0f); // Right Eyebrow Mid
-        pts[14] = GazeVector3(-12.0f, -48.0f, -18.0f); // Right Eyebrow Inner
-        pts[15] = GazeVector3( 12.0f, -48.0f, -18.0f); // Left Eyebrow Inner
-        pts[16] = GazeVector3( 32.0f, -52.0f, -12.0f); // Left Eyebrow Mid
-        pts[17] = GazeVector3( 50.0f, -48.0f,  -5.0f); // Left Eyebrow Outer
+        pts[12] = GazeVector3(-50.0f, -48.0f,   8.0f); // Right Eyebrow Outer
+        pts[13] = GazeVector3(-32.0f, -52.0f,   5.0f); // Right Eyebrow Mid
+        pts[14] = GazeVector3(-12.0f, -48.0f,   0.0f); // Right Eyebrow Inner
+        pts[15] = GazeVector3( 12.0f, -48.0f,   0.0f); // Left Eyebrow Inner
+        pts[16] = GazeVector3( 32.0f, -52.0f,   5.0f); // Left Eyebrow Mid
+        pts[17] = GazeVector3( 50.0f, -48.0f,   8.0f); // Left Eyebrow Outer
 
         // 17-point Jawline Contour (Pts 18..34) from Right Ear to Chin Apex (Pt 26) to Left Ear
         float jaw_x[] = {-70.0f, -68.0f, -64.0f, -58.0f, -50.0f, -40.0f, -28.0f, -15.0f, 0.0f, 15.0f, 28.0f, 40.0f, 50.0f, 58.0f, 64.0f, 68.0f, 70.0f};
-        float jaw_y[] = {-35.0f, -20.0f,  -5.0f,  12.0f,  28.0f,  44.0f,  58.0f,  68.0f, 72.0f, 68.0f, 58.0f, 44.0f, 28.0f, 12.0f, -5.0f, -20.0f, -35.0f};
-        float jaw_z[] = { 40.0f,  35.0f,  28.0f,  18.0f,   8.0f,  -2.0f, -10.0f, -15.0f, -17.0f, -15.0f, -10.0f, -2.0f, 8.0f, 18.0f, 28.0f, 35.0f, 40.0f};
+        float jaw_y[] = {-35.0f, -20.0f,  -5.0f,  12.0f,  28.0f,  44.0f,  58.0f,  68.0f, 70.0f, 68.0f, 58.0f, 44.0f, 28.0f, 12.0f, -5.0f, -20.0f, -35.0f};
+        float jaw_z[] = { 35.0f,  30.0f,  24.0f,  16.0f,   8.0f,   2.0f,  -2.0f,  -4.0f,  0.0f, -4.0f, -2.0f,   2.0f,  8.0f, 16.0f, 24.0f, 30.0f, 35.0f};
 
         for (int i = 0; i < 17; ++i)
         {

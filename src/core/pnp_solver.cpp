@@ -1,4 +1,6 @@
 #include "pnp_solver.hpp"
+#include <opencv2/calib3d.hpp>
+#include <opencv2/core.hpp>
 #include <cmath>
 #include <algorithm>
 #include <vector>
@@ -174,6 +176,77 @@ bool solve_pnp_dlt(
     return true;
 }
 
+bool solve_pnp_opencv(
+    const std::vector<GazeVector3>& model_points,
+    const std::vector<GazeVector2>& image_points,
+    double fx, double fy, double cx, double cy,
+    GazeVector3& rvec, GazeVector3& tvec,
+    PnPSolverMethod method,
+    bool use_extrinsic_guess
+) {
+    if (model_points.size() < 4 || image_points.size() != model_points.size()) {
+        return false;
+    }
+
+    std::vector<cv::Point3d> cv_obj_pts(model_points.size());
+    for (size_t i = 0; i < model_points.size(); ++i) {
+        cv_obj_pts[i] = cv::Point3d(model_points[i].x, model_points[i].y, model_points[i].z);
+    }
+
+    std::vector<cv::Point2d> cv_img_pts(image_points.size());
+    for (size_t i = 0; i < image_points.size(); ++i) {
+        cv_img_pts[i] = cv::Point2d(image_points[i].x, image_points[i].y);
+    }
+
+    cv::Mat camera_matrix = (cv::Mat_<double>(3, 3) <<
+        fx, 0.0, cx,
+        0.0, fy, cy,
+        0.0, 0.0, 1.0);
+    cv::Mat dist_coeffs = cv::Mat::zeros(4, 1, CV_64F);
+
+    cv::Mat cv_rvec = cv::Mat::zeros(3, 1, CV_64F);
+    cv::Mat cv_tvec = cv::Mat::zeros(3, 1, CV_64F);
+
+    if (use_extrinsic_guess) {
+        cv_rvec.at<double>(0) = rvec.x;
+        cv_rvec.at<double>(1) = rvec.y;
+        cv_rvec.at<double>(2) = rvec.z;
+        cv_tvec.at<double>(0) = tvec.x;
+        cv_tvec.at<double>(1) = tvec.y;
+        cv_tvec.at<double>(2) = tvec.z;
+    }
+
+    int flag = cv::SOLVEPNP_SQPNP;
+    if (method == PnPSolverMethod::ITERATIVE) {
+        flag = cv::SOLVEPNP_ITERATIVE;
+    } else if (method == PnPSolverMethod::EPNP) {
+        flag = cv::SOLVEPNP_EPNP;
+    }
+
+    try {
+        bool ok = cv::solvePnP(
+            cv_obj_pts,
+            cv_img_pts,
+            camera_matrix,
+            dist_coeffs,
+            cv_rvec,
+            cv_tvec,
+            use_extrinsic_guess,
+            flag
+        );
+
+        if (!ok) {
+            return false;
+        }
+
+        rvec = GazeVector3(cv_rvec.at<double>(0), cv_rvec.at<double>(1), cv_rvec.at<double>(2));
+        tvec = GazeVector3(cv_tvec.at<double>(0), cv_tvec.at<double>(1), cv_tvec.at<double>(2));
+        return true;
+    } catch (...) {
+        return false;
+    }
+}
+
 bool solve_pnp_lm(
     const std::vector<GazeVector3>& model_points,
     const std::vector<GazeVector2>& image_points,
@@ -181,122 +254,7 @@ bool solve_pnp_lm(
     GazeVector3& rvec, GazeVector3& tvec,
     bool use_extrinsic_guess
 ) {
-    if (model_points.size() < 4 || image_points.size() != model_points.size()) {
-        return false;
-    }
-
-    double beta[6];
-    if (use_extrinsic_guess) {
-        beta[0] = rvec.x;
-        beta[1] = rvec.y;
-        beta[2] = rvec.z;
-        beta[3] = tvec.x;
-        beta[4] = tvec.y;
-        beta[5] = tvec.z;
-    } else {
-        double beta_default[6] = {0.0, 0.0, 0.0, 0.0, 0.0, 600.0};
-        std::vector<double> res_default;
-        double sse_default = compute_residuals(model_points, image_points, beta_default, fx, fy, cx, cy, res_default);
-
-        GazeVector3 dlt_r, dlt_t;
-        if (solve_pnp_dlt(model_points, image_points, fx, fy, cx, cy, dlt_r, dlt_t)) {
-            double beta_dlt[6] = {dlt_r.x, dlt_r.y, dlt_r.z, dlt_t.x, dlt_t.y, dlt_t.z};
-            std::vector<double> res_dlt;
-            double sse_dlt = compute_residuals(model_points, image_points, beta_dlt, fx, fy, cx, cy, res_dlt);
-            if (sse_dlt < sse_default) {
-                std::copy(beta_dlt, beta_dlt + 6, beta);
-            } else {
-                std::copy(beta_default, beta_default + 6, beta);
-            }
-        } else {
-            std::copy(beta_default, beta_default + 6, beta);
-        }
-    }
-
-    std::vector<double> residuals;
-    double sse = compute_residuals(model_points, image_points, beta, fx, fy, cx, cy, residuals);
-
-    size_t n_pts = model_points.size();
-    size_t n_res = 2 * n_pts;
-    bool has_converged = (sse < 1.0);
-    double lambda = 0.001;
-    const int max_iter = 100;
-
-    for (int iter = 0; iter < max_iter; ++iter) {
-        std::vector<std::vector<double>> J;
-        compute_jacobian(model_points, beta, fx, fy, cx, cy, J);
-
-        double JTJ[6][6];
-        double JTe[6];
-        for (int i = 0; i < 6; ++i) {
-            JTe[i] = 0.0;
-            for (size_t r = 0; r < n_res; ++r) {
-                JTe[i] += J[r][i] * residuals[r];
-            }
-            for (int j = 0; j < 6; ++j) {
-                JTJ[i][j] = 0.0;
-                for (size_t r = 0; r < n_res; ++r) {
-                    JTJ[i][j] += J[r][i] * J[r][j];
-                }
-            }
-        }
-
-        bool solved = false;
-        double beta_new[6];
-        double delta[6];
-
-        while (!solved && lambda < 1e10) {
-            double A[6][6];
-            for (int i = 0; i < 6; ++i) {
-                for (int j = 0; j < 6; ++j) {
-                    A[i][j] = JTJ[i][j];
-                }
-                A[i][i] += lambda * (JTJ[i][i] > 1e-6 ? JTJ[i][i] : 1.0);
-            }
-
-            if (!solve6x6(A, JTe, delta)) {
-                lambda *= 10.0;
-                continue;
-            }
-
-            for (int i = 0; i < 6; ++i) {
-                beta_new[i] = beta[i] + delta[i];
-            }
-
-            std::vector<double> residuals_new;
-            double sse_new = compute_residuals(model_points, image_points, beta_new, fx, fy, cx, cy, residuals_new);
-
-            if (sse_new < sse) {
-                sse = sse_new;
-                residuals = residuals_new;
-                std::copy(beta_new, beta_new + 6, beta);
-                lambda = std::max(1e-7, lambda / 10.0);
-                solved = true;
-                has_converged = true;
-            } else {
-                lambda *= 10.0;
-            }
-        }
-
-        double delta_norm = 0.0;
-        for (int i = 0; i < 6; ++i) {
-            delta_norm += delta[i] * delta[i];
-        }
-        delta_norm = std::sqrt(delta_norm);
-
-        if (!solved || delta_norm < 1e-8) {
-            break;
-        }
-    }
-
-    if (has_converged && !std::isnan(beta[0]) && !std::isnan(beta[3]) && !std::isinf(beta[0]) && !std::isinf(beta[3])) {
-        rvec = GazeVector3(beta[0], beta[1], beta[2]);
-        tvec = GazeVector3(beta[3], beta[4], beta[5]);
-        return true;
-    }
-    return false;
+    return solve_pnp_opencv(model_points, image_points, fx, fy, cx, cy, rvec, tvec, PnPSolverMethod::SQPNP, use_extrinsic_guess);
 }
-
-
 
 } // namespace Gaze

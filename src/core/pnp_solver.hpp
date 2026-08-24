@@ -20,6 +20,12 @@ namespace Gaze {
  * @param use_extrinsic_guess If true, uses the input values of rvec/tvec as initial guess.
  * @return true if the solver converged successfully, false otherwise.
  */
+enum class PnPSolverMethod {
+    SQPNP = 0,     // cv::SOLVEPNP_SQPNP (Globally optimal SQPnP)
+    ITERATIVE = 1, // cv::SOLVEPNP_ITERATIVE (Levenberg-Marquardt)
+    EPNP = 2       // cv::SOLVEPNP_EPNP
+};
+
 bool solve_pnp_dlt(
     const std::vector<GazeVector3>& model_points,
     const std::vector<GazeVector2>& image_points,
@@ -27,12 +33,21 @@ bool solve_pnp_dlt(
     GazeVector3& rvec, GazeVector3& tvec
 );
 
+bool solve_pnp_opencv(
+    const std::vector<GazeVector3>& model_points,
+    const std::vector<GazeVector2>& image_points,
+    double fx, double fy, double cx, double cy,
+    GazeVector3& rvec, GazeVector3& tvec,
+    PnPSolverMethod method = PnPSolverMethod::SQPNP,
+    bool use_extrinsic_guess = false
+);
+
 bool solve_pnp_lm(
     const std::vector<GazeVector3>& model_points,
     const std::vector<GazeVector2>& image_points,
     double fx, double fy, double cx, double cy,
     GazeVector3& rvec, GazeVector3& tvec,
-    bool use_extrinsic_guess = true
+    bool use_extrinsic_guess = false
 );
 
 } // namespace Gaze

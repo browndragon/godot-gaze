@@ -211,11 +211,18 @@ func run_benchmark():
 
 			if golden_data.has(key):
 				var g_info = golden_data[key]
-				prev_err = g_info["err"]
-
 				var cur_v = parse_vector(p["val_str"])
 				var gold_v = parse_vector(g_info["val"])
-				var diff_len = (cur_v - gold_v).length()
+				var diff_len = 0.0
+				if p["name"] == "head_rot_deg":
+					var dyaw = cur_v.y - gold_v.y
+					while dyaw > 180.0: dyaw -= 360.0
+					while dyaw < -180.0: dyaw += 360.0
+					var dpitch = cur_v.x - gold_v.x
+					var droll = cur_v.z - gold_v.z
+					diff_len = sqrt(dpitch * dpitch + dyaw * dyaw + droll * droll)
+				else:
+					diff_len = (cur_v - gold_v).length()
 				var tol = 35.0 if (p["name"] == "gaze_mm" or p["name"] == "nose_mm") else (20.0 if p["name"] == "head_pos_mm" else 10.0)
 				if diff_len > tol:
 					mismatches.append("Goldenfile value mismatch for %s on %s: current %s vs golden %s (delta: %.2f > %.2f)" % [p["name"], img_file, p["val_str"], g_info["val"], diff_len, tol])

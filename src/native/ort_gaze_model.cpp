@@ -1,7 +1,6 @@
 #include "ort_gaze_model.hpp"
 #include "log.hpp"
 #include "platform_ort.hpp"
-#include "../core/space_conversions.hpp"
 #include <cmath>
 #include <cstring>
 #include <algorithm>

@@ -9,7 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include "godot_files.hpp"
-#include "../core/space_conversions.hpp"
+#include "../core/opencv_space_conversions.hpp"
 
 #ifdef WEB_ENABLED
 #include <godot_cpp/classes/java_script_bridge.hpp>
@@ -391,7 +391,7 @@ void GazeServer::face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector
     face->head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
 
     if (p_detected) {
-        Gaze::GazeTransform3D core_xform = Gaze::Inference::get_head_transform_in_camera_space(
+        Gaze::GazeTransform3D core_xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
             face->head_pose_translation,
             face->head_pose_rotation
         );
@@ -443,7 +443,7 @@ Vector3 GazeServer::get_head_pose_origin_mm(RID p_face) const {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     FaceInfo *face = impl->face_owner.get_or_null(p_face);
     if (!face) return Vector3();
-    Gaze::GazeTransform3D core_xform = Gaze::Inference::get_head_transform_in_camera_space(
+    Gaze::GazeTransform3D core_xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
         face->head_pose_translation,
         face->head_pose_rotation
     );
@@ -454,7 +454,7 @@ Vector3 GazeServer::get_head_pose_euler_deg(RID p_face) const {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     FaceInfo *face = impl->face_owner.get_or_null(p_face);
     if (!face) return Vector3();
-    Gaze::GazeTransform3D core_xform = Gaze::Inference::get_head_transform_in_camera_space(
+    Gaze::GazeTransform3D core_xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
         face->head_pose_translation,
         face->head_pose_rotation
     );

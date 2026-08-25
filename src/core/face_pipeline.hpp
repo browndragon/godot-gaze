@@ -60,12 +60,6 @@ namespace Gaze
         // Used to calculate Z distance based on IPD (Interpupillary Distance)
         GazeVector3 left_eye_center_cam;
         GazeVector3 right_eye_center_cam;
-
-        // TODO: Does it make sense to have both a texture_handle, rid_val, _AND_ our own inline storage buffer? I'd think if we're using handles, they'd provide the storage location? IDK.
-        uint64_t left_eye_texture_handle = 0;
-        uint64_t right_eye_texture_handle = 0;
-        uint64_t left_eye_texture_rid_val = 0;
-        uint64_t right_eye_texture_rid_val = 0;
     };
 
     class FacePipeline

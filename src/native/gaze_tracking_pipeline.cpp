@@ -1,6 +1,7 @@
 #include "gaze_tracking_pipeline.hpp"
 #include "../core/cpu_image_warper.hpp"
-#include "../core/space_conversions.hpp"
+#include "../core/opencv_space_conversions.hpp"
+#include "../core/face_model_geometry.hpp"
 #include "../core/math_defs.hpp"
 #include "../core/pnp_solver.hpp"
 #include "../core/log.hpp"
@@ -10,20 +11,6 @@
 
 namespace Gaze
 {
-    // Copies a block of data from src to dst, reversing triples.
-    static void copy_rgb_to_gbr(const uint8_t *src, uint8_t *dst, size_t sz)
-    {
-        for (size_t i = 0; i < EYE_CROP_SIZE * EYE_CROP_SIZE; ++i)
-        {
-            // Copy rgb->bgr
-            for (size_t rgb = 0; rgb < 3; ++rgb)
-            {
-                size_t bgr = 2 - rgb;
-                dst[i * 3 + rgb] = src[i * 3 + bgr];
-            }
-        }
-    }
-
     GazeTrackingPipeline::~GazeTrackingPipeline()
     {
         log_info(2, "GazeTrackingPipeline_Destructor_Began");
@@ -240,7 +227,7 @@ namespace Gaze
                                 double cy = working_frame.height * 0.5;
                                 GazeVector3 rvec(0.0f, 0.0f, 0.0f);
                                 GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-                                static const auto model_35pt = get_canonical_35pt_face_model();
+                                static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
                                 bool pnp_ok = solve_pnp_lm(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec, false);
 
                                 if (pnp_ok)
@@ -345,9 +332,9 @@ namespace Gaze
 
                             GazeBasis3D head_rot = yunet_res.head_pose.rotation_matrix();
                             GazeVector3 head_trans = yunet_res.head_pose.translation();
-                            // Canonical 35-pt model: Right eye is at X = -30.5mm, Left eye is at X = +30.5mm, Y = -32.0mm, Z = -13.0mm
-                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-30.5, -32.0, -13.0)) + head_trans;
-                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(30.5, -32.0, -13.0)) + head_trans;
+                            // Canonical anthropometric eye positions in OpenCV Model Space (IPD ~ 63mm)
+                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-FaceModelGeometry::EYE_X, -FaceModelGeometry::EYE_Y, -FaceModelGeometry::EYE_Z)) + head_trans;
+                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(FaceModelGeometry::EYE_X, -FaceModelGeometry::EYE_Y, -FaceModelGeometry::EYE_Z)) + head_trans;
                             std::memcpy(crops.left_eye_data, yunet_res.left_eye_crop, 60*60*3);
                             std::memcpy(crops.right_eye_data, yunet_res.right_eye_crop, 60*60*3);
 
@@ -360,9 +347,9 @@ namespace Gaze
                             if (gaze_success)
                             {
                                 data->gaze_success = true;
-                                GazeTransform3D head_xform = Gaze::Inference::get_head_transform_in_camera_space(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
+                                GazeTransform3D head_xform = CoordinateConversions::opencv_pose_to_godot_camera_transform(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
                                 data->gaze_origin = head_xform.origin;
-                                data->gaze_direction = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_dir_cam);
+                                data->gaze_direction = CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_dir_cam);
                             }
                         }
                         else

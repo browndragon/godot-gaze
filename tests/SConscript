@@ -235,10 +235,6 @@ if env["platform"] != "javascript":
         source="#tests/test_transforms.cpp"
     ))
     test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_mediapipe_pipeline" + core_env["OBJSUFFIX"]),
-        source="#tests/test_mediapipe_pipeline.cpp"
-    ))
-    test_objs.append(core_env.Object(
         target="#" + os.path.join(gaze_variant_dir, "tests/test_gaze_model" + core_env["OBJSUFFIX"]),
         source="#tests/test_gaze_model.cpp"
     ))
@@ -267,16 +263,6 @@ if env["platform"] != "javascript":
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
     test_program = core_env.Program(target=target_test_bin, source=test_objs)
-
-    # Build benchmark test executable
-    benchmark_objs = [obj for obj in test_objs if "test_native" not in str(obj)]
-    benchmark_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_benchmark" + core_env["OBJSUFFIX"]),
-        source="#tests/test_benchmark.cpp"
-    ))
-    
-    target_benchmark_bin = "#" + f"build/tests/test_benchmark.{platform_str}.{env['arch']}{exe_suffix}"
-    benchmark_program = core_env.Program(target=target_benchmark_bin, source=benchmark_objs)
     
     # Build stress test cast
     stress_test_objs = [
@@ -288,7 +274,6 @@ if env["platform"] != "javascript":
     # Codesigning on macOS
     if env["platform"] == "macos":
         core_env.AddPostAction(test_program, "codesign -s - --force $TARGET")
-        core_env.AddPostAction(benchmark_program, "codesign -s - --force $TARGET")
         env.AddPostAction(stress_test_program, "codesign -s - --force $TARGET")
 
     # Native test runner target
@@ -326,20 +311,10 @@ python_run = env.Command(
     "build/tests/logs/tests.python.log",
     [],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["pytest", "tests/gaze_test.py", "tests/test_mediapipe_model.py", "-s", "--junitxml=build/tests/artifacts/python_report.xml"]
+    TEST_CMD=["pytest", "tests/gaze_test.py", "-s", "--junitxml=build/tests/artifacts/python_report.xml"]
 )
 env.AlwaysBuild(python_run)
 env.Alias("tests/python", python_run)
-
-# MediaPipe model test target
-mediapipe_model_run = env.Command(
-    "build/tests/logs/tests.mediapipe_model.log",
-    [],
-    Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["pytest", "tests/test_mediapipe_model.py", "-s"]
-)
-env.AlwaysBuild(mediapipe_model_run)
-env.Alias("tests/mediapipe_model", mediapipe_model_run)
 
 # Godot headless E2E test target
 godot_headless_run = env.Command(
@@ -440,6 +415,17 @@ style_run = env.Command(
 env.AlwaysBuild(style_run)
 env.Alias("tests/style", style_run)
 
+# Eyecandy cross-project GUT test target
+eyecandy_run = env.Command(
+    "build/tests/logs/tests.eyecandy.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--headless", "--path", "/Users/browndragon/src/eyecandy", "-s", "res://addons/gut/gut_cmdln.gd"]
+)
+env.AlwaysBuild(eyecandy_run)
+env.Alias("tests/eyecandy", eyecandy_run)
+env.Alias("eyecandy", eyecandy_run)
+
 # Standard local quick tests run (native + python + headless + style)
 local_tests = ["tests/python", "tests/style"]
 if env["platform"] != "javascript":
@@ -449,7 +435,7 @@ env.Alias("tests", local_tests)
 env.Alias("test", local_tests)
 
 # Run all E2E targets
-all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
+all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed", "tests/eyecandy"]
 if env["platform"] != "javascript":
     all_tests.extend(["tests/native", "tests/benchmark"])
 env.Alias("tests/all", all_tests)

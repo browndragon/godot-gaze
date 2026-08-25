@@ -58,15 +58,23 @@ TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
     // Load open eye from eyes_both_open.jpg and closed eye from eyes_both_wink.jpg
     auto open_crop = load_crop("tests/resources/eyes_both_open.jpg", 680, 420, 80);
     auto closed_crop = load_crop("tests/resources/eyes_both_wink.jpg", 680, 420, 80);
+    auto r_wink_crop = load_crop("tests/resources/eyes_anatomical_right_wink.jpg", 680, 420, 80);
+    auto l_wink_crop = load_crop("tests/resources/eyes_anatomical_left_wink.jpg", 760, 420, 80);
 
     float open_score = 0.0f;
     float closed_score = 0.0f;
+    float r_wink_score = 0.0f;
+    float l_wink_score = 0.0f;
 
     bool ok1 = model.estimate_openness(open_crop.data(), open_score);
     bool ok2 = model.estimate_openness(closed_crop.data(), closed_score);
+    bool ok3 = model.estimate_openness(r_wink_crop.data(), r_wink_score);
+    bool ok4 = model.estimate_openness(l_wink_crop.data(), l_wink_score);
 
     REQUIRE(ok1 == true);
     REQUIRE(ok2 == true);
+    REQUIRE(ok3 == true);
+    REQUIRE(ok4 == true);
 
     // Assert probability bounds [0.0, 1.0]
     CHECK(open_score >= 0.0f);
@@ -74,8 +82,9 @@ TEST_CASE("ORT Eye State Classifier Boundary Invariants and Signal Separation")
     CHECK(closed_score >= 0.0f);
     CHECK(closed_score <= 1.0f);
 
-    // Assert strict signal separation between open vs closed
+    // Assert strict domain bounds
     CHECK(open_score >= 0.70f);
     CHECK(closed_score <= 0.20f);
-    CHECK((open_score - closed_score) >= 0.50f);
+    CHECK(r_wink_score <= 0.25f);
+    CHECK(l_wink_score <= 0.25f);
 }

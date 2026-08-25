@@ -202,70 +202,70 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
         out_frame.timestamp = current_time - start_time;
 
         return true;
-    }
+    } else {
+        godot::Ref<godot::Image> y_img = y_texture->get_image();
+        godot::Ref<godot::Image> cbcr_img = cbcr_texture->get_image();
 
-    godot::Ref<godot::Image> y_img = y_texture->get_image();
-    godot::Ref<godot::Image> cbcr_img = cbcr_texture->get_image();
-
-    if (y_img.is_null() || y_img->is_empty() || cbcr_img.is_null() || cbcr_img->is_empty()) {
-        return false;
-    }
-
-    int width = y_img->get_width();
-    int height = y_img->get_height();
-    int size = width * height * 3;
-
-    godot::PackedByteArray y_data = y_img->get_data();
-    godot::PackedByteArray cbcr_data = cbcr_img->get_data();
-
-    if (y_data.size() < width * height || cbcr_data.size() < (width / 2) * (height / 2) * 2) {
-        return false;
-    }
-
-    frame_buffer.resize(size);
-    const uint8_t* y_ptr = y_data.ptr();
-    const uint8_t* cbcr_ptr = cbcr_data.ptr();
-    uint8_t* dst = frame_buffer.data();
-
-    int cbcr_w = cbcr_img->get_width();
-
-    // Perform YCbCr (NV12) to BGR conversion
-    for (int y = 0; y < height; ++y) {
-        int cy = y / 2;
-        for (int x = 0; x < width; ++x) {
-            int src_x = horizontal_flip ? (width - 1 - x) : x;
-            int src_cx = src_x / 2;
-
-            uint8_t y_val = y_ptr[y * width + src_x];
-            int cbcr_idx = (cy * cbcr_w + src_cx) * 2;
-            uint8_t cb_val = cbcr_ptr[cbcr_idx];
-            uint8_t cr_val = cbcr_ptr[cbcr_idx + 1];
-
-            float Y = static_cast<float>(y_val);
-            float Cb = static_cast<float>(cb_val) - 128.0f;
-            float Cr = static_cast<float>(cr_val) - 128.0f;
-
-            // YCbCr -> RGB (BT.601)
-            float r = Y + 1.402f * Cr;
-            float g = Y - 0.344136f * Cb - 0.714136f * Cr;
-            float b = Y + 1.772f * Cb;
-
-            int dst_idx = (y * width + x) * 3;
-            dst[dst_idx + 0] = static_cast<uint8_t>(std::max(0.0f, std::min(b, 255.0f))); // B
-            dst[dst_idx + 1] = static_cast<uint8_t>(std::max(0.0f, std::min(g, 255.0f))); // G
-            dst[dst_idx + 2] = static_cast<uint8_t>(std::max(0.0f, std::min(r, 255.0f))); // R
+        if (y_img.is_null() || y_img->is_empty() || cbcr_img.is_null() || cbcr_img->is_empty()) {
+            return false;
         }
+
+        int width = y_img->get_width();
+        int height = y_img->get_height();
+        int size = width * height * 3;
+
+        godot::PackedByteArray y_data = y_img->get_data();
+        godot::PackedByteArray cbcr_data = cbcr_img->get_data();
+
+        if (y_data.size() < width * height || cbcr_data.size() < (width / 2) * (height / 2) * 2) {
+            return false;
+        }
+
+        frame_buffer.resize(size);
+        const uint8_t* y_ptr = y_data.ptr();
+        const uint8_t* cbcr_ptr = cbcr_data.ptr();
+        uint8_t* dst = frame_buffer.data();
+
+        int cbcr_w = cbcr_img->get_width();
+
+        // Perform YCbCr (NV12) to BGR conversion
+        for (int y = 0; y < height; ++y) {
+            int cy = y / 2;
+            for (int x = 0; x < width; ++x) {
+                int src_x = horizontal_flip ? (width - 1 - x) : x;
+                int src_cx = src_x / 2;
+
+                uint8_t y_val = y_ptr[y * width + src_x];
+                int cbcr_idx = (cy * cbcr_w + src_cx) * 2;
+                uint8_t cb_val = cbcr_ptr[cbcr_idx];
+                uint8_t cr_val = cbcr_ptr[cbcr_idx + 1];
+
+                float Y = static_cast<float>(y_val);
+                float Cb = static_cast<float>(cb_val) - 128.0f;
+                float Cr = static_cast<float>(cr_val) - 128.0f;
+
+                // YCbCr -> RGB (BT.601)
+                float r = Y + 1.402f * Cr;
+                float g = Y - 0.344136f * Cb - 0.714136f * Cr;
+                float b = Y + 1.772f * Cb;
+
+                int dst_idx = (y * width + x) * 3;
+                dst[dst_idx + 0] = static_cast<uint8_t>(std::max(0.0f, std::min(b, 255.0f))); // B
+                dst[dst_idx + 1] = static_cast<uint8_t>(std::max(0.0f, std::min(g, 255.0f))); // G
+                dst[dst_idx + 2] = static_cast<uint8_t>(std::max(0.0f, std::min(r, 255.0f))); // R
+            }
+        }
+
+        auto now = std::chrono::steady_clock::now();
+        double current_time = std::chrono::duration<double>(now.time_since_epoch()).count();
+
+        out_frame.width = width;
+        out_frame.height = height;
+        out_frame.data = frame_buffer.data();
+        out_frame.timestamp = current_time - start_time;
+
+        return true;
     }
-
-    auto now = std::chrono::steady_clock::now();
-    double current_time = std::chrono::duration<double>(now.time_since_epoch()).count();
-
-    out_frame.width = width;
-    out_frame.height = height;
-    out_frame.data = frame_buffer.data();
-    out_frame.timestamp = current_time - start_time;
-
-    return true;
 }
 
 void GodotCamera::release() {

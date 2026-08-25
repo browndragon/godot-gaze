@@ -11,6 +11,7 @@ constexpr size_t EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANN
 
 struct GazeFrameData {
     std::vector<uint8_t> camera_raw_bgr;
+    std::vector<uint8_t> rotated_frame_bgr; // Pre-allocated scratch space for roll un-rotation
     int camera_width = 0;
     int camera_height = 0;
     double timestamp = 0.0;
@@ -30,16 +31,18 @@ struct GazeFrameData {
     bool has_landmarks_2d = false;
     float landmarks_2d_px[35 * 2] = {0.0f};
 
-    // Zero-copy pointers to Godot Image backing buffers
+    // Pointers to output crop image buffers
     uint8_t* left_eye_buffer = nullptr;
     uint8_t* right_eye_buffer = nullptr;
     uint8_t* full_crop_buffer = nullptr;
     size_t full_crop_bytes = 0;
 
-    uint64_t face_rid_val = 0;
-    uint64_t eye_rid_val = 0;
+    uint64_t face_context_id = 0;
+    uint64_t eye_context_id = 0;
+    uint64_t face_rid_val = 0; // Compatibility alias
+    uint64_t eye_rid_val = 0;  // Compatibility alias
 
-    // Backreference to Godot wrapper object (GazeFrame*)
+    // Generic opaque user context pointer
     void* userdata = nullptr;
 
 };

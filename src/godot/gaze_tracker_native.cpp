@@ -6,7 +6,6 @@
 #include "eye_estimator.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
-#include "../native/ort_mediapipe_face_mesh.hpp"
 #include "../native/ort_gaze_model.hpp"
 #include "display_profile.hpp"
 #include "../core/math_defs.hpp"

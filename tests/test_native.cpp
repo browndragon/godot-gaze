@@ -1,11 +1,12 @@
 // TODO: Name `native_test.cpp`. How does this differ `main_test.cpp`?
 #include "doctest.h"
-#include "ort_mediapipe_face_mesh.hpp"
+#include "ort_yunet_detector.hpp"
+#include "ort_landmark_model.hpp"
 #include "ort_gaze_model.hpp"
 #include "gaze_tracking_pipeline.hpp"
 #include "projection_engine.hpp"
 #include "screen_projector.hpp"
-#include "space_conversions.hpp"
+#include "opencv_space_conversions.hpp"
 #include "pnp_solver.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -160,7 +161,7 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
     REQUIRE(yunet_res.face_detected == true);
 
     // Verify head forward vector direction in standard Camera Space
-    GazeTransform3D head_transform = Gaze::Inference::get_head_transform_in_camera_space(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
+    GazeTransform3D head_transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
     GazeVector3 head_forward = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
 
     // For a forward-facing head, the forward vector should point towards the screen (+Z_cam in Godot camera space)
@@ -455,7 +456,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_straight(0.0, 0.0, 0.0);
-        Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_straight);
+        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_straight);
         Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
 
         // Z points towards the screen (positive Z in Godot camera space)
@@ -468,7 +469,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_up(-0.15, 0.0, 0.0); // ~8.6 degrees up
-        Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_up);
+        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_up);
         Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
 
         // Pitch up must produce a positive Y component in camera space
@@ -480,7 +481,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_down(0.15, 0.0, 0.0); // ~8.6 degrees down
-        Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_down);
+        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_down);
         Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
 
         // Pitch down must produce a negative Y component in camera space
@@ -492,7 +493,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_left(0.0, -0.15, 0.0); // ~8.6 degrees left
-        Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_left);
+        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
         Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
 
         // Turning left (facing camera's positive X direction / viewer right)
@@ -504,7 +505,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     {
         Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
         Gaze::GazeVector3 rotation_right(0.0, 0.15, 0.0); // ~8.6 degrees right
-        Gaze::GazeTransform3D transform = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_right);
+        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
         Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
 
         // Turning right (facing camera's negative X direction / viewer left)
@@ -545,7 +546,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         CHECK(est_rvec.x > 0.15); // Must recover significant downward pitch
 
         // Project ray onto screen plane (600x340 mm screen, camera at top y=170mm)
-        Gaze::GazeTransform3D xform = Gaze::Inference::get_head_transform_in_camera_space(est_tvec, est_rvec);
+        Gaze::GazeTransform3D xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(est_tvec, est_rvec);
         Gaze::GazeVector3 head_fwd = -xform.basis.z.normalized();
         
         Gaze::ProjectionEngine proj_engine;
@@ -599,11 +600,11 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         CHECK(warm_rvec.x > 0.10);
     }
 
-    // 8. Test MediaPipeFaceMeshPipeline initialization and verification
+    // 8. Test ORTYuNetDetector initialization and verification
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        Gaze::MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        Gaze::ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
     }
 }
 
@@ -611,9 +612,9 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 {
     // 1. Test empty frames (null data)
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
 
         Frame empty_frame;
         empty_frame.width = 640;
@@ -621,15 +622,15 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         empty_frame.timestamp = 0.0;
         empty_frame.data = nullptr;
 
-        MediaPipeFaceMeshResult mp_res;
-        CHECK(pipeline.process_frame(empty_frame, mp_res) == false);
+        YuNetResult res;
+        CHECK(detector.process_frame(empty_frame, res, 0.0f) == false);
     }
 
     // 2. Test invalid dimensions (0x0 frame)
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
 
         unsigned char dummy_data[1] = {0};
         Frame zero_frame;
@@ -638,15 +639,15 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         zero_frame.timestamp = 0.0;
         zero_frame.data = dummy_data;
 
-        MediaPipeFaceMeshResult mp_res;
-        CHECK(pipeline.process_frame(zero_frame, mp_res) == false);
+        YuNetResult res;
+        CHECK(detector.process_frame(zero_frame, res, 0.0f) == false);
     }
 
     // 3. Test negative dimensions (-640x-480 frame)
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
 
         unsigned char dummy_data[1] = {0};
         Frame neg_frame;
@@ -655,15 +656,15 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         neg_frame.timestamp = 0.0;
         neg_frame.data = dummy_data;
 
-        MediaPipeFaceMeshResult mp_res;
-        CHECK(pipeline.process_frame(neg_frame, mp_res) == false);
+        YuNetResult res;
+        CHECK(detector.process_frame(neg_frame, res, 0.0f) == false);
     }
 
     // 4. Test extremely small non-zero dimensions (1x1 frame)
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
 
         unsigned char dummy_data[3] = {128, 128, 128};
         Frame tiny_frame;
@@ -672,9 +673,10 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         tiny_frame.timestamp = 0.0;
         tiny_frame.data = dummy_data;
 
-        MediaPipeFaceMeshResult mp_res;
-        bool exec_ok = pipeline.process_frame(tiny_frame, mp_res);
-        CHECK(exec_ok == true);
+        YuNetResult res;
+        bool exec_ok = detector.process_frame(tiny_frame, res, 0.0f);
+        CHECK(exec_ok == false);
+        CHECK(res.face_detected == false);
     }
 
     // 5. Test ORTGazeModel with extreme head pose rotations (NaN, Infinity, and Out of Bounds)
@@ -747,8 +749,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 
     // 7. Test uninitialized pipeline and model behavior
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
         // Do NOT call initialize()
         Frame frame;
         frame.width = 640;
@@ -756,8 +758,8 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         frame.timestamp = 0.0;
         unsigned char dummy_data[640 * 480 * 3] = {0};
         frame.data = dummy_data;
-        MediaPipeFaceMeshResult mp_res;
-        CHECK(pipeline.process_frame(frame, mp_res) == false);
+        YuNetResult res;
+        CHECK(detector.process_frame(frame, res, 0.0f) == false);
 
         std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
         ORTGazeModel model(gaze_path);
@@ -769,9 +771,9 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 
     // 8. Test extremely large frame sizes (8K: 7680x4320)
     {
-        std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path);
-        REQUIRE(pipeline.initialize() == true);
+        std::string detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+        ORTYuNetDetector detector(detector_path);
+        REQUIRE(detector.initialize() == true);
 
         std::unique_ptr<unsigned char[]> huge_mat(new unsigned char[7680 * 4320 * 3]());
         Frame huge_frame;
@@ -780,8 +782,10 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         huge_frame.timestamp = 0.0;
         huge_frame.data = huge_mat.get();
 
-        MediaPipeFaceMeshResult mp_res;
-        CHECK(pipeline.process_frame(huge_frame, mp_res) == true);
+        YuNetResult res;
+        bool exec_ok = detector.process_frame(huge_frame, res, 0.0f);
+        CHECK(exec_ok == false);
+        CHECK(res.face_detected == false);
     }
 }
 
@@ -1577,13 +1581,12 @@ TEST_CASE("Testing Log Verbosity Filtering")
 
 TEST_CASE("Testing Head Roll Landmark Detection")
 {
-    std::string face_mesh_path = "project/addons/godot-gaze/models/mediapipe_face_mesh.ort";
     std::string face_detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
     
     // 1. Test Anatomical Left Ear to Shoulder Tilt (self_roll_left.jpg)
     {
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path, face_detector_path);
-        REQUIRE(pipeline.initialize() == true);
+        ORTYuNetDetector detector(face_detector_path);
+        REQUIRE(detector.initialize() == true);
 
         LoadedImage img = load_test_image("tests/resources/self_roll_left.jpg");
         REQUIRE(!img.data.empty());
@@ -1594,16 +1597,16 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         frame.timestamp = 0.0;
         frame.data = img.data.data();
 
-        MediaPipeFaceMeshResult res;
-        bool pipeline_success = pipeline.process_frame(frame, res);
-        REQUIRE(pipeline_success == true);
-        REQUIRE(res.face_detected == false);
+        YuNetResult res;
+        bool detector_success = detector.process_frame(frame, res, 0.0f);
+        REQUIRE(detector_success == true);
+        REQUIRE(res.face_detected == true);
     }
 
     // 2. Test Anatomical Right Ear to Shoulder Tilt (self_roll_right.jpg)
     {
-        MediaPipeFaceMeshPipeline pipeline(face_mesh_path, face_detector_path);
-        REQUIRE(pipeline.initialize() == true);
+        ORTYuNetDetector detector(face_detector_path);
+        REQUIRE(detector.initialize() == true);
 
         LoadedImage img = load_test_image("tests/resources/self_roll_right.jpg");
         REQUIRE(!img.data.empty());
@@ -1614,9 +1617,9 @@ TEST_CASE("Testing Head Roll Landmark Detection")
         frame.timestamp = 0.0;
         frame.data = img.data.data();
 
-        MediaPipeFaceMeshResult res;
-        bool pipeline_success = pipeline.process_frame(frame, res);
-        REQUIRE(pipeline_success == true);
+        YuNetResult res;
+        bool detector_success = detector.process_frame(frame, res, 0.0f);
+        REQUIRE(detector_success == true);
         REQUIRE(res.face_detected == true);
     }
 }
@@ -1627,9 +1630,9 @@ TEST_CASE("Testing Gaze Direction Vector Sign and Ray Projection in Calibration"
     GazeVector3 raw_gaze_dir_cv(0.0, 0.0, 1.0);
     GazeVector3 origin_cv(0.0, 0.0, 600.0); // 600mm in front of camera
 
-    // Convert using Inference::CAMERA_TRANSFORM for points and CAMERA_TRANSFORM.basis for directions
-    GazeVector3 origin_cam = Gaze::Inference::CAMERA_TRANSFORM * origin_cv;
-    GazeVector3 dir_cam = Gaze::Inference::CAMERA_TRANSFORM.basis * GazeVector3(0.0, 0.0, -1.0); // ray pointing towards camera in CV space
+    // Convert using OPENCV_CAM_TO_GODOT_CAM
+    GazeVector3 origin_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(origin_cv);
+    GazeVector3 dir_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(GazeVector3(0.0, 0.0, -1.0)); // ray pointing towards camera in CV space
 
     // Gaze origin in camera space must be at Z < 0 (in front of camera/screen plane)
     CHECK(origin_cam.z < 0.0);
@@ -1726,7 +1729,7 @@ TEST_CASE("Testing Physical Gaze Ray Direction Invariants")
 TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vector Mappings")
 {
     // 1. OPENCV_CAM_TO_GODOT_CAM Matrix Basis Properties
-    GazeBasis3D r_cam = Gaze::Inference::OPENCV_CAM_TO_GODOT_CAM.basis;
+    GazeBasis3D r_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM;
     CHECK(std::abs(r_cam.determinant()) == doctest::Approx(1.0));
     // Verify orthogonality R^T * R = I
     GazeBasis3D r_cam_t = r_cam.transposed();
@@ -1736,7 +1739,7 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     CHECK(r_cam_prod.z.z == doctest::Approx(1.0));
 
     // 2. GODOT_FACE_TO_OPENCV_FACE Matrix Basis Properties
-    GazeBasis3D r_face = Gaze::Inference::GODOT_FACE_TO_OPENCV_FACE.basis;
+    GazeBasis3D r_face = Gaze::CoordinateConversions::GODOT_FACE_TO_OPENCV_FACE;
     CHECK(std::abs(r_face.determinant()) == doctest::Approx(1.0));
     GazeBasis3D r_face_t = r_face.transposed();
     GazeBasis3D r_face_prod = r_face_t * r_face;
@@ -1745,7 +1748,7 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     CHECK(r_face_prod.z.z == doctest::Approx(1.0));
 
     // 3. ONNX_GAZE_TO_GODOT_CAM Matrix Basis Properties (Inversion of Z axis)
-    GazeBasis3D r_onnx = Gaze::Inference::ONNX_GAZE_TO_GODOT_CAM;
+    GazeBasis3D r_onnx = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM;
     CHECK(std::abs(r_onnx.determinant()) == doctest::Approx(1.0));
     
     // Test canonical gaze direction vector mapping:
@@ -1773,20 +1776,20 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     // For unrotated head (rvec = 0), face forward vector in Godot face space is -Z (0, 0, -1)
     GazeVector3 translation(0.0, 0.0, 800.0);
     GazeVector3 rotation_zero(0.0, 0.0, 0.0);
-    GazeTransform3D transform_zero = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_zero);
+    GazeTransform3D transform_zero = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_zero);
     GazeVector3 fwd_zero = -transform_zero.basis.z.normalized();
     CHECK(fwd_zero.z > 0.9); // Points towards display screen plane (+Z_cam)
 
     // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Viewer Right (+X_cam)
     GazeVector3 rotation_left(0.0, -0.15, 0.0);
-    GazeTransform3D transform_left = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_left);
+    GazeTransform3D transform_left = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
     GazeVector3 fwd_left = -transform_left.basis.z.normalized();
     CHECK(fwd_left.x > 0.05); // Must point towards viewer right (+X_cam)
     CHECK(fwd_left.z > 0.9);
 
     // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Viewer Left (-X_cam)
     GazeVector3 rotation_right(0.0, 0.15, 0.0);
-    GazeTransform3D transform_right = Gaze::Inference::get_head_transform_in_camera_space(translation, rotation_right);
+    GazeTransform3D transform_right = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
     GazeVector3 fwd_right = -transform_right.basis.z.normalized();
     CHECK(fwd_right.x < -0.05); // Must point towards viewer left (-X_cam)
     CHECK(fwd_right.z > 0.9);
@@ -1847,11 +1850,11 @@ TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
         img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
     }
 
-    Gaze::GazeVector3 dlt_rvec, dlt_tvec;
-    bool dlt_ok = Gaze::solve_pnp_dlt(model_points, img_pts, fx, fx, cx, cy, dlt_rvec, dlt_tvec);
-    REQUIRE(dlt_ok == true);
+    Gaze::GazeVector3 pnp_rvec, pnp_tvec;
+    bool pnp_ok = Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, pnp_rvec, pnp_tvec);
+    REQUIRE(pnp_ok == true);
 
-    CHECK(dlt_tvec.z == doctest::Approx(680.0).epsilon(0.05));
-    CHECK(dlt_rvec.z == doctest::Approx(0.05).epsilon(0.05));
+    CHECK(pnp_tvec.z == doctest::Approx(680.0).epsilon(0.05));
+    CHECK(pnp_rvec.z == doctest::Approx(0.05).epsilon(0.05));
 }
 

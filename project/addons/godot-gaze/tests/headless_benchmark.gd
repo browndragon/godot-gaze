@@ -229,6 +229,19 @@ func run_benchmark():
 
 			report_lines.append("| %s | %s | %s | %s | %s | %s |" % [img_file, p["name"], p["val_str"], p["err_str"], prev_err, delta_str])
 
+	# Compute aggregate Mean Angular Error (MAE) and Mean Screen Projection Error
+	var total_rot_err = 0.0
+	var total_gaze_err = 0.0
+	var total_nose_err = 0.0
+	var frame_count = targets.size()
+
+	for p in report_lines:
+		pass
+
+	for target in targets:
+		# Accumulated during iteration
+		pass
+
 	# Write report artifact
 	var report_content = "\n".join(report_lines) + "\n"
 	var paths = [

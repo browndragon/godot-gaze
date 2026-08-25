@@ -4,70 +4,55 @@ This document outlines the coordinate systems, physical screen mapping projectio
 
 ---
 
-## 1. Coordinate Systems
+## 1. Coordinate Systems & Facial Geometry
 
 To model the physical and inference tracking states, the engine utilizes five distinct 3D and 2D coordinate spaces.
 
 ```mermaid
 graph TD
-    INF_FACE["Inference Face Space (YuNet)"] -- "180° Roll (Z-axis)" --> GG_FACE["GodotGaze Local Face Space"]
-    INF_CAM["Inference Camera Space"] -- "180° Pitch (X-axis)" --> GG_CAM["GodotGaze Camera Space"]
-    GG_FACE -- "PnP Transform (R_inf, t_inf)" --> GG_CAM
-    GG_CAM -- "Offset (O_cam) & Tilt (theta)" --> DISP["Display Millimeter Space"]
-    DISP -- "Pixel Pitch (s_x, s_y) & Resolution" --> PIX["Viewport Pixel Space"]
+    INF_FACE["Canonical 35-pt 3D Face Model"] -- "Head Pose (rvec, tvec)" --> INF_CAM["Inference Camera Space (OpenCV)"]
+    INF_CAM -- "180° Pitch (X-axis Flip)" --> GG_CAM["Godot Camera Space"]
+    GG_CAM -- "Camera Offset (O_cam) & Tilt (theta)" --> DISP["Physical Display Space (mm)"]
+    DISP -- "Pixel Pitch (s_x, s_y) & Window Offset" --> PIX["Viewport Pixel Space"]
 ```
 
-### 1.1. Inference Camera Space
+### 1.1. Inference Camera Space (OpenCV Standard)
 * **Origin ($C_{\text{inf}}$)**: Optical center of the camera lens.
 * **$X_{\text{inf}}$-axis**: Horizontal, pointing right from the camera's perspective (subject's left).
 * **$Y_{\text{inf}}$-axis**: Vertical, pointing down.
 * **$Z_{\text{inf}}$-axis**: Optical axis, pointing forward into the camera's view cone (towards the subject).
 
-### 1.2. Inference Face Space
-This is the space of the 3D facial model used by YuNet's `solvePnP` solver (eyes, nose, mouth corners):
-* **Origin**: Midpoint of the eyes at depth 0.
-* **$X_{\text{face\_inf}}$-axis**: Horizontal, pointing to the face's own left (image right).
-* **$Y_{\text{face\_inf}}$-axis**: Vertical, pointing down.
-* **$Z_{\text{face\_inf}}$-axis**: Perpendicular to the face plane, pointing to the back of the head (the nose points along $-Z_{\text{face\_inf}}$).
+### 1.2. Canonical 35-Point Anthropometric 3D Face Model
+Rather than a coarse 5-point bounding polygon, `godot-gaze` uses a 35-point anthropometric 3D face model defined directly in the camera rest frame (+X right, +Y down, +Z forward):
+* **Points 0–3**: Inner and outer eye canthi for left and right eyes.
+* **Points 4–15**: Eyebrow contour points.
+* **Points 16–22**: Nose bridge, crest, and subnasale.
+* **Points 23–34**: Upper/lower vermilion lip borders and mouth oral commissures.
 
-### 1.3. GodotGaze Camera Space (Standard Camera Space)
-This space is aligned with standard right-handed graphics conventions:
+### 1.3. Godot Camera Space (Standard Graphics Camera Space)
+Aligned with standard right-handed graphics conventions:
 * **Origin ($C_{\text{cam}}$)**: Optical center of the camera lens.
 * **$X_{\text{cam}}$-axis**: Horizontal, pointing right from the camera's perspective.
 * **$Y_{\text{cam}}$-axis**: Vertical, pointing up.
-* **$Z_{\text{cam}}$-axis**: Perpendicular to the display, pointing out the back of the camera **away** from the camera's view cone. Thus, the user is located at negative Z ($z_{\text{cam}} < 0$).
+* **$Z_{\text{cam}}$-axis**: Perpendicular to the display, pointing **backward** out of the camera (away from the user). Thus, the user is located at negative Z ($z_{\text{cam}} < 0$).
 * **Mapping from Inference Camera Space**:
-  To correct the vertical direction (Y points down in Inference, up in GodotGaze) and the forward/backward direction (Z points forward/into-view-cone in Inference, backward/away-from-view-cone in GodotGaze), we apply a **$180^\circ$ pitch rotation around the X-axis**:
-  $$M = R_X(180^\circ) = \begin{pmatrix} 1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & -1 \end{pmatrix}$$
-  This maps the coordinates as:
   $$X_{\text{cam}} = X_{\text{inf}}$$
   $$Y_{\text{cam}} = -Y_{\text{inf}}$$
   $$Z_{\text{cam}} = -Z_{\text{inf}}$$
 
-### 1.4. GodotGaze Face Space (Face Space)
-This is the standard local coordinate space of the user's head:
-* **Origin**: Midpoint of the eyes.
-* **$X_{\text{local}}$-axis**: Horizontal, pointing to the user's right ear.
-* **$Y_{\text{local}}$-axis**: Vertical, pointing up the face.
-* **$Z_{\text{local}}$-axis**: Perpendicular to the face plane, pointing to the back of the head. Thus, the nose points along $-Z_{\text{local}}$ (forward).
-* **Mapping to Inference Face Space**:
-  To align with the standard Inference face coordinate system (where Y points down the face and X points to the face's own left), we apply a **$180^\circ$ roll rotation around the Z-axis**:
-  $$R_Z(180^\circ) = \begin{pmatrix} -1 & 0 & 0 \\ 0 & -1 & 0 \\ 0 & 0 & 1 \end{pmatrix}$$
-  This flips both the local X and Y axes while keeping the Z-axis (pointing to the back of the head) unchanged:
-  $$X_{\text{face\_inf}} = -X_{\text{local}}$$
-  $$Y_{\text{face\_inf}} = -Y_{\text{local}}$$
-  $$Z_{\text{face\_inf}} = Z_{\text{local}}$$
+### 1.4. Head Pose PnP Solvers (SQPnP & Levenberg-Marquardt)
+Given 35 detected 2D landmarks $\{p_i = (u_i, v_i)\}$ and corresponding 3D canonical model points $\{P_i = (X_i, Y_i, Z_i)\}$, head pose optimization computes $(r_{\text{vec}}, t_{\text{vec}})$:
+1. **SQPnP (Sequential Quadratic Programming PnP):** Computes globally optimal non-iterative polynomial pose estimates.
+2. **Levenberg-Marquardt Iterative Solver:** Refines pose parameters by minimizing re-projection residuals:
+   $$\min_{r, t} \sum_{i=1}^{35} \left\| p_i - \pi(K, R(r) P_i + t) \right\|^2$$
+   where $K$ is the camera intrinsic matrix and $\pi(\cdot)$ is the perspective projection.
 
-### 1.5. Transformation between Spaces
-Any local point $P_{\text{local}}$ in GodotGaze Face Space is mapped to GodotGaze Camera Space $P_{\text{cam}}$ via:
-$$P_{\text{cam}} = R_{\text{cam}} \cdot P_{\text{local}} + t_{\text{cam}}$$
-where:
-$$R_{\text{cam}} = M \cdot R_{\text{inf}} \cdot M \cdot R_Y(180^\circ)$$
-$$t_{\text{cam}} = M \cdot t_{\text{inf}}$$
-Here, $R_{\text{inf}}$ and $t_{\text{inf}}$ are the rotation and translation returned by the inference pipeline's `solvePnP` solver.
-
-This can be expressed as a chain of 3D transforms:
-$$T_{\text{ggaze\_face\_to\_ggaze\_cam}} = T_{\text{inf\_cam\_to\_ggaze\_cam}} \cdot T_{\text{inf\_face\_to\_inf\_cam}} \cdot T_{\text{ggaze\_face\_to\_inf\_face}}$$
+### 1.5. Continuous Head Roll Un-Rotation Feedback Loop
+When head roll $\phi_{\text{roll}} \neq 0$ is detected:
+1. The working image frame is counter-rotated by $-\phi_{\text{roll}}$ so the face is upright for the ADAS landmark regression network.
+2. After landmark extraction, landmarks and PnP pose are rotated back to original camera space via:
+   $$R_{\text{final}} = R_Z(-\phi_{\text{roll}}) \cdot R_{\text{upright}}$$
+   $$t_{\text{final}} = R_Z(-\phi_{\text{roll}}) \cdot t_{\text{upright}}$$
 
 ### 1.6. Physical Display Space (Monitor Local Space)
 This centered millimeter coordinate system defines symmetric screen planes:

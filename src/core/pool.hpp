@@ -13,6 +13,7 @@ private:
         T instance; // Must remain the first member for O(1) offset alignment
         bool in_use = false;
     };
+    static_assert(offsetof(Item, instance) == 0, "instance must be at offset 0 of Item for pointer casting");
     std::array<Item, SZ> items;
     std::mutex mutex;
 
@@ -47,10 +48,15 @@ public:
         item->in_use = false;
     }
 
-    T *get_frame(size_t idx)
+    T *get(size_t idx)
     {
         if (idx >= SZ)
             return nullptr;
         return &items[idx].instance;
+    }
+
+    T *get_frame(size_t idx)
+    {
+        return get(idx);
     }
 };

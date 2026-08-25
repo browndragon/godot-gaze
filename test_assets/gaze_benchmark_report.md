@@ -11,10 +11,10 @@ Generated on: 2026-08-24T18:36:31Z
 | self_left_left.jpg | head_rot_deg | (-5.3,-161.6,0.7) | (-15.4,-3.0,0.7) | (-9.7,-6.6,0.3) | N/A |
 | self_left_left.jpg | nose_mm | (-173.3,-76.6) | (-22.6,-76.6) | (65.5,-0.9) | N/A |
 | self_left_left.jpg | gaze_mm | (-315.7,-10.2) | (-165.0,-10.2) | (463.0,-24.0) | N/A |
-| self_right_right.jpg | head_pos_mm | (-12.5,-7.6,-459.0) | N/A | N/A | N/A |
-| self_right_right.jpg | head_rot_deg | (-15.6,153.8,-3.4) | (-25.7,-6.7,-3.4) | (-17.8,-1.7,-1.4) | N/A |
-| self_right_right.jpg | nose_mm | (0.7,-42.3) | (-150.1,-42.3) | (18.6,74.0) | N/A |
-| self_right_right.jpg | gaze_mm | (204.8,61.5) | (54.0,61.5) | (-314.3,49.7) | N/A |
+| self_right_right.jpg | head_pos_mm | (-12.6,-7.4,-458.3) | N/A | N/A | N/A |
+| self_right_right.jpg | head_rot_deg | (-16.0,153.4,-3.7) | (-25.7,-6.7,-3.4) | (-17.8,-1.7,-1.4) | N/A |
+| self_right_right.jpg | nose_mm | (2.2,-41.3) | (-150.1,-42.3) | (18.6,74.0) | N/A |
+| self_right_right.jpg | gaze_mm | (204.9,65.0) | (54.0,65.0) | (-314.3,49.7) | N/A |
 | self_top_top.jpg | head_pos_mm | (18.8,7.3,-522.8) | N/A | N/A | N/A |
 | self_top_top.jpg | head_rot_deg | (0.3,179.6,2.5) | (-0.5,-2.5,2.5) | (0.7,-3.0,2.5) | N/A |
 | self_top_top.jpg | nose_mm | (-99.0,-98.0) | (-99.0,-3.7) | (27.8,73.6) | N/A |

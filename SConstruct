@@ -578,41 +578,12 @@ def setup_onnxruntime(env):
         if os.path.exists(expected_import_lib_path):
             shutil.copy2(expected_import_lib_path, os.path.join(out_dir, f"{ort_lib_name}.lib"))
 
-def setup_opencv(env):
-    import os
-    if env["platform"] == "macos":
-        opencv_dir = "/opt/homebrew/opt/opencv"
-        if os.path.exists(opencv_dir):
-            env.Append(CPPPATH=[os.path.join(opencv_dir, "include/opencv4")])
-            env.Append(LIBPATH=[os.path.join(opencv_dir, "lib")])
-            env.Append(LIBS=["opencv_calib3d", "opencv_core"])
-        else:
-            try:
-                import subprocess
-                cflags = subprocess.check_output(["pkg-config", "--cflags", "opencv4"], text=True).strip().split()
-                libs = subprocess.check_output(["pkg-config", "--libs", "opencv4"], text=True).strip().split()
-                env.Append(CCFLAGS=cflags)
-                env.Append(LINKFLAGS=libs)
-            except Exception:
-                pass
-    elif env["platform"] == "linux":
-        try:
-            import subprocess
-            cflags = subprocess.check_output(["pkg-config", "--cflags", "opencv4"], text=True).strip().split()
-            libs = subprocess.check_output(["pkg-config", "--libs", "opencv4"], text=True).strip().split()
-            env.Append(CCFLAGS=cflags)
-            env.Append(LINKFLAGS=libs)
-        except Exception:
-            pass
-
 # Conditional Source and Dependency mapping
 # Compile core, native, and windows using core_env (no Godot includes)
 # Compile godot and gen using env (with Godot includes)
 if env["platform"] != "web":
     setup_onnxruntime(core_env)
     setup_onnxruntime(env)
-    setup_opencv(core_env)
-    setup_opencv(env)
     if env["platform"] == "windows":
         win_libs = ["mf", "mfplat", "mfreadwrite", "mfuuid", "ole32"]
         env.Append(LIBS=win_libs)

@@ -52,6 +52,16 @@ namespace Gaze
         }
 
         /**
+         * @brief 18-point rigid facial core model points (Eyes 0..3, Nose 4..7, Mouth 8..11, Eyebrows 12..17).
+         * Excludes moving jawline contour points (18..34) to achieve expression-invariant PnP tracking.
+         */
+        static inline std::vector<GazeVector3> get_rigid_18pt_model_points()
+        {
+            auto pts_35 = get_canonical_35pt_face_model();
+            return std::vector<GazeVector3>(pts_35.begin(), pts_35.begin() + 18);
+        }
+
+        /**
          * @brief Primary canonical 3D model points exposed to Godot for debug overlays and tracking.
          * Converts OpenCV Model Space (-X Right, -Y Up, -Z Forward) to Godot Face Local Space (+X Right, +Y Up, -Z Forward).
          */

@@ -310,6 +310,10 @@ If true, stops camera/pipeline immediately. If false, schedules deferred check.<
 			<param index="0" name="p_config" type="const Ref&lt; GazePipelineConfig &gt; &amp;"></param>
 			<description></description>
 		</method>
+		<method name="ensure_process_connected">
+			<return type="void"></return>
+			<description></description>
+		</method>
 		<method name="trigger_process">
 			<return type="void"></return>
 			<description></description>

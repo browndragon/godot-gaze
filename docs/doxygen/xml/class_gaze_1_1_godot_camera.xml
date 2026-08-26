@@ -181,7 +181,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="31" column="5" bodyfile="src/godot/godot_camera.cpp" bodystart="10" bodyend="10"/>
+        <location file="src/godot/godot_camera.hpp" line="31" column="5" bodyfile="src/godot/godot_camera.cpp" bodystart="11" bodyend="11"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_godot_camera_1acd29c43588f15f5b18bcdc2021a8ce31" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -195,7 +195,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="32" column="13" bodyfile="src/godot/godot_camera.cpp" bodystart="12" bodyend="16"/>
+        <location file="src/godot/godot_camera.hpp" line="32" column="13" bodyfile="src/godot/godot_camera.cpp" bodystart="13" bodyend="17"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a9790ab2213ea82bb77632fe6e765e150" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -210,7 +210,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="34" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="18" bodyend="82"/>
+        <location file="src/godot/godot_camera.hpp" line="34" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="19" bodyend="88"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a898f32280666255531b0fbf184107013" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -233,7 +233,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="35" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="84" bodyend="87"/>
+        <location file="src/godot/godot_camera.hpp" line="35" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="90" bodyend="93"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a1f5709064fc408789305988d04384325" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -252,7 +252,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="36" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="89" bodyend="269"/>
+        <location file="src/godot/godot_camera.hpp" line="36" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="95" bodyend="275"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_godot_camera_1a8c1634ff2034399afb54fb07001bb3cd" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -267,7 +267,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/godot_camera.hpp" line="37" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="271" bodyend="299"/>
+        <location file="src/godot/godot_camera.hpp" line="37" column="18" bodyfile="src/godot/godot_camera.cpp" bodystart="277" bodyend="305"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

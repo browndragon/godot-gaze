@@ -39,7 +39,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="154" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="204" bodyend="206"/>
+        <location file="src/godot/vision_server.hpp" line="154" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="203" bodyend="205"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="160" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="208" bodyend="216"/>
+        <location file="src/godot/vision_server.hpp" line="160" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="207" bodyend="214"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -108,7 +108,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="161" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="218" bodyend="223"/>
+        <location file="src/godot/vision_server.hpp" line="161" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="216" bodyend="221"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -128,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="162" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="225" bodyend="229"/>
+        <location file="src/godot/vision_server.hpp" line="162" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="223" bodyend="227"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Texture2D &gt;</type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="163" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="231" bodyend="235"/>
+        <location file="src/godot/vision_server.hpp" line="163" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="229" bodyend="233"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Image &gt;</type>
@@ -168,7 +168,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="164" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="237" bodyend="241"/>
+        <location file="src/godot/vision_server.hpp" line="164" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="235" bodyend="239"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a6b5b3db71732c984c4393f0c87de7a6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -210,7 +210,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="171" column="10" bodyfile="src/godot/vision_server.cpp" bodystart="243" bodyend="245"/>
+        <location file="src/godot/vision_server.hpp" line="171" column="10" bodyfile="src/godot/vision_server.cpp" bodystart="241" bodyend="243"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

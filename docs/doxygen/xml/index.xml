@@ -597,6 +597,7 @@
     <member refid="classgodot_1_1_gaze_server_1a689bee74b07f945a3a3873562e03419c" kind="function"><name>get_gaze_screen</name></member>
     <member refid="classgodot_1_1_gaze_server_1a2b974a0514692071b50ef3f626828b8d" kind="function"><name>is_face_detected</name></member>
     <member refid="classgodot_1_1_gaze_server_1a6c5dece3b44bcea175d4cc179b409560" kind="function"><name>set_pipeline_config</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a8c24dd37784ddfea15b0f0e4d2d99255" kind="function"><name>ensure_process_connected</name></member>
     <member refid="classgodot_1_1_gaze_server_1a9d81a069fba97ef90f81c4651c905221" kind="function"><name>trigger_process</name></member>
     <member refid="classgodot_1_1_gaze_server_1a26c611815fc3e9d8d5844b350c1f00e4" kind="function"><name>start_processing</name></member>
     <member refid="classgodot_1_1_gaze_server_1a068ee3727ded8f206a8898d284bb7ca2" kind="function"><name>stop_processing</name></member>
@@ -1148,6 +1149,7 @@
     <member refid="register__types_8cpp_1adcb7aa22e2f166b81c32e258438023e0" kind="variable"><name>default_calib</name></member>
     <member refid="register__types_8cpp_1afeeb9dfa64a26d3565a3b36580d7c043" kind="variable"><name>vision_server_singleton</name></member>
     <member refid="register__types_8cpp_1a742bb3c63b2210a23496673ecab3c7de" kind="variable"><name>gaze_server_singleton</name></member>
+    <member refid="display__profile_8cpp_1a283a7d7a7a398b58c3fa07dccd4b5cc6" kind="function"><name>get_display_server_safe</name></member>
     <member refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kind="function"><name>resolve_model_path</name></member>
     <member refid="godot__files_8hpp_1a438d87c72f03b6b817f49243709e71b3" kind="function"><name>load_file_buffer</name></member>
     <member refid="register__types_8cpp_1ab47c55fc6efbb2b016683f73c317a77a" kind="function"><name>register_gaze_project_settings</name></member>

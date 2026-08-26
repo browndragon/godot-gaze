@@ -71,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="24" column="17" bodyfile="src/godot/display_profile.cpp" bodystart="19" bodyend="33"/>
+        <location file="src/godot/display_profile.hpp" line="24" column="17" bodyfile="src/godot/display_profile.cpp" bodystart="28" bodyend="42"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -87,7 +87,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="27" column="5" bodyfile="src/godot/display_profile.cpp" bodystart="82" bodyend="82"/>
+        <location file="src/godot/display_profile.hpp" line="27" column="5" bodyfile="src/godot/display_profile.cpp" bodystart="91" bodyend="91"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a1fe0e5846900a263f4f56bcbff358d6c" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -101,7 +101,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="28" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="84" bodyend="84"/>
+        <location file="src/godot/display_profile.hpp" line="28" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="93" bodyend="93"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1affcdcacf14e9dad1d9f5e90ed5d1caf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -119,7 +119,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="30" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="86" bodyend="88"/>
+        <location file="src/godot/display_profile.hpp" line="30" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="95" bodyend="97"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1ad910e19d60fcf5c62eaad5c21e0b695c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2i</type>
@@ -133,7 +133,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="31" column="14" bodyfile="src/godot/display_profile.cpp" bodystart="90" bodyend="92"/>
+        <location file="src/godot/display_profile.hpp" line="31" column="14" bodyfile="src/godot/display_profile.cpp" bodystart="99" bodyend="101"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1ab8fdde3b0ce7bfa9c83e5fbfdf0bc967" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -151,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="33" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="94" bodyend="96"/>
+        <location file="src/godot/display_profile.hpp" line="33" column="10" bodyfile="src/godot/display_profile.cpp" bodystart="103" bodyend="105"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1abc78184ef9001b8bb4f63215dd0d5c72" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -165,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="34" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="98" bodyend="100"/>
+        <location file="src/godot/display_profile.hpp" line="34" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="107" bodyend="109"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a05c10f4f3c5b99a7469e5919e652b82f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -179,7 +179,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="36" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="102" bodyend="110"/>
+        <location file="src/godot/display_profile.hpp" line="36" column="13" bodyfile="src/godot/display_profile.cpp" bodystart="111" bodyend="119"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
@@ -195,7 +195,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="38" column="16" bodyfile="src/godot/display_profile.cpp" bodystart="35" bodyend="80"/>
+        <location file="src/godot/display_profile.hpp" line="38" column="16" bodyfile="src/godot/display_profile.cpp" bodystart="44" bodyend="89"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a63e978bcd7b9ae49d70c3ef5403c098c" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -209,7 +209,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="39" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="112" bodyend="126"/>
+        <location file="src/godot/display_profile.hpp" line="39" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="121" bodyend="135"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1acb229e8512363e385aac73f1527cae13" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -223,7 +223,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="40" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="128" bodyend="147"/>
+        <location file="src/godot/display_profile.hpp" line="40" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="137" bodyend="156"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_display_profile_1a1ce25443266a1d178a9c0ac0f5e2f4ee" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
@@ -237,7 +237,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/display_profile.hpp" line="41" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="149" bodyend="180"/>
+        <location file="src/godot/display_profile.hpp" line="41" column="20" bodyfile="src/godot/display_profile.cpp" bodystart="158" bodyend="189"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

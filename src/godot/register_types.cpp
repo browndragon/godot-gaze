@@ -1,5 +1,5 @@
 #include "register_types.hpp"
-#include "gaze_tracker.hpp"
+#include "input_event_gaze.hpp"
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_session.hpp"
 #include "gaze_pipeline_config.hpp"
@@ -43,6 +43,33 @@ static GazeServer* gaze_server_singleton = nullptr;
 static void register_gaze_project_settings() {
     ProjectSettings *ps = ProjectSettings::get_singleton();
     if (ps) {
+        if (!ps->has_setting("gaze/general/autostart")) {
+            ps->set_setting("gaze/general/autostart", true);
+        }
+        Dictionary prop_autostart;
+        prop_autostart["name"] = "gaze/general/autostart";
+        prop_autostart["type"] = Variant::BOOL;
+        ps->add_property_info(prop_autostart);
+        ps->set_initial_value("gaze/general/autostart", true);
+
+        if (!ps->has_setting("gaze/pointing/emulate_gaze_from_mouse")) {
+            ps->set_setting("gaze/pointing/emulate_gaze_from_mouse", true);
+        }
+        Dictionary prop_emul_gaze;
+        prop_emul_gaze["name"] = "gaze/pointing/emulate_gaze_from_mouse";
+        prop_emul_gaze["type"] = Variant::BOOL;
+        ps->add_property_info(prop_emul_gaze);
+        ps->set_initial_value("gaze/pointing/emulate_gaze_from_mouse", true);
+
+        if (!ps->has_setting("gaze/pointing/emulate_mouse_from_gaze")) {
+            ps->set_setting("gaze/pointing/emulate_mouse_from_gaze", false);
+        }
+        Dictionary prop_emul_mouse;
+        prop_emul_mouse["name"] = "gaze/pointing/emulate_mouse_from_gaze";
+        prop_emul_mouse["type"] = Variant::BOOL;
+        ps->add_property_info(prop_emul_mouse);
+        ps->set_initial_value("gaze/pointing/emulate_mouse_from_gaze", false);
+
         if (!ps->has_setting("gaze/models/search_paths")) {
             ps->set_setting("gaze/models/search_paths", "res://models,res://addons/godot-gaze/models");
         }
@@ -209,12 +236,10 @@ static void register_gaze_project_settings() {
 
 void initialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
-        ClassDB::register_class<DisplayProfile>();
         ClassDB::register_class<VisionServer>();
         ClassDB::register_class<MockVisionServer>();
         ClassDB::register_class<GazeFrame>();
         ClassDB::register_class<GazeServer>();
-
 
         vision_server_singleton = memnew(VisionServer);
         Engine::get_singleton()->register_singleton("VisionServer", vision_server_singleton);
@@ -247,10 +272,18 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     }
 
     // Register GDExtension classes so they are exposed to GDScript/Editor
+    ClassDB::register_class<DisplayProfile>();
+
+    ClassDB::register_class<InputEventGazeBase>();
+    ClassDB::register_class<InputEventGaze>();
+    ClassDB::register_class<InputEventGazeMissing>();
+
+    ClassDB::register_class<Smoother>();
+    ClassDB::register_class<OneEuroSmoother>();
+    ClassDB::register_internal_class<OneEuroFilterState>();
+
     ClassDB::register_class<DeviceCalibration>();
-
     ClassDB::register_class<GuessDeviceCalibration>();
-
     ClassDB::register_class<StoredDeviceCalibration>();
     ClassDB::register_class<DefaultDeviceCalibration>();
 
@@ -261,14 +294,10 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
     ClassDB::register_class<GazeCalibrationSession>();
     ClassDB::register_class<GazePipelineConfig>();
-    ClassDB::register_class<GazeTracker>();
     ClassDB::register_class<GazeDeviceEstimatedCalibration>();
     ClassDB::register_class<CameraSensor>();
     ClassDB::register_class<FaceEstimator>();
     ClassDB::register_class<EyeEstimator>();
-    ClassDB::register_class<Smoother>();
-    ClassDB::register_class<OneEuroSmoother>();
-    ClassDB::register_internal_class<OneEuroFilterState>();
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif

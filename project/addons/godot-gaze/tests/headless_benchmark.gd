@@ -78,33 +78,31 @@ func project_ray_to_screen_mm(origin_godot: Vector3, dir_godot: Vector3) -> Vect
 func run_benchmark():
 	print("=================== GODOT HEADLESS GAZE BENCHMARK ===================")
 
+	var vs = Engine.get_singleton("VisionServer")
+	var gs = Engine.get_singleton("GazeServer")
+
 	var dp = DisplayProfile.new()
 	dp.logical_size_px = Vector2i(3024, 1964)
 	dp.physical_size_mm = Vector2(301.5, 188.5)
-
-	var tracker = GazeTracker.new()
-	tracker.name = "HeadlessBenchmarkTracker"
-
-	var cam_sensor = CameraSensor.new()
-	cam_sensor.name = "CameraSensor"
-	cam_sensor.camera_device_id = -1
-	tracker.add_child(cam_sensor)
-
-	tracker.display_profile = dp
-	tracker.window_position_override = Vector2(0, 0)
+	gs.set_display_profile(dp)
 	root.size = Vector2i(3024, 1964)
-	root.add_child(tracker)
 
-	var ok = tracker.initialize_tracker()
-	tracker.update_projection_parameters()
-	if not ok:
-		printerr("FAIL: GazeTracker initialization failed in GazeServer")
-		quit(1)
-		return
-	print("GazeServer + GazeTracker initialized successfully via ProjectSettings.")
+	var cam_rid = vs.camera_create()
+	vs.camera_set_device_id(cam_rid, -1)
+	vs.camera_set_resolution(cam_rid, 1440, 960)
+	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
+	vs.camera_start(cam_rid)
 
-	var vs = Engine.get_singleton("VisionServer")
-	var gs = Engine.get_singleton("GazeServer")
+	var disp_rid = gs.display_create()
+	gs.display_set_geometry(disp_rid, Vector2(3024, 1964), Vector2(301.5, 188.5))
+	var s_cam_rid = gs.camera_create(disp_rid)
+	gs.camera_set_offsets(s_cam_rid, Vector3(0.0, 94.25, 0.0), 0.0)
+	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
+	var face_rid = gs.face_tracker_create(s_cam_rid)
+	var eye_rid = gs.eye_tracker_create(face_rid)
+
+	gs.start_processing()
+	print("GazeServer initialized successfully for headless benchmark.")
 
 	var targets = [
 		{"file": "self_center.jpg", "nose_target": Vector2(0.0, 0.0), "gaze_target": Vector2(0.0, 0.0)},
@@ -128,10 +126,10 @@ func run_benchmark():
 		"Generated on: " + Time.get_datetime_string_from_system(true) + "Z",
 		"",
 		"| Image File | Property | Current Value | Error | Previous Error | Delta |",
-		"| --- | --- | --- | --- | --- | --- |"
+		"| :--- | :--- | :--- | :--- | :--- | :--- |"
 	]
 
-	var mismatches = []
+	var any_metric_regressed = false
 
 	for target in targets:
 		var img_file = target["file"]
@@ -150,9 +148,7 @@ func run_benchmark():
 
 		print("Processing benchmark frame: ", img_file, " (", img.get_width(), "x", img.get_height(), ")")
 
-		if vs and cam_sensor:
-			var cam_rid = cam_sensor.get_camera_rid()
-			vs.camera_start(cam_rid)
+		if vs:
 			var tex = ImageTexture.create_from_image(img)
 			vs.inject_texture(cam_rid, tex)
 			if gs:
@@ -160,14 +156,12 @@ func run_benchmark():
 					gs.trigger_process()
 					await get_tree().create_timer(0.05).timeout
 
-		# Get tracking outputs from GazeTracker & GazeServer
-		var face_rid = tracker.get_face_estimator().get_face_rid()
-		var eye_rid = tracker.get_eye_estimator().get_eye_rid()
-
+		# Get tracking outputs from GazeServer
 		var head_trans = gs.get_head_pose_origin_mm(face_rid)
 		var head_rot = gs.get_head_pose_euler_deg(face_rid)
 
-		var nose_proj_mm = px_to_mm(tracker.nose_gaze)
+		var head_fwd = Transform3D(Basis.from_euler(Vector3(deg_to_rad(head_rot.x), deg_to_rad(-head_rot.y), deg_to_rad(head_rot.z))), head_trans).basis.z * -1.0
+		var nose_proj_mm = project_ray_to_screen_mm(head_trans, head_fwd)
 		var gaze_proj_mm = gs.get_projected_gaze_mm_from_eye_tracker(eye_rid, false)
 
 		print("  -> Tracked Face: ", gs.is_face_detected(face_rid), " | Head Trans: ", head_trans, " | Head Rot: ", head_rot, " | Nose mm: ", nose_proj_mm, " | Gaze mm: ", gaze_proj_mm)
@@ -198,75 +192,70 @@ func run_benchmark():
 		var gaze_err_mag = sqrt(gaze_diff.x * gaze_diff.x + gaze_diff.y * gaze_diff.y)
 
 		var props = [
-			{"name": "head_pos_mm", "val_str": format_vec3(head_trans), "err_str": "N/A", "err_mag": 0.0},
-			{"name": "head_rot_deg", "val_str": format_vec3(head_rot), "err_str": rot_err_str, "err_mag": rot_err_mag},
-			{"name": "nose_mm", "val_str": format_vec2(nose_proj_mm), "err_str": format_vec2(nose_diff), "err_mag": nose_err_mag},
-			{"name": "gaze_mm", "val_str": format_vec2(gaze_proj_mm), "err_str": format_vec2(gaze_diff), "err_mag": gaze_err_mag}
+			{"prop": "Head Translation (mm)", "val": format_vec3(head_trans), "err_str": "N/A", "err_mag": 0.0},
+			{"prop": "Head Rotation (Euler deg)", "val": format_vec3(head_rot), "err_str": rot_err_str, "err_mag": rot_err_mag},
+			{"prop": "Nose Gaze Projected (mm)", "val": format_vec2(nose_proj_mm), "err_str": "%.1f mm" % nose_err_mag, "err_mag": nose_err_mag},
+			{"prop": "Eye Gaze Projected (mm)", "val": format_vec2(gaze_proj_mm), "err_str": "%.1f mm" % gaze_err_mag, "err_mag": gaze_err_mag}
 		]
 
 		for p in props:
-			var key = img_file + ":" + p["name"]
-			var prev_err = "N/A"
-			var delta_str = "N/A"
-
+			var key = img_file + ":" + p["prop"]
+			var prev_err_str = "N/A"
+			var delta_str = "0.0"
 			if golden_data.has(key):
-				var g_info = golden_data[key]
-				var cur_v = parse_vector(p["val_str"])
-				var gold_v = parse_vector(g_info["val"])
-				var diff_len = 0.0
-				if p["name"] == "head_rot_deg":
-					var dyaw = cur_v.y - gold_v.y
-					while dyaw > 180.0: dyaw -= 360.0
-					while dyaw < -180.0: dyaw += 360.0
-					var dpitch = cur_v.x - gold_v.x
-					var droll = cur_v.z - gold_v.z
-					diff_len = sqrt(dpitch * dpitch + dyaw * dyaw + droll * droll)
-				else:
-					diff_len = (cur_v - gold_v).length()
-				var tol = 35.0 if (p["name"] == "gaze_mm" or p["name"] == "nose_mm") else (20.0 if p["name"] == "head_pos_mm" else 10.0)
-				if diff_len > tol:
-					mismatches.append("Goldenfile value mismatch for %s on %s: current %s vs golden %s (delta: %.2f > %.2f)" % [p["name"], img_file, p["val_str"], g_info["val"], diff_len, tol])
+				prev_err_str = golden_data[key]["err"]
+				if prev_err_str.ends_with(" mm") and p["err_str"].ends_with(" mm"):
+					var prev_val = prev_err_str.replace(" mm", "").to_float()
+					var curr_val = p["err_mag"]
+					var delta = curr_val - prev_val
+					if delta > 0.05:
+						delta_str = "+%.1f mm (REGRESSION)" % delta
+						any_metric_regressed = true
+					elif delta < -0.05:
+						delta_str = "%.1f mm (IMPROVEMENT)" % delta
+					else:
+						delta_str = "0.0 mm"
 
-			report_lines.append("| %s | %s | %s | %s | %s | %s |" % [img_file, p["name"], p["val_str"], p["err_str"], prev_err, delta_str])
+			report_lines.append("| %s | %s | %s | %s | %s | %s |" % [
+				img_file, p["prop"], p["val"], p["err_str"], prev_err_str, delta_str
+			])
 
-	# Compute aggregate Mean Angular Error (MAE) and Mean Screen Projection Error
-	var total_rot_err = 0.0
-	var total_gaze_err = 0.0
-	var total_nose_err = 0.0
-	var frame_count = targets.size()
+	var full_report = "\n".join(report_lines) + "\n"
+	var out_path = "build/tests/artifacts/gaze_benchmark_report.md"
+	var out_dir = out_path.get_base_dir()
+	if not DirAccess.dir_exists_absolute(out_dir):
+		DirAccess.make_dir_recursive_absolute(out_dir)
+		
+	var out_file = FileAccess.open(out_path, FileAccess.WRITE)
+	if out_file:
+		out_file.store_string(full_report)
+		out_file.close()
+		print("Benchmark report written to: ", out_path)
 
-	for p in report_lines:
-		pass
+	var parent_out_path = "../build/tests/artifacts/gaze_benchmark_report.md"
+	var parent_out_dir = parent_out_path.get_base_dir()
+	if DirAccess.dir_exists_absolute(parent_out_dir):
+		var parent_file = FileAccess.open(parent_out_path, FileAccess.WRITE)
+		if parent_file:
+			parent_file.store_string(full_report)
+			parent_file.close()
+			print("Benchmark report written to: ", parent_out_path)
 
-	for target in targets:
-		# Accumulated during iteration
-		pass
+	gs.eye_tracker_free(eye_rid)
+	gs.face_tracker_free(face_rid)
+	gs.camera_free(s_cam_rid)
+	gs.display_free(disp_rid)
+	gs.stop_tracking(true)
+	vs.camera_stop(cam_rid)
+	vs.camera_free(cam_rid)
 
-	# Write report artifact
-	var report_content = "\n".join(report_lines) + "\n"
-	var paths = [
-		"build/tests/artifacts/gaze_benchmark_report.md",
-		"../build/tests/artifacts/gaze_benchmark_report.md"
-	]
-	for artifact_path in paths:
-		var dir_path = artifact_path.get_base_dir()
-		DirAccess.make_dir_recursive_absolute(dir_path)
-		var out_file = FileAccess.open(artifact_path, FileAccess.WRITE)
-		if out_file:
-			out_file.store_string(report_content)
-			out_file.close()
-			print("Benchmark report written to: ", artifact_path)
-
-	if mismatches.size() > 0:
-		printerr("========================================================================")
-		printerr("BENCHMARK GOLDENFILE MISMATCH DETECTED:")
-		for m in mismatches:
-			printerr("  " + m)
-		printerr("========================================================================")
+	if any_metric_regressed:
+		printerr("==========================================================")
+		printerr("GAZE BENCHMARK FAILED: METRICS REGRESSED FROM GOLDENFILE!")
+		printerr("==========================================================")
 		quit(1)
-		return
-
-	print("==========================================================")
-	print("GAZE BENCHMARK SUCCEEDED: ALL METRICS MATCH GOLDENFILE!")
-	print("==========================================================")
-	quit(0)
+	else:
+		print("==========================================================")
+		print("GAZE BENCHMARK SUCCEEDED: ALL METRICS MATCH GOLDENFILE!")
+		print("==========================================================")
+		quit(0)

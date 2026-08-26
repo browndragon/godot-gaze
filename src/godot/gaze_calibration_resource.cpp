@@ -1,5 +1,5 @@
 #include "gaze_calibration_resource.hpp"
-#include "gaze_tracker.hpp"
+#include "gaze_server.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
@@ -37,15 +37,24 @@ void DeviceCalibration::_bind_methods() {
 }
 
 Vector2 DeviceCalibration::get_pixel_size_mm(Object* tracker) const {
-    return pixel_size_mm;
+    if (pixel_size_mm.x > 0.0 && pixel_size_mm.y > 0.0) {
+        return pixel_size_mm;
+    }
+    return Vector2(0.25, 0.25);
 }
 
 Vector3 DeviceCalibration::get_camera_offset(Object* tracker) const {
-    return camera_offset;
+    if (camera_offset.x > -999.0 && camera_offset.y > -999.0 && camera_offset.z > -999.0) {
+        return camera_offset;
+    }
+    return Vector3(0.0, 148.0, 0.0);
 }
 
 double DeviceCalibration::get_camera_tilt(Object* tracker) const {
-    return camera_tilt;
+    if (camera_tilt > -999.0) {
+        return camera_tilt;
+    }
+    return 0.0;
 }
 
 double DeviceCalibration::get_focal_length_under_scaling_static(double f_original, double original_dim, double new_dim) {
@@ -66,18 +75,25 @@ Vector2 GuessDeviceCalibration::get_pixel_size_mm(Object* tracker) const {
     if (pixel_size_mm.x > 0.0 && pixel_size_mm.y > 0.0) {
         return pixel_size_mm;
     }
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            Ref<DisplayProfile> dp = gt->get_display_profile();
-            if (dp.is_valid()) {
-                Vector2i size_px = dp->get_logical_size_px();
-                Vector2 size_mm = dp->get_physical_size_mm();
-                if (size_px.x > 0 && size_px.y > 0 && size_mm.x > 0.0 && size_mm.y > 0.0) {
-                    return Vector2(size_mm.x / size_px.x, size_mm.y / size_px.y);
-                }
+    if (tracker && tracker->has_method("get_display_profile")) {
+        Ref<DisplayProfile> dp = tracker->call("get_display_profile");
+        if (dp.is_valid()) {
+            Vector2i size_px = dp->get_logical_size_px();
+            Vector2 size_mm = dp->get_physical_size_mm();
+            if (size_px.x > 0 && size_px.y > 0 && size_mm.x > 0.0 && size_mm.y > 0.0) {
+                return Vector2(size_mm.x / size_px.x, size_mm.y / size_px.y);
             }
-            return gt->get_pixel_size_mm();
+        }
+    }
+    GazeServer* gs = GazeServer::get_singleton();
+    if (gs) {
+        Ref<DisplayProfile> dp = gs->get_display_profile();
+        if (dp.is_valid()) {
+            Vector2i size_px = dp->get_logical_size_px();
+            Vector2 size_mm = dp->get_physical_size_mm();
+            if (size_px.x > 0 && size_px.y > 0 && size_mm.x > 0.0 && size_mm.y > 0.0) {
+                return Vector2(size_mm.x / size_px.x, size_mm.y / size_px.y);
+            }
         }
     }
     DisplayServer* ds = DisplayServer::get_singleton();
@@ -109,11 +125,8 @@ Vector3 GuessDeviceCalibration::get_camera_offset(Object* tracker) const {
     if (camera_offset.x > -999.0 && camera_offset.y > -999.0 && camera_offset.z > -999.0) {
         return camera_offset;
     }
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            return gt->get_derived_camera_offset();
-        }
+    if (tracker && tracker->has_method("get_derived_camera_offset")) {
+        return tracker->call("get_derived_camera_offset");
     }
     return Vector3(0.0, 148.0, 0.0);
 }
@@ -122,11 +135,8 @@ double GuessDeviceCalibration::get_camera_tilt(Object* tracker) const {
     if (camera_tilt > -999.0) {
         return camera_tilt;
     }
-    if (tracker) {
-        GazeTracker* gt = Object::cast_to<GazeTracker>(tracker);
-        if (gt) {
-            return gt->get_derived_camera_tilt();
-        }
+    if (tracker && tracker->has_method("get_derived_camera_tilt")) {
+        return tracker->call("get_derived_camera_tilt");
     }
     return 0.0;
 }

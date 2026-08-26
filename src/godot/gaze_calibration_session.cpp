@@ -3,7 +3,7 @@
  * @brief Implement Godot wrapper for GazeCalibrationSession using the C++ core estimator
  */
 #include "gaze_calibration_session.hpp"
-#include "gaze_tracker.hpp"
+#include "gaze_server.hpp"
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_estimator.hpp"
 #include "display_profile.hpp"
@@ -17,7 +17,7 @@ void GazeCalibrationSession::_bind_methods() {
     ClassDB::bind_method(D_METHOD("add_sample", "target_pixel_px", "gaze_origin", "gaze_direction"), &GazeCalibrationSession::add_sample);
     ClassDB::bind_method(D_METHOD("clear"), &GazeCalibrationSession::clear);
     ClassDB::bind_method(D_METHOD("get_sample_count"), &GazeCalibrationSession::get_sample_count);
-    ClassDB::bind_method(D_METHOD("calculate_calibration", "tracker"), &GazeCalibrationSession::calculate_calibration);
+    ClassDB::bind_method(D_METHOD("calculate_calibration", "tracker"), &GazeCalibrationSession::calculate_calibration, DEFVAL(Variant()));
 
     ClassDB::bind_method(D_METHOD("set_freeze_camera_params", "freeze"), &GazeCalibrationSession::set_freeze_camera_params);
     ClassDB::bind_method(D_METHOD("get_freeze_camera_params"), &GazeCalibrationSession::get_freeze_camera_params);
@@ -52,7 +52,7 @@ int GazeCalibrationSession::get_sample_count() const {
     return target_pixels_px.size();
 }
 
-Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
+Dictionary GazeCalibrationSession::calculate_calibration(Object *tracker) {
     Dictionary res;
 
     Ref<GuessDeviceCalibration> dev_cal;
@@ -64,14 +64,26 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
     res["device_calibration"] = dev_cal;
     res["bio_calibration"] = bio_cal;
 
-    if (!tracker) {
-        return res;
-    }
-
     int count = get_sample_count();
     if (count == 0) {
         return res;
     }
+
+    GazeServer* gs = GazeServer::get_singleton();
+    Ref<DisplayProfile> profile;
+    if (tracker && tracker->has_method("get_display_profile")) {
+        profile = tracker->call("get_display_profile");
+    } else if (gs) {
+        profile = gs->get_display_profile();
+    }
+    if (!profile.is_valid()) {
+        profile = DisplayProfile::estimate_from_os();
+    }
+
+    Vector2i screen_sz_px = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
+    Vector2 screen_sz_mm = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(345.0, 215.0);
+    if (screen_sz_px.x <= 0 || screen_sz_px.y <= 0) screen_sz_px = Vector2i(1920, 1080);
+    if (screen_sz_mm.x <= 0.0 || screen_sz_mm.y <= 0.0) screen_sz_mm = Vector2(345.0, 215.0);
 
     std::vector<Gaze::CalibrationSample> core_samples;
     for (int i = 0; i < count; ++i) {
@@ -83,18 +95,6 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
         Vector3 orig_val = gaze_origins[i];
         Vector3 dir_val = gaze_directions[i];
 
-        // Convert logical screen target pixels to millimeter offsets from screen center
-        Ref<DisplayProfile> profile = tracker->get_display_profile();
-        Vector2i screen_sz_px = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
-        Vector2 screen_sz_mm = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(345.0, 215.0);
-
-        if (screen_sz_px.x <= 0 || screen_sz_px.y <= 0) {
-            screen_sz_px = Vector2i(1920, 1080); // baseline fallback
-        }
-        if (screen_sz_mm.x <= 0.0 || screen_sz_mm.y <= 0.0) {
-            screen_sz_mm = Vector2(345.0, 215.0); // baseline fallback
-        }
-
         Gaze::CalibrationSample sample;
         sample.gaze_origin = Gaze::GazeVector3(orig_val.x, orig_val.y, orig_val.z);
         sample.gaze_direction = Gaze::GazeVector3(dir_val.x, dir_val.y, dir_val.z);
@@ -105,12 +105,11 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
         core_samples.push_back(sample);
     }
 
-    Vector3 init_off = tracker->get_derived_camera_offset();
-    double init_tilt = tracker->get_derived_camera_tilt();
-    Ref<DisplayProfile> profile = tracker->get_display_profile();
-    Vector2 screen_sz_mm_vec = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(345.0, 215.0);
-    if (screen_sz_mm_vec.x <= 0.0 || screen_sz_mm_vec.y <= 0.0) {
-        screen_sz_mm_vec = Vector2(345.0, 215.0);
+    Vector3 init_off = Vector3(0.0, 148.0, 0.0);
+    double init_tilt = 0.0;
+    if (tracker && tracker->has_method("get_derived_camera_offset")) {
+        init_off = tracker->call("get_derived_camera_offset");
+        init_tilt = tracker->call("get_derived_camera_tilt");
     }
 
     Gaze::GazeVector3 out_off;
@@ -120,7 +119,7 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
 
     bool success = Gaze::CalibrationEstimator::estimate(
         core_samples,
-        Gaze::GazeVector2(screen_sz_mm_vec.x, screen_sz_mm_vec.y),
+        Gaze::GazeVector2(screen_sz_mm.x, screen_sz_mm.y),
         Gaze::GazeVector3(init_off.x, init_off.y, init_off.z),
         init_tilt,
         freeze_camera_params,
@@ -133,7 +132,7 @@ Dictionary GazeCalibrationSession::calculate_calibration(GazeTracker *tracker) {
     if (success) {
         dev_cal->set_camera_offset(Vector3(out_off.x, out_off.y, out_off.z));
         dev_cal->set_camera_tilt(out_tilt);
-        dev_cal->set_pixel_size_mm(tracker->get_pixel_size_mm());
+        dev_cal->set_pixel_size_mm(Vector2(screen_sz_mm.x / screen_sz_px.x, screen_sz_mm.y / screen_sz_px.y));
 
         bio_cal->set_bias_pitch(out_pitch);
         bio_cal->set_bias_yaw(out_yaw);

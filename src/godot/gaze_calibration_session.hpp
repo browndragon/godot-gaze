@@ -12,8 +12,6 @@
 
 namespace godot {
 
-class GazeTracker;
-
 class GazeCalibrationSession : public Resource {
     GDCLASS(GazeCalibrationSession, Resource);
 
@@ -34,7 +32,7 @@ public:
     void clear();
     int get_sample_count() const;
 
-    Dictionary calculate_calibration(GazeTracker *tracker);
+    Dictionary calculate_calibration(Object *tracker = nullptr);
 
     // Getters and setters for properties to allow serialization
     void set_freeze_camera_params(bool p_freeze) { freeze_camera_params = p_freeze; }

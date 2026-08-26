@@ -143,3 +143,44 @@ flowchart LR
    - 100% of spatial geometry, PnP head pose solving, basis rotations, and screen ray projections are compiled directly from `src/core/` into WebAssembly.
    - Eliminates JavaScript math duplication and guarantees identical behavior between Native desktop and Web builds.
    - WebAssembly execution reduces main-thread CPU time by ~2x–4x compared to pure JavaScript numerical loops.
+
+---
+
+## 6. Input Subsystem & Event Architecture
+
+> [!NOTE]
+> **Status: Phase 1 Implemented / Phase 2 (Interaction & Dwell) In Active Development**
+> The input event hierarchy (`InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`) and centralized `GazeServer` lifecycle are **implemented** as of Phase 1. The high-level interaction widgets (`PowerAccumulator`, `GazeAreaControl`) are being implemented in Phase 2.
+
+To integrate idiomatic Godot input handling, `godot-gaze` models eye-gaze as first-class engine input events rather than relying strictly on out-of-band polling.
+
+```mermaid
+flowchart TD
+    GS["GazeServer Singleton"] -->|Constructs 60 FPS Frame Event| IEG["InputEventGaze / InputEventGazeMissing<br/>(inherits InputEventAction)"]
+    IEG -->|Input.parse_input_event| INP["Godot Input Pipeline"]
+    INP -->|Standard Dispatch| UN["Node._unhandled_input / _input"]
+    INP -->|Interaction Layer (Phase 2)| GAC["GazeAreaControl / GazeDetector"]
+    GAC -->|Target Power 1.0 / 0.0| PA["PowerAccumulator (2nd-Order Dynamics)"]
+    PA -->|charge_changed / full| UI["UI Focus & Button Activation"]
+```
+
+### 1. First-Class Events: `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing` (Implemented)
+- **Inheritance**: Subclasses `InputEventAction` (concrete in Godot's `ClassDB`), enabling registration and routing through `Input::get_singleton()->parse_input_event()`.
+- **`InputEventGazeBase`**:
+  - `window_id: int`, `frame_id: int`, `timestamp_usec: int`.
+  - Continuous eye openness: `left_eye_openness: float`, `right_eye_openness: float` ($0.0$ closed to $1.0$ open).
+  - Blink queries: `is_blink(threshold = 0.5)`, `is_left_blink()`, `is_right_blink()`.
+  - `is_face_tracked() -> bool` (virtual, defaults to false on base / missing).
+- **`InputEventGaze`**:
+  - Dispatched when face detection and gaze estimation succeed.
+  - **2D Coordinates**: `position: Vector2` (viewport pixels) and `global_position: Vector2` (window pixels).
+  - **Kinematics**: `relative: Vector2`, `velocity: Vector2` ($\Delta\text{pos}/\Delta t$ in px/sec), `screen_velocity: Vector2`.
+  - **3D Spatial Transforms**: `head_transform: Transform3D` (origin in mm, orientation basis) and `gaze_transform: Transform3D` (combined optical ray origin and direction basis).
+- **`InputEventGazeMissing`**:
+  - Dispatched when face or eye tracking drops.
+  - Carries `reason: MissingReason` (`REASON_NO_FACE_DETECTED`, `REASON_OCCLUSION_BLINK`, `REASON_OUT_OF_BOUNDS`, `REASON_LOW_CONFIDENCE`).
+
+### 2. Decoupled Interaction & Dwell Layer (Phase 2 - In Progress)
+- **`PowerAccumulator`**: A 2nd-order dynamical integrator ($\frac{dv}{dt} = A(P_{\text{target}} - P) - D v, \frac{dq}{dt} = v$) that handles dwell charging and decay with physical momentum. Absorbs natural $100\text{–}150\text{ms}$ micro-saccades and dropouts without discrete pause timers.
+- **Unified Infinite Margins**: Hitbox expansion (`margin_left`, `margin_right`, `margin_top`, `margin_bottom`) allows expanding target regions; setting margins to $\infty$ on $X$ or $Y$ creates full-width row or full-height column bands.
+- **Focus-Driven UI**: UI targets react to gaze via standard Godot `grab_focus()` rather than hijacking physical mouse hover coordinates.

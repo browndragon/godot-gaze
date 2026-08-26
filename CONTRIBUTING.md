@@ -9,17 +9,17 @@ Please adhere to the following guidelines to maintain library quality, testabili
 
 ## 1. Directory Layout & Architecture Layers
 
-The codebase is organized as a layered architecture to ensure complete testability and platform separation:
+The codebase is organized as a strictly layered architecture to ensure complete testability, layer purity, and platform separation. For the complete specification, component topologies, and concurrency model, see [System Architecture & Technical Specification](docs/architecture.md).
 
 - `src/core/`: Zero-dependency, pure C++ structures, math, filters, and projection algorithms. **Must not depend on Godot-cpp or ONNX Runtime.**
 - `src/native/`: Platform-independent ML inference pipelines utilizing ONNX Runtime (CPU/XNNPACK).
 - `src/windows/`: Windows-specific C++ platform implementations (e.g., path mapping/conversions).
 - `src/android/`: Android-specific C++ platform implementations (e.g., NNAPI execution provider setup).
-- `src/web/`: Web/HTML5 stubs and stubs interfacing with the browser Emscripten sidecar.
-- `src/godot/`: GDExtension bindings and lifecycle orchestrations.
+- `src/web/`: Web/HTML5 stubs and browser Emscripten sidecar.
+- `src/godot/`: GDExtension bindings, input events (`InputEventGaze`), servers (`GazeServer`, `VisionServer`), and lifecycle orchestrations.
 - `project/`: The Godot project containing the editor addon (`addons/godot-gaze/`).
-- `tests/`: Standalone C++ and python unit tests, regression benchmarks, and Godot headless/windowed integration tests.
-- `docs/`: Physical/calibration mathematical guides and documentation.
+- `tests/`: Standalone C++ and Python unit tests, regression benchmarks, and Godot headless/windowed integration tests.
+- `docs/`: Technical specifications, architecture docs, and calibration/mathematical model guides.
 - `thirdparty/`: External vendored packages (e.g. `doctest`, `one_euro_filter`, `godot-cpp`).
 
 ---

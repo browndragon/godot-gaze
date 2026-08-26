@@ -7,7 +7,7 @@
 -
 - When compiling for the Web, SCons stub-out the native C++ ONNX Runtime and replaces them with a lightweight Emscripten JS data bridge.
 - - The main thread interacts with the browser sidecar (`gaze_sidecar.js`).
-- - The sidecar runs MediaPipe Face Landmarker JS and ONNX Runtime Web inside a dedicated browser Web Worker.
+- - The sidecar runs ONNX Runtime Web (YuNet face detection + OpenVINO ADAS gaze estimation) inside the browser.
 - - Ingested coordinates are fed back to Godot through registered Emscripten callbacks on the `WebBindingState` class.
   */
 

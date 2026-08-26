@@ -5,8 +5,8 @@ signal calibration_completed(resource)
 
 @export var target_hold_time: float = 1.5
 
-var tracker: GazeTracker = null
 var calib_session: GazeCalibrationSession
+var latest_gaze_event: InputEventGaze = null
 var calib_points = [
 	Vector2(0.5, 0.5),   # Center
 	Vector2(0.1, 0.1),   # Top Left
@@ -32,22 +32,21 @@ func _ready():
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	
-	if not tracker:
-		# Fallback if tracker not injected by parent
-		var child_tracker = get_node_or_null("GazeTracker")
-		if child_tracker:
-			tracker = child_tracker
-		else:
-			tracker = GazeTracker.new()
-			add_child(tracker)
-			tracker.initialize_tracker()
+	var gs = Engine.get_singleton("GazeServer")
+	if gs:
+		gs.start_tracking()
+		gs.set_device_calibration(null)
+		gs.set_bio_calibration(null)
 		
-	tracker.clear_calibration()
 	calib_session = GazeCalibrationSession.new()
 	calib_session.clear()
 	current_target_idx = 0
 	target_timer = 0.0
 	draw_target = true
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventGaze:
+		latest_gaze_event = event
 
 func _process(delta):
 	if current_target_idx >= calib_points.size():
@@ -58,12 +57,13 @@ func _process(delta):
 	var target_norm = calib_points[current_target_idx]
 	var target_window_pos = target_norm * viewport_size
 	
-	current_target_screen_pos = tracker.map_viewport_to_screen(target_window_pos)
+	var win_pos = get_window().position if get_window() else Vector2i.ZERO
+	current_target_screen_pos = Vector2(win_pos) + target_window_pos
 	
 	if target_timer >= target_hold_time:
-		if tracker.is_face_detected():
-			var gaze_orig = tracker.get_gaze_origin()
-			var gaze_dir = tracker.get_gaze_direction(false)
+		if latest_gaze_event != null and latest_gaze_event.is_face_tracked():
+			var gaze_orig = latest_gaze_event.gaze_transform.origin
+			var gaze_dir = latest_gaze_event.gaze_transform.basis.z * -1.0
 			calib_session.add_sample(current_target_screen_pos, gaze_orig, gaze_dir)
 			
 		current_target_idx += 1
@@ -76,11 +76,13 @@ func _process(delta):
 
 func complete_calibration():
 	draw_target = false
-	var res_dict = calib_session.calculate_calibration(tracker)
-	if res_dict.has("device_calibration"):
-		tracker.device_calibration = res_dict["device_calibration"]
-	if res_dict.has("bio_calibration"):
-		tracker.bio_calibration = res_dict["bio_calibration"]
+	var res_dict = calib_session.calculate_calibration(null)
+	var gs = Engine.get_singleton("GazeServer")
+	if gs:
+		if res_dict.has("device_calibration"):
+			gs.set_device_calibration(res_dict["device_calibration"])
+		if res_dict.has("bio_calibration"):
+			gs.set_bio_calibration(res_dict["bio_calibration"])
 	calibration_completed.emit(res_dict)
 
 func _draw():

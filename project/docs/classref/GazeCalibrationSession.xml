@@ -21,7 +21,7 @@
 		</method>
 		<method name="calculate_calibration">
 			<return type="Dictionary"></return>
-			<param index="0" name="tracker" type="GazeTracker *"></param>
+			<param index="0" name="tracker" type="Object *" default="null"></param>
 			<description></description>
 		</method>
 		<method name="set_freeze_camera_params">

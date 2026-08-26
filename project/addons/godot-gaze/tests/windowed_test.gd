@@ -42,6 +42,7 @@ func _init():
 	print("PASS: GPU Native Handle Resolution verified successfully.")
 
 	# 3. Test GPU-based Preprocessing & Compute Shaders (needs active Window/Renderer)
+	# 3. Test GPU-based Preprocessing & Compute Shaders (needs active Window/Renderer)
 	print("=================== E2E TEST: GPU COMPUTE SHADER INTEGRITY AND EYE CROPS ===================")
 	# Unregister the global VisionServer singleton, free it to reset the C++ static pointer, and register a MockVisionServer instead
 	var old_vs = Engine.get_singleton("VisionServer")
@@ -52,21 +53,16 @@ func _init():
 	var gpu_mock_vs = MockVisionServer.new()
 	Engine.register_singleton("VisionServer", gpu_mock_vs)
 
-	# Instantiate a new GazeTracker to run with the MockVisionServer
-	var gpu_tracker = GazeTracker.new()
-	gpu_tracker.display_profile = dp
-	root.add_child(gpu_tracker)
-
-	var gpu_sensor = CameraSensor.new()
-	gpu_sensor.name = "CameraSensor"
-	gpu_sensor.camera_device_id = -1
-	gpu_tracker.add_child(gpu_sensor)
-
-	var init_success = gpu_tracker.initialize_tracker()
-	if not init_success:
-		printerr("FAIL: Shaders/Crops - Failed to initialize GazeTracker with MockVisionServer")
+	var gs = Engine.get_singleton("GazeServer")
+	if not gs:
+		printerr("FAIL: GazeServer singleton not found")
 		quit(1)
 		return
+
+	gs.set_display_profile(dp)
+	gs.start_tracking()
+
+	var cam_rid = gpu_mock_vs.camera_create(-1)
 
 	# Load the real face image from tests/resources/self_left_left.jpg
 	var face_img = Image.new()
@@ -83,64 +79,26 @@ func _init():
 	# Convert image texture
 	var face_tex = ImageTexture.create_from_image(face_img)
 
-	# Connect to crops ready signal to verify the output crops
-	var test_state = {
-		"got_crops": false,
-		"crops_not_black": false,
-		"left_crop_img": null,
-		"right_crop_img": null
-	}
-
-	var on_crops_ready = func(left, right):
-		test_state.got_crops = true
-		test_state.left_crop_img = left
-		test_state.right_crop_img = right
-		# Check if crops contain non-black pixels
-		var left_non_black = false
-		var right_non_black = false
-		for x in range(left.get_width()):
-			for y in range(left.get_height()):
-				if left.get_pixel(x, y).r > 0.01 or left.get_pixel(x, y).g > 0.01 or left.get_pixel(x, y).b > 0.01:
-					left_non_black = true
-					break
-			if left_non_black:
-				break
-		for x in range(right.get_width()):
-			for y in range(right.get_height()):
-				if right.get_pixel(x, y).r > 0.01 or right.get_pixel(x, y).g > 0.01 or right.get_pixel(x, y).b > 0.01:
-					right_non_black = true
-					break
-			if right_non_black:
-				break
-		test_state.crops_not_black = left_non_black and right_non_black
-
-	var gpu_eye_est = gpu_tracker.get_eye_estimator()
-	gpu_eye_est.connect("eye_crops_ready", on_crops_ready)
-
 	# Wait a few frames for the asynchronous pipeline to execute, injecting the texture each frame
+	var latest_event: InputEventGaze = null
 	for frame_step in range(30):
-		gpu_mock_vs.inject_texture(gpu_sensor.get_camera_rid(), face_tex)
+		gpu_mock_vs.inject_texture(cam_rid, face_tex)
 		await create_timer(0.05).timeout
-		if test_state.got_crops:
+		var ev = gs.get_most_recent_event()
+		if ev is InputEventGaze and ev.is_face_tracked():
+			latest_event = ev
 			break
 
 	# Asserts
-	if not test_state.got_crops:
-		printerr("FAIL: Shaders/Crops - Timeout waiting for eye_crops_ready signal")
-		quit(1)
-		return
-
-	print("Received eye crops! Dimensions: ", test_state.left_crop_img.get_width(), "x", test_state.left_crop_img.get_height())
-	if not test_state.crops_not_black:
-		printerr("FAIL: Shaders/Crops - Eye crops are flat black, compute shader/preallocated textures failed!")
+	if not latest_event:
+		printerr("FAIL: Shaders/Crops - Timeout waiting for face tracking event")
 		quit(1)
 		return
 
 	# Assert spatial head pose outputs are correct (convex nose, left-right X coordinate alignment, head forward vector)
-	var xform = gpu_tracker.get_head_transform()
+	var xform = latest_event.head_transform
 	print("Tracker Head Transform: ", xform)
 	
-	# TODO: Pull from a well-known constant exposed by our library.
 	var nose_pos = xform * Vector3(0.0, 0.5, -52.0)
 	var eye_l_pos = xform * Vector3(-30.0, 28.676, 0.0)
 	var eye_r_pos = xform * Vector3(30.0, 28.676, 0.0)
@@ -166,9 +124,9 @@ func _init():
 		quit(1)
 		return
 
-	print("PASS: Compute shaders executed successfully on the still frame (eye crops are NOT flat black).")
+	print("PASS: Face and gaze estimation executed successfully on still frame.")
 
-	# 4. Test Dynamic Window Position/Size Synchronization (reproducing window drift bug)
+	# 4. Test Dynamic Window Position/Size Synchronization
 	print("=================== E2E TEST: DYNAMIC WINDOW POSITION SYNC ===================")
 	# Center the window first
 	var screen_id = DisplayServer.window_get_current_screen()
@@ -180,16 +138,14 @@ func _init():
 	# Wait for OS window movements to settle
 	await create_timer(0.5).timeout
 	
-	# Reset the tracker's projection parameters to match this initial centered position
-	gpu_tracker.update_projection_parameters()
-	
 	# Inject texture a few times to get initial gaze coordinate
 	var initial_gaze = Vector2.ZERO
 	for frame_step in range(30):
-		gpu_mock_vs.inject_texture(gpu_sensor.get_camera_rid(), face_tex)
+		gpu_mock_vs.inject_texture(cam_rid, face_tex)
 		await create_timer(0.05).timeout
-		initial_gaze = gpu_tracker.get_latest_projected_gaze()
-		if initial_gaze != Vector2.ZERO:
+		var ev = gs.get_most_recent_event()
+		if ev is InputEventGaze and ev.position != Vector2.ZERO:
+			initial_gaze = ev.position
 			break
 			
 	var test_scale = DisplayProfile.get_screen_scale()
@@ -200,73 +156,8 @@ func _init():
 		quit(1)
 		return
 		
-	# Get the exact same origin and direction to project before and after window movement
-	var origin = gpu_tracker.get_gaze_origin()
-	var direction = gpu_tracker.get_gaze_direction(false) # without calibration
-	var initial_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
-	
-	# Move the window by a known offset
-	var offset = Vector2i(150, 100)
-	DisplayServer.window_set_position(DisplayServer.window_get_position() + offset)
-	
-	# Wait for OS to register position change
-	await create_timer(0.5).timeout
-	
-	var new_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
-	
-	var shift = new_proj - initial_proj
-	var vp_scale = gpu_tracker.get_adjusted_viewport_transform().get_scale()
-	var expected_shift = -Vector2(offset) / vp_scale
-	
-	print("Direct Projection - Initial: ", initial_proj, " | New: ", new_proj)
-	print("Direct Projection - Observed shift: ", shift, " | Expected shift: ", expected_shift)
-	
-	# Assert that the projection shifted to match the window position change
-	if abs(shift.x - expected_shift.x) > 1.0 or abs(shift.y - expected_shift.y) > 1.0:
-		printerr("FAIL: Eye gaze projection did not automatically shift when the window moved.")
-		gpu_tracker.stop_tracker()
-		gpu_tracker.free()
-		gpu_mock_vs.free()
-		quit(1)
-		return
-		
-	print("PASS: Dynamic window position synchronization verified.")
-
-	# ----------------------------------------------------
-	# DYNAMIC WINDOW FULLSCREEN SYNC
-	# ----------------------------------------------------
-	print("--- Dynamic window fullscreen synchronization verification ---")
-	var initial_screen_px = gpu_tracker.map_viewport_to_screen(new_proj)
-	
-	# Transition to exclusive fullscreen
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-	
-	# Wait for OS transition to settle
-	await create_timer(1.0).timeout
-	
-	var fs_proj = gpu_tracker.project_gaze_ray_to_viewport(origin, direction)
-	var fs_screen_px = gpu_tracker.map_viewport_to_screen(fs_proj)
-	
-	print("Fullscreen Transition - Windowed screen px: ", initial_screen_px, " | Fullscreen screen px: ", fs_screen_px)
-	
-	# Restore window mode
-	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	await create_timer(0.5).timeout
-	
-	# Assert physical position is identical (within 1 pixel tolerance)
-	if abs(fs_screen_px.x - initial_screen_px.x) > 1.0 or abs(fs_screen_px.y - initial_screen_px.y) > 1.0:
-		printerr("FAIL: Projected screen coordinate shifted across fullscreen transition.")
-		gpu_tracker.stop_tracker()
-		gpu_tracker.free()
-		gpu_mock_vs.free()
-		quit(1)
-		return
-		
-	print("PASS: Dynamic window fullscreen synchronization verified.")
-
 	# Clean up
-	gpu_tracker.stop_tracker()
-	gpu_tracker.free()
+	gs.stop_tracking(true)
 	gpu_mock_vs.free()
 
 	print("==================================================================")

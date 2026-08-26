@@ -1,5 +1,4 @@
 #include "web_binding_state.hpp"
-#include "gaze_tracker.hpp"
 #include "gaze_server.hpp"
 #include <godot_cpp/classes/java_script_bridge.hpp>
 #include <godot_cpp/classes/file_access.hpp>
@@ -25,9 +24,8 @@ namespace godot
         cleanup();
     }
 
-    void WebBindingState::setup_callbacks(GazeTracker *tracker)
+    void WebBindingState::setup_callbacks()
     {
-        tracker_ptr = tracker;
         JavaScriptBridge *js = JavaScriptBridge::get_singleton();
         if (!js)
             return;
@@ -47,9 +45,8 @@ namespace godot
         }
     }
 
-    void WebBindingState::start_tracking_loop(GazeTracker *tracker, const String &yunet_path, const String &gaze_onnx_path, int camera_width, int camera_height)
+    void WebBindingState::start_tracking_loop(const String &yunet_path, const String &gaze_onnx_path, int camera_width, int camera_height)
     {
-        tracker_ptr = tracker;
         JavaScriptBridge *js = JavaScriptBridge::get_singleton();
         if (!js)
             return;
@@ -109,19 +106,10 @@ namespace godot
 
     void WebBindingState::on_sidecar_ready(const Array& args)
     {
-        if (tracker_ptr)
-        {
-            tracker_ptr->on_sidecar_ready(args);
-        }
     }
 
     void WebBindingState::on_permission_result(const Array& args)
     {
-        if (tracker_ptr && args.size() > 0)
-        {
-            bool granted = args[0];
-            tracker_ptr->on_permission_result(granted);
-        }
     }
 }
 #endif

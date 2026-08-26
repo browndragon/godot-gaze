@@ -4,31 +4,18 @@ extends SceneTree
 func _init():
 	print("=================== CAMERA EXIT TEST ===================")
 	
-	# 1. Setup DisplayProfile
-	var dp = DisplayProfile.new()
-	dp.logical_size_px = Vector2i(1920, 1080)
-	dp.physical_size_mm = Vector2(345.0, 215.0)
-
-	# 2. Instantiate GazeTracker
-	var tracker = GazeTracker.new()
-	tracker.display_profile = dp
-	root.add_child(tracker)
-
-	var sensor = CameraSensor.new()
-	sensor.name = "CameraSensor"
-	sensor.camera_device_id = 0
-	tracker.add_child(sensor)
-
-	var init_success = tracker.initialize_tracker()
-	if not init_success:
-		printerr("FAIL: Failed to initialize GazeTracker")
+	# 1. Start GazeServer tracking
+	var gs = Engine.get_singleton("GazeServer")
+	if not gs:
+		printerr("FAIL: GazeServer not available")
 		quit(1)
 		return
 
-	print("GazeTracker initialized, running toggles several times...")
+	var started = gs.start_tracking()
+	print("GazeServer tracking started (step: ", started, "), running toggles...")
 	
-	var cam_rid = sensor.get_camera_rid()
 	var vs = Engine.get_singleton("VisionServer")
+	var cam_rid = vs.camera_create(0) if vs else RID()
 	
 	# Loop toggles 15 times
 	for i in range(15):

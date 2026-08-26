@@ -12,8 +12,8 @@
 
 ```mermaid
 flowchart TD
-    subgraph L4["Layer 4: Godot High-Level Frontends (Node3D & UI)"]
-        GT["GazeTracker / EyecandyTracker<br/>(Spatial Lifecycle & Ray Projections)"]
+    subgraph L4["Layer 4: Godot High-Level Frontends (InputEvent & UI)"]
+        IE["InputEventGaze / EyecandyTracker<br/>(Event Dispatch & Spatial Handling)"]
         CS["CameraSensor<br/>(Hardware / Video Ingestion)"]
         FE["FaceEstimator<br/>(3D Head Pose & 35-pt Landmarks)"]
         EE["EyeEstimator<br/>(Eye Rays, Openness, Crops)"]
@@ -44,7 +44,7 @@ flowchart TD
         GFD["GazeFrameData POD<br/>(Double-Buffered Frame Payloads)"]
     end
 
-    GT --> GS & VS
+    IE --> GS & VS
     GS --> GTP
     GTP --> YN & LM & PNP & EM & GM
     GTP --> GFD & PL
@@ -70,9 +70,9 @@ flowchart TD
    - Manages platform camera feeds (Windows Media Foundation, Godot CameraFeed, Web `getUserMedia`).
    - Enforces Pimpl (`GazeServerImpl`) encapsulation to insulate Godot bindings from native allocations.
 
-4. **Layer 4 (High-Level Nodes - `src/godot/` & `eyecandy`):**
-   - `Node3D` and `RefCounted` classes (`GazeTracker`, `CameraSensor`, `FaceEstimator`, `EyeEstimator`, `DisplayProfile`, `EyecandyTracker.gd`).
-   - Communicates with backends solely by passing RIDs to `GazeServer` and `VisionServer`.
+4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & `eyecandy`):**
+   - `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`, and resources (`DisplayProfile`, `DeviceCalibration`, `BioCalibration`).
+   - Communicates with backends solely by querying `GazeServer` or receiving input events.
 
 ---
 

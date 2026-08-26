@@ -6,8 +6,8 @@
 - This directory contains the GDExtension classes and ClassDB registration interfaces that bridge the core C++ gaze engine to Godot.
 -
 - Classes here include:
-- - `GazeTracker`: Singleton wrapping the asynchronous pipeline, filters, and display projector.
-- - `GazeServer`: Background thread manager.
+- - `GazeServer`: Lifecycle manager, refcounted tracking, and input event generator.
+- - `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`: Native Godot input event hierarchy.
 - - `CameraSensor`: Frame ingestion and camera property wrapper.
 - - `FaceEstimator`: YuNet detector bindings.
 - - `EyeEstimator`: Gaze estimation model bindings.

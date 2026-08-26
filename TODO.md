@@ -1,31 +1,30 @@
-# GazeTracker Project Backlog & TODO
+# godot-gaze Project Backlog & TODO
 
 This document tracks the prioritized outstanding tasks, design decisions, and future roadmap items for `godot-gaze`.
 
 ---
 
-## 1. Multi-Component Architecture Redesign [DONE]
+## 1. Gaze Server & Input Subsystem Architecture [DONE]
 
-- **Objective**: Refactor `GazeTracker` to reduce its responsibility overhead, breaking it down into independent, modular C++ components that communicate sequentially.
+- **Objective**: Provide an idiomatic `InputEventGaze` subsystem and centralized `GazeServer` singleton managing hardware lifecycles and spatial ray projections.
 - **Architecture Components**:
-  - **CameraSensor**: Manages the raw connection to the camera device, providing frame-ready events/callbacks, webcam preview buffers, and snapshots.
-  - **FaceEstimator**: Runs face detection (YuNet) on raw frames, selects the primary face, and estimates the 3D head pose.
-  - **EyeEstimator**: Crops eyes and runs gaze estimation networks (GazeNet) to calculate direction vectors.
+  - **GazeServer**: Manages tracking refcounts, background thread pipelining, and 3D inverse kinematics mouse emulation.
+  - **InputEventGaze**: Native Godot input event delivering 2D viewport coordinates, 3D head/gaze transforms, and eye openness.
   - **Smoother**: Manages temporal filtering (OneEuroFilter) to stabilize output coordinates.
-- **Status**: Completed. Components are decoupled, communicating via `GazeServer` RID events and hierarchal connections.
+- **Status**: Completed.
 
 ## 2. Unified Vision Debug Overlay (`debug_feed.tscn`) [DONE]
 
 - **Objective**: Create a cross-platform HUD to render live webcam frames, face landmarks, and eye crops inside Godot.
-- **Design**: Build a unified Godot Control scene (`debug_feed.tscn`). When instantiated, it will subscribe to notifications/signals on the sub-components of the redesigned `GazeTracker` (e.g. `CameraSensor` and `EyeEstimator`) to obtain and render the frames/crops as Godot `ImageTexture` resources.
+- **Design**: Build a unified Godot Control scene (`debug_feed.tscn`).
 
 ## 3. Proper Gaze Calibration Resource & Scene Persistence
 
-- **Objective**: Decouple the calibration UI/logic from the core C++ tracker and persist calibration state.
+- **Objective**: Persist and manage calibration state via `GazeServer`.
 - **Design**:
-  - The calibration scene guides the user through multi-point (corners, sides, center) alignment and generates a `GazeCalibration` resource.
+  - The calibration scene guides the user through multi-point (corners, sides, center) alignment and generates calibration resources (`DeviceCalibration`, `BioCalibration`).
   - Persist and reload calibration weights and OLS bias offsets using standard Godot `ResourceSaver` and `ResourceLoader` manual serialization to a `user://` path
-  - The saved calibration resource is loaded back onto the `GazeTracker` node on application launch.
+  - The saved calibration resource is loaded into `GazeServer` on application launch.
   - This behavior should be the null-default (if no calibration is specified, the user path is loaded), the default path should be a project setting, and should be hot-swappable (if a new calibration is produced it can be slotted in).
   - Stacked/Replaced calibrations? (if a game does a 1-point center-point recalibration or a 5-point corner-recalibration, we make it easy for them to slot those "on the fly" and get updated data going forward?)
   - Remember, there is a distinction between a **screen** calibration (used to learn the actual screen density/geometry) and the **bio** calibration (used to understand the user's actual personal gaze adjustment from the system calibration, based on depth of eyes or strength between the eyes).
@@ -88,7 +87,7 @@ This document tracks the prioritized outstanding tasks, design decisions, and fu
 
 - **Objective**: Develop structured documentation and robust test suites specifically targeted at the two primary audiences of the project: GDScript game developers and native C++ engine/plugin contributors.
 - **Tasks for GDScript Users**:
-  - **GDScript API Reference & Guides**: Write comprehensive XML class reference pages integrated with Godot's built-in editor documentation. Provide tutorials on utilizing the `GazeTracker` Node3D scene node, handling tracking signals, and customizing the pipeline configuration at runtime using `GazePipelineConfig` resources.
+  - **GDScript API Reference & Guides**: Write comprehensive XML class reference pages integrated with Godot's built-in editor documentation. Provide tutorials on utilizing the `InputEventGaze` subsystem, `GazeServer` singleton, handling tracking events in `_unhandled_input(event)`, and customizing calibration resources.
   - **GDScript Integration Demo Project**: Build a small, clean template project demonstrating 3D viewport coordinate mapping, custom UI calibration overlays, and basic gaze-driven gameplay mechanics.
   - **GDScript Integration Tests**: Implement E2E and integration tests using Godot's GDScript test integration frameworks (like GUT - Godot Unit Test) to verify the behavior of tracker nodes, calibration resources, and signals directly from scripts.
 - **Tasks for C++ Contributors**:

@@ -11,14 +11,11 @@
 
 namespace godot
 {
-    class GazeTracker;
-
     class WebBindingState : public RefCounted
     {
         GDCLASS(WebBindingState, RefCounted);
 
     private:
-        GazeTracker *tracker_ptr = nullptr;
         Ref<JavaScriptObject> permission_callback;
         Ref<JavaScriptObject> feed_callback;
         Ref<JavaScriptObject> ready_callback;
@@ -30,8 +27,8 @@ namespace godot
         WebBindingState();
         virtual ~WebBindingState();
 
-        void setup_callbacks(GazeTracker *tracker);
-        void start_tracking_loop(GazeTracker *tracker, const String &yunet_path, const String &gaze_onnx_path, int camera_width, int camera_height);
+        void setup_callbacks();
+        void start_tracking_loop(const String &yunet_path, const String &gaze_onnx_path, int camera_width, int camera_height);
         void cleanup();
 
         // Web callbacks invoked from JavaScript

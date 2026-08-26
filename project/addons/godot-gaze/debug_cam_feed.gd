@@ -45,11 +45,11 @@ func _ready():
 			tracker = find_gaze_tracker(get_tree().root)
 		if is_instance_valid(tracker):
 			connect_tracker_signals()
-			print("[DebugHUD] GazeTracker connected: ", tracker)
+			print("[DebugHUD] Tracker connected: ", tracker)
 			print("[DebugHUD] Camera sensor: ", camera_sensor)
 			print("[DebugHUD] Face estimator: ", face_estimator)
 		else:
-			print("[DebugHUD] WARNING: GazeTracker NOT found in scene tree!")
+			print("[DebugHUD] WARNING: Tracker NOT found in scene tree!")
 
 var preview_requested: bool = false
 var crop_requested: bool = false
@@ -99,7 +99,7 @@ func _exit_tree():
 func find_gaze_tracker(node: Node) -> Node:
 	if node == null:
 		return null
-	if node.get_class() == "GazeTracker" or node.has_method("get_camera_sensor"):
+	if node.has_method("get_camera_sensor") or node.has_method("get_head_transform") or node.name.to_lower().contains("tracker"):
 		return node
 	for child in node.get_children():
 		var found = find_gaze_tracker(child)
@@ -268,7 +268,7 @@ func update_diagnostics_ui():
 	
 	var lines = []
 	if not is_instance_valid(tracker):
-		metrics_lbl.text = "[color=red]GazeTracker not found in scene tree.[/color]"
+		metrics_lbl.text = "[color=red]Tracker not found in scene tree.[/color]"
 		return
 	
 	var is_face_detected = false

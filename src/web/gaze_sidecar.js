@@ -338,7 +338,7 @@
 
     setModels: function (hexYunet, hexGaze, focalLength) {
       console.log(
-        "[GazeTracker] Received hex model bytes from Godot. Focal: " +
+        "[GazeSidecar] Received hex model bytes from Godot. Focal: " +
           focalLength,
       );
       if (focalLength) this.cameraFocalLength = focalLength;
@@ -370,7 +370,7 @@
       this.yunetBytes = hexToUint8Array(hexYunet);
       this.gazeBytes = hexToUint8Array(hexGaze);
       console.log(
-        "[GazeTracker] Converted hex to Uint8Arrays: YuNet size = " +
+        "[GazeSidecar] Converted hex to Uint8Arrays: YuNet size = " +
           this.yunetBytes.length +
           ", Gaze size = " +
           this.gazeBytes.length,
@@ -379,16 +379,16 @@
 
     // TODO: Can this also be done from our `gaze_tracker_web.cpp` server? Fetching & injecting the scripts it depends on during its startup?
     injectScript: function (url, onload, onerror) {
-      console.log("[GazeTracker] Injecting ONNX Runtime script tag: " + url);
+      console.log("[GazeSidecar] Injecting ONNX Runtime script tag: " + url);
       var s = document.createElement("script");
       s.src = url;
       s.onload = function () {
-        console.log("[GazeTracker] ONNX Runtime loaded successfully");
+        console.log("[GazeSidecar] ONNX Runtime loaded successfully");
         onload();
       };
       s.onerror = function (err) {
         console.error(
-          "[GazeTracker] Failed to load ONNX Runtime from " + url,
+          "[GazeSidecar] Failed to load ONNX Runtime from " + url,
           err,
         );
         onerror(err);
@@ -446,13 +446,13 @@
         };
       }
 
-      console.log("[GazeTracker] Initializing sidecar tracking pipeline...");
+      console.log("[GazeSidecar] Initializing sidecar tracking pipeline...");
 
       if (isDebug) {
         try {
           this.createDebugHUD(); // TODO: Still necessary? The xplat debugHUD should replace this?
         } catch (hudErr) {
-          console.error("[GazeTracker] HUD error:", hudErr);
+          console.error("[GazeSidecar] HUD error:", hudErr);
         }
       }
 
@@ -465,7 +465,7 @@
           proceed,
           function () {
             console.error(
-              "[GazeTracker] Critical: failed to load onnxruntime-web",
+              "[GazeSidecar] Critical: failed to load onnxruntime-web",
             );
           },
         );
@@ -473,7 +473,7 @@
 
       function proceed() {
         console.log(
-          "[GazeTracker] ONNX Runtime library ready. Setting up sessions...",
+          "[GazeSidecar] ONNX Runtime library ready. Setting up sessions...",
         );
         if (window.godotGaze && window.godotGaze.on_ready) {
           window.godotGaze.on_ready(self);
@@ -486,7 +486,7 @@
       var self = this;
       if (window.useMock) {
         console.log(
-          "[GazeTracker] Running in Mock mode. Skipping real InferenceSession creation.",
+          "[GazeSidecar] Running in Mock mode. Skipping real InferenceSession creation.",
         );
         this.setupVideoLoop();
         return;
@@ -498,10 +498,10 @@
         );
         this.gazeSession = await ort.InferenceSession.create(this.gazeBytes);
         console.log(
-          "[GazeTracker] ONNX Runtime InferenceSessions created successfully",
+          "[GazeSidecar] ONNX Runtime InferenceSessions created successfully",
         );
       } catch (err) {
-        console.error("[GazeTracker] Failed to create ONNX sessions:", err);
+        console.error("[GazeSidecar] Failed to create ONNX sessions:", err);
         return;
       }
 
@@ -744,7 +744,7 @@
                   }
                 }
               } catch (detErr) {
-                console.error("[GazeTracker] Face detection failed:", detErr);
+                console.error("[GazeSidecar] Face detection failed:", detErr);
               }
             }
 
@@ -1183,7 +1183,7 @@
                   }
                 }
               } catch (gazeErr) {
-                console.error("[GazeTracker] Gaze estimation failed:", gazeErr);
+                console.error("[GazeSidecar] Gaze estimation failed:", gazeErr);
               }
             } else {
               // Face lost handling
@@ -1236,7 +1236,7 @@
           trackFrame();
         })
         .catch(function (err) {
-          console.error("[GazeTracker] Camera initialization failed:", err);
+          console.error("[GazeSidecar] Camera initialization failed:", err);
         });
     },
 
@@ -1568,7 +1568,7 @@
       this.stream = null;
       this.video = null;
       console.log(
-        "[GazeTracker] Web tracking loop stopped and resources cleaned up.",
+        "[GazeSidecar] Web tracking loop stopped and resources cleaned up.",
       );
     },
 

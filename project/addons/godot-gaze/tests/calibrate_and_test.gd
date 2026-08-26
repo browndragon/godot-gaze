@@ -4,7 +4,6 @@ extends Control
 @export var calibration_scene_path: String = "res://addons/godot-gaze/tests/calibration.tscn"
 @export var test_scene_path: String = "res://addons/godot-gaze/tests/test.tscn"
 
-@onready var tracker = $GazeTracker
 @onready var calibration_scene = preload("res://addons/godot-gaze/tests/calibration.tscn")
 @onready var test_scene = preload("res://addons/godot-gaze/tests/test.tscn")
 
@@ -22,7 +21,6 @@ func load_calibration_scene():
 	var inst = calibration_scene.instantiate()
 	current_scene_node = inst
 	
-	inst.tracker = tracker
 	if inst.has_signal("calibration_completed"):
 		inst.calibration_completed.connect(_on_calibration_completed)
 	
@@ -40,10 +38,11 @@ func load_test_scene():
 	var inst = test_scene.instantiate()
 	current_scene_node = inst
 	
-	inst.tracker = tracker
-	if active_calibration_dict.has("device_calibration"):
-		tracker.device_calibration = active_calibration_dict["device_calibration"]
-	if active_calibration_dict.has("bio_calibration"):
-		tracker.bio_calibration = active_calibration_dict["bio_calibration"]
+	var gs = Engine.get_singleton("GazeServer")
+	if gs:
+		if active_calibration_dict.has("device_calibration"):
+			gs.set_device_calibration(active_calibration_dict["device_calibration"])
+		if active_calibration_dict.has("bio_calibration"):
+			gs.set_bio_calibration(active_calibration_dict["bio_calibration"])
 	
 	add_child(inst)

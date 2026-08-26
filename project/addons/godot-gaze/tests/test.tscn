@@ -88,9 +88,6 @@ layout_mode = 1
 [node name="FullScreener" type="Node" parent="." unique_id=1363448967]
 script = SubResource("GDScript_0ejwa")
 
-[node name="GazeTracker" type="GazeTracker" parent="." unique_id=1112781723]
-screen_smooth = SubResource("OneEuroSmoother_7a0ga")
-
 [node name="Node" type="Node" parent="." unique_id=232520022]
 script = SubResource("GDScript_rhdqk")
 

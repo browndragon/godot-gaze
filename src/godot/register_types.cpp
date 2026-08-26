@@ -236,6 +236,41 @@ static void register_gaze_project_settings() {
 
 void initialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
+        // Redirect gaze library logging messages to Godot output console
+        Gaze::register_log_handler([](bool is_error, const char* msg) {
+            String godot_msg = String(msg);
+            if (is_error) {
+                UtilityFunctions::printerr(godot_msg);
+            } else {
+                UtilityFunctions::print(godot_msg);
+            }
+        });
+
+        // Register Core Resource, Event, and Server classes needed by GazeServer
+        ClassDB::register_class<DisplayProfile>();
+
+        ClassDB::register_class<InputEventGazeBase>();
+        ClassDB::register_class<InputEventGaze>();
+        ClassDB::register_class<InputEventGazeMissing>();
+
+        ClassDB::register_class<Smoother>();
+        ClassDB::register_class<OneEuroSmoother>();
+        ClassDB::register_internal_class<OneEuroFilterState>();
+
+        ClassDB::register_class<DeviceCalibration>();
+        ClassDB::register_class<GuessDeviceCalibration>();
+        ClassDB::register_class<StoredDeviceCalibration>();
+        ClassDB::register_class<DefaultDeviceCalibration>();
+
+        ClassDB::register_class<BioCalibration>();
+        ClassDB::register_class<GuessBioCalibration>();
+        ClassDB::register_class<StoredBioCalibration>();
+        ClassDB::register_class<DefaultBioCalibration>();
+
+        ClassDB::register_class<GazeCalibrationSession>();
+        ClassDB::register_class<GazePipelineConfig>();
+        ClassDB::register_class<GazeDeviceEstimatedCalibration>();
+
         ClassDB::register_class<VisionServer>();
         ClassDB::register_class<MockVisionServer>();
         ClassDB::register_class<GazeFrame>();
@@ -246,6 +281,9 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
         gaze_server_singleton = memnew(GazeServer);
         Engine::get_singleton()->register_singleton("GazeServer", gaze_server_singleton);
+
+        default_calib = memnew(GazeDeviceEstimatedCalibration);
+        Engine::get_singleton()->register_singleton("GazeDeviceEstimatedCalibration", default_calib);
 
         register_gaze_project_settings();
         return;
@@ -271,50 +309,13 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         return;
     }
 
-    // Register GDExtension classes so they are exposed to GDScript/Editor
-    ClassDB::register_class<DisplayProfile>();
-
-    ClassDB::register_class<InputEventGazeBase>();
-    ClassDB::register_class<InputEventGaze>();
-    ClassDB::register_class<InputEventGazeMissing>();
-
-    ClassDB::register_class<Smoother>();
-    ClassDB::register_class<OneEuroSmoother>();
-    ClassDB::register_internal_class<OneEuroFilterState>();
-
-    ClassDB::register_class<DeviceCalibration>();
-    ClassDB::register_class<GuessDeviceCalibration>();
-    ClassDB::register_class<StoredDeviceCalibration>();
-    ClassDB::register_class<DefaultDeviceCalibration>();
-
-    ClassDB::register_class<BioCalibration>();
-    ClassDB::register_class<GuessBioCalibration>();
-    ClassDB::register_class<StoredBioCalibration>();
-    ClassDB::register_class<DefaultBioCalibration>();
-
-    ClassDB::register_class<GazeCalibrationSession>();
-    ClassDB::register_class<GazePipelineConfig>();
-    ClassDB::register_class<GazeDeviceEstimatedCalibration>();
+    // Register Scene / Node classes
     ClassDB::register_class<CameraSensor>();
     ClassDB::register_class<FaceEstimator>();
     ClassDB::register_class<EyeEstimator>();
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif
-
-    // Register GazeDeviceEstimatedCalibration engine singleton
-    default_calib = memnew(GazeDeviceEstimatedCalibration);
-    Engine::get_singleton()->register_singleton("GazeDeviceEstimatedCalibration", default_calib);
-
-    // Redirect gaze library logging messages to Godot output console
-    Gaze::register_log_handler([](bool is_error, const char* msg) {
-        String godot_msg = String(msg);
-        if (is_error) {
-            UtilityFunctions::printerr(godot_msg);
-        } else {
-            UtilityFunctions::print(godot_msg);
-        }
-    });
 
     // On Web, if run-tests=true is passed via URL search parameters, override the boot scene dynamically
     ProjectSettings* ps = ProjectSettings::get_singleton();
@@ -334,6 +335,12 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
         Gaze::log_info("uninitialize_gaze_module_level_servers_began");
         Gaze::g_is_exiting = true;
+        if (default_calib) {
+            Engine::get_singleton()->unregister_singleton("GazeDeviceEstimatedCalibration");
+            memdelete(default_calib);
+            default_calib = nullptr;
+        }
+
         if (GazeServer::get_singleton()) {
             Engine::get_singleton()->unregister_singleton("GazeServer");
             memdelete(GazeServer::get_singleton());
@@ -345,6 +352,9 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
             memdelete(VisionServer::get_singleton());
             vision_server_singleton = nullptr;
         }
+
+        // Clean up registry
+        Gaze::register_log_handler(nullptr);
         Gaze::log_info("uninitialize_gaze_module_level_servers_finished");
         return;
     }
@@ -352,15 +362,6 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
         return;
     }
-
-    if (default_calib) {
-        Engine::get_singleton()->unregister_singleton("GazeDeviceEstimatedCalibration");
-        memdelete(default_calib);
-        default_calib = nullptr;
-    }
-
-    // Clean up registry
-    Gaze::register_log_handler(nullptr);
 }
 
 extern "C" {

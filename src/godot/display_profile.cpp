@@ -1,6 +1,7 @@
 #include "display_profile.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #ifdef WEB_ENABLED
 #include <emscripten.h>
 #include <cstdlib>
@@ -15,6 +16,14 @@ static double em_eval_float(const char* script) {
 #endif
 
 namespace godot {
+
+static DisplayServer* get_display_server_safe() {
+    Engine* engine = Engine::get_singleton();
+    if (engine && engine->has_singleton("DisplayServer")) {
+        return DisplayServer::get_singleton();
+    }
+    return nullptr;
+}
 
 void DisplayProfile::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_logical_size_px"), &DisplayProfile::get_logical_size_px);
@@ -51,7 +60,7 @@ Ref<DisplayProfile> DisplayProfile::estimate_from_os() {
         size_mm = Vector2((w_lpix / dpi_lpix) * 25.4, (h_lpix / dpi_lpix) * 25.4);
     }
 #else
-    DisplayServer* ds = DisplayServer::get_singleton();
+    DisplayServer* ds = get_display_server_safe();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         double scale = ds->screen_get_scale(screen_id);
@@ -117,7 +126,7 @@ Vector2 DisplayProfile::get_screen_scale() {
         scale = dpr;
     }
 #else
-    DisplayServer *ds = DisplayServer::get_singleton();
+    DisplayServer *ds = get_display_server_safe();
     if (ds) {
         scale = ds->screen_get_scale(ds->window_get_current_screen());
     }
@@ -133,7 +142,7 @@ Vector2 DisplayProfile::get_screen_size_logical() {
         return Vector2(w_lpix, h_lpix);
     }
 #else
-    DisplayServer *ds = DisplayServer::get_singleton();
+    DisplayServer *ds = get_display_server_safe();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         double scale = ds->screen_get_scale(screen_id);
@@ -166,7 +175,7 @@ Vector2 DisplayProfile::get_window_size_logical() {
         return Vector2(canvas_w, canvas_h);
     }
 #else
-    DisplayServer *ds = DisplayServer::get_singleton();
+    DisplayServer *ds = get_display_server_safe();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         double scale = ds->screen_get_scale(screen_id);

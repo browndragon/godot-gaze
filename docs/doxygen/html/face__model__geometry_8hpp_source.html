@@ -120,27 +120,84 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('face__model__g
 </div><!--header-->
 <div class="contents">
 <a href="face__model__geometry_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">namespace </span>Gaze {</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_face_model_geometry.html">   13</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_face_model_geometry.html">FaceModelGeometry</a> {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_X = 30.0;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_Y = -28.676;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_Z = 0.0;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> DEFAULT_NOSE_Y = -0.5;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> DEFAULT_NOSE_Z = -52.0;</div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="keyword">namespace </span>Gaze</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>{</div>
+<div class="foldopen" id="foldopen00012" data-start="{" data-end="};">
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_model_geometry.html">   12</a></span>    <span class="keyword">class </span><a class="code hl_class" href="class_gaze_1_1_face_model_geometry.html">FaceModelGeometry</a></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>        <span class="comment">// Canonical Anthropometric 3D Head Model Points (mm) in Head Local Space:</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>        <span class="comment">// Origin (0,0,0) = Nose Tip</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>        <span class="comment">// +X = Subject&#39;s Anatomical Right (viewer left)</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>        <span class="comment">// +Y = Up towards top of head</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>        <span class="comment">// -Z = Forward out of face (facing camera)</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_X = 18.462;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_Y = 31.712;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_Z = -4.550;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>};</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_X = 31.5;   <span class="comment">// Inter-pupillary half-distance (63mm IPD)</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_Y = 33.4;   <span class="comment">// Eye height above nose tip</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> EYE_Z = 18.0;   <span class="comment">// Eye depth behind nose tip</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_X = 24.2; <span class="comment">// Mouth corner half-width (48.4mm mouth width)</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_Y = -28.1;<span class="comment">// Mouth corner height below nose tip</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> MOUTH_Z = 10.0; <span class="comment">// Mouth corner depth behind nose tip</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> DEFAULT_NOSE_Y = 0.0;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> DEFAULT_NOSE_Z = 0.0;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span></div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="}">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_model_geometry.html#ab40b6f49e642b40da85280ec67790b66">   35</a></span>        <span class="keyword">static</span> <span class="keyword">inline</span> std::vector&lt;GazeVector3&gt; <a class="code hl_function" href="class_gaze_1_1_face_model_geometry.html#ab40b6f49e642b40da85280ec67790b66">get_5pt_model_points</a>()</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>            <span class="keywordflow">return</span> {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>                <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0, 0.0, 0.0),            <span class="comment">// 0: Nose Tip</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>                <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(EYE_X, EYE_Y, EYE_Z),      <span class="comment">// 1: Right Eye (Anatomical Right, +X)</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>                <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(-EYE_X, EYE_Y, EYE_Z),     <span class="comment">// 2: Left Eye (Anatomical Left, -X)</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>                <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(MOUTH_X, MOUTH_Y, MOUTH_Z),<span class="comment">// 3: Right Mouth Corner (Anatomical Right, +X)</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>                <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(-MOUTH_X, MOUTH_Y, MOUTH_Z)<span class="comment">// 4: Left Mouth Corner (Anatomical Left, -X)</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>            };</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        }</div>
 </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>} <span class="comment">// namespace Gaze</span></div>
-<div class="ttc" id="astruct_gaze_1_1_face_model_geometry_html"><div class="ttname"><a href="struct_gaze_1_1_face_model_geometry.html">Gaze::FaceModelGeometry</a></div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:13</div></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span></div>
+<div class="foldopen" id="foldopen00049" data-start="{" data-end="}">
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_model_geometry.html#abd8df00320880afe16aa00ca5bf63103">   49</a></span>        <span class="keyword">static</span> <span class="keyword">inline</span> std::vector&lt;GazeVector3&gt; <a class="code hl_function" href="class_gaze_1_1_face_model_geometry.html#abd8df00320880afe16aa00ca5bf63103">get_canonical_35pt_model_points</a>()</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        {</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="keywordflow">return</span> <a class="code hl_function" href="math__defs_8hpp.html#acc882e9b8cf4247f09fb958a984ee62d">get_canonical_35pt_face_model</a>();</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        }</div>
+</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="foldopen" id="foldopen00058" data-start="{" data-end="}">
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_model_geometry.html#a89b481382efbcac117f4456e75f57fc7">   58</a></span>        <span class="keyword">static</span> <span class="keyword">inline</span> std::vector&lt;GazeVector3&gt; <a class="code hl_function" href="class_gaze_1_1_face_model_geometry.html#a89b481382efbcac117f4456e75f57fc7">get_rigid_18pt_model_points</a>()</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>            <span class="keyword">auto</span> pts_35 = <a class="code hl_function" href="math__defs_8hpp.html#acc882e9b8cf4247f09fb958a984ee62d">get_canonical_35pt_face_model</a>();</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>            <span class="keywordflow">return</span> std::vector&lt;GazeVector3&gt;(pts_35.begin(), pts_35.begin() + 18);</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
+</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span></div>
+<div class="foldopen" id="foldopen00068" data-start="{" data-end="}">
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="class_gaze_1_1_face_model_geometry.html#ac11c699e57ba9f5c3fd141ccf1d4a891">   68</a></span>        <span class="keyword">static</span> <span class="keyword">inline</span> std::vector&lt;GazeVector3&gt; <a class="code hl_function" href="class_gaze_1_1_face_model_geometry.html#ac11c699e57ba9f5c3fd141ccf1d4a891">get_canonical_godot_model_points</a>()</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>        {</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>            <span class="keyword">auto</span> cv_pts = <a class="code hl_function" href="math__defs_8hpp.html#acc882e9b8cf4247f09fb958a984ee62d">get_canonical_35pt_face_model</a>();</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>            std::vector&lt;GazeVector3&gt; godot_pts(cv_pts.size());</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>            <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; cv_pts.size(); ++i) {</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>                godot_pts[i] = <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(-cv_pts[i].x, -cv_pts[i].y, cv_pts[i].z);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>            }</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>            <span class="keywordflow">return</span> godot_pts;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>        }</div>
+</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    };</div>
+</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="ttc" id="aclass_gaze_1_1_face_model_geometry_html"><div class="ttname"><a href="class_gaze_1_1_face_model_geometry.html">Gaze::FaceModelGeometry</a></div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:13</div></div>
+<div class="ttc" id="aclass_gaze_1_1_face_model_geometry_html_a89b481382efbcac117f4456e75f57fc7"><div class="ttname"><a href="class_gaze_1_1_face_model_geometry.html#a89b481382efbcac117f4456e75f57fc7">Gaze::FaceModelGeometry::get_rigid_18pt_model_points</a></div><div class="ttdeci">static std::vector&lt; GazeVector3 &gt; get_rigid_18pt_model_points()</div><div class="ttdoc">18-point rigid facial core model points (Eyes 0..3, Nose 4..7, Mouth 8..11, Eyebrows 12....</div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:58</div></div>
+<div class="ttc" id="aclass_gaze_1_1_face_model_geometry_html_ab40b6f49e642b40da85280ec67790b66"><div class="ttname"><a href="class_gaze_1_1_face_model_geometry.html#ab40b6f49e642b40da85280ec67790b66">Gaze::FaceModelGeometry::get_5pt_model_points</a></div><div class="ttdeci">static std::vector&lt; GazeVector3 &gt; get_5pt_model_points()</div><div class="ttdoc">5-point face model used specifically for YuNet initial face alignment.</div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:35</div></div>
+<div class="ttc" id="aclass_gaze_1_1_face_model_geometry_html_abd8df00320880afe16aa00ca5bf63103"><div class="ttname"><a href="class_gaze_1_1_face_model_geometry.html#abd8df00320880afe16aa00ca5bf63103">Gaze::FaceModelGeometry::get_canonical_35pt_model_points</a></div><div class="ttdeci">static std::vector&lt; GazeVector3 &gt; get_canonical_35pt_model_points()</div><div class="ttdoc">Canonical 35-point anthropometric 3D face model matching ADAS-0002 landmarks.</div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:49</div></div>
+<div class="ttc" id="aclass_gaze_1_1_face_model_geometry_html_ac11c699e57ba9f5c3fd141ccf1d4a891"><div class="ttname"><a href="class_gaze_1_1_face_model_geometry.html#ac11c699e57ba9f5c3fd141ccf1d4a891">Gaze::FaceModelGeometry::get_canonical_godot_model_points</a></div><div class="ttdeci">static std::vector&lt; GazeVector3 &gt; get_canonical_godot_model_points()</div><div class="ttdoc">Primary canonical 3D model points exposed to Godot for debug overlays and tracking.</div><div class="ttdef"><b>Definition</b> face_model_geometry.hpp:68</div></div>
+<div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency 3D/2D Vector and Matrix Math structures.</div></div>
+<div class="ttc" id="amath__defs_8hpp_html_acc882e9b8cf4247f09fb958a984ee62d"><div class="ttname"><a href="math__defs_8hpp.html#acc882e9b8cf4247f09fb958a984ee62d">Gaze::get_canonical_35pt_face_model</a></div><div class="ttdeci">std::vector&lt; GazeVector3 &gt; get_canonical_35pt_face_model()</div><div class="ttdoc">Canonical 35-point anthropometric 3D face model defined directly in camera rest frame (+X right,...</div><div class="ttdef"><b>Definition</b> math_defs.hpp:766</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:261</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

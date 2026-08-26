@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="InputEventGazeBase" inherits="InputEventAction">
+	<brief_description>Base class for all gaze-related input events in Godot.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_window_id">
+			<return type="void"></return>
+			<param index="0" name="p_id" type="int64_t"></param>
+			<description></description>
+		</method>
+		<method name="get_window_id">
+			<return type="int64_t"></return>
+			<description></description>
+		</method>
+		<method name="set_frame_id">
+			<return type="void"></return>
+			<param index="0" name="p_id" type="uint64_t"></param>
+			<description></description>
+		</method>
+		<method name="get_frame_id">
+			<return type="uint64_t"></return>
+			<description></description>
+		</method>
+		<method name="set_timestamp_usec">
+			<return type="void"></return>
+			<param index="0" name="p_time" type="uint64_t"></param>
+			<description></description>
+		</method>
+		<method name="get_timestamp_usec">
+			<return type="uint64_t"></return>
+			<description></description>
+		</method>
+		<method name="set_left_eye_openness">
+			<return type="void"></return>
+			<param index="0" name="p_val" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_left_eye_openness">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_right_eye_openness">
+			<return type="void"></return>
+			<param index="0" name="p_val" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_right_eye_openness">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="is_face_tracked">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

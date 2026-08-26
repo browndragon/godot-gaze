@@ -28,9 +28,15 @@
         <childnode refid="2" relation="include">
         </childnode>
       </node>
+      <node id="4">
+        <label>src/godot/gaze_calibration_session.cpp</label>
+        <link refid="gaze__calibration__session_8cpp"/>
+      </node>
       <node id="3">
         <label>src/godot/gaze_server.hpp</label>
         <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
       </node>
       <node id="2">
         <label>src/native/gaze_tracking_pipeline.hpp</label>

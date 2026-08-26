@@ -7,10 +7,7 @@
     <includes local="no">godot_cpp/variant/rid.hpp</includes>
     <includedby refid="camera__sensor_8cpp" local="yes">src/godot/camera_sensor.cpp</includedby>
     <includedby refid="face__estimator_8cpp" local="yes">src/godot/face_estimator.cpp</includedby>
-    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
-    <includedby refid="gaze__tracker__native_8cpp" local="yes">src/godot/gaze_tracker_native.cpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
-    <includedby refid="gaze__tracker__web_8cpp" local="yes">src/web/gaze_tracker_web.cpp</includedby>
     <incdepgraph>
       <node id="1">
         <label>src/godot/camera_sensor.hpp</label>

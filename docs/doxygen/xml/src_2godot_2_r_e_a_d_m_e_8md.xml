@@ -15,8 +15,8 @@
 <codeline><highlight class="normal">-<sp/>This<sp/>directory<sp/>contains<sp/>the<sp/>GDExtension<sp/>classes<sp/>and<sp/>ClassDB<sp/>registration<sp/>interfaces<sp/>that<sp/>bridge<sp/>the<sp/>core<sp/>C++<sp/>gaze<sp/>engine<sp/>to<sp/>Godot.</highlight></codeline>
 <codeline><highlight class="normal">-</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>Classes<sp/>here<sp/>include:</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>-<sp/>`GazeTracker`:<sp/>Singleton<sp/>wrapping<sp/>the<sp/>asynchronous<sp/>pipeline,<sp/>filters,<sp/>and<sp/>display<sp/>projector.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>-<sp/>`GazeServer`:<sp/>Background<sp/>thread<sp/>manager.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`GazeServer`:<sp/>Lifecycle<sp/>manager,<sp/>refcounted<sp/>tracking,<sp/>and<sp/>input<sp/>event<sp/>generator.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>`InputEventGazeBase`,<sp/>`InputEventGaze`,<sp/>`InputEventGazeMissing`:<sp/>Native<sp/>Godot<sp/>input<sp/>event<sp/>hierarchy.</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>-<sp/>`CameraSensor`:<sp/>Frame<sp/>ingestion<sp/>and<sp/>camera<sp/>property<sp/>wrapper.</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>-<sp/>`FaceEstimator`:<sp/>YuNet<sp/>detector<sp/>bindings.</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>-<sp/>`EyeEstimator`:<sp/>Gaze<sp/>estimation<sp/>model<sp/>bindings.</highlight></codeline>

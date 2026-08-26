@@ -3,7 +3,6 @@
   <compounddef id="dir_0d4dde2834ed44e47b6207c19e4aac26" kind="dir">
     <compoundname>src/web</compoundname>
     <innerfile refid="gaze__sidecar_8js">gaze_sidecar.js</innerfile>
-    <innerfile refid="gaze__tracker__web_8cpp">gaze_tracker_web.cpp</innerfile>
     <innerfile refid="web__binding__state_8cpp">web_binding_state.cpp</innerfile>
     <innerfile refid="web__binding__state_8hpp">web_binding_state.hpp</innerfile>
     <briefdescription>
@@ -17,7 +16,7 @@
 <para>-- This directory contains the WebAssembly (WASM) compatibility bridge.<itemizedlist>
 <listitem></listitem><listitem><para>When compiling for the Web, SCons stub-out the native C++ ONNX Runtime and replaces them with a lightweight Emscripten JS data bridge.</para>
 </listitem><listitem><para>- The main thread interacts with the browser sidecar (<computeroutput>gaze_sidecar.js</computeroutput>).</para>
-</listitem><listitem><para>- The sidecar runs MediaPipe Face Landmarker JS and ONNX Runtime Web inside a dedicated browser Web Worker.</para>
+</listitem><listitem><para>- The sidecar runs ONNX Runtime Web (YuNet face detection + OpenVINO ADAS gaze estimation) inside the browser.</para>
 </listitem><listitem><para>- Ingested coordinates are fed back to Godot through registered Emscripten callbacks on the <computeroutput>WebBindingState</computeroutput> class. */</para>
 </listitem></itemizedlist>
 </para>

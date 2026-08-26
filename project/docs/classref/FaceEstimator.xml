@@ -12,6 +12,24 @@
 			<return type="void"></return>
 			<description></description>
 		</method>
+		<method name="set_face_detector_model_prefix">
+			<return type="void"></return>
+			<param index="0" name="path" type="String"></param>
+			<description></description>
+		</method>
+		<method name="get_face_detector_model_prefix">
+			<return type="String"></return>
+			<description></description>
+		</method>
+		<method name="set_face_mesh_model_prefix">
+			<return type="void"></return>
+			<param index="0" name="path" type="String"></param>
+			<description></description>
+		</method>
+		<method name="get_face_mesh_model_prefix">
+			<return type="String"></return>
+			<description></description>
+		</method>
 		<method name="set_yunet_model_prefix">
 			<return type="void"></return>
 			<param index="0" name="path" type="String"></param>
@@ -55,6 +73,10 @@
 		<method name="set_face_rid">
 			<return type="void"></return>
 			<param index="0" name="p_rid" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="get_face_landmarks_2d">
+			<return type="PackedVector2Array"></return>
 			<description></description>
 		</method>
 	</methods>

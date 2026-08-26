@@ -1,18 +1,11 @@
 var searchData=
 [
-  ['face_5fmodel_5fgeometry_2ehpp_0',['face_model_geometry.hpp',['../face__model__geometry_8hpp.html',1,'']]],
-  ['face_5fpipeline_2ehpp_1',['face_pipeline.hpp',['../face__pipeline_8hpp.html',1,'']]],
-  ['face_5ftracker_5fcreate_2',['face_tracker_create',['../classgodot_1_1_gaze_server.html#a1f8ab3ef22979c5b71a78de463b6f46a',1,'godot::GazeServer']]],
-  ['face_5ftracker_5ffree_3',['face_tracker_free',['../classgodot_1_1_gaze_server.html#a5145ce12942b3b048ec1a873e8029c87',1,'godot::GazeServer']]],
-  ['face_5ftracker_5fset_5fpose_4',['face_tracker_set_pose',['../classgodot_1_1_gaze_server.html#a3a00f75bfed23efc532549959d6a8c32',1,'godot::GazeServer']]],
-  ['faceestimator_5',['FaceEstimator',['../classgodot_1_1_face_estimator.html',1,'godot']]],
-  ['faceinfo_6',['FaceInfo',['../structgodot_1_1_gaze_server_impl_1_1_face_info.html',1,'godot::GazeServerImpl']]],
-  ['facemodelgeometry_7',['FaceModelGeometry',['../struct_gaze_1_1_face_model_geometry.html',1,'Gaze']]],
-  ['facepipeline_8',['FacePipeline',['../class_gaze_1_1_face_pipeline.html',1,'Gaze']]],
-  ['features_9',['Key Features',['../index.html#autotoc_md6',1,'']]],
-  ['feed_5fgaze_10',['feed_gaze',['../classgodot_1_1_gaze_tracker.html#ac765619951568b95fbc3e0d4d8f11011',1,'godot::GazeTracker']]],
-  ['filter_5fgaze_5fcoordinate_11',['filter_gaze_coordinate',['../classgodot_1_1_gaze_tracker.html#aac3804e601c511b17726227b4e4596bf',1,'godot::GazeTracker']]],
-  ['for_20contributors_12',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]],
-  ['frame_13',['Frame',['../struct_gaze_1_1_frame.html',1,'Gaze']]],
-  ['from_20pre_20compiled_20release_20recommended_14',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]]
+  ['estimate_5fopenness_0',['estimate_openness',['../class_gaze_1_1_eye_blink_estimator.html#a5f93137dd9d5e2754fe69a7f22837c39',1,'Gaze::EyeBlinkEstimator::estimate_openness()'],['../class_gaze_1_1_o_r_t_eye_state_model.html#a41542ae045ee3c8b9df3a414a461a73b',1,'Gaze::ORTEyeStateModel::estimate_openness()']]],
+  ['export_20guidelines_1',['Web / HTML5 Export Guidelines',['../index.html#autotoc_md15',1,'']]],
+  ['extract_5flandmarks_2',['extract_landmarks',['../class_gaze_1_1_o_r_t_landmark_model.html#a4b83c82b150b273a45130a976d76e49c',1,'Gaze::ORTLandmarkModel']]],
+  ['extract_5flandmarks_5fnorm_3',['extract_landmarks_norm',['../class_gaze_1_1_o_r_t_landmark_model.html#a28928e7d3cbeaf59cfa24e5b11a67c30',1,'Gaze::ORTLandmarkModel']]],
+  ['eyeblinkestimator_4',['EyeBlinkEstimator',['../class_gaze_1_1_eye_blink_estimator.html',1,'Gaze']]],
+  ['eyecrops_5',['EyeCrops',['../struct_gaze_1_1_eye_crops.html',1,'Gaze']]],
+  ['eyeestimator_6',['EyeEstimator',['../classgodot_1_1_eye_estimator.html',1,'godot']]],
+  ['eyeinfo_7',['EyeInfo',['../structgodot_1_1_gaze_server_impl_1_1_eye_info.html',1,'godot::GazeServerImpl']]]
 ];

@@ -16,7 +16,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="33" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="33" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="41" column="18" bodyfile="src/godot/gaze_server.cpp" bodystart="41" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1af3363e709a86b3e0677ff24bc3f06db2" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="34" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="34" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="42" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1aac2c86aedcd36bc5df422b89b1f88579" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -46,7 +46,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="35" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="35" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="43" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a1b65c05d795b8bcf6295aa37df486cb3" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="36" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="36" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="44" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="44" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1a4b28c3e37b18640e04da94d66d954886" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -76,14 +76,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="37" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="37" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="45" column="20" bodyfile="src/godot/gaze_server.cpp" bodystart="45" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/godot/gaze_server.cpp" line="32" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="32" bodyend="38"/>
+    <location file="src/godot/gaze_server.cpp" line="40" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="40" bodyend="46"/>
     <listofallmembers>
       <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1af3363e709a86b3e0677ff24bc3f06db2" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>bias_pitch</name></member>
       <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data_1aac2c86aedcd36bc5df422b89b1f88579" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo::BioCalibrationData</scope><name>bias_yaw</name></member>

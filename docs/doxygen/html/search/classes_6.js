@@ -11,14 +11,13 @@ var searchData=
   ['gazerect_8',['GazeRect',['../struct_gaze_1_1_gaze_rect.html',1,'Gaze']]],
   ['gazeserver_9',['GazeServer',['../classgodot_1_1_gaze_server.html',1,'godot']]],
   ['gazeserverimpl_10',['GazeServerImpl',['../structgodot_1_1_gaze_server_impl.html',1,'godot']]],
-  ['gazetracker_11',['GazeTracker',['../classgodot_1_1_gaze_tracker.html',1,'godot']]],
-  ['gazetrackingpipeline_12',['GazeTrackingPipeline',['../class_gaze_1_1_gaze_tracking_pipeline.html',1,'Gaze']]],
-  ['gazetransform3d_13',['GazeTransform3D',['../struct_gaze_1_1_gaze_transform3_d.html',1,'Gaze']]],
-  ['gazevector2_5f32f_14',['GazeVector2_32f',['../struct_gaze_1_1_gaze_vector2__32f.html',1,'Gaze']]],
-  ['gazevector2_5f64f_15',['GazeVector2_64f',['../struct_gaze_1_1_gaze_vector2__64f.html',1,'Gaze']]],
-  ['gazevector2i_16',['GazeVector2i',['../struct_gaze_1_1_gaze_vector2i.html',1,'Gaze']]],
-  ['gazevector3_17',['GazeVector3',['../struct_gaze_1_1_gaze_vector3.html',1,'Gaze']]],
-  ['godotcamera_18',['GodotCamera',['../class_gaze_1_1_godot_camera.html',1,'Gaze']]],
-  ['guessbiocalibration_19',['GuessBioCalibration',['../classgodot_1_1_guess_bio_calibration.html',1,'godot']]],
-  ['guessdevicecalibration_20',['GuessDeviceCalibration',['../classgodot_1_1_guess_device_calibration.html',1,'godot']]]
+  ['gazetrackingpipeline_11',['GazeTrackingPipeline',['../class_gaze_1_1_gaze_tracking_pipeline.html',1,'Gaze']]],
+  ['gazetransform3d_12',['GazeTransform3D',['../struct_gaze_1_1_gaze_transform3_d.html',1,'Gaze']]],
+  ['gazevector2_5f32f_13',['GazeVector2_32f',['../struct_gaze_1_1_gaze_vector2__32f.html',1,'Gaze']]],
+  ['gazevector2_5f64f_14',['GazeVector2_64f',['../struct_gaze_1_1_gaze_vector2__64f.html',1,'Gaze']]],
+  ['gazevector2i_15',['GazeVector2i',['../struct_gaze_1_1_gaze_vector2i.html',1,'Gaze']]],
+  ['gazevector3_16',['GazeVector3',['../struct_gaze_1_1_gaze_vector3.html',1,'Gaze']]],
+  ['godotcamera_17',['GodotCamera',['../class_gaze_1_1_godot_camera.html',1,'Gaze']]],
+  ['guessbiocalibration_18',['GuessBioCalibration',['../classgodot_1_1_guess_bio_calibration.html',1,'godot']]],
+  ['guessdevicecalibration_19',['GuessDeviceCalibration',['../classgodot_1_1_guess_device_calibration.html',1,'godot']]]
 ];

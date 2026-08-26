@@ -16,13 +16,14 @@
     <innerclass refid="classgodot_1_1_gaze_pipeline_config" prot="public">godot::GazePipelineConfig</innerclass>
     <innerclass refid="classgodot_1_1_gaze_server" prot="public">godot::GazeServer</innerclass>
     <innerclass refid="structgodot_1_1_gaze_server_impl" prot="public">godot::GazeServerImpl</innerclass>
-    <innerclass refid="classgodot_1_1_gaze_tracker" prot="public">godot::GazeTracker</innerclass>
     <innerclass refid="classgodot_1_1_guess_bio_calibration" prot="public">godot::GuessBioCalibration</innerclass>
     <innerclass refid="classgodot_1_1_guess_device_calibration" prot="public">godot::GuessDeviceCalibration</innerclass>
+    <innerclass refid="classgodot_1_1_input_event_gaze" prot="public">godot::InputEventGaze</innerclass>
+    <innerclass refid="classgodot_1_1_input_event_gaze_base" prot="public">godot::InputEventGazeBase</innerclass>
+    <innerclass refid="classgodot_1_1_input_event_gaze_missing" prot="public">godot::InputEventGazeMissing</innerclass>
     <innerclass refid="classgodot_1_1_mock_vision_server" prot="public">godot::MockVisionServer</innerclass>
     <innerclass refid="classgodot_1_1_one_euro_filter_state" prot="public">godot::OneEuroFilterState</innerclass>
     <innerclass refid="classgodot_1_1_one_euro_smoother" prot="public">godot::OneEuroSmoother</innerclass>
-    <innerclass refid="structgodot_1_1_platform_geometry" prot="public">godot::PlatformGeometry</innerclass>
     <innerclass refid="classgodot_1_1_smoother" prot="public">godot::Smoother</innerclass>
     <innerclass refid="classgodot_1_1_stored_bio_calibration" prot="public">godot::StoredBioCalibration</innerclass>
     <innerclass refid="classgodot_1_1_stored_device_calibration" prot="public">godot::StoredDeviceCalibration</innerclass>
@@ -40,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="124" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="124" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="138" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="138" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1ab070609219a178075b631f7a0e54dfe9" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">GazeServerImpl::CameraInfo</ref></type>
@@ -54,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="125" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="125" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="139" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="139" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aa24283970a9aaa3091d657d00c57ad5c" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">GazeServerImpl::FaceInfo</ref></type>
@@ -68,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="126" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="126" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="140" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="140" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aaa7ce825608ed8737c49e990b8d07885" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">GazeServerImpl::EyeInfo</ref></type>
@@ -82,7 +83,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="127" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="127" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="141" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="141" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="var">
@@ -133,20 +134,6 @@
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
-      <memberdef kind="function" id="gaze__tracker_8cpp_1afaf1b1b3d6cda864b551161d1905fc32" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>Ref&lt; <ref refid="classgodot_1_1_device_calibration" kindref="compound">DeviceCalibration</ref> &gt;</type>
-        <definition>static Ref&lt; DeviceCalibration &gt; godot::get_default_device_calibration</definition>
-        <argsstring>()</argsstring>
-        <name>get_default_device_calibration</name>
-        <qualifiedname>godot::get_default_device_calibration</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_tracker.cpp" line="38" column="12" bodyfile="src/godot/gaze_tracker.cpp" bodystart="38" bodyend="42"/>
-      </memberdef>
       <memberdef kind="function" id="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>String</type>
         <definition>String godot::resolve_model_path</definition>
@@ -197,7 +184,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="43" column="13" bodyfile="src/godot/register_types.cpp" bodystart="43" bodyend="169"/>
+        <location file="src/godot/register_types.cpp" line="43" column="13" bodyfile="src/godot/register_types.cpp" bodystart="43" bodyend="235"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a5bdb7944917b948a595175b7dd080a38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -215,7 +202,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="171" column="6" bodyfile="src/godot/register_types.cpp" bodystart="171" bodyend="263" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="237" column="6" bodyfile="src/godot/register_types.cpp" bodystart="237" bodyend="331" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1aa63ec0122dad078a5d8132f4f93f9ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -233,7 +220,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="265" column="6" bodyfile="src/godot/register_types.cpp" bodystart="265" bodyend="296" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="333" column="6" bodyfile="src/godot/register_types.cpp" bodystart="333" bodyend="364" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a26ba0015844c927077a2fdd22bf05f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>GDExtensionBool GDE_EXPORT</type>
@@ -259,7 +246,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="300" column="28" bodyfile="src/godot/register_types.cpp" bodystart="300" bodyend="312"/>
+        <location file="src/godot/register_types.cpp" line="368" column="28" bodyfile="src/godot/register_types.cpp" bodystart="368" bodyend="380"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

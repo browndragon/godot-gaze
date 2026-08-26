@@ -119,31 +119,51 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('pnp__solver_8h
   <div class="headertitle"><div class="title">pnp_solver.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="keyword">namespace </span>Gaze {</div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keywordtype">bool</span> solve_pnp_lm(</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keyword">const</span> std::vector&lt;GazeVector3&gt;&amp; model_points,</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">const</span> std::vector&lt;GazeVector2&gt;&amp; image_points,</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&amp; rvec, <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&amp; tvec,</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">bool</span> use_extrinsic_guess = <span class="keyword">true</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>);</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>} <span class="comment">// namespace Gaze</span></div>
+<a href="pnp__solver_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#pragma once</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &quot;<a class="code" href="math__defs_8hpp.html">math_defs.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &quot;<a class="code" href="sqpnp__solver_8hpp.html">sqpnp_solver.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">namespace </span>Gaze</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>{</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span></div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="}">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="pnp__solver_8hpp.html#a04367513ccc264b21f1730ac06b4c97f">   29</a></span><span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="pnp__solver_8hpp.html#a04367513ccc264b21f1730ac06b4c97f">solve_pnp_lm</a>(</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">const</span> std::vector&lt;GazeVector3&gt; &amp;model_points,</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">const</span> std::vector&lt;GazeVector2&gt; &amp;image_points,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;rvec, <a class="code hl_struct" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;tvec,</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">bool</span> use_extrinsic_guess = <span class="keyword">false</span>)</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    (void)use_extrinsic_guess;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordflow">return</span> SQPnPSolver::solve_rvec(model_points, image_points, fx, fy, cx, cy, rvec, tvec);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>}</div>
+</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">inline</span> <span class="keywordtype">bool</span> solve_pnp(</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">const</span> std::vector&lt;GazeVector3&gt; &amp;model_points,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">const</span> std::vector&lt;GazeVector2&gt; &amp;image_points,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    GazeBasis3D &amp;rotation, GazeVector3 &amp;translation)</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>{</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="class_gaze_1_1_s_q_pn_p_solver.html#a554eaf69cc57e000997fb4086bb94641">SQPnPSolver::solve</a>(model_points, image_points, fx, fy, cx, cy, rotation, translation);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>}</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html_a554eaf69cc57e000997fb4086bb94641"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html#a554eaf69cc57e000997fb4086bb94641">Gaze::SQPnPSolver::solve</a></div><div class="ttdeci">static bool solve(const std::vector&lt; GazeVector3 &gt; &amp;object_points, const std::vector&lt; GazeVector2 &gt; &amp;image_points, double fx, double fy, double cx, double cy, GazeBasis3D &amp;out_rotation, GazeVector3 &amp;out_translation)</div><div class="ttdoc">Solves the PnP problem given 3D object points and corresponding 2D image points.</div><div class="ttdef"><b>Definition</b> sqpnp_solver.cpp:706</div></div>
 <div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency 3D/2D Vector and Matrix Math structures.</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:191</div></div>
+<div class="ttc" id="apnp__solver_8hpp_html_a04367513ccc264b21f1730ac06b4c97f"><div class="ttname"><a href="pnp__solver_8hpp.html#a04367513ccc264b21f1730ac06b4c97f">Gaze::solve_pnp_lm</a></div><div class="ttdeci">bool solve_pnp_lm(const std::vector&lt; GazeVector3 &gt; &amp;model_points, const std::vector&lt; GazeVector2 &gt; &amp;image_points, double fx, double fy, double cx, double cy, GazeVector3 &amp;rvec, GazeVector3 &amp;tvec, bool use_extrinsic_guess=false)</div><div class="ttdoc">Solves the Perspective-n-Point pose using the globally optimal SQPnP algorithm.</div><div class="ttdef"><b>Definition</b> pnp_solver.hpp:29</div></div>
+<div class="ttc" id="asqpnp__solver_8hpp_html"><div class="ttname"><a href="sqpnp__solver_8hpp.html">sqpnp_solver.hpp</a></div><div class="ttdoc">Self-Contained Globally Optimal Sequential Quadratic Programming PnP (SQPnP) Solver.</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:261</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><b>src</b></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><b>pnp_solver.hpp</b></li>
+    <li class="navelem"><b>src</b></li><li class="navelem"><a href="dir_aebb8dcc11953d78e620bbef0b9e2183.html">core</a></li><li class="navelem"><a href="pnp__solver_8hpp.html">pnp_solver.hpp</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

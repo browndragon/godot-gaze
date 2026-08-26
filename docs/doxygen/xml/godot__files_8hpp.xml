@@ -10,7 +10,6 @@
     <includes local="no">godot_cpp/variant/packed_string_array.hpp</includes>
     <includes refid="log_8hpp" local="yes">log.hpp</includes>
     <includedby refid="gaze__server_8cpp" local="yes">src/godot/gaze_server.cpp</includedby>
-    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
     <incdepgraph>
       <node id="8">
         <label>log.hpp</label>

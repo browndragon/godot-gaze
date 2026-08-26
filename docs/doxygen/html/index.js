@@ -10,5 +10,5 @@ var index =
       [ "3. Basic GDScript Usage", "index.html#autotoc_md13", null ]
     ] ],
     [ "Web / HTML5 Export Guidelines", "index.html#autotoc_md15", null ],
-    [ "Developer Guidelines &amp; Compiling", "index.html#autotoc_md17", null ]
+    [ "Developer Guidelines &amp; Architecture", "index.html#autotoc_md17", null ]
 ];

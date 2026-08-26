@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::ORTYuNetDetector::Anchor</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a5902dc3c2bf47202138e1e9efc6ca385" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetDetector::Anchor::cx</definition>
+        <argsstring></argsstring>
+        <name>cx</name>
+        <qualifiedname>Gaze::ORTYuNetDetector::Anchor::cx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="44" column="19" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a4201fb961614107bc7d3d87c6364bdbd" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetDetector::Anchor::cy</definition>
+        <argsstring></argsstring>
+        <name>cy</name>
+        <qualifiedname>Gaze::ORTYuNetDetector::Anchor::cy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="45" column="19" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a8afa9f6039b46a16324503fa35b03483" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetDetector::Anchor::stride_x</definition>
+        <argsstring></argsstring>
+        <name>stride_x</name>
+        <qualifiedname>Gaze::ORTYuNetDetector::Anchor::stride_x</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="46" column="19" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a1c0234c7ec6ab71c9b9fc3836dbe2540" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::ORTYuNetDetector::Anchor::stride_y</definition>
+        <argsstring></argsstring>
+        <name>stride_y</name>
+        <qualifiedname>Gaze::ORTYuNetDetector::Anchor::stride_y</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="47" column="19" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/native/ort_yunet_detector.hpp" line="42" column="9" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="43" bodyend="48"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a5902dc3c2bf47202138e1e9efc6ca385" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetDetector::Anchor</scope><name>cx</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a4201fb961614107bc7d3d87c6364bdbd" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetDetector::Anchor</scope><name>cy</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a8afa9f6039b46a16324503fa35b03483" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetDetector::Anchor</scope><name>stride_x</name></member>
+      <member refid="struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor_1a1c0234c7ec6ab71c9b9fc3836dbe2540" prot="public" virt="non-virtual"><scope>Gaze::ORTYuNetDetector::Anchor</scope><name>stride_y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

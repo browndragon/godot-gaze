@@ -142,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="34" column="14" bodyfile="src/native/ort_gaze_model.cpp" bodystart="87" bodyend="94"/>
+        <location file="src/native/ort_gaze_model.hpp" line="34" column="14" bodyfile="src/native/ort_gaze_model.cpp" bodystart="85" bodyend="94"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -162,7 +162,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="37" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="12" bodyend="15"/>
+        <location file="src/native/ort_gaze_model.hpp" line="37" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="10" bodyend="13"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ac161a5ba84b50679276dce4d511438ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="38" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="17" bodyend="20"/>
+        <location file="src/native/ort_gaze_model.hpp" line="38" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="15" bodyend="18"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ad07c4803d77b91af848e81f4cfa2a851" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -202,7 +202,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="39" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="22" bodyend="25"/>
+        <location file="src/native/ort_gaze_model.hpp" line="39" column="9" bodyfile="src/native/ort_gaze_model.cpp" bodystart="20" bodyend="23"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1ac5e0e7134c4e97b8d89b3adfee344da4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -231,7 +231,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="42" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="27" bodyend="85"/>
+        <location file="src/native/ort_gaze_model.hpp" line="42" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="25" bodyend="83"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a8baef8f34356e926e1b4649092352dc3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -254,7 +254,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_gaze_model.hpp" line="43" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="96" bodyend="184"/>
+        <location file="src/native/ort_gaze_model.hpp" line="43" column="22" bodyfile="src/native/ort_gaze_model.cpp" bodystart="96" bodyend="179"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_gaze_model_1a90a87379c8b415212f8abc4349386087" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>void</type>

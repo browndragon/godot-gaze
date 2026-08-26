@@ -88,7 +88,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="22" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="17" bodyend="36"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="22" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="18" bodyend="37"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -139,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="28" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="38" bodyend="40"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="28" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="39" bodyend="44"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_device_calibration_1a065135aa7c60e2b9d96f5bce083831b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Vector3</type>
@@ -160,7 +160,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="29" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="42" bodyend="44"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="29" column="21" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="46" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_device_calibration_1ac7737a8f09d656716ad80f9352ef2781" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>double</type>
@@ -181,7 +181,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="30" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="46" bodyend="48"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="30" column="20" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="53" bodyend="58"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_device_calibration_1acc50bc6f86624634e9ddf8fefb03dd3a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Vector2</type>
@@ -308,7 +308,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="40" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="50" bodyend="52"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="40" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="60" bodyend="62"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_device_calibration_1a95f5b2a173cbba44b388b74affe325ca" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -339,7 +339,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="41" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="54" bodyend="56"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="41" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="64" bodyend="66"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_device_calibration_1aeb45957361372715968072941da613fd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -365,7 +365,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="42" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="58" bodyend="60"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="42" column="19" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="68" bodyend="70"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

@@ -15,16 +15,16 @@
         <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="15">
+      <node id="16">
         <label>../core/log.hpp</label>
         <link refid="log_8hpp"/>
-        <childnode refid="16" relation="include">
-        </childnode>
         <childnode refid="17" relation="include">
         </childnode>
         <childnode refid="18" relation="include">
         </childnode>
         <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
         </childnode>
       </node>
       <node id="12">
@@ -35,6 +35,10 @@
         <childnode refid="11" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -56,7 +60,7 @@
         </childnode>
         <childnode refid="12" relation="include">
         </childnode>
-        <childnode refid="14" relation="include">
+        <childnode refid="15" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -64,14 +68,17 @@
         <link refid="vision__server__web_8cpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="15" relation="include">
-        </childnode>
-        <childnode refid="20" relation="include">
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="21" relation="include">
         </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
       </node>
-      <node id="19">
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="20">
         <label>atomic</label>
       </node>
       <node id="13">
@@ -86,13 +93,13 @@
       <node id="5">
         <label>godot_cpp/classes/image_texture.hpp</label>
       </node>
-      <node id="20">
+      <node id="21">
         <label>godot_cpp/classes/java_script_bridge.hpp</label>
       </node>
       <node id="3">
         <label>godot_cpp/classes/object.hpp</label>
       </node>
-      <node id="21">
+      <node id="22">
         <label>godot_cpp/classes/os.hpp</label>
       </node>
       <node id="4">
@@ -104,19 +111,19 @@
       <node id="7">
         <label>godot_cpp/variant/rid.hpp</label>
       </node>
-      <node id="16">
+      <node id="17">
         <label>iostream</label>
       </node>
-      <node id="17">
+      <node id="18">
         <label>sstream</label>
       </node>
-      <node id="18">
+      <node id="19">
         <label>string</label>
       </node>
       <node id="11">
         <label>type_traits</label>
       </node>
-      <node id="14">
+      <node id="15">
         <label>vector</label>
       </node>
     </incdepgraph>

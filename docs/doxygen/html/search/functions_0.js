@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['apply_5f3d_5fbias_5fvector_0',['apply_3d_bias_vector',['../math__defs_8hpp.html#ad93a5bce0845264d135053937ec1b70b',1,'Gaze']]]
+  ['_5fdeferred_5fstop_5fcheck_0',['_deferred_stop_check',['../classgodot_1_1_gaze_server.html#acfcd847c410fc078fa3e8f467278941b',1,'godot::GazeServer']]]
 ];

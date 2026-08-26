@@ -169,6 +169,8 @@ virtual void&#160;</td><td class="memItemRight"><b>camera_set_fov</b> (RID p_cam
 <tr class="memitem:a646a7355c2c87ce6214284b1078cd5ca" id="r_a646a7355c2c87ce6214284b1078cd5ca"><td class="memItemLeft"><a id="a646a7355c2c87ce6214284b1078cd5ca" name="a646a7355c2c87ce6214284b1078cd5ca"></a>
 virtual double&#160;</td><td class="memItemRight"><b>camera_get_fov</b> (RID p_camera)</td></tr>
 <tr class="memdesc:a646a7355c2c87ce6214284b1078cd5ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the camera lens fov parameter. <br /></td></tr>
+<tr class="memitem:a2f08934369e54b58cbed71c8427f4364" id="r_a2f08934369e54b58cbed71c8427f4364"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a2f08934369e54b58cbed71c8427f4364">inject_texture</a> (RID p_camera, const Ref&lt; Texture2D &gt; &amp;p_texture)</td></tr>
+<tr class="memdesc:a2f08934369e54b58cbed71c8427f4364"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually inject a frame texture into the camera (supported on <a class="el" href="classgodot_1_1_mock_vision_server.html" title="Subclass of VisionServer enabling manual frame injection for unit testing and virtualization.">MockVisionServer</a>).  <br /></td></tr>
 <tr class="memitem:a6a077be45fb502ef66adbd69a9b1baf0" id="r_a6a077be45fb502ef66adbd69a9b1baf0"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="#a6a077be45fb502ef66adbd69a9b1baf0">camera_start</a> (RID p_camera)</td></tr>
 <tr class="memdesc:a6a077be45fb502ef66adbd69a9b1baf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start frame capture capture on the camera.  <br /></td></tr>
 <tr class="memitem:acfd359215cca0d1bd9c86a2832b883bc" id="r_acfd359215cca0d1bd9c86a2832b883bc"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#acfd359215cca0d1bd9c86a2832b883bc">camera_stop</a> (RID p_camera)</td></tr>
@@ -185,7 +187,7 @@ virtual bool&#160;</td><td class="memItemRight"><b>camera_is_preview_requested</
 virtual void&#160;</td><td class="memItemRight"><b>camera_free</b> (RID p_camera)</td></tr>
 <tr class="memdesc:ae723eed2cc069d00b1e59761f33617b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the camera resource. <br /></td></tr>
 <tr class="memitem:ad9768aeaf47648743bff2c0b57b10735" id="r_ad9768aeaf47648743bff2c0b57b10735"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="#ad9768aeaf47648743bff2c0b57b10735">get_camera_current_frame</a> (RID p_camera, <a class="el" href="struct_gaze_1_1_frame.html">Gaze::Frame</a> &amp;r_frame)</td></tr>
-<tr class="memdesc:ad9768aeaf47648743bff2c0b57b10735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html" title="Singleton coordinating display profiles, camera models, and thread-safe pipeline execution.">GazeServer</a> or background pipeline threads.  <br /></td></tr>
+<tr class="memdesc:ad9768aeaf47648743bff2c0b57b10735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html" title="Central engine singleton managing camera acquisition, ML pipeline, calibrations, lifecycle,...">GazeServer</a> or background pipeline threads.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -358,7 +360,7 @@ std::vector&lt; RID &gt;&#160;</td><td class="memItemRight"><b>allocated_cameras
 </table>
 </div><div class="memdoc">
 
-<p>Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html" title="Singleton coordinating display profiles, camera models, and thread-safe pipeline execution.">GazeServer</a> or background pipeline threads. </p>
+<p>Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html" title="Central engine singleton managing camera acquisition, ML pipeline, calibrations, lifecycle,...">GazeServer</a> or background pipeline threads. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p_camera</td><td>The camera RID. </td></tr>
@@ -396,6 +398,46 @@ std::vector&lt; RID &gt;&#160;</td><td class="memItemRight"><b>allocated_cameras
 <p>Retrieve the latest captured frame texture for Godot rendering. </p>
 
 <p>Reimplemented in <a class="el" href="classgodot_1_1_mock_vision_server.html#aacade9a5fbef9962053deb89231cdcd4">godot::MockVisionServer</a>.</p>
+
+</div>
+</div>
+<a id="a2f08934369e54b58cbed71c8427f4364" name="a2f08934369e54b58cbed71c8427f4364"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f08934369e54b58cbed71c8427f4364">&#9670;&#160;</a></span>inject_texture()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::VisionServer::inject_texture </td>
+          <td>(</td>
+          <td class="paramtype">RID</td>          <td class="paramname"><span class="paramname"><em>p_camera</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Ref&lt; Texture2D &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>p_texture</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Manually inject a frame texture into the camera (supported on <a class="el" href="classgodot_1_1_mock_vision_server.html" title="Subclass of VisionServer enabling manual frame injection for unit testing and virtualization.">MockVisionServer</a>). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_camera</td><td>The camera RID. </td></tr>
+    <tr><td class="paramname">p_texture</td><td>The frame texture to inject. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_vision_server.html#a6b5b3db71732c984c4393f0c87de7a6d">godot::MockVisionServer</a>.</p>
 
 </div>
 </div>

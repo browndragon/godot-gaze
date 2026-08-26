@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['reset_5feye_5ftracker_0',['reset_eye_tracker',['../classgodot_1_1_gaze_server.html#a5871479299d688d0798ccaac9aea0bc1',1,'godot::GazeServer']]],
-  ['resolve_5fmodel_5fpath_1',['resolve_model_path',['../godot__files_8hpp.html#a8b35896322b0f4af040f508f62eff6ed',1,'godot']]],
-  ['rodrigues_5fto_5fbasis_2',['rodrigues_to_basis',['../math__defs_8hpp.html#a956327787e5b5bf19a5c91d0ec705d3e',1,'Gaze']]]
+  ['solve_0',['solve',['../class_gaze_1_1_s_q_pn_p_solver.html#a554eaf69cc57e000997fb4086bb94641',1,'Gaze::SQPnPSolver']]],
+  ['solve_5fpnp_5flm_1',['solve_pnp_lm',['../pnp__solver_8hpp.html#a04367513ccc264b21f1730ac06b4c97f',1,'Gaze']]],
+  ['start_5ftracking_2',['start_tracking',['../classgodot_1_1_gaze_server.html#a8bd1cd3216c9bfbef0c36ad38c1e6d6f',1,'godot::GazeServer']]],
+  ['stop_5ftracking_3',['stop_tracking',['../classgodot_1_1_gaze_server.html#a775985238b7cffb0390acf2fb3586186',1,'godot::GazeServer']]]
 ];

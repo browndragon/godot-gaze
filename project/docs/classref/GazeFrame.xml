@@ -82,6 +82,24 @@
 			<return type="bool"></return>
 			<description></description>
 		</method>
+		<method name="set_left_eye_openness">
+			<return type="void"></return>
+			<param index="0" name="o" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_left_eye_openness">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_right_eye_openness">
+			<return type="void"></return>
+			<param index="0" name="o" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_right_eye_openness">
+			<return type="float"></return>
+			<description></description>
+		</method>
 		<method name="set_head_translation">
 			<return type="void"></return>
 			<param index="0" name="t" type="Vector3"></param>
@@ -116,6 +134,15 @@
 		</method>
 		<method name="get_gaze_direction">
 			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="set_face_landmarks_2d">
+			<return type="void"></return>
+			<param index="0" name="l" type="const PackedVector2Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_face_landmarks_2d">
+			<return type="PackedVector2Array"></return>
 			<description></description>
 		</method>
 	</methods>

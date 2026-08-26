@@ -144,11 +144,15 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 Key Features</h1>
 <ul>
 <li><b>Cross-Platform Gaze Tracking</b>:<ul>
-<li><b>Native Desktop &amp; Mobile (macOS, Windows, Linux, iOS, Android)</b>: Runs an optimized CPU-based <b>ONNX Runtime (CPU/XNNPACK)</b> pipeline for face detection (YuNet) and gaze estimation.</li>
-<li><b>WebAssembly (WASM)</b>: Leverages browser-native <b>ONNX Runtime Web</b> (WebGPU/WebGL accelerated) and MediaPipe Face Landmarker JS to process gaze outside the WebAssembly runtime, passing tracking data back to Godot.</li>
+<li><b>Native Desktop &amp; Mobile (macOS, Windows, Linux, iOS, Android)</b>: Runs an optimized CPU-based <b>ONNX Runtime (CPU/XNNPACK)</b> pipeline for face detection (YuNet) and gaze estimation (OpenVINO vehicle models).</li>
+<li><b>WebAssembly (WASM)</b>: Leverages browser-native <b>ONNX Runtime Web</b> (WebGPU/WebGL accelerated) and the same models as the desktop.</li>
 </ul>
 </li>
-<li><b>Background Thread Inference</b>: All ML model estimation runs in a background worker thread (<span class="tt">GazeTrackingPipeline</span>) to keep Godot's main thread smooth and responsive.</li>
+<li><b>Background Inference</b>:<ul>
+<li><b>Native (Desktop/Mobile)</b>: All ML model estimation runs in a dedicated C++ background worker thread (<span class="tt">GazeTrackingPipeline</span>) with lock-free double buffering.</li>
+<li><b>Web (WASM)</b>: Camera capture and inference run asynchronously outside the WebAssembly runtime via the browser sidecar (<span class="tt">gaze_sidecar.js</span>) using ONNX Runtime Web (WebGPU/WebGL accelerated).</li>
+</ul>
+</li>
 <li><b>Principled 3D Spherical Calibration</b>: Corrects biological user differences using 3D angular biases (pitch/yaw) applied directly to the estimated 3D gaze vector.</li>
 <li><b>Adaptive Smoothing</b>: Implements a <b>1 Euro Filter</b> to suppress saccadic jitter during steady gaze while preserving low latency during rapid eye movements.</li>
 </ul>
@@ -167,7 +171,8 @@ A. From Pre-compiled Release (Recommended)</h3>
 </ol>
 <h3 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 B. Local Development Symlinking (For Contributors)</h3>
-<p>If you are developing this plugin locally and want to test changes in your own Godot project without repeatedly copying files:</p><ol type="1">
+<p>If you are developing this plugin locally and want to test changes in your own Godot project without repeatedly copying files:</p>
+<ol type="1">
 <li>Create a symbolic link from your project's <span class="tt">addons</span> directory back to this repository's addon folder: <div class="fragment"><div class="line">ln -s /path/to/godot-gaze/project/addons/godot-gaze /path/to/your-project/addons/godot-gaze</div>
 </div><!-- fragment --></li>
 <li>When you run <span class="tt">scons</span> to rebuild any template (e.g. <span class="tt">scons platform=macos target=editor</span>), the compiled binaries in <span class="tt">project/addons/godot-gaze/bin</span> are instantly available and loaded by your target project.</li>
@@ -175,46 +180,42 @@ B. Local Development Symlinking (For Contributors)</h3>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 2. Basic Setup</h2>
 <ol type="1">
-<li>In your Godot Scene, add a <b>GazeTracker</b> node.</li>
-<li>The tracker automatically attempts to guess the camera offsets, screen resolution, and physical display characteristics. You can also customize these properties on the node in the Inspector if needed:<ul>
-<li><span class="tt">camera_offset</span>: Camera mount position relative to the screen center in millimeters.</li>
-<li><span class="tt">camera_tilt</span>: Downtilted angle of the camera in degrees.</li>
-<li><span class="tt">screen_size_pixels</span>: Monitor resolution in pixels.</li>
-<li><span class="tt">screen_size_mm</span>: Physical display dimensions in millimeters.</li>
+<li><b>Autostart &amp; Configuration</b>: When the plugin is enabled, it automatically registers project settings under <span class="tt">gaze/</span>:<ul>
+<li><span class="tt">gaze/general/autostart</span> (default <span class="tt">true</span>): Starts camera tracking automatically on startup.</li>
+<li><span class="tt">gaze/pointing/emulate_gaze_from_mouse</span> (default <span class="tt">true</span>): Emulates <span class="tt">InputEventGaze</span> from mouse cursor movements using 3D inverse kinematics when camera tracking is inactive.</li>
+<li><span class="tt">gaze/pointing/emulate_mouse_from_gaze</span> (default <span class="tt">false</span>): Dispatches synthetic mouse move events based on gaze coordinates.</li>
+<li><span class="tt">gaze/calibration/device_calibration_path</span> (defaults to <span class="tt">user://calibrations/device_calibration.tres</span>).</li>
+<li><span class="tt">gaze/calibration/bio_calibration_path</span> (defaults to <span class="tt">user://calibrations/bio_calibration.tres</span>).</li>
 </ul>
 </li>
-<li>Default Calibration Resources: The plugin registers project settings that specify where user calibration resources are automatically loaded:<ul>
-<li><span class="tt">gaze/calibration/device_calibration_path</span> (defaults to <span class="tt">user://calibrations/device_calibration.tres</span>)</li>
-<li><span class="tt">gaze/calibration/bio_calibration_path</span> (defaults to <span class="tt">user://calibrations/bio_calibration.tres</span>) When <span class="tt">GazeTracker</span> initializes, it automatically attempts to load custom <span class="tt">.tres</span> resources from these paths, seamlessly applying device and biological corrections.</li>
-</ul>
-</li>
-</ol>
-<ol type="1">
-<li>Model weights (<span class="tt">.ort</span> format) are pre-bundled inside the addon's <span class="tt">models/</span> folder.</li>
+<li><b>Model Weights</b>: Model weights (<span class="tt">.ort</span> format) are pre-bundled inside <span class="tt">addons/godot-gaze/models/</span>.</li>
 </ol>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 3. Basic GDScript Usage</h2>
-<p>Attach a script to your scene root node to start receiving tracking data:</p>
+<p>Nodes receive gaze events idiomatically through <span class="tt">_unhandled_input(event)</span>:</p>
 <div class="fragment"><div class="line">extends Node2D</div>
 <div class="line"> </div>
-<div class="line">@onready var gaze_tracker: GazeTracker = $GazeTracker</div>
 <div class="line">@onready var cursor: Node2D = $Cursor</div>
 <div class="line">@onready var status: Label = $Status</div>
 <div class="line"> </div>
-<div class="line">func _ready():</div>
-<div class="line">    # Connect signals</div>
-<div class="line">    gaze_tracker.gaze_updated.connect(_on_gaze_updated)</div>
-<div class="line">    gaze_tracker.face_detected.connect(_on_face_detected)</div>
+<div class="line">func _unhandled_input(event: InputEvent) -&gt; void:</div>
+<div class="line">    if event is InputEventGaze:</div>
+<div class="line">        # 2D Screen / Viewport position</div>
+<div class="line">        cursor.global_position = event.position</div>
+<div class="line">        status.text = &quot;Face Tracked (Openness L: %.2f, R: %.2f)&quot; % [event.left_eye_openness, event.right_eye_openness]</div>
 <div class="line"> </div>
-<div class="line">    # Start the tracker (automatically starts when autostart == true on entering tree)</div>
-<div class="line">    if gaze_tracker.start_tracker():</div>
-<div class="line">        print(&quot;Gaze Tracker Started.&quot;)</div>
+<div class="line">        # 3D Head &amp; Gaze transforms</div>
+<div class="line">        var head_pos_mm = event.head_transform.origin</div>
+<div class="line">        var gaze_ray_dir = event.gaze_transform.basis.z * -1.0</div>
+<div class="line">    elif event is InputEventGazeMissing:</div>
+<div class="line">        status.text = &quot;Gaze Lost (Reason: %d)&quot; % event.reason</div>
 <div class="line"> </div>
-<div class="line">func _on_gaze_updated(screen_pixel: Vector2):</div>
-<div class="line">    cursor.global_position = screen_pixel</div>
-<div class="line"> </div>
-<div class="line">func _on_face_detected(detected: bool):</div>
-<div class="line">    status.text = &quot;Face Tracked&quot; if detected else &quot;Face Lost&quot;</div>
+<div class="line">func _ready() -&gt; void:</div>
+<div class="line">    # Tracking starts automatically when autostart is true.</div>
+<div class="line">    # You can also manually control tracking refcounts:</div>
+<div class="line">    var gs = Engine.get_singleton(&quot;GazeServer&quot;)</div>
+<div class="line">    if gs:</div>
+<div class="line">        gs.start_tracking()</div>
 </div><!-- fragment --><hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Web / HTML5 Export Guidelines</h1>
@@ -231,8 +232,12 @@ Web / HTML5 Export Guidelines</h1>
 </ol>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
-Developer Guidelines &amp; Compiling</h1>
-<p>For guidelines on compiling the plugin from source, running tests, or contributing, please refer to CONTRIBUTING.md. For detailed design and math specifications, refer to the Mathematical &amp; Physical Model Guide and the <a href="CONTRIBUTING.md#1-directory-layout--architecture-layers">Architecture &amp; Layout section of CONTRIBUTING.md</a>. </p>
+Developer Guidelines &amp; Architecture</h1>
+<ul>
+<li>For the full system architecture, layer isolation rules, and concurrency model, refer to System Architecture &amp; Technical Specification.</li>
+<li>For guidelines on compiling the plugin from source, running test suites, or contributing, please refer to CONTRIBUTING.md.</li>
+<li>For mathematical and physical projection guides, refer to docs/mathematical_model.md. </li>
+</ul>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->

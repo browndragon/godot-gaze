@@ -8,7 +8,6 @@
     <includedby refid="projection__engine_8cpp" local="yes">src/core/projection_engine.cpp</includedby>
     <includedby refid="screen__projector_8hpp" local="yes">src/core/screen_projector.hpp</includedby>
     <includedby refid="gaze__server_8hpp" local="yes">src/godot/gaze_server.hpp</includedby>
-    <includedby refid="gaze__tracker_8hpp" local="yes">src/godot/gaze_tracker.hpp</includedby>
     <incdepgraph>
       <node id="2">
         <label>camera_placement.hpp</label>
@@ -16,7 +15,7 @@
         <childnode refid="3" relation="include">
         </childnode>
       </node>
-      <node id="7">
+      <node id="9">
         <label>gaze_calibration.hpp</label>
         <link refid="gaze__calibration_8hpp"/>
         <childnode refid="3" relation="include">
@@ -31,16 +30,23 @@
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>src/core/projection_engine.hpp</label>
         <link refid="projection__engine_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="7" relation="include">
+        <childnode refid="9" relation="include">
         </childnode>
         <childnode refid="3" relation="include">
         </childnode>
+      </node>
+      <node id="7">
+        <label>algorithm</label>
       </node>
       <node id="4">
         <label>cmath</label>
@@ -51,6 +57,9 @@
       <node id="5">
         <label>type_traits</label>
       </node>
+      <node id="8">
+        <label>vector</label>
+      </node>
     </incdepgraph>
     <invincdepgraph>
       <node id="1">
@@ -59,8 +68,6 @@
         <childnode refid="2" relation="include">
         </childnode>
         <childnode refid="4" relation="include">
-        </childnode>
-        <childnode refid="5" relation="include">
         </childnode>
       </node>
       <node id="3">
@@ -73,18 +80,14 @@
         <childnode refid="3" relation="include">
         </childnode>
       </node>
-      <node id="6">
+      <node id="5">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
       </node>
       <node id="4">
         <label>src/godot/gaze_server.hpp</label>
         <link refid="gaze__server_8hpp_source"/>
-      </node>
-      <node id="5">
-        <label>src/godot/gaze_tracker.hpp</label>
-        <link refid="gaze__tracker_8hpp"/>
-        <childnode refid="6" relation="include">
+        <childnode refid="5" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

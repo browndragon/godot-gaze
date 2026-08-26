@@ -6,6 +6,7 @@
     <innerfile refid="camera__interface_8hpp">camera_interface.hpp</innerfile>
     <innerfile refid="camera__placement_8hpp">camera_placement.hpp</innerfile>
     <innerfile refid="cpu__image__warper_8hpp">cpu_image_warper.hpp</innerfile>
+    <innerfile refid="eye__blink__estimator_8hpp">eye_blink_estimator.hpp</innerfile>
     <innerfile refid="face__model__geometry_8hpp">face_model_geometry.hpp</innerfile>
     <innerfile refid="face__pipeline_8hpp">face_pipeline.hpp</innerfile>
     <innerfile refid="gaze__calibration_8hpp">gaze_calibration.hpp</innerfile>
@@ -15,6 +16,7 @@
     <innerfile refid="gaze__model_8hpp">gaze_model.hpp</innerfile>
     <innerfile refid="log_8hpp">log.hpp</innerfile>
     <innerfile refid="math__defs_8hpp">math_defs.hpp</innerfile>
+    <innerfile refid="opencv__space__conversions_8hpp">opencv_space_conversions.hpp</innerfile>
     <innerfile refid="pipeline__config_8hpp">pipeline_config.hpp</innerfile>
     <innerfile refid="pnp__solver_8cpp">pnp_solver.cpp</innerfile>
     <innerfile refid="pnp__solver_8hpp">pnp_solver.hpp</innerfile>
@@ -23,7 +25,8 @@
     <innerfile refid="projection__engine_8hpp">projection_engine.hpp</innerfile>
     <innerfile refid="screen__projector_8cpp">screen_projector.cpp</innerfile>
     <innerfile refid="screen__projector_8hpp">screen_projector.hpp</innerfile>
-    <innerfile refid="space__conversions_8hpp">space_conversions.hpp</innerfile>
+    <innerfile refid="sqpnp__solver_8cpp">sqpnp_solver.cpp</innerfile>
+    <innerfile refid="sqpnp__solver_8hpp">sqpnp_solver.hpp</innerfile>
     <briefdescription>
 <para>Core tracking logic and mathematical definitions. *. </para>
     </briefdescription>

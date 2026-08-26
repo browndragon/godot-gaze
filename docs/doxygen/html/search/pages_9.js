@@ -7,5 +7,5 @@ var searchData=
   ['godot_20gaze_4',['godot-gaze',['../index.html',1,'']]],
   ['godot_20gdextension_20layer_5',['Godot GDExtension Layer',['../dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0.html#autotoc_md1',1,'']]],
   ['guidelines_6',['Web / HTML5 Export Guidelines',['../index.html#autotoc_md15',1,'']]],
-  ['guidelines_20compiling_7',['Developer Guidelines &amp;amp; Compiling',['../index.html#autotoc_md17',1,'']]]
+  ['guidelines_20architecture_7',['Developer Guidelines &amp;amp; Architecture',['../index.html#autotoc_md17',1,'']]]
 ];

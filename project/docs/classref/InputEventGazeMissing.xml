@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="InputEventGazeMissing" inherits="godot::InputEventGazeBase">
+	<brief_description>Input event emitted when face or eye tracking is lost or during full blink.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="is_face_tracked">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_reason">
+			<return type="void"></return>
+			<param index="0" name="p_reason" type="MissingReason"></param>
+			<description></description>
+		</method>
+		<method name="get_reason">
+			<return type="MissingReason"></return>
+			<description></description>
+		</method>
+		<method name="as_text">
+			<return type="String"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

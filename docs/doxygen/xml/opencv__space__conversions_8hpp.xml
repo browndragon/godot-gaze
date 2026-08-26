@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="opencv__space__conversions_8hpp" kind="file" language="C++">
+    <compoundname>opencv_space_conversions.hpp</compoundname>
+    <includes refid="math__defs_8hpp" local="yes">math_defs.hpp</includes>
+    <includedby refid="gaze__server_8cpp" local="yes">src/godot/gaze_server.cpp</includedby>
+    <includedby refid="gaze__tracking__pipeline_8cpp" local="yes">src/native/gaze_tracking_pipeline.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/core/opencv_space_conversions.hpp</label>
+        <link refid="opencv__space__conversions_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>algorithm</label>
+      </node>
+      <node id="3">
+        <label>cmath</label>
+      </node>
+      <node id="5">
+        <label>cstdint</label>
+      </node>
+      <node id="4">
+        <label>type_traits</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespace_gaze">Gaze</innernamespace>
+    <innernamespace refid="namespace_gaze_1_1_coordinate_conversions">Gaze::CoordinateConversions</innernamespace>
+    <briefdescription>
+<para>Coordinate Space Transformations between OpenCV PnP Model Space and Godot Camera Space. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Defines exact mathematical transformations at the boundary between OpenCV-style PnP solvers and Godot&apos;s standard Camera and Face local reference frames.</para>
+<para>Coordinate Systems:<orderedlist>
+<listitem><para>OpenCV Camera Space:<itemizedlist>
+<listitem><para>+X: Right</para>
+</listitem><listitem><para>+Y: Down</para>
+</listitem><listitem><para>+Z: Forward (away from camera into scene)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>OpenCV Face Model Space:<itemizedlist>
+<listitem><para>+X: Subject&apos;s Anatomical Left (Viewer&apos;s Right)</para>
+</listitem><listitem><para>+Y: Down towards Chin</para>
+</listitem><listitem><para>+Z: Back into skull (Nose tip at Z=0 or negative Z)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Godot Camera Space:<itemizedlist>
+<listitem><para>+X: Right</para>
+</listitem><listitem><para>+Y: Up</para>
+</listitem><listitem><para>-Z: Forward (away from camera into room)</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>Godot Face Local Space:<itemizedlist>
+<listitem><para>+X: Subject&apos;s Anatomical Right (Viewer&apos;s Left)</para>
+</listitem><listitem><para>+Y: Up towards top of head</para>
+</listitem><listitem><para>-Z: Forward out of face (towards camera) </para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="math__defs_8hpp" kindref="compound">math_defs.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze</highlight></codeline>
+<codeline lineno="34"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">CoordinateConversions</highlight></codeline>
+<codeline lineno="36"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="43" refid="opencv__space__conversions_8hpp_1a89c5a932d2c9efff5ab8b073ab5eec5a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref><sp/><ref refid="opencv__space__conversions_8hpp_1a89c5a932d2c9efff5ab8b073ab5eec5a" kindref="member">OPENCV_CAM_TO_GODOT_CAM</ref><sp/>=<sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref>(</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(1.0,<sp/><sp/>0.0,<sp/><sp/>0.0),</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0,<sp/>-1.0,<sp/><sp/>0.0),</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0,<sp/><sp/>0.0,<sp/>-1.0)</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="54" refid="opencv__space__conversions_8hpp_1ae2966bcbed87aee40a0b56e353b4b351" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref><sp/><ref refid="opencv__space__conversions_8hpp_1ae2966bcbed87aee40a0b56e353b4b351" kindref="member">GODOT_FACE_TO_OPENCV_FACE</ref><sp/>=<sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref>(</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(-1.0,<sp/><sp/>0.0,<sp/>0.0),</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(<sp/>0.0,<sp/>-1.0,<sp/>0.0),</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(<sp/>0.0,<sp/><sp/>0.0,<sp/>1.0)</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="65" refid="opencv__space__conversions_8hpp_1a5fc97a6693437ff47815c41c55c81f3a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref><sp/><ref refid="opencv__space__conversions_8hpp_1a5fc97a6693437ff47815c41c55c81f3a" kindref="member">ONNX_GAZE_TO_GODOT_CAM</ref><sp/>=<sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref>(</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(1.0,<sp/>0.0,<sp/><sp/>0.0),</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0,<sp/>1.0,<sp/><sp/>0.0),</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref>(0.0,<sp/>0.0,<sp/>-1.0)</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="77" refid="opencv__space__conversions_8hpp_1a6bc543d9b42abea1392ba09a1e07b3d7" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">inline</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_transform3_d" kindref="compound">GazeTransform3D</ref><sp/><ref refid="opencv__space__conversions_8hpp_1a6bc543d9b42abea1392ba09a1e07b3d7" kindref="member">opencv_pose_to_godot_camera_transform</ref>(</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>&amp;cv_translation,</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>&amp;cv_rvec)</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref><sp/>R_cv<sp/>=<sp/><ref refid="math__defs_8hpp_1a956327787e5b5bf19a5c91d0ec705d3e" kindref="member">rodrigues_to_basis</ref>(cv_rvec);</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_basis3_d" kindref="compound">GazeBasis3D</ref><sp/>R_godot<sp/>=<sp/><ref refid="opencv__space__conversions_8hpp_1a89c5a932d2c9efff5ab8b073ab5eec5a" kindref="member">OPENCV_CAM_TO_GODOT_CAM</ref><sp/>*<sp/>R_cv<sp/>*<sp/><ref refid="opencv__space__conversions_8hpp_1ae2966bcbed87aee40a0b56e353b4b351" kindref="member">GODOT_FACE_TO_OPENCV_FACE</ref>;</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref><sp/>origin_godot<sp/>=<sp/><ref refid="opencv__space__conversions_8hpp_1a89c5a932d2c9efff5ab8b073ab5eec5a" kindref="member">OPENCV_CAM_TO_GODOT_CAM</ref>.multiply_vector(cv_translation);</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="struct_gaze_1_1_gaze_transform3_d" kindref="compound">GazeTransform3D</ref>(R_godot,<sp/>origin_godot);</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>CoordinateConversions</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/core/opencv_space_conversions.hpp"/>
+  </compounddef>
+</doxygen>

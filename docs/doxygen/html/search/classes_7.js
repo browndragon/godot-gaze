@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['imagewarper_0',['ImageWarper',['../class_gaze_1_1_image_warper.html',1,'Gaze']]]
+  ['headpose_0',['HeadPose',['../struct_gaze_1_1_head_pose.html',1,'Gaze']]]
 ];

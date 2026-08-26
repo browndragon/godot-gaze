@@ -13,5 +13,6 @@ var classgodot_1_1_vision_server =
     [ "camera_start", "classgodot_1_1_vision_server.html#a6a077be45fb502ef66adbd69a9b1baf0", null ],
     [ "camera_stop", "classgodot_1_1_vision_server.html#acfd359215cca0d1bd9c86a2832b883bc", null ],
     [ "get_camera_current_frame", "classgodot_1_1_vision_server.html#ad9768aeaf47648743bff2c0b57b10735", null ],
-    [ "get_camera_current_texture", "classgodot_1_1_vision_server.html#a89c29bb40ca0e5453d3faf6e636397b8", null ]
+    [ "get_camera_current_texture", "classgodot_1_1_vision_server.html#a89c29bb40ca0e5453d3faf6e636397b8", null ],
+    [ "inject_texture", "classgodot_1_1_vision_server.html#a2f08934369e54b58cbed71c8427f4364", null ]
 ];

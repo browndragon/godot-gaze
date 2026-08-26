@@ -142,6 +142,8 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('struct_gaze_1_
 Public Attributes</h2></td></tr>
 <tr class="memitem:ad7bf761e8cbdde42935b54a7e439168f" id="r_ad7bf761e8cbdde42935b54a7e439168f"><td class="memItemLeft"><a id="ad7bf761e8cbdde42935b54a7e439168f" name="ad7bf761e8cbdde42935b54a7e439168f"></a>
 std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight"><b>camera_raw_bgr</b></td></tr>
+<tr class="memitem:abef8ef10ef94a3476ee7db55f5583ee2" id="r_abef8ef10ef94a3476ee7db55f5583ee2"><td class="memItemLeft"><a id="abef8ef10ef94a3476ee7db55f5583ee2" name="abef8ef10ef94a3476ee7db55f5583ee2"></a>
+std::vector&lt; uint8_t &gt;&#160;</td><td class="memItemRight"><b>rotated_frame_bgr</b></td></tr>
 <tr class="memitem:a53967e0485b1aad835e25fdfb6037abb" id="r_a53967e0485b1aad835e25fdfb6037abb"><td class="memItemLeft"><a id="a53967e0485b1aad835e25fdfb6037abb" name="a53967e0485b1aad835e25fdfb6037abb"></a>
 int&#160;</td><td class="memItemRight"><b>camera_width</b> = 0</td></tr>
 <tr class="memitem:aa2e34bef1a2ac28aef044348677597a2" id="r_aa2e34bef1a2ac28aef044348677597a2"><td class="memItemLeft"><a id="aa2e34bef1a2ac28aef044348677597a2" name="aa2e34bef1a2ac28aef044348677597a2"></a>
@@ -156,6 +158,10 @@ double&#160;</td><td class="memItemRight"><b>camera_fov_degrees</b> = DEFAULT_CA
 bool&#160;</td><td class="memItemRight"><b>face_detected</b> = false</td></tr>
 <tr class="memitem:ac20aa020c950df2cd587f05eb35adca1" id="r_ac20aa020c950df2cd587f05eb35adca1"><td class="memItemLeft"><a id="ac20aa020c950df2cd587f05eb35adca1" name="ac20aa020c950df2cd587f05eb35adca1"></a>
 bool&#160;</td><td class="memItemRight"><b>gaze_success</b> = false</td></tr>
+<tr class="memitem:a15a7c00970b0969deee53810197b47b3" id="r_a15a7c00970b0969deee53810197b47b3"><td class="memItemLeft"><a id="a15a7c00970b0969deee53810197b47b3" name="a15a7c00970b0969deee53810197b47b3"></a>
+float&#160;</td><td class="memItemRight"><b>left_eye_openness</b> = 1.0f</td></tr>
+<tr class="memitem:af78a944ecdec0f2f30c7db44b6313f85" id="r_af78a944ecdec0f2f30c7db44b6313f85"><td class="memItemLeft"><a id="af78a944ecdec0f2f30c7db44b6313f85" name="af78a944ecdec0f2f30c7db44b6313f85"></a>
+float&#160;</td><td class="memItemRight"><b>right_eye_openness</b> = 1.0f</td></tr>
 <tr class="memitem:a9c1437a23c06ba5ad996fd41f9dba1a3" id="r_a9c1437a23c06ba5ad996fd41f9dba1a3"><td class="memItemLeft"><a id="a9c1437a23c06ba5ad996fd41f9dba1a3" name="a9c1437a23c06ba5ad996fd41f9dba1a3"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>head_translation</b></td></tr>
 <tr class="memitem:a5273318406740a14ede46b750fdea884" id="r_a5273318406740a14ede46b750fdea884"><td class="memItemLeft"><a id="a5273318406740a14ede46b750fdea884" name="a5273318406740a14ede46b750fdea884"></a>
@@ -164,6 +170,10 @@ bool&#160;</td><td class="memItemRight"><b>gaze_success</b> = false</td></tr>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>gaze_origin</b></td></tr>
 <tr class="memitem:aaf7215432f74d70fb6d75ce84369a6b1" id="r_aaf7215432f74d70fb6d75ce84369a6b1"><td class="memItemLeft"><a id="aaf7215432f74d70fb6d75ce84369a6b1" name="aaf7215432f74d70fb6d75ce84369a6b1"></a>
 <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>gaze_direction</b></td></tr>
+<tr class="memitem:a80b095e03e7e2913a169b722a09b84cc" id="r_a80b095e03e7e2913a169b722a09b84cc"><td class="memItemLeft"><a id="a80b095e03e7e2913a169b722a09b84cc" name="a80b095e03e7e2913a169b722a09b84cc"></a>
+bool&#160;</td><td class="memItemRight"><b>has_landmarks_2d</b> = false</td></tr>
+<tr class="memitem:a440fb449980815dc94a6ff07ca32ae89" id="r_a440fb449980815dc94a6ff07ca32ae89"><td class="memItemLeft"><a id="a440fb449980815dc94a6ff07ca32ae89" name="a440fb449980815dc94a6ff07ca32ae89"></a>
+float&#160;</td><td class="memItemRight"><b>landmarks_2d_px</b> [35 *2] = {0.0f}</td></tr>
 <tr class="memitem:a08e1500f6d930afdf1ed5d9f47c3c9bd" id="r_a08e1500f6d930afdf1ed5d9f47c3c9bd"><td class="memItemLeft"><a id="a08e1500f6d930afdf1ed5d9f47c3c9bd" name="a08e1500f6d930afdf1ed5d9f47c3c9bd"></a>
 uint8_t *&#160;</td><td class="memItemRight"><b>left_eye_buffer</b> = nullptr</td></tr>
 <tr class="memitem:a9e73af014954b83da72e919cd835d30f" id="r_a9e73af014954b83da72e919cd835d30f"><td class="memItemLeft"><a id="a9e73af014954b83da72e919cd835d30f" name="a9e73af014954b83da72e919cd835d30f"></a>
@@ -172,6 +182,10 @@ uint8_t *&#160;</td><td class="memItemRight"><b>right_eye_buffer</b> = nullptr</
 uint8_t *&#160;</td><td class="memItemRight"><b>full_crop_buffer</b> = nullptr</td></tr>
 <tr class="memitem:a292961d8e63d05543e91c1aa6d03b082" id="r_a292961d8e63d05543e91c1aa6d03b082"><td class="memItemLeft"><a id="a292961d8e63d05543e91c1aa6d03b082" name="a292961d8e63d05543e91c1aa6d03b082"></a>
 size_t&#160;</td><td class="memItemRight"><b>full_crop_bytes</b> = 0</td></tr>
+<tr class="memitem:a00418debb312b960a4764522684a3317" id="r_a00418debb312b960a4764522684a3317"><td class="memItemLeft"><a id="a00418debb312b960a4764522684a3317" name="a00418debb312b960a4764522684a3317"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>face_context_id</b> = 0</td></tr>
+<tr class="memitem:a13f2b229d651ef6c21571e7c92061d77" id="r_a13f2b229d651ef6c21571e7c92061d77"><td class="memItemLeft"><a id="a13f2b229d651ef6c21571e7c92061d77" name="a13f2b229d651ef6c21571e7c92061d77"></a>
+uint64_t&#160;</td><td class="memItemRight"><b>eye_context_id</b> = 0</td></tr>
 <tr class="memitem:a4d40c3bae02719faf99221c1a2fe601b" id="r_a4d40c3bae02719faf99221c1a2fe601b"><td class="memItemLeft"><a id="a4d40c3bae02719faf99221c1a2fe601b" name="a4d40c3bae02719faf99221c1a2fe601b"></a>
 uint64_t&#160;</td><td class="memItemRight"><b>face_rid_val</b> = 0</td></tr>
 <tr class="memitem:a86d9bc667ea9de42233134860ae730aa" id="r_a86d9bc667ea9de42233134860ae730aa"><td class="memItemLeft"><a id="a86d9bc667ea9de42233134860ae730aa" name="a86d9bc667ea9de42233134860ae730aa"></a>

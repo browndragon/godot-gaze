@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="145" column="15" bodyfile="src/core/math_defs.hpp" bodystart="145" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="215" column="15" bodyfile="src/core/math_defs.hpp" bodystart="215" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_vector2__32f_1ae7a4f9c3b17901e715ee002e88e5148b" prot="public" static="no" mutable="no">
         <type>float</type>
@@ -29,7 +29,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="146" column="15" bodyfile="src/core/math_defs.hpp" bodystart="146" bodyend="-1"/>
+        <location file="src/core/math_defs.hpp" line="216" column="15" bodyfile="src/core/math_defs.hpp" bodystart="216" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="148" column="9"/>
+        <location file="src/core/math_defs.hpp" line="218" column="9"/>
       </memberdef>
       <memberdef kind="function" id="struct_gaze_1_1_gaze_vector2__32f_1abaf9ada38f36317ff6b2df1606763496" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>constexpr</type>
@@ -67,14 +67,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/math_defs.hpp" line="149" column="19" bodyfile="src/core/math_defs.hpp" bodystart="149" bodyend="149"/>
+        <location file="src/core/math_defs.hpp" line="219" column="19" bodyfile="src/core/math_defs.hpp" bodystart="219" bodyend="219"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/math_defs.hpp" line="143" column="5" bodyfile="src/core/math_defs.hpp" bodystart="144" bodyend="150"/>
+    <location file="src/core/math_defs.hpp" line="213" column="5" bodyfile="src/core/math_defs.hpp" bodystart="214" bodyend="220"/>
     <listofallmembers>
       <member refid="struct_gaze_1_1_gaze_vector2__32f_1a27bbe92e817d529d3e84d530dadfda61" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>GazeVector2_32f</name></member>
       <member refid="struct_gaze_1_1_gaze_vector2__32f_1abaf9ada38f36317ff6b2df1606763496" prot="public" virt="non-virtual"><scope>Gaze::GazeVector2_32f</scope><name>GazeVector2_32f</name></member>

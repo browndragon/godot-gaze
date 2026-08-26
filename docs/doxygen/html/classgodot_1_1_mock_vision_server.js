@@ -5,5 +5,5 @@ var classgodot_1_1_mock_vision_server =
     [ "camera_start", "classgodot_1_1_mock_vision_server.html#a4a43ab97ac090d728fe6a2a946f4a43b", null ],
     [ "camera_stop", "classgodot_1_1_mock_vision_server.html#aa043038fb3f8f4b57a8df1ed58643b8b", null ],
     [ "get_camera_current_texture", "classgodot_1_1_mock_vision_server.html#aacade9a5fbef9962053deb89231cdcd4", null ],
-    [ "inject_texture", "classgodot_1_1_mock_vision_server.html#acb358611cd86c171b357adbb5e6d548b", null ]
+    [ "inject_texture", "classgodot_1_1_mock_vision_server.html#a6b5b3db71732c984c4393f0c87de7a6d", null ]
 ];

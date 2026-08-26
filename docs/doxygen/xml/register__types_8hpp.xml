@@ -20,7 +20,7 @@
 <para>GDExtension module registration hooks. </para>
     </briefdescription>
     <detaileddescription>
-<para>Declares the initialization and teardown entry points for registering the GazeTracker, GazePipelineConfig, and GazeCalibration classes into the Godot engine ClassDB. </para>
+<para>Declares the initialization and teardown entry points for registering the GazeServer, InputEventGaze, and GazeCalibration classes into the Godot engine ClassDB. </para>
     </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="normal"></highlight></codeline>

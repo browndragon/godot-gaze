@@ -3,9 +3,9 @@
   <compounddef id="class_gaze_1_1_gaze_tracking_pipeline" kind="class" language="C++" prot="public">
     <compoundname>Gaze::GazeTrackingPipeline</compoundname>
     <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a7e2512b329f5571bfcde1a6308d9f4d1" prot="private" static="no" mutable="no">
-        <type>std::unique_ptr&lt; <ref refid="class_gaze_1_1_o_r_t_yu_net_pipeline" kindref="compound">ORTYuNetPipeline</ref> &gt;</type>
-        <definition>std::unique_ptr&lt;ORTYuNetPipeline&gt; Gaze::GazeTrackingPipeline::face_detector</definition>
+      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1ad60c0e4f72b7625c7be9578d7693febc" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="class_gaze_1_1_o_r_t_yu_net_detector" kindref="compound">ORTYuNetDetector</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;ORTYuNetDetector&gt; Gaze::GazeTrackingPipeline::face_detector</definition>
         <argsstring></argsstring>
         <name>face_detector</name>
         <qualifiedname>Gaze::GazeTrackingPipeline::face_detector</qualifiedname>
@@ -15,7 +15,35 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="24" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="24" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="26" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a22d4f4822ffe32576e30a98c4e13017c" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="class_gaze_1_1_o_r_t_landmark_model" kindref="compound">ORTLandmarkModel</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;ORTLandmarkModel&gt; Gaze::GazeTrackingPipeline::landmark_model</definition>
+        <argsstring></argsstring>
+        <name>landmark_model</name>
+        <qualifiedname>Gaze::GazeTrackingPipeline::landmark_model</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="27" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a9caed53d039ae2433fa3d79d05e901b1" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; <ref refid="class_gaze_1_1_o_r_t_eye_state_model" kindref="compound">ORTEyeStateModel</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;ORTEyeStateModel&gt; Gaze::GazeTrackingPipeline::eye_state_model</definition>
+        <argsstring></argsstring>
+        <name>eye_state_model</name>
+        <qualifiedname>Gaze::GazeTrackingPipeline::eye_state_model</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="28" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="28" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a53a12c145d56e36775d5ef2222c8423e" prot="private" static="no" mutable="no">
         <type>std::unique_ptr&lt; <ref refid="class_gaze_1_1_o_r_t_gaze_model" kindref="compound">ORTGazeModel</ref> &gt;</type>
@@ -29,7 +57,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="25" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="25" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="29" column="25" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a6e23e70584cea649ae20a3263dbd24ca" prot="private" static="no" mutable="no">
         <type>std::thread</type>
@@ -43,7 +71,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="27" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="27" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="31" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1ae344b36ac03a7cbc002b64f754d01161" prot="private" static="no" mutable="no">
         <type>std::atomic&lt; bool &gt;</type>
@@ -58,7 +86,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="28" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="28" bodyend="28"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="32" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="32" bodyend="32"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a4b69b9983aafee10910fef07dcb1df32" prot="private" static="no" mutable="yes">
         <type>std::mutex</type>
@@ -72,7 +100,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="29" column="28" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="29" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="33" column="28" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a48f0572b6e5f01eda096e959bb6dded3" prot="private" static="no" mutable="no">
         <type>std::condition_variable</type>
@@ -86,7 +114,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="30" column="33" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="30" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="34" column="33" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1add24542d41cd712c37c4216cba13f385" prot="private" static="no" mutable="no">
         <type>std::mutex</type>
@@ -100,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="31" column="20" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="31" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="35" column="20" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a17839dee84a776c7dcf82dbcc44210fb" prot="private" static="no" mutable="no">
         <type>std::mutex</type>
@@ -114,7 +142,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="32" column="20" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="32" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="36" column="20" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a03a3a7f87ae1ee65a62d06264f43d701" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -129,7 +157,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="33" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="33" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="37" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1aba5d4dd323d7a644e5bdc96d211a5bb5" prot="private" static="no" mutable="no">
         <type><ref refid="class_gaze_1_1_atomic_mailbox" kindref="compound">AtomicMailbox</ref>&lt; <ref refid="struct_gaze_1_1_gaze_frame_data" kindref="compound">GazeFrameData</ref> * &gt;</type>
@@ -143,7 +171,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="35" column="23" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="35" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="39" column="23" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1adc502801730a1d106507fc1f1e0d5eb1" prot="private" static="no" mutable="no">
         <type><ref refid="class_gaze_1_1_atomic_mailbox" kindref="compound">AtomicMailbox</ref>&lt; <ref refid="struct_gaze_1_1_gaze_frame_data" kindref="compound">GazeFrameData</ref> * &gt;</type>
@@ -157,7 +185,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="36" column="23" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="36" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="40" column="23" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a483233405a00bc0e280475fbe44f309e" prot="private" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">PipelineConfig</ref></type>
@@ -171,7 +199,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="37" column="24" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="37" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="41" column="24" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="41" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a5e49de53afdfedf8f3c39ad54b5478a4" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -186,7 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="38" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="38" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="42" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="42" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1ae54b5e8341804774e9898aadb982e7d0" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -201,7 +229,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="39" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="39" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="43" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="43" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a5526e8abf6576e8e6a3286f5d0057cbb" prot="private" static="no" mutable="no">
         <type>std::atomic&lt; bool &gt;</type>
@@ -216,7 +244,36 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="40" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="40" bodyend="40"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="44" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1a80f879b25403321c0cd22ff5285261a1" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::GazeTrackingPipeline::prev_roll_rad</definition>
+        <argsstring></argsstring>
+        <name>prev_roll_rad</name>
+        <qualifiedname>Gaze::GazeTrackingPipeline::prev_roll_rad</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="45" column="15" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_gaze_tracking_pipeline_1ab8e59b2861b43f1f825e28f6966b2be4" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; unsigned char &gt;</type>
+        <definition>std::vector&lt;unsigned char&gt; Gaze::GazeTrackingPipeline::rotated_frame_buffer</definition>
+        <argsstring></argsstring>
+        <name>rotated_frame_buffer</name>
+        <qualifiedname>Gaze::GazeTrackingPipeline::rotated_frame_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="46" column="21" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="46" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-attrib">
@@ -232,7 +289,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="45" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="45" bodyend="-1"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="51" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -248,7 +305,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="42" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="135" bodyend="256"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="48" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="145" bodyend="380"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -264,7 +321,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="47" column="9"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="53" column="9"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a612fe6a79eefe4a5bc3e5431cb306d3a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -278,12 +335,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="48" column="9" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="25" bodyend="30"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="54" column="9" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="14" bodyend="19"/>
       </memberdef>
-      <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a82c1b77629fb5c85300f2fb96c2be2d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a05eaf05b5450c991e2aa81c6567dd5cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
         <definition>bool Gaze::GazeTrackingPipeline::initialize</definition>
-        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;yunet_model_data, const std::vector&lt; uint8_t &gt; &amp;gaze_model_data)</argsstring>
+        <argsstring>(const std::vector&lt; uint8_t &gt; &amp;yunet_model_data, const std::vector&lt; uint8_t &gt; &amp;gaze_model_data, const std::vector&lt; uint8_t &gt; &amp;eye_openness_model_data={}, const std::vector&lt; uint8_t &gt; &amp;landmark_model_data={})</argsstring>
         <name>initialize</name>
         <qualifiedname>Gaze::GazeTrackingPipeline::initialize</qualifiedname>
         <param>
@@ -294,13 +351,23 @@
           <type>const std::vector&lt; uint8_t &gt; &amp;</type>
           <declname>gaze_model_data</declname>
         </param>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>eye_openness_model_data</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>landmark_model_data</declname>
+          <defval>{}</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="50" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="32" bodyend="60"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="56" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="21" bodyend="65"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1ac4c20b6bd740df10836beddf6ed6814d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -314,7 +381,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="51" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="62" bodyend="72"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="61" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="67" bodyend="82"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a46066f73e1cd9d5ff45b731843969673" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -328,7 +395,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="52" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="74" bodyend="101"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="62" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="84" bodyend="111"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1aba18c14b3c538e9af17e5d121c8b32da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -346,7 +413,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="54" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="103" bodyend="108"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="64" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="113" bodyend="118"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1afe6c7f9d5c67882770e6f987df43c171" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -364,7 +431,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="55" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="110" bodyend="118"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="65" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="120" bodyend="128"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a3071ccd0f3622a90fb3a6e6ce7b9acaf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -382,7 +449,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="56" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="120" bodyend="127"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="66" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="130" bodyend="137"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1a6de071df6b2487d9697a6da3cd7d5454" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -396,7 +463,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="57" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="129" bodyend="133"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="67" column="14" bodyfile="src/native/gaze_tracking_pipeline.cpp" bodystart="139" bodyend="143"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_gaze_tracking_pipeline_1aa2f809fc4369523921e4c44bbfc118c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -410,7 +477,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/gaze_tracking_pipeline.hpp" line="58" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="58" bodyend="58"/>
+        <location file="src/native/gaze_tracking_pipeline.hpp" line="68" column="14" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="68" bodyend="68"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -430,25 +497,29 @@
         <link refid="class_pool"/>
       </node>
     </collaborationgraph>
-    <location file="src/native/gaze_tracking_pipeline.hpp" line="21" column="5" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="22" bodyend="59"/>
+    <location file="src/native/gaze_tracking_pipeline.hpp" line="23" column="5" bodyfile="src/native/gaze_tracking_pipeline.hpp" bodystart="24" bodyend="69"/>
     <listofallmembers>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a7e45122d36e916c8a8d1db80275c7320" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>_worker_loop</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a483233405a00bc0e280475fbe44f309e" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>active_config</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a6de071df6b2487d9697a6da3cd7d5454" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>clear_work_queue</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ae54b5e8341804774e9898aadb982e7d0" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>config_dirty</name></member>
-      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a7e2512b329f5571bfcde1a6308d9f4d1" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>face_detector</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a9caed53d039ae2433fa3d79d05e901b1" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>eye_state_model</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ad60c0e4f72b7625c7be9578d7693febc" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>face_detector</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a03a3a7f87ae1ee65a62d06264f43d701" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>frame_pending</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a89dbe0aa50dc354d0dba83bea445db87" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>frame_pool</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a53a12c145d56e36775d5ef2222c8423e" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>gaze_estimator</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a0ffc9687fab0931d446d7a687177b388" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>GazeTrackingPipeline</name></member>
-      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a82c1b77629fb5c85300f2fb96c2be2d8" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>initialize</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a05eaf05b5450c991e2aa81c6567dd5cc" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>initialize</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a5e49de53afdfedf8f3c39ad54b5478a4" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>initialized</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1aa2f809fc4369523921e4c44bbfc118c4" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>is_busy</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a22d4f4822ffe32576e30a98c4e13017c" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>landmark_model</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a17839dee84a776c7dcf82dbcc44210fb" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>lifecycle_mutex</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a3071ccd0f3622a90fb3a6e6ce7b9acaf" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>pop_result</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a80f879b25403321c0cd22ff5285261a1" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>prev_roll_rad</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1afe6c7f9d5c67882770e6f987df43c171" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>push_frame_request</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1aba5d4dd323d7a644e5bdc96d211a5bb5" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>request_mailbox</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1adc502801730a1d106507fc1f1e0d5eb1" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>results_mailbox</name></member>
+      <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ab8e59b2861b43f1f825e28f6966b2be4" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>rotated_frame_buffer</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1aba18c14b3c538e9af17e5d121c8b32da" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>set_config</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ac4c20b6bd740df10836beddf6ed6814d" prot="public" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>start</name></member>
       <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a4b69b9983aafee10910fef07dcb1df32" prot="private" virt="non-virtual"><scope>Gaze::GazeTrackingPipeline</scope><name>state_mutex</name></member>

@@ -103,7 +103,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="104" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="219" bodyend="235"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="104" column="17" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="230" bodyend="246"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">

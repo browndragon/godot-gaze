@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "Gaze::ORTYuNetDetector::Anchor", "struct_gaze_1_1_o_r_t_yu_net_detector_1_1_anchor.html", null ],
     [ "Gaze::AtomicMailbox&lt; T &gt;", "class_gaze_1_1_atomic_mailbox.html", null ],
     [ "godot::GazeServerImpl::DisplayInfo::BioCalibrationData", "structgodot_1_1_gaze_server_impl_1_1_display_info_1_1_bio_calibration_data.html", null ],
     [ "Gaze::CalibrationEstimator", "class_gaze_1_1_calibration_estimator.html", null ],
@@ -12,13 +13,12 @@ var hierarchy =
     ] ],
     [ "Gaze::CameraPlacement", "struct_gaze_1_1_camera_placement.html", null ],
     [ "godot::GazeServerImpl::DisplayInfo", "structgodot_1_1_gaze_server_impl_1_1_display_info.html", null ],
+    [ "Gaze::EyeBlinkEstimator", "class_gaze_1_1_eye_blink_estimator.html", null ],
     [ "Gaze::EyeCrops", "struct_gaze_1_1_eye_crops.html", null ],
     [ "godot::GazeServerImpl::EyeInfo", "structgodot_1_1_gaze_server_impl_1_1_eye_info.html", null ],
     [ "godot::GazeServerImpl::FaceInfo", "structgodot_1_1_gaze_server_impl_1_1_face_info.html", null ],
-    [ "Gaze::FaceModelGeometry", "struct_gaze_1_1_face_model_geometry.html", null ],
-    [ "Gaze::FacePipeline", "class_gaze_1_1_face_pipeline.html", [
-      [ "Gaze::ORTYuNetPipeline", "class_gaze_1_1_o_r_t_yu_net_pipeline.html", null ]
-    ] ],
+    [ "Gaze::FaceModelGeometry", "class_gaze_1_1_face_model_geometry.html", null ],
+    [ "Gaze::FacePipeline", "class_gaze_1_1_face_pipeline.html", null ],
     [ "Gaze::Frame", "struct_gaze_1_1_frame.html", null ],
     [ "Gaze::GazeBasis3D", "struct_gaze_1_1_gaze_basis3_d.html", null ],
     [ "Gaze::GazeCalibration", "struct_gaze_1_1_gaze_calibration.html", null ],
@@ -34,14 +34,20 @@ var hierarchy =
     [ "Gaze::GazeVector2_64f", "struct_gaze_1_1_gaze_vector2__64f.html", null ],
     [ "Gaze::GazeVector2i", "struct_gaze_1_1_gaze_vector2i.html", null ],
     [ "Gaze::GazeVector3", "struct_gaze_1_1_gaze_vector3.html", null ],
+    [ "Gaze::HeadPose", "struct_gaze_1_1_head_pose.html", null ],
     [ "Gaze::ImageWarper", "class_gaze_1_1_image_warper.html", [
       [ "Gaze::CPUImageWarper", "class_gaze_1_1_c_p_u_image_warper.html", null ]
+    ] ],
+    [ "InputEventAction", null, [
+      [ "godot::InputEventGazeBase", "classgodot_1_1_input_event_gaze_base.html", [
+        [ "godot::InputEventGaze", "classgodot_1_1_input_event_gaze.html", null ],
+        [ "godot::InputEventGazeMissing", "classgodot_1_1_input_event_gaze_missing.html", null ]
+      ] ]
     ] ],
     [ "Node3D", null, [
       [ "godot::CameraSensor", "classgodot_1_1_camera_sensor.html", null ],
       [ "godot::EyeEstimator", "classgodot_1_1_eye_estimator.html", null ],
-      [ "godot::FaceEstimator", "classgodot_1_1_face_estimator.html", null ],
-      [ "godot::GazeTracker", "classgodot_1_1_gaze_tracker.html", null ]
+      [ "godot::FaceEstimator", "classgodot_1_1_face_estimator.html", null ]
     ] ],
     [ "Object", null, [
       [ "godot::GazeDeviceEstimatedCalibration", "classgodot_1_1_gaze_device_estimated_calibration.html", null ],
@@ -51,8 +57,10 @@ var hierarchy =
         [ "godot::MockVisionServer", "classgodot_1_1_mock_vision_server.html", null ]
       ] ]
     ] ],
+    [ "Gaze::ORTEyeStateModel", "class_gaze_1_1_o_r_t_eye_state_model.html", null ],
+    [ "Gaze::ORTLandmarkModel", "class_gaze_1_1_o_r_t_landmark_model.html", null ],
+    [ "Gaze::ORTYuNetDetector", "class_gaze_1_1_o_r_t_yu_net_detector.html", null ],
     [ "Gaze::PipelineConfig", "struct_gaze_1_1_pipeline_config.html", null ],
-    [ "godot::PlatformGeometry", "structgodot_1_1_platform_geometry.html", null ],
     [ "Pool&lt; T, SZ &gt;", "class_pool.html", null ],
     [ "Gaze::ProjectionEngine", "class_gaze_1_1_projection_engine.html", null ],
     [ "RefCounted", null, [
@@ -77,5 +85,8 @@ var hierarchy =
       ] ]
     ] ],
     [ "Gaze::ScreenProjector", "class_gaze_1_1_screen_projector.html", null ],
-    [ "Gaze::Vertex", "struct_gaze_1_1_vertex.html", null ]
+    [ "Gaze::SQPnPSolver::Solution", "struct_gaze_1_1_s_q_pn_p_solver_1_1_solution.html", null ],
+    [ "Gaze::SQPnPSolver", "class_gaze_1_1_s_q_pn_p_solver.html", null ],
+    [ "Gaze::Vertex", "struct_gaze_1_1_vertex.html", null ],
+    [ "Gaze::YuNetResult", "struct_gaze_1_1_yu_net_result.html", null ]
 ];

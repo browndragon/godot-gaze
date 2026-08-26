@@ -20,6 +20,13 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>algorithm</label>
       </node>
       <node id="3">
         <label>cmath</label>
@@ -29,6 +36,9 @@
       </node>
       <node id="4">
         <label>type_traits</label>
+      </node>
+      <node id="7">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <invincdepgraph>
@@ -45,8 +55,6 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
-        </childnode>
       </node>
       <node id="4">
         <label>src/core/screen_projector.cpp</label>
@@ -58,18 +66,14 @@
         <childnode refid="4" relation="include">
         </childnode>
       </node>
-      <node id="7">
+      <node id="6">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
       </node>
       <node id="5">
         <label>src/godot/gaze_server.hpp</label>
         <link refid="gaze__server_8hpp_source"/>
-      </node>
-      <node id="6">
-        <label>src/godot/gaze_tracker.hpp</label>
-        <link refid="gaze__tracker_8hpp"/>
-        <childnode refid="7" relation="include">
+        <childnode refid="6" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

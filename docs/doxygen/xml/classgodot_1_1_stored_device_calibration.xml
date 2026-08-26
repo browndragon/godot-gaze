@@ -54,7 +54,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_calibration_resource.hpp" line="67" column="5" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="135" bodyend="139"/>
+        <location file="src/godot/gaze_calibration_resource.hpp" line="67" column="5" bodyfile="src/godot/gaze_calibration_resource.cpp" bodystart="146" bodyend="150"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_stored_device_calibration_1a8d37761b03590dd202390bb78f8c1930" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>

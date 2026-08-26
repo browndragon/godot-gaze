@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['basis_5fto_5frodrigues_0',['basis_to_rodrigues',['../math__defs_8hpp.html#affe895852483e031ecf8b552a96fdc65',1,'Gaze']]]
+  ['apply_5f3d_5fbias_5fvector_0',['apply_3d_bias_vector',['../math__defs_8hpp.html#ad93a5bce0845264d135053937ec1b70b',1,'Gaze']]]
 ];

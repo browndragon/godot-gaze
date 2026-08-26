@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['project_5fgaze_5fray_5fto_5fviewport_0',['project_gaze_ray_to_viewport',['../classgodot_1_1_gaze_tracker.html#ae3e8acf31fbdcd82680ef0c7b66b5c5e',1,'godot::GazeTracker']]],
-  ['project_5fray_5fto_5fscreen_5fmm_1',['project_ray_to_screen_mm',['../math__defs_8hpp.html#a38517b7bb8c677200c9e70a259b1c0eb',1,'Gaze']]]
+  ['resolve_5fmodel_5fpath_0',['resolve_model_path',['../godot__files_8hpp.html#a8b35896322b0f4af040f508f62eff6ed',1,'godot']]],
+  ['rodrigues_5fto_5fbasis_1',['rodrigues_to_basis',['../math__defs_8hpp.html#a956327787e5b5bf19a5c91d0ec705d3e',1,'Gaze']]]
 ];

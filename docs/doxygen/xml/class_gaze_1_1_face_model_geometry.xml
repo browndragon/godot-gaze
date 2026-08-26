@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_face_model_geometry" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::FaceModelGeometry</compoundname>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1afca1294199ae4740ac2a8fe44c789ba1" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::EYE_X</definition>
+        <argsstring></argsstring>
+        <name>EYE_X</name>
+        <qualifiedname>Gaze::FaceModelGeometry::EYE_X</qualifiedname>
+        <initializer>= 31.5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="21" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1a23ff0975c0ab4f1e3c9caf3991c14a30" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::EYE_Y</definition>
+        <argsstring></argsstring>
+        <name>EYE_Y</name>
+        <qualifiedname>Gaze::FaceModelGeometry::EYE_Y</qualifiedname>
+        <initializer>= 33.4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="22" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1a84919b4d0e3d9cb9c7d79111405d624b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::EYE_Z</definition>
+        <argsstring></argsstring>
+        <name>EYE_Z</name>
+        <qualifiedname>Gaze::FaceModelGeometry::EYE_Z</qualifiedname>
+        <initializer>= 18.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="23" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1af888bf6b5ec7877f8de40f8e41c29e2d" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::MOUTH_X</definition>
+        <argsstring></argsstring>
+        <name>MOUTH_X</name>
+        <qualifiedname>Gaze::FaceModelGeometry::MOUTH_X</qualifiedname>
+        <initializer>= 24.2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="25" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1aff8fb0524e710a2a1d1d88c0bb8ebdd5" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::MOUTH_Y</definition>
+        <argsstring></argsstring>
+        <name>MOUTH_Y</name>
+        <qualifiedname>Gaze::FaceModelGeometry::MOUTH_Y</qualifiedname>
+        <initializer>= -28.1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="26" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1a63f96d72d5abc8748b9ed6deaa862896" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::MOUTH_Z</definition>
+        <argsstring></argsstring>
+        <name>MOUTH_Z</name>
+        <qualifiedname>Gaze::FaceModelGeometry::MOUTH_Z</qualifiedname>
+        <initializer>= 10.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="27" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1ad5f6b5a750464adbbec93ec32625b5fb" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::DEFAULT_NOSE_Y</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_NOSE_Y</name>
+        <qualifiedname>Gaze::FaceModelGeometry::DEFAULT_NOSE_Y</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="29" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_face_model_geometry_1a7891930a01556a0149e6909b3d1dfbb2" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FaceModelGeometry::DEFAULT_NOSE_Z</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_NOSE_Z</name>
+        <qualifiedname>Gaze::FaceModelGeometry::DEFAULT_NOSE_Z</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="30" column="33" bodyfile="src/core/face_model_geometry.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_face_model_geometry_1ab40b6f49e642b40da85280ec67790b66" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt;</type>
+        <definition>static std::vector&lt; GazeVector3 &gt; Gaze::FaceModelGeometry::get_5pt_model_points</definition>
+        <argsstring>()</argsstring>
+        <name>get_5pt_model_points</name>
+        <qualifiedname>Gaze::FaceModelGeometry::get_5pt_model_points</qualifiedname>
+        <briefdescription>
+<para>5-point face model used specifically for YuNet initial face alignment. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="35" column="35" bodyfile="src/core/face_model_geometry.hpp" bodystart="35" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_model_geometry_1abd8df00320880afe16aa00ca5bf63103" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt;</type>
+        <definition>static std::vector&lt; GazeVector3 &gt; Gaze::FaceModelGeometry::get_canonical_35pt_model_points</definition>
+        <argsstring>()</argsstring>
+        <name>get_canonical_35pt_model_points</name>
+        <qualifiedname>Gaze::FaceModelGeometry::get_canonical_35pt_model_points</qualifiedname>
+        <briefdescription>
+<para>Canonical 35-point anthropometric 3D face model matching ADAS-0002 landmarks. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="49" column="35" bodyfile="src/core/face_model_geometry.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_model_geometry_1a89b481382efbcac117f4456e75f57fc7" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt;</type>
+        <definition>static std::vector&lt; GazeVector3 &gt; Gaze::FaceModelGeometry::get_rigid_18pt_model_points</definition>
+        <argsstring>()</argsstring>
+        <name>get_rigid_18pt_model_points</name>
+        <qualifiedname>Gaze::FaceModelGeometry::get_rigid_18pt_model_points</qualifiedname>
+        <briefdescription>
+<para>18-point rigid facial core model points (Eyes 0..3, Nose 4..7, Mouth 8..11, Eyebrows 12..17). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Excludes moving jawline contour points (18..34) to achieve expression-invariant PnP tracking. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="58" column="35" bodyfile="src/core/face_model_geometry.hpp" bodystart="58" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_face_model_geometry_1ac11c699e57ba9f5c3fd141ccf1d4a891" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::vector&lt; <ref refid="struct_gaze_1_1_gaze_vector3" kindref="compound">GazeVector3</ref> &gt;</type>
+        <definition>static std::vector&lt; GazeVector3 &gt; Gaze::FaceModelGeometry::get_canonical_godot_model_points</definition>
+        <argsstring>()</argsstring>
+        <name>get_canonical_godot_model_points</name>
+        <qualifiedname>Gaze::FaceModelGeometry::get_canonical_godot_model_points</qualifiedname>
+        <briefdescription>
+<para>Primary canonical 3D model points exposed to Godot for debug overlays and tracking. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Converts OpenCV Model Space (-X Right, -Y Up, -Z Forward) to Godot Face Local Space (+X Right, +Y Up, -Z Forward). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/face_model_geometry.hpp" line="68" column="35" bodyfile="src/core/face_model_geometry.hpp" bodystart="68" bodyend="76"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/face_model_geometry.hpp" line="12" column="5" bodyfile="src/core/face_model_geometry.hpp" bodystart="13" bodyend="77"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_face_model_geometry_1ad5f6b5a750464adbbec93ec32625b5fb" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>DEFAULT_NOSE_Y</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1a7891930a01556a0149e6909b3d1dfbb2" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>DEFAULT_NOSE_Z</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1afca1294199ae4740ac2a8fe44c789ba1" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>EYE_X</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1a23ff0975c0ab4f1e3c9caf3991c14a30" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>EYE_Y</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1a84919b4d0e3d9cb9c7d79111405d624b" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>EYE_Z</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1ab40b6f49e642b40da85280ec67790b66" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>get_5pt_model_points</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1abd8df00320880afe16aa00ca5bf63103" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>get_canonical_35pt_model_points</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1ac11c699e57ba9f5c3fd141ccf1d4a891" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>get_canonical_godot_model_points</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1a89b481382efbcac117f4456e75f57fc7" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>get_rigid_18pt_model_points</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1af888bf6b5ec7877f8de40f8e41c29e2d" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>MOUTH_X</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1aff8fb0524e710a2a1d1d88c0bb8ebdd5" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>MOUTH_Y</name></member>
+      <member refid="class_gaze_1_1_face_model_geometry_1a63f96d72d5abc8748b9ed6deaa862896" prot="public" virt="non-virtual"><scope>Gaze::FaceModelGeometry</scope><name>MOUTH_Z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

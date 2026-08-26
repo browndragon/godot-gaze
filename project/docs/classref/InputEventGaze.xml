@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="InputEventGaze" inherits="godot::InputEventGazeBase">
+	<brief_description>Input event emitted when face and eye gaze tracking is actively locked.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="is_face_tracked">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="set_position">
+			<return type="void"></return>
+			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_position">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_global_position">
+			<return type="void"></return>
+			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_global_position">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_screen_position">
+			<return type="void"></return>
+			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_screen_position">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_relative">
+			<return type="void"></return>
+			<param index="0" name="p_rel" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_relative">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_screen_relative">
+			<return type="void"></return>
+			<param index="0" name="p_rel" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_screen_relative">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_velocity">
+			<return type="void"></return>
+			<param index="0" name="p_vel" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_velocity">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_screen_velocity">
+			<return type="void"></return>
+			<param index="0" name="p_vel" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_screen_velocity">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_head_transform">
+			<return type="void"></return>
+			<param index="0" name="p_xform" type="const Transform3D &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_head_transform">
+			<return type="Transform3D"></return>
+			<description></description>
+		</method>
+		<method name="set_gaze_transform">
+			<return type="void"></return>
+			<param index="0" name="p_xform" type="const Transform3D &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_gaze_transform">
+			<return type="Transform3D"></return>
+			<description></description>
+		</method>
+		<method name="as_text">
+			<return type="String"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

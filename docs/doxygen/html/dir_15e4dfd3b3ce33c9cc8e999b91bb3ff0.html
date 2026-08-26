@@ -158,12 +158,11 @@ Files</h2></td></tr>
 <tr class="memitem:gaze_5Fpipeline_5Fconfig_2Ehpp" id="r_gaze_5Fpipeline_5Fconfig_2Ehpp"><td class="memItemLeft"><a href="gaze__pipeline__config_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="gaze__pipeline__config_8hpp.html">gaze_pipeline_config.hpp</a></td></tr>
 <tr class="memdesc:gaze__pipeline__config_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Godot Resource for pipeline configurations. <br /></td></tr>
 <tr class="memitem:gaze_5Fserver_2Ehpp" id="r_gaze_5Fserver_2Ehpp"><td class="memItemLeft"><a href="gaze__server_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><b>gaze_server.hpp</b></td></tr>
-<tr class="memitem:gaze_5Ftracker_2Ehpp" id="r_gaze_5Ftracker_2Ehpp"><td class="memItemLeft"><a href="gaze__tracker_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="gaze__tracker_8hpp.html">gaze_tracker.hpp</a></td></tr>
-<tr class="memdesc:gaze__tracker_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">GazeTracker Godot Node GDExtension binding. <br /></td></tr>
 <tr class="memitem:godot_5Fcamera_2Ehpp" id="r_godot_5Fcamera_2Ehpp"><td class="memItemLeft"><a href="godot__camera_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="godot__camera_8hpp.html">godot_camera.hpp</a></td></tr>
 <tr class="memdesc:godot__camera_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Platform-native camera ingestion using Godot's CameraServer and CameraFeed. <br /></td></tr>
 <tr class="memitem:godot_5Ffiles_2Ehpp" id="r_godot_5Ffiles_2Ehpp"><td class="memItemLeft"><a href="godot__files_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="godot__files_8hpp.html">godot_files.hpp</a></td></tr>
 <tr class="memdesc:godot__files_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">Shared file loading utilities for Godot classes. <br /></td></tr>
+<tr class="memitem:input_5Fevent_5Fgaze_2Ehpp" id="r_input_5Fevent_5Fgaze_2Ehpp"><td class="memItemLeft"><a href="input__event__gaze_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><b>input_event_gaze.hpp</b></td></tr>
 <tr class="memitem:one_5Feuro_5Fsmoother_2Ehpp" id="r_one_5Feuro_5Fsmoother_2Ehpp"><td class="memItemLeft"><a href="one__euro__smoother_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><b>one_euro_smoother.hpp</b></td></tr>
 <tr class="memitem:register_5Ftypes_2Ehpp" id="r_register_5Ftypes_2Ehpp"><td class="memItemLeft"><a href="register__types_8hpp_source.html"><span class="icondoc"><div class="doc-icon"></div></span></a>&#160;</td><td class="memItemRight"><a class="el" href="register__types_8hpp.html">register_types.hpp</a></td></tr>
 <tr class="memdesc:register__types_8hpp"><td class="mdescLeft">&#160;</td><td class="mdescRight">GDExtension module registration hooks. <br /></td></tr>
@@ -179,8 +178,8 @@ Files</h2></td></tr>
 <p>-- This directory contains the GDExtension classes and ClassDB registration interfaces that bridge the core C++ gaze engine to Godot.</p><ul>
 <li></li>
 <li>Classes here include:</li>
-<li>- <span class="tt">GazeTracker</span>: Singleton wrapping the asynchronous pipeline, filters, and display projector.</li>
-<li>- <span class="tt">GazeServer</span>: Background thread manager.</li>
+<li>- <span class="tt">GazeServer</span>: Lifecycle manager, refcounted tracking, and input event generator.</li>
+<li>- <span class="tt">InputEventGazeBase</span>, <span class="tt">InputEventGaze</span>, <span class="tt">InputEventGazeMissing</span>: Native Godot input event hierarchy.</li>
 <li>- <span class="tt">CameraSensor</span>: Frame ingestion and camera property wrapper.</li>
 <li>- <span class="tt">FaceEstimator</span>: YuNet detector bindings.</li>
 <li>- <span class="tt">EyeEstimator</span>: Gaze estimation model bindings.</li>

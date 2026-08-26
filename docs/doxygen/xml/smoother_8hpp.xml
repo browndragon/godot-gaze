@@ -6,12 +6,9 @@
     <includes local="no">godot_cpp/variant/array.hpp</includes>
     <includes local="no">godot_cpp/variant/variant.hpp</includes>
     <includedby refid="gaze__server_8hpp" local="yes">src/godot/gaze_server.hpp</includedby>
-    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
-    <includedby refid="gaze__tracker__native_8cpp" local="yes">src/godot/gaze_tracker_native.cpp</includedby>
     <includedby refid="one__euro__smoother_8hpp" local="yes">src/godot/one_euro_smoother.hpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
     <includedby refid="smoother_8cpp" local="yes">src/godot/smoother.cpp</includedby>
-    <includedby refid="gaze__tracker__web_8cpp" local="yes">src/web/gaze_tracker_web.cpp</includedby>
     <incdepgraph>
       <node id="1">
         <label>src/godot/smoother.hpp</label>
@@ -34,20 +31,28 @@
       </node>
     </incdepgraph>
     <invincdepgraph>
+      <node id="3">
+        <label>src/godot/gaze_calibration_session.cpp</label>
+        <link refid="gaze__calibration__session_8cpp"/>
+      </node>
       <node id="2">
         <label>src/godot/gaze_server.hpp</label>
         <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
       </node>
-      <node id="3">
+      <node id="4">
         <label>src/godot/one_euro_smoother.hpp</label>
         <link refid="one__euro__smoother_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>src/godot/smoother.hpp</label>
         <link refid="smoother_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="3" relation="include">
+        <childnode refid="4" relation="include">
         </childnode>
       </node>
     </invincdepgraph>

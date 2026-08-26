@@ -8,8 +8,7 @@
     <includedby refid="display__profile_8cpp" local="yes">src/godot/display_profile.cpp</includedby>
     <includedby refid="gaze__calibration__resource_8cpp" local="yes">src/godot/gaze_calibration_resource.cpp</includedby>
     <includedby refid="gaze__calibration__session_8cpp" local="yes">src/godot/gaze_calibration_session.cpp</includedby>
-    <includedby refid="gaze__tracker_8cpp" local="yes">src/godot/gaze_tracker.cpp</includedby>
-    <includedby refid="gaze__tracker__native_8cpp" local="yes">src/godot/gaze_tracker_native.cpp</includedby>
+    <includedby refid="gaze__server_8hpp" local="yes">src/godot/gaze_server.hpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
     <incdepgraph>
       <node id="1">
@@ -38,10 +37,18 @@
         <link refid="display__profile_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
       </node>
       <node id="2">
         <label>src/godot/gaze_calibration_session.cpp</label>
         <link refid="gaze__calibration__session_8cpp"/>
+      </node>
+      <node id="3">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="2" relation="include">
+        </childnode>
       </node>
     </invincdepgraph>
     <innerclass refid="classgodot_1_1_display_profile" prot="public">godot::DisplayProfile</innerclass>

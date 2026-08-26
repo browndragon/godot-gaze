@@ -8,6 +8,24 @@
       <node id="5">
         <label>face_model_geometry.hpp</label>
         <link refid="face__model__geometry_8hpp"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
       </node>
       <node id="4">
         <label>pipeline_config.hpp</label>
@@ -20,7 +38,7 @@
         <link refid="gaze__pipeline__config_8cpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="6" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -31,11 +49,26 @@
         <childnode refid="4" relation="include">
         </childnode>
       </node>
+      <node id="10">
+        <label>algorithm</label>
+      </node>
+      <node id="7">
+        <label>cmath</label>
+      </node>
+      <node id="9">
+        <label>cstdint</label>
+      </node>
       <node id="3">
         <label>godot_cpp/classes/resource.hpp</label>
       </node>
-      <node id="6">
+      <node id="12">
         <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="8">
+        <label>type_traits</label>
+      </node>
+      <node id="11">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <innernamespace refid="namespacegodot">godot</innernamespace>

@@ -143,6 +143,8 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('math__defs_8hp
 <div class="textblock"><code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;type_traits&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
 </div>
 <p><a href="math__defs_8hpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -154,6 +156,7 @@ Classes</h2></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeRect" id="r_Gaze_3A_3AGazeRect"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_rect.html">Gaze::GazeRect</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeVector3" id="r_Gaze_3A_3AGazeVector3"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_vector3.html">Gaze::GazeVector3</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeBasis3D" id="r_Gaze_3A_3AGazeBasis3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_basis3_d.html">Gaze::GazeBasis3D</a></td></tr>
+<tr class="memitem:Gaze_3A_3AHeadPose" id="r_Gaze_3A_3AHeadPose"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_head_pose.html">Gaze::HeadPose</a></td></tr>
 <tr class="memitem:Gaze_3A_3AGazeTransform3D" id="r_Gaze_3A_3AGazeTransform3D"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_gaze_1_1_gaze_transform3_d.html">Gaze::GazeTransform3D</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-typedef-members" class="groupheader"><a id="typedef-members" name="typedef-members"></a>
@@ -167,6 +170,10 @@ using&#160;</td><td class="memItemRight"><b>Gaze::GazePoint</b> = <a class="el" 
 Functions</h2></td></tr>
 <tr class="memitem:ae6da62914f1bba3510e826b1d196e27f" id="r_ae6da62914f1bba3510e826b1d196e27f"><td class="memItemLeft"><a id="ae6da62914f1bba3510e826b1d196e27f" name="ae6da62914f1bba3510e826b1d196e27f"></a>
 void&#160;</td><td class="memItemRight"><b>Gaze::resize_bgr_to_rgb</b> (const uint8_t *src, int src_w, int src_h, uint8_t *dst, int dst_w, int dst_h)</td></tr>
+<tr class="memitem:a945b5c3067c6ca03687e2ecf1cd125da" id="r_a945b5c3067c6ca03687e2ecf1cd125da"><td class="memItemLeft"><a id="a945b5c3067c6ca03687e2ecf1cd125da" name="a945b5c3067c6ca03687e2ecf1cd125da"></a>
+void&#160;</td><td class="memItemRight"><b>Gaze::crop_and_resize_bgr</b> (const unsigned char *src, int src_w, int src_h, float crop_x, float crop_y, float crop_w, float crop_h, unsigned char *dst, int dst_w, int dst_h)</td></tr>
+<tr class="memitem:ae08ff5882cb209cac072def9526519ac" id="r_ae08ff5882cb209cac072def9526519ac"><td class="memItemLeft"><a id="ae08ff5882cb209cac072def9526519ac" name="ae08ff5882cb209cac072def9526519ac"></a>
+void&#160;</td><td class="memItemRight"><b>Gaze::crop_and_resize_bgr_to_rgb</b> (const uint8_t *src, int src_w, int src_h, float roi_x, float roi_y, float roi_w, float roi_h, uint8_t *dst, int dst_w, int dst_h)</td></tr>
 <tr class="memitem:a598ea344cf8ef8b3d9083dde52cd3197" id="r_a598ea344cf8ef8b3d9083dde52cd3197"><td class="memItemLeft"><a id="a598ea344cf8ef8b3d9083dde52cd3197" name="a598ea344cf8ef8b3d9083dde52cd3197"></a>
 double&#160;</td><td class="memItemRight"><b>Gaze::get_focal_length_px</b> (double width_px, double fov_degrees)</td></tr>
 <tr class="memitem:a61faa4b0cd24d89b41478d29adb054d6" id="r_a61faa4b0cd24d89b41478d29adb054d6"><td class="memItemLeft"><a id="a61faa4b0cd24d89b41478d29adb054d6" name="a61faa4b0cd24d89b41478d29adb054d6"></a>
@@ -189,6 +196,13 @@ double&#160;</td><td class="memItemRight"><b>Gaze::diagonal_to_horizontal_fov</b
 <tr class="memitem:a38517b7bb8c677200c9e70a259b1c0eb" id="r_a38517b7bb8c677200c9e70a259b1c0eb"><td class="memItemLeft"><a id="a38517b7bb8c677200c9e70a259b1c0eb" name="a38517b7bb8c677200c9e70a259b1c0eb"></a>
 bool&#160;</td><td class="memItemRight"><b>Gaze::project_ray_to_screen_mm</b> (const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;origin_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;dir_cam, const <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &amp;camera_offset, double camera_tilt_deg, const GazeVector2 &amp;screen_size_mm, GazeVector2 &amp;out_pos_mm)</td></tr>
 <tr class="memdesc:a38517b7bb8c677200c9e70a259b1c0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a camera-space gaze ray onto a tilted screen plane in millimeters. <br /></td></tr>
+<tr class="memitem:acc882e9b8cf4247f09fb958a984ee62d" id="r_acc882e9b8cf4247f09fb958a984ee62d"><td class="memItemLeft"><a id="acc882e9b8cf4247f09fb958a984ee62d" name="acc882e9b8cf4247f09fb958a984ee62d"></a>
+std::vector&lt; <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a> &gt;&#160;</td><td class="memItemRight"><b>Gaze::get_canonical_35pt_face_model</b> ()</td></tr>
+<tr class="memdesc:acc882e9b8cf4247f09fb958a984ee62d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Canonical 35-point anthropometric 3D face model defined directly in camera rest frame (+X right, +Y down, +Z away from camera into scene, face facing camera at rvec = 0). <br /></td></tr>
+<tr class="memitem:a083e6ca94f13b4b8c52f12889c120d84" id="r_a083e6ca94f13b4b8c52f12889c120d84"><td class="memItemLeft"><a id="a083e6ca94f13b4b8c52f12889c120d84" name="a083e6ca94f13b4b8c52f12889c120d84"></a>
+void&#160;</td><td class="memItemRight"><b>Gaze::rotate_image_bgr</b> (const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)</td></tr>
+<tr class="memitem:a2783ccf58bdd074d6255a82891fcc9dc" id="r_a2783ccf58bdd074d6255a82891fcc9dc"><td class="memItemLeft"><a id="a2783ccf58bdd074d6255a82891fcc9dc" name="a2783ccf58bdd074d6255a82891fcc9dc"></a>
+GazeVector2&#160;</td><td class="memItemRight"><b>Gaze::rotate_point_back</b> (const GazeVector2 &amp;pt, float angle_rad, int w, int h)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-var-members" class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -202,8 +216,8 @@ constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>
 constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::DOWN</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, -1.0f, 0.0f)</td></tr>
 <tr class="memitem:a953d4066052741c25ffbdc3ba465aa86" id="r_a953d4066052741c25ffbdc3ba465aa86"><td class="memItemLeft"><a id="a953d4066052741c25ffbdc3ba465aa86" name="a953d4066052741c25ffbdc3ba465aa86"></a>
 constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::FORWARD</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 0.0f, -1.0f)</td></tr>
-<tr class="memitem:a26700d1d40341f351a4cf40b001c793d" id="r_a26700d1d40341f351a4cf40b001c793d"><td class="memItemLeft"><a id="a26700d1d40341f351a4cf40b001c793d" name="a26700d1d40341f351a4cf40b001c793d"></a>
-constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::BACK</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 0.0f, 1.0f)</td></tr>
+<tr class="memitem:a44f80e2b644977c04d14d5d02e228ad2" id="r_a44f80e2b644977c04d14d5d02e228ad2"><td class="memItemLeft"><a id="a44f80e2b644977c04d14d5d02e228ad2" name="a44f80e2b644977c04d14d5d02e228ad2"></a>
+constexpr <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>&#160;</td><td class="memItemRight"><b>Gaze::BACKWARD</b> = <a class="el" href="struct_gaze_1_1_gaze_vector3.html">GazeVector3</a>(0.0f, 0.0f, 1.0f)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Zero-Dependency 3D/2D Vector and Matrix Math structures. </p>

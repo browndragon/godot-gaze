@@ -16,7 +16,7 @@
 <codeline><highlight class="normal">-</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>When<sp/>compiling<sp/>for<sp/>the<sp/>Web,<sp/>SCons<sp/>stub-out<sp/>the<sp/>native<sp/>C++<sp/>ONNX<sp/>Runtime<sp/>and<sp/>replaces<sp/>them<sp/>with<sp/>a<sp/>lightweight<sp/>Emscripten<sp/>JS<sp/>data<sp/>bridge.</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>-<sp/>The<sp/>main<sp/>thread<sp/>interacts<sp/>with<sp/>the<sp/>browser<sp/>sidecar<sp/>(`gaze_sidecar.js`).</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>-<sp/>The<sp/>sidecar<sp/>runs<sp/>MediaPipe<sp/>Face<sp/>Landmarker<sp/>JS<sp/>and<sp/>ONNX<sp/>Runtime<sp/>Web<sp/>inside<sp/>a<sp/>dedicated<sp/>browser<sp/>Web<sp/>Worker.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>-<sp/>The<sp/>sidecar<sp/>runs<sp/>ONNX<sp/>Runtime<sp/>Web<sp/>(YuNet<sp/>face<sp/>detection<sp/>+<sp/>OpenVINO<sp/>ADAS<sp/>gaze<sp/>estimation)<sp/>inside<sp/>the<sp/>browser.</highlight></codeline>
 <codeline><highlight class="normal">-<sp/>-<sp/>Ingested<sp/>coordinates<sp/>are<sp/>fed<sp/>back<sp/>to<sp/>Godot<sp/>through<sp/>registered<sp/>Emscripten<sp/>callbacks<sp/>on<sp/>the<sp/>`WebBindingState`<sp/>class.</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/>*/</highlight></codeline>
 <codeline></codeline>

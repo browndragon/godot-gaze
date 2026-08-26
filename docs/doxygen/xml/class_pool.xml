@@ -27,7 +27,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="16" column="16" bodyfile="src/core/pool.hpp" bodystart="16" bodyend="-1"/>
+        <location file="src/core/pool.hpp" line="17" column="16" bodyfile="src/core/pool.hpp" bodystart="17" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_pool_1a1e4bbb359330bf59a15a78ecce3fa01f" prot="private" static="no" mutable="no">
         <type>std::mutex</type>
@@ -41,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="17" column="16" bodyfile="src/core/pool.hpp" bodystart="17" bodyend="-1"/>
+        <location file="src/core/pool.hpp" line="18" column="16" bodyfile="src/core/pool.hpp" bodystart="18" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-attrib">
@@ -58,7 +58,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="20" column="29" bodyfile="src/core/pool.hpp" bodystart="20" bodyend="-1"/>
+        <location file="src/core/pool.hpp" line="21" column="29" bodyfile="src/core/pool.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -74,7 +74,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="22" column="5"/>
+        <location file="src/core/pool.hpp" line="23" column="5"/>
       </memberdef>
       <memberdef kind="function" id="class_pool_1af777be11857e15563899895409525b53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -88,7 +88,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="23" column="5"/>
+        <location file="src/core/pool.hpp" line="24" column="5"/>
       </memberdef>
       <memberdef kind="function" id="class_pool_1a45b08f3b186b5f7d9401e3e4406df944" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>T *</type>
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="26" column="7" bodyfile="src/core/pool.hpp" bodystart="26" bodyend="38"/>
+        <location file="src/core/pool.hpp" line="27" column="7" bodyfile="src/core/pool.hpp" bodystart="27" bodyend="39"/>
       </memberdef>
       <memberdef kind="function" id="class_pool_1a8a2fd89e985e6fbf903391a179b4a527" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -120,7 +120,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="41" column="10" bodyfile="src/core/pool.hpp" bodystart="41" bodyend="48"/>
+        <location file="src/core/pool.hpp" line="42" column="10" bodyfile="src/core/pool.hpp" bodystart="42" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="class_pool_1a5e0930f31ce98a866ef0af71c8e4df46" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Pool&lt; T, SZ &gt;::get</definition>
+        <argsstring>(size_t idx)</argsstring>
+        <name>get</name>
+        <qualifiedname>Pool::get</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pool.hpp" line="51" column="7" bodyfile="src/core/pool.hpp" bodystart="51" bodyend="56"/>
       </memberdef>
       <memberdef kind="function" id="class_pool_1a417d692ae5877fcba4d7665fa2ed7c0d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>T *</type>
@@ -138,15 +156,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/pool.hpp" line="50" column="7" bodyfile="src/core/pool.hpp" bodystart="50" bodyend="55"/>
+        <location file="src/core/pool.hpp" line="58" column="7" bodyfile="src/core/pool.hpp" bodystart="58" bodyend="61"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/pool.hpp" line="8" column="1" bodyfile="src/core/pool.hpp" bodystart="9" bodyend="56"/>
+    <location file="src/core/pool.hpp" line="8" column="1" bodyfile="src/core/pool.hpp" bodystart="9" bodyend="62"/>
     <listofallmembers>
+      <member refid="class_pool_1a5e0930f31ce98a866ef0af71c8e4df46" prot="public" virt="non-virtual"><scope>Pool</scope><name>get</name></member>
       <member refid="class_pool_1a417d692ae5877fcba4d7665fa2ed7c0d" prot="public" virt="non-virtual"><scope>Pool</scope><name>get_frame</name></member>
       <member refid="class_pool_1a0e36f73f7c5aac540aaab013c2517532" prot="private" virt="non-virtual"><scope>Pool</scope><name>items</name></member>
       <member refid="class_pool_1a1e4bbb359330bf59a15a78ecce3fa01f" prot="private" virt="non-virtual"><scope>Pool</scope><name>mutex</name></member>

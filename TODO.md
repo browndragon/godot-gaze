@@ -89,7 +89,7 @@ This document tracks the prioritized outstanding tasks, design decisions, and fu
 - **Tasks for GDScript Users**:
   - **GDScript API Reference & Guides**: Write comprehensive XML class reference pages integrated with Godot's built-in editor documentation. Provide tutorials on utilizing the `InputEventGaze` subsystem, `GazeServer` singleton, handling tracking events in `_unhandled_input(event)`, and customizing calibration resources.
   - **GDScript Integration Demo Project**: Build a small, clean template project demonstrating 3D viewport coordinate mapping, custom UI calibration overlays, and basic gaze-driven gameplay mechanics.
-  - **GDScript Integration Tests**: Implement E2E and integration tests using Godot's GDScript test integration frameworks (like GUT - Godot Unit Test) to verify the behavior of tracker nodes, calibration resources, and signals directly from scripts.
+  - **GDScript Integration Tests**: Implement E2E and integration tests using Godot's GDScript test integration frameworks (like GUT - Godot Unit Test) to verify the behavior of `GazeServer`, calibration resources, and input events directly from scripts.
 - **Tasks for C++ Contributors**:
   - **C++ Contribution & Compilation Guide**: Document the project build process, detailing platform dependencies, SCons compilation flags, GDExtension binding mechanisms, and cross-compilation setup.
   - **Native ML Pipeline Integration Guide**: Provide step-by-step instructions on updating or replacing neural models (`.ort` format) and writing platform-agnostic wraps/inference loops within `src/native/` (e.g. updating input/output shapes or sign conventions).

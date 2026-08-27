@@ -156,7 +156,10 @@ public:
     // --- Debug Texture & Landmarks Access ---
 
     Ref<Texture2D> get_camera_texture();
+    Array get_eye_crops(RID p_eye = RID());
+    PackedVector2Array get_face_landmarks(RID p_face = RID()) const;
     PackedVector2Array get_debug_landmarks() const;
+    bool is_face_detected(RID p_face = RID()) const;
     void camera_set_preview_requested(bool p_requested);
     bool is_camera_preview_requested() const;
 
@@ -212,7 +215,6 @@ public:
     void emit_camera_frame_ready(RID p_vision_camera);
     Transform3D get_relative_transform(RID p_entity);
     Vector2 get_gaze_screen(RID p_display, bool p_smoothed = true);
-    bool is_face_detected(RID p_face);
 
     // --- Pipeline Processing ---
 
@@ -222,8 +224,6 @@ public:
     void start_processing();
     void stop_processing();
 
-    void ref_tracker();
-    void unref_tracker();
     int get_active_tracker_count() const;
 
 #ifdef WEB_ENABLED

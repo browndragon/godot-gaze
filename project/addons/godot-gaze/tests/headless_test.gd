@@ -178,10 +178,10 @@ func run_tests():
 			printerr("FAIL: E2E - Missing fixture: ", path)
 			return {}
 		var tex = ImageTexture.create_from_image(img)
-		for k in range(15):
+		for k in range(20):
 			vs.inject_texture(cam_rid, tex)
 			gs.trigger_process()
-			await get_tree().create_timer(0.04).timeout
+			await get_tree().create_timer(0.05).timeout
 		var head_trans = gs.get_head_pose_origin_mm(face_rid)
 		var head_rot = gs.get_head_pose_euler_deg(face_rid)
 		var head_fwd = Transform3D(Basis.from_euler(Vector3(deg_to_rad(head_rot.x), deg_to_rad(-head_rot.y), deg_to_rad(head_rot.z))), head_trans).basis.z * -1.0

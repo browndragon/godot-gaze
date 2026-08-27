@@ -326,14 +326,6 @@ If true, stops camera/pipeline immediately. If false, schedules deferred check.<
 			<return type="void"></return>
 			<description></description>
 		</method>
-		<method name="ref_tracker">
-			<return type="void"></return>
-			<description></description>
-		</method>
-		<method name="unref_tracker">
-			<return type="void"></return>
-			<description></description>
-		</method>
 		<method name="get_active_tracker_count">
 			<return type="int"></return>
 			<description></description>

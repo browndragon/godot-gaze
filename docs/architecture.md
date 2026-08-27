@@ -13,10 +13,8 @@
 ```mermaid
 flowchart TD
     subgraph L4["Layer 4: Godot High-Level Frontends (InputEvent & UI)"]
-        IE["InputEventGaze / EyecandyTracker<br/>(Event Dispatch & Spatial Handling)"]
-        CS["CameraSensor<br/>(Hardware / Video Ingestion)"]
-        FE["FaceEstimator<br/>(3D Head Pose & 35-pt Landmarks)"]
-        EE["EyeEstimator<br/>(Eye Rays, Openness, Crops)"]
+        IE["InputEventGaze / InputEventGazeMissing<br/>(Native Input Dispatch)"]
+        HUD["Debug HUD / Overlay<br/>(debug_cam_feed.tscn)"]
         DP["DisplayProfile<br/>(Screen Geometry & Physical Millimeters)"]
         Cal["BioCalibration / DeviceCalibration<br/>(User-Specific Offset Tuning)"]
     end

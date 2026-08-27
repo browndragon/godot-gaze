@@ -1,19 +1,6 @@
 @tool
+class_name DebugCamFeed
 extends Control
-
-@export var tracker: Node = null:
-	set(val):
-		if tracker != val:
-			disconnect_tracker_signals()
-			tracker = val
-			if tracker:
-				connect_tracker_signals()
-
-const DEFAULT_FOCAL_TO_WIDTH_RATIO = 1.5625
-
-var camera_sensor: Node = null
-var eye_estimator: Node = null
-var face_estimator: Node = null
 
 var camera_feed_texture: ImageTexture = null
 var left_eye_texture: ImageTexture = null
@@ -27,6 +14,7 @@ const UPDATE_INTERVAL: float = 0.15
 
 var landmark_overlay: Control = null
 var active_canvas: CanvasItem = null
+var _active_preview_requested: bool = false
 
 func _ready():
 	var copy_btn = get_node_or_null("Panel/CopyButton")
@@ -41,90 +29,21 @@ func _ready():
 	add_child(landmark_overlay)
 
 	if not Engine.is_editor_hint():
-		if is_inside_tree() and not is_instance_valid(tracker):
-			tracker = find_gaze_tracker(get_tree().root)
-		if is_instance_valid(tracker):
-			connect_tracker_signals()
-			print("[DebugHUD] Tracker connected: ", tracker)
-			print("[DebugHUD] Camera sensor: ", camera_sensor)
-			print("[DebugHUD] Face estimator: ", face_estimator)
+		var gs = Engine.get_singleton("GazeServer")
+		if gs:
+			print("[DebugHUD] Connected to GazeServer singleton")
 		else:
-			var gs = Engine.get_singleton("GazeServer")
-			var vs = Engine.get_singleton("VisionServer")
-			if gs and vs:
-				print("[DebugHUD] Connected to GazeServer singleton")
-			else:
-				print("[DebugHUD] WARNING: Neither Tracker nor GazeServer found!")
+			print("[DebugHUD] WARNING: GazeServer singleton not found!")
 
-var preview_requested: bool = false
-var crop_requested: bool = false
-
-func _process(delta):
-	if not Engine.is_editor_hint():
-		if not is_instance_valid(tracker) and is_inside_tree():
-			tracker = find_gaze_tracker(get_tree().root)
-		if is_instance_valid(tracker):
-			var t_camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
-			var t_eye_estimator = tracker.call("get_eye_estimator") if tracker.has_method("get_eye_estimator") else null
-			var t_face_estimator = tracker.call("get_face_estimator") if tracker.has_method("get_face_estimator") else null
-			
-			var current_cam_valid = is_instance_valid(camera_sensor)
-			var current_eye_valid = is_instance_valid(eye_estimator)
-			var current_face_valid = is_instance_valid(face_estimator)
-			
-			var target_cam_valid = is_instance_valid(t_camera_sensor)
-			var target_eye_valid = is_instance_valid(t_eye_estimator)
-			var target_face_valid = is_instance_valid(t_face_estimator)
-			
-			var is_different = false
-			if current_cam_valid != target_cam_valid or (current_cam_valid and camera_sensor != t_camera_sensor):
-				is_different = true
-			elif current_eye_valid != target_eye_valid or (current_eye_valid and eye_estimator != t_eye_estimator):
-				is_different = true
-			elif current_face_valid != target_face_valid or (current_face_valid and face_estimator != t_face_estimator):
-				is_different = true
-			elif current_cam_valid and not preview_requested:
-				is_different = true
-			elif current_eye_valid and not crop_requested:
-				is_different = true
-				
-			if is_different:
-				disconnect_tracker_signals()
-				connect_tracker_signals()
-		else:
-			# Direct GazeServer singleton mode
-			var gs = Engine.get_singleton("GazeServer")
-			if gs:
-				var tex = gs.get_camera_texture()
-				if tex:
-					actual_cam_width = tex.get_width()
-					actual_cam_height = tex.get_height()
-					var rect = get_texture_rect("CameraFeedRect")
-					if rect:
-						rect.texture = tex
-				var crops = gs.get_eye_crops()
-				if crops and crops.size() >= 2:
-					var left_rect = get_texture_rect("LeftEyeRect")
-					if left_rect and crops[0]:
-						left_rect.texture = crops[0]
-					var right_rect = get_texture_rect("RightEyeRect")
-					if right_rect and crops[1]:
-						right_rect.texture = crops[1]
-				if landmark_overlay:
-					landmark_overlay.queue_redraw()
-
-		update_accumulator += delta
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_VISIBILITY_CHANGED or what == NOTIFICATION_ENTER_TREE:
 		_update_preview_state()
 	elif what == NOTIFICATION_EXIT_TREE:
 		_release_preview_state()
 
-var _active_preview_requested: bool = false
-
 func _update_preview_state() -> void:
 	if Engine.is_editor_hint(): return
-	var should_preview = is_visible_in_tree()
+	var should_preview = is_visible_in_tree() if is_inside_tree() else visible
 	if should_preview != _active_preview_requested:
 		_active_preview_requested = should_preview
 		var gs = Engine.get_singleton("GazeServer")
@@ -140,72 +59,48 @@ func _release_preview_state() -> void:
 
 func _exit_tree():
 	_release_preview_state()
-	disconnect_tracker_signals()
 
-func find_gaze_tracker(node: Node) -> Node:
-	if node == null:
-		return null
-	if node.has_method("get_camera_sensor") or node.has_method("get_head_transform") or node.name.to_lower().contains("tracker"):
-		return node
-	for child in node.get_children():
-		var found = find_gaze_tracker(child)
-		if found:
-			return found
-	return null
+func _process(delta: float) -> void:
+	if not Engine.is_editor_hint():
+		var gs = Engine.get_singleton("GazeServer")
+		if gs:
+			var tex = gs.get_camera_texture()
+			if tex:
+				actual_cam_width = tex.get_width()
+				actual_cam_height = tex.get_height()
+				var rect = get_texture_rect("CameraFeedRect")
+				if rect:
+					rect.texture = tex
 
-func disconnect_tracker_signals():
-	if is_instance_valid(camera_sensor):
-		if camera_sensor.is_connected("frame_ready", _on_frame_ready):
-			camera_sensor.disconnect("frame_ready", _on_frame_ready)
-		var cam_rid = camera_sensor.call("get_camera_rid") if camera_sensor.has_method("get_camera_rid") else RID()
-		if cam_rid.is_valid():
-			var vs = Engine.get_singleton("VisionServer")
-			if vs:
-				vs.camera_set_preview_requested(cam_rid, false)
-	if is_instance_valid(eye_estimator):
-		if eye_estimator.is_connected("eye_crops_ready", _on_eye_crops_ready):
-			eye_estimator.disconnect("eye_crops_ready", _on_eye_crops_ready)
-		if eye_estimator.is_connected("gaze_estimated", _on_gaze_estimated):
-			eye_estimator.disconnect("gaze_estimated", _on_gaze_estimated)
-		var eye_rid = eye_estimator.call("get_eye_rid") if eye_estimator.has_method("get_eye_rid") else RID()
-		if eye_rid.is_valid():
-			var gs = Engine.get_singleton("GazeServer")
-			if gs:
-				gs.eye_tracker_set_crop_requested(eye_rid, false)
-	
-	preview_requested = false
-	crop_requested = false
-	camera_sensor = null
-	eye_estimator = null
-	face_estimator = null
+			var crops = gs.get_eye_crops()
+			if crops and crops.size() >= 2:
+				var left_img = crops[0]
+				if left_img and not left_img.is_empty():
+					if left_eye_texture == null or left_eye_texture.get_size() != Vector2(left_img.get_size()):
+						left_eye_texture = ImageTexture.create_from_image(left_img)
+					else:
+						left_eye_texture.update(left_img)
+					var left_rect = get_texture_rect("LeftEyeRect")
+					if left_rect:
+						left_rect.texture = left_eye_texture
 
-func connect_tracker_signals():
-	if not is_instance_valid(tracker):
-		return
-	camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
-	eye_estimator = tracker.call("get_eye_estimator") if tracker.has_method("get_eye_estimator") else null
-	face_estimator = tracker.call("get_face_estimator") if tracker.has_method("get_face_estimator") else null
-	
-	if is_instance_valid(camera_sensor):
-		if not camera_sensor.is_connected("frame_ready", _on_frame_ready):
-			camera_sensor.connect("frame_ready", _on_frame_ready)
-		var cam_rid = camera_sensor.call("get_camera_rid") if camera_sensor.has_method("get_camera_rid") else RID()
-		if cam_rid.is_valid():
-			var vs = Engine.get_singleton("VisionServer")
-			if vs:
-				vs.camera_set_preview_requested(cam_rid, true)
-				preview_requested = true
-	if is_instance_valid(eye_estimator):
-		if not eye_estimator.is_connected("eye_crops_ready", _on_eye_crops_ready):
-			eye_estimator.connect("eye_crops_ready", _on_eye_crops_ready)
-		if not eye_estimator.is_connected("gaze_estimated", _on_gaze_estimated):
-			eye_estimator.connect("gaze_estimated", _on_gaze_estimated)
-		var eye_rid = eye_estimator.call("get_eye_rid") if eye_estimator.has_method("get_eye_rid") else RID()
-		if eye_rid.is_valid():
-			var gs = Engine.get_singleton("GazeServer")
-			if gs:
-				gs.eye_tracker_set_crop_requested(eye_rid, true)
-				crop_requested = true
+				var right_img = crops[1]
+				if right_img and not right_img.is_empty():
+					if right_eye_texture == null or right_eye_texture.get_size() != Vector2(right_img.get_size()):
+						right_eye_texture = ImageTexture.create_from_image(right_img)
+					else:
+						right_eye_texture.update(right_img)
+					var right_rect = get_texture_rect("RightEyeRect")
+					if right_rect:
+						right_rect.texture = right_eye_texture
+
+			if landmark_overlay:
+				landmark_overlay.queue_redraw()
+
+		update_accumulator += delta
+		if update_accumulator >= UPDATE_INTERVAL:
+			update_accumulator = 0.0
+			update_diagnostics_ui()
 
 func get_texture_rect(node_name: String) -> TextureRect:
 	var node = get_node_or_null(node_name)
@@ -266,112 +161,18 @@ func get_texture_drawn_rect(rect: TextureRect) -> Rect2:
 		return Rect2(offset_x, offset_y, drawn_w, drawn_h)
 	return Rect2(0, 0, rect_size.x, rect_size.y)
 
-func _on_frame_ready(img: Image):
-	if not img or img.is_empty():
-		return
-	actual_cam_width = img.get_width()
-	actual_cam_height = img.get_height()
-	
-	if camera_feed_texture == null or camera_feed_texture.get_size() != Vector2(img.get_size()):
-		camera_feed_texture = ImageTexture.create_from_image(img)
-	else:
-		camera_feed_texture.update(img)
-	
-	var rect = get_texture_rect("CameraFeedRect")
-	if rect:
-		rect.texture = camera_feed_texture
-	
-	if landmark_overlay:
-		landmark_overlay.queue_redraw()
-
-func _on_eye_crops_ready(left: Image, right: Image):
-	if left and not left.is_empty():
-		if left_eye_texture == null or left_eye_texture.get_size() != Vector2(left.get_size()):
-			left_eye_texture = ImageTexture.create_from_image(left)
-		else:
-			left_eye_texture.update(left)
-		var rect = get_texture_rect("LeftEyeRect")
-		if rect:
-			rect.texture = left_eye_texture
-
-	if right and not right.is_empty():
-		if right_eye_texture == null or right_eye_texture.get_size() != Vector2(right.get_size()):
-			right_eye_texture = ImageTexture.create_from_image(right)
-		else:
-			right_eye_texture.update(right)
-		var rect = get_texture_rect("RightEyeRect")
-		if rect:
-			rect.texture = right_eye_texture
-
-func _on_gaze_estimated():
-	if landmark_overlay:
-		landmark_overlay.queue_redraw()
-
-func update_diagnostics_ui():
+func update_diagnostics_ui() -> void:
 	var metrics_lbl = get_node_or_null("Panel/ScrollContainer/VBoxContainer/MetricsBox/MetricsLabel")
 	if not metrics_lbl:
 		return
-	
+
 	var lines = []
 	var gs = Engine.get_singleton("GazeServer")
-	
-	if is_instance_valid(tracker):
-		var is_face_detected = false
-		var head_pos = Vector3.ZERO
-		var head_rot = Vector3.ZERO
-		if is_instance_valid(face_estimator):
-			is_face_detected = face_estimator.get("has_detected_face") == true
-			if is_face_detected:
-				var xform = face_estimator.get("transform")
-				if xform:
-					head_pos = xform.origin
-					head_rot = xform.basis.get_euler() * (180.0 / PI)
-
-		var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3.ZERO
-		var dev_cal = tracker.get("device_calibration")
-		var bio_cal = tracker.get("bio_calibration")
-
-		var state_names = {0: "Unknown", 1: "Permission Required", 2: "Initializing", 3: "Running", 4: "Error"}
-		var state_colors = {0: "gray", 1: "orange", 2: "yellow", 3: "green", 4: "red"}
-		var lifecycle_val = tracker.call("get_lifecycle_state") if tracker.has_method("get_lifecycle_state") else 0
-		var state_name = state_names.get(lifecycle_val, "Unknown")
-		var state_color = state_colors.get(lifecycle_val, "gray")
-		
-		var build_info = tracker.call("get_build_info") if tracker.has_method("get_build_info") else ""
-		if build_info != "":
-			lines.append("Build: [color=aqua]%s[/color]" % build_info)
-		lines.append("Tracker State: [color=%s]%s[/color]" % [state_color, state_name])
-		lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
-		
-		if is_face_detected:
-			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
-			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
-		else:
-			lines.append("Head Trans (mm): [color=gray]N/A[/color]")
-			lines.append("Head Rot (deg): [color=gray]N/A[/color]")
-
-		lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
-		
-		lines.append("\n[b]Calibration Status:[/b]")
-		lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
-		lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
-
-		if is_instance_valid(camera_sensor):
-			var focal = camera_sensor.get("focal_length")
-			var fov = camera_sensor.get("camera_fov")
-			if fov == null: fov = 35.488537576579634
-			var display_focal = focal
-			if focal == null or focal <= 0.0:
-				var w = actual_cam_width if actual_cam_width > 0 else 640
-				display_focal = w / (2.0 * tan(fov * PI / 180.0 * 0.5))
-			lines.append("\n[b]Camera Feed:[/b]")
-			lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
-			lines.append("  Focal Length: [color=yellow]%.1f px%s[/color]" % [display_focal, " (Auto)" if focal == null or focal <= 0.0 else ""])
-	elif gs:
+	if gs:
 		var ev = gs.get_most_recent_event()
 		var is_face_detected = (ev is InputEventGaze and ev.is_face_tracked())
 		var is_running = gs.is_tracking_active()
-		
+
 		var build_info = GazeServer.get_build_info() if ClassDB.class_has_method("GazeServer", "get_build_info") else ""
 		if build_info != "":
 			lines.append("Build: [color=aqua]%s[/color]" % build_info)
@@ -400,7 +201,7 @@ func update_diagnostics_ui():
 		lines.append("\n[b]Camera Feed:[/b]")
 		lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
 	else:
-		metrics_lbl.text = "[color=red]Neither Tracker nor GazeServer found.[/color]"
+		metrics_lbl.text = "[color=red]GazeServer not found.[/color]"
 		return
 
 	lines.append("\n[b]Environment Details:[/b]")
@@ -416,7 +217,7 @@ func _on_copy_button_pressed():
 	var copy_btn = get_node_or_null("Panel/CopyButton")
 	var data = {
 		"timestamp": Time.get_datetime_string_from_system(true),
-		"gaze_tracker_active": is_instance_valid(tracker),
+		"gaze_tracker_active": false,
 		"face_detected": false,
 		"gaze_direction": null,
 		"head_translation_mm": null,
@@ -424,43 +225,24 @@ func _on_copy_button_pressed():
 		"device_calibration": null,
 		"bio_calibration": null,
 		"screen_dpi": DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96,
-		"camera_width_height": null,
-		"camera_focal_length": null
+		"camera_width_height": "%dx%d" % [actual_cam_width, actual_cam_height]
 	}
-	
-	if is_instance_valid(tracker):
-		data["device_calibration"] = tracker.get("device_calibration").get_class() if tracker.get("device_calibration") else "Null"
-		data["bio_calibration"] = tracker.get("bio_calibration").get_class() if tracker.get("bio_calibration") else "Null"
-		
-		if is_instance_valid(camera_sensor):
-			data["camera_width_height"] = "%dx%d" % [actual_cam_width, actual_cam_height]
-			data["camera_focal_length"] = camera_sensor.get("focal_length")
-		
-		if is_instance_valid(face_estimator):
-			var detected = face_estimator.get("has_detected_face") == true
-			data["face_detected"] = detected
-			if detected:
-				var xform = face_estimator.get("transform")
-				if xform:
-					data["head_translation_mm"] = [xform.origin.x, xform.origin.y, xform.origin.z]
-					var rot = xform.basis.get_euler() * (180.0 / PI)
-					data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
-		
-		var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
-		if gaze_dir:
+
+	var gs = Engine.get_singleton("GazeServer")
+	if gs:
+		data["gaze_tracker_active"] = gs.is_tracking_active()
+		var dev_cal = gs.get_device_calibration()
+		var bio_cal = gs.get_bio_calibration()
+		data["device_calibration"] = dev_cal.get_class() if dev_cal else "Null"
+		data["bio_calibration"] = bio_cal.get_class() if bio_cal else "Null"
+		var ev = gs.get_most_recent_event()
+		if ev is InputEventGaze and ev.is_face_tracked():
+			data["face_detected"] = true
+			data["head_translation_mm"] = [ev.head_transform.origin.x, ev.head_transform.origin.y, ev.head_transform.origin.z]
+			var rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
+			data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
+			var gaze_dir = -ev.gaze_transform.basis.z
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
-	else:
-		var gs = Engine.get_singleton("GazeServer")
-		if gs:
-			data["gaze_tracker_active"] = gs.is_tracking_active()
-			var ev = gs.get_most_recent_event()
-			if ev is InputEventGaze and ev.is_face_tracked():
-				data["face_detected"] = true
-				data["head_translation_mm"] = [ev.head_transform.origin.x, ev.head_transform.origin.y, ev.head_transform.origin.z]
-				var rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
-				data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
-				var gaze_dir = -ev.gaze_transform.basis.z
-				data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
 
 	if Engine.has_singleton("DisplayServer"):
 		DisplayServer.clipboard_set(JSON.stringify(data, "  "))
@@ -497,38 +279,16 @@ func _perform_drawing():
 	var cx = img_w / 2.0
 	var cy = img_h / 2.0
 
-	var xform = Transform3D()
-	var landmarks_2d = []
-	var raw_gaze = Vector3(0, 0, 1)
-
-	if is_instance_valid(tracker):
-		if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
-			face_estimator = tracker.call("get_face_estimator") if tracker.has_method("get_face_estimator") else null
-			camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
-		if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
-			return
-		var has_face = face_estimator.get("has_detected_face")
-		if has_face == null or not has_face:
-			return
-		var f_val = camera_sensor.get("focal_length")
-		if f_val and f_val > 0.0: focal_len = f_val
-		xform = face_estimator.get("transform") if face_estimator.get("transform") != null else Transform3D()
-		landmarks_2d = tracker.call("get_face_landmarks_2d") if tracker.has_method("get_face_landmarks_2d") else []
-		raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3(0, 0, 1)
-	else:
-		var gs = Engine.get_singleton("GazeServer")
-		if not gs: return
-		var ev = gs.get_most_recent_event()
-		if not (ev is InputEventGaze) or not ev.is_face_tracked(): return
-		xform = ev.head_transform
-		landmarks_2d = gs.get_debug_landmarks()
-		raw_gaze = -ev.gaze_transform.basis.z
+	var gs = Engine.get_singleton("GazeServer")
+	if not gs: return
+	var ev = gs.get_most_recent_event()
+	if not (ev is InputEventGaze) or not ev.is_face_tracked(): return
+	var xform = ev.head_transform
+	var landmarks_2d = gs.get_face_landmarks()
+	var raw_gaze = -ev.gaze_transform.basis.z
 
 	if abs(xform.origin.z) <= 0.01:
 		return
-
-	# Authoritative canonical 3D Face Model Points
-	var model_points = tracker.call("get_face_model_points") if is_instance_valid(tracker) and tracker.has_method("get_face_model_points") else []
 
 	var drawn_pts = []
 	if not landmarks_2d.is_empty() and landmarks_2d.size() == 35:
@@ -536,19 +296,6 @@ func _perform_drawing():
 			var local_pt = Vector2(pt_px.x * drawn_rect.size.x / img_w, pt_px.y * drawn_rect.size.y / img_h) + drawn_rect.position
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 			drawn_pts.append(screen_pt)
-	elif not model_points.is_empty():
-		# Fallback to 3D projection if 2D landmarks not available
-		for p_face in model_points:
-			var p_cam = xform * p_face
-			var depth = -p_cam.z
-			if depth <= 0.01:
-				drawn_pts.append(Vector2.INF)
-			else:
-				var px = (p_cam.x / depth) * focal_len + cx
-				var py = cy - (p_cam.y / depth) * focal_len
-				var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
-				var screen_pt = rect.global_position + local_pt - active_canvas.global_position
-				drawn_pts.append(screen_pt)
 
 	# Draws landmark points (Cyan)
 	for pt in drawn_pts:

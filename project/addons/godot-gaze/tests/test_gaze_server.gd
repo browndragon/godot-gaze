@@ -63,3 +63,20 @@ func test_gaze_server_tracking_lifecycle_and_camera_recovery():
 	# Full stop
 	gs.stop_tracking(true)
 	assert_eq(gs.get_active_tracker_count(), 0, "Active trackers count must return to 0 after immediate stop")
+
+func test_gaze_server_domain_telemetry_apis():
+	var gs = Engine.get_singleton("GazeServer")
+	assert_not_null(gs, "GazeServer singleton must exist")
+
+	# Landmarks should return a valid PackedVector2Array
+	var landmarks = gs.get_face_landmarks()
+	assert_not_null(landmarks, "get_face_landmarks should return a PackedVector2Array")
+
+	# Eye crops should return an Array
+	var crops = gs.get_eye_crops()
+	assert_not_null(crops, "get_eye_crops should return an Array")
+
+	# Face detected should return a boolean
+	var detected = gs.is_face_detected()
+	assert_true(detected is bool, "is_face_detected should return a boolean")
+

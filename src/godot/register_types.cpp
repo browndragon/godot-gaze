@@ -3,9 +3,6 @@
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_session.hpp"
 #include "gaze_pipeline_config.hpp"
-#include "camera_sensor.hpp"
-#include "face_estimator.hpp"
-#include "eye_estimator.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
 #include "display_profile.hpp"
@@ -324,9 +321,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     }
 
     // Register Scene / Node classes
-    ClassDB::register_class<CameraSensor>();
-    ClassDB::register_class<FaceEstimator>();
-    ClassDB::register_class<EyeEstimator>();
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif

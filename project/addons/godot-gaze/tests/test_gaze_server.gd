@@ -80,3 +80,33 @@ func test_gaze_server_domain_telemetry_apis():
 	var detected = gs.is_face_detected()
 	assert_true(detected is bool, "is_face_detected should return a boolean")
 
+func test_mouse_emulation_settings_and_api():
+	var gs = Engine.get_singleton("GazeServer")
+	assert_not_null(gs, "GazeServer singleton must exist")
+	
+	# ProjectSetting checks
+	assert_true(ProjectSettings.has_setting("gaze/pointing/mouse_emulation_dwell_sec"), "gaze/pointing/mouse_emulation_dwell_sec must be registered")
+	assert_true(ProjectSettings.has_setting("gaze/pointing/mouse_emulation_transition_sec"), "gaze/pointing/mouse_emulation_transition_sec must be registered")
+	
+	var default_dwell = ProjectSettings.get_setting("gaze/pointing/mouse_emulation_dwell_sec")
+	assert_almost_eq(default_dwell, 2.0, 0.01, "Default dwell setting should be 2.0 seconds")
+	
+	var default_trans = ProjectSettings.get_setting("gaze/pointing/mouse_emulation_transition_sec")
+	assert_almost_eq(default_trans, 0.3, 0.01, "Default transition setting should be 0.3 seconds")
+	
+	# Default runtime getter checks
+	assert_almost_eq(gs.get_mouse_emulation_dwell_sec(), 2.0, 0.01, "GazeServer default dwell should be 2.0 seconds")
+	assert_almost_eq(gs.get_mouse_emulation_transition_sec(), 0.3, 0.01, "GazeServer default transition should be 0.3 seconds")
+	
+	# Runtime modifications
+	gs.set_mouse_emulation_dwell_sec(3.5)
+	assert_almost_eq(gs.get_mouse_emulation_dwell_sec(), 3.5, 0.01, "GazeServer should reflect updated dwell")
+	
+	gs.set_mouse_emulation_transition_sec(0.5)
+	assert_almost_eq(gs.get_mouse_emulation_transition_sec(), 0.5, 0.01, "GazeServer should reflect updated transition")
+	
+	# Reset
+	gs.set_mouse_emulation_dwell_sec(2.0)
+	gs.set_mouse_emulation_transition_sec(0.3)
+
+

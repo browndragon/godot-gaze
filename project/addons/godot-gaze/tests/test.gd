@@ -38,21 +38,45 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event is InputEventGaze:
 			eye_gaze_pos = event.position
 			
-			# Project head pose ray ("nose gaze") to window pixel coordinates
+			# Project head pose ray ("nose gaze") to window pixel coordinates using calibrated geometry
 			var xform = event.head_transform
 			var nose_orig = xform.origin
 			var nose_fwd = -xform.basis.z.normalized()
-			if abs(nose_fwd.z) > 1e-4:
-				var t = -nose_orig.z / nose_fwd.z
-				var hit_mm = Vector2(nose_orig.x + t * nose_fwd.x, nose_orig.y + t * nose_fwd.y)
-				var dp = DisplayProfile.new()
+			
+			var gs = Engine.get_singleton("GazeServer")
+			var dp: DisplayProfile = gs.get_display_profile() if gs else null
+			if not dp:
+				dp = DisplayProfile.new()
 				dp.estimate_from_os()
-				var phys = dp.physical_size_mm
-				var log_sz = dp.logical_size_px
-				var scale_x = log_sz.x / phys.x if phys.x > 0 else 1.0
-				var scale_y = log_sz.y / phys.y if phys.y > 0 else 1.0
-				var screen_px = Vector2((hit_mm.x + phys.x * 0.5) * scale_x, (phys.y * 0.5 - hit_mm.y) * scale_y)
-				nose_gaze_pos = screen_px - Vector2(DisplayServer.window_get_position())
+			var dev_cal: DeviceCalibration = gs.get_device_calibration() if gs else null
+			
+			var phys = dp.physical_size_mm
+			var log_sz = dp.logical_size_px
+			var scale_x = log_sz.x / phys.x if phys.x > 0 else 1.0
+			var scale_y = log_sz.y / phys.y if phys.y > 0 else 1.0
+			var cam_offset = dev_cal.get_camera_offset(null) if dev_cal else Vector3(0, phys.y * 0.5, 0)
+			var cam_tilt = dev_cal.get_camera_tilt(null) if dev_cal else 0.0
+			
+			var theta_rad = deg_to_rad(cam_tilt)
+			var cos_t = cos(theta_rad)
+			var sin_t = sin(theta_rad)
+			
+			var o_disp_z = sin_t * nose_orig.y - cos_t * nose_orig.z + cam_offset.z
+			var v_disp_z = sin_t * nose_fwd.y - cos_t * nose_fwd.z
+			
+			if abs(v_disp_z) > 1e-6:
+				var t = -o_disp_z / v_disp_z
+				if t >= 0.0:
+					var w_half = phys.x * 0.5
+					var h_half = phys.y * 0.5
+					var o_disp_x = w_half - (nose_orig.x + cam_offset.x)
+					var o_disp_y = -(cos_t * nose_orig.y + sin_t * nose_orig.z + cam_offset.y) + h_half
+					var v_disp_x = -nose_fwd.x
+					var v_disp_y = -(cos_t * nose_fwd.y + sin_t * nose_fwd.z)
+					var hit_mm_x = o_disp_x + v_disp_x * t
+					var hit_mm_y = o_disp_y + v_disp_y * t
+					var screen_px = Vector2(hit_mm_x * scale_x, hit_mm_y * scale_y)
+					nose_gaze_pos = screen_px - Vector2(DisplayServer.window_get_position())
 
 			if is_instance_valid(cursor):
 				cursor.visible = true

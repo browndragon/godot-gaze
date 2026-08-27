@@ -16,6 +16,7 @@
 #include "gaze_calibration_resource.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
+#include "mouse_gaze_emulation.hpp"
 #include "gaze_pipeline_config.hpp"
 #include "gaze_frame.hpp"
 #include "display_profile.hpp"
@@ -74,6 +75,8 @@ private:
     bool emulate_gaze_from_mouse = true;
     bool emulate_mouse_from_gaze = false;
     bool was_both_closed = false;
+    uint64_t last_camera_face_detected_usec = 0;
+    MouseGazeEmulation mouse_emulation;
 
     Ref<ImageTexture> camera_debug_texture;
 
@@ -152,6 +155,12 @@ public:
 
     void set_emulate_mouse_from_gaze(bool p_enable);
     bool get_emulate_mouse_from_gaze() const;
+
+    void set_mouse_emulation_dwell_sec(float p_sec);
+    float get_mouse_emulation_dwell_sec() const;
+
+    void set_mouse_emulation_transition_sec(float p_sec);
+    float get_mouse_emulation_transition_sec() const;
 
     // --- Debug Texture & Landmarks Access ---
 

@@ -75,6 +75,24 @@ If true, stops camera/pipeline immediately. If false, schedules deferred check.<
 			<return type="bool"></return>
 			<description></description>
 		</method>
+		<method name="set_mouse_emulation_dwell_sec">
+			<return type="void"></return>
+			<param index="0" name="dwell_sec" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_mouse_emulation_dwell_sec">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_mouse_emulation_transition_sec">
+			<return type="void"></return>
+			<param index="0" name="transition_sec" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_mouse_emulation_transition_sec">
+			<return type="float"></return>
+			<description></description>
+		</method>
 		<method name="get_camera_texture">
 			<return type="Ref&lt; Texture2D &gt;"></return>
 			<description></description>

@@ -192,6 +192,20 @@ func update_diagnostics_ui() -> void:
 			lines.append("Head Rot (deg): [color=gray]N/A[/color]")
 			lines.append("Gaze Direction: [color=gray]N/A[/color]")
 
+		if ev:
+			var domain_lines = []
+			if "biorhythm_index" in ev:
+				domain_lines.append("Biorhythm: [color=yellow]%.2f[/color]" % ev.biorhythm_index)
+			if "saccade_meter" in ev:
+				domain_lines.append("Saccade: [color=yellow]%.2f[/color]" % ev.saccade_meter)
+			if "distance_meter" in ev:
+				domain_lines.append("Distance: [color=yellow]%.2f[/color]" % ev.distance_meter)
+			if "eye_state_flags" in ev:
+				domain_lines.append("Eye Flags: [color=yellow]0x%X[/color]" % ev.eye_state_flags)
+			if domain_lines.size() > 0:
+				lines.append("\n[b]Event Domain Telemetry:[/b]")
+				lines.append("  " + " | ".join(domain_lines))
+
 		var dev_cal = gs.get_device_calibration()
 		var bio_cal = gs.get_bio_calibration()
 		lines.append("\n[b]Calibration Status:[/b]")

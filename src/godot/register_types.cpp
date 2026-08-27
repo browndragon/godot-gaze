@@ -69,6 +69,24 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_emul_mouse);
         ps->set_initial_value("gaze/pointing/emulate_mouse_from_gaze", false);
 
+        if (!ps->has_setting("gaze/pointing/mouse_emulation_dwell_sec")) {
+            ps->set_setting("gaze/pointing/mouse_emulation_dwell_sec", 2.0);
+        }
+        Dictionary prop_dwell;
+        prop_dwell["name"] = "gaze/pointing/mouse_emulation_dwell_sec";
+        prop_dwell["type"] = Variant::FLOAT;
+        ps->add_property_info(prop_dwell);
+        ps->set_initial_value("gaze/pointing/mouse_emulation_dwell_sec", 2.0);
+
+        if (!ps->has_setting("gaze/pointing/mouse_emulation_transition_sec")) {
+            ps->set_setting("gaze/pointing/mouse_emulation_transition_sec", 0.3);
+        }
+        Dictionary prop_trans;
+        prop_trans["name"] = "gaze/pointing/mouse_emulation_transition_sec";
+        prop_trans["type"] = Variant::FLOAT;
+        ps->add_property_info(prop_trans);
+        ps->set_initial_value("gaze/pointing/mouse_emulation_transition_sec", 0.3);
+
         if (!ps->has_setting("gaze/models/search_paths")) {
             ps->set_setting("gaze/models/search_paths", "res://models,res://addons/godot-gaze/models");
         }

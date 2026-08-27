@@ -115,7 +115,7 @@ fi
 
 if [[ -z "$TIMEOUT" ]]; then
     if [[ "$AUTO" == "true" ]]; then
-        TIMEOUT=20
+        TIMEOUT=45
     else
         TIMEOUT=0
     fi

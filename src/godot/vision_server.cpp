@@ -27,11 +27,18 @@ void VisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_start", "camera_rid"), &VisionServer::camera_start);
     ClassDB::bind_method(D_METHOD("camera_stop", "camera_rid"), &VisionServer::camera_stop);
     ClassDB::bind_method(D_METHOD("get_camera_current_texture", "camera_rid"), &VisionServer::get_camera_current_texture);
+    ClassDB::bind_method(D_METHOD("camera_is_active", "camera_rid"), &VisionServer::camera_is_active);
     ClassDB::bind_method(D_METHOD("camera_get_current_image", "camera_rid"), &VisionServer::camera_get_current_image);
     ClassDB::bind_method(D_METHOD("camera_free", "camera_rid"), &VisionServer::camera_free);
     ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "camera_rid", "requested"), &VisionServer::camera_set_preview_requested);
     ClassDB::bind_method(D_METHOD("camera_is_preview_requested", "camera_rid"), &VisionServer::camera_is_preview_requested);
     ClassDB::bind_method(D_METHOD("inject_texture", "camera_rid", "texture"), &VisionServer::inject_texture);
+}
+
+bool VisionServer::camera_is_active(RID p_camera) {
+    CameraData *data = camera_owner.get_or_null(p_camera);
+    ERR_FAIL_NULL_V(data, false);
+    return data->is_active;
 }
 
 void VisionServer::inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) {

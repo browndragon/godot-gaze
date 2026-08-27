@@ -29,6 +29,10 @@ enabled=PackedStringArray("res://addons/godot-gaze/plugin.cfg", "res://addons/gu
 
 3d/physics_engine="Jolt Physics"
 
+[gaze]
+
+events/event_factory_path="res://addons/godot-gaze/tests/fixtures/custom_event_factory.tres"
+
 [rendering]
 
 rendering_device/driver.windows="d3d12"

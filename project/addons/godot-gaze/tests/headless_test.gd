@@ -161,13 +161,11 @@ func run_tests():
 	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
 	vs.camera_start(cam_rid)
 
-	var disp_rid = gs.display_create()
-	gs.display_set_geometry(disp_rid, Vector2(3024, 1964), Vector2(301.5, 188.5))
-	var s_cam_rid = gs.camera_create(disp_rid)
-	gs.camera_set_offsets(s_cam_rid, Vector3(0.0, 94.25, 0.0), 0.0)
-	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
-	var face_rid = gs.face_tracker_create(s_cam_rid)
-	var eye_rid = gs.eye_tracker_create(face_rid)
+	gs.display_set_geometry(gs.get_default_display_rid(), Vector2(3024, 1964), Vector2(301.5, 188.5))
+	gs.camera_set_offsets(gs.get_default_camera_rid(), Vector3(0.0, 94.25, 0.0), 0.0)
+	gs.camera_set_vision_rid(gs.get_default_camera_rid(), cam_rid)
+	var face_rid = gs.get_default_face_rid()
+	var eye_rid = gs.get_default_eye_rid()
 
 	gs.start_processing()
 
@@ -271,10 +269,6 @@ func run_tests():
 	print("PASS: All Physical Directional Invariants (Nose/Eye Yaw & Pitch) Verified in GDScript!")
 	print("PASS: Physical Directional Invariants in GDScript bindings verified.")
 
-	gs.eye_tracker_free(eye_rid)
-	gs.face_tracker_free(face_rid)
-	gs.camera_free(s_cam_rid)
-	gs.display_free(disp_rid)
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)

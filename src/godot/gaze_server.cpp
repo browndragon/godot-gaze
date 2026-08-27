@@ -307,15 +307,6 @@ GazeServer::GazeServer() {
         }
     }
 #endif
-
-    // Autostart tracking if configured
-    bool autostart = true;
-    if (ps && ps->has_setting("gaze/general/autostart")) {
-        autostart = ps->get_setting("gaze/general/autostart");
-    }
-    if (autostart) {
-        start_tracking();
-    }
 }
 
 GazeServer::~GazeServer() {
@@ -386,6 +377,13 @@ bool GazeServer::start_tracking() {
             was_zero = true;
             start_processing();
         } else {
+            VisionServer *vs = VisionServer::get_singleton();
+            if (vs) {
+                CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
+                if (cam && cam->vision_camera_rid.is_valid() && !vs->camera_is_active(cam->vision_camera_rid)) {
+                    vs->camera_start(cam->vision_camera_rid);
+                }
+            }
             ensure_process_connected();
         }
     }

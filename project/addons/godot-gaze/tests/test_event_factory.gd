@@ -55,3 +55,23 @@ func test_gaze_server_event_factory_composition():
 	var cast_event = event as CustomTestEvent
 	assert_eq(cast_event.custom_metric, 0.99, "Custom metric should be augmented")
 	assert_eq(cast_event.custom_tag, "augmented", "Custom tag should be augmented")
+
+func test_early_boot_custom_factory_loaded_from_project_settings():
+	var gs = Engine.get_singleton("GazeServer")
+	assert_not_null(gs, "GazeServer should exist")
+	if gs:
+		var factory = gs.get_event_factory()
+		assert_not_null(factory, "Early-boot event factory should be loaded from ProjectSettings")
+		if factory:
+			var event = factory.create_gaze_event()
+			assert_not_null(event, "Minted event should not be null")
+			assert_true(event.has_meta("custom_factory_applied"), "Custom metadata applied by early boot factory")
+			assert_eq(event.get_meta("custom_factory_applied"), true, "Metadata value should be true")
+
+func test_custom_event_factory_tres_resource_loading():
+	var res = load("res://addons/godot-gaze/tests/fixtures/custom_event_factory.tres")
+	assert_not_null(res, "Custom event factory resource should load from .tres")
+	if res:
+		var event = res.call("create_gaze_event")
+		assert_not_null(event, "Resource minted event should not be null")
+		assert_true(event.has_meta("custom_factory_applied"), "Resource minted event has custom metadata")

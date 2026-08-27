@@ -28,6 +28,7 @@
 #include <emscripten.h>
 #include "../web/web_binding_state.hpp"
 #endif
+#include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/variant/dictionary.hpp>
 #include "log.hpp"
 
@@ -256,7 +257,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
             }
         });
 
-        // Register Core Resource, Event, and Server classes needed by GazeServer
+        // Register all classes needed by GazeServer, VisionServer, and GDScript
         ClassDB::register_class<DisplayProfile>();
 
         ClassDB::register_class<InputEventGazeBase>();
@@ -330,10 +331,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     ClassDB::register_class<WebBindingState>();
 #endif
 
-    if (GazeServer::get_singleton()) {
-        GazeServer::get_singleton()->initialize_scene_resources();
-    }
-
     // On Web, if run-tests=true is passed via URL search parameters, override the boot scene dynamically
     ProjectSettings* ps = ProjectSettings::get_singleton();
     if (ps) {
@@ -352,6 +349,12 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
     if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
         Gaze::log_info("uninitialize_gaze_module_level_servers_began");
         Gaze::g_is_exiting = true;
+
+        Input *input = Input::get_singleton();
+        if (input) {
+            input->flush_buffered_events();
+        }
+
         if (default_calib) {
             Engine::get_singleton()->unregister_singleton("GazeDeviceEstimatedCalibration");
             memdelete(default_calib);

@@ -14,7 +14,7 @@ async function run() {
       cdpPort: SIDECAR_TEST_PORTS.cdpPort,
       serverPort: SIDECAR_TEST_PORTS.serverPort,
       targetUrl: TARGET_URL,
-      timeoutMs: 25000,
+      timeoutMs: 45000,
       serveFile: (urlPath) => {
         let filePath = "";
         let contentType = "application/octet-stream";

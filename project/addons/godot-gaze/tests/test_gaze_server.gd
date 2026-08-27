@@ -36,3 +36,30 @@ func test_gaze_server_display_profile_injection():
 	assert_not_null(active_profile, "Active display profile should not be null")
 	assert_eq(active_profile.get_logical_size_px(), Vector2i(1920, 1080), "Logical size matches")
 	assert_eq(active_profile.get_physical_size_mm(), Vector2(345.0, 215.0), "Physical size matches")
+
+func test_gaze_server_tracking_lifecycle_and_camera_recovery():
+	var gs = Engine.get_singleton("GazeServer")
+	var vs = Engine.get_singleton("VisionServer")
+	assert_not_null(gs, "GazeServer singleton must exist")
+	assert_not_null(vs, "VisionServer singleton must exist")
+
+	# Initial state: active trackers must be zero (no premature autostart at server constructor level)
+	assert_eq(gs.get_active_tracker_count(), 0, "Initial tracker count must be zero")
+
+	# Start tracking: transitions 0 -> 1
+	var transitioned = gs.start_tracking()
+	assert_true(transitioned, "First start_tracking must transition from 0 -> 1")
+	assert_eq(gs.get_active_tracker_count(), 1, "Active trackers count must be 1")
+
+	# Second start tracking: refcount becomes 2, does not transition from 0
+	var transitioned_second = gs.start_tracking()
+	assert_false(transitioned_second, "Second start_tracking must not transition from 0")
+	assert_eq(gs.get_active_tracker_count(), 2, "Active trackers count must be 2")
+
+	# Unref tracker: refcount becomes 1
+	gs.stop_tracking(false)
+	assert_eq(gs.get_active_tracker_count(), 1, "Active trackers count must be 1")
+
+	# Full stop
+	gs.stop_tracking(true)
+	assert_eq(gs.get_active_tracker_count(), 0, "Active trackers count must return to 0 after immediate stop")

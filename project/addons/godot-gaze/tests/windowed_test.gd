@@ -156,10 +156,23 @@ func _init():
 		quit(1)
 		return
 		
-	# Clean up
+	# Clean up synthetic camera
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)
+
+	# 4. Test Physical Camera Device 0 and CameraServer Query
+	print("=================== E2E TEST: PHYSICAL CAMERA SERVER (DEVICE 0) ===================")
+	var phys_cam_rid = vs.camera_create()
+	vs.camera_set_device_id(phys_cam_rid, 0)
+	var started = vs.camera_start(phys_cam_rid)
+	print("Physical camera start (device 0) returned: ", started)
+	if started:
+		print("PASS: Physical camera device 0 started successfully.")
+		vs.camera_stop(phys_cam_rid)
+	else:
+		print("INFO: Physical camera device 0 not active or feeds unavailable in this test session (cleanly handled).")
+	vs.camera_free(phys_cam_rid)
 
 	print("==================================================================")
 	print("ALL Windowed GPU integration tests have passed successfully!")

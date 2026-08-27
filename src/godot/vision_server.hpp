@@ -109,6 +109,7 @@ public:
      * @return True if started successfully, false otherwise.
      */
     virtual bool camera_start(RID p_camera);
+    virtual bool camera_is_active(RID p_camera);
 
     /**
      * @brief Stop frame capture and release hardware resources.

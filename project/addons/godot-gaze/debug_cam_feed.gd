@@ -102,6 +102,14 @@ func _process(delta):
 					var rect = get_texture_rect("CameraFeedRect")
 					if rect:
 						rect.texture = tex
+				var crops = gs.get_eye_crops()
+				if crops and crops.size() >= 2:
+					var left_rect = get_texture_rect("LeftEyeRect")
+					if left_rect and crops[0]:
+						left_rect.texture = crops[0]
+					var right_rect = get_texture_rect("RightEyeRect")
+					if right_rect and crops[1]:
+						right_rect.texture = crops[1]
 				if landmark_overlay:
 					landmark_overlay.queue_redraw()
 

@@ -12,6 +12,7 @@
 #include "vision_server.hpp"
 #include "gaze_server.hpp"
 #include "gaze_frame.hpp"
+#include "gaze_event_factory.hpp"
 
 
 
@@ -229,6 +230,15 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_verbosity);
         ps->set_initial_value("gaze/debug/verbosity", 1);
 
+        if (!ps->has_setting("gaze/events/event_factory_path")) {
+            ps->set_setting("gaze/events/event_factory_path", "");
+        }
+        Dictionary prop_factory_path;
+        prop_factory_path["name"] = "gaze/events/event_factory_path";
+        prop_factory_path["type"] = Variant::STRING;
+        ps->add_property_info(prop_factory_path);
+        ps->set_initial_value("gaze/events/event_factory_path", "");
+
         int verbosity = ps->get_setting("gaze/debug/verbosity");
         Gaze::set_log_verbosity(verbosity);
     }
@@ -252,6 +262,9 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         ClassDB::register_class<InputEventGazeBase>();
         ClassDB::register_class<InputEventGaze>();
         ClassDB::register_class<InputEventGazeMissing>();
+
+        ClassDB::register_class<GazeEventFactory>();
+        ClassDB::register_class<GazeServerEventFactory>();
 
         ClassDB::register_class<Smoother>();
         ClassDB::register_class<OneEuroSmoother>();
@@ -316,6 +329,10 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif
+
+    if (GazeServer::get_singleton()) {
+        GazeServer::get_singleton()->initialize_scene_resources();
+    }
 
     // On Web, if run-tests=true is passed via URL search parameters, override the boot scene dynamically
     ProjectSettings* ps = ProjectSettings::get_singleton();

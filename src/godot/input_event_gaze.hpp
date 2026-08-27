@@ -44,6 +44,8 @@ public:
     float get_right_eye_openness() const { return right_eye_openness; }
 
     virtual bool is_face_tracked() const { return false; }
+
+    void copy_from(const Ref<InputEventGazeBase> &p_other);
 };
 
 /**
@@ -101,6 +103,8 @@ public:
     void set_gaze_transform(const Transform3D &p_xform) { gaze_transform = p_xform; }
     Transform3D get_gaze_transform() const { return gaze_transform; }
 
+    void copy_from(const Ref<InputEventGaze> &p_other);
+
     String as_text() const;
 };
 
@@ -133,6 +137,8 @@ public:
 
     void set_reason(MissingReason p_reason) { reason = p_reason; }
     MissingReason get_reason() const { return reason; }
+
+    void copy_from(const Ref<InputEventGazeMissing> &p_other);
 
     String as_text() const;
 };

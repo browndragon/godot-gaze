@@ -1,6 +1,7 @@
 #include "godot_camera.hpp"
 #include "../core/log.hpp"
 #include <chrono>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/rendering_server.hpp>
 #include <godot_cpp/classes/rendering_device.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
@@ -22,6 +23,11 @@ bool GodotCamera::initialize() {
         return false;
     }
 
+    godot::Engine* eng = godot::Engine::get_singleton();
+    if (!eng || !eng->has_singleton("CameraServer")) {
+        log_error("GodotCamera_ServerNotFound");
+        return false;
+    }
     godot::CameraServer* cs = godot::CameraServer::get_singleton();
     if (!cs) {
         log_error("GodotCamera_ServerNotFound");

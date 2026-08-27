@@ -23,7 +23,7 @@ window/stretch/aspect="expand"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot-gaze/plugin.cfg")
+enabled=PackedStringArray("res://addons/godot-gaze/plugin.cfg", "res://addons/gut/plugin.cfg")
 
 [physics]
 

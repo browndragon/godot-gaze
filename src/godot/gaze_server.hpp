@@ -20,6 +20,7 @@
 #include "gaze_frame.hpp"
 #include "display_profile.hpp"
 #include "input_event_gaze.hpp"
+#include "gaze_event_factory.hpp"
 #include "../core/gaze_frame_data.hpp"
 
 #include <vector>
@@ -62,6 +63,7 @@ private:
     Ref<DisplayProfile> default_display_profile;
     Ref<DeviceCalibration> default_device_calibration;
     Ref<BioCalibration> default_bio_calibration;
+    Ref<GazeEventFactory> event_factory;
 
     Ref<InputEventGazeBase> most_recent_event;
     uint64_t current_frame_id = 0;
@@ -133,6 +135,16 @@ public:
     void set_bio_calibration(const Ref<BioCalibration>& p_calibration);
     Ref<BioCalibration> get_bio_calibration() const;
 
+    // --- Event Factory ---
+
+    void set_event_factory(const Ref<GazeEventFactory>& p_factory);
+    Ref<GazeEventFactory> get_event_factory();
+    void initialize_scene_resources();
+    void _ensure_event_factory_loaded();
+
+    Ref<InputEventGaze> create_default_event();
+    Ref<InputEventGazeMissing> create_default_missing_event(int p_reason);
+
     // --- Emulation Settings ---
 
     void set_emulate_gaze_from_mouse(bool p_enable);
@@ -145,8 +157,15 @@ public:
 
     Ref<Texture2D> get_camera_texture();
     PackedVector2Array get_debug_landmarks() const;
+    void camera_set_preview_requested(bool p_requested);
+    bool is_camera_preview_requested() const;
 
     // --- Server Low-Level Resource Management (RIDs) ---
+
+    RID get_default_camera_rid() const { return default_camera_rid; }
+    RID get_default_display_rid() const { return default_display_rid; }
+    RID get_default_face_rid() const { return default_face_rid; }
+    RID get_default_eye_rid() const { return default_eye_rid; }
 
     RID display_create();
     void display_set_geometry(RID p_display, Vector2 p_logical_size, Vector2 p_physical_size);
@@ -198,6 +217,7 @@ public:
     // --- Pipeline Processing ---
 
     void set_pipeline_config(const Ref<GazePipelineConfig>& p_config);
+    void ensure_process_connected();
     void trigger_process();
     void start_processing();
     void stop_processing();

@@ -44,6 +44,7 @@ protected:
         Ref<Image> current_image;
         bool is_active = false;
         bool preview_requested = false;
+        int preview_refcount = 0;
         
         Gaze::Frame last_frame;
         std::vector<unsigned char> last_frame_data; // Thread-safe back buffer copy

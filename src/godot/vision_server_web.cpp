@@ -64,6 +64,8 @@ void VisionServer::camera_stop(RID p_camera) {
     }
 
     data->is_active = false;
+    data->current_texture.unref();
+    data->current_image.unref();
     data->last_frame = Gaze::Frame();
     data->last_frame_data.clear();
     Gaze::log_info("VisionServerWeb_CameraStopped");

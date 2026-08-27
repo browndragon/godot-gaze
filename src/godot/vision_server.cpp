@@ -91,6 +91,9 @@ VisionServer::~VisionServer() {
                 delete data->camera;
                 data->camera = nullptr;
             }
+            data->current_texture.unref();
+            data->current_image.unref();
+            camera_owner.free(rid);
             memdelete(data);
         }
     }
@@ -104,7 +107,6 @@ VisionServer::~VisionServer() {
 
 RID VisionServer::camera_create() {
     CameraData *data = memnew(CameraData);
-    data->current_texture.instantiate();
     RID rid = camera_owner.make_rid(data);
     allocated_cameras.push_back(rid);
     return rid;
@@ -150,19 +152,27 @@ double VisionServer::camera_get_fov(RID p_camera) {
 void VisionServer::camera_set_preview_requested(RID p_camera, bool p_requested) {
     CameraData *data = camera_owner.get_or_null(p_camera);
     ERR_FAIL_NULL(data);
-    data->preview_requested = p_requested;
+    if (p_requested) {
+        data->preview_refcount++;
+    } else if (data->preview_refcount > 0) {
+        data->preview_refcount--;
+    }
+    bool was_requested = data->preview_requested;
+    data->preview_requested = (data->preview_refcount > 0);
+    if (data->preview_requested != was_requested) {
 #ifdef WEB_ENABLED
-    JavaScriptBridge *js = JavaScriptBridge::get_singleton();
-    if (js) {
-        Ref<JavaScriptObject> window = js->get_interface("window");
-        if (window.is_valid()) {
-            Ref<JavaScriptObject> godotGaze = window->get("godotGaze");
-            if (godotGaze.is_valid()) {
-                godotGaze->set("previewRequested", p_requested);
+        JavaScriptBridge *js = JavaScriptBridge::get_singleton();
+        if (js) {
+            Ref<JavaScriptObject> window = js->get_interface("window");
+            if (window.is_valid()) {
+                Ref<JavaScriptObject> godotGaze = window->get("godotGaze");
+                if (godotGaze.is_valid()) {
+                    godotGaze->set("previewRequested", data->preview_requested);
+                }
             }
         }
-    }
 #endif
+    }
 }
 
 bool VisionServer::camera_is_preview_requested(RID p_camera) {
@@ -207,7 +217,6 @@ void MockVisionServer::_bind_methods() {
 
 RID MockVisionServer::camera_create() {
     CameraData *data = memnew(CameraData);
-    data->current_texture.instantiate();
     // Device ID -1 represents virtual/fake camera
     data->device_id = -1;
     RID rid = camera_owner.make_rid(data);

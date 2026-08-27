@@ -31,11 +31,23 @@ void InputEventGazeBase::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("is_face_tracked"), &InputEventGazeBase::is_face_tracked);
 
+    ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGazeBase::copy_from);
+
     ADD_PROPERTY(PropertyInfo(Variant::INT, "window_id"), "set_window_id", "get_window_id");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "frame_id"), "set_frame_id", "get_frame_id");
     ADD_PROPERTY(PropertyInfo(Variant::INT, "timestamp_usec"), "set_timestamp_usec", "get_timestamp_usec");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "left_eye_openness"), "set_left_eye_openness", "get_left_eye_openness");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "right_eye_openness"), "set_right_eye_openness", "get_right_eye_openness");
+}
+
+void InputEventGazeBase::copy_from(const Ref<InputEventGazeBase> &p_other) {
+    if (p_other.is_valid()) {
+        window_id = p_other->window_id;
+        frame_id = p_other->frame_id;
+        timestamp_usec = p_other->timestamp_usec;
+        left_eye_openness = p_other->left_eye_openness;
+        right_eye_openness = p_other->right_eye_openness;
+    }
 }
 
 // --- InputEventGaze ---
@@ -82,6 +94,8 @@ void InputEventGaze::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_gaze_transform", "gaze_transform"), &InputEventGaze::set_gaze_transform);
     ClassDB::bind_method(D_METHOD("get_gaze_transform"), &InputEventGaze::get_gaze_transform);
 
+    ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGaze::copy_from);
+
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "position"), "set_position", "get_position");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "global_position"), "set_global_position", "get_global_position");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screen_position"), "set_screen_position", "get_screen_position");
@@ -91,6 +105,21 @@ void InputEventGaze::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screen_velocity"), "set_screen_velocity", "get_screen_velocity");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "set_head_transform", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "gaze_transform"), "set_gaze_transform", "get_gaze_transform");
+}
+
+void InputEventGaze::copy_from(const Ref<InputEventGaze> &p_other) {
+    if (p_other.is_valid()) {
+        InputEventGazeBase::copy_from(p_other);
+        position = p_other->position;
+        global_position = p_other->global_position;
+        screen_position = p_other->screen_position;
+        relative = p_other->relative;
+        screen_relative = p_other->screen_relative;
+        velocity = p_other->velocity;
+        screen_velocity = p_other->screen_velocity;
+        head_transform = p_other->head_transform;
+        gaze_transform = p_other->gaze_transform;
+    }
 }
 
 String InputEventGaze::as_text() const {
@@ -108,6 +137,7 @@ InputEventGazeMissing::InputEventGazeMissing() {
 void InputEventGazeMissing::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_reason", "reason"), &InputEventGazeMissing::set_reason);
     ClassDB::bind_method(D_METHOD("get_reason"), &InputEventGazeMissing::get_reason);
+    ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGazeMissing::copy_from);
 
     ADD_PROPERTY(PropertyInfo(Variant::INT, "reason", PROPERTY_HINT_ENUM, "NoFaceDetected,Occluded,OutOfBounds,SensorInactive"), "set_reason", "get_reason");
 
@@ -115,6 +145,13 @@ void InputEventGazeMissing::_bind_methods() {
     BIND_ENUM_CONSTANT(REASON_OCCLUDED);
     BIND_ENUM_CONSTANT(REASON_OUT_OF_BOUNDS);
     BIND_ENUM_CONSTANT(REASON_SENSOR_INACTIVE);
+}
+
+void InputEventGazeMissing::copy_from(const Ref<InputEventGazeMissing> &p_other) {
+    if (p_other.is_valid()) {
+        InputEventGazeBase::copy_from(p_other);
+        reason = p_other->reason;
+    }
 }
 
 String InputEventGazeMissing::as_text() const {

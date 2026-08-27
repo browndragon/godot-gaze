@@ -33,6 +33,15 @@ fi
 AUTO=true
 HEADLESS=""
 TIMEOUT=""
+TEST_MODE=true
+EXPLICIT_S=""
+if [[ -f "project/project.godot" ]]; then
+    PROJECT_PATH="project"
+elif [[ -f "project.godot" ]]; then
+    PROJECT_PATH="."
+else
+    PROJECT_PATH="."
+fi
 GODOT_ARGS=()
 
 # Parse arguments
@@ -62,8 +71,34 @@ while [[ $# -gt 0 ]]; do
             TIMEOUT=0
             shift
             ;;
+        -s)
+            EXPLICIT_S="$2"
+            shift 2
+            ;;
+        --notest|--no-test)
+            TEST_MODE=false
+            shift
+            ;;
+        --test)
+            TEST_MODE=true
+            shift
+            ;;
+        --path)
+            PROJECT_PATH="$2"
+            shift 2
+            ;;
         *)
-            GODOT_ARGS+=("$1")
+            ARG="$1"
+            if [[ -d "$PROJECT_PATH" ]]; then
+                ABS_PROJ="$(cd "$PROJECT_PATH" && pwd)"
+                if [[ "$ARG" == "$ABS_PROJ/"* ]]; then
+                    ARG="res://${ARG#$ABS_PROJ/}"
+                fi
+            fi
+            if [[ "$ARG" == "project/"* && ("$PROJECT_PATH" == "project" || "$PROJECT_PATH" == *"/project") ]]; then
+                ARG="res://${ARG#project/}"
+            fi
+            GODOT_ARGS+=("$ARG")
             shift
             ;;
     esac
@@ -86,37 +121,34 @@ if [[ -z "$TIMEOUT" ]]; then
     fi
 fi
 
-# Add --headless if required
+FINAL_ARGS=()
+
+# 1. Project path
+if [[ -d "$PROJECT_PATH" ]]; then
+    PROJECT_PATH="$(cd "$PROJECT_PATH" && pwd)"
+fi
+FINAL_ARGS+=("--path" "$PROJECT_PATH")
+
+# 2. Headless mode
 if [[ "$HEADLESS" == "true" ]]; then
-    HAS_HEADLESS=false
-    for arg in ${GODOT_ARGS[@]+"${GODOT_ARGS[@]}"}; do
-        if [[ "$arg" == "--headless" ]]; then
-            HAS_HEADLESS=true
-            break
-        fi
-    done
-    if [[ "$HAS_HEADLESS" == "false" ]]; then
-        GODOT_ARGS+=("--headless")
-    fi
+    FINAL_ARGS+=("--headless")
 fi
 
-# Always ensure path is set to project directory if not specified
-HAS_PATH=false
-for arg in ${GODOT_ARGS[@]+"${GODOT_ARGS[@]}"}; do
-    if [[ "$arg" == "--path" ]]; then
-        HAS_PATH=true
-        break
-    fi
-done
-if [[ "$HAS_PATH" == "false" ]]; then
-    GODOT_ARGS+=("--path" "project")
+# 3. Script flag precedence (-s arg, --notest, or default to GUT)
+if [[ -n "$EXPLICIT_S" ]]; then
+    FINAL_ARGS+=("-s" "$EXPLICIT_S")
+elif [[ "$TEST_MODE" == "true" ]]; then
+    FINAL_ARGS+=("-s" "res://addons/gut/gut_cmdln.gd")
 fi
 
-echo "Running Godot tests with: ${GODOT_ARGS[*]:-}"
+# 4. Remaining Godot arguments (e.g. -gtest=..., -gdir=..., or scene path)
+FINAL_ARGS+=(${GODOT_ARGS[@]+"${GODOT_ARGS[@]}"})
+
+echo "Running Godot with: ${FINAL_ARGS[*]:-}"
 
 # Run Godot with or without watchdog timeout
 if [[ $TIMEOUT -gt 0 ]]; then
-    "$GODOT_BIN" ${GODOT_ARGS[@]+"${GODOT_ARGS[@]}"} &
+    "$GODOT_BIN" ${FINAL_ARGS[@]+"${FINAL_ARGS[@]}"} &
     GODOT_PID=$!
     
     (
@@ -137,5 +169,5 @@ if [[ $TIMEOUT -gt 0 ]]; then
     kill "$WATCHDOG_PID" 2>/dev/null || true
     exit "$EXIT_CODE"
 else
-    exec "$GODOT_BIN" ${GODOT_ARGS[@]+"${GODOT_ARGS[@]}"}
+    exec "$GODOT_BIN" ${FINAL_ARGS[@]+"${FINAL_ARGS[@]}"}
 fi

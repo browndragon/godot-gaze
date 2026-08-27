@@ -105,3 +105,82 @@ TEST_CASE("Gaze Input - Velocity and Kinematics Invariant")
     CHECK(std::abs(vel_x - 960.0f) < 1.0f);
     CHECK(std::abs(vel_y - 0.0f) < 1e-4f);
 }
+
+TEST_CASE("Gaze Input - Event Subclass Copying and Extension Invariant")
+{
+    // Simulating base InputEventGaze properties
+    struct TestBaseEvent {
+        int64_t window_id = 1;
+        uint64_t frame_id = 42;
+        uint64_t timestamp_usec = 123456789;
+        float left_eye_openness = 0.85f;
+        float right_eye_openness = 0.82f;
+        float pos_x = 350.0f;
+        float pos_y = 220.0f;
+        float vel_x = 55.0f;
+        float vel_y = -12.0f;
+        float head_x = 10.0f, head_y = -5.0f, head_z = 600.0f;
+        float gaze_dir_x = 0.05f, gaze_dir_y = -0.02f, gaze_dir_z = -0.998f;
+    } base_evt;
+
+    // Simulating downstream custom subclass (e.g. InputEventEyecandyGaze)
+    struct TestCustomEvent {
+        // Base fields
+        int64_t window_id = 0;
+        uint64_t frame_id = 0;
+        uint64_t timestamp_usec = 0;
+        float left_eye_openness = 0.0f;
+        float right_eye_openness = 0.0f;
+        float pos_x = 0.0f, pos_y = 0.0f;
+        float vel_x = 0.0f, vel_y = 0.0f;
+        float head_x = 0.0f, head_y = 0.0f, head_z = 0.0f;
+        float gaze_dir_x = 0.0f, gaze_dir_y = 0.0f, gaze_dir_z = 0.0f;
+
+        // Custom downstream fields
+        float biorhythm_index = 0.0f;
+        float saccade_meter = 0.0f;
+        float blink_meter = 0.0f;
+        int accessibility_mode = 0;
+
+        void copy_from(const TestBaseEvent &p_base) {
+            window_id = p_base.window_id;
+            frame_id = p_base.frame_id;
+            timestamp_usec = p_base.timestamp_usec;
+            left_eye_openness = p_base.left_eye_openness;
+            right_eye_openness = p_base.right_eye_openness;
+            pos_x = p_base.pos_x;
+            pos_y = p_base.pos_y;
+            vel_x = p_base.vel_x;
+            vel_y = p_base.vel_y;
+            head_x = p_base.head_x;
+            head_y = p_base.head_y;
+            head_z = p_base.head_z;
+            gaze_dir_x = p_base.gaze_dir_x;
+            gaze_dir_y = p_base.gaze_dir_y;
+            gaze_dir_z = p_base.gaze_dir_z;
+        }
+    } custom_evt;
+
+    custom_evt.copy_from(base_evt);
+    custom_evt.biorhythm_index = 0.75f;
+    custom_evt.saccade_meter = 0.40f;
+    custom_evt.accessibility_mode = 1;
+
+    // Verify all base properties copied faithfully
+    CHECK(custom_evt.window_id == 1);
+    CHECK(custom_evt.frame_id == 42);
+    CHECK(custom_evt.timestamp_usec == 123456789);
+    CHECK(std::abs(custom_evt.left_eye_openness - 0.85f) < 1e-4f);
+    CHECK(std::abs(custom_evt.right_eye_openness - 0.82f) < 1e-4f);
+    CHECK(std::abs(custom_evt.pos_x - 350.0f) < 1e-4f);
+    CHECK(std::abs(custom_evt.pos_y - 220.0f) < 1e-4f);
+    CHECK(std::abs(custom_evt.vel_x - 55.0f) < 1e-4f);
+    CHECK(std::abs(custom_evt.vel_y - (-12.0f)) < 1e-4f);
+    CHECK(std::abs(custom_evt.head_z - 600.0f) < 1e-4f);
+    CHECK(std::abs(custom_evt.gaze_dir_z - (-0.998f)) < 1e-4f);
+
+    // Verify custom fields intact
+    CHECK(std::abs(custom_evt.biorhythm_index - 0.75f) < 1e-4f);
+    CHECK(std::abs(custom_evt.saccade_meter - 0.40f) < 1e-4f);
+    CHECK(custom_evt.accessibility_mode == 1);
+}

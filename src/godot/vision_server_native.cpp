@@ -22,7 +22,7 @@ namespace godot {
 
 bool VisionServer::camera_start(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, false);
+    if (!data) return false;
 
     if (data->is_active) return true;
 
@@ -52,7 +52,7 @@ bool VisionServer::camera_start(RID p_camera) {
 void VisionServer::camera_stop(RID p_camera) {
     Gaze::log_info(2, "VisionServer_CameraStop_Began");
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL(data);
+    if (!data) return;
 
     if (!data->is_active) {
         Gaze::log_info(2, "VisionServer_CameraStop_NotActive");
@@ -68,6 +68,8 @@ void VisionServer::camera_stop(RID p_camera) {
     }
 
     data->is_active = false;
+    data->current_texture.unref();
+    data->current_image.unref();
     data->last_frame = Gaze::Frame();
     data->last_frame_data.clear();
     Gaze::log_info("VisionServer_CameraStopped", "device_id", data->device_id);

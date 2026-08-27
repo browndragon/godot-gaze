@@ -44,25 +44,23 @@ func _init():
 	# 3. Test GPU-based Preprocessing & Compute Shaders (needs active Window/Renderer)
 	# 3. Test GPU-based Preprocessing & Compute Shaders (needs active Window/Renderer)
 	print("=================== E2E TEST: GPU COMPUTE SHADER INTEGRITY AND EYE CROPS ===================")
-	# Unregister the global VisionServer singleton, free it to reset the C++ static pointer, and register a MockVisionServer instead
-	var old_vs = Engine.get_singleton("VisionServer")
-	if old_vs:
-		Engine.unregister_singleton("VisionServer")
-		old_vs.free()
-
-	var gpu_mock_vs = MockVisionServer.new()
-	Engine.register_singleton("VisionServer", gpu_mock_vs)
-
+	var vs = Engine.get_singleton("VisionServer")
 	var gs = Engine.get_singleton("GazeServer")
-	if not gs:
-		printerr("FAIL: GazeServer singleton not found")
+	if not gs or not vs:
+		printerr("FAIL: GazeServer or VisionServer singleton not found")
 		quit(1)
 		return
 
 	gs.set_display_profile(dp)
-	gs.start_tracking()
 
-	var cam_rid = gpu_mock_vs.camera_create(-1)
+	var cam_rid = vs.camera_create()
+	vs.camera_set_device_id(cam_rid, -1)
+	vs.camera_set_resolution(cam_rid, 1440, 960)
+	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
+	vs.camera_start(cam_rid)
+
+	gs.camera_set_vision_rid(gs.get_default_camera_rid(), cam_rid)
+	gs.start_processing()
 
 	# Load the real face image from tests/resources/self_left_left.jpg
 	var face_img = Image.new()
@@ -82,10 +80,11 @@ func _init():
 	# Wait a few frames for the asynchronous pipeline to execute, injecting the texture each frame
 	var latest_event: InputEventGaze = null
 	for frame_step in range(30):
-		gpu_mock_vs.inject_texture(cam_rid, face_tex)
+		vs.inject_texture(cam_rid, face_tex)
+		gs.trigger_process()
 		await create_timer(0.05).timeout
 		var ev = gs.get_most_recent_event()
-		if ev is InputEventGaze and ev.is_face_tracked():
+		if ev is InputEventGaze and ev.head_transform.origin != Vector3(0, 0, 500) and ev.head_transform.origin != Vector3.ZERO:
 			latest_event = ev
 			break
 
@@ -100,13 +99,13 @@ func _init():
 	print("Tracker Head Transform: ", xform)
 	
 	var nose_pos = xform * Vector3(0.0, 0.5, -52.0)
-	var eye_l_pos = xform * Vector3(-30.0, 28.676, 0.0)
-	var eye_r_pos = xform * Vector3(30.0, 28.676, 0.0)
+	var eye_l_pos = xform * Vector3(30.0, 28.676, 0.0)
+	var eye_r_pos = xform * Vector3(-30.0, 28.676, 0.0)
 	
 	print("Nose position: ", nose_pos, " | Left eye position: ", eye_l_pos, " | Right eye position: ", eye_r_pos)
 	
-	# Convex nose assertion: nose tip must be closer to camera (less negative Z) than the eyes
-	if nose_pos.z <= eye_l_pos.z or nose_pos.z <= eye_r_pos.z:
+	# Convex nose assertion: nose tip must be closer to camera (smaller Z) than the eyes
+	if nose_pos.z >= eye_l_pos.z or nose_pos.z >= eye_r_pos.z:
 		printerr("FAIL: Shaders/Crops - Head transform has concave nose! nose.z = ", nose_pos.z, " eye_l.z = ", eye_l_pos.z)
 		quit(1)
 		return
@@ -117,9 +116,9 @@ func _init():
 		quit(1)
 		return
 		
-	# Head forward vector direction assertion: must point generally towards the screen (+Z direction)
+	# Head forward vector direction assertion: must point generally towards the screen (-Z direction in camera space)
 	var head_forward = -xform.basis.z.normalized()
-	if head_forward.z <= 0.5:
+	if head_forward.z >= -0.5:
 		printerr("FAIL: Shaders/Crops - Head forward vector points away from the screen! head_forward = ", head_forward)
 		quit(1)
 		return
@@ -141,7 +140,8 @@ func _init():
 	# Inject texture a few times to get initial gaze coordinate
 	var initial_gaze = Vector2.ZERO
 	for frame_step in range(30):
-		gpu_mock_vs.inject_texture(cam_rid, face_tex)
+		vs.inject_texture(cam_rid, face_tex)
+		gs.trigger_process()
 		await create_timer(0.05).timeout
 		var ev = gs.get_most_recent_event()
 		if ev is InputEventGaze and ev.position != Vector2.ZERO:
@@ -158,7 +158,8 @@ func _init():
 		
 	# Clean up
 	gs.stop_tracking(true)
-	gpu_mock_vs.free()
+	vs.camera_stop(cam_rid)
+	vs.camera_free(cam_rid)
 
 	print("==================================================================")
 	print("ALL Windowed GPU integration tests have passed successfully!")

@@ -49,7 +49,12 @@ func _ready():
 			print("[DebugHUD] Camera sensor: ", camera_sensor)
 			print("[DebugHUD] Face estimator: ", face_estimator)
 		else:
-			print("[DebugHUD] WARNING: Tracker NOT found in scene tree!")
+			var gs = Engine.get_singleton("GazeServer")
+			var vs = Engine.get_singleton("VisionServer")
+			if gs and vs:
+				print("[DebugHUD] Connected to GazeServer singleton")
+			else:
+				print("[DebugHUD] WARNING: Neither Tracker nor GazeServer found!")
 
 var preview_requested: bool = false
 var crop_requested: bool = false
@@ -57,7 +62,6 @@ var crop_requested: bool = false
 func _process(delta):
 	if not Engine.is_editor_hint():
 		if not is_instance_valid(tracker) and is_inside_tree():
-			disconnect_tracker_signals()
 			tracker = find_gaze_tracker(get_tree().root)
 		if is_instance_valid(tracker):
 			var t_camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
@@ -87,13 +91,47 @@ func _process(delta):
 			if is_different:
 				disconnect_tracker_signals()
 				connect_tracker_signals()
+		else:
+			# Direct GazeServer singleton mode
+			var gs = Engine.get_singleton("GazeServer")
+			if gs:
+				var tex = gs.get_camera_texture()
+				if tex:
+					actual_cam_width = tex.get_width()
+					actual_cam_height = tex.get_height()
+					var rect = get_texture_rect("CameraFeedRect")
+					if rect:
+						rect.texture = tex
+				if landmark_overlay:
+					landmark_overlay.queue_redraw()
 
-			update_accumulator += delta
-			if update_accumulator >= UPDATE_INTERVAL:
-				update_accumulator = 0.0
-				update_diagnostics_ui()
+		update_accumulator += delta
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_VISIBILITY_CHANGED or what == NOTIFICATION_ENTER_TREE:
+		_update_preview_state()
+	elif what == NOTIFICATION_EXIT_TREE:
+		_release_preview_state()
+
+var _active_preview_requested: bool = false
+
+func _update_preview_state() -> void:
+	if Engine.is_editor_hint(): return
+	var should_preview = is_visible_in_tree()
+	if should_preview != _active_preview_requested:
+		_active_preview_requested = should_preview
+		var gs = Engine.get_singleton("GazeServer")
+		if gs and gs.has_method("camera_set_preview_requested"):
+			gs.camera_set_preview_requested(should_preview)
+
+func _release_preview_state() -> void:
+	if _active_preview_requested:
+		_active_preview_requested = false
+		var gs = Engine.get_singleton("GazeServer")
+		if gs and gs.has_method("camera_set_preview_requested"):
+			gs.camera_set_preview_requested(false)
 
 func _exit_tree():
+	_release_preview_state()
 	disconnect_tracker_signals()
 
 func find_gaze_tracker(node: Node) -> Node:
@@ -267,78 +305,99 @@ func update_diagnostics_ui():
 		return
 	
 	var lines = []
-	if not is_instance_valid(tracker):
-		metrics_lbl.text = "[color=red]Tracker not found in scene tree.[/color]"
-		return
+	var gs = Engine.get_singleton("GazeServer")
 	
-	var is_face_detected = false
-	var head_pos = Vector3.ZERO
-	var head_rot = Vector3.ZERO
-	if is_instance_valid(face_estimator):
-		is_face_detected = face_estimator.get("has_detected_face") == true
+	if is_instance_valid(tracker):
+		var is_face_detected = false
+		var head_pos = Vector3.ZERO
+		var head_rot = Vector3.ZERO
+		if is_instance_valid(face_estimator):
+			is_face_detected = face_estimator.get("has_detected_face") == true
+			if is_face_detected:
+				var xform = face_estimator.get("transform")
+				if xform:
+					head_pos = xform.origin
+					head_rot = xform.basis.get_euler() * (180.0 / PI)
+
+		var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3.ZERO
+		var dev_cal = tracker.get("device_calibration")
+		var bio_cal = tracker.get("bio_calibration")
+
+		var state_names = {0: "Unknown", 1: "Permission Required", 2: "Initializing", 3: "Running", 4: "Error"}
+		var state_colors = {0: "gray", 1: "orange", 2: "yellow", 3: "green", 4: "red"}
+		var lifecycle_val = tracker.call("get_lifecycle_state") if tracker.has_method("get_lifecycle_state") else 0
+		var state_name = state_names.get(lifecycle_val, "Unknown")
+		var state_color = state_colors.get(lifecycle_val, "gray")
+		
+		var build_info = tracker.call("get_build_info") if tracker.has_method("get_build_info") else ""
+		if build_info != "":
+			lines.append("Build: [color=aqua]%s[/color]" % build_info)
+		lines.append("Tracker State: [color=%s]%s[/color]" % [state_color, state_name])
+		lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
+		
 		if is_face_detected:
-			var xform = face_estimator.get("transform")
-			if xform:
-				head_pos = xform.origin
-				head_rot = xform.basis.get_euler() * (180.0 / PI)
+			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
+			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
+		else:
+			lines.append("Head Trans (mm): [color=gray]N/A[/color]")
+			lines.append("Head Rot (deg): [color=gray]N/A[/color]")
 
-	var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3.ZERO
-	var dev_cal = tracker.get("device_calibration")
-	var bio_cal = tracker.get("bio_calibration")
+		lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
+		
+		lines.append("\n[b]Calibration Status:[/b]")
+		lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
+		lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
 
-	# Formatting
-	var state_names = {
-		0: "Unknown",
-		1: "Permission Required",
-		2: "Initializing",
-		3: "Running",
-		4: "Error"
-	}
-	var state_colors = {
-		0: "gray",
-		1: "orange",
-		2: "yellow",
-		3: "green",
-		4: "red"
-	}
-	var lifecycle_val = tracker.call("get_lifecycle_state") if tracker.has_method("get_lifecycle_state") else 0
-	var state_name = state_names.get(lifecycle_val, "Unknown")
-	var state_color = state_colors.get(lifecycle_val, "gray")
-	
-	var build_info = tracker.call("get_build_info") if tracker.has_method("get_build_info") else ""
-	if build_info != "":
-		lines.append("Build: [color=aqua]%s[/color]" % build_info)
-	lines.append("Tracker State: [color=%s]%s[/color]" % [state_color, state_name])
-	lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
-	
-	if is_face_detected:
-		lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
-		lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
-	else:
-		lines.append("Head Trans (mm): [color=gray]N/A[/color]")
-		lines.append("Head Rot (deg): [color=gray]N/A[/color]")
+		if is_instance_valid(camera_sensor):
+			var focal = camera_sensor.get("focal_length")
+			var fov = camera_sensor.get("camera_fov")
+			if fov == null: fov = 35.488537576579634
+			var display_focal = focal
+			if focal == null or focal <= 0.0:
+				var w = actual_cam_width if actual_cam_width > 0 else 640
+				display_focal = w / (2.0 * tan(fov * PI / 180.0 * 0.5))
+			lines.append("\n[b]Camera Feed:[/b]")
+			lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
+			lines.append("  Focal Length: [color=yellow]%.1f px%s[/color]" % [display_focal, " (Auto)" if focal == null or focal <= 0.0 else ""])
+	elif gs:
+		var ev = gs.get_most_recent_event()
+		var is_face_detected = (ev is InputEventGaze and ev.is_face_tracked())
+		var is_running = gs.is_tracking_active()
+		
+		var build_info = GazeServer.get_build_info() if ClassDB.class_has_method("GazeServer", "get_build_info") else ""
+		if build_info != "":
+			lines.append("Build: [color=aqua]%s[/color]" % build_info)
+		lines.append("Tracker State: [color=%s]%s[/color]" % ["green" if is_running else "gray", "Running" if is_running else "Idle"])
+		lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
 
-	lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
-	
-	lines.append("\n[b]Calibration Status:[/b]")
-	lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
-	lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
+		if is_face_detected:
+			var head_pos = ev.head_transform.origin
+			var head_rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
+			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
+			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
+			var gaze_dir = -ev.gaze_transform.basis.z
+			lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
+			lines.append("Eye Openness: [color=yellow]L: %.2f, R: %.2f[/color]" % [ev.left_eye_openness, ev.right_eye_openness])
+		else:
+			lines.append("Head Trans (mm): [color=gray]N/A[/color]")
+			lines.append("Head Rot (deg): [color=gray]N/A[/color]")
+			lines.append("Gaze Direction: [color=gray]N/A[/color]")
 
-	if is_instance_valid(camera_sensor):
-		var focal = camera_sensor.get("focal_length")
-		var fov = camera_sensor.get("camera_fov")
-		if fov == null:
-			fov = 35.488537576579634
-		var display_focal = focal
-		if focal == null or focal <= 0.0:
-			var w = actual_cam_width if actual_cam_width > 0 else 640
-			display_focal = w / (2.0 * tan(fov * PI / 180.0 * 0.5))
+		var dev_cal = gs.get_device_calibration()
+		var bio_cal = gs.get_bio_calibration()
+		lines.append("\n[b]Calibration Status:[/b]")
+		lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
+		lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
+
 		lines.append("\n[b]Camera Feed:[/b]")
 		lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
-		lines.append("  Focal Length: [color=yellow]%.1f px%s[/color]" % [display_focal, " (Auto)" if focal == null or focal <= 0.0 else ""])
+	else:
+		metrics_lbl.text = "[color=red]Neither Tracker nor GazeServer found.[/color]"
+		return
 
 	lines.append("\n[b]Environment Details:[/b]")
-	lines.append("  Screen DPI: [color=yellow]%d[/color]" % DisplayServer.screen_get_dpi())
+	var dpi_val = DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96
+	lines.append("  Screen DPI: [color=yellow]%d[/color]" % dpi_val)
 	lines.append("  Device Scale: [color=yellow]%.2f[/color]" % (1.0 if OS.get_name() != "macOS" else 2.0))
 
 	var new_text = "\n".join(lines)
@@ -356,7 +415,7 @@ func _on_copy_button_pressed():
 		"head_rotation_deg": null,
 		"device_calibration": null,
 		"bio_calibration": null,
-		"screen_dpi": DisplayServer.screen_get_dpi(),
+		"screen_dpi": DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96,
 		"camera_width_height": null,
 		"camera_focal_length": null
 	}
@@ -382,8 +441,21 @@ func _on_copy_button_pressed():
 		var gaze_dir = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else null
 		if gaze_dir:
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
+	else:
+		var gs = Engine.get_singleton("GazeServer")
+		if gs:
+			data["gaze_tracker_active"] = gs.is_tracking_active()
+			var ev = gs.get_most_recent_event()
+			if ev is InputEventGaze and ev.is_face_tracked():
+				data["face_detected"] = true
+				data["head_translation_mm"] = [ev.head_transform.origin.x, ev.head_transform.origin.y, ev.head_transform.origin.z]
+				var rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
+				data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
+				var gaze_dir = -ev.gaze_transform.basis.z
+				data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
 
-	DisplayServer.clipboard_set(JSON.stringify(data, "  "))
+	if Engine.has_singleton("DisplayServer"):
+		DisplayServer.clipboard_set(JSON.stringify(data, "  "))
 	if copy_btn:
 		copy_btn.text = "✅ Copied!"
 		await get_tree().create_timer(2.0).timeout
@@ -402,59 +474,61 @@ func _on_overlay_draw():
 		active_canvas = null
 
 func _perform_drawing():
-	if not is_instance_valid(tracker):
-		return
-	if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
-		face_estimator = tracker.call("get_face_estimator") if tracker.has_method("get_face_estimator") else null
-		camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
-	
-	if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
-		return
-		
-	var has_face = face_estimator.get("has_detected_face")
-	if has_face == null or not has_face:
-		return
-
 	var rect = get_texture_rect("CameraFeedRect")
 	if not rect or rect.texture == null:
 		return
 
 	var drawn_rect = get_texture_drawn_rect(rect)
-
 	var tex_size = rect.texture.get_size()
 	var img_w = tex_size.x
 	var img_h = tex_size.y
 	if img_w <= 0 or img_h <= 0:
 		return
 
-	var focal_len = camera_sensor.get("focal_length") if is_instance_valid(camera_sensor) else -1.0
-	if focal_len == null or focal_len <= 0.0:
-		focal_len = img_w
-		
+	var focal_len = img_w
 	var cx = img_w / 2.0
 	var cy = img_h / 2.0
 
-	var xform = face_estimator.get("transform") if is_instance_valid(face_estimator) else null
-	if xform == null:
-		xform = Transform3D()
+	var xform = Transform3D()
+	var landmarks_2d = []
+	var raw_gaze = Vector3(0, 0, 1)
+
+	if is_instance_valid(tracker):
+		if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
+			face_estimator = tracker.call("get_face_estimator") if tracker.has_method("get_face_estimator") else null
+			camera_sensor = tracker.call("get_camera_sensor") if tracker.has_method("get_camera_sensor") else null
+		if not is_instance_valid(face_estimator) or not is_instance_valid(camera_sensor):
+			return
+		var has_face = face_estimator.get("has_detected_face")
+		if has_face == null or not has_face:
+			return
+		var f_val = camera_sensor.get("focal_length")
+		if f_val and f_val > 0.0: focal_len = f_val
+		xform = face_estimator.get("transform") if face_estimator.get("transform") != null else Transform3D()
+		landmarks_2d = tracker.call("get_face_landmarks_2d") if tracker.has_method("get_face_landmarks_2d") else []
+		raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3(0, 0, 1)
+	else:
+		var gs = Engine.get_singleton("GazeServer")
+		if not gs: return
+		var ev = gs.get_most_recent_event()
+		if not (ev is InputEventGaze) or not ev.is_face_tracked(): return
+		xform = ev.head_transform
+		landmarks_2d = gs.get_debug_landmarks()
+		raw_gaze = -ev.gaze_transform.basis.z
 
 	if abs(xform.origin.z) <= 0.01:
 		return
 
-	# Authoritative canonical 3D Face Model Points exposed from C++ FaceModelGeometry / GazeServer
-	var model_points = tracker.call("get_face_model_points") if tracker.has_method("get_face_model_points") else []
-	if model_points.is_empty():
-		return
+	# Authoritative canonical 3D Face Model Points
+	var model_points = tracker.call("get_face_model_points") if is_instance_valid(tracker) and tracker.has_method("get_face_model_points") else []
 
-	var landmarks_2d = tracker.call("get_face_landmarks_2d") if tracker.has_method("get_face_landmarks_2d") else []
 	var drawn_pts = []
-
 	if not landmarks_2d.is_empty() and landmarks_2d.size() == 35:
 		for pt_px in landmarks_2d:
 			var local_pt = Vector2(pt_px.x * drawn_rect.size.x / img_w, pt_px.y * drawn_rect.size.y / img_h) + drawn_rect.position
 			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 			drawn_pts.append(screen_pt)
-	else:
+	elif not model_points.is_empty():
 		# Fallback to 3D projection if 2D landmarks not available
 		for p_face in model_points:
 			var p_cam = xform * p_face
@@ -468,24 +542,19 @@ func _perform_drawing():
 				var screen_pt = rect.global_position + local_pt - active_canvas.global_position
 				drawn_pts.append(screen_pt)
 
-	# Draws high-fidelity landmark points (Cyan)
+	# Draws landmark points (Cyan)
 	for pt in drawn_pts:
 		if pt != Vector2.INF:
 			gd_draw_circle(pt, 3.5, Color(0.0, 0.85, 1.0, 0.95))
 
-	# Connect 35-point facial landmark wireframe (jawline, eyebrows, nose, mouth, eyes)
+	# Connect 35-point facial landmark wireframe
 	var connections = []
 	if drawn_pts.size() >= 35:
-		# Jawline contour (18..34)
 		for i in range(18, 34):
 			connections.append([i, i + 1])
-		# Eyebrows (12..14, 15..17)
 		connections.append_array([[12, 13], [13, 14], [15, 16], [16, 17]])
-		# Nose ridge and wings (4..7)
 		connections.append_array([[4, 5], [6, 7], [4, 6], [4, 7]])
-		# Mouth contours (8..11)
 		connections.append_array([[8, 10], [10, 9], [9, 11], [11, 8]])
-		# Eye canthi (0..3)
 		connections.append_array([[0, 1], [2, 3]])
 
 	for conn in connections:
@@ -495,7 +564,6 @@ func _perform_drawing():
 			if p1 != Vector2.INF and p2 != Vector2.INF:
 				gd_draw_line(p1, p2, Color(0.0, 0.85, 1.0, 0.75), 2.0)
 
-	# Helper to convert camera-space 3D point to overlay 2D screen coordinate
 	var cam_to_screen = func(p_cam: Vector3) -> Vector2:
 		if p_cam.z <= 0.01:
 			return Vector2.INF
@@ -504,15 +572,12 @@ func _perform_drawing():
 		var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
 		return rect.global_position + local_pt - active_canvas.global_position
 
-	# =========================================================================
-	# 1. NOSE / HEAD POSE 3-AXIS ORIENTATION INDICATOR (~10cm in camera basis)
-	# =========================================================================
+	# Nose 3-axis indicator
 	var nose_origin_3d = xform.origin
-	var head_axis_len = 100.0 # 100 mm = 10 cm
-
+	var head_axis_len = 100.0
 	var nose_x_3d = nose_origin_3d + xform.basis.x * head_axis_len
 	var nose_y_3d = nose_origin_3d + xform.basis.y * head_axis_len
-	var nose_fwd_3d = nose_origin_3d - xform.basis.z * head_axis_len # Local -Z is head forward
+	var nose_fwd_3d = nose_origin_3d - xform.basis.z * head_axis_len
 
 	var pt_nose_org = cam_to_screen.call(nose_origin_3d)
 	var pt_nose_x = cam_to_screen.call(nose_x_3d)
@@ -520,55 +585,24 @@ func _perform_drawing():
 	var pt_nose_fwd = cam_to_screen.call(nose_fwd_3d)
 
 	if pt_nose_org != Vector2.INF:
-		# Transparent +X axis (Red, alpha ~0.35)
-		if pt_nose_x != Vector2.INF:
-			gd_draw_line(pt_nose_org, pt_nose_x, Color(1.0, 0.2, 0.2, 0.35), 2.0)
-		# Transparent +Y axis (Green, alpha ~0.35)
-		if pt_nose_y != Vector2.INF:
-			gd_draw_line(pt_nose_org, pt_nose_y, Color(0.2, 1.0, 0.2, 0.35), 2.0)
-		# Saturated -Z Head Forward vector (Cyan, alpha 1.0, thick line + tip circle)
+		if pt_nose_x != Vector2.INF: gd_draw_line(pt_nose_org, pt_nose_x, Color(1.0, 0.2, 0.2, 0.35), 2.0)
+		if pt_nose_y != Vector2.INF: gd_draw_line(pt_nose_org, pt_nose_y, Color(0.2, 1.0, 0.2, 0.35), 2.0)
 		if pt_nose_fwd != Vector2.INF:
 			gd_draw_line(pt_nose_org, pt_nose_fwd, Color(0.0, 0.95, 1.0, 1.0), 3.5)
-			gd_draw_circle(pt_nose_fwd, 4.5, Color(0.0, 0.95, 1.0, 1.0))
 
-	# =========================================================================
-	# 2. EYE GAZE 3-AXIS ORIENTATION INDICATOR (~10cm in camera basis)
-	# =========================================================================
-	var eye_mid_local = (model_points[0] + model_points[2]) * 0.5
-	var eye_origin_3d = xform * eye_mid_local
-	var raw_gaze = tracker.call("get_gaze_direction") if tracker.has_method("get_gaze_direction") else Vector3(0.0, 0.0, 1.0)
+	# Eye Gaze indicator
+	var eye_origin_3d = xform.origin
 	if raw_gaze.length_squared() < 0.001:
 		raw_gaze = Vector3(0.0, 0.0, 1.0)
 	var eye_fwd = raw_gaze.normalized()
 
-	# Construct orthonormal orientation basis for eye gaze vector
-	var eye_up_ref = Vector3(0.0, 1.0, 0.0)
-	if abs(eye_fwd.dot(eye_up_ref)) > 0.95:
-		eye_up_ref = Vector3(1.0, 0.0, 0.0)
-	var eye_right_vec = eye_up_ref.cross(eye_fwd).normalized()
-	var eye_up_vec = eye_fwd.cross(eye_right_vec).normalized()
-
-	var eye_axis_len = 100.0 # 100 mm = 10 cm
-	var eye_x_3d = eye_origin_3d + eye_right_vec * (eye_axis_len * 0.6)
-	var eye_y_3d = eye_origin_3d + eye_up_vec * (eye_axis_len * 0.6)
+	var eye_axis_len = 100.0
 	var eye_fwd_3d = eye_origin_3d + eye_fwd * eye_axis_len
-
 	var pt_eye_org = cam_to_screen.call(eye_origin_3d)
-	var pt_eye_x = cam_to_screen.call(eye_x_3d)
-	var pt_eye_y = cam_to_screen.call(eye_y_3d)
 	var pt_eye_fwd = cam_to_screen.call(eye_fwd_3d)
 
-	if pt_eye_org != Vector2.INF:
-		# Transparent +X coordinate (Red, alpha ~0.35)
-		if pt_eye_x != Vector2.INF:
-			gd_draw_line(pt_eye_org, pt_eye_x, Color(1.0, 0.3, 0.3, 0.35), 2.0)
-		# Transparent +Y coordinate (Green, alpha ~0.35)
-		if pt_eye_y != Vector2.INF:
-			gd_draw_line(pt_eye_org, pt_eye_y, Color(0.3, 1.0, 0.3, 0.35), 2.0)
-		# Saturated forward Eye Gaze vector (Lime Green, alpha 1.0, thick line + diamond)
-		if pt_eye_fwd != Vector2.INF:
-			gd_draw_line(pt_eye_org, pt_eye_fwd, Color(0.2, 1.0, 0.1, 1.0), 3.5)
-			gd_draw_circle(pt_eye_fwd, 4.5, Color(0.2, 1.0, 0.1, 1.0))
+	if pt_eye_org != Vector2.INF and pt_eye_fwd != Vector2.INF:
+		gd_draw_line(pt_eye_org, pt_eye_fwd, Color(0.2, 1.0, 0.1, 1.0), 3.5)
 
 func gd_draw_circle(pos: Vector2, radius: float, color: Color):
 	if active_canvas:

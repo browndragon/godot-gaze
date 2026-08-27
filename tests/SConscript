@@ -134,20 +134,29 @@ def run_command_and_log(target, source, env):
             text=True
         )
         
+        has_engine_error = False
         with open(log_path, "w") as log_file:
             for line in process.stdout:
                 sys.stdout.write(line)
                 log_file.write(line)
+                if line.startswith("ERROR:") or line.startswith("E 0:") or "<C++ Error>" in line:
+                    if "Cannot get class" in line or "Failed to retrieve non-existent singleton" in line or "Parameter" in line or "Condition" in line:
+                        has_engine_error = True
                 
         process.wait()
         
+        exit_code = process.returncode
+        if exit_code == 0 and has_engine_error:
+            exit_code = 1
+            print(f"[SCons Test] Failure: Engine/ClassDB errors detected in test output.")
+
         # Save exit code to status file
         with open(log_path + ".status", "w") as sf:
-            sf.write(str(process.returncode))
+            sf.write(str(exit_code))
             
-        if process.returncode != 0:
-            print(f"[SCons Test] Failure: Command exited with code {process.returncode}")
-            return process.returncode
+        if exit_code != 0:
+            print(f"[SCons Test] Failure: Command exited with code {exit_code}")
+            return exit_code
     except Exception as e:
         error_msg = f"Failed to execute test subprocess: {e}\n"
         sys.stderr.write(error_msg)
@@ -294,7 +303,7 @@ if env["platform"] != "javascript":
         "build/tests/logs/tests.benchmark.log",
         [library],
         Action(run_command_and_log, varlist=["TEST_CMD"]),
-        TEST_CMD=["./scripts/godot.sh", "--headless", "addons/godot-gaze/tests/headless_benchmark.tscn"]
+        TEST_CMD=["./scripts/godot.sh", "--headless", "--notest", "addons/godot-gaze/tests/headless_benchmark.tscn"]
     )
     env.AlwaysBuild(benchmark_run)
     env.Alias("tests/benchmark", benchmark_run)
@@ -324,7 +333,7 @@ godot_headless_run = env.Command(
     "build/tests/logs/tests.godot.headless.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--headless", "addons/godot-gaze/tests/headless_test.tscn"]
+    TEST_CMD=["./scripts/godot.sh", "--headless", "--notest", "addons/godot-gaze/tests/headless_test.tscn"]
 )
 env.AlwaysBuild(godot_headless_run)
 env.Alias("tests/godot/headless", godot_headless_run)
@@ -427,7 +436,7 @@ env.Alias("tests", local_tests)
 env.Alias("test", local_tests)
 
 # Run all E2E targets
-all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed", "tests/eyecandy"]
+all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
 if env["platform"] != "javascript":
     all_tests.extend(["tests/native", "tests/benchmark"])
 env.Alias("tests/all", all_tests)

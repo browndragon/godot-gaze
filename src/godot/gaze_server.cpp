@@ -13,6 +13,7 @@
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/time.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/resource_loader.hpp>
 #include <cmath>
 #include <vector>
 #include <algorithm>
@@ -158,6 +159,12 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_bio_calibration", "calibration"), &GazeServer::set_bio_calibration);
     ClassDB::bind_method(D_METHOD("get_bio_calibration"), &GazeServer::get_bio_calibration);
 
+    // Event Factory
+    ClassDB::bind_method(D_METHOD("set_event_factory", "factory"), &GazeServer::set_event_factory);
+    ClassDB::bind_method(D_METHOD("get_event_factory"), &GazeServer::get_event_factory);
+    ClassDB::bind_method(D_METHOD("create_default_event"), &GazeServer::create_default_event);
+    ClassDB::bind_method(D_METHOD("create_default_missing_event", "reason"), &GazeServer::create_default_missing_event);
+
     // Emulation
     ClassDB::bind_method(D_METHOD("set_emulate_gaze_from_mouse", "enable"), &GazeServer::set_emulate_gaze_from_mouse);
     ClassDB::bind_method(D_METHOD("get_emulate_gaze_from_mouse"), &GazeServer::get_emulate_gaze_from_mouse);
@@ -167,6 +174,12 @@ void GazeServer::_bind_methods() {
     // Debug Frame Access
     ClassDB::bind_method(D_METHOD("get_camera_texture"), &GazeServer::get_camera_texture);
     ClassDB::bind_method(D_METHOD("get_debug_landmarks"), &GazeServer::get_debug_landmarks);
+    ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "requested"), &GazeServer::camera_set_preview_requested);
+    ClassDB::bind_method(D_METHOD("is_camera_preview_requested"), &GazeServer::is_camera_preview_requested);
+    ClassDB::bind_method(D_METHOD("get_default_camera_rid"), &GazeServer::get_default_camera_rid);
+    ClassDB::bind_method(D_METHOD("get_default_display_rid"), &GazeServer::get_default_display_rid);
+    ClassDB::bind_method(D_METHOD("get_default_face_rid"), &GazeServer::get_default_face_rid);
+    ClassDB::bind_method(D_METHOD("get_default_eye_rid"), &GazeServer::get_default_eye_rid);
 
     // RID Resource Management
     ClassDB::bind_method(D_METHOD("display_create"), &GazeServer::display_create);
@@ -245,6 +258,12 @@ GazeServer::GazeServer() {
     default_face_rid = face_tracker_create(default_camera_rid);
     default_eye_rid = eye_tracker_create(default_face_rid);
 
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs) {
+        RID default_vision_cam = vs->camera_create();
+        camera_set_vision_rid(default_camera_rid, default_vision_cam);
+    }
+
     Ref<OneEuroSmoother> sm;
     sm.instantiate();
     eye_tracker_set_smoother(default_eye_rid, sm);
@@ -269,6 +288,12 @@ GazeServer::GazeServer() {
         if (ps->has_setting("gaze/pointing/emulate_mouse_from_gaze")) {
             emulate_mouse_from_gaze = ps->get_setting("gaze/pointing/emulate_mouse_from_gaze");
         }
+    }
+
+    if (event_factory.is_null()) {
+        Ref<GazeServerEventFactory> def_factory;
+        def_factory.instantiate();
+        event_factory = def_factory;
     }
 
 #ifndef WEB_ENABLED
@@ -300,6 +325,25 @@ GazeServer::~GazeServer() {
         active_trackers = 0;
     }
     stop_processing();
+
+    // Free all allocated resources (eyes, faces, cameras, displays)
+    std::vector<RID> eyes_to_free = impl->allocated_eyes;
+    for (RID r : eyes_to_free) {
+        eye_tracker_free(r);
+    }
+    std::vector<RID> faces_to_free = impl->allocated_faces;
+    for (RID r : faces_to_free) {
+        face_tracker_free(r);
+    }
+    std::vector<RID> cameras_to_free = impl->allocated_cameras;
+    for (RID r : cameras_to_free) {
+        camera_free(r);
+    }
+    std::vector<RID> displays_to_free = impl->allocated_displays;
+    for (RID r : displays_to_free) {
+        display_free(r);
+    }
+
 #ifndef WEB_ENABLED
     if (pipeline) {
         for (size_t i = 0; i < pipeline->frame_pool.size; ++i) {
@@ -319,6 +363,20 @@ GazeServer::~GazeServer() {
     Gaze::log_info(2, "GazeServer_Destructor_Finished");
 }
 
+void GazeServer::ensure_process_connected() {
+    if (active_trackers <= 0) return;
+    Engine *eng = Engine::get_singleton();
+    if (eng) {
+        MainLoop *ml = eng->get_main_loop();
+        if (ml) {
+            SceneTree *st = Object::cast_to<SceneTree>(ml);
+            if (st && !st->is_connected("process_frame", Callable(this, "trigger_process"))) {
+                st->connect("process_frame", Callable(this, "trigger_process"));
+            }
+        }
+    }
+}
+
 bool GazeServer::start_tracking() {
     bool was_zero = false;
     {
@@ -327,6 +385,8 @@ bool GazeServer::start_tracking() {
         if (active_trackers == 1) {
             was_zero = true;
             start_processing();
+        } else {
+            ensure_process_connected();
         }
     }
     return was_zero;
@@ -402,6 +462,131 @@ Ref<BioCalibration> GazeServer::get_bio_calibration() const {
     return default_bio_calibration;
 }
 
+void GazeServer::set_event_factory(const Ref<GazeEventFactory>& p_factory) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    if (p_factory.is_valid()) {
+        event_factory = p_factory;
+    } else {
+        Ref<GazeServerEventFactory> def_factory;
+        def_factory.instantiate();
+        event_factory = def_factory;
+    }
+}
+
+void GazeServer::initialize_scene_resources() {
+    _ensure_event_factory_loaded();
+}
+
+void GazeServer::_ensure_event_factory_loaded() {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    if (event_factory.is_valid() && Object::cast_to<GazeServerEventFactory>(event_factory.ptr()) == nullptr) {
+        return; // Already has custom factory
+    }
+    ProjectSettings *ps = ProjectSettings::get_singleton();
+    if (ps && ps->has_setting("gaze/events/event_factory_path")) {
+        String factory_path = ps->get_setting("gaze/events/event_factory_path");
+        if (!factory_path.is_empty()) {
+            ResourceLoader *rl = ResourceLoader::get_singleton();
+            if (rl) {
+                Ref<Resource> res = rl->load(factory_path);
+                if (res.is_valid()) {
+                    GazeEventFactory *fact = Object::cast_to<GazeEventFactory>(res.ptr());
+                    if (fact) {
+                        event_factory = fact;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    if (event_factory.is_null()) {
+        Ref<GazeServerEventFactory> def_factory;
+        def_factory.instantiate();
+        event_factory = def_factory;
+    }
+}
+
+Ref<GazeEventFactory> GazeServer::get_event_factory() {
+    _ensure_event_factory_loaded();
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return event_factory;
+}
+
+Ref<InputEventGaze> GazeServer::create_default_event() {
+    _ensure_event_factory_loaded();
+    Ref<InputEventGaze> event;
+    event.instantiate();
+    event->set_frame_id(++current_frame_id);
+    event->set_timestamp_usec(Time::get_singleton()->get_ticks_usec());
+
+    if (active_read_data) {
+        event->set_left_eye_openness(active_read_data->left_eye_openness);
+        event->set_right_eye_openness(active_read_data->right_eye_openness);
+    } else {
+        event->set_left_eye_openness(1.0f);
+        event->set_right_eye_openness(1.0f);
+    }
+
+    Vector2 local_pos = default_eye_rid.is_valid() ? get_projected_gaze_from_eye_tracker(default_eye_rid, true) : Vector2(0, 0);
+    Vector2 win_pos = Vector2(0, 0);
+    DisplayInfo *disp = default_display_rid.is_valid() ? impl->display_owner.get_or_null(default_display_rid) : nullptr;
+    if (disp) {
+        win_pos = disp->window_position_px;
+    }
+    Vector2 screen_pos = local_pos + win_pos;
+
+    uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
+    float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
+    if (dt < 0.0001f) dt = 0.0001f;
+
+    Vector2 rel = local_pos - last_gaze_pos;
+    Vector2 screen_rel = screen_pos - last_screen_pos;
+    Vector2 vel = rel / dt;
+    Vector2 screen_vel = screen_rel / dt;
+
+    last_gaze_pos = local_pos;
+    last_screen_pos = screen_pos;
+    last_event_time_usec = now_usec;
+
+    event->set_position(local_pos);
+    event->set_global_position(local_pos);
+    event->set_screen_position(screen_pos);
+    event->set_relative(rel);
+    event->set_screen_relative(screen_rel);
+    event->set_velocity(vel);
+    event->set_screen_velocity(screen_vel);
+
+    Vector3 head_t = default_face_rid.is_valid() ? get_head_translation_from_face_tracker(default_face_rid) : Vector3();
+    Vector3 head_r = default_face_rid.is_valid() ? get_head_rotation_from_face_tracker(default_face_rid) : Vector3();
+    Basis head_basis = Basis::from_euler(head_r);
+    event->set_head_transform(Transform3D(head_basis, head_t));
+
+    Vector3 gaze_d = Vector3(0, 0, -1);
+    Vector3 gaze_o = Vector3(0, 0, 0);
+    if (active_read_data && active_read_data->gaze_success) {
+        gaze_d = reinterpret_cast<const Vector3&>(active_read_data->gaze_direction);
+        gaze_o = reinterpret_cast<const Vector3&>(active_read_data->gaze_origin);
+    }
+    Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
+    Basis gaze_basis = Basis::looking_at(norm_gaze_dir, Vector3(0, 1, 0));
+    event->set_gaze_transform(Transform3D(gaze_basis, gaze_o));
+
+    return event;
+}
+
+Ref<InputEventGazeMissing> GazeServer::create_default_missing_event(int p_reason) {
+    Ref<InputEventGazeMissing> event;
+    event.instantiate();
+    event->set_frame_id(++current_frame_id);
+    event->set_timestamp_usec(Time::get_singleton()->get_ticks_usec());
+    event->set_reason(static_cast<InputEventGazeMissing::MissingReason>(p_reason));
+    if (active_read_data) {
+        event->set_left_eye_openness(active_read_data->left_eye_openness);
+        event->set_right_eye_openness(active_read_data->right_eye_openness);
+    }
+    return event;
+}
+
 void GazeServer::set_emulate_gaze_from_mouse(bool p_enable) {
     emulate_gaze_from_mouse = p_enable;
 }
@@ -424,6 +609,22 @@ Ref<Texture2D> GazeServer::get_camera_texture() {
     CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
     if (!cam || !cam->vision_camera_rid.is_valid()) return Ref<Texture2D>();
     return vs->get_camera_current_texture(cam->vision_camera_rid);
+}
+
+void GazeServer::camera_set_preview_requested(bool p_requested) {
+    VisionServer* vs = VisionServer::get_singleton();
+    if (!vs) return;
+    CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
+    if (!cam || !cam->vision_camera_rid.is_valid()) return;
+    vs->camera_set_preview_requested(cam->vision_camera_rid, p_requested);
+}
+
+bool GazeServer::is_camera_preview_requested() const {
+    VisionServer* vs = VisionServer::get_singleton();
+    if (!vs) return false;
+    CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
+    if (!cam || !cam->vision_camera_rid.is_valid()) return false;
+    return vs->camera_is_preview_requested(cam->vision_camera_rid);
 }
 
 PackedVector2Array GazeServer::get_debug_landmarks() const {
@@ -517,6 +718,13 @@ void GazeServer::camera_free(RID p_camera) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     CameraInfo *info = impl->camera_owner.get_or_null(p_camera);
     if (info) {
+        if (info->vision_camera_rid.is_valid()) {
+            VisionServer *vs = VisionServer::get_singleton();
+            if (vs) {
+                vs->camera_free(info->vision_camera_rid);
+            }
+            info->vision_camera_rid = RID();
+        }
         impl->allocated_cameras.erase(std::remove(impl->allocated_cameras.begin(), impl->allocated_cameras.end(), p_camera), impl->allocated_cameras.end());
         impl->camera_owner.free(p_camera);
         memdelete(info);
@@ -907,11 +1115,18 @@ void GazeServer::start_processing() {
     }
 #endif
 
-    // Connect to Main Loop process_frame
-    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && !st->is_connected("process_frame", Callable(this, "trigger_process"))) {
-        st->connect("process_frame", Callable(this, "trigger_process"));
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs) {
+        CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
+        if (cam) {
+            if (!cam->vision_camera_rid.is_valid()) {
+                cam->vision_camera_rid = vs->camera_create();
+            }
+            vs->camera_start(cam->vision_camera_rid);
+        }
     }
+
+    ensure_process_connected();
 }
 
 void GazeServer::stop_processing() {
@@ -925,6 +1140,14 @@ void GazeServer::stop_processing() {
         Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Finished");
     }
 #endif
+
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs) {
+        CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
+        if (cam && cam->vision_camera_rid.is_valid()) {
+            vs->camera_stop(cam->vision_camera_rid);
+        }
+    }
 
     SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
     if (st && st->is_connected("process_frame", Callable(this, "trigger_process"))) {
@@ -1017,56 +1240,38 @@ void GazeServer::trigger_process() {
 
             emit_signal("gaze_frame_began", gaze_frame);
 
+            if (active_read_data) {
+                pipeline->frame_pool.release(active_read_data);
+            }
+            active_read_data = completed_data;
+
             if (completed_data->face_detected) {
                 face_detected_this_frame = true;
-                Ref<InputEventGaze> event;
-                event.instantiate();
-                event->set_frame_id(++current_frame_id);
-                event->set_timestamp_usec(Time::get_singleton()->get_ticks_usec());
-                event->set_left_eye_openness(completed_data->left_eye_openness);
-                event->set_right_eye_openness(completed_data->right_eye_openness);
-
-                Vector2 local_pos = eye_rid.is_valid() ? get_projected_gaze_from_eye_tracker(eye_rid, true) : Vector2(0, 0);
-                Vector2 screen_pos = local_pos;
-                DisplayServer* ds = DisplayServer::get_singleton();
-                if (ds) {
-                    screen_pos += ds->window_get_position();
+                Ref<InputEventGazeBase> event;
+                if (event_factory.is_valid()) {
+                    if (event_factory->get_script().get_type() != Variant::NIL) {
+                        event = event_factory->call("create_gaze_event");
+                    } else {
+                        event = event_factory->create_gaze_event();
+                    }
+                }
+                if (event.is_null()) {
+                    event = create_default_event();
                 }
 
-                uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
-                float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
-                if (dt < 0.0001f) dt = 0.0001f;
-
-                Vector2 rel = local_pos - last_gaze_pos;
-                Vector2 screen_rel = screen_pos - last_screen_pos;
-                Vector2 vel = rel / dt;
-                Vector2 screen_vel = screen_rel / dt;
-
-                last_gaze_pos = local_pos;
-                last_screen_pos = screen_pos;
-                last_event_time_usec = now_usec;
-
-                event->set_position(local_pos);
-                event->set_global_position(local_pos);
-                event->set_screen_position(screen_pos);
-                event->set_relative(rel);
-                event->set_screen_relative(screen_rel);
-                event->set_velocity(vel);
-                event->set_screen_velocity(screen_vel);
-
-                Basis head_basis = Basis::from_euler(head_r);
-                event->set_head_transform(Transform3D(head_basis, head_t));
-
-                Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
-                Basis gaze_basis = Basis::looking_at(norm_gaze_dir, Vector3(0, 1, 0));
-                event->set_gaze_transform(Transform3D(gaze_basis, gaze_o));
-
                 most_recent_event = event;
-                if (input) {
+                if (input && event.is_valid()) {
                     input->parse_input_event(event);
                 }
 
                 if (emulate_mouse_from_gaze && input) {
+                    Vector2 local_pos = default_eye_rid.is_valid() ? get_projected_gaze_from_eye_tracker(default_eye_rid, true) : Vector2(0, 0);
+                    Vector2 rel = local_pos - last_gaze_pos;
+                    uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
+                    float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
+                    if (dt < 0.0001f) dt = 0.0001f;
+                    Vector2 vel = rel / dt;
+
                     Ref<InputEventMouseMotion> mm;
                     mm.instantiate();
                     mm->set_position(local_pos);
@@ -1100,21 +1305,22 @@ void GazeServer::trigger_process() {
                     }
                 }
             } else {
-                Ref<InputEventGazeMissing> missing;
-                missing.instantiate();
-                missing->set_frame_id(++current_frame_id);
-                missing->set_timestamp_usec(Time::get_singleton()->get_ticks_usec());
-                missing->set_reason(InputEventGazeMissing::REASON_NO_FACE_DETECTED);
+                Ref<InputEventGazeBase> missing;
+                if (event_factory.is_valid()) {
+                    if (event_factory->get_script().get_type() != Variant::NIL) {
+                        missing = event_factory->call("create_missing_event", InputEventGazeMissing::REASON_NO_FACE_DETECTED);
+                    } else {
+                        missing = event_factory->create_missing_event(InputEventGazeMissing::REASON_NO_FACE_DETECTED);
+                    }
+                }
+                if (missing.is_null()) {
+                    missing = create_default_missing_event(InputEventGazeMissing::REASON_NO_FACE_DETECTED);
+                }
                 most_recent_event = missing;
-                if (input) {
+                if (input && missing.is_valid()) {
                     input->parse_input_event(missing);
                 }
             }
-
-            if (active_read_data) {
-                pipeline->frame_pool.release(active_read_data);
-            }
-            active_read_data = completed_data;
 
             emit_signal("gaze_frame_ready", gaze_frame);
         }

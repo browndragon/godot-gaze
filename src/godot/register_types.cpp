@@ -5,7 +5,6 @@
 #include "gaze_pipeline_config.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
-#include "display_profile.hpp"
 #include "vision_server.hpp"
 #include "gaze_server.hpp"
 #include "gaze_frame.hpp"
@@ -273,8 +272,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         });
 
         // Register all classes needed by GazeServer, VisionServer, and GDScript
-        ClassDB::register_class<DisplayProfile>();
-
         ClassDB::register_class<InputEventGazeBase>();
         ClassDB::register_class<InputEventGaze>();
         ClassDB::register_class<InputEventGazeMissing>();
@@ -289,6 +286,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         ClassDB::register_class<DeviceCalibration>();
         ClassDB::register_class<GuessDeviceCalibration>();
         ClassDB::register_class<StoredDeviceCalibration>();
+        ClassDB::register_class<MockDeviceCalibration>();
         ClassDB::register_class<DefaultDeviceCalibration>();
 
         ClassDB::register_class<BioCalibration>();

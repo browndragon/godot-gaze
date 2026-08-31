@@ -8,7 +8,8 @@
 #include <godot_cpp/variant/array.hpp>
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/variant/vector3.hpp>
-#include <godot_cpp/variant/dictionary.hpp>
+#include <godot_cpp/classes/ref.hpp>
+#include "gaze_calibration_resource.hpp"
 
 namespace godot {
 
@@ -21,6 +22,9 @@ private:
     Array gaze_origins;
     Array gaze_directions;
 
+    Ref<DeviceCalibration> result_device_calibration;
+    Ref<BioCalibration> result_bio_calibration;
+
 protected:
     static void _bind_methods();
 
@@ -32,7 +36,10 @@ public:
     void clear();
     int get_sample_count() const;
 
-    Dictionary calculate_calibration(Object *tracker = nullptr);
+    bool calculate_calibration(const Ref<DeviceCalibration>& p_initial_device_calib = nullptr);
+
+    Ref<DeviceCalibration> get_device_calibration() const { return result_device_calibration; }
+    Ref<BioCalibration> get_bio_calibration() const { return result_bio_calibration; }
 
     // Getters and setters for properties to allow serialization
     void set_freeze_camera_params(bool p_freeze) { freeze_camera_params = p_freeze; }

@@ -23,6 +23,7 @@ struct GazeFrameData {
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
 
+    GazeTransform3D head_transform;
     GazeVector3 head_translation;
     GazeVector3 head_rotation;
     GazeVector3 gaze_origin;

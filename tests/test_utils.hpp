@@ -63,6 +63,9 @@ namespace GazeTest
         uint8_t *out_right_crop_bgr, uint8_t *out_left_crop_bgr,
         float scale_factor = 1.5f)
     {
+        // In OpenVINO ADAS 35-point landmarks:
+        // pts 0..1 = Image Left Eye (Anatomical Right Eye)
+        // pts 2..3 = Image Right Eye (Anatomical Left Eye)
         float r_cx = (landmarks_35[0].x + landmarks_35[1].x) * 0.5f;
         float r_cy = (landmarks_35[0].y + landmarks_35[1].y) * 0.5f;
         float r_dx = landmarks_35[0].x - landmarks_35[1].x;

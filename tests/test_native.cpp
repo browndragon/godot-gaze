@@ -175,9 +175,9 @@ TEST_CASE("Testing Viewport and High-DPI Projection Coordinates")
     engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
     engine.set_camera_placement(CameraPlacement(GazeVector3(0, 0, 0), 0.0));
 
-    // Staring at the center of the screen
+    // Staring at the center of the screen (170mm below top bezel camera)
     GazeVector3 origin(0.0, 0.0, -600.0);
-    GazeVector3 direction(0.0, 0.0, 1.0);
+    GazeVector3 direction = GazeVector3(0.0, -170.0, 600.0).normalized();
     GazeVector2 pixel;
     REQUIRE(engine.project_gaze(origin, direction, pixel) == true);
 
@@ -1447,6 +1447,102 @@ TEST_CASE("Testing GazeTrackingPipeline Thread-Safety and Race Conditions")
     pipeline.stop();
 }
 
+TEST_CASE("Testing GazeTrackingPipeline Godot Camera Space Invariance Across Benchmark Fixtures")
+{
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
+    std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
+    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
+
+    REQUIRE(!yunet_data.empty());
+    REQUIRE(!gaze_data.empty());
+    REQUIRE(!eye_data.empty());
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_data, gaze_data, eye_data) == true);
+    pipeline.start();
+
+    auto process_fixture = [&](const std::string &filename) -> GazeFrameData {
+        pipeline.clear_work_queue();
+        LoadedImage img = load_test_image("tests/resources/" + filename);
+        REQUIRE(!img.data.empty());
+        GazeFrameData *req = pipeline.frame_pool.take();
+        REQUIRE(req != nullptr);
+        req->camera_raw_bgr = img.data;
+        req->camera_width = img.width;
+        req->camera_height = img.height;
+        req->timestamp = 1.0;
+        req->face_rid_val = 1;
+        req->eye_rid_val = 2;
+        pipeline.push_frame_request(req);
+
+        GazeFrameData result;
+        GazeFrameData *res = nullptr;
+        for (int retry = 0; retry < 500; ++retry) {
+            if (pipeline.pop_result(&res)) {
+                result = *res;
+                pipeline.frame_pool.release(res);
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
+        return result;
+    };
+
+    // 1. self_center.jpg: Facing camera, head below camera
+    {
+        GazeFrameData res = process_fixture("self_center.jpg");
+        REQUIRE(res.face_detected == true);
+        REQUIRE(res.gaze_success == true);
+
+        // In Godot Camera Space, head in front of camera is along -Z, below camera is along -Y
+        CHECK(res.head_translation.z < -200.0f);
+        CHECK(res.head_translation.y < 0.0f);
+
+        // Head transform origin matches head_translation in Godot Camera Space
+        CHECK(res.head_transform.origin.x == doctest::Approx(res.head_translation.x));
+        CHECK(res.head_transform.origin.y == doctest::Approx(res.head_translation.y));
+        CHECK(res.head_transform.origin.z == doctest::Approx(res.head_translation.z));
+
+        // Forward vector -basis.z points towards the camera/screen (+Z > 0)
+        GazeVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.z > 0.9f);
+        CHECK(std::abs(head_fwd.x) < 0.15f);
+
+        // Gaze direction points towards the screen (+Z > 0)
+        CHECK(res.gaze_direction.z > 0.85f);
+    }
+
+    // 2. self_left_left.jpg: Head turned left (viewer left / Camera Right, +X in Godot Camera Space), Gaze looking viewer left (+X in Godot Camera Space)
+    {
+        GazeFrameData res = process_fixture("self_left_left.jpg");
+        REQUIRE(res.face_detected == true);
+        REQUIRE(res.gaze_success == true);
+
+        GazeVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.x > 0.05f);
+        CHECK(head_fwd.z > 0.85f);
+        CHECK(res.gaze_direction.x > 0.05f);
+    }
+
+    // 3. self_right_right.jpg: Head turned right (viewer right / Camera Left, -X in Godot Camera Space), Gaze looking viewer right (-X in Godot Camera Space)
+    {
+        GazeFrameData res = process_fixture("self_right_right.jpg");
+        REQUIRE(res.face_detected == true);
+        REQUIRE(res.gaze_success == true);
+
+        GazeVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.x < -0.05f);
+        CHECK(head_fwd.z > 0.85f);
+        CHECK(res.gaze_direction.x < -0.05f);
+    }
+
+    pipeline.stop();
+}
+
 TEST_CASE("Testing resize_bgr_to_rgb bilinear filtering and color swap")
 {
     // 2x2 source BGR image:
@@ -1680,7 +1776,20 @@ TEST_CASE("Testing BioCalibration Isolation on Eye Gaze vs Nose Gaze")
     CHECK(biased_dir_cal.x != doctest::Approx(uncal_dir.x));
     CHECK(biased_dir_cal.y != doctest::Approx(uncal_dir.y));
 
-    // Head pose / Nose gaze ray MUST remain uncalibrated (must NOT apply 3D bio bias)
+    // 3. Head pose / Nose gaze ray MUST remain uncalibrated
+    CHECK(head_fwd.x == doctest::Approx(0.0));
+    CHECK(head_fwd.y == doctest::Approx(0.0));
+    CHECK(head_fwd.z == doctest::Approx(1.0));
+}
+
+TEST_CASE("Testing Full Pipeline Rotation Counter-Measures")
+{
+    // Test that head forward vector remains invariant under image rotation
+    GazeTransform3D t_unrot = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
+        GazeVector3(0.0, 0.0, 600.0),
+        GazeVector3(0.0, 0.0, 0.0)
+    );
+    GazeVector3 head_fwd = -t_unrot.basis.z.normalized();
     CHECK(head_fwd.x == doctest::Approx(0.0));
     CHECK(head_fwd.y == doctest::Approx(0.0));
     CHECK(head_fwd.z == doctest::Approx(1.0));
@@ -1747,27 +1856,27 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     CHECK(r_face_prod.y.y == doctest::Approx(1.0));
     CHECK(r_face_prod.z.z == doctest::Approx(1.0));
 
-    // 3. ONNX_GAZE_TO_GODOT_CAM Matrix Basis Properties (Inversion of Z axis)
+    // 3. ONNX_GAZE_TO_GODOT_CAM Matrix Basis Properties (diag(1, 1, -1))
     GazeBasis3D r_onnx = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM;
     CHECK(std::abs(r_onnx.determinant()) == doctest::Approx(1.0));
     
     // Test canonical gaze direction vector mapping:
-    // Gazing subject left / screen left (+x_onnx) -> +X_cam (camera right, which projects to screen left)
+    // Gazing subject right / display left (+x_onnx, -z_onnx forward) -> +X_cam (camera right / display left), +Z_cam (screen plane)
     GazeVector3 screen_left_gaze = r_onnx.multiply_vector(GazeVector3(0.5, 0.0, -0.866));
     CHECK(screen_left_gaze.x > 0.0);
     CHECK(screen_left_gaze.z > 0.0); // Points towards display screen plane (+Z)
 
-    // Gazing subject right / screen right (-x_onnx) -> -X_cam (camera left, which projects to screen right)
+    // Gazing subject left / display right (-x_onnx, -z_onnx forward) -> -X_cam (camera left / display right), +Z_cam
     GazeVector3 screen_right_gaze = r_onnx.multiply_vector(GazeVector3(-0.5, 0.0, -0.866));
     CHECK(screen_right_gaze.x < 0.0);
     CHECK(screen_right_gaze.z > 0.0);
 
-    // Looking UP (+y_onnx) -> +Y_cam (screen top)
+    // Looking UP (+y_onnx in OpenVINO space) -> +Y_cam (screen top)
     GazeVector3 up_gaze = r_onnx.multiply_vector(GazeVector3(0.0, 0.5, -0.866));
     CHECK(up_gaze.y > 0.0);
     CHECK(up_gaze.z > 0.0);
 
-    // Looking DOWN (-y_onnx) -> -Y_cam (screen bottom)
+    // Looking DOWN (-y_onnx in OpenVINO space) -> -Y_cam (screen bottom)
     GazeVector3 down_gaze = r_onnx.multiply_vector(GazeVector3(0.0, -0.5, -0.866));
     CHECK(down_gaze.y < 0.0);
     CHECK(down_gaze.z > 0.0);
@@ -1780,18 +1889,18 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     GazeVector3 fwd_zero = -transform_zero.basis.z.normalized();
     CHECK(fwd_zero.z > 0.9); // Points towards display screen plane (+Z_cam)
 
-    // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Viewer Right (+X_cam)
+    // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Viewer Right / Display Right (-X_cam)
     GazeVector3 rotation_left(0.0, -0.15, 0.0);
     GazeTransform3D transform_left = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
     GazeVector3 fwd_left = -transform_left.basis.z.normalized();
-    CHECK(fwd_left.x > 0.05); // Must point towards viewer right (+X_cam)
+    CHECK(fwd_left.x < -0.05); // Must point towards viewer right (-X_cam)
     CHECK(fwd_left.z > 0.9);
 
-    // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Viewer Left (-X_cam)
+    // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Viewer Left / Display Left (+X_cam)
     GazeVector3 rotation_right(0.0, 0.15, 0.0);
     GazeTransform3D transform_right = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
     GazeVector3 fwd_right = -transform_right.basis.z.normalized();
-    CHECK(fwd_right.x < -0.05); // Must point towards viewer left (-X_cam)
+    CHECK(fwd_right.x > 0.05); // Must point towards viewer left (+X_cam)
     CHECK(fwd_right.z > 0.9);
 }
 
@@ -1857,4 +1966,52 @@ TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
     CHECK(pnp_tvec.z == doctest::Approx(680.0).epsilon(0.05));
     CHECK(pnp_rvec.z == doctest::Approx(0.05).epsilon(0.05));
 }
+
+TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invariants")
+{
+    Gaze::GazeVector2 physical_size_mm(300.0, 200.0);
+    Gaze::GazeVector2 logical_size_px(1920.0, 1080.0);
+    
+    // Top-bezel camera placement: (0, 0, 0) relative to top-bezel center
+    Gaze::GazeVector3 default_cam_offset(0.0, 0.0, 0.0);
+    CHECK(default_cam_offset.y == doctest::Approx(0.0));
+
+    // Pixel size calculation: physical / logical
+    Gaze::GazeVector2 pixel_size_mm(physical_size_mm.x / logical_size_px.x, physical_size_mm.y / logical_size_px.y);
+    CHECK(pixel_size_mm.x == doctest::Approx(300.0 / 1920.0));
+    CHECK(pixel_size_mm.y == doctest::Approx(200.0 / 1080.0));
+
+    // Forward ray straight into camera from (0, 0, -500)
+    Gaze::GazeVector3 origin(0.0, 0.0, -500.0);
+    Gaze::GazeVector3 dir = Gaze::BACKWARD; // (0, 0, 1) in Godot Camera Space
+    Gaze::GazeVector2 pos_mm;
+    bool ok = Gaze::project_ray_to_screen_mm(origin, dir, default_cam_offset, 0.0, physical_size_mm, pos_mm);
+    REQUIRE(ok == true);
+    
+    // Straight-ahead ray hits camera position on screen plane (top-center: X=150mm, Y=0mm)
+    CHECK(pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
+    CHECK(pos_mm.y == doctest::Approx(0.0).epsilon(0.01));
+
+    // Screen pixel position: (960, 0)
+    double scale_x = logical_size_px.x / physical_size_mm.x;
+    double scale_y = logical_size_px.y / physical_size_mm.y;
+    Gaze::GazeVector2 screen_px(pos_mm.x * scale_x, pos_mm.y * scale_y);
+    CHECK(screen_px.x == doctest::Approx(960.0).epsilon(0.01));
+    CHECK(screen_px.y == doctest::Approx(0.0).epsilon(0.01));
+
+    // When window is offset at (100, 50), local pixel position is (860, -50)
+    Gaze::GazeVector2 window_pos(100.0, 50.0);
+    Gaze::GazeVector2 local_px = screen_px - window_pos;
+    CHECK(local_px.x == doctest::Approx(860.0).epsilon(0.01));
+    CHECK(local_px.y == doctest::Approx(-50.0).epsilon(0.01));
+
+    // Ray angled down toward screen center: origin=(0, 100, -500) pointing at (0, 0, 0) in screen coords
+    Gaze::GazeVector3 dir_to_center = GazeVector3(0.0, -100.0, 500.0).normalized();
+    GazeVector2 center_pos_mm;
+    bool center_ok = Gaze::project_ray_to_screen_mm(origin, dir_to_center, default_cam_offset, 0.0, physical_size_mm, center_pos_mm);
+    REQUIRE(center_ok == true);
+    CHECK(center_pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
+    CHECK(center_pos_mm.y == doctest::Approx(100.0).epsilon(0.01));
+}
+
 

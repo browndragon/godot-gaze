@@ -19,7 +19,6 @@
 #include "mouse_gaze_emulation.hpp"
 #include "gaze_pipeline_config.hpp"
 #include "gaze_frame.hpp"
-#include "display_profile.hpp"
 #include "input_event_gaze.hpp"
 #include "gaze_event_factory.hpp"
 #include "../core/gaze_frame_data.hpp"
@@ -61,7 +60,6 @@ private:
     RID default_face_rid;
     RID default_eye_rid;
 
-    Ref<DisplayProfile> default_display_profile;
     Ref<DeviceCalibration> default_device_calibration;
     Ref<BioCalibration> default_bio_calibration;
     Ref<GazeEventFactory> event_factory;
@@ -129,14 +127,13 @@ public:
 
     // --- Calibrations & Display Geometry ---
 
-    void set_display_profile(const Ref<DisplayProfile>& p_profile);
-    Ref<DisplayProfile> get_display_profile() const;
-
     void set_device_calibration(const Ref<DeviceCalibration>& p_calibration);
     Ref<DeviceCalibration> get_device_calibration() const;
 
     void set_bio_calibration(const Ref<BioCalibration>& p_calibration);
     Ref<BioCalibration> get_bio_calibration() const;
+
+    Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration = false) const;
 
     // --- Event Factory ---
 
@@ -183,7 +180,6 @@ public:
     void display_set_geometry(RID p_display, Vector2 p_logical_size, Vector2 p_physical_size);
     void display_set_device_calibration(RID p_display, const Ref<DeviceCalibration>& p_calibration);
     void display_set_bio_calibration(RID p_display, const Ref<BioCalibration>& p_calibration);
-    void display_set_window_parameters(RID p_display, Vector2 p_window_pos, Transform2D p_viewport_transform);
     void display_free(RID p_display);
 
     RID camera_create(RID p_display);
@@ -194,6 +190,7 @@ public:
     RID face_tracker_create(RID p_camera);
     PackedVector3Array get_face_model_points() const;
     void face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector3 p_rotation, bool p_detected);
+    void face_tracker_set_transform(RID p_face, const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected);
     void face_tracker_free(RID p_face);
 
     Vector3 get_head_rotation_from_face_tracker(RID p_face) const;

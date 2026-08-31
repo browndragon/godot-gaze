@@ -15,7 +15,9 @@ func _init():
 	print("GazeServer tracking started (step: ", started, "), running toggles...")
 	
 	var vs = Engine.get_singleton("VisionServer")
-	var cam_rid = vs.camera_create(0) if vs else RID()
+	var cam_rid = vs.camera_create() if vs else RID()
+	if vs and cam_rid.is_valid():
+		vs.camera_set_device_id(cam_rid, 0)
 	
 	# Loop toggles 15 times
 	for i in range(15):

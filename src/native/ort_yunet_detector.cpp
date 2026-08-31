@@ -237,13 +237,13 @@ namespace Gaze
                     int src_idx = (y * model_w + x) * 3;
                     int pixel_idx = y * model_w + x;
 
-                    float b = static_cast<float>(resized_bgr[src_idx + 0]);
-                    float g = static_cast<float>(resized_bgr[src_idx + 1]);
-                    float r = static_cast<float>(resized_bgr[src_idx + 2]);
+                    float c0 = static_cast<float>(resized_bgr[src_idx + 0]);
+                    float c1 = static_cast<float>(resized_bgr[src_idx + 1]);
+                    float c2 = static_cast<float>(resized_bgr[src_idx + 2]);
 
-                    input_tensor_data[0 * channel_size + pixel_idx] = b;
-                    input_tensor_data[1 * channel_size + pixel_idx] = g;
-                    input_tensor_data[2 * channel_size + pixel_idx] = r;
+                    input_tensor_data[0 * channel_size + pixel_idx] = c0;
+                    input_tensor_data[1 * channel_size + pixel_idx] = c1;
+                    input_tensor_data[2 * channel_size + pixel_idx] = c2;
                 }
             }
         }
@@ -313,10 +313,10 @@ namespace Gaze
                         GazeVector2 c3_crop((x_left + w) / scale + crop_x0, (y_top + h) / scale + crop_y0);
                         GazeVector2 c4_crop(x_left / scale + crop_x0, (y_top + h) / scale + crop_y0);
 
-                        GazeVector2 c1_orig = rotate_point_back(c1_crop, -roll_rad, width, height);
-                        GazeVector2 c2_orig = rotate_point_back(c2_crop, -roll_rad, width, height);
-                        GazeVector2 c3_orig = rotate_point_back(c3_crop, -roll_rad, width, height);
-                        GazeVector2 c4_orig = rotate_point_back(c4_crop, -roll_rad, width, height);
+                        GazeVector2 c1_orig = rotate_point_2d(c1_crop, roll_rad, width, height);
+                        GazeVector2 c2_orig = rotate_point_2d(c2_crop, roll_rad, width, height);
+                        GazeVector2 c3_orig = rotate_point_2d(c3_crop, roll_rad, width, height);
+                        GazeVector2 c4_orig = rotate_point_2d(c4_crop, roll_rad, width, height);
 
                         float orig_xmin = std::min({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
                         float orig_ymin = std::min({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
@@ -332,7 +332,7 @@ namespace Gaze
                             float crop_kx = kx / scale + crop_x0;
                             float crop_ky = ky / scale + crop_y0;
 
-                            ldm[j] = rotate_point_back(GazeVector2(crop_kx, crop_ky), -roll_rad, width, height);
+                            ldm[j] = rotate_point_2d(GazeVector2(crop_kx, crop_ky), roll_rad, width, height);
                         }
 
                         candidate_bboxes.push_back(GazeRect(orig_xmin, orig_ymin, orig_xmax - orig_xmin, orig_ymax - orig_ymin));
@@ -435,13 +435,13 @@ namespace Gaze
             float dynamic_crop_size = std::max(50.0f, ipd_px * 0.75f);
             float half_s = dynamic_crop_size * 0.5f;
 
-            crop_and_resize_bgr_to_rgb(
+            crop_and_resize_bgr(
                 frame.data, width, height,
                 out_result.left_eye_px.x - half_s, out_result.left_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.left_eye_crop, 60, 60
             );
 
-            crop_and_resize_bgr_to_rgb(
+            crop_and_resize_bgr(
                 frame.data, width, height,
                 out_result.right_eye_px.x - half_s, out_result.right_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
                 out_result.right_eye_crop, 60, 60

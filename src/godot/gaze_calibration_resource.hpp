@@ -6,6 +6,7 @@
 
 #include <godot_cpp/classes/resource.hpp>
 #include <godot_cpp/variant/vector2.hpp>
+#include <godot_cpp/variant/vector2i.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/ref.hpp>
 
@@ -15,7 +16,8 @@ class DeviceCalibration : public Resource {
     GDCLASS(DeviceCalibration, Resource);
 
 protected:
-    Vector2 pixel_size_mm = Vector2(-1.0, -1.0);
+    Vector2 physical_size_mm = Vector2(-1.0, -1.0);
+    Vector2i logical_size_px = Vector2i(0, 0);
     Vector3 camera_offset = Vector3(-1000.0, -1000.0, -1000.0);
     double camera_tilt = -1000.0;
 
@@ -25,17 +27,22 @@ public:
     DeviceCalibration() = default;
     virtual ~DeviceCalibration() = default;
 
-    virtual Vector2 get_pixel_size_mm(Object* tracker = nullptr) const;
-    virtual Vector3 get_camera_offset(Object* tracker = nullptr) const;
-    virtual double get_camera_tilt(Object* tracker = nullptr) const;
+    virtual Vector2 get_physical_size_mm() const;
+    virtual void set_physical_size_mm(Vector2 p_size);
 
-    Vector2 get_pixel_size_mm_bind() const { return get_pixel_size_mm(nullptr); }
-    Vector3 get_camera_offset_bind() const { return get_camera_offset(nullptr); }
-    double get_camera_tilt_bind() const { return get_camera_tilt(nullptr); }
+    virtual Vector2i get_logical_size_px() const;
+    virtual void set_logical_size_px(Vector2i p_size);
 
-    virtual void set_pixel_size_mm(Vector2 val) { pixel_size_mm = val; emit_changed(); }
-    virtual void set_camera_offset(Vector3 val) { camera_offset = val; emit_changed(); }
-    virtual void set_camera_tilt(double val) { camera_tilt = val; emit_changed(); }
+    virtual Vector3 get_camera_offset() const;
+    virtual void set_camera_offset(Vector3 p_offset);
+
+    virtual double get_camera_tilt() const;
+    virtual void set_camera_tilt(double p_tilt);
+
+    virtual Vector2 get_window_position() const;
+
+    Vector2 get_pixel_size_mm() const;
+    Vector2 get_dpi() const;
 
     static double get_focal_length_under_scaling_static(double f_original, double original_dim, double new_dim);
     static double get_card_width_px_static(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm = 85.603);
@@ -46,26 +53,47 @@ class GuessDeviceCalibration : public DeviceCalibration {
     GDCLASS(GuessDeviceCalibration, DeviceCalibration);
 
 protected:
-    static void _bind_methods() {}
+    static void _bind_methods();
 
 public:
     GuessDeviceCalibration() = default;
     virtual ~GuessDeviceCalibration() = default;
 
-    virtual Vector2 get_pixel_size_mm(Object* tracker = nullptr) const override;
-    virtual Vector3 get_camera_offset(Object* tracker = nullptr) const override;
-    virtual double get_camera_tilt(Object* tracker = nullptr) const override;
+    virtual Vector2 get_physical_size_mm() const override;
+    virtual Vector2i get_logical_size_px() const override;
+    virtual Vector3 get_camera_offset() const override;
+    virtual double get_camera_tilt() const override;
+    virtual Vector2 get_window_position() const override;
 };
 
 class StoredDeviceCalibration : public DeviceCalibration {
     GDCLASS(StoredDeviceCalibration, DeviceCalibration);
 
 protected:
-    static void _bind_methods() {}
+    static void _bind_methods();
 
 public:
     StoredDeviceCalibration();
     virtual ~StoredDeviceCalibration() = default;
+
+    virtual Vector2 get_window_position() const override;
+};
+
+class MockDeviceCalibration : public DeviceCalibration {
+    GDCLASS(MockDeviceCalibration, DeviceCalibration);
+
+private:
+    Vector2 window_position_px = Vector2(0.0, 0.0);
+
+protected:
+    static void _bind_methods();
+
+public:
+    MockDeviceCalibration();
+    virtual ~MockDeviceCalibration() = default;
+
+    void set_window_position(Vector2 p_pos) { window_position_px = p_pos; emit_changed(); }
+    virtual Vector2 get_window_position() const override { return window_position_px; }
 };
 
 class DefaultDeviceCalibration : public DeviceCalibration {
@@ -80,16 +108,21 @@ public:
     virtual ~DefaultDeviceCalibration() = default;
 
     Ref<DeviceCalibration> get_actual_calibration() const;
-
     void clear_cache();
 
-    virtual Vector2 get_pixel_size_mm(Object* tracker = nullptr) const override;
-    virtual Vector3 get_camera_offset(Object* tracker = nullptr) const override;
-    virtual double get_camera_tilt(Object* tracker = nullptr) const override;
+    virtual Vector2 get_physical_size_mm() const override;
+    virtual void set_physical_size_mm(Vector2 p_size) override;
 
-    virtual void set_pixel_size_mm(Vector2 val) override;
-    virtual void set_camera_offset(Vector3 val) override;
-    virtual void set_camera_tilt(double val) override;
+    virtual Vector2i get_logical_size_px() const override;
+    virtual void set_logical_size_px(Vector2i p_size) override;
+
+    virtual Vector3 get_camera_offset() const override;
+    virtual void set_camera_offset(Vector3 p_offset) override;
+
+    virtual double get_camera_tilt() const override;
+    virtual void set_camera_tilt(double p_tilt) override;
+
+    virtual Vector2 get_window_position() const override;
 };
 
 class BioCalibration : public Resource {
@@ -152,7 +185,6 @@ public:
     virtual ~DefaultBioCalibration() = default;
 
     Ref<BioCalibration> get_actual_calibration() const;
-
     void clear_cache();
 
     virtual double get_bias_pitch() const override;

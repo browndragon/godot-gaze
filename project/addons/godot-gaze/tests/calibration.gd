@@ -76,13 +76,20 @@ func _process(delta):
 
 func complete_calibration():
 	draw_target = false
-	var res_dict = calib_session.calculate_calibration(null)
+	var success = calib_session.calculate_calibration(null)
+	var dev_cal = calib_session.get_device_calibration()
+	var bio_cal = calib_session.get_bio_calibration()
 	var gs = Engine.get_singleton("GazeServer")
-	if gs:
-		if res_dict.has("device_calibration"):
-			gs.set_device_calibration(res_dict["device_calibration"])
-		if res_dict.has("bio_calibration"):
-			gs.set_bio_calibration(res_dict["bio_calibration"])
+	if gs and success:
+		if dev_cal:
+			gs.set_device_calibration(dev_cal)
+		if bio_cal:
+			gs.set_bio_calibration(bio_cal)
+	var res_dict = {
+		"success": success,
+		"device_calibration": dev_cal,
+		"bio_calibration": bio_cal
+	}
 	calibration_completed.emit(res_dict)
 
 func _draw():

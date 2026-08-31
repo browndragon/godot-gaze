@@ -65,7 +65,7 @@ namespace Gaze
         }
     }
 
-    void ORTLandmarkModel::preprocess_face_crop(const uint8_t *raw_crop_bgr, float *out_buffer)
+    void ORTLandmarkModel::preprocess_face_crop(const uint8_t *raw_crop_rgb, float *out_buffer)
     {
         // 60x60 BGR format [1, 3, 60, 60] with raw float pixel intensities [0.0, 255.0]
         constexpr int width = 60;
@@ -78,9 +78,9 @@ namespace Gaze
 
         for (int i = 0; i < plane_size; ++i)
         {
-            b_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 0]);
-            g_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 1]);
-            r_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 2]);
+            b_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 0]);
+            g_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 1]);
+            r_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 2]);
         }
     }
 
@@ -130,24 +130,10 @@ namespace Gaze
 
     static GazeRect adjust_bounding_box(const GazeRect &bbox)
     {
-        float bx = bbox.x - 0.067f * bbox.width;
-        float by = bbox.y - 0.028f * bbox.height;
-        float bw = bbox.width * 1.15f;
-        float bh = bbox.height * 1.13f;
-
-        if (bw < bh)
-        {
-            float dx = bh - bw;
-            bx -= dx * 0.5f;
-            bw = bh;
-        }
-        else
-        {
-            float dy = bw - bh;
-            by -= dy * 0.5f;
-            bh = bw;
-        }
-        return GazeRect(bx, by, bw, bh);
+        float cx = bbox.x + bbox.width * 0.5f;
+        float cy = bbox.y + bbox.height * 0.5f;
+        float sz = std::max(bbox.width, bbox.height) * 1.15f;
+        return GazeRect(cx - sz * 0.5f, cy - sz * 0.5f, sz, sz);
     }
 
     bool ORTLandmarkModel::extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GazeVector2> &out_landmarks_px, float roll_hint_rad)
@@ -176,7 +162,7 @@ namespace Gaze
 
             float cx = face_bbox.x + face_bbox.width * 0.5f;
             float cy = face_bbox.y + face_bbox.height * 0.5f;
-            GazeVector2 rot_center = rotate_point_back(GazeVector2(cx, cy), roll_hint_rad, img_w, img_h);
+            GazeVector2 rot_center = rotate_point_2d(GazeVector2(cx, cy), -roll_hint_rad, img_w, img_h);
             working_bbox = GazeRect(rot_center.x - face_bbox.width * 0.5f, rot_center.y - face_bbox.height * 0.5f, face_bbox.width, face_bbox.height);
         }
 
@@ -203,7 +189,7 @@ namespace Gaze
             GazeVector2 pt(px_x, px_y);
             if (std::abs(roll_hint_rad) > 1e-4f)
             {
-                pt = rotate_point_back(pt, -roll_hint_rad, img_w, img_h);
+                pt = rotate_point_2d(pt, roll_hint_rad, img_w, img_h);
             }
             out_landmarks_px[i] = pt;
         }

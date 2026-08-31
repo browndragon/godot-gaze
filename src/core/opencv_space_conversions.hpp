@@ -1,30 +1,14 @@
 /**
  * @file opencv_space_conversions.hpp
- * @brief Coordinate Space Transformations between OpenCV PnP Model Space and Godot Camera Space
+ * @brief Strongly-Typed Coordinate Space Definitions and Transformations
  *
- * Defines exact mathematical transformations at the boundary between OpenCV-style PnP solvers
- * and Godot's standard Camera and Face local reference frames.
- *
- * Coordinate Systems:
- * 1. OpenCV Camera Space:
- *    - +X: Right
- *    - +Y: Down
- *    - +Z: Forward (away from camera into scene)
- *
- * 2. OpenCV Face Model Space:
- *    - +X: Subject's Anatomical Left (Viewer's Right)
- *    - +Y: Down towards Chin
- *    - +Z: Back into skull (Nose tip at Z=0 or negative Z)
- *
- * 3. Godot Camera Space:
- *    - +X: Right
- *    - +Y: Up
- *    - -Z: Forward (away from camera into room)
- *
- * 4. Godot Face Local Space:
- *    - +X: Subject's Anatomical Right (Viewer's Left)
- *    - +Y: Up towards top of head
- *    - -Z: Forward out of face (towards camera)
+ * Single Source of Truth for reference frame transformations across:
+ * 1. GodotCamera Space: +X Camera Right (Display Right), +Y Up, -Z Forward into room towards user
+ * 2. GodotFace Space: +X User's Right Ear (Display Left), +Y Top of Head, -Z Forward out of face
+ * 3. GodotDisplayPx Space: 2D px: Origin Top-Left (0,0), +X Right, +Y Down
+ * 4. OpenCVCamera Space: +X Right (Display Right), +Y Down, +Z Away into scene
+ * 5. OpenCVFaceModel Space: +X User's Left Ear (Image Right), +Y Down towards Chin, +Z Back into skull
+ * 6. OpenVINOADASGaze Space: +X User's Right Ear (Display Left), +Y Up, +Z Forward towards camera
  */
 #pragma once
 
@@ -32,6 +16,82 @@
 
 namespace Gaze
 {
+
+/**
+ * @brief Canonical Coordinate Space Identifiers.
+ */
+enum class Space
+{
+    GodotCamera,     ///< 3D mm: +X Camera Right (Display Right), +Y Up, -Z Forward into room towards user
+    GodotFace,       ///< 3D mm: +X User's Right Ear (Display Left), +Y Top of Head, -Z Forward out of face towards camera
+    GodotDisplayPx,  ///< 2D px: Origin Top-Left (0,0), +X Right (0..W_px), +Y Down (0..H_px)
+    OpenCVCamera,    ///< 3D mm: +X Right (Display Right), +Y Down, +Z Away from camera into scene
+    OpenCVFaceModel, ///< 3D mm: +X User's Left Ear (Image Right), +Y Down towards chin, +Z Back into skull
+    OpenVINOADASGaze ///< 3D mm: +X User's Right Ear (Display Left), +Y Up, +Z Forward towards camera
+};
+
+/**
+ * @brief Generic wrapper tagging a data structure with its explicit Coordinate Space.
+ */
+template <typename T, Space S>
+struct Spaced
+{
+    T value;
+
+    Spaced() = default;
+    explicit Spaced(const T &v) : value(v) {}
+
+    const T *operator->() const { return &value; }
+    T *operator->() { return &value; }
+    const T &get() const { return value; }
+    T &get() { return value; }
+
+    bool operator==(const Spaced<T, S> &other) const { return value == other.value; }
+    bool operator!=(const Spaced<T, S> &other) const { return value != other.value; }
+};
+
+template <Space S>
+using SpacedVector3 = Spaced<GazeVector3, S>;
+
+template <Space S>
+using SpacedVector2 = Spaced<GazeVector2, S>;
+
+/**
+ * @brief Type-safe basis matrix transforming 3D vectors from space 'From' to space 'To'.
+ */
+template <Space From, Space To>
+struct SpacedBasis
+{
+    GazeBasis3D basis;
+
+    SpacedBasis() = default;
+    explicit SpacedBasis(const GazeBasis3D &b) : basis(b) {}
+
+    SpacedVector3<To> transform(const SpacedVector3<From> &v) const
+    {
+        return SpacedVector3<To>(basis.multiply_vector(v.get()));
+    }
+};
+
+/**
+ * @brief Type-safe rigid 3D transform mapping points from space 'From' to space 'To'.
+ */
+template <Space From, Space To>
+struct SpacedTransform3D
+{
+    SpacedBasis<From, To> basis;
+    SpacedVector3<To> origin;
+
+    SpacedTransform3D() = default;
+    SpacedTransform3D(const SpacedBasis<From, To> &b, const SpacedVector3<To> &o)
+        : basis(b), origin(o) {}
+
+    SpacedVector3<To> transform_point(const SpacedVector3<From> &p) const
+    {
+        return SpacedVector3<To>(basis.basis.multiply_vector(p.get()) + origin.get());
+    }
+};
+
 namespace CoordinateConversions
 {
 
@@ -41,15 +101,15 @@ namespace CoordinateConversions
      * Basis: diag(1, -1, -1)
      */
     inline const GazeBasis3D OPENCV_CAM_TO_GODOT_CAM = GazeBasis3D(
-        GazeVector3(1.0,  0.0,  0.0),
-        GazeVector3(0.0, -1.0,  0.0),
-        GazeVector3(0.0,  0.0, -1.0)
+        GazeVector3( 1.0,  0.0,  0.0),
+        GazeVector3( 0.0, -1.0,  0.0),
+        GazeVector3( 0.0,  0.0, -1.0)
     );
 
     /**
-     * @brief Transformation matrix mapping Godot Face Local Space (+X right, +Y up, -Z forward)
-     * to OpenCV Face Model Space (+X left eye, +Y down, +Z into head).
-     * Basis: diag(-1, -1, 1)
+     * @brief Transformation matrix mapping Godot Face Local Space (+X right ear, +Y up, -Z forward)
+     * to OpenCV Face Model Space (+X left ear, +Y down, +Z into head).
+     * Basis: diag(-1, -1, -1)
      */
     inline const GazeBasis3D GODOT_FACE_TO_OPENCV_FACE = GazeBasis3D(
         GazeVector3(-1.0,  0.0, 0.0),
@@ -58,15 +118,47 @@ namespace CoordinateConversions
     );
 
     /**
-     * @brief Basis mapping OpenVINO ONNX Gaze Model Output Vector (+x screen right, +y up, -z forward)
-     * to Godot Camera Space (+X screen right, +Y up, +Z forward towards user).
-     * Basis: diag(1, 1, -1)
+     * @brief Basis mapping OpenVINO ADAS Gaze Model Output Vector (+x user right / display left, +y up, -z forward)
+     * to Godot Camera Space (+X camera right / display right, +Y up, +Z forward towards screen plane at Z=0).
+     * Basis: diag(-1, 1, -1).
      */
     inline const GazeBasis3D ONNX_GAZE_TO_GODOT_CAM = GazeBasis3D(
-        GazeVector3(1.0, 0.0,  0.0),
-        GazeVector3(0.0, 1.0,  0.0),
-        GazeVector3(0.0, 0.0, -1.0)
+        GazeVector3(-1.0, 0.0,  0.0),
+        GazeVector3( 0.0, 1.0,  0.0),
+        GazeVector3( 0.0, 0.0, -1.0)
     );
+
+    /**
+     * @brief Transforms OpenVINO ADAS raw Cartesian gaze output vector (+x user right, +y up, +z forward)
+     * into Godot Camera Space (+X camera right, +Y up, +Z forward towards screen plane).
+     * @param gaze_openvino Raw vector from gaze-estimation-adas-0002 model.
+     * @return GazeVector3 Vector in Godot Camera Space.
+     */
+    inline GazeVector3 openvino_gaze_to_godot_cam(const GazeVector3 &gaze_openvino)
+    {
+        return ONNX_GAZE_TO_GODOT_CAM.multiply_vector(gaze_openvino);
+    }
+
+    /**
+     * @brief Converts OpenCV PnP Rodrigues rotation vector into OpenVINO ADAS Euler angles [yaw, pitch, roll] in degrees.
+     *
+     * In OpenCV model space (with canonical face geometry), the Rodrigues vector components directly express
+     * head rotation in radians:
+     * - cv_rvec.y = Yaw (Turn head: viewer left / subject right is negative, viewer right / subject left is positive)
+     * - cv_rvec.x = Pitch (Nod head: down is positive, up is negative)
+     * - cv_rvec.z = Roll (Tilt head: right shoulder is positive, left shoulder is negative)
+     *
+     * @param cv_rvec Rodrigues rotation vector in OpenCV head space.
+     * @return GazeVector3 containing (yaw_deg, pitch_deg, roll_deg).
+     */
+    inline GazeVector3 opencv_head_pose_to_openvino_angles_deg(const GazeVector3 &cv_rvec)
+    {
+        return GazeVector3(
+             cv_rvec.y * RAD_TO_DEG, // Yaw: OpenVINO -yaw is turn to subject left / image right (matches cv_rvec.y < 0)
+            -cv_rvec.x * RAD_TO_DEG, // Pitch: OpenVINO +pitch is CCW around OY (nodding up) -> -cv_rvec.x
+             cv_rvec.z * RAD_TO_DEG  // Roll: OpenVINO +roll is CW around OX (tilt to subject right shoulder) -> +cv_rvec.z
+        );
+    }
 
     /**
      * @brief Converts OpenCV PnP pose (translation and Rodrigues rotation) to Godot Camera Space Transform.
@@ -86,3 +178,4 @@ namespace CoordinateConversions
 
 } // namespace CoordinateConversions
 } // namespace Gaze
+

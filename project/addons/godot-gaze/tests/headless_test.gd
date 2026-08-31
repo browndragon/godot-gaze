@@ -12,25 +12,25 @@ func project_ray_to_screen_mm(origin_godot: Vector3, dir_godot: Vector3) -> Vect
 	if abs(dir_godot.z) < 1e-6:
 		return Vector2(-9999.0, -9999.0)
 	var t = -origin_godot.z / dir_godot.z
-	var pos_x = origin_godot.x + t * dir_godot.x
-	var pos_y = origin_godot.y + t * dir_godot.y
+	var pos_x = -(origin_godot.x + t * dir_godot.x)
+	var pos_y = -(origin_godot.y + t * dir_godot.y)
 	return Vector2(pos_x, pos_y)
 
 func run_tests():
 	print("=================== HEADLESS INTEGRATION TESTS ===================")
 	
-	# 1. Test DisplayProfile Resource
-	var dp = DisplayProfile.new()
-	dp.logical_size_px = Vector2i(1920, 1080)
-	dp.physical_size_mm = Vector2(345.0, 215.0)
+	# 1. Test DeviceCalibration Resource
+	var dev_cal = MockDeviceCalibration.new()
+	dev_cal.logical_size_px = Vector2i(1920, 1080)
+	dev_cal.physical_size_mm = Vector2(345.0, 215.0)
 	
-	var dpi = dp.get_dpi()
-	print("DisplayProfile DPI: ", dpi)
+	var dpi = dev_cal.get_dpi()
+	print("DeviceCalibration DPI: ", dpi)
 	if abs(dpi.x - 141.35) > 0.1 or abs(dpi.y - 127.64) > 0.1:
-		printerr("FAIL: DisplayProfile DPI calculation incorrect")
+		printerr("FAIL: DeviceCalibration DPI calculation incorrect")
 		quit(1)
 		return
-	print("PASS: DisplayProfile resource verified.")
+	print("PASS: DeviceCalibration resource verified.")
 	
 	# 2. Test InputEventGazeBase, InputEventGaze, and InputEventGazeMissing ClassDB registration & polymorphism
 	if not ClassDB.class_exists("InputEventGazeBase"):
@@ -67,7 +67,7 @@ func run_tests():
 		quit(1)
 		return
 
-	gs.set_display_profile(dp)
+	gs.set_device_calibration(dev_cal)
 	# Ensure stopped before testing 0->1 transition
 	gs.stop_tracking(true)
 	var started_fresh = gs.start_tracking()
@@ -110,9 +110,9 @@ func run_tests():
 	var session = GazeCalibrationSession.new()
 	session.add_sample(Vector2(960, 540), Vector3(0, 0, -500), Vector3(0, 0, 1))
 	session.add_sample(Vector2(480, 270), Vector3(-100, -50, -500), Vector3(-0.2, -0.1, 0.95))
-	var solved_calib = session.calculate_calibration(null)
-	if not solved_calib.has("device_calibration") or not solved_calib.has("bio_calibration"):
-		printerr("FAIL: F1 - GazeCalibrationSession output missing calibration resources")
+	var solved_ok = session.calculate_calibration(dev_cal)
+	if not solved_ok or not session.get_device_calibration() or not session.get_bio_calibration():
+		printerr("FAIL: F1 - GazeCalibrationSession output missing calibration resources or returned false")
 		quit(1)
 		return
 	print("GazeCalibrationSession sample math and estimation successfully triggered and solved.")
@@ -161,7 +161,14 @@ func run_tests():
 	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
 	vs.camera_start(cam_rid)
 
-	gs.display_set_geometry(gs.get_default_display_rid(), Vector2(3024, 1964), Vector2(301.5, 188.5))
+	var fixture_dev = MockDeviceCalibration.new()
+	fixture_dev.logical_size_px = Vector2i(3024, 1964)
+	fixture_dev.physical_size_mm = Vector2(301.5, 188.5)
+	fixture_dev.camera_offset = Vector3(0.0, 94.25, 0.0)
+	fixture_dev.camera_tilt = 0.0
+	fixture_dev.set_window_position(Vector2(0, 0))
+	gs.set_device_calibration(fixture_dev)
+
 	gs.camera_set_offsets(gs.get_default_camera_rid(), Vector3(0.0, 94.25, 0.0), 0.0)
 	gs.camera_set_vision_rid(gs.get_default_camera_rid(), cam_rid)
 	var face_rid = gs.get_default_face_rid()
@@ -183,8 +190,8 @@ func run_tests():
 			gs.trigger_process()
 			await get_tree().create_timer(0.05).timeout
 		var head_trans = gs.get_head_pose_origin_mm(face_rid)
-		var head_rot = gs.get_head_pose_euler_deg(face_rid)
-		var head_fwd = Transform3D(Basis.from_euler(Vector3(deg_to_rad(head_rot.x), deg_to_rad(-head_rot.y), deg_to_rad(head_rot.z))), head_trans).basis.z * -1.0
+		var head_xform = gs.get_relative_transform(face_rid)
+		var head_fwd = -head_xform.basis.z
 		var nose_gaze = project_ray_to_screen_mm(head_trans, head_fwd)
 		var eye_gaze = gs.get_projected_gaze_mm_from_eye_tracker(eye_rid, false)
 		print("  -> Image: ", img_name, " | Head Forward: ", head_fwd, " | Nose: ", nose_gaze, " | Gaze: ", eye_gaze)

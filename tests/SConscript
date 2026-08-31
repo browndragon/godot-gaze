@@ -303,7 +303,7 @@ if env["platform"] != "javascript":
         "build/tests/logs/tests.benchmark.log",
         [library],
         Action(run_command_and_log, varlist=["TEST_CMD"]),
-        TEST_CMD=["./scripts/godot.sh", "--headless", "--notest", "addons/godot-gaze/tests/headless_benchmark.tscn"]
+        TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tests/headless_benchmark.gd"]
     )
     env.AlwaysBuild(benchmark_run)
     env.Alias("tests/benchmark", benchmark_run)
@@ -348,12 +348,22 @@ godot_overlay_run = env.Command(
 env.AlwaysBuild(godot_overlay_run)
 env.Alias("tests/godot/overlay", godot_overlay_run)
 
+# Godot diagnostic visual overlays generation tool target
+godot_render_overlays_run = env.Command(
+    "build/tests/logs/tools.render_overlays.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tools/render_diagnostic_overlays.gd"]
+)
+env.AlwaysBuild(godot_render_overlays_run)
+env.Alias("tools/render_overlays", godot_render_overlays_run)
+
 # Godot windowed E2E test target
 godot_windowed_run = env.Command(
     "build/tests/logs/tests.godot.windowed.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd"]
+    TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd"]
 )
 env.AlwaysBuild(godot_windowed_run)
 env.Alias("tests/godot/windowed", godot_windowed_run)
@@ -363,7 +373,7 @@ godot_camera_exit_run = env.Command(
     "build/tests/logs/tests.godot.camera_exit.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/camera_exit_test.gd"]
+    TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/camera_exit_test.gd"]
 )
 env.AlwaysBuild(godot_camera_exit_run)
 env.Alias("tests/godot/camera_exit", godot_camera_exit_run)
@@ -373,7 +383,7 @@ godot_scene_exit_run = env.Command(
     "build/tests/logs/tests.godot.scene_exit.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--no-auto", "--rendering-method", "mobile", "addons/godot-gaze/tests/test.tscn", "--run-automated-toggles"]
+    TEST_CMD=["./scripts/godot.sh", "--no-headless", "--notest", "--rendering-method", "mobile", "addons/godot-gaze/tests/test.tscn", "--run-automated-toggles"]
 )
 env.AlwaysBuild(godot_scene_exit_run)
 env.Alias("tests/godot/scene_exit", godot_scene_exit_run)

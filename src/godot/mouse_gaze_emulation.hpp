@@ -66,7 +66,6 @@ public:
 
     Ref<InputEventGazeBase> synthesize_event(
         DisplayServer* p_ds,
-        const Ref<DisplayProfile>& p_dp,
         const Ref<DeviceCalibration>& p_dev_cal,
         const Ref<GazeEventFactory>& p_event_factory,
         uint64_t &r_frame_id,

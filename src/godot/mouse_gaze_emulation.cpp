@@ -7,8 +7,8 @@
 namespace godot {
 
 MouseGazeEmulation::MouseGazeEmulation() {
-    last_cam_head_xform = Transform3D(Basis(), Vector3(0, 0, 500.0f));
-    last_cam_gaze_xform = Transform3D(Basis(), Vector3(0, 0, 500.0f));
+    last_cam_head_xform = Transform3D(Basis(Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, -1)), Vector3(0, 0, -500.0f));
+    last_cam_gaze_xform = Transform3D(Basis::looking_at(Vector3(0, 0, 1), Vector3(0, 1, 0)), Vector3(0, 0, -500.0f));
 }
 
 void MouseGazeEmulation::reset() {
@@ -91,7 +91,6 @@ void MouseGazeEmulation::update(
 
 Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     DisplayServer* p_ds,
-    const Ref<DisplayProfile>& p_dp,
     const Ref<DeviceCalibration>& p_dev_cal,
     const Ref<GazeEventFactory>& p_event_factory,
     uint64_t &r_frame_id,
@@ -101,24 +100,29 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 ) {
     Vector2 mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position() - p_ds->window_get_position()) : Vector2(0, 0);
 
-    Ref<DisplayProfile> dp = p_dp.is_valid() ? p_dp : DisplayProfile::estimate_from_os();
-    Vector2i log_sz = dp.is_valid() ? dp->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector2 phys_sz = dp.is_valid() ? dp->get_physical_size_mm() : Vector2(345.0, 215.0);
+    Ref<DeviceCalibration> dev_cal = p_dev_cal;
+    if (!dev_cal.is_valid()) {
+        Ref<GuessDeviceCalibration> guess;
+        guess.instantiate();
+        dev_cal = guess;
+    }
+    Vector2i log_sz = dev_cal->get_logical_size_px();
+    Vector2 phys_sz = dev_cal->get_physical_size_mm();
     if (log_sz.x <= 0) log_sz.x = 1920;
     if (log_sz.y <= 0) log_sz.y = 1080;
     if (phys_sz.x <= 0.0) phys_sz.x = 345.0;
     if (phys_sz.y <= 0.0) phys_sz.y = 215.0;
 
-    Vector3 cam_offset = p_dev_cal.is_valid() ? p_dev_cal->get_camera_offset(nullptr) : Vector3(0.0f, phys_sz.y * 0.5f, 0.0f);
+    Vector3 cam_offset = dev_cal->get_camera_offset();
 
     float x_s = (mouse_pos.x / log_sz.x - 0.5f) * phys_sz.x;
     float y_s = (mouse_pos.y / log_sz.y - 0.5f) * phys_sz.y;
 
     Vector3 target_cam(-(x_s - cam_offset.x), -(y_s + cam_offset.y), 0.0f);
-    Vector3 eye_origin_cam(0.0f, 0.0f, 500.0f);
+    Vector3 eye_origin_cam(0.0f, 0.0f, -500.0f);
     Vector3 gaze_dir_cam = (target_cam - eye_origin_cam).normalized();
 
-    Transform3D mouse_head_xform(Basis(), eye_origin_cam);
+    Transform3D mouse_head_xform(Basis(Vector3(-1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, -1)), eye_origin_cam);
     Transform3D mouse_gaze_xform(Basis::looking_at(gaze_dir_cam, Vector3(0, 1, 0)), eye_origin_cam);
 
     float ease_factor = get_eased_blend_factor();

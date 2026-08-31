@@ -715,7 +715,32 @@ namespace Gaze
     }
 
     /**
-     * @brief Projects a camera-space gaze ray onto a tilted screen plane in millimeters.
+     * @brief Computes default pinhole focal length in pixels for a given frame width and horizontal FOV.
+     * Standard webcam default: HFOV = 65.0 deg.
+     */
+    inline double calculate_default_focal_length(double frame_width, double hfov_deg = 65.0)
+    {
+        double hfov_rad = hfov_deg * (3.14159265358979323846 / 180.0);
+        return frame_width / (2.0 * std::tan(hfov_rad * 0.5));
+    }
+
+    /**
+     * @brief Directly projects a Godot Camera Space 3D gaze ray onto the 2D display surface in millimeters.
+     *
+     * Coordinate spaces:
+     * - Godot Camera Space (3D mm): +X camera right (display left), +Y camera up (display up), -Z towards user (Z=0 screen plane).
+     * - Godot Display Space (2D mm): (0, 0) top-left corner of display, +X display right, +Y display down towards keyboard.
+     *
+     * Camera Mount Default:
+     * - Top-bezel center: (X = W_mm / 2, Y = 0 mm).
+     *
+     * @param origin_cam Eyegaze origin in Godot Camera Space (mm).
+     * @param dir_cam Eyegaze direction unit vector in Godot Camera Space (+Z towards screen).
+     * @param camera_offset Physical offset of camera from top-bezel center (mm).
+     * @param camera_tilt_deg Downward tilt of camera relative to screen in degrees.
+     * @param screen_size_mm Display dimensions in millimeters (width, height).
+     * @param out_pos_mm Output 2D position in millimeters from top-left of display (0..W_mm, 0..H_mm).
+     * @return true if ray intersects the screen plane in front of the user (t > 0).
      */
     inline bool project_ray_to_screen_mm(
         const GazeVector3 &origin_cam,
@@ -729,8 +754,9 @@ namespace Gaze
         double cos_t = std::cos(theta_rad);
         double sin_t = std::sin(theta_rad);
 
-        double O_disp_z = sin_t * origin_cam.y - cos_t * origin_cam.z + camera_offset.z;
-        double v_disp_z = sin_t * dir_cam.y - cos_t * dir_cam.z;
+        // Screen plane normal in camera space is (0, sin_t, cos_t)
+        double O_disp_z = sin_t * (origin_cam.y - camera_offset.y) + cos_t * (origin_cam.z - camera_offset.z);
+        double v_disp_z = sin_t * dir_cam.y + cos_t * dir_cam.z;
 
         if (std::abs(v_disp_z) < 1e-6)
         {
@@ -744,55 +770,65 @@ namespace Gaze
         }
 
         double W_half = screen_size_mm.x * 0.5;
-        double H_half = screen_size_mm.y * 0.5;
 
-        // Camera faces opposite the screen plane normal:
-        // +X_cam (camera right / user left) maps to Screen Left (X < W_half)
-        double O_disp_x = W_half - (origin_cam.x + camera_offset.x);
-        double O_disp_y = -(cos_t * origin_cam.y + sin_t * origin_cam.z + camera_offset.y) + H_half;
+        // Intersection point in camera space:
+        double int_x = origin_cam.x + t * dir_cam.x;
+        double int_y = origin_cam.y + t * dir_cam.y;
+        double int_z = origin_cam.z + t * dir_cam.z;
 
-        double v_disp_x = -dir_cam.x;
-        double v_disp_y = -(cos_t * dir_cam.y + sin_t * dir_cam.z);
+        // Horizontal (+X_cam is Camera Right / User Left -> Display Left $X=0$, -X_cam is Camera Left / User Right -> Display Right $X=W$):
+        out_pos_mm.x = W_half - (int_x + camera_offset.x);
 
-        out_pos_mm.x = O_disp_x + v_disp_x * t;
-        out_pos_mm.y = O_disp_y + v_disp_y * t;
+        // Vertical (+Y_cam is Camera Up / Display Up):
+        // Top-bezel is at Y = 0 mm. Moving down screen plane (+Y_disp) corresponds to -Y_cam / +Z_cam:
+        out_pos_mm.y = -(int_y - camera_offset.y) * cos_t + (int_z - camera_offset.z) * sin_t;
+
         return true;
     }
 
     /**
-     * @brief Canonical 35-point anthropometric 3D face model defined directly in camera rest frame
-     * (+X right, +Y down, +Z away from camera into scene, face facing camera at rvec = 0).
+     * @brief Canonical 35-point anthropometric 3D face model defined in OpenCV model space
+     * (+X image right / left ear, +Y down towards chin, +Z back into skull, face facing camera at rvec = 0).
+     *
+     * In OpenVINO ADAS 35-point landmarks:
+     * - pts 0..1: Image Left Eye (Anatomical Right Eye, X < 0 in OpenCV)
+     * - pts 2..3: Image Right Eye (Anatomical Left Eye, X > 0 in OpenCV)
+     * - pts 4..7: Nose (pts 6=right wing at -X, 7=left wing at +X)
+     * - pts 8..11: Mouth (pts 8=right corner at -X, 9=left corner at +X)
+     * - pts 12..14: Image Left Eyebrow (Anatomical Right Eyebrow, X < 0 in OpenCV)
+     * - pts 15..17: Image Right Eyebrow (Anatomical Left Eyebrow, X > 0 in OpenCV)
+     * - pts 18..34: Contour from Image Left / Right Ear (-X) to Chin (Pt 26) to Image Right / Left Ear (+X)
      */
     inline std::vector<GazeVector3> get_canonical_35pt_face_model()
     {
         std::vector<GazeVector3> pts(35);
         // Eyes (IPD approx 63mm, standard anthropometric plane Z=0)
-        pts[0] = GazeVector3(-15.0f, -32.0f,   0.0f); // Right Eye Inner Canthus
-        pts[1] = GazeVector3(-46.0f, -32.0f,   8.0f); // Right Eye Outer Canthus
-        pts[2] = GazeVector3( 15.0f, -32.0f,   0.0f); // Left Eye Inner Canthus
-        pts[3] = GazeVector3( 46.0f, -32.0f,   8.0f); // Left Eye Outer Canthus
+        pts[0] = GazeVector3(-15.0f, -32.0f,   0.0f); // Image Left Eye Inner Canthus (Anatomical Right)
+        pts[1] = GazeVector3(-46.0f, -32.0f,   8.0f); // Image Left Eye Outer Canthus
+        pts[2] = GazeVector3( 15.0f, -32.0f,   0.0f); // Image Right Eye Inner Canthus (Anatomical Left)
+        pts[3] = GazeVector3( 46.0f, -32.0f,   8.0f); // Image Right Eye Outer Canthus
 
         // Nose (Protruding forward along -Z)
         pts[4] = GazeVector3(  0.0f, -22.0f, -15.0f); // Nose Bridge Top
         pts[5] = GazeVector3(  0.0f,   0.0f, -35.0f); // Nose Tip (furthest forward towards camera)
-        pts[6] = GazeVector3(-16.0f,   6.0f, -15.0f); // Nose Right Wing
-        pts[7] = GazeVector3( 16.0f,   6.0f, -15.0f); // Nose Left Wing
+        pts[6] = GazeVector3(-16.0f,   6.0f, -15.0f); // Right Nose Wing (Image Left)
+        pts[7] = GazeVector3( 16.0f,   6.0f, -15.0f); // Left Nose Wing (Image Right)
 
         // Mouth
-        pts[8]  = GazeVector3(-25.0f,  32.0f,  -5.0f); // Mouth Right Corner
-        pts[9]  = GazeVector3( 25.0f,  32.0f,  -5.0f); // Mouth Left Corner
+        pts[8]  = GazeVector3(-25.0f,  32.0f,  -5.0f); // Right Mouth Corner (Image Left)
+        pts[9]  = GazeVector3( 25.0f,  32.0f,  -5.0f); // Left Mouth Corner (Image Right)
         pts[10] = GazeVector3(  0.0f,  26.0f, -12.0f); // Upper Lip Center
         pts[11] = GazeVector3(  0.0f,  40.0f,  -8.0f); // Lower Lip Center
 
         // Eyebrows
-        pts[12] = GazeVector3(-50.0f, -48.0f,   8.0f); // Right Eyebrow Outer
+        pts[12] = GazeVector3(-12.0f, -48.0f,   0.0f); // Right Eyebrow Inner (Image Left)
         pts[13] = GazeVector3(-32.0f, -52.0f,   5.0f); // Right Eyebrow Mid
-        pts[14] = GazeVector3(-12.0f, -48.0f,   0.0f); // Right Eyebrow Inner
-        pts[15] = GazeVector3( 12.0f, -48.0f,   0.0f); // Left Eyebrow Inner
+        pts[14] = GazeVector3(-50.0f, -48.0f,   8.0f); // Right Eyebrow Outer
+        pts[15] = GazeVector3( 12.0f, -48.0f,   0.0f); // Left Eyebrow Inner (Image Right)
         pts[16] = GazeVector3( 32.0f, -52.0f,   5.0f); // Left Eyebrow Mid
         pts[17] = GazeVector3( 50.0f, -48.0f,   8.0f); // Left Eyebrow Outer
 
-        // 17-point Jawline Contour (Pts 18..34) from Right Ear to Chin Apex (Pt 26) to Left Ear
+        // 17-point Jawline Contour (Pts 18..34) from Image Left / Right Ear to Chin Apex (Pt 26) to Image Right / Left Ear
         float jaw_x[] = {-70.0f, -68.0f, -64.0f, -58.0f, -50.0f, -40.0f, -28.0f, -15.0f, 0.0f, 15.0f, 28.0f, 40.0f, 50.0f, 58.0f, 64.0f, 68.0f, 70.0f};
         float jaw_y[] = {-35.0f, -20.0f,  -5.0f,  12.0f,  28.0f,  44.0f,  58.0f,  68.0f, 70.0f, 68.0f, 58.0f, 44.0f, 28.0f, 12.0f, -5.0f, -20.0f, -35.0f};
         float jaw_z[] = { 35.0f,  30.0f,  24.0f,  16.0f,   8.0f,   2.0f,  -2.0f,  -4.0f,  0.0f, -4.0f, -2.0f,   2.0f,  8.0f, 16.0f, 24.0f, 30.0f, 35.0f};
@@ -856,16 +892,27 @@ namespace Gaze
         }
     }
 
-    inline GazeVector2 rotate_point_back(const GazeVector2 &pt, float angle_rad, int w, int h)
+    /**
+     * @brief Rotates a 2D point around the center of an image of size (w, h) by angle_rad.
+     * In standard screen coordinates (Y-down):
+     * angle > 0 rotates clockwise (from +X towards +Y).
+     * angle < 0 rotates counter-clockwise.
+     */
+    inline GazeVector2 rotate_point_2d(const GazeVector2 &pt, float angle_rad, int w, int h)
     {
-        if (std::abs(angle_rad) < 1e-4f) return pt;
+        if (std::abs(angle_rad) < 1e-6f) return pt;
         float cos_a = std::cos(angle_rad);
         float sin_a = std::sin(angle_rad);
-        float cx = w / 2.0f;
-        float cy = h / 2.0f;
+        float cx = w * 0.5f;
+        float cy = h * 0.5f;
         float dx = pt.x - cx;
         float dy = pt.y - cy;
-        return GazeVector2(cx + dx * cos_a + dy * sin_a, cy - dx * sin_a + dy * cos_a);
+        return GazeVector2(cx + dx * cos_a - dy * sin_a, cy + dx * sin_a + dy * cos_a);
+    }
+
+    inline GazeVector2 rotate_point_back(const GazeVector2 &pt, float angle_rad, int w, int h)
+    {
+        return rotate_point_2d(pt, angle_rad, w, h);
     }
 
     // type_traits included at top

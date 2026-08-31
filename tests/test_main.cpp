@@ -71,24 +71,19 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)")
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
-    // Camera placed top-center, 10mm in front of screen plane
-    CameraPlacement placement(GazeVector3(0.0, 148.0, 10.0), 0.0);
+    // Camera placed top-center, 10mm in front of screen plane (offset relative to top bezel)
+    CameraPlacement placement(GazeVector3(0.0, 0.0, 10.0), 0.0);
     engine.set_camera_placement(placement);
 
     // Gaze origin (user's eyes) straight in front at -500mm, looking forward along Z axis
     GazeVector3 origin(0.0, 0.0, -500.0);
-    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at screen center
+    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at camera on top bezel
 
     GazeVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
 
     REQUIRE(success == true);
-    // Center of screen horizontally, top of screen vertically (10mm offset below camera)
-    // Camera is at y = 148mm (top edge). Gaze hits at y = 0mm screen relative coordinate.
-    // Screen coordinate y_s = 0.
-    // Since 0mm relative is center vertically, and camera Y-offset of 148mm places it at the top:
-    // x = 960
-    // y = 540 + (148 * (-1080 / 296)) = 540 - 540 = 0
+    // Center of screen horizontally, top of screen vertically (hits top-bezel camera at Y=0)
     CHECK(pixel.x == doctest::Approx(960.0));
     CHECK(pixel.y == doctest::Approx(0.0));
 }
@@ -100,7 +95,7 @@ TEST_CASE("Testing Projection Sensitivity under Retina Dimensions")
     engine.set_screen_size_pixels(GazeVector2(1440.0, 900.0));
     engine.set_screen_size_mm(GazeVector2(166.0, 103.0));
 
-    CameraPlacement placement(GazeVector3(0.0, 51.5, 0.0), 0.0);
+    CameraPlacement placement(GazeVector3(0.0, 0.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
     GazeVector3 origin(0.0, 0.0, -500.0);
@@ -122,7 +117,7 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)")
     engine.set_screen_size_mm(GazeVector2(527.0, 296.0));
 
     // Camera top-center, tilted down by 15 degrees
-    CameraPlacement placement(GazeVector3(0.0, 148.0, 10.0), 15.0);
+    CameraPlacement placement(GazeVector3(0.0, 0.0, 10.0), 15.0);
     engine.set_camera_placement(placement);
 
     GazeVector3 origin(0.0, 0.0, -500.0);
@@ -134,8 +129,8 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)")
     REQUIRE(success == true);
     // Check that vertical coordinate incorporates the 15-degree tilt
     CHECK(pixel.x == doctest::Approx(960.0));
-    // Since camera is tilted down, looking straight along the optical axis projects higher up (above the screen top edge)
-    CHECK(pixel.y < 0.0);
+    // Looking straight at the tilted camera lands at Y = 0 mm
+    CHECK(pixel.y == doctest::Approx(0.0).epsilon(0.01));
 }
 
 TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs")
@@ -212,7 +207,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Center, Looking at Screen Center",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -221,7 +216,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Center, Looking at Screen Top-Edge",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -230,7 +225,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Center, Looking at Screen Bottom-Edge",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -239,7 +234,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Center, Looking at Screen Left-Edge",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -248,7 +243,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Center, Looking at Screen Right-Edge",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -257,7 +252,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Left, Looking at Bottom-Right",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(46.9, 4.5, -775.6),
@@ -266,7 +261,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Seated Right, Looking at Top-Left",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(-14.2, -1.1, -725.5),
@@ -275,7 +270,7 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         {
             "Laptop: Looking off-screen Left",
             15.0,
-            GazeVector3(0.0, 95.5, 0.0),
+            GazeVector3(0.0, 0.0, 0.0),
             GazeVector2(1920.0, 1080.0),
             GazeVector2(305.0, 191.0),
             GazeVector3(12.2, 0.3, -739.5),
@@ -297,25 +292,20 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         double H_mm = sc.screen_size_mm.y;
 
         // 1. Back-project target pixel to Camera Space
-        // Display space coordinates relative to screen center
-        double x_s = (sc.target_screen_px.x - W_px / 2.0) * (W_mm / W_px);
-        double y_s = (sc.target_screen_px.y - H_px / 2.0) * (H_mm / H_px);
+        // Display space coordinates from top-left (0..W_mm, 0..H_mm)
+        double target_x_mm = sc.target_screen_px.x * (W_mm / W_px);
+        double target_y_mm = sc.target_screen_px.y * (H_mm / H_px);
 
         double theta_rad = sc.camera_tilt_deg * (3.14159265358979323846 / 180.0);
         double cos_t = std::cos(theta_rad);
         double sin_t = std::sin(theta_rad);
 
-        // dx maps from Display X to Camera X (screen left x_s < 0 maps to +X_cam)
-        double dx = -x_s - sc.camera_offset_mm.x;
-        // dy maps from Display Y to Camera Y (both negating y_s and subtracting offset_y)
-        double dy = -y_s - sc.camera_offset_mm.y;
-        double dz = -sc.camera_offset_mm.z;
+        // x_cam = W_mm/2 - target_x_mm - camera_offset_x
+        double x_cam = W_mm * 0.5 - target_x_mm - sc.camera_offset_mm.x;
+        double y_cam = sc.camera_offset_mm.y - target_y_mm * cos_t;
+        double z_cam = sc.camera_offset_mm.z + target_y_mm * sin_t;
 
-        // Using the inverse mapping for Display Space coordinates (R^-1 = R)
-        GazeVector3 P_cam_target(
-            dx,
-            dy * cos_t + dz * sin_t,
-            dy * sin_t - dz * cos_t);
+        GazeVector3 P_cam_target(x_cam, y_cam, z_cam);
 
         // 2. Verify Ray Intersection in ProjectionEngine
         GazeVector3 V_cam = (P_cam_target - sc.head_position_cam).normalized();
@@ -327,18 +317,18 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
         CHECK(projected.y == doctest::Approx(sc.target_screen_px.y).epsilon(0.001));
 
         // 3. Verify Camera-to-Screen Matrix (simulated get_camera_to_screen_transform)
+        // 3. Verify Camera-to-Screen Matrix
         double scale_x = W_px / W_mm;
-        double scale_y = -H_px / H_mm;
+        double scale_y = H_px / H_mm;
         double W_half = W_px / 2.0;
-        double H_half = H_px / 2.0;
 
         GazeVector3 basis_col0(-scale_x, 0.0, 0.0);
-        GazeVector3 basis_col1(0.0, cos_t * scale_y, sin_t);
-        GazeVector3 basis_col2(0.0, sin_t * scale_y, -cos_t);
+        GazeVector3 basis_col1(0.0, -cos_t * scale_y, sin_t);
+        GazeVector3 basis_col2(0.0, sin_t * scale_y, cos_t);
         GazeVector3 translation(
             -sc.camera_offset_mm.x * scale_x + W_half,
-            sc.camera_offset_mm.y * scale_y + H_half,
-            sc.camera_offset_mm.z);
+            (sc.camera_offset_mm.y * cos_t - sc.camera_offset_mm.z * sin_t) * scale_y,
+            -sc.camera_offset_mm.y * sin_t - sc.camera_offset_mm.z * cos_t);
 
         // Apply matrix multiplication P_disp = basis * P_cam_target + translation
         double P_disp_x = basis_col0.x * P_cam_target.x + basis_col1.x * P_cam_target.y + basis_col2.x * P_cam_target.z + translation.x;
@@ -576,7 +566,7 @@ TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations")
     engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
     engine.set_screen_size_mm(GazeVector2(305.0, 191.0));
 
-    CameraPlacement placement(GazeVector3(0.0, 95.5, 0.0), 0.0);
+    CameraPlacement placement(GazeVector3(0.0, 0.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
     // Gaze origin (user's eyes) straight in front at -500mm (aligned with screen center vertically at y = -95.5mm), looking forward along Z axis
@@ -629,7 +619,7 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
 {
     // We simulate ground truth parameters:
     GazeVector2 gt_pixel_size(0.26, 0.26);
-    GazeVector3 gt_camera_offset(0.0, 130.0, 15.0);
+    GazeVector3 gt_camera_offset(0.0, 0.0, 15.0);
     double gt_camera_tilt = 12.0; // degrees
     double gt_bias_pitch = 0.02;  // rad
     double gt_bias_yaw = -0.01;   // rad
@@ -673,13 +663,12 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
 
         // Compute where the target point is in camera space (mm)
         // using the ground truth parameters
-        double tgt_x_mm = (tgt.x - 960.0) * gt_pixel_size.x;
-        double tgt_y_mm = (tgt.y - 540.0) * gt_pixel_size.y;
+        double target_x_mm = tgt.x * gt_pixel_size.x;
+        double target_y_mm = tgt.y * gt_pixel_size.y;
 
-        double P_cam_x = -tgt_x_mm - gt_camera_offset.x;
-        double A = -tgt_y_mm - gt_camera_offset.y;
-        double P_cam_y = A * cos_t - gt_camera_offset.z * sin_t;
-        double P_cam_z = A * sin_t + gt_camera_offset.z * cos_t;
+        double P_cam_x = screen_mm_x * 0.5 - target_x_mm - gt_camera_offset.x;
+        double P_cam_y = gt_camera_offset.y - target_y_mm * cos_t;
+        double P_cam_z = gt_camera_offset.z + target_y_mm * sin_t;
 
         GazeVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
 
@@ -701,8 +690,8 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
         samples.push_back(sample);
     }
 
-    // Run the solver starting from slightly off guesses (e.g. camera 20% off)
-    GazeVector3 init_camera_offset(0.0, 148.0, 0.0);
+    // Run the solver starting from slightly off guesses (e.g. camera 5mm off)
+    GazeVector3 init_camera_offset(0.0, 5.0, 0.0);
     double init_camera_tilt = 0.0;
 
     GazeVector3 est_off;
@@ -772,13 +761,12 @@ TEST_CASE("Testing CalibrationEstimator simplex convergence (Frozen camera param
 
         sample.gaze_origin = GazeVector3(0.0, 0.0, -600.0);
 
-        double tgt_x_mm = (tgt.x - 960.0) * gt_pixel_size.x;
-        double tgt_y_mm = (tgt.y - 540.0) * gt_pixel_size.y;
+        double target_x_mm = tgt.x * gt_pixel_size.x;
+        double target_y_mm = tgt.y * gt_pixel_size.y;
 
-        double P_cam_x = -tgt_x_mm - gt_camera_offset.x;
-        double A = -tgt_y_mm - gt_camera_offset.y;
-        double P_cam_y = A * cos_t - gt_camera_offset.z * sin_t;
-        double P_cam_z = A * sin_t + gt_camera_offset.z * cos_t;
+        double P_cam_x = screen_mm_x * 0.5 - target_x_mm - gt_camera_offset.x;
+        double P_cam_y = gt_camera_offset.y - target_y_mm * cos_t;
+        double P_cam_z = gt_camera_offset.z + target_y_mm * sin_t;
 
         GazeVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
         GazeVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();

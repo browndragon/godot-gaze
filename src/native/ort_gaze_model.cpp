@@ -1,4 +1,5 @@
 #include "ort_gaze_model.hpp"
+#include "opencv_space_conversions.hpp"
 #include "log.hpp"
 #include "platform_ort.hpp"
 #include <cmath>
@@ -82,14 +83,14 @@ bool ORTGazeModel::initialize() {
     return true;
 }
 
-void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop_bgr, float* out_buffer) {
+void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop_rgb, float* out_buffer) {
     constexpr int channel_size = EyeCrops::EYE_CROP_WIDTH * EyeCrops::EYE_CROP_HEIGHT;
     for (int i = 0; i < channel_size; ++i) {
-        // raw_crop_bgr is BGR8 (Blue at 0, Green at 1, Red at 2)
-        // ADAS model expects NCHW BGR tensor: Channel 0 = Blue, Channel 1 = Green, Channel 2 = Red
-        out_buffer[i] = static_cast<float>(raw_crop_bgr[3 * i + 0]);                 // Blue
-        out_buffer[channel_size + i] = static_cast<float>(raw_crop_bgr[3 * i + 1]);  // Green
-        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop_bgr[3 * i + 2]);  // Red
+        // Godot image format is RGB8 (Red at 0, Green at 1, Blue at 2)
+        // OpenVINO ADAS model expects NCHW BGR tensor: Channel 0 = Blue, Channel 1 = Green, Channel 2 = Red
+        out_buffer[i] = static_cast<float>(raw_crop_rgb[3 * i + 2]);                 // Blue
+        out_buffer[channel_size + i] = static_cast<float>(raw_crop_rgb[3 * i + 1]);  // Green
+        out_buffer[2 * channel_size + i] = static_cast<float>(raw_crop_rgb[3 * i + 0]);  // Red
     }
 }
 
@@ -101,7 +102,8 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
     std::vector<float> head_pose_tensor_data(3, 0.0f);
 
     // 1. Preprocess eye crops
-    // Note: Model expectations matching OpenCV DNN
+    // In OpenVINO ADAS convention: "left_eye_image" is the subject's anatomical left eye (appears on image-right),
+    // and "right_eye_image" is the subject's anatomical right eye (appears on image-left).
     preprocess_eye_crop(crops.left_eye_data, left_eye_tensor_data.data());
     preprocess_eye_crop(crops.right_eye_data, right_eye_tensor_data.data());
 
@@ -111,11 +113,10 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
         return false;
     }
 
-    GazeBasis3D R_basis = rodrigues_to_basis(crops.head_pose_rotation);
-    GazeVector3 euler = R_basis.get_euler_gaze_model_deg();
-    head_pose_tensor_data[0] = static_cast<float>(-euler.y); // Yaw (OpenVINO expects -yaw for head-left)
-    head_pose_tensor_data[1] = static_cast<float>(euler.x);  // Pitch
-    head_pose_tensor_data[2] = static_cast<float>(euler.z);  // Roll
+    GazeVector3 openvino_angles = CoordinateConversions::opencv_head_pose_to_openvino_angles_deg(crops.head_pose_rotation);
+    head_pose_tensor_data[0] = static_cast<float>(openvino_angles.x); // Yaw
+    head_pose_tensor_data[1] = static_cast<float>(openvino_angles.y); // Pitch
+    head_pose_tensor_data[2] = static_cast<float>(openvino_angles.z); // Roll
 
     // 3. Create input tensors referencing staging buffers
     std::vector<int64_t> eye_shape = {1, 3, EyeCrops::EYE_CROP_WIDTH, EyeCrops::EYE_CROP_HEIGHT};

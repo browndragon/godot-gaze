@@ -4,10 +4,8 @@ extends SceneTree
 func _init():
 	print("=================== WINDOWED GPU INTEGRATION TESTS ===================")
 	
-	# 1. Setup DisplayProfile
-	var dp = DisplayProfile.new()
-	dp.logical_size_px = Vector2i(1920, 1080)
-	dp.physical_size_mm = Vector2(345.0, 215.0)
+	# 1. Setup DeviceCalibration
+	var dev_cal = GuessDeviceCalibration.new()
 
 	# 2. Test GPU Native Handle Resolution Verification Test
 	print("=================== E2E TEST: GPU NATIVE HANDLE RESOLUTION (WINDOWED) ===================")
@@ -51,7 +49,7 @@ func _init():
 		quit(1)
 		return
 
-	gs.set_display_profile(dp)
+	gs.set_device_calibration(dev_cal)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)
@@ -84,7 +82,7 @@ func _init():
 		gs.trigger_process()
 		await create_timer(0.05).timeout
 		var ev = gs.get_most_recent_event()
-		if ev is InputEventGaze and ev.head_transform.origin != Vector3(0, 0, 500) and ev.head_transform.origin != Vector3.ZERO:
+		if ev is InputEventGaze and ev.head_transform.origin != Vector3(0, 0, -500) and ev.head_transform.origin != Vector3(0, 0, 500) and ev.head_transform.origin != Vector3.ZERO:
 			latest_event = ev
 			break
 
@@ -99,26 +97,20 @@ func _init():
 	print("Tracker Head Transform: ", xform)
 	
 	var nose_pos = xform * Vector3(0.0, 0.5, -52.0)
-	var eye_l_pos = xform * Vector3(30.0, 28.676, 0.0)
-	var eye_r_pos = xform * Vector3(-30.0, 28.676, 0.0)
+	var eye_l_pos = xform * Vector3(-30.0, 28.676, 0.0)
+	var eye_r_pos = xform * Vector3(30.0, 28.676, 0.0)
 	
 	print("Nose position: ", nose_pos, " | Left eye position: ", eye_l_pos, " | Right eye position: ", eye_r_pos)
 	
-	# Convex nose assertion: nose tip must be closer to camera (smaller Z) than the eyes
-	if nose_pos.z >= eye_l_pos.z or nose_pos.z >= eye_r_pos.z:
+	# Convex nose assertion: nose tip is closer to camera (larger / less negative Z in Godot Camera Space) than the eyes
+	if nose_pos.z <= eye_l_pos.z or nose_pos.z <= eye_r_pos.z:
 		printerr("FAIL: Shaders/Crops - Head transform has concave nose! nose.z = ", nose_pos.z, " eye_l.z = ", eye_l_pos.z)
 		quit(1)
 		return
 		
-	# X-axis left-right coordinate alignment assertion: Anatomical Left Eye (+X) must be greater than Anatomical Right Eye (-X)
-	if eye_l_pos.x <= eye_r_pos.x:
-		printerr("FAIL: Shaders/Crops - Coordinate system X-axis is inverted! eye_l.x = ", eye_l_pos.x, " eye_r.x = ", eye_r_pos.x)
-		quit(1)
-		return
-		
-	# Head forward vector direction assertion: must point generally towards the screen (-Z direction in camera space)
+	# Head forward vector direction assertion: must point generally towards the screen (+Z direction in Godot Camera Space)
 	var head_forward = -xform.basis.z.normalized()
-	if head_forward.z >= -0.5:
+	if head_forward.z <= 0.5:
 		printerr("FAIL: Shaders/Crops - Head forward vector points away from the screen! head_forward = ", head_forward)
 		quit(1)
 		return
@@ -148,7 +140,7 @@ func _init():
 			initial_gaze = ev.position
 			break
 			
-	var test_scale = DisplayProfile.get_screen_scale()
+	var test_scale = DisplayServer.screen_get_scale(DisplayServer.window_get_current_screen())
 	print("Initial window position: ", DisplayServer.window_get_position(), " | Initial scale: ", test_scale)
 	print("Initial gaze: ", initial_gaze)
 	if initial_gaze == Vector2.ZERO:

@@ -182,9 +182,13 @@ func update_diagnostics_ui() -> void:
 		if is_face_detected:
 			var head_pos = ev.head_transform.origin
 			var head_rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
+			var head_fwd = -ev.head_transform.basis.z.normalized()
+			var eye_orig = ev.gaze_transform.origin
+			var gaze_dir = -ev.gaze_transform.basis.z.normalized()
 			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
 			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
-			var gaze_dir = -ev.gaze_transform.basis.z
+			lines.append("Head Forward: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [head_fwd.x, head_fwd.y, head_fwd.z])
+			lines.append("Eye Origin (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [eye_orig.x, eye_orig.y, eye_orig.z])
 			lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
 			lines.append("Eye Openness: [color=yellow]L: %.2f, R: %.2f[/color]" % [ev.left_eye_openness, ev.right_eye_openness])
 		else:
@@ -208,8 +212,16 @@ func update_diagnostics_ui() -> void:
 
 		var dev_cal = gs.get_device_calibration()
 		var bio_cal = gs.get_bio_calibration()
-		lines.append("\n[b]Calibration Status:[/b]")
+		lines.append("\n[b]Calibration & Geometry:[/b]")
 		lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
+		if dev_cal:
+			var phys_mm = dev_cal.get_physical_size_mm()
+			var log_px = dev_cal.get_logical_size_px()
+			var w_pos = dev_cal.get_window_position()
+			var c_off = dev_cal.get_camera_offset()
+			lines.append("  Screen Size: [color=yellow]%.1fx%.1f mm ( %dx%d px )[/color]" % [phys_mm.x, phys_mm.y, log_px.x, log_px.y])
+			lines.append("  Window Pos: [color=yellow](%.1f, %.1f)[/color]" % [w_pos.x, w_pos.y])
+			lines.append("  Cam Offset: [color=yellow](%.1f, %.1f, %.1f) mm[/color]" % [c_off.x, c_off.y, c_off.z])
 		lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
 
 		lines.append("\n[b]Camera Feed:[/b]")
@@ -220,8 +232,9 @@ func update_diagnostics_ui() -> void:
 
 	lines.append("\n[b]Environment Details:[/b]")
 	var dpi_val = DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96
+	var scr_scale = DisplayServer.screen_get_scale() if Engine.has_singleton("DisplayServer") else 1.0
 	lines.append("  Screen DPI: [color=yellow]%d[/color]" % dpi_val)
-	lines.append("  Device Scale: [color=yellow]%.2f[/color]" % (1.0 if OS.get_name() != "macOS" else 2.0))
+	lines.append("  Device Scale: [color=yellow]%.2f[/color]" % scr_scale)
 
 	var new_text = "\n".join(lines)
 	if metrics_lbl.text != new_text:
@@ -233,12 +246,19 @@ func _on_copy_button_pressed():
 		"timestamp": Time.get_datetime_string_from_system(true),
 		"gaze_tracker_active": false,
 		"face_detected": false,
+		"gaze_origin_mm": null,
 		"gaze_direction": null,
 		"head_translation_mm": null,
 		"head_rotation_deg": null,
+		"head_forward": null,
 		"device_calibration": null,
+		"screen_physical_mm": null,
+		"screen_logical_px": null,
+		"window_position_px": null,
+		"camera_offset_mm": null,
 		"bio_calibration": null,
 		"screen_dpi": DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96,
+		"device_scale": DisplayServer.screen_get_scale() if Engine.has_singleton("DisplayServer") else 1.0,
 		"camera_width_height": "%dx%d" % [actual_cam_width, actual_cam_height]
 	}
 
@@ -248,6 +268,11 @@ func _on_copy_button_pressed():
 		var dev_cal = gs.get_device_calibration()
 		var bio_cal = gs.get_bio_calibration()
 		data["device_calibration"] = dev_cal.get_class() if dev_cal else "Null"
+		if dev_cal:
+			data["screen_physical_mm"] = [dev_cal.get_physical_size_mm().x, dev_cal.get_physical_size_mm().y]
+			data["screen_logical_px"] = [dev_cal.get_logical_size_px().x, dev_cal.get_logical_size_px().y]
+			data["window_position_px"] = [dev_cal.get_window_position().x, dev_cal.get_window_position().y]
+			data["camera_offset_mm"] = [dev_cal.get_camera_offset().x, dev_cal.get_camera_offset().y, dev_cal.get_camera_offset().z]
 		data["bio_calibration"] = bio_cal.get_class() if bio_cal else "Null"
 		var ev = gs.get_most_recent_event()
 		if ev is InputEventGaze and ev.is_face_tracked():
@@ -255,7 +280,11 @@ func _on_copy_button_pressed():
 			data["head_translation_mm"] = [ev.head_transform.origin.x, ev.head_transform.origin.y, ev.head_transform.origin.z]
 			var rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
 			data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
-			var gaze_dir = -ev.gaze_transform.basis.z
+			var head_fwd = -ev.head_transform.basis.z.normalized()
+			data["head_forward"] = [head_fwd.x, head_fwd.y, head_fwd.z]
+			var eye_orig = ev.gaze_transform.origin
+			data["gaze_origin_mm"] = [eye_orig.x, eye_orig.y, eye_orig.z]
+			var gaze_dir = -ev.gaze_transform.basis.z.normalized()
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
 
 	if Engine.has_singleton("DisplayServer"):
@@ -289,7 +318,7 @@ func _perform_drawing():
 	if img_w <= 0 or img_h <= 0:
 		return
 
-	var focal_len = img_w
+	var focal_len = img_w / (2.0 * tan(deg_to_rad(65.0) * 0.5))
 	var cx = img_w / 2.0
 	var cy = img_h / 2.0
 
@@ -334,10 +363,11 @@ func _perform_drawing():
 				gd_draw_line(p1, p2, Color(0.0, 0.85, 1.0, 0.75), 2.0)
 
 	var cam_to_screen = func(p_cam: Vector3) -> Vector2:
-		if p_cam.z <= 0.01:
+		var depth = -p_cam.z
+		if depth <= 0.01:
 			return Vector2.INF
-		var px = (p_cam.x / p_cam.z) * focal_len + cx
-		var py = cy - (p_cam.y / p_cam.z) * focal_len
+		var px = (p_cam.x / depth) * focal_len + cx
+		var py = cy - (p_cam.y / depth) * focal_len
 		var local_pt = Vector2(px * drawn_rect.size.x / img_w, py * drawn_rect.size.y / img_h) + drawn_rect.position
 		return rect.global_position + local_pt - active_canvas.global_position
 
@@ -360,7 +390,7 @@ func _perform_drawing():
 			gd_draw_line(pt_nose_org, pt_nose_fwd, Color(0.0, 0.95, 1.0, 1.0), 3.5)
 
 	# Eye Gaze indicator
-	var eye_origin_3d = xform.origin
+	var eye_origin_3d = ev.gaze_transform.origin
 	if raw_gaze.length_squared() < 0.001:
 		raw_gaze = Vector3(0.0, 0.0, 1.0)
 	var eye_fwd = raw_gaze.normalized()

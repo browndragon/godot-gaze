@@ -6,7 +6,6 @@
 #include "gaze_server.hpp"
 #include "gaze_calibration_resource.hpp"
 #include "gaze_calibration_estimator.hpp"
-#include "display_profile.hpp"
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -17,7 +16,9 @@ void GazeCalibrationSession::_bind_methods() {
     ClassDB::bind_method(D_METHOD("add_sample", "target_pixel_px", "gaze_origin", "gaze_direction"), &GazeCalibrationSession::add_sample);
     ClassDB::bind_method(D_METHOD("clear"), &GazeCalibrationSession::clear);
     ClassDB::bind_method(D_METHOD("get_sample_count"), &GazeCalibrationSession::get_sample_count);
-    ClassDB::bind_method(D_METHOD("calculate_calibration", "tracker"), &GazeCalibrationSession::calculate_calibration, DEFVAL(Variant()));
+    ClassDB::bind_method(D_METHOD("calculate_calibration", "initial_device_calib"), &GazeCalibrationSession::calculate_calibration, DEFVAL(Ref<DeviceCalibration>()));
+    ClassDB::bind_method(D_METHOD("get_device_calibration"), &GazeCalibrationSession::get_device_calibration);
+    ClassDB::bind_method(D_METHOD("get_bio_calibration"), &GazeCalibrationSession::get_bio_calibration);
 
     ClassDB::bind_method(D_METHOD("set_freeze_camera_params", "freeze"), &GazeCalibrationSession::set_freeze_camera_params);
     ClassDB::bind_method(D_METHOD("get_freeze_camera_params"), &GazeCalibrationSession::get_freeze_camera_params);
@@ -52,38 +53,38 @@ int GazeCalibrationSession::get_sample_count() const {
     return target_pixels_px.size();
 }
 
-Dictionary GazeCalibrationSession::calculate_calibration(Object *tracker) {
-    Dictionary res;
-
-    Ref<GuessDeviceCalibration> dev_cal;
+bool GazeCalibrationSession::calculate_calibration(const Ref<DeviceCalibration>& p_initial_device_calib) {
+    Ref<StoredDeviceCalibration> dev_cal;
     dev_cal.instantiate();
 
-    Ref<GuessBioCalibration> bio_cal;
+    Ref<StoredBioCalibration> bio_cal;
     bio_cal.instantiate();
 
-    res["device_calibration"] = dev_cal;
-    res["bio_calibration"] = bio_cal;
+    result_device_calibration = dev_cal;
+    result_bio_calibration = bio_cal;
 
     int count = get_sample_count();
     if (count == 0) {
-        return res;
+        return false;
     }
 
-    GazeServer* gs = GazeServer::get_singleton();
-    Ref<DisplayProfile> profile;
-    if (tracker && tracker->has_method("get_display_profile")) {
-        profile = tracker->call("get_display_profile");
-    } else if (gs) {
-        profile = gs->get_display_profile();
-    }
-    if (!profile.is_valid()) {
-        profile = DisplayProfile::estimate_from_os();
+    Ref<DeviceCalibration> initial_calib = p_initial_device_calib;
+    if (!initial_calib.is_valid()) {
+        Ref<GuessDeviceCalibration> guess;
+        guess.instantiate();
+        initial_calib = guess;
     }
 
-    Vector2i screen_sz_px = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector2 screen_sz_mm = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(345.0, 215.0);
+    Vector2 screen_sz_mm = initial_calib->get_physical_size_mm();
+    Vector2i screen_sz_px = initial_calib->get_logical_size_px();
+    Vector3 init_off = initial_calib->get_camera_offset();
+    double init_tilt = initial_calib->get_camera_tilt();
+
     if (screen_sz_px.x <= 0 || screen_sz_px.y <= 0) screen_sz_px = Vector2i(1920, 1080);
     if (screen_sz_mm.x <= 0.0 || screen_sz_mm.y <= 0.0) screen_sz_mm = Vector2(345.0, 215.0);
+
+    dev_cal->set_physical_size_mm(screen_sz_mm);
+    dev_cal->set_logical_size_px(screen_sz_px);
 
     std::vector<Gaze::CalibrationSample> core_samples;
     for (int i = 0; i < count; ++i) {
@@ -103,13 +104,6 @@ Dictionary GazeCalibrationSession::calculate_calibration(Object *tracker) {
             (tgt_val.y / screen_sz_px.y) * screen_sz_mm.y
         );
         core_samples.push_back(sample);
-    }
-
-    Vector3 init_off = Vector3(0.0, 148.0, 0.0);
-    double init_tilt = 0.0;
-    if (tracker && tracker->has_method("get_derived_camera_offset")) {
-        init_off = tracker->call("get_derived_camera_offset");
-        init_tilt = tracker->call("get_derived_camera_tilt");
     }
 
     Gaze::GazeVector3 out_off;
@@ -132,7 +126,6 @@ Dictionary GazeCalibrationSession::calculate_calibration(Object *tracker) {
     if (success) {
         dev_cal->set_camera_offset(Vector3(out_off.x, out_off.y, out_off.z));
         dev_cal->set_camera_tilt(out_tilt);
-        dev_cal->set_pixel_size_mm(Vector2(screen_sz_mm.x / screen_sz_px.x, screen_sz_mm.y / screen_sz_px.y));
 
         bio_cal->set_bias_pitch(out_pitch);
         bio_cal->set_bias_yaw(out_yaw);
@@ -150,7 +143,7 @@ Dictionary GazeCalibrationSession::calculate_calibration(Object *tracker) {
         Gaze::log_warning("Calibration_Failed", "reason", "estimation failed to converge");
     }
 
-    return res;
+    return success;
 }
 
 } // namespace godot

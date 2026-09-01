@@ -161,14 +161,9 @@ func run_benchmark():
 	vs.camera_set_focal_length(cam_rid, focal)
 	vs.camera_start(cam_rid)
 
-	var disp_rid = gs.display_create()
-	gs.display_set_device_calibration(disp_rid, dev_cal)
-	var s_cam_rid = gs.camera_create(disp_rid)
-	gs.camera_set_offsets(s_cam_rid, Vector3(0.0, 0.0, 0.0), 0.0)
-	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
-	var face_rid = gs.face_tracker_create(s_cam_rid)
-	var eye_rid = gs.eye_tracker_create(face_rid)
-	gs.eye_tracker_set_smoother(eye_rid, null)
+	gs.set_camera_offsets(Vector3(0.0, 0.0, 0.0), 0.0)
+	gs.set_camera_vision_rid(cam_rid)
+	gs.set_smoother(null)
 
 	gs.start_processing()
 	print("GazeServer initialized successfully for headless benchmark.")
@@ -211,9 +206,9 @@ func run_benchmark():
 		vs.camera_set_resolution(cam_rid, expected_w, expected_h)
 		vs.camera_set_focal_length(cam_rid, frame_focal)
 
-		gs.face_tracker_reset(face_rid)
+		gs.reset()
 		if meta.has("roll_hint_deg"):
-			gs.face_tracker_set_roll_hint(face_rid, deg_to_rad(meta.roll_hint_deg))
+			gs.set_roll_hint(deg_to_rad(meta.roll_hint_deg))
 
 		print("Processing benchmark frame: ", img_file, " (", img.get_width(), "x", img.get_height(), ")")
 
@@ -227,15 +222,15 @@ func run_benchmark():
 				gs.trigger_process()
 
 		# Get tracking outputs from GazeServer
-		var head_trans = gs.get_head_pose_origin_mm(face_rid)
-		var head_rot = gs.get_head_pose_euler_deg(face_rid)
-		var head_xform = gs.get_relative_transform(face_rid)
+		var head_trans = gs.get_head_position()
+		var head_rot = gs.get_head_pose_euler_deg()
+		var head_xform = gs.get_head_transform()
 		var head_fwd = -head_xform.basis.z
 		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd, false)
 		var nose_proj_mm = px_to_screen_mm(nose_proj_px)
-		var gaze_proj_mm = gs.get_projected_gaze_mm_from_eye_tracker(eye_rid, false)
+		var gaze_proj_mm = gs.get_projected_gaze_mm(false)
 
-		print("  -> Tracked Face: ", gs.is_face_detected(face_rid), " | Head Trans: ", head_trans, " | Head Rot: ", head_rot, " | Nose mm: ", nose_proj_mm, " | Gaze mm: ", gaze_proj_mm)
+		print("  -> Tracked Face: ", gs.is_face_detected(), " | Head Trans: ", head_trans, " | Head Rot: ", head_rot, " | Nose mm: ", nose_proj_mm, " | Gaze mm: ", gaze_proj_mm)
 
 		var target_info = meta.get("target", TARGET_CENTER)
 		var rel_offset = target_info.get("relative_to", Vector2(0.0, -50.0))
@@ -317,10 +312,6 @@ func run_benchmark():
 
 	print("\n" + full_report)
 
-	gs.eye_tracker_free(eye_rid)
-	gs.face_tracker_free(face_rid)
-	gs.camera_free(s_cam_rid)
-	gs.display_free(disp_rid)
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)

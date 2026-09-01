@@ -174,13 +174,15 @@ Ref<DeviceCalibration> DefaultDeviceCalibration::get_actual_calibration() const 
             }
         }
     }
-    GazeDeviceEstimatedCalibration* sing = Object::cast_to<GazeDeviceEstimatedCalibration>(Engine::get_singleton()->get_singleton("GazeDeviceEstimatedCalibration"));
-    if (sing && sing->get_calibration().is_valid()) {
-        cached_calibration = sing->get_calibration();
-        if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"))) {
-            cached_calibration->connect("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"));
+    if (Engine::get_singleton()->has_singleton("GazeDeviceEstimatedCalibration")) {
+        GazeDeviceEstimatedCalibration* sing = Object::cast_to<GazeDeviceEstimatedCalibration>(Engine::get_singleton()->get_singleton("GazeDeviceEstimatedCalibration"));
+        if (sing && sing->get_calibration().is_valid()) {
+            cached_calibration = sing->get_calibration();
+            if (!cached_calibration->is_connected("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"))) {
+                cached_calibration->connect("changed", Callable(const_cast<DefaultDeviceCalibration*>(this), "emit_changed"));
+            }
+            return cached_calibration;
         }
-        return cached_calibration;
     }
     Ref<GuessDeviceCalibration> guess;
     guess.instantiate();

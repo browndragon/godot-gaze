@@ -27,14 +27,10 @@ const CAM_FOCAL_PX: float = 1440.0 / (2.0 * 0.6370702608) # 65 deg HFOV default
 const CAM_CX_PX: float = 720.0
 const CAM_CY_PX: float = 480.0
 
-var gs: Object
-var vs: Object
+var vs: VisionServer
+var gs: GazeServer
 var cam_rid: RID
-var s_cam_rid: RID
-var disp_rid: RID
-var face_rid: RID
-var eye_rid: RID
-var dev_cal: MockDeviceCalibration
+var dev_cal: DeviceCalibration
 
 const CAM_GEOM_1440 := {
 	"res": Vector2i(1440, 960),
@@ -155,24 +151,18 @@ func run_tool() -> void:
 	vs.camera_start(cam_rid)
 
 	# Configure Reference Snapshot Geometry (2021 14" MacBook Pro Capture Hardware)
-	disp_rid = gs.display_create()
 	dev_cal = MockDeviceCalibration.new()
 	dev_cal.physical_size_mm = Vector2(SCREEN_WIDTH_MM, SCREEN_HEIGHT_MM)
 	dev_cal.logical_size_px = Vector2i(int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT))
 	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0) # Top bezel center (X=150.75mm, Y=0.0mm)
 	dev_cal.camera_tilt = 0.0
 	dev_cal.set_window_position(Vector2(WIN_POS_X_PT, WIN_POS_Y_PT))
-	gs.display_set_device_calibration(disp_rid, dev_cal)
 	gs.set_device_calibration(dev_cal)
 
-	s_cam_rid = gs.camera_create(disp_rid)
-	gs.camera_set_offsets(s_cam_rid, Vector3(0.0, 0.0, 0.0), 0.0)
-	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
-	face_rid = gs.face_tracker_create(s_cam_rid)
-	eye_rid = gs.eye_tracker_create(face_rid)
-
-	gs.camera_set_preview_requested(true)
-	gs.eye_tracker_set_crop_requested(eye_rid, true)
+	gs.set_camera_offsets(Vector3(0.0, 0.0, 0.0), 0.0)
+	gs.set_camera_vision_rid(cam_rid)
+	gs.set_camera_preview_requested(true)
+	gs.set_crop_requested(true)
 
 	gs.start_processing()
 
@@ -222,27 +212,27 @@ func run_tool() -> void:
 		vs.camera_set_resolution(cam_rid, expected_w, expected_h)
 		vs.camera_set_focal_length(cam_rid, focal)
 
-		gs.face_tracker_reset(face_rid)
+		gs.reset()
 		if meta.has("roll_hint_deg"):
-			gs.face_tracker_set_roll_hint(face_rid, deg_to_rad(meta.roll_hint_deg))
+			gs.set_roll_hint(deg_to_rad(meta.roll_hint_deg))
 
 		var ok = await inject_and_sync_frame(img)
-		if not ok or not gs.is_face_detected(face_rid):
+		if not ok or not gs.is_face_detected():
 			print("[WARN] %-30s -> Face not detected or pipeline timeout" % img_name)
 			summary_rows.append("| %s | N/A | N/A | N/A | N/A | N/A | N/A | NO_FACE |" % img_name)
 			continue
 
 		# 1. Read Tracking Data and Diagnostic Textures from GazeServer & VisionServer
-		var head_pos = gs.get_head_pose_origin_mm(face_rid)
-		var head_xform = gs.get_relative_transform(face_rid)
-		var _head_rot = gs.get_head_pose_euler_deg(face_rid)
+		var head_pos = gs.get_head_position()
+		var head_xform = gs.get_head_transform()
+		var _head_rot = gs.get_head_rotation()
 		var head_fwd = -head_xform.basis.z.normalized()
-		var lm_pts = gs.get_face_landmarks(face_rid)
+		var lm_pts = gs.get_face_landmarks_2d()
 
-		var eye_orig = gs.get_gaze_origin_from_eye_tracker(eye_rid)
+		var eye_orig = gs.get_gaze_origin()
 		if eye_orig == Vector3.ZERO:
 			eye_orig = head_pos + Vector3(0.0, 30.0, 0.0) # Fallback to inter-ocular center
-		var gaze_dir = gs.get_gaze_direction_from_eye_tracker(eye_rid)
+		var gaze_dir = gs.get_gaze_direction()
 		if gaze_dir == Vector3.ZERO:
 			gaze_dir = head_fwd
 
@@ -251,13 +241,13 @@ func run_tool() -> void:
 		var camera_img: Image = cam_tex.get_image() if cam_tex != null else img
 
 		# Get eye crops from GazeServer
-		var eye_crops = gs.get_eye_crops(eye_rid)
+		var eye_crops = gs.get_eye_crops()
 		var left_crop: Image = eye_crops[0] if eye_crops.size() > 0 and eye_crops[0] != null else null
 		var right_crop: Image = eye_crops[1] if eye_crops.size() > 1 and eye_crops[1] != null else null
 
 		# 2. GazeServer Reported Points (Viewport -> Screen)
 		var nose_win_reported = gs.project_ray_to_viewport(head_pos, head_fwd, false)
-		var eye_win_reported = gs.get_projected_gaze_from_eye_tracker(eye_rid, false)
+		var eye_win_reported = gs.get_gaze_screen_px(false)
 
 		var nose_screen_reported = nose_win_reported + Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
 		var eye_screen_reported = eye_win_reported + Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
@@ -312,10 +302,6 @@ func run_tool() -> void:
 	print("================================================================================")
 
 	# Cleanup
-	gs.eye_tracker_free(eye_rid)
-	gs.face_tracker_free(face_rid)
-	gs.camera_free(s_cam_rid)
-	gs.display_free(disp_rid)
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)
@@ -334,7 +320,7 @@ func inject_and_sync_frame(img: Image) -> bool:
 		gs.trigger_process()
 		await create_timer(0.04).timeout
 
-	return gs.is_face_detected(face_rid)
+	return gs.is_face_detected()
 
 func project_cam_3d_to_img_2d(p3d: Vector3, img_w: float, img_h: float) -> Vector2:
 	var z_depth = -p3d.z

@@ -6,15 +6,23 @@
 
 #include "gaze_calibration_resource.hpp"
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/core/error_macros.hpp>
 
 namespace godot {
+
+static DisplayServer* get_safe_display_server() {
+    if (Engine::get_singleton()->get_singleton_list().has("DisplayServer")) {
+        return DisplayServer::get_singleton();
+    }
+    return nullptr;
+}
 
 Vector2 GuessDeviceCalibration::get_physical_size_mm() const {
     if (physical_size_mm.x > 0.0 && physical_size_mm.y > 0.0) {
         return physical_size_mm;
     }
-    DisplayServer* ds = DisplayServer::get_singleton();
+    DisplayServer* ds = get_safe_display_server();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         Vector2i size_ppix = ds->screen_get_size(screen_id);
@@ -42,7 +50,7 @@ Vector2i GuessDeviceCalibration::get_logical_size_px() const {
     if (logical_size_px.x > 0 && logical_size_px.y > 0) {
         return logical_size_px;
     }
-    DisplayServer* ds = DisplayServer::get_singleton();
+    DisplayServer* ds = get_safe_display_server();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         Vector2i size_ppix = ds->screen_get_size(screen_id);
@@ -58,7 +66,8 @@ Vector3 GuessDeviceCalibration::get_camera_offset() const {
     if (camera_offset.x > -999.0 && camera_offset.y > -999.0 && camera_offset.z > -999.0) {
         return camera_offset;
     }
-    return Vector3(0.0, 0.0, 0.0);
+    Vector2 phys = get_physical_size_mm();
+    return Vector3(0.0, phys.y * 0.5, 0.0);
 }
 
 double GuessDeviceCalibration::get_camera_tilt() const {
@@ -69,8 +78,10 @@ double GuessDeviceCalibration::get_camera_tilt() const {
 }
 
 Vector2 GuessDeviceCalibration::get_window_position() const {
-    DisplayServer* ds = DisplayServer::get_singleton();
-    ERR_FAIL_COND_V_MSG(!ds, Vector2(), "DisplayServer is missing; tests must inject MockDeviceCalibration!");
+    DisplayServer* ds = get_safe_display_server();
+    if (!ds) {
+        return Vector2(0.0, 0.0);
+    }
     int screen_id = ds->window_get_current_screen();
     double scale = ds->screen_get_scale(screen_id);
     if (scale <= 0.0) scale = 1.0;
@@ -79,7 +90,7 @@ Vector2 GuessDeviceCalibration::get_window_position() const {
 }
 
 Vector2 StoredDeviceCalibration::get_window_position() const {
-    DisplayServer* ds = DisplayServer::get_singleton();
+    DisplayServer* ds = get_safe_display_server();
     if (ds) {
         int screen_id = ds->window_get_current_screen();
         double scale = ds->screen_get_scale(screen_id);

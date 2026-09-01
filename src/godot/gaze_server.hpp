@@ -38,11 +38,6 @@ namespace godot {
 
 class GazeServer;
 
-/**
- * @class GazeServer
- * @brief Central engine singleton managing camera acquisition, ML pipeline, calibrations,
- *        lifecycle, and dispatching InputEventGaze events into Godot's input tree.
- */
 struct GazeServerImpl;
 
 class GazeServer : public Object {
@@ -55,13 +50,6 @@ private:
     std::unique_ptr<Gaze::GazeTrackingPipeline> pipeline;
 #endif
 
-    RID default_display_rid;
-    RID default_camera_rid;
-    RID default_face_rid;
-    RID default_eye_rid;
-
-    Ref<DeviceCalibration> default_device_calibration;
-    Ref<BioCalibration> default_bio_calibration;
     Ref<GazeEventFactory> event_factory;
 
     Ref<InputEventGazeBase> most_recent_event;
@@ -91,156 +79,112 @@ public:
     GazeServer();
     virtual ~GazeServer();
 
-    /**
-     * @brief Get the GazeServer global singleton instance.
-     */
     static GazeServer *get_singleton() { return singleton; }
 
     // --- High-Level Lifecycle Management ---
-
-    /**
-     * @brief Request tracking start (increments refcount).
-     * @return true if this call was the 0 -> 1 transition (initiating pipeline startup), false otherwise.
-     */
     bool start_tracking();
-
-    /**
-     * @brief Request tracking stop (decrements refcount).
-     * @param p_immediate If true, stops camera/pipeline immediately. If false, schedules deferred check.
-     */
     void stop_tracking(bool p_immediate = false);
-
-    /**
-     * @brief Deferred check to halt tracking if refcount remains 0 at end of frame.
-     */
     void _deferred_stop_check();
-
-    /**
-     * @brief Check whether gaze tracking or pipeline processing is actively running.
-     */
     bool is_tracking_active() const;
-
-    /**
-     * @brief Retrieve the most recent gaze input event (InputEventGaze or InputEventGazeMissing).
-     */
     Ref<InputEventGazeBase> get_most_recent_event() const;
 
-    // --- Calibrations & Display Geometry ---
+    void ensure_process_connected();
+    void trigger_process();
+    void start_processing();
+    void stop_processing();
+    void reset();
+    int get_active_tracker_count() const;
 
+    // --- Calibrations & Hardware Setup ---
     void set_device_calibration(const Ref<DeviceCalibration>& p_calibration);
     Ref<DeviceCalibration> get_device_calibration() const;
 
     void set_bio_calibration(const Ref<BioCalibration>& p_calibration);
     Ref<BioCalibration> get_bio_calibration() const;
 
-    Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration = false) const;
+    void set_camera_offsets(Vector3 p_offset, double p_tilt);
+    Vector3 get_camera_offset() const;
+    double get_camera_tilt() const;
 
-    // --- Event Factory ---
+    void set_camera_vision_rid(RID p_vision_camera);
+    RID get_camera_vision_rid() const;
 
-    void set_event_factory(const Ref<GazeEventFactory>& p_factory);
-    Ref<GazeEventFactory> get_event_factory();
-    void initialize_scene_resources();
-    void _ensure_event_factory_loaded();
+    void set_pipeline_config(const Ref<GazePipelineConfig>& p_config);
+    Ref<GazePipelineConfig> get_pipeline_config() const;
 
-    Ref<InputEventGaze> create_default_event();
-    Ref<InputEventGazeMissing> create_default_missing_event(int p_reason);
+    // --- Face & Head Pose Tracking ---
+    bool is_face_detected() const;
+    Transform3D get_head_transform() const;
+    Vector3 get_head_position() const;
+    Vector3 get_head_rotation() const;
+    Vector3 get_head_pose_origin_mm() const;
+    Vector3 get_head_pose_euler_deg() const;
 
-    // --- Emulation Settings ---
+    void set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p_detected);
+    void set_face_transform(const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected);
 
-    void set_emulate_gaze_from_mouse(bool p_enable);
-    bool get_emulate_gaze_from_mouse() const;
-
-    void set_emulate_mouse_from_gaze(bool p_enable);
-    bool get_emulate_mouse_from_gaze() const;
-
-    void set_mouse_emulation_dwell_sec(float p_sec);
-    float get_mouse_emulation_dwell_sec() const;
-
-    void set_mouse_emulation_transition_sec(float p_sec);
-    float get_mouse_emulation_transition_sec() const;
-
-    // --- Debug Texture & Landmarks Access ---
-
-    Ref<Texture2D> get_camera_texture();
-    Array get_eye_crops(RID p_eye = RID());
-    PackedVector2Array get_face_landmarks(RID p_face = RID()) const;
+    PackedVector2Array get_face_landmarks_2d() const;
+    PackedVector2Array get_face_landmarks() const;
     PackedVector2Array get_debug_landmarks() const;
-    bool is_face_detected(RID p_face = RID()) const;
-    void camera_set_preview_requested(bool p_requested);
-    bool is_camera_preview_requested() const;
+    void set_face_landmarks_2d(const PackedVector2Array &p_landmarks);
 
-    // --- Server Low-Level Resource Management (RIDs) ---
-
-    RID get_default_camera_rid() const { return default_camera_rid; }
-    RID get_default_display_rid() const { return default_display_rid; }
-    RID get_default_face_rid() const { return default_face_rid; }
-    RID get_default_eye_rid() const { return default_eye_rid; }
-
-    RID display_create();
-    void display_set_geometry(RID p_display, Vector2 p_logical_size, Vector2 p_physical_size);
-    void display_set_device_calibration(RID p_display, const Ref<DeviceCalibration>& p_calibration);
-    void display_set_bio_calibration(RID p_display, const Ref<BioCalibration>& p_calibration);
-    void display_free(RID p_display);
-
-    RID camera_create(RID p_display);
-    void camera_set_offsets(RID p_camera, Vector3 p_offset, double p_tilt);
-    void camera_set_vision_rid(RID p_camera, RID p_vision_camera);
-    void camera_free(RID p_camera);
-
-    RID face_tracker_create(RID p_camera);
     PackedVector3Array get_face_model_points() const;
-    void face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector3 p_rotation, bool p_detected);
-    void face_tracker_set_transform(RID p_face, const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected);
-    void face_tracker_free(RID p_face);
-
-    Vector3 get_head_rotation_from_face_tracker(RID p_face) const;
-    Vector3 get_head_translation_from_face_tracker(RID p_face) const;
-    Vector3 get_head_pose_origin_mm(RID p_face) const;
-    Vector3 get_head_pose_euler_deg(RID p_face) const;
-    void face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks);
-    PackedVector2Array get_face_landmarks_2d(RID p_face) const;
-    void face_tracker_set_roll_hint(RID p_face, float p_roll_hint_rad);
-    float face_tracker_get_roll_hint(RID p_face) const;
-    void face_tracker_set_auto_roll_enabled(RID p_face, bool p_enabled);
-    bool face_tracker_is_auto_roll_enabled(RID p_face) const;
-    void face_tracker_reset(RID p_face);
 
     void set_roll_hint(float p_roll_hint_rad);
     float get_roll_hint() const;
     void set_auto_roll_enabled(bool p_enabled);
     bool is_auto_roll_enabled() const;
 
-    RID eye_tracker_create(RID p_face);
-    void eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p_direction_cam);
-    void eye_tracker_set_openness(RID p_eye, float p_left, float p_right);
-    float get_left_eye_openness(RID p_eye) const;
-    float get_right_eye_openness(RID p_eye) const;
-    void eye_tracker_set_smoother(RID p_eye, const Ref<Smoother>& p_smoother);
-    void eye_tracker_set_crop_requested(RID p_eye, bool p_requested);
-    bool eye_tracker_is_crop_requested(RID p_eye);
-    Array tracker_get_eye_crops(RID p_eye);
-    void eye_tracker_free(RID p_eye);
+    // --- Eye & Gaze Tracking ---
+    bool is_gaze_detected() const;
+    Vector3 get_gaze_origin() const;
+    Vector3 get_gaze_direction() const;
+    void set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam);
 
-    Vector3 get_gaze_origin_from_eye_tracker(RID p_eye) const;
-    Vector3 get_gaze_direction_from_eye_tracker(RID p_eye) const;
-    Vector2 get_projected_gaze_from_eye_tracker(RID p_eye, bool p_smoothed = false) const;
-    Vector2 get_projected_gaze_mm_from_eye_tracker(RID p_eye, bool p_smoothed = false) const;
-    void set_crops_on_eye_tracker(RID p_eye, const Ref<Image>& p_left_crop, const Ref<Image>& p_right_crop);
-    void reset_eye_tracker(RID p_eye);
+    Vector2 get_gaze_screen_px(bool p_smoothed = true) const;
+    Vector2 get_gaze_screen_mm(bool p_smoothed = true) const;
+    Vector2 get_gaze_screen(bool p_smoothed = true) const;
+    Vector2 get_projected_gaze(bool p_smoothed = false) const;
+    Vector2 get_projected_gaze_mm(bool p_smoothed = false) const;
 
+    float get_left_eye_openness() const;
+    float get_right_eye_openness() const;
+    void set_eye_openness(float p_left, float p_right);
+
+    void set_smoother(const Ref<Smoother>& p_smoother);
+    Ref<Smoother> get_smoother() const;
+
+    void set_crop_requested(bool p_requested);
+    bool is_crop_requested() const;
+    Array get_eye_crops();
+    void set_eye_crops(const Ref<Image>& p_left_crop, const Ref<Image>& p_right_crop);
+
+    Ref<Texture2D> get_camera_texture();
+    void set_camera_preview_requested(bool p_requested);
+    bool is_camera_preview_requested() const;
     void emit_camera_frame_ready(RID p_vision_camera);
-    Transform3D get_relative_transform(RID p_entity);
-    Vector2 get_gaze_screen(RID p_display, bool p_smoothed = true);
 
-    // --- Pipeline Processing ---
+    // --- Ray Projection Math ---
+    Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration = false) const;
+    Vector2 project_ray_to_screen_mm(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 
-    void set_pipeline_config(const Ref<GazePipelineConfig>& p_config);
-    void ensure_process_connected();
-    void trigger_process();
-    void start_processing();
-    void stop_processing();
+    // --- Event Factory ---
+    void set_event_factory(const Ref<GazeEventFactory>& p_factory);
+    Ref<GazeEventFactory> get_event_factory();
+    void initialize_scene_resources();
+    void _ensure_event_factory_loaded();
+    Ref<InputEventGaze> create_default_event();
+    Ref<InputEventGazeMissing> create_default_missing_event(int p_reason);
 
-    int get_active_tracker_count() const;
+    // --- Emulation Settings ---
+    void set_emulate_gaze_from_mouse(bool p_enable);
+    bool get_emulate_gaze_from_mouse() const;
+    void set_emulate_mouse_from_gaze(bool p_enable);
+    bool get_emulate_mouse_from_gaze() const;
+    void set_mouse_emulation_dwell_sec(float p_sec);
+    float get_mouse_emulation_dwell_sec() const;
+    void set_mouse_emulation_transition_sec(float p_sec);
+    float get_mouse_emulation_transition_sec() const;
 
 #ifdef WEB_ENABLED
     void feed_gaze_web_raw(const Array& args);

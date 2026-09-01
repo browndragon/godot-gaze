@@ -28,13 +28,8 @@ func run_render():
 	vs.camera_set_focal_length(cam_rid, 1440.0)
 	vs.camera_start(cam_rid)
 
-	var disp_rid = gs.display_create()
-	gs.display_set_device_calibration(disp_rid, dev_cal)
-	var s_cam_rid = gs.camera_create(disp_rid)
-	gs.camera_set_offsets(s_cam_rid, Vector3(0.0, 94.25, 0.0), 0.0)
-	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
-	var face_rid = gs.face_tracker_create(s_cam_rid)
-	var eye_rid = gs.eye_tracker_create(face_rid)
+	gs.set_camera_offsets(Vector3(0.0, 94.25, 0.0), 0.0)
+	gs.set_camera_vision_rid(cam_rid)
 
 	gs.start_processing()
 
@@ -72,19 +67,19 @@ func run_render():
 			gs.trigger_process()
 			await create_timer(0.04).timeout
 
-		if not gs.is_face_detected(face_rid):
+		if not gs.is_face_detected():
 			print("[%s] No face tracked or not converged" % img_name)
 			continue
 
-		var head_pos = gs.get_head_pose_origin_mm(face_rid)
-		var head_rot = gs.get_head_pose_euler_deg(face_rid)
-		var head_xform = gs.get_relative_transform(face_rid)
+		var head_pos = gs.get_head_position()
+		var head_rot = gs.get_head_rotation()
+		var head_xform = gs.get_head_transform()
 		var head_fwd = -head_xform.basis.z.normalized()
-		var lm_pts = gs.get_face_landmarks(face_rid)
+		var lm_pts = gs.get_face_landmarks_2d()
 
 		# Project to window coordinates
 		var nose_win = gs.project_ray_to_viewport(head_pos, head_fwd, false)
-		var eye_win = gs.get_projected_gaze_from_eye_tracker(eye_rid, false)
+		var eye_win = gs.get_gaze_screen_px(false)
 
 		# Screen coordinates
 		var win_pos = dev_cal.get_window_position()
@@ -129,7 +124,7 @@ func run_render():
 		preview.convert(Image.FORMAT_RGBA8)
 
 		# Draw 2D facial landmarks on mirrored preview
-		var lms = gs.get_face_landmarks(face_rid) if face_rid.is_valid() else PackedVector2Array()
+		var lms = gs.get_face_landmarks_2d()
 		var orig_w = float(img.get_width())
 		var orig_h = float(img.get_height())
 		for pt in lms:
@@ -163,10 +158,6 @@ func run_render():
 		canvas.save_png(out_file)
 		print("Saved overlay to: ", out_file)
 
-	gs.eye_tracker_free(eye_rid)
-	gs.face_tracker_free(face_rid)
-	gs.camera_free(s_cam_rid)
-	gs.display_free(disp_rid)
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)

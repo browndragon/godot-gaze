@@ -169,10 +169,8 @@ func run_tests():
 	fixture_dev.set_window_position(Vector2(0, 0))
 	gs.set_device_calibration(fixture_dev)
 
-	gs.camera_set_offsets(gs.get_default_camera_rid(), Vector3(0.0, 94.25, 0.0), 0.0)
-	gs.camera_set_vision_rid(gs.get_default_camera_rid(), cam_rid)
-	var face_rid = gs.get_default_face_rid()
-	var eye_rid = gs.get_default_eye_rid()
+	gs.set_camera_offsets(Vector3(0.0, 94.25, 0.0), 0.0)
+	gs.set_camera_vision_rid(cam_rid)
 
 	gs.start_processing()
 
@@ -189,14 +187,14 @@ func run_tests():
 			vs.inject_texture(cam_rid, tex)
 			gs.trigger_process()
 			await get_tree().create_timer(0.05).timeout
-		var head_trans = gs.get_head_pose_origin_mm(face_rid)
-		var head_xform = gs.get_relative_transform(face_rid)
+		var head_trans = gs.get_head_position()
+		var head_xform = gs.get_head_transform()
 		var head_fwd = -head_xform.basis.z
 		var nose_gaze = project_ray_to_screen_mm(head_trans, head_fwd)
-		var eye_gaze = gs.get_projected_gaze_mm_from_eye_tracker(eye_rid, false)
+		var eye_gaze = gs.get_gaze_screen_mm(false)
 		print("  -> Image: ", img_name, " | Head Forward: ", head_fwd, " | Nose: ", nose_gaze, " | Gaze: ", eye_gaze)
 		return {
-			"face_detected": gs.is_face_detected(face_rid),
+			"face_detected": gs.is_face_detected(),
 			"nose_gaze": nose_gaze,
 			"eye_gaze": eye_gaze
 		}

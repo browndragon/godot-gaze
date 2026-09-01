@@ -3,7 +3,6 @@
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
-#include <godot_cpp/templates/rid_owner.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/main_loop.hpp>
@@ -30,7 +29,7 @@ static_assert(alignof(Gaze::GazeVector3) == alignof(godot::Vector3), "Alignment 
 
 namespace godot {
 
-// Structs definitions inside GazeServerImpl for Pimpl idiom
+// Structs definitions inside GazeServerImpl for direct singleton state management
 struct GazeServerImpl {
     struct DisplayInfo {
         Vector2 logical_size_px = Vector2(1920, 1080);
@@ -48,17 +47,15 @@ struct GazeServerImpl {
 
         Vector2 window_position_px = Vector2(0.0, 0.0);
         Transform2D viewport_transform;
-    };
+    } display;
 
     struct CameraInfo {
-        RID parent_display_rid;
         Vector3 offset = Vector3(0.0, 107.5, 0.0);
         double tilt = 0.0;
         RID vision_camera_rid;
-    };
+    } camera;
 
     struct FaceInfo {
-        RID parent_camera_rid;
         Transform3D relative_transform;
         bool detected = false;
         
@@ -67,10 +64,9 @@ struct GazeServerImpl {
         PackedVector2Array landmarks_2d;
         float roll_hint_rad = 0.0f;
         bool auto_roll_enabled = true;
-    };
+    } face;
 
     struct EyeInfo {
-        RID parent_face_rid;
         Transform3D relative_transform;
         
         Vector3 gaze_origin_cam;
@@ -90,54 +86,11 @@ struct GazeServerImpl {
         Ref<Image> left_eye_crop;
         Ref<Image> right_eye_crop;
         bool crop_requested = false;
-    };
+    } eye;
 
-    RID_PtrOwner<DisplayInfo, true> display_owner;
-    RID_PtrOwner<CameraInfo, true> camera_owner;
-    RID_PtrOwner<FaceInfo, true> face_owner;
-    RID_PtrOwner<EyeInfo, true> eye_owner;
-
-    std::vector<RID> allocated_displays;
-    std::vector<RID> allocated_cameras;
-    std::vector<RID> allocated_faces;
-    std::vector<RID> allocated_eyes;
-
-    ~GazeServerImpl() {
-        for (RID rid : allocated_eyes) {
-            EyeInfo *info = eye_owner.get_or_null(rid);
-            if (info) {
-                memdelete(info);
-            }
-        }
-        allocated_eyes.clear();
-
-        for (RID rid : allocated_faces) {
-            FaceInfo *info = face_owner.get_or_null(rid);
-            if (info) {
-                memdelete(info);
-            }
-        }
-        allocated_faces.clear();
-
-        for (RID rid : allocated_cameras) {
-            CameraInfo *info = camera_owner.get_or_null(rid);
-            if (info) {
-                memdelete(info);
-            }
-        }
-        allocated_cameras.clear();
-
-        for (RID rid : allocated_displays) {
-            DisplayInfo *info = display_owner.get_or_null(rid);
-            if (info) {
-                memdelete(info);
-            }
-        }
-        allocated_displays.clear();
-    }
+    Ref<GazePipelineConfig> pipeline_config;
 };
 
-// Aliases for shorter syntax inside this implementation file
 using DisplayInfo = GazeServerImpl::DisplayInfo;
 using CameraInfo = GazeServerImpl::CameraInfo;
 using FaceInfo = GazeServerImpl::FaceInfo;
@@ -152,99 +105,87 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("_deferred_stop_check"), &GazeServer::_deferred_stop_check);
     ClassDB::bind_method(D_METHOD("is_tracking_active"), &GazeServer::is_tracking_active);
     ClassDB::bind_method(D_METHOD("get_most_recent_event"), &GazeServer::get_most_recent_event);
+    ClassDB::bind_method(D_METHOD("ensure_process_connected"), &GazeServer::ensure_process_connected);
+    ClassDB::bind_method(D_METHOD("trigger_process"), &GazeServer::trigger_process);
+    ClassDB::bind_method(D_METHOD("start_processing"), &GazeServer::start_processing);
+    ClassDB::bind_method(D_METHOD("stop_processing"), &GazeServer::stop_processing);
+    ClassDB::bind_method(D_METHOD("reset"), &GazeServer::reset);
+    ClassDB::bind_method(D_METHOD("get_active_tracker_count"), &GazeServer::get_active_tracker_count);
 
-    // Calibrations
+    // Calibration & Hardware Configuration
     ClassDB::bind_method(D_METHOD("set_device_calibration", "calibration"), &GazeServer::set_device_calibration);
     ClassDB::bind_method(D_METHOD("get_device_calibration"), &GazeServer::get_device_calibration);
     ClassDB::bind_method(D_METHOD("set_bio_calibration", "calibration"), &GazeServer::set_bio_calibration);
     ClassDB::bind_method(D_METHOD("get_bio_calibration"), &GazeServer::get_bio_calibration);
-    ClassDB::bind_method(D_METHOD("project_ray_to_viewport", "origin_cam", "direction_cam", "apply_bio_calibration"), &GazeServer::project_ray_to_viewport, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("set_camera_offsets", "offset", "tilt_deg"), &GazeServer::set_camera_offsets);
+    ClassDB::bind_method(D_METHOD("get_camera_offset"), &GazeServer::get_camera_offset);
+    ClassDB::bind_method(D_METHOD("get_camera_tilt"), &GazeServer::get_camera_tilt);
+    ClassDB::bind_method(D_METHOD("set_camera_vision_rid", "vision_camera_rid"), &GazeServer::set_camera_vision_rid);
+    ClassDB::bind_method(D_METHOD("get_camera_vision_rid"), &GazeServer::get_camera_vision_rid);
+    ClassDB::bind_method(D_METHOD("set_pipeline_config", "config"), &GazeServer::set_pipeline_config);
+    ClassDB::bind_method(D_METHOD("get_pipeline_config"), &GazeServer::get_pipeline_config);
 
-    // Event Factory
+    // Face Tracking & Head Pose
+    ClassDB::bind_method(D_METHOD("is_face_detected"), &GazeServer::is_face_detected);
+    ClassDB::bind_method(D_METHOD("get_head_transform"), &GazeServer::get_head_transform);
+    ClassDB::bind_method(D_METHOD("get_head_position"), &GazeServer::get_head_position);
+    ClassDB::bind_method(D_METHOD("get_head_rotation"), &GazeServer::get_head_rotation);
+    ClassDB::bind_method(D_METHOD("get_head_pose_origin_mm"), &GazeServer::get_head_pose_origin_mm);
+    ClassDB::bind_method(D_METHOD("get_head_pose_euler_deg"), &GazeServer::get_head_pose_euler_deg);
+    ClassDB::bind_method(D_METHOD("set_face_pose", "translation", "rotation", "detected"), &GazeServer::set_face_pose);
+    ClassDB::bind_method(D_METHOD("set_face_transform", "transform", "rotation", "detected"), &GazeServer::set_face_transform);
+    ClassDB::bind_method(D_METHOD("get_face_landmarks_2d"), &GazeServer::get_face_landmarks_2d);
+    ClassDB::bind_method(D_METHOD("get_face_landmarks"), &GazeServer::get_face_landmarks);
+    ClassDB::bind_method(D_METHOD("get_debug_landmarks"), &GazeServer::get_debug_landmarks);
+    ClassDB::bind_method(D_METHOD("set_face_landmarks_2d", "landmarks"), &GazeServer::set_face_landmarks_2d);
+    ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
+    ClassDB::bind_method(D_METHOD("set_roll_hint", "roll_hint_rad"), &GazeServer::set_roll_hint);
+    ClassDB::bind_method(D_METHOD("get_roll_hint"), &GazeServer::get_roll_hint);
+    ClassDB::bind_method(D_METHOD("set_auto_roll_enabled", "enabled"), &GazeServer::set_auto_roll_enabled);
+    ClassDB::bind_method(D_METHOD("is_auto_roll_enabled"), &GazeServer::is_auto_roll_enabled);
+
+    // Eye & Gaze Tracking
+    ClassDB::bind_method(D_METHOD("is_gaze_detected"), &GazeServer::is_gaze_detected);
+    ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeServer::get_gaze_origin);
+    ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeServer::get_gaze_direction);
+    ClassDB::bind_method(D_METHOD("set_gaze", "origin_cam", "direction_cam"), &GazeServer::set_gaze);
+    ClassDB::bind_method(D_METHOD("get_gaze_screen_px", "smoothed"), &GazeServer::get_gaze_screen_px, DEFVAL(true));
+    ClassDB::bind_method(D_METHOD("get_gaze_screen_mm", "smoothed"), &GazeServer::get_gaze_screen_mm, DEFVAL(true));
+    ClassDB::bind_method(D_METHOD("get_gaze_screen", "smoothed"), &GazeServer::get_gaze_screen, DEFVAL(true));
+    ClassDB::bind_method(D_METHOD("get_projected_gaze", "smoothed"), &GazeServer::get_projected_gaze, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("get_projected_gaze_mm", "smoothed"), &GazeServer::get_projected_gaze_mm, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("get_left_eye_openness"), &GazeServer::get_left_eye_openness);
+    ClassDB::bind_method(D_METHOD("get_right_eye_openness"), &GazeServer::get_right_eye_openness);
+    ClassDB::bind_method(D_METHOD("set_eye_openness", "left", "right"), &GazeServer::set_eye_openness);
+    ClassDB::bind_method(D_METHOD("set_smoother", "smoother"), &GazeServer::set_smoother);
+    ClassDB::bind_method(D_METHOD("get_smoother"), &GazeServer::get_smoother);
+    ClassDB::bind_method(D_METHOD("set_crop_requested", "requested"), &GazeServer::set_crop_requested);
+    ClassDB::bind_method(D_METHOD("is_crop_requested"), &GazeServer::is_crop_requested);
+    ClassDB::bind_method(D_METHOD("get_eye_crops"), &GazeServer::get_eye_crops);
+    ClassDB::bind_method(D_METHOD("set_eye_crops", "left_crop", "right_crop"), &GazeServer::set_eye_crops);
+    ClassDB::bind_method(D_METHOD("get_camera_texture"), &GazeServer::get_camera_texture);
+    ClassDB::bind_method(D_METHOD("set_camera_preview_requested", "requested"), &GazeServer::set_camera_preview_requested);
+    ClassDB::bind_method(D_METHOD("is_camera_preview_requested"), &GazeServer::is_camera_preview_requested);
+    ClassDB::bind_method(D_METHOD("emit_camera_frame_ready", "vision_camera_rid"), &GazeServer::emit_camera_frame_ready);
+
+    // Ray Projection Math
+    ClassDB::bind_method(D_METHOD("project_ray_to_viewport", "origin_cam", "direction_cam", "apply_bio_calibration"), &GazeServer::project_ray_to_viewport, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("project_ray_to_screen_mm", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_screen_mm);
+
+    // Event Factory & Emulation
     ClassDB::bind_method(D_METHOD("set_event_factory", "factory"), &GazeServer::set_event_factory);
     ClassDB::bind_method(D_METHOD("get_event_factory"), &GazeServer::get_event_factory);
     ClassDB::bind_method(D_METHOD("create_default_event"), &GazeServer::create_default_event);
     ClassDB::bind_method(D_METHOD("create_default_missing_event", "reason"), &GazeServer::create_default_missing_event);
 
-    // Emulation
     ClassDB::bind_method(D_METHOD("set_emulate_gaze_from_mouse", "enable"), &GazeServer::set_emulate_gaze_from_mouse);
     ClassDB::bind_method(D_METHOD("get_emulate_gaze_from_mouse"), &GazeServer::get_emulate_gaze_from_mouse);
     ClassDB::bind_method(D_METHOD("set_emulate_mouse_from_gaze", "enable"), &GazeServer::set_emulate_mouse_from_gaze);
-    ClassDB::bind_method(D_METHOD("set_mouse_emulation_dwell_sec", "dwell_sec"), &GazeServer::set_mouse_emulation_dwell_sec);
+    ClassDB::bind_method(D_METHOD("get_emulate_mouse_from_gaze"), &GazeServer::get_emulate_mouse_from_gaze);
+    ClassDB::bind_method(D_METHOD("set_mouse_emulation_dwell_sec", "sec"), &GazeServer::set_mouse_emulation_dwell_sec);
     ClassDB::bind_method(D_METHOD("get_mouse_emulation_dwell_sec"), &GazeServer::get_mouse_emulation_dwell_sec);
-    ClassDB::bind_method(D_METHOD("set_mouse_emulation_transition_sec", "transition_sec"), &GazeServer::set_mouse_emulation_transition_sec);
+    ClassDB::bind_method(D_METHOD("set_mouse_emulation_transition_sec", "sec"), &GazeServer::set_mouse_emulation_transition_sec);
     ClassDB::bind_method(D_METHOD("get_mouse_emulation_transition_sec"), &GazeServer::get_mouse_emulation_transition_sec);
-
-    // Debug Frame Access
-    ClassDB::bind_method(D_METHOD("get_camera_texture"), &GazeServer::get_camera_texture);
-    ClassDB::bind_method(D_METHOD("get_eye_crops", "eye_rid"), &GazeServer::get_eye_crops, DEFVAL(RID()));
-    ClassDB::bind_method(D_METHOD("get_face_landmarks", "face_rid"), &GazeServer::get_face_landmarks, DEFVAL(RID()));
-    ClassDB::bind_method(D_METHOD("get_debug_landmarks"), &GazeServer::get_debug_landmarks);
-    ClassDB::bind_method(D_METHOD("is_face_detected", "face_rid"), &GazeServer::is_face_detected, DEFVAL(RID()));
-    ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "requested"), &GazeServer::camera_set_preview_requested);
-    ClassDB::bind_method(D_METHOD("is_camera_preview_requested"), &GazeServer::is_camera_preview_requested);
-    ClassDB::bind_method(D_METHOD("get_default_camera_rid"), &GazeServer::get_default_camera_rid);
-    ClassDB::bind_method(D_METHOD("get_default_display_rid"), &GazeServer::get_default_display_rid);
-    ClassDB::bind_method(D_METHOD("get_default_face_rid"), &GazeServer::get_default_face_rid);
-    ClassDB::bind_method(D_METHOD("get_default_eye_rid"), &GazeServer::get_default_eye_rid);
-
-    // RID Resource Management
-    ClassDB::bind_method(D_METHOD("display_create"), &GazeServer::display_create);
-    ClassDB::bind_method(D_METHOD("display_set_geometry", "display_rid", "logical_size", "physical_size"), &GazeServer::display_set_geometry);
-    ClassDB::bind_method(D_METHOD("display_set_device_calibration", "display_rid", "calibration"), &GazeServer::display_set_device_calibration);
-    ClassDB::bind_method(D_METHOD("display_set_bio_calibration", "display_rid", "calibration"), &GazeServer::display_set_bio_calibration);
-    ClassDB::bind_method(D_METHOD("display_free", "display_rid"), &GazeServer::display_free);
-
-    ClassDB::bind_method(D_METHOD("camera_create", "display_rid"), &GazeServer::camera_create);
-    ClassDB::bind_method(D_METHOD("camera_set_offsets", "camera_rid", "offset", "tilt"), &GazeServer::camera_set_offsets);
-    ClassDB::bind_method(D_METHOD("camera_set_vision_rid", "camera_rid", "vision_camera_rid"), &GazeServer::camera_set_vision_rid);
-    ClassDB::bind_method(D_METHOD("camera_free", "camera_rid"), &GazeServer::camera_free);
-
-    ClassDB::bind_method(D_METHOD("face_tracker_create", "camera_rid"), &GazeServer::face_tracker_create);
-    ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
-    ClassDB::bind_method(D_METHOD("face_tracker_set_pose", "face_rid", "translation", "rotation", "detected"), &GazeServer::face_tracker_set_pose);
-    ClassDB::bind_method(D_METHOD("face_tracker_set_roll_hint", "face_rid", "roll_hint_rad"), &GazeServer::face_tracker_set_roll_hint);
-    ClassDB::bind_method(D_METHOD("face_tracker_get_roll_hint", "face_rid"), &GazeServer::face_tracker_get_roll_hint);
-    ClassDB::bind_method(D_METHOD("face_tracker_set_auto_roll_enabled", "face_rid", "enabled"), &GazeServer::face_tracker_set_auto_roll_enabled);
-    ClassDB::bind_method(D_METHOD("face_tracker_is_auto_roll_enabled", "face_rid"), &GazeServer::face_tracker_is_auto_roll_enabled);
-    ClassDB::bind_method(D_METHOD("face_tracker_reset", "face_rid"), &GazeServer::face_tracker_reset);
-    ClassDB::bind_method(D_METHOD("face_tracker_free", "face_rid"), &GazeServer::face_tracker_free);
-    ClassDB::bind_method(D_METHOD("set_roll_hint", "roll_hint_rad"), &GazeServer::set_roll_hint);
-    ClassDB::bind_method(D_METHOD("get_roll_hint"), &GazeServer::get_roll_hint);
-    ClassDB::bind_method(D_METHOD("set_auto_roll_enabled", "enabled"), &GazeServer::set_auto_roll_enabled);
-    ClassDB::bind_method(D_METHOD("is_auto_roll_enabled"), &GazeServer::is_auto_roll_enabled);
-    ClassDB::bind_method(D_METHOD("get_head_rotation_from_face_tracker", "face_rid"), &GazeServer::get_head_rotation_from_face_tracker);
-    ClassDB::bind_method(D_METHOD("get_head_translation_from_face_tracker", "face_rid"), &GazeServer::get_head_translation_from_face_tracker);
-    ClassDB::bind_method(D_METHOD("get_head_pose_origin_mm", "face_rid"), &GazeServer::get_head_pose_origin_mm);
-    ClassDB::bind_method(D_METHOD("get_head_pose_euler_deg", "face_rid"), &GazeServer::get_head_pose_euler_deg);
-
-    ClassDB::bind_method(D_METHOD("eye_tracker_create", "face_rid"), &GazeServer::eye_tracker_create);
-    ClassDB::bind_method(D_METHOD("eye_tracker_set_gaze", "eye_rid", "origin_cam", "direction_cam"), &GazeServer::eye_tracker_set_gaze);
-    ClassDB::bind_method(D_METHOD("eye_tracker_set_openness", "eye_rid", "left", "right"), &GazeServer::eye_tracker_set_openness);
-    ClassDB::bind_method(D_METHOD("get_left_eye_openness", "eye_rid"), &GazeServer::get_left_eye_openness);
-    ClassDB::bind_method(D_METHOD("get_right_eye_openness", "eye_rid"), &GazeServer::get_right_eye_openness);
-    ClassDB::bind_method(D_METHOD("eye_tracker_set_smoother", "eye_rid", "smoother"), &GazeServer::eye_tracker_set_smoother);
-    ClassDB::bind_method(D_METHOD("eye_tracker_set_crop_requested", "eye_rid", "requested"), &GazeServer::eye_tracker_set_crop_requested);
-    ClassDB::bind_method(D_METHOD("eye_tracker_is_crop_requested", "eye_rid"), &GazeServer::eye_tracker_is_crop_requested);
-    ClassDB::bind_method(D_METHOD("tracker_get_eye_crops", "eye_rid"), &GazeServer::tracker_get_eye_crops);
-    ClassDB::bind_method(D_METHOD("eye_tracker_free", "eye_rid"), &GazeServer::eye_tracker_free);
-
-    ClassDB::bind_method(D_METHOD("get_gaze_origin_from_eye_tracker", "eye_rid"), &GazeServer::get_gaze_origin_from_eye_tracker);
-    ClassDB::bind_method(D_METHOD("get_gaze_direction_from_eye_tracker", "eye_rid"), &GazeServer::get_gaze_direction_from_eye_tracker);
-    ClassDB::bind_method(D_METHOD("get_projected_gaze_from_eye_tracker", "eye_rid", "smoothed"), &GazeServer::get_projected_gaze_from_eye_tracker, DEFVAL(false));
-    ClassDB::bind_method(D_METHOD("get_projected_gaze_mm_from_eye_tracker", "eye_rid", "smoothed"), &GazeServer::get_projected_gaze_mm_from_eye_tracker, DEFVAL(false));
-    ClassDB::bind_method(D_METHOD("set_crops_on_eye_tracker", "eye_rid", "left_crop", "right_crop"), &GazeServer::set_crops_on_eye_tracker);
-    ClassDB::bind_method(D_METHOD("reset_eye_tracker", "eye_rid"), &GazeServer::reset_eye_tracker);
-
-    ClassDB::bind_method(D_METHOD("emit_camera_frame_ready", "vision_camera_rid"), &GazeServer::emit_camera_frame_ready);
-    ClassDB::bind_method(D_METHOD("get_relative_transform", "entity_rid"), &GazeServer::get_relative_transform);
-    ClassDB::bind_method(D_METHOD("get_gaze_screen", "display_rid", "smoothed"), &GazeServer::get_gaze_screen, DEFVAL(true));
-
-    ClassDB::bind_method(D_METHOD("set_pipeline_config", "config"), &GazeServer::set_pipeline_config);
-    ClassDB::bind_method(D_METHOD("trigger_process"), &GazeServer::trigger_process);
-    ClassDB::bind_method(D_METHOD("start_processing"), &GazeServer::start_processing);
-    ClassDB::bind_method(D_METHOD("stop_processing"), &GazeServer::stop_processing);
-    ClassDB::bind_method(D_METHOD("get_active_tracker_count"), &GazeServer::get_active_tracker_count);
 
     ClassDB::bind_method(D_METHOD("set_verbosity", "level"), &GazeServer::set_verbosity);
     ClassDB::bind_method(D_METHOD("get_verbosity"), &GazeServer::get_verbosity);
@@ -264,31 +205,23 @@ GazeServer::GazeServer() {
     pipeline = std::make_unique<Gaze::GazeTrackingPipeline>();
 #endif
 
-    // Setup Default Spatial Hierarchy
-    default_display_rid = display_create();
-    default_camera_rid = camera_create(default_display_rid);
-    default_face_rid = face_tracker_create(default_camera_rid);
-    default_eye_rid = eye_tracker_create(default_face_rid);
+    Ref<OneEuroSmoother> sm;
+    sm.instantiate();
+    impl->eye.screen_smoother = sm;
+
+    Ref<DefaultDeviceCalibration> def_dev;
+    def_dev.instantiate();
+    set_device_calibration(def_dev);
+
+    Ref<DefaultBioCalibration> def_bio;
+    def_bio.instantiate();
+    set_bio_calibration(def_bio);
 
     VisionServer *vs = VisionServer::get_singleton();
     if (vs) {
         RID default_vision_cam = vs->camera_create();
-        camera_set_vision_rid(default_camera_rid, default_vision_cam);
+        impl->camera.vision_camera_rid = default_vision_cam;
     }
-
-    Ref<OneEuroSmoother> sm;
-    sm.instantiate();
-    eye_tracker_set_smoother(default_eye_rid, sm);
-
-    Ref<DefaultDeviceCalibration> def_dev;
-    def_dev.instantiate();
-    default_device_calibration = def_dev;
-    display_set_device_calibration(default_display_rid, default_device_calibration);
-
-    Ref<DefaultBioCalibration> def_bio;
-    def_bio.instantiate();
-    default_bio_calibration = def_bio;
-    display_set_bio_calibration(default_display_rid, default_bio_calibration);
 
     ProjectSettings *ps = ProjectSettings::get_singleton();
     if (ps) {
@@ -342,25 +275,8 @@ GazeServer::~GazeServer() {
     }
     stop_processing();
 
-    // Free all allocated resources (eyes, faces, cameras, displays)
-    std::vector<RID> eyes_to_free = impl->allocated_eyes;
-    for (RID r : eyes_to_free) {
-        eye_tracker_free(r);
-    }
-    std::vector<RID> faces_to_free = impl->allocated_faces;
-    for (RID r : faces_to_free) {
-        face_tracker_free(r);
-    }
-    std::vector<RID> cameras_to_free = impl->allocated_cameras;
-    for (RID r : cameras_to_free) {
-        camera_free(r);
-    }
-    std::vector<RID> displays_to_free = impl->allocated_displays;
-    for (RID r : displays_to_free) {
-        display_free(r);
-    }
-
 #ifndef WEB_ENABLED
+    Gaze::log_info(2, "GazeServer_Destructor_PipelineReset_Began");
     if (pipeline) {
         for (size_t i = 0; i < pipeline->frame_pool.size; ++i) {
             Gaze::GazeFrameData* data = pipeline->frame_pool.get_frame(i);
@@ -370,27 +286,105 @@ GazeServer::~GazeServer() {
                 data->userdata = nullptr;
             }
         }
+        pipeline.reset();
     }
-    Gaze::log_info(2, "GazeServer_Destructor_PipelineReset_Began");
-    pipeline.reset();
     Gaze::log_info(2, "GazeServer_Destructor_PipelineReset_Finished");
 #endif
+
     singleton = nullptr;
     Gaze::log_info(2, "GazeServer_Destructor_Finished");
 }
 
 void GazeServer::ensure_process_connected() {
-    if (active_trackers <= 0) return;
-    Engine *eng = Engine::get_singleton();
-    if (eng) {
-        MainLoop *ml = eng->get_main_loop();
-        if (ml) {
-            SceneTree *st = Object::cast_to<SceneTree>(ml);
-            if (st && !st->is_connected("process_frame", Callable(this, "trigger_process"))) {
-                st->connect("process_frame", Callable(this, "trigger_process"));
+    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && !st->is_connected("process_frame", Callable(this, "trigger_process"))) {
+        st->connect("process_frame", Callable(this, "trigger_process"));
+    }
+}
+
+void GazeServer::start_processing() {
+    Gaze::log_info(2, "GazeServer_StartProcessing_Began");
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+
+#ifndef WEB_ENABLED
+    if (pipeline) {
+        if (!pipeline->is_initialized()) {
+            ProjectSettings *ps = ProjectSettings::get_singleton();
+            if (ps) {
+                String face_detector_path = ps->has_setting("gaze/models/face_detector_prefix") ? (String)ps->get_setting("gaze/models/face_detector_prefix") : String("face_detection_yunet_2023mar");
+                face_detector_path = resolve_model_path(face_detector_path);
+                if (face_detector_path.is_empty()) {
+                    face_detector_path = resolve_model_path("face_detection_yunet_2023mar");
+                }
+
+                String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("open_closed_eye");
+                eye_openness_path = resolve_model_path(eye_openness_path);
+                if (eye_openness_path.is_empty()) {
+                    eye_openness_path = resolve_model_path("open_closed_eye");
+                }
+
+                String gaze_path = ps->has_setting("gaze/models/gaze_prefix") ? (String)ps->get_setting("gaze/models/gaze_prefix") : String("gaze-estimation-adas-0002");
+                gaze_path = resolve_model_path(gaze_path);
+                if (gaze_path.is_empty()) {
+                    gaze_path = resolve_model_path("gaze-estimation-adas-0002");
+                }
+
+                String landmarks_path = ps->has_setting("gaze/models/landmarks_prefix") ? (String)ps->get_setting("gaze/models/landmarks_prefix") : String("facial-landmarks-35-adas-0002");
+                landmarks_path = resolve_model_path(landmarks_path);
+                if (landmarks_path.is_empty()) {
+                    landmarks_path = resolve_model_path("facial-landmarks-35-adas-0002");
+                }
+
+                std::vector<uint8_t> face_detector_buffer = load_file_buffer(face_detector_path);
+                std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
+                std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
+                std::vector<uint8_t> landmarks_buffer = load_file_buffer(landmarks_path);
+
+                bool init_ok = pipeline->initialize(face_detector_buffer, gaze_buffer, eye_openness_buffer, landmarks_buffer);
+                if (!init_ok) {
+                    Gaze::log_error("GazeServer_StartProcessing_FailedModelInit");
+                    return;
+                }
             }
         }
+        pipeline->set_config(active_config);
+        pipeline->start();
     }
+#endif
+
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs && impl->camera.vision_camera_rid.is_valid()) {
+        vs->camera_start(impl->camera.vision_camera_rid);
+    }
+
+    ensure_process_connected();
+    Gaze::log_info(2, "GazeServer_StartProcessing_Finished");
+}
+
+void GazeServer::stop_processing() {
+    Gaze::log_info(2, "GazeServer_StopProcessing_Began", "active_trackers", active_trackers);
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+
+#ifndef WEB_ENABLED
+    if (pipeline) {
+        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Began");
+        pipeline->stop();
+        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Finished");
+    }
+#endif
+
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs && impl->camera.vision_camera_rid.is_valid()) {
+        vs->camera_stop(impl->camera.vision_camera_rid);
+    }
+
+    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->is_connected("process_frame", Callable(this, "trigger_process"))) {
+        st->disconnect("process_frame", Callable(this, "trigger_process"));
+    }
+
+    last_camera_face_detected_usec = 0;
+    Gaze::log_info(2, "GazeServer_StopProcessing_Finished");
 }
 
 bool GazeServer::start_tracking() {
@@ -403,11 +397,8 @@ bool GazeServer::start_tracking() {
             start_processing();
         } else {
             VisionServer *vs = VisionServer::get_singleton();
-            if (vs) {
-                CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
-                if (cam && cam->vision_camera_rid.is_valid() && !vs->camera_is_active(cam->vision_camera_rid)) {
-                    vs->camera_start(cam->vision_camera_rid);
-                }
+            if (vs && impl->camera.vision_camera_rid.is_valid() && !vs->camera_is_active(impl->camera.vision_camera_rid)) {
+                vs->camera_start(impl->camera.vision_camera_rid);
             }
             ensure_process_connected();
         }
@@ -446,49 +437,397 @@ Ref<InputEventGazeBase> GazeServer::get_most_recent_event() const {
     return most_recent_event;
 }
 
+void GazeServer::reset() {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face = FaceInfo();
+    impl->eye.gaze_origin_cam = Vector3();
+    impl->eye.gaze_direction_cam = Vector3();
+    impl->eye.smoother_state.clear();
+    impl->eye.latest_projected_gaze = Vector2();
+    impl->eye.latest_filtered_gaze = Vector2();
+    impl->eye.latest_projected_gaze_mm = Vector2();
+    impl->eye.latest_filtered_gaze_mm = Vector2();
+    impl->eye.left_eye_openness = 1.0f;
+    impl->eye.right_eye_openness = 1.0f;
+    impl->eye.left_eye_crop.unref();
+    impl->eye.right_eye_crop.unref();
+}
+
+int GazeServer::get_active_tracker_count() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return active_trackers;
+}
+
+// --- Calibrations & Hardware Setup ---
+
 void GazeServer::set_device_calibration(const Ref<DeviceCalibration>& p_calibration) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    default_device_calibration = p_calibration;
-    if (default_display_rid.is_valid()) {
-        display_set_device_calibration(default_display_rid, p_calibration);
+    impl->display.device_calibration = p_calibration;
+    if (p_calibration.is_valid()) {
+        impl->display.logical_size_px = p_calibration->get_logical_size_px();
+        impl->display.physical_size_mm = p_calibration->get_physical_size_mm();
+        impl->camera.offset = p_calibration->get_camera_offset();
+        impl->camera.tilt = p_calibration->get_camera_tilt();
     }
 }
 
 Ref<DeviceCalibration> GazeServer::get_device_calibration() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return default_device_calibration;
+    return impl->display.device_calibration;
 }
 
 void GazeServer::set_bio_calibration(const Ref<BioCalibration>& p_calibration) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    default_bio_calibration = p_calibration;
-    if (default_display_rid.is_valid()) {
-        display_set_bio_calibration(default_display_rid, p_calibration);
+    impl->display.bio_calibration = p_calibration;
+    if (p_calibration.is_valid()) {
+        impl->display.bio_data.is_valid = true;
+        impl->display.bio_data.bias_pitch = p_calibration->get_bias_pitch();
+        impl->display.bio_data.bias_yaw = p_calibration->get_bias_yaw();
+        impl->display.bio_data.scale_yaw = p_calibration->get_scale_yaw();
+        impl->display.bio_data.scale_pitch = p_calibration->get_scale_pitch();
+    } else {
+        impl->display.bio_data.is_valid = false;
     }
 }
 
 Ref<BioCalibration> GazeServer::get_bio_calibration() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return default_bio_calibration;
+    return impl->display.bio_calibration;
 }
 
-Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration) const {
+void GazeServer::set_camera_offsets(Vector3 p_offset, double p_tilt) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->camera.offset = p_offset;
+    impl->camera.tilt = p_tilt;
+}
+
+Vector3 GazeServer::get_camera_offset() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    DisplayInfo *disp = impl->display_owner.get_or_null(default_display_rid);
-    Ref<DeviceCalibration> dev_cal = (disp && disp->device_calibration.is_valid()) ? disp->device_calibration : default_device_calibration;
+    return impl->camera.offset;
+}
+
+double GazeServer::get_camera_tilt() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->camera.tilt;
+}
+
+void GazeServer::set_camera_vision_rid(RID p_vision_camera) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->camera.vision_camera_rid = p_vision_camera;
+}
+
+RID GazeServer::get_camera_vision_rid() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->camera.vision_camera_rid;
+}
+
+void GazeServer::set_pipeline_config(const Ref<GazePipelineConfig>& p_config) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->pipeline_config = p_config;
+    if (p_config.is_valid()) {
+        active_config = p_config->get_config();
+#ifndef WEB_ENABLED
+        if (pipeline) {
+            pipeline->set_config(active_config);
+        }
+#endif
+    }
+}
+
+Ref<GazePipelineConfig> GazeServer::get_pipeline_config() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->pipeline_config;
+}
+
+// --- Face & Head Pose Tracking ---
+
+bool GazeServer::is_face_detected() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.detected;
+}
+
+Transform3D GazeServer::get_head_transform() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.relative_transform;
+}
+
+Vector3 GazeServer::get_head_position() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return Vector3(impl->face.head_pose_translation.x, impl->face.head_pose_translation.y, impl->face.head_pose_translation.z);
+}
+
+Vector3 GazeServer::get_head_rotation() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return Vector3(impl->face.head_pose_rotation.x, impl->face.head_pose_rotation.y, impl->face.head_pose_rotation.z);
+}
+
+Vector3 GazeServer::get_head_pose_origin_mm() const {
+    return get_head_position();
+}
+
+Vector3 GazeServer::get_head_pose_euler_deg() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return Vector3(Math::rad_to_deg(impl->face.head_pose_rotation.x), Math::rad_to_deg(impl->face.head_pose_rotation.y), Math::rad_to_deg(impl->face.head_pose_rotation.z));
+}
+
+void GazeServer::set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p_detected) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.detected = p_detected;
+    impl->face.head_pose_translation = Gaze::GazeVector3(p_translation.x, p_translation.y, p_translation.z);
+    impl->face.head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
+    if (p_detected) {
+        Basis b = Basis::from_euler(p_rotation);
+        impl->face.relative_transform = Transform3D(b, p_translation);
+    } else {
+        impl->face.relative_transform = Transform3D();
+    }
+}
+
+void GazeServer::set_face_transform(const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.detected = p_detected;
+    impl->face.head_pose_translation = Gaze::GazeVector3(p_transform.origin.x, p_transform.origin.y, p_transform.origin.z);
+    impl->face.head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
+    impl->face.relative_transform = p_detected ? p_transform : Transform3D();
+}
+
+PackedVector2Array GazeServer::get_face_landmarks_2d() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.landmarks_2d;
+}
+
+PackedVector2Array GazeServer::get_face_landmarks() const {
+    return get_face_landmarks_2d();
+}
+
+PackedVector2Array GazeServer::get_debug_landmarks() const {
+    return get_face_landmarks_2d();
+}
+
+void GazeServer::set_face_landmarks_2d(const PackedVector2Array &p_landmarks) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.landmarks_2d = p_landmarks;
+}
+
+PackedVector3Array GazeServer::get_face_model_points() const {
+    PackedVector3Array arr;
+    const auto& points = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
+    arr.resize(points.size());
+    for (size_t i = 0; i < points.size(); ++i) {
+        arr[i] = Vector3(points[i].x, points[i].y, points[i].z);
+    }
+    return arr;
+}
+
+void GazeServer::set_roll_hint(float p_roll_hint_rad) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.roll_hint_rad = p_roll_hint_rad;
+    impl->face.auto_roll_enabled = false;
+}
+
+float GazeServer::get_roll_hint() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.roll_hint_rad;
+}
+
+void GazeServer::set_auto_roll_enabled(bool p_enabled) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.auto_roll_enabled = p_enabled;
+}
+
+bool GazeServer::is_auto_roll_enabled() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.auto_roll_enabled;
+}
+
+// --- Eye & Gaze Tracking ---
+
+bool GazeServer::is_gaze_detected() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.detected && (impl->eye.gaze_direction_cam.length_squared() > 0.001f);
+}
+
+Vector3 GazeServer::get_gaze_origin() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.gaze_origin_cam;
+}
+
+Vector3 GazeServer::get_gaze_direction() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.gaze_direction_cam;
+}
+
+void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->eye.gaze_origin_cam = p_origin_cam;
+    impl->eye.gaze_direction_cam = p_direction_cam;
+
+    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
     Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
     Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : Vector3(0.0, physical_sz.y * 0.5, 0.0);
-    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : 0.0;
+    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
+    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
     Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position() : Vector2(0.0, 0.0);
 
     Vector3 calibrated_dir = p_direction_cam;
-    if (p_apply_bio_calibration && disp && disp->bio_data.is_valid) {
+    if (impl->display.bio_data.is_valid) {
         Gaze::GazeVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
         Gaze::GazeVector3 calib_v = Gaze::apply_3d_bias_vector(
             raw_dir,
-            Gaze::GazeVector2(disp->bio_data.bias_pitch, disp->bio_data.bias_yaw),
-            Gaze::GazeVector2(disp->bio_data.scale_pitch, disp->bio_data.scale_yaw)
+            Gaze::GazeVector2(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
+            Gaze::GazeVector2(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
+        );
+        calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
+    }
+
+    Gaze::GazeVector2 pos_mm;
+    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GazeVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
+    if (Gaze::project_ray_to_screen_mm(
+            origin_godot,
+            dir_godot,
+            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
+            effective_tilt,
+            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
+            pos_mm
+        )) {
+        double scale_x = (double)logical_sz.x / physical_sz.x;
+        double scale_y = (double)logical_sz.y / physical_sz.y;
+        Vector2 px(pos_mm.x * scale_x, pos_mm.y * scale_y);
+
+        px = px - win_pos;
+
+        impl->eye.latest_projected_gaze = px;
+        Vector2 pos_mm_center(pos_mm.x - physical_sz.x * 0.5, pos_mm.y - physical_sz.y * 0.5);
+        impl->eye.latest_projected_gaze_mm = pos_mm_center;
+        
+        if (impl->eye.screen_smoother.is_valid()) {
+            auto now = std::chrono::steady_clock::now();
+            double tstamp = std::chrono::duration<double>(now.time_since_epoch()).count();
+            impl->eye.latest_filtered_gaze = impl->eye.screen_smoother->_smoother_next(impl->eye.smoother_state, tstamp, px);
+            impl->eye.latest_filtered_gaze_mm = impl->eye.latest_filtered_gaze;
+        } else {
+            impl->eye.latest_filtered_gaze = px;
+            impl->eye.latest_filtered_gaze_mm = pos_mm_center;
+        }
+    }
+}
+
+Vector2 GazeServer::get_gaze_screen_px(bool p_smoothed) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return p_smoothed ? impl->eye.latest_filtered_gaze : impl->eye.latest_projected_gaze;
+}
+
+Vector2 GazeServer::get_gaze_screen_mm(bool p_smoothed) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return p_smoothed ? impl->eye.latest_filtered_gaze_mm : impl->eye.latest_projected_gaze_mm;
+}
+
+Vector2 GazeServer::get_gaze_screen(bool p_smoothed) const {
+    return get_gaze_screen_px(p_smoothed);
+}
+
+Vector2 GazeServer::get_projected_gaze(bool p_smoothed) const {
+    return get_gaze_screen_px(p_smoothed);
+}
+
+Vector2 GazeServer::get_projected_gaze_mm(bool p_smoothed) const {
+    return get_gaze_screen_mm(p_smoothed);
+}
+
+float GazeServer::get_left_eye_openness() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.left_eye_openness;
+}
+
+float GazeServer::get_right_eye_openness() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.right_eye_openness;
+}
+
+void GazeServer::set_eye_openness(float p_left, float p_right) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->eye.left_eye_openness = p_left;
+    impl->eye.right_eye_openness = p_right;
+}
+
+void GazeServer::set_smoother(const Ref<Smoother>& p_smoother) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->eye.screen_smoother = p_smoother;
+    impl->eye.smoother_state.clear();
+}
+
+Ref<Smoother> GazeServer::get_smoother() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.screen_smoother;
+}
+
+void GazeServer::set_crop_requested(bool p_requested) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->eye.crop_requested = p_requested;
+}
+
+bool GazeServer::is_crop_requested() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.crop_requested;
+}
+
+Array GazeServer::get_eye_crops() {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    Array crops;
+    crops.push_back(impl->eye.left_eye_crop);
+    crops.push_back(impl->eye.right_eye_crop);
+    return crops;
+}
+
+void GazeServer::set_eye_crops(const Ref<Image>& p_left_crop, const Ref<Image>& p_right_crop) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->eye.left_eye_crop = p_left_crop;
+    impl->eye.right_eye_crop = p_right_crop;
+}
+
+Ref<Texture2D> GazeServer::get_camera_texture() {
+    VisionServer* vs = VisionServer::get_singleton();
+    if (!vs || !impl->camera.vision_camera_rid.is_valid()) return Ref<Texture2D>();
+    return vs->get_camera_current_texture(impl->camera.vision_camera_rid);
+}
+
+void GazeServer::set_camera_preview_requested(bool p_requested) {
+    VisionServer* vs = VisionServer::get_singleton();
+    if (vs && impl->camera.vision_camera_rid.is_valid()) {
+        vs->camera_set_preview_requested(impl->camera.vision_camera_rid, p_requested);
+    }
+    set_crop_requested(p_requested);
+}
+
+bool GazeServer::is_camera_preview_requested() const {
+    VisionServer* vs = VisionServer::get_singleton();
+    if (!vs || !impl->camera.vision_camera_rid.is_valid()) return false;
+    return vs->camera_is_preview_requested(impl->camera.vision_camera_rid);
+}
+
+void GazeServer::emit_camera_frame_ready(RID p_vision_camera) {
+    emit_signal("gaze_data_ready", p_vision_camera);
+}
+
+// --- Ray Projection Math ---
+
+Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
+    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
+    Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
+    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
+    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
+    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position() : Vector2(0.0, 0.0);
+
+    Vector3 calibrated_dir = p_direction_cam;
+    if (p_apply_bio_calibration && impl->display.bio_data.is_valid) {
+        Gaze::GazeVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+        Gaze::GazeVector3 calib_v = Gaze::apply_3d_bias_vector(
+            raw_dir,
+            Gaze::GazeVector2(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
+            Gaze::GazeVector2(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
         );
         calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
     }
@@ -512,6 +851,31 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
     return Vector2(INFINITY, INFINITY);
 }
 
+Vector2 GazeServer::project_ray_to_screen_mm(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
+    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
+    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
+    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
+
+    Gaze::GazeVector2 pos_mm;
+    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GazeVector3 dir_godot(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    if (Gaze::project_ray_to_screen_mm(
+            origin_godot,
+            dir_godot,
+            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
+            effective_tilt,
+            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
+            pos_mm
+        )) {
+        return Vector2(pos_mm.x, pos_mm.y);
+    }
+    return Vector2(INFINITY, INFINITY);
+}
+
+// --- Event Factory ---
+
 void GazeServer::set_event_factory(const Ref<GazeEventFactory>& p_factory) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     if (p_factory.is_valid()) {
@@ -530,7 +894,7 @@ void GazeServer::initialize_scene_resources() {
 void GazeServer::_ensure_event_factory_loaded() {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     if (event_factory.is_valid() && Object::cast_to<GazeServerEventFactory>(event_factory.ptr()) == nullptr) {
-        return; // Already has custom factory
+        return;
     }
     ProjectSettings *ps = ProjectSettings::get_singleton();
     if (ps && ps->has_setting("gaze/events/event_factory_path")) {
@@ -577,13 +941,9 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         event->set_right_eye_openness(1.0f);
     }
 
-    Vector2 local_pos = default_eye_rid.is_valid() ? get_projected_gaze_from_eye_tracker(default_eye_rid, true) : Vector2(0, 0);
+    Vector2 local_pos = get_gaze_screen_px(true);
     Vector2 win_pos = Vector2(0, 0);
-    Ref<DeviceCalibration> dev_cal = default_device_calibration;
-    DisplayInfo *disp = default_display_rid.is_valid() ? impl->display_owner.get_or_null(default_display_rid) : nullptr;
-    if (disp && disp->device_calibration.is_valid()) {
-        dev_cal = disp->device_calibration;
-    }
+    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
     if (dev_cal.is_valid()) {
         win_pos = dev_cal->get_window_position();
     }
@@ -610,7 +970,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     event->set_velocity(vel);
     event->set_screen_velocity(screen_vel);
 
-    Transform3D head_xform = default_face_rid.is_valid() ? get_relative_transform(default_face_rid) : Transform3D();
+    Transform3D head_xform = get_head_transform();
     event->set_head_transform(head_xform);
 
     Vector3 gaze_d = Vector3(0, 0, -1);
@@ -638,6 +998,8 @@ Ref<InputEventGazeMissing> GazeServer::create_default_missing_event(int p_reason
     }
     return event;
 }
+
+// --- Emulation Settings ---
 
 void GazeServer::set_emulate_gaze_from_mouse(bool p_enable) {
     emulate_gaze_from_mouse = p_enable;
@@ -673,653 +1035,6 @@ void GazeServer::set_mouse_emulation_transition_sec(float p_sec) {
 float GazeServer::get_mouse_emulation_transition_sec() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
     return mouse_emulation.get_transition_duration_sec();
-}
-
-Ref<Texture2D> GazeServer::get_camera_texture() {
-    VisionServer* vs = VisionServer::get_singleton();
-    if (!vs) return Ref<Texture2D>();
-    CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
-    if (!cam || !cam->vision_camera_rid.is_valid()) return Ref<Texture2D>();
-    return vs->get_camera_current_texture(cam->vision_camera_rid);
-}
-
-void GazeServer::camera_set_preview_requested(bool p_requested) {
-    VisionServer* vs = VisionServer::get_singleton();
-    if (vs) {
-        CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
-        if (cam && cam->vision_camera_rid.is_valid()) {
-            vs->camera_set_preview_requested(cam->vision_camera_rid, p_requested);
-        }
-    }
-    eye_tracker_set_crop_requested(default_eye_rid, p_requested);
-}
-
-bool GazeServer::is_camera_preview_requested() const {
-    VisionServer* vs = VisionServer::get_singleton();
-    if (!vs) return false;
-    CameraInfo* cam = impl->camera_owner.get_or_null(default_camera_rid);
-    if (!cam || !cam->vision_camera_rid.is_valid()) return false;
-    return vs->camera_is_preview_requested(cam->vision_camera_rid);
-}
-
-Array GazeServer::get_eye_crops(RID p_eye) {
-    RID eye_rid = p_eye.is_valid() ? p_eye : default_eye_rid;
-    return tracker_get_eye_crops(eye_rid);
-}
-
-PackedVector2Array GazeServer::get_face_landmarks(RID p_face) const {
-    RID face_rid = p_face.is_valid() ? p_face : default_face_rid;
-    return get_face_landmarks_2d(face_rid);
-}
-
-PackedVector2Array GazeServer::get_debug_landmarks() const {
-    return get_face_landmarks_2d(default_face_rid);
-}
-
-bool GazeServer::is_face_detected(RID p_face) const {
-    RID face_rid = p_face.is_valid() ? p_face : default_face_rid;
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *face = impl->face_owner.get_or_null(face_rid);
-    ERR_FAIL_NULL_V(face, false);
-    return face->detected;
-}
-
-// Display RID Resource Management
-RID GazeServer::display_create() {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *info = memnew(DisplayInfo);
-    RID rid = impl->display_owner.make_rid(info);
-    impl->allocated_displays.push_back(rid);
-    return rid;
-}
-
-void GazeServer::display_set_geometry(RID p_display, Vector2 p_logical_size, Vector2 p_physical_size) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *info = impl->display_owner.get_or_null(p_display);
-    ERR_FAIL_NULL(info);
-    info->logical_size_px = p_logical_size;
-    info->physical_size_mm = p_physical_size;
-}
-
-void GazeServer::display_set_device_calibration(RID p_display, const Ref<DeviceCalibration>& p_calibration) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *info = impl->display_owner.get_or_null(p_display);
-    ERR_FAIL_NULL(info);
-    info->device_calibration = p_calibration;
-}
-
-void GazeServer::display_set_bio_calibration(RID p_display, const Ref<BioCalibration>& p_calibration) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *info = impl->display_owner.get_or_null(p_display);
-    ERR_FAIL_NULL(info);
-    info->bio_calibration = p_calibration;
-    if (p_calibration.is_valid()) {
-        info->bio_data.is_valid = true;
-        info->bio_data.bias_pitch = p_calibration->get_bias_pitch();
-        info->bio_data.bias_yaw = p_calibration->get_bias_yaw();
-        info->bio_data.scale_pitch = p_calibration->get_scale_pitch();
-        info->bio_data.scale_yaw = p_calibration->get_scale_yaw();
-    } else {
-        info->bio_data.is_valid = false;
-    }
-}
-
-void GazeServer::display_free(RID p_display) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *info = impl->display_owner.get_or_null(p_display);
-    if (info) {
-        impl->allocated_displays.erase(std::remove(impl->allocated_displays.begin(), impl->allocated_displays.end(), p_display), impl->allocated_displays.end());
-        impl->display_owner.free(p_display);
-        memdelete(info);
-    }
-}
-
-// Camera Model RID Management
-RID GazeServer::camera_create(RID p_display) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    CameraInfo *info = memnew(CameraInfo);
-    info->parent_display_rid = p_display;
-    RID rid = impl->camera_owner.make_rid(info);
-    impl->allocated_cameras.push_back(rid);
-    return rid;
-}
-
-void GazeServer::camera_set_offsets(RID p_camera, Vector3 p_offset, double p_tilt) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    CameraInfo *info = impl->camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL(info);
-    info->offset = p_offset;
-    info->tilt = p_tilt;
-}
-
-void GazeServer::camera_set_vision_rid(RID p_camera, RID p_vision_camera) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    CameraInfo *info = impl->camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL(info);
-    info->vision_camera_rid = p_vision_camera;
-}
-
-void GazeServer::camera_free(RID p_camera) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    CameraInfo *info = impl->camera_owner.get_or_null(p_camera);
-    if (info) {
-        if (info->vision_camera_rid.is_valid()) {
-            VisionServer *vs = VisionServer::get_singleton();
-            if (vs) {
-                vs->camera_free(info->vision_camera_rid);
-            }
-            info->vision_camera_rid = RID();
-        }
-        impl->allocated_cameras.erase(std::remove(impl->allocated_cameras.begin(), impl->allocated_cameras.end(), p_camera), impl->allocated_cameras.end());
-        impl->camera_owner.free(p_camera);
-        memdelete(info);
-    }
-}
-
-// Face Tracker RID Management
-RID GazeServer::face_tracker_create(RID p_camera) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = memnew(FaceInfo);
-    info->parent_camera_rid = p_camera;
-    RID rid = impl->face_owner.make_rid(info);
-    impl->allocated_faces.push_back(rid);
-    return rid;
-}
-
-PackedVector3Array GazeServer::get_face_model_points() const {
-    PackedVector3Array arr;
-    const auto& points = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
-    arr.resize(points.size());
-    for (size_t i = 0; i < points.size(); ++i) {
-        arr[i] = Vector3(points[i].x, points[i].y, points[i].z);
-    }
-    return arr;
-}
-
-void GazeServer::face_tracker_set_pose(RID p_face, Vector3 p_translation, Vector3 p_rotation, bool p_detected) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(info);
-    info->detected = p_detected;
-    info->head_pose_translation = Gaze::GazeVector3(p_translation.x, p_translation.y, p_translation.z);
-    info->head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
-    
-    if (p_detected) {
-        Basis b = Basis::from_euler(p_rotation);
-        info->relative_transform = Transform3D(b, p_translation);
-    } else {
-        info->relative_transform = Transform3D();
-    }
-}
-
-void GazeServer::face_tracker_set_transform(RID p_face, const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(info);
-    info->detected = p_detected;
-    info->head_pose_translation = Gaze::GazeVector3(p_transform.origin.x, p_transform.origin.y, p_transform.origin.z);
-    info->head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
-    info->relative_transform = p_detected ? p_transform : Transform3D();
-}
-
-void GazeServer::face_tracker_free(RID p_face) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    if (info) {
-        impl->allocated_faces.erase(std::remove(impl->allocated_faces.begin(), impl->allocated_faces.end(), p_face), impl->allocated_faces.end());
-        impl->face_owner.free(p_face);
-        memdelete(info);
-    }
-}
-
-Vector3 GazeServer::get_head_rotation_from_face_tracker(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, Vector3());
-    return Vector3(info->head_pose_rotation.x, info->head_pose_rotation.y, info->head_pose_rotation.z);
-}
-
-Vector3 GazeServer::get_head_translation_from_face_tracker(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, Vector3());
-    return Vector3(info->head_pose_translation.x, info->head_pose_translation.y, info->head_pose_translation.z);
-}
-
-Vector3 GazeServer::get_head_pose_origin_mm(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, Vector3());
-    return info->relative_transform.origin;
-}
-
-Vector3 GazeServer::get_head_pose_euler_deg(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, Vector3());
-    Gaze::GazeBasis3D b(
-        Gaze::GazeVector3(info->relative_transform.basis.rows[0].x, info->relative_transform.basis.rows[0].y, info->relative_transform.basis.rows[0].z),
-        Gaze::GazeVector3(info->relative_transform.basis.rows[1].x, info->relative_transform.basis.rows[1].y, info->relative_transform.basis.rows[1].z),
-        Gaze::GazeVector3(info->relative_transform.basis.rows[2].x, info->relative_transform.basis.rows[2].y, info->relative_transform.basis.rows[2].z)
-    );
-    Gaze::GazeVector3 deg = b.get_euler_deg();
-    return Vector3(deg.x, deg.y, deg.z);
-}
-
-void GazeServer::face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(info);
-    info->landmarks_2d = p_landmarks;
-}
-
-PackedVector2Array GazeServer::get_face_landmarks_2d(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, PackedVector2Array());
-    return info->landmarks_2d;
-}
-
-void GazeServer::face_tracker_set_roll_hint(RID p_face, float p_roll_hint_rad) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(info);
-    info->roll_hint_rad = p_roll_hint_rad;
-    info->auto_roll_enabled = false;
-}
-
-float GazeServer::face_tracker_get_roll_hint(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    const FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, 0.0f);
-    return info->roll_hint_rad;
-}
-
-void GazeServer::face_tracker_set_auto_roll_enabled(RID p_face, bool p_enabled) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL(info);
-    info->auto_roll_enabled = p_enabled;
-}
-
-bool GazeServer::face_tracker_is_auto_roll_enabled(RID p_face) const {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    const FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    ERR_FAIL_NULL_V(info, true);
-    return info->auto_roll_enabled;
-}
-
-void GazeServer::face_tracker_reset(RID p_face) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *info = impl->face_owner.get_or_null(p_face);
-    if (info) {
-        info->roll_hint_rad = 0.0f;
-        info->auto_roll_enabled = true;
-        info->detected = false;
-    }
-#ifndef WEB_ENABLED
-    if (pipeline) {
-        pipeline->reset_tracker();
-    }
-#endif
-}
-
-void GazeServer::set_roll_hint(float p_roll_hint_rad) {
-    face_tracker_set_roll_hint(default_face_rid, p_roll_hint_rad);
-}
-
-float GazeServer::get_roll_hint() const {
-    return face_tracker_get_roll_hint(default_face_rid);
-}
-
-void GazeServer::set_auto_roll_enabled(bool p_enabled) {
-    face_tracker_set_auto_roll_enabled(default_face_rid, p_enabled);
-}
-
-bool GazeServer::is_auto_roll_enabled() const {
-    return face_tracker_is_auto_roll_enabled(default_face_rid);
-}
-
-// Eye Tracker RID Management
-RID GazeServer::eye_tracker_create(RID p_face) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *info = memnew(EyeInfo);
-    info->parent_face_rid = p_face;
-    RID rid = impl->eye_owner.make_rid(info);
-    impl->allocated_eyes.push_back(rid);
-    return rid;
-}
-
-void GazeServer::eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p_direction_cam) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    
-    eye->gaze_origin_cam = p_origin_cam;
-    eye->gaze_direction_cam = p_direction_cam;
-
-    FaceInfo *face = impl->face_owner.get_or_null(eye->parent_face_rid);
-    if (!face) return;
-    CameraInfo *cam = impl->camera_owner.get_or_null(face->parent_camera_rid);
-    if (!cam) return;
-    DisplayInfo *disp = impl->display_owner.get_or_null(cam->parent_display_rid);
-    if (!disp) return;
-
-    Ref<DeviceCalibration> dev_cal = disp->device_calibration.is_valid() ? disp->device_calibration : default_device_calibration;
-    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
-    Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : Vector3(0.0, physical_sz.y * 0.5, 0.0);
-    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : 0.0;
-    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position() : Vector2(0.0, 0.0);
-
-    Vector3 calibrated_dir = p_direction_cam;
-    if (disp->bio_data.is_valid) {
-        Gaze::GazeVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-        Gaze::GazeVector3 calib_v = Gaze::apply_3d_bias_vector(
-            raw_dir,
-            Gaze::GazeVector2(disp->bio_data.bias_pitch, disp->bio_data.bias_yaw),
-            Gaze::GazeVector2(disp->bio_data.scale_pitch, disp->bio_data.scale_yaw)
-        );
-        calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
-    }
-
-    Gaze::GazeVector2 pos_mm;
-    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GazeVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
-    if (Gaze::project_ray_to_screen_mm(
-            origin_godot,
-            dir_godot,
-            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
-            effective_tilt,
-            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
-            pos_mm
-        )) {
-        double scale_x = (double)logical_sz.x / physical_sz.x;
-        double scale_y = (double)logical_sz.y / physical_sz.y;
-        Vector2 px(pos_mm.x * scale_x, pos_mm.y * scale_y);
-
-        px = px - win_pos;
-
-        eye->latest_projected_gaze = px;
-        Vector2 pos_mm_center(pos_mm.x - physical_sz.x * 0.5, pos_mm.y - physical_sz.y * 0.5);
-        eye->latest_projected_gaze_mm = pos_mm_center;
-        
-        if (eye->screen_smoother.is_valid()) {
-            auto now = std::chrono::steady_clock::now();
-            double tstamp = std::chrono::duration<double>(now.time_since_epoch()).count();
-            eye->latest_filtered_gaze = eye->screen_smoother->_smoother_next(eye->smoother_state, tstamp, px);
-            eye->latest_filtered_gaze_mm = eye->latest_filtered_gaze;
-        } else {
-            eye->latest_filtered_gaze = px;
-            eye->latest_filtered_gaze_mm = pos_mm_center;
-        }
-    }
-}
-
-void GazeServer::eye_tracker_set_openness(RID p_eye, float p_left, float p_right) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    eye->left_eye_openness = p_left;
-    eye->right_eye_openness = p_right;
-}
-
-float GazeServer::get_left_eye_openness(RID p_eye) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, 0.0f);
-    return eye->left_eye_openness;
-}
-
-float GazeServer::get_right_eye_openness(RID p_eye) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, 0.0f);
-    return eye->right_eye_openness;
-}
-
-void GazeServer::eye_tracker_set_smoother(RID p_eye, const Ref<Smoother>& p_smoother) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    eye->screen_smoother = p_smoother;
-    eye->smoother_state.clear();
-}
-
-void GazeServer::eye_tracker_set_crop_requested(RID p_eye, bool p_requested) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    eye->crop_requested = p_requested;
-}
-
-bool GazeServer::eye_tracker_is_crop_requested(RID p_eye) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, false);
-    return eye->crop_requested;
-}
-
-Array GazeServer::tracker_get_eye_crops(RID p_eye) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, Array());
-    Array ret;
-    ret.push_back(eye->left_eye_crop);
-    ret.push_back(eye->right_eye_crop);
-    return ret;
-}
-
-void GazeServer::eye_tracker_free(RID p_eye) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *info = impl->eye_owner.get_or_null(p_eye);
-    if (info) {
-        impl->allocated_eyes.erase(std::remove(impl->allocated_eyes.begin(), impl->allocated_eyes.end(), p_eye), impl->allocated_eyes.end());
-        impl->eye_owner.free(p_eye);
-        memdelete(info);
-    }
-}
-
-Vector3 GazeServer::get_gaze_origin_from_eye_tracker(RID p_eye) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, Vector3());
-    return eye->gaze_origin_cam;
-}
-
-Vector3 GazeServer::get_gaze_direction_from_eye_tracker(RID p_eye) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, Vector3());
-    return eye->gaze_direction_cam;
-}
-
-Vector2 GazeServer::get_projected_gaze_from_eye_tracker(RID p_eye, bool p_smoothed) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, Vector2());
-    return p_smoothed ? eye->latest_filtered_gaze : eye->latest_projected_gaze;
-}
-
-Vector2 GazeServer::get_projected_gaze_mm_from_eye_tracker(RID p_eye, bool p_smoothed) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL_V(eye, Vector2());
-    return p_smoothed ? eye->latest_filtered_gaze_mm : eye->latest_projected_gaze_mm;
-}
-
-void GazeServer::set_crops_on_eye_tracker(RID p_eye, const Ref<Image>& p_left_crop, const Ref<Image>& p_right_crop) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    eye->left_eye_crop = p_left_crop;
-    eye->right_eye_crop = p_right_crop;
-}
-
-void GazeServer::reset_eye_tracker(RID p_eye) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_eye);
-    ERR_FAIL_NULL(eye);
-    eye->latest_projected_gaze = Vector2(-1000.0, -1000.0);
-    eye->latest_filtered_gaze = Vector2(-1000.0, -1000.0);
-    eye->left_eye_openness = 0.0f;
-    eye->right_eye_openness = 0.0f;
-    eye->smoother_state.clear();
-}
-
-void GazeServer::emit_camera_frame_ready(RID p_vision_camera) {
-    emit_signal("gaze_data_ready", p_vision_camera);
-}
-
-Transform3D GazeServer::get_relative_transform(RID p_entity) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    FaceInfo *face = impl->face_owner.get_or_null(p_entity);
-    if (face) return face->relative_transform;
-    EyeInfo *eye = impl->eye_owner.get_or_null(p_entity);
-    if (eye) return eye->relative_transform;
-    return Transform3D();
-}
-
-Vector2 GazeServer::get_gaze_screen(RID p_display, bool p_smoothed) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    DisplayInfo *disp = impl->display_owner.get_or_null(p_display);
-    ERR_FAIL_NULL_V(disp, Vector2());
-
-    RID target_camera;
-    List<RID> cameras;
-    impl->camera_owner.get_owned_list(&cameras);
-    for (const RID &r : cameras) {
-        CameraInfo *c = impl->camera_owner.get_or_null(r);
-        if (c && c->parent_display_rid == p_display) {
-            target_camera = r;
-            break;
-        }
-    }
-    if (!target_camera.is_valid()) return Vector2();
-
-    RID target_face;
-    List<RID> faces;
-    impl->face_owner.get_owned_list(&faces);
-    for (const RID &r : faces) {
-        FaceInfo *f = impl->face_owner.get_or_null(r);
-        if (f && f->parent_camera_rid == target_camera) {
-            target_face = r;
-            break;
-        }
-    }
-    if (!target_face.is_valid()) return Vector2();
-
-    RID target_eye;
-    List<RID> eyes;
-    impl->eye_owner.get_owned_list(&eyes);
-    for (const RID &r : eyes) {
-        EyeInfo *e = impl->eye_owner.get_or_null(r);
-        if (e && e->parent_face_rid == target_face) {
-            target_eye = r;
-            break;
-        }
-    }
-    if (!target_eye.is_valid()) return Vector2();
-
-    EyeInfo *eye = impl->eye_owner.get_or_null(target_eye);
-    if (!eye) return Vector2();
-
-    return p_smoothed ? eye->latest_filtered_gaze : eye->latest_projected_gaze;
-}
-
-// Background Worker Loop
-void GazeServer::start_processing() {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-#ifndef WEB_ENABLED
-    if (pipeline) {
-        ProjectSettings *ps = ProjectSettings::get_singleton();
-        if (ps) {
-            String face_detector_path = ps->has_setting("gaze/models/face_detector_prefix") ? (String)ps->get_setting("gaze/models/face_detector_prefix") : String("face_detection_yunet_2023mar");
-            face_detector_path = resolve_model_path(face_detector_path);
-            if (face_detector_path.is_empty()) {
-                face_detector_path = resolve_model_path("face_detection_yunet_2023mar");
-            }
-
-            String eye_openness_path = ps->has_setting("gaze/models/eye_openness_prefix") ? (String)ps->get_setting("gaze/models/eye_openness_prefix") : String("open_closed_eye");
-            eye_openness_path = resolve_model_path(eye_openness_path);
-            if (eye_openness_path.is_empty()) {
-                eye_openness_path = resolve_model_path("open_closed_eye");
-            }
-
-            String gaze_path = ps->has_setting("gaze/models/gaze_prefix") ? (String)ps->get_setting("gaze/models/gaze_prefix") : String("gaze-estimation-adas-0002");
-            gaze_path = resolve_model_path(gaze_path);
-            if (gaze_path.is_empty()) {
-                gaze_path = resolve_model_path("gaze-estimation-adas-0002");
-            }
-
-            String landmarks_path = ps->has_setting("gaze/models/landmarks_prefix") ? (String)ps->get_setting("gaze/models/landmarks_prefix") : String("facial-landmarks-35-adas-0002");
-            landmarks_path = resolve_model_path(landmarks_path);
-            if (landmarks_path.is_empty()) {
-                landmarks_path = resolve_model_path("facial-landmarks-35-adas-0002");
-            }
-
-            std::vector<uint8_t> face_detector_buffer = load_file_buffer(face_detector_path);
-            std::vector<uint8_t> eye_openness_buffer = load_file_buffer(eye_openness_path);
-            std::vector<uint8_t> gaze_buffer = load_file_buffer(gaze_path);
-            std::vector<uint8_t> landmarks_buffer = load_file_buffer(landmarks_path);
-
-            bool init_ok = pipeline->initialize(face_detector_buffer, gaze_buffer, eye_openness_buffer, landmarks_buffer);
-            if (!init_ok) {
-                Gaze::log_error("GazeServer_StartProcessing_FailedModelInit");
-                return;
-            }
-        }
-        pipeline->set_config(active_config);
-        pipeline->start();
-    }
-#endif
-
-    VisionServer *vs = VisionServer::get_singleton();
-    if (vs) {
-        CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
-        if (cam) {
-            if (!cam->vision_camera_rid.is_valid()) {
-                cam->vision_camera_rid = vs->camera_create();
-            }
-            vs->camera_start(cam->vision_camera_rid);
-        }
-    }
-
-    ensure_process_connected();
-}
-
-void GazeServer::stop_processing() {
-    Gaze::log_info(2, "GazeServer_StopProcessing_Began", "active_trackers", active_trackers);
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-
-#ifndef WEB_ENABLED
-    if (pipeline) {
-        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Began");
-        pipeline->stop();
-        Gaze::log_info(2, "GazeServer_StopProcessing_PipelineStop_Finished");
-    }
-#endif
-
-    VisionServer *vs = VisionServer::get_singleton();
-    if (vs) {
-        CameraInfo *cam = impl->camera_owner.get_or_null(default_camera_rid);
-        if (cam && cam->vision_camera_rid.is_valid()) {
-            vs->camera_stop(cam->vision_camera_rid);
-        }
-    }
-
-    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && st->is_connected("process_frame", Callable(this, "trigger_process"))) {
-        st->disconnect("process_frame", Callable(this, "trigger_process"));
-    }
-
-    last_camera_face_detected_usec = 0;
-    Gaze::log_info(2, "GazeServer_StopProcessing_Finished");
-}
-
-int GazeServer::get_active_tracker_count() const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return active_trackers;
 }
 
 void GazeServer::trigger_process() {
@@ -1362,39 +1077,25 @@ void GazeServer::trigger_process() {
             gaze_frame->set_face_landmarks_2d(lm_array);
             gaze_frame->post_process();
 
-            RID face_rid;
-            std::memcpy(&face_rid, &completed_data->face_rid_val, sizeof(uint64_t));
-            RID eye_rid;
-            std::memcpy(&eye_rid, &completed_data->eye_rid_val, sizeof(uint64_t));
+            if (completed_data->face_detected) {
+                const Gaze::GazeBasis3D &gb = completed_data->head_transform.basis;
+                Basis godot_basis(
+                    Vector3(gb.x.x, gb.x.y, gb.x.z),
+                    Vector3(gb.y.x, gb.y.y, gb.y.z),
+                    Vector3(gb.z.x, gb.z.y, gb.z.z)
+                );
+                Transform3D godot_xform(godot_basis, head_t);
+                set_face_transform(godot_xform, head_r, true);
+                set_face_landmarks_2d(lm_array);
+                set_eye_openness(completed_data->left_eye_openness, completed_data->right_eye_openness);
+                set_eye_crops(gaze_frame->get_left_eye_crop(), gaze_frame->get_right_eye_crop());
 
-            if (face_rid.is_valid()) {
-                if (completed_data->face_detected) {
-                    const Gaze::GazeBasis3D &gb = completed_data->head_transform.basis;
-                    Basis godot_basis(
-                        Vector3(gb.x.x, gb.x.y, gb.x.z),
-                        Vector3(gb.y.x, gb.y.y, gb.y.z),
-                        Vector3(gb.z.x, gb.z.y, gb.z.z)
-                    );
-                    Transform3D godot_xform(godot_basis, head_t);
-                    face_tracker_set_transform(face_rid, godot_xform, head_r, true);
-                    face_tracker_set_landmarks_2d(face_rid, lm_array);
-                } else {
-                    face_tracker_set_transform(face_rid, Transform3D(), Vector3(), false);
-                    face_tracker_set_landmarks_2d(face_rid, PackedVector2Array());
+                if (completed_data->gaze_success) {
+                    set_gaze(gaze_o, gaze_d);
                 }
-            }
-            if (eye_rid.is_valid()) {
-                if (completed_data->face_detected) {
-                    eye_tracker_set_openness(eye_rid, completed_data->left_eye_openness, completed_data->right_eye_openness);
-                    set_crops_on_eye_tracker(eye_rid, gaze_frame->get_left_eye_crop(), gaze_frame->get_right_eye_crop());
-                    if (completed_data->gaze_success) {
-                        eye_tracker_set_gaze(eye_rid, gaze_o, gaze_d);
-                    } else {
-                        reset_eye_tracker(eye_rid);
-                    }
-                } else {
-                    reset_eye_tracker(eye_rid);
-                }
+            } else {
+                set_face_transform(Transform3D(), Vector3(), false);
+                set_face_landmarks_2d(PackedVector2Array());
             }
 
             emit_signal("gaze_frame_began", gaze_frame);
@@ -1426,7 +1127,7 @@ void GazeServer::trigger_process() {
                 }
 
                 if (emulate_mouse_from_gaze && input) {
-                    Vector2 local_pos = default_eye_rid.is_valid() ? get_projected_gaze_from_eye_tracker(default_eye_rid, true) : Vector2(0, 0);
+                    Vector2 local_pos = get_gaze_screen_px(true);
                     Vector2 rel = local_pos - last_gaze_pos;
                     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
                     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1488,78 +1189,36 @@ void GazeServer::trigger_process() {
     }
 
     // Grab current frames from VisionServer and push to GazeTrackingPipeline
-    if (pipeline && !pipeline->is_busy()) {
-        List<RID> cameras;
-        impl->camera_owner.get_owned_list(&cameras);
-        for (const RID &r : cameras) {
-            CameraInfo *cam = impl->camera_owner.get_or_null(r);
-            if (cam && cam->vision_camera_rid.is_valid()) {
-                Gaze::Frame current_frame;
-                bool has_frame = VisionServer::get_singleton()->get_camera_current_frame(cam->vision_camera_rid, current_frame);
-                if (has_frame) {
-                    Gaze::GazeFrameData* write_data = pipeline->frame_pool.take();
-                    if (write_data) {
-                        size_t frame_bytes = current_frame.width * current_frame.height * 3;
-                        write_data->camera_raw_bgr.resize(frame_bytes);
-                        std::memcpy(write_data->camera_raw_bgr.data(), current_frame.data, frame_bytes);
-                        write_data->camera_width = current_frame.width;
-                        write_data->camera_height = current_frame.height;
-                        write_data->timestamp = current_frame.timestamp;
-                        write_data->camera_focal_length_px = VisionServer::get_singleton()->camera_get_focal_length(cam->vision_camera_rid);
-                        write_data->camera_fov_degrees = VisionServer::get_singleton()->camera_get_fov(cam->vision_camera_rid);
+    if (pipeline && !pipeline->is_busy() && impl->camera.vision_camera_rid.is_valid()) {
+        Gaze::Frame current_frame;
+        bool has_frame = VisionServer::get_singleton()->get_camera_current_frame(impl->camera.vision_camera_rid, current_frame);
+        if (has_frame) {
+            Gaze::GazeFrameData* write_data = pipeline->frame_pool.take();
+            if (write_data) {
+                size_t frame_bytes = current_frame.width * current_frame.height * 3;
+                write_data->camera_raw_bgr.resize(frame_bytes);
+                std::memcpy(write_data->camera_raw_bgr.data(), current_frame.data, frame_bytes);
+                write_data->camera_width = current_frame.width;
+                write_data->camera_height = current_frame.height;
+                write_data->timestamp = current_frame.timestamp;
+                write_data->camera_focal_length_px = VisionServer::get_singleton()->camera_get_focal_length(impl->camera.vision_camera_rid);
+                write_data->camera_fov_degrees = VisionServer::get_singleton()->camera_get_fov(impl->camera.vision_camera_rid);
 
-                        RID face_rid;
-                        List<RID> faces;
-                        impl->face_owner.get_owned_list(&faces);
-                        for (const RID &f : faces) {
-                            FaceInfo *face = impl->face_owner.get_or_null(f);
-                            if (face && face->parent_camera_rid == r) {
-                                face_rid = f;
-                                break;
-                            }
-                        }
+                write_data->auto_roll_enabled = impl->face.auto_roll_enabled;
+                write_data->roll_hint_rad = impl->face.roll_hint_rad;
 
-                        RID eye_rid;
-                        if (face_rid.is_valid()) {
-                            List<RID> eyes;
-                            impl->eye_owner.get_owned_list(&eyes);
-                            for (const RID &e : eyes) {
-                                EyeInfo *eye = impl->eye_owner.get_or_null(e);
-                                if (eye && eye->parent_face_rid == face_rid) {
-                                    eye_rid = e;
-                                    break;
-                                }
-                            }
-                        }
-
-                        write_data->face_rid_val = face_rid.get_id();
-                        write_data->eye_rid_val = eye_rid.get_id();
-
-                        if (face_rid.is_valid()) {
-                            FaceInfo *face = impl->face_owner.get_or_null(face_rid);
-                            if (face) {
-                                write_data->auto_roll_enabled = face->auto_roll_enabled;
-                                write_data->roll_hint_rad = face->roll_hint_rad;
-                            } else {
-                                write_data->auto_roll_enabled = true;
-                                write_data->roll_hint_rad = 0.0f;
-                            }
-                        }
-
-                        GazeFrame* wrapper = static_cast<GazeFrame*>(write_data->userdata);
-                        if (wrapper) {
-                            wrapper->set_camera_size(Vector2i(current_frame.width, current_frame.height));
-                            write_data->left_eye_buffer = wrapper->get_left_eye_buffer_ptr();
-                            write_data->right_eye_buffer = wrapper->get_right_eye_buffer_ptr();
-                            wrapper->resize_full_crop(160, 128);
-                            write_data->full_crop_buffer = wrapper->get_full_crop_buffer_ptr();
-                            write_data->full_crop_bytes = wrapper->get_full_crop_bytes_size();
-                        }
-
-                        pipeline->push_frame_request(write_data);
-                        emit_camera_frame_ready(cam->vision_camera_rid);
-                    }
+                GazeFrame* wrapper = static_cast<GazeFrame*>(write_data->userdata);
+                if (wrapper) {
+                    wrapper->set_camera_size(Vector2i(current_frame.width, current_frame.height));
+                    write_data->left_eye_buffer = wrapper->get_left_eye_buffer_ptr();
+                    write_data->right_eye_buffer = wrapper->get_right_eye_buffer_ptr();
+                    wrapper->resize_full_crop(160, 128);
+                    write_data->full_crop_buffer = wrapper->get_full_crop_buffer_ptr();
+                    write_data->full_crop_bytes = wrapper->get_full_crop_bytes_size();
                 }
+
+                pipeline->push_frame_request(write_data);
+                emit_camera_frame_ready(impl->camera.vision_camera_rid);
             }
         }
     }
@@ -1567,7 +1226,7 @@ void GazeServer::trigger_process() {
 
     // Mouse-to-Gaze Emulation & IN_OUT Transition Strategy
     DisplayServer* ds = nullptr;
-    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+    if (Engine::get_singleton()->get_singleton_list().has("DisplayServer")) {
         ds = DisplayServer::get_singleton();
     }
 
@@ -1590,18 +1249,6 @@ void GazeServer::trigger_process() {
             most_recent_event = syn_event;
             input->parse_input_event(syn_event);
         }
-    }
-}
-
-void GazeServer::set_pipeline_config(const Ref<GazePipelineConfig>& p_config) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    if (p_config.is_valid()) {
-        active_config = p_config->get_config();
-#ifndef WEB_ENABLED
-        if (pipeline) {
-            pipeline->set_config(active_config);
-        }
-#endif
     }
 }
 

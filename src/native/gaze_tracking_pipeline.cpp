@@ -395,9 +395,7 @@ namespace Gaze
         // 1. Unroll 3D Head Transform from GodotCameraHintRolled to canonical GodotCamera
         data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, +data->roll_hint_rad);
         data->head_translation = data->head_transform.origin;
-        GazeBasis3D head_rot = rodrigues_to_basis(data->head_rotation);
-        float solved_roll = std::atan2(head_rot.x.y, head_rot.x.x);
-        data->head_rotation.z = solved_roll + data->roll_hint_rad;
+        data->head_rotation = data->head_transform.basis.get_euler_deg() * DEG_TO_RAD;
         prev_roll_rad = static_cast<float>(data->head_rotation.z);
 
         // 2. Unroll 2D Landmarks back to original camera pixel coordinates

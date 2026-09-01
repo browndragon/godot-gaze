@@ -73,6 +73,7 @@ namespace Gaze
         bool pop_result(GazeFrameData** out_res);
         void clear_work_queue();
         void reset_tracker() { prev_roll_rad = 0.0f; }
+        bool is_initialized() const { return initialized; }
         bool is_busy() const { return worker_busy.load() || request_mailbox.is_pending(); }
     };
 

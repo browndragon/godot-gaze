@@ -140,7 +140,7 @@ void VisionServer::camera_set_focal_length(RID p_camera, double p_focal_length) 
 
 double VisionServer::camera_get_focal_length(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, 1000.0);
+    ERR_FAIL_NULL_V(data, -1.0);
     return data->focal_length;
 }
 

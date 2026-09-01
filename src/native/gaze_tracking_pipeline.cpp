@@ -340,8 +340,8 @@ namespace Gaze
         data->eye_crops.head_pose_rotation = rvec;
 
         GazeBasis3D head_rot = rodrigues_to_basis(rvec);
-        data->eye_crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5f, -32.0f, 0.0f)) + tvec;
-        data->eye_crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5f, -32.0f, 0.0f)) + tvec;
+        data->eye_crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5f, -32.0f, 35.0f)) + tvec;
+        data->eye_crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5f, -32.0f, 35.0f)) + tvec;
 
         crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
                             r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
@@ -432,19 +432,15 @@ namespace Gaze
         {
             if (std::abs(data->roll_hint_rad) > 1e-4f)
             {
-                double cos_r = std::cos(data->roll_hint_rad);
-                double sin_r = std::sin(data->roll_hint_rad);
-
-                double gx = cos_r * data->gaze_direction.x + sin_r * data->gaze_direction.y;
-                double gy = -sin_r * data->gaze_direction.x + cos_r * data->gaze_direction.y;
-                data->gaze_direction.x = gx;
-                data->gaze_direction.y = gy;
-                data->gaze_direction = data->gaze_direction.normalized();
-
-                double ox = cos_r * data->gaze_origin.x + sin_r * data->gaze_origin.y;
-                double oy = -sin_r * data->gaze_origin.x + cos_r * data->gaze_origin.y;
-                data->gaze_origin.x = ox;
-                data->gaze_origin.y = oy;
+                float cos_a = std::cos(data->roll_hint_rad);
+                float sin_a = std::sin(data->roll_hint_rad);
+                GazeBasis3D R_roll(
+                    GazeVector3(cos_a, -sin_a, 0.0f),
+                    GazeVector3(sin_a,  cos_a, 0.0f),
+                    GazeVector3( 0.0f,   0.0f, 1.0f)
+                );
+                data->gaze_direction = R_roll.multiply_vector(data->gaze_direction).normalized();
+                data->gaze_origin = R_roll.multiply_vector(data->gaze_origin);
             }
         }
     }

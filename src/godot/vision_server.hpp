@@ -37,7 +37,7 @@ protected:
         int device_id = 0;
         int width = 640;
         int height = 480;
-        double focal_length = 1000.0;
+        double focal_length = -1.0;
         double camera_fov = Gaze::DEFAULT_CAMERA_FOV_DEGREES;
         Gaze::CameraInterface *camera = nullptr;
         Ref<ImageTexture> current_texture;

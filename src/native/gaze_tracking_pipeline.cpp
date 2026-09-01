@@ -140,7 +140,7 @@ namespace Gaze
     {
         request_mailbox.clear();
         results_mailbox.clear();
-        prev_roll_rad = 0.0f;
+        pipeline_roll_rad = 0.0f;
     }
 
     void GazeTrackingPipeline::_worker_loop()
@@ -188,6 +188,21 @@ namespace Gaze
 
                         auto start_face = std::chrono::steady_clock::now();
                         bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
+                        if (!face_ok && std::abs(data->roll_hint_rad) > 1e-4f)
+                        {
+                            // Multi-pass fallback: if detection failed with roll hint, try raw unrotated frame
+                            Frame raw_frame;
+                            raw_frame.width = data->camera_width;
+                            raw_frame.height = data->camera_height;
+                            raw_frame.data = data->camera_raw_bgr.data();
+                            raw_frame.timestamp = data->timestamp;
+                            data->roll_hint_rad = 0.0f;
+                            face_ok = _stage_2_detect_face_bbox(data, raw_frame);
+                            if (face_ok)
+                            {
+                                working_frame = raw_frame;
+                            }
+                        }
                         auto end_face = std::chrono::steady_clock::now();
                         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
@@ -224,9 +239,15 @@ namespace Gaze
                                 _stage_8_unroll_to_canonical_godot_camera(data);
                             }
                         }
-                        else
+
+                        if (!data->face_detected)
                         {
-                            prev_roll_rad = 0.0f;
+                            // Graceful decay instead of instant snap to 0
+                            pipeline_roll_rad *= 0.5f;
+                            if (std::abs(pipeline_roll_rad) < 0.02f)
+                            {
+                                pipeline_roll_rad = 0.0f;
+                            }
                         }
 
                         auto end_total = std::chrono::steady_clock::now();
@@ -255,7 +276,7 @@ namespace Gaze
     {
         if (data->auto_roll_enabled)
         {
-            data->roll_hint_rad = prev_roll_rad;
+            data->roll_hint_rad = pipeline_roll_rad;
         }
         Frame frame;
         frame.width = data->camera_width;
@@ -402,7 +423,6 @@ namespace Gaze
     {
         if (!data->face_detected)
         {
-            prev_roll_rad = 0.0f;
             return;
         }
 
@@ -410,7 +430,10 @@ namespace Gaze
         data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, +data->roll_hint_rad);
         data->head_translation = data->head_transform.origin;
         data->head_rotation = data->head_transform.basis.get_euler_deg() * DEG_TO_RAD;
-        prev_roll_rad = static_cast<float>(data->head_rotation.z);
+
+        float current_roll = static_cast<float>(data->head_rotation.z);
+        // 50% lerp tweening on pipeline_roll_rad for stable temporal feedback across frames
+        pipeline_roll_rad = pipeline_roll_rad * 0.5f + current_roll * 0.5f;
 
         // 2. Unroll 2D Landmarks back to original camera pixel coordinates
         if (data->has_landmarks_2d && data->landmarks_working_px.size() == 35)

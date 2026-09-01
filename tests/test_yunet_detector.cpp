@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
+#include <iostream>
+#include <iomanip>
 
 #ifndef STB_IMAGE_IMPLEMENTATION_INCLUDED
 #include "stb_image.h"
@@ -237,4 +239,45 @@ TEST_CASE("ORT YuNet Detection Robustness on Chin-Clipped Frames")
         CHECK_MESSAGE(res.score >= 0.30f, "Detection score too low on chin-clipped height: ", h);
     }
 }
+
+TEST_CASE("Empirical Test: YuNet Face Detection Across Roll Angles with Roll Hint")
+{
+    std::string model_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    if (!yunet_file_exists(model_path)) {
+        model_path = "../project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    }
+    REQUIRE(yunet_file_exists(model_path));
+
+    Gaze::ORTYuNetDetector detector(model_path);
+    REQUIRE(detector.initialize() == true);
+
+    std::string img_path = "tests/resources/self_center.jpg";
+    if (!yunet_file_exists(img_path)) {
+        img_path = "../tests/resources/self_center.jpg";
+    }
+    TestImage base_img = load_yunet_test_image(img_path);
+    REQUIRE(!base_img.data.empty());
+
+    int w = base_img.width;
+    int h = base_img.height;
+
+    // Verify that with roll hint, YuNet detects face across entire -90 to +90 degree range
+    for (int deg = -90; deg <= 90; deg += 15) {
+        float rad = deg * (3.14159265f / 180.0f);
+        std::vector<unsigned char> rot_data(w * h * 3);
+        Gaze::rotate_image(base_img.data.data(), w, h, rot_data.data(), rad);
+
+        Gaze::Frame frame;
+        frame.width = w;
+        frame.height = h;
+        frame.data = rot_data.data();
+
+        Gaze::YuNetResult res_withhint;
+        bool ok = detector.process_frame(frame, res_withhint, rad);
+        CHECK_MESSAGE(ok == true, "Processing failed for angle: ", deg);
+        CHECK_MESSAGE(res_withhint.face_detected == true, "Face detection lost with hint at angle: ", deg);
+        CHECK_MESSAGE(res_withhint.score >= 0.70f, "Detection score degraded at angle: ", deg);
+    }
+}
+
 

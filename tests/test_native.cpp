@@ -1687,6 +1687,78 @@ TEST_CASE("Testing Log Verbosity Filtering")
     Gaze::set_log_verbosity(original_verbosity);
 }
 
+TEST_CASE("Testing Dynamic Continuous Head Roll Sequence with Zero Frame Drops")
+{
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    std::vector<uint8_t> yunet_data = read_binary_file(yunet_path);
+    std::vector<uint8_t> gaze_data = read_binary_file(gaze_path);
+    std::vector<uint8_t> eye_data = read_binary_file(eye_path);
+
+    REQUIRE(!yunet_data.empty());
+    REQUIRE(!gaze_data.empty());
+    REQUIRE(!eye_data.empty());
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_data, gaze_data, eye_data) == true);
+    pipeline.start();
+
+    LoadedImage base_img = load_test_image("tests/resources/self_center2.jpg");
+    REQUIRE(!base_img.data.empty());
+
+    // Generate dynamic sweep trajectory: 0 -> +45 -> -45 -> 0 in 3-degree steps (61 frames)
+    std::vector<float> trajectory_deg;
+    for (int deg = 0; deg <= 45; deg += 3) trajectory_deg.push_back(static_cast<float>(deg));
+    for (int deg = 42; deg >= -45; deg -= 3) trajectory_deg.push_back(static_cast<float>(deg));
+    for (int deg = -42; deg <= 0; deg += 3) trajectory_deg.push_back(static_cast<float>(deg));
+
+    int total_frames = static_cast<int>(trajectory_deg.size());
+    int detected_frames = 0;
+
+    for (int i = 0; i < total_frames; ++i) {
+        float angle_deg = trajectory_deg[i];
+        float angle_rad = angle_deg * (3.141592653589793f / 180.0f);
+
+        std::vector<unsigned char> rot_bgr(base_img.width * base_img.height * 3);
+        rotate_image(base_img.data.data(), base_img.width, base_img.height, rot_bgr.data(), -angle_rad);
+
+        GazeFrameData *req = pipeline.frame_pool.take();
+        REQUIRE(req != nullptr);
+        req->camera_raw_bgr = rot_bgr;
+        req->camera_width = base_img.width;
+        req->camera_height = base_img.height;
+        req->timestamp = static_cast<double>(i) * 0.033;
+        req->auto_roll_enabled = true;
+        pipeline.push_frame_request(req);
+
+        GazeFrameData *res = nullptr;
+        for (int retry = 0; retry < 500; ++retry) {
+            if (pipeline.pop_result(&res)) {
+                break;
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+        }
+        REQUIRE(res != nullptr);
+
+        if (res->face_detected) {
+            detected_frames++;
+            float solved_roll_deg = static_cast<float>(res->head_rotation.z * (180.0 / 3.141592653589793));
+            CHECK(std::abs(solved_roll_deg - angle_deg) < 6.0f);
+        } else {
+            MESSAGE("Dropped frame at angle: ", angle_deg, " deg (frame index ", i, ")");
+        }
+
+        pipeline.frame_pool.release(res);
+    }
+
+    pipeline.stop();
+
+    // Strict zero-drop invariant: all frames in dynamic sweep must be detected continuously
+    CHECK_MESSAGE(detected_frames == total_frames, "Dropped ", (total_frames - detected_frames), " / ", total_frames, " frames during dynamic head roll sweep!");
+}
+
 TEST_CASE("Testing Head Roll Landmark Detection")
 {
     std::string face_detector_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";

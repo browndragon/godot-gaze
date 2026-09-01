@@ -382,11 +382,11 @@ namespace Gaze
 
     struct GazeBasis3D
     {
-        GazeVector3 x;
-        GazeVector3 y;
-        GazeVector3 z;
+        GazeVector3 x{1.0, 0.0, 0.0};
+        GazeVector3 y{0.0, 1.0, 0.0};
+        GazeVector3 z{0.0, 0.0, 1.0};
 
-        GazeBasis3D() = default;
+        constexpr GazeBasis3D() = default;
         constexpr GazeBasis3D(const GazeVector3 &px, const GazeVector3 &py, const GazeVector3 &pz) : x(px), y(py), z(pz) {}
 
         static constexpr GazeBasis3D identity()
@@ -520,10 +520,10 @@ namespace Gaze
 
     struct GazeTransform3D
     {
-        GazeBasis3D basis;
-        GazeVector3 origin;
+        GazeBasis3D basis{GazeBasis3D::identity()};
+        GazeVector3 origin{0.0, 0.0, 0.0};
 
-        GazeTransform3D() = default;
+        constexpr GazeTransform3D() = default;
         constexpr GazeTransform3D(const GazeBasis3D &b, const GazeVector3 &o) : basis(b), origin(o) {}
 
         static constexpr GazeTransform3D identity()
@@ -960,9 +960,9 @@ namespace Gaze
     static_assert(std::is_trivial<GazeVector3>::value, "GazeVector3 must be trivial");
 
     static_assert(std::is_standard_layout<GazeBasis3D>::value, "GazeBasis3D must be standard-layout");
-    static_assert(std::is_trivial<GazeBasis3D>::value, "GazeBasis3D must be trivial");
+    static_assert(std::is_trivially_copyable<GazeBasis3D>::value, "GazeBasis3D must be trivially copyable");
 
     static_assert(std::is_standard_layout<GazeTransform3D>::value, "GazeTransform3D must be standard-layout");
-    static_assert(std::is_trivial<GazeTransform3D>::value, "GazeTransform3D must be trivial");
+    static_assert(std::is_trivially_copyable<GazeTransform3D>::value, "GazeTransform3D must be trivially copyable");
 
 } // namespace Gaze

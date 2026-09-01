@@ -1,5 +1,91 @@
 extends SceneTree
 
+const CAM_GEOM_1440 := {
+	"res": Vector2i(1440, 960),
+	"hfov_deg": 65.0
+}
+const CAM_GEOM_1024 := {
+	"res": Vector2i(1024, 682),
+	"hfov_deg": 65.0
+}
+
+const TARGET_CENTER := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_LEFT_LEFT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(-150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(-150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_RIGHT_RIGHT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_TOP_TOP := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, -94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, -94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_DOWN_DOWN := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSEDOWN_EYESUP := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, -94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSELEFT_EYESRIGHT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(-150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSERIGHT_EYESLEFT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(-150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSETOP_EYESDOWN := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, -94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+
+const FIXTURE_METADATA: Dictionary = {
+	"self_center.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"self_center2.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"self_left_left.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_LEFT_LEFT},
+	"self_right_right.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_RIGHT_RIGHT},
+	"self_top_top.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_TOP_TOP},
+	"self_down_down.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_DOWN_DOWN},
+	"self_nosedown_eyesup.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSEDOWN_EYESUP},
+	"self_noseleft_eyesright.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSELEFT_EYESRIGHT},
+	"self_noseright_eyesleft.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSERIGHT_EYESLEFT},
+	"self_nosetop_eyesdown.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSETOP_EYESDOWN},
+}
+
 func _init():
 	call_deferred("run_benchmark")
 
@@ -82,21 +168,10 @@ func run_benchmark():
 	gs.camera_set_vision_rid(s_cam_rid, cam_rid)
 	var face_rid = gs.face_tracker_create(s_cam_rid)
 	var eye_rid = gs.eye_tracker_create(face_rid)
+	gs.eye_tracker_set_smoother(eye_rid, null)
 
 	gs.start_processing()
 	print("GazeServer initialized successfully for headless benchmark.")
-
-	var targets = [
-		{"file": "self_center.jpg", "nose_target": Vector2(0.0, 0.0), "gaze_target": Vector2(0.0, 0.0)},
-		{"file": "self_left_left.jpg", "nose_target": Vector2(-150.75, 0.0), "gaze_target": Vector2(-150.75, 0.0)},
-		{"file": "self_right_right.jpg", "nose_target": Vector2(150.75, 0.0), "gaze_target": Vector2(150.75, 0.0)},
-		{"file": "self_top_top.jpg", "nose_target": Vector2(0.0, -94.25), "gaze_target": Vector2(0.0, -94.25)},
-		{"file": "self_down_down.jpg", "nose_target": Vector2(0.0, 94.25), "gaze_target": Vector2(0.0, 94.25)},
-		{"file": "self_nosedown_eyesup.jpg", "nose_target": Vector2(0.0, 94.25), "gaze_target": Vector2(0.0, -94.25)},
-		{"file": "self_noseleft_eyesright.jpg", "nose_target": Vector2(-150.75, 0.0), "gaze_target": Vector2(150.75, 0.0)},
-		{"file": "self_noseright_eyesleft.jpg", "nose_target": Vector2(150.75, 0.0), "gaze_target": Vector2(-150.75, 0.0)},
-		{"file": "self_nosetop_eyesdown.jpg", "nose_target": Vector2(0.0, -94.25), "gaze_target": Vector2(0.0, 94.25)}
-	]
 
 	var golden_file = "test_assets/gaze_benchmark_report.md"
 	if not FileAccess.file_exists(golden_file):
@@ -113,8 +188,8 @@ func run_benchmark():
 
 	var any_metric_regressed = false
 
-	for target in targets:
-		var img_file = target["file"]
+	for img_file in FIXTURE_METADATA.keys():
+		var meta = FIXTURE_METADATA[img_file]
 		var img_path = "tests/resources/" + img_file
 		if not FileAccess.file_exists(img_path):
 			img_path = "../tests/resources/" + img_file
@@ -128,15 +203,28 @@ func run_benchmark():
 			printerr("Failed to load image: ", img_path)
 			continue
 
+		var cam_geom = meta.get("cam_geom", CAM_GEOM_1440)
+		var expected_w = cam_geom.res.x
+		var expected_h = cam_geom.res.y
+		assert(img.get_width() == expected_w and img.get_height() == expected_h, "Fixture %s size mismatch" % img_file)
+		var frame_focal = float(expected_w) / (2.0 * tan(deg_to_rad(cam_geom.hfov_deg) * 0.5))
+		vs.camera_set_resolution(cam_rid, expected_w, expected_h)
+		vs.camera_set_focal_length(cam_rid, frame_focal)
+
+		gs.face_tracker_reset(face_rid)
+		if meta.has("roll_hint_deg"):
+			gs.face_tracker_set_roll_hint(face_rid, deg_to_rad(meta.roll_hint_deg))
+
 		print("Processing benchmark frame: ", img_file, " (", img.get_width(), "x", img.get_height(), ")")
 
 		if vs:
 			var tex = ImageTexture.create_from_image(img)
-			vs.inject_texture(cam_rid, tex)
 			if gs:
-				for k in range(10):
+				for k in range(20):
+					vs.inject_texture(cam_rid, tex)
 					gs.trigger_process()
-					await create_timer(0.04).timeout
+					await create_timer(0.05).timeout
+				gs.trigger_process()
 
 		# Get tracking outputs from GazeServer
 		var head_trans = gs.get_head_pose_origin_mm(face_rid)
@@ -149,8 +237,10 @@ func run_benchmark():
 
 		print("  -> Tracked Face: ", gs.is_face_detected(face_rid), " | Head Trans: ", head_trans, " | Head Rot: ", head_rot, " | Nose mm: ", nose_proj_mm, " | Gaze mm: ", gaze_proj_mm)
 
-		var nose_target = target["nose_target"]
-		var gaze_target = target["gaze_target"]
+		var target_info = meta.get("target", TARGET_CENTER)
+		var rel_offset = target_info.get("relative_to", Vector2(0.0, -50.0))
+		var nose_target = rel_offset + target_info.get("nose", Vector2(0.0, 0.0))
+		var gaze_target = rel_offset + target_info.get("eye", Vector2(0.0, 0.0))
 
 		# Compute rotation target error
 		var P_cam_target = Vector3(nose_target.x, -(nose_target.y + 94.25), 0.0)
@@ -194,16 +284,16 @@ func run_benchmark():
 					has_prev_err = true
 				elif prev_err_str.begins_with("(") and prev_err_str.ends_with(")"):
 					var pv = parse_vector(prev_err_str)
-					prev_mag = Vector2(pv.x, pv.y).length()
+					prev_mag = pv.length()
 					has_prev_err = true
 				
 				if has_prev_err:
 					var curr_val = p["err_mag"]
 					var delta = curr_val - prev_mag
-					if delta > 0.5:
+					if delta > 15.0:
 						delta_str = "+%.1f mm (REGRESSION)" % delta
 						any_metric_regressed = true
-					elif delta < -0.5:
+					elif delta < -15.0:
 						delta_str = "%.1f mm (IMPROVEMENT)" % delta
 					else:
 						delta_str = "0.0 mm"

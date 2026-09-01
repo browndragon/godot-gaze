@@ -20,6 +20,21 @@ using GazeTest::load_test_image;
 using LoadedImage = GazeTest::TestImage;
 #define load_image load_test_image
 
+TEST_CASE("Face Model Geometry SSOT: Point 5 (Nose Tip) is strictly (0, 0, 0)")
+{
+    auto model_35pt = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
+    REQUIRE(model_35pt.size() == 35);
+
+    // Point 5 MUST be the Nose Tip origin (0, 0, 0)
+    CHECK(model_35pt[5].x == doctest::Approx(0.0f));
+    CHECK(model_35pt[5].y == doctest::Approx(0.0f));
+    CHECK(model_35pt[5].z == doctest::Approx(0.0f));
+
+    // Eye canthi must be located behind the nose tip (+Z in OpenCV model space)
+    CHECK(model_35pt[0].z > 0.0f); // Image left inner canthus
+    CHECK(model_35pt[2].z > 0.0f); // Image right inner canthus
+}
+
 TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP Solver")
 {
     std::string lm_model_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
@@ -106,7 +121,7 @@ TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP 
         if (std::abs(roll_hint_rad) > 1e-4f)
         {
             rot_buffer.resize(frame.width * frame.height * 3);
-            Gaze::rotate_image_bgr(frame.data, frame.width, frame.height, rot_buffer.data(), -roll_hint_rad);
+            Gaze::rotate_image(frame.data, frame.width, frame.height, rot_buffer.data(), -roll_hint_rad);
             working_data = rot_buffer.data();
         }
         Gaze::Frame working_frame = frame;
@@ -288,10 +303,10 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
         float true_roll_rad = true_roll_deg * (3.14159265f / 180.0f);
 
         // Apply true roll to base image
-        Gaze::rotate_image_bgr(img.data.data(), img.width, img.height, rot_frame.data(), true_roll_rad);
+        Gaze::rotate_image(img.data.data(), img.width, img.height, rot_frame.data(), true_roll_rad);
 
         // Pipeline step: counter-rotate by current_roll_hint_rad
-        Gaze::rotate_image_bgr(rot_frame.data(), img.width, img.height, working_frame.data(), -current_roll_hint_rad);
+        Gaze::rotate_image(rot_frame.data(), img.width, img.height, working_frame.data(), -current_roll_hint_rad);
 
         Gaze::Frame frame;
         frame.width = img.width;
@@ -325,8 +340,8 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
         // Verify that 2D landmarks unrotated back to camera space align with ground truth rotated face position
         for (size_t lm_idx : {0, 1, 2, 3, 30})
         {
-            Gaze::GazeVector2 expected_pt = Gaze::rotate_point_back(base_landmarks[lm_idx], -true_roll_rad, img.width, img.height);
-            Gaze::GazeVector2 unrotated_pt = Gaze::rotate_point_back(landmarks_35[lm_idx], -current_roll_hint_rad, img.width, img.height);
+            Gaze::GazeVector2 expected_pt = Gaze::rotate_point_2d(base_landmarks[lm_idx], true_roll_rad, img.width, img.height);
+            Gaze::GazeVector2 unrotated_pt = Gaze::rotate_point_2d(landmarks_35[lm_idx], current_roll_hint_rad, img.width, img.height);
             float dx = unrotated_pt.x - expected_pt.x;
             float dy = unrotated_pt.y - expected_pt.y;
             float dist_px = std::sqrt(dx * dx + dy * dy);

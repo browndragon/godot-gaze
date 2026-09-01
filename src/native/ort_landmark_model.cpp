@@ -157,7 +157,7 @@ namespace Gaze
         if (std::abs(roll_hint_rad) > 1e-4f)
         {
             working_buffer.resize(img_w * img_h * 3);
-            rotate_image_bgr(src_data, img_w, img_h, working_buffer.data(), -roll_hint_rad);
+            rotate_image(src_data, img_w, img_h, working_buffer.data(), -roll_hint_rad);
             working_data = working_buffer.data();
 
             float cx = face_bbox.x + face_bbox.width * 0.5f;

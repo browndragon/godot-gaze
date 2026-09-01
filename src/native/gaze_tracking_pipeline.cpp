@@ -183,198 +183,36 @@ namespace Gaze
 
                         auto start_total = std::chrono::steady_clock::now();
 
-                        // Form a temporary Frame pointing to data's camera_raw_bgr
-                        Frame frame;
-                        frame.width = data->camera_width;
-                        frame.height = data->camera_height;
-                        frame.data = data->camera_raw_bgr.data();
-                        frame.timestamp = data->timestamp;
+                        Frame working_frame;
+                        _stage_1_apply_roll_hint(data, working_frame);
 
-                        // 1. Counter-rotate frame by -prev_roll_rad so face is presented upright in working_frame
-                        const unsigned char *working_data = frame.data;
-                        if (std::abs(prev_roll_rad) > 1e-4f)
-                        {
-                            rotated_frame_buffer.resize(frame.width * frame.height * 3);
-                            rotate_image_bgr(frame.data, frame.width, frame.height, rotated_frame_buffer.data(), -prev_roll_rad);
-                            working_data = rotated_frame_buffer.data();
-                        }
-                        Frame working_frame = frame;
-                        working_frame.data = const_cast<unsigned char *>(working_data);
-
-                        YuNetResult yunet_res;
                         auto start_face = std::chrono::steady_clock::now();
-                        bool success = face_detector ? face_detector->process_frame(working_frame, yunet_res, 0.0f) : false;
+                        bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
                         auto end_face = std::chrono::steady_clock::now();
                         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
                         double gaze_ms = 0.0;
-                        data->face_detected = success && yunet_res.face_detected;
-                        data->gaze_success = false;
-
-                        if (data->face_detected)
+                        if (face_ok)
                         {
-                            std::vector<GazeVector2> landmarks_35;
-                            bool lm_ok = false;
-                            GazeVector3 rvec_upright(0.0f, 0.0f, 0.0f);
-                            if (landmark_model)
+                            bool lm_ok = _stage_3_extract_landmarks(data, working_frame);
+                            if (lm_ok)
                             {
-                                GazeRect bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-                                lm_ok = landmark_model->extract_landmarks(working_frame.data, working_frame.width, working_frame.height, bbox, landmarks_35, 0.0f);
-                            }
-
-                            if (lm_ok && landmarks_35.size() == 35)
-                            {
-                                double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : calculate_default_focal_length(static_cast<double>(working_frame.width));
-                                double cx = working_frame.width * 0.5;
-                                double cy = working_frame.height * 0.5;
                                 GazeVector3 rvec(0.0f, 0.0f, 0.0f);
                                 GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-                                static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
-                                bool pnp_ok = solve_pnp_lm(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec, false);
-                                if (pnp_ok)
-                                {
-                                    rvec_upright = rvec;
-                                    if (std::abs(prev_roll_rad) > 1e-4f)
-                                    {
-                                        GazeBasis3D R_up = rodrigues_to_basis(rvec);
-                                        GazeBasis3D R_z = rodrigues_to_basis(GazeVector3(0.0, 0.0, prev_roll_rad));
-                                        GazeBasis3D R_orig = R_z * R_up;
-                                        GazeVector3 t_orig = R_z.multiply_vector(tvec);
-                                        GazeVector3 r_orig = basis_to_rodrigues(R_orig);
+                                _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                                _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
+                                _stage_6_estimate_eye_state(data);
 
-                                        yunet_res.head_pose.pitch_rad = r_orig.x;
-                                        yunet_res.head_pose.yaw_rad = r_orig.y;
-                                        yunet_res.head_pose.roll_rad = r_orig.z;
-                                        yunet_res.head_pose.trans_x_mm = t_orig.x;
-                                        yunet_res.head_pose.trans_y_mm = t_orig.y;
-                                        yunet_res.head_pose.trans_z_mm = t_orig.z;
-                                    }
-                                    else
-                                    {
-                                        yunet_res.head_pose.pitch_rad = rvec.x;
-                                        yunet_res.head_pose.yaw_rad = rvec.y;
-                                        yunet_res.head_pose.roll_rad = rvec.z;
-                                        yunet_res.head_pose.trans_x_mm = tvec.x;
-                                        yunet_res.head_pose.trans_y_mm = tvec.y;
-                                        yunet_res.head_pose.trans_z_mm = tvec.z;
-                                    }
-                                }
-
-                                data->has_landmarks_2d = true;
-                                for (size_t i = 0; i < 35; ++i)
-                                {
-                                    GazeVector2 pt = landmarks_35[i];
-                                    if (std::abs(prev_roll_rad) > 1e-4f)
-                                    {
-                                        pt = rotate_point_back(pt, prev_roll_rad, frame.width, frame.height);
-                                    }
-                                    data->landmarks_2d_px[i * 2 + 0] = pt.x;
-                                    data->landmarks_2d_px[i * 2 + 1] = pt.y;
-                                }
-
-                                // Extract dynamic eye crops directly from upright working_frame (naturally horizontal & centered)
-                                // In OpenVINO ADAS 35-point landmarks:
-                                // pts 0..1 = Image Left Eye (Anatomical Right Eye)
-                                // pts 2..3 = Image Right Eye (Anatomical Left Eye)
-                                float r_cx = (landmarks_35[0].x + landmarks_35[1].x) * 0.5f;
-                                float r_cy = (landmarks_35[0].y + landmarks_35[1].y) * 0.5f;
-                                float r_dx = landmarks_35[0].x - landmarks_35[1].x;
-                                float r_dy = landmarks_35[0].y - landmarks_35[1].y;
-                                float r_w = std::sqrt(r_dx * r_dx + r_dy * r_dy);
-
-                                float l_cx = (landmarks_35[2].x + landmarks_35[3].x) * 0.5f;
-                                float l_cy = (landmarks_35[2].y + landmarks_35[3].y) * 0.5f;
-                                float l_dx = landmarks_35[2].x - landmarks_35[3].x;
-                                float l_dy = landmarks_35[2].y - landmarks_35[3].y;
-                                float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
-
-                                float eye_box_sz = std::max({24.0f, r_w * 1.8f, l_w * 1.8f});
-
-                                crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                                                    r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
-                                                    yunet_res.right_eye_crop, 60, 60);
-
-                                crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                                                    l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
-                                                    yunet_res.left_eye_crop, 60, 60);
+                                auto start_gaze = std::chrono::steady_clock::now();
+                                _stage_7_estimate_gaze_direction(data);
+                                auto end_gaze = std::chrono::steady_clock::now();
+                                gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
                             }
-                            else
-                            {
-                                data->has_landmarks_2d = false;
-                            }
-
-                            GazeTransform3D head_xform = CoordinateConversions::opencv_pose_to_godot_camera_transform(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
-                            data->head_transform = head_xform;
-                            data->head_translation = head_xform.origin;
-                            data->head_rotation = head_xform.basis.get_euler_deg() * DEG_TO_RAD;
-                            prev_roll_rad = yunet_res.head_pose.roll_rad;
-
-                            // Estimate Eye Openness for Left & Right eyes via ORTEyeStateModel
-                            if (eye_state_model)
-                            {
-                                eye_state_model->estimate_openness(yunet_res.left_eye_crop, data->left_eye_openness);
-                                eye_state_model->estimate_openness(yunet_res.right_eye_crop, data->right_eye_openness);
-                            }
-
-                            if (data->left_eye_buffer)
-                            {
-                                std::memcpy(data->left_eye_buffer, yunet_res.left_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
-                            }
-                            if (data->right_eye_buffer)
-                            {
-                                std::memcpy(data->right_eye_buffer, yunet_res.right_eye_crop, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
-                            }
-
-                            if (data->full_crop_buffer && data->full_crop_bytes >= 160 * 128 * 3)
-                            {
-                                crop_and_resize_bgr_to_rgb(frame.data, frame.width, frame.height, yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h, data->full_crop_buffer, 160, 128);
-                            }
-
-                            EyeCrops crops;
-                            crops.face_detected = true;
-                            crops.head_pose_translation = yunet_res.head_pose.translation();
-                            // Pass upright head pose (rvec from working_frame) to gaze estimator
-                            crops.head_pose_rotation = rvec_upright;
-
-                            GazeBasis3D head_rot = yunet_res.head_pose.rotation_matrix();
-                            GazeVector3 head_trans = yunet_res.head_pose.translation();
-                            // Canonical anthropometric eye positions in OpenCV Model Space (IPD = 63mm, Y = -32mm, Z = 0mm)
-                            crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5f, -32.0f, 0.0f)) + head_trans;
-                            crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5f, -32.0f, 0.0f)) + head_trans;
-                            std::memcpy(crops.left_eye_data, yunet_res.left_eye_crop, 60*60*3);
-                            std::memcpy(crops.right_eye_data, yunet_res.right_eye_crop, 60*60*3);
-
-                            GazeVector3 raw_gaze_dir_cam;
-                            auto start_gaze = std::chrono::steady_clock::now();
-                            bool gaze_success = gaze_estimator ? gaze_estimator->estimate_raw_gaze(crops, raw_gaze_dir_cam) : false;
-                            auto end_gaze = std::chrono::steady_clock::now();
-                            gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
-
-                            if (gaze_success)
-                            {
-                                data->gaze_success = true;
-                                // 1. Convert raw OpenVINO gaze vector to Godot camera space (+X camera right, +Y up, +Z forward towards screen)
-                                GazeVector3 gaze_godot = CoordinateConversions::openvino_gaze_to_godot_cam(raw_gaze_dir_cam);
-
-                                // 2. Rotate gaze vector in Godot camera space by roll angle (+prev_roll_rad around +Z)
-                                if (std::abs(prev_roll_rad) > 1e-4f)
-                                {
-                                    double cos_r = std::cos(prev_roll_rad);
-                                    double sin_r = std::sin(prev_roll_rad);
-                                    double gx = cos_r * gaze_godot.x - sin_r * gaze_godot.y;
-                                    double gy = sin_r * gaze_godot.x + cos_r * gaze_godot.y;
-                                    gaze_godot.x = gx;
-                                    gaze_godot.y = gy;
-                                }
-
-                                GazeVector3 eye_mid_cv = (crops.right_eye_center_cam + crops.left_eye_center_cam) * 0.5;
-                                data->gaze_origin = CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(eye_mid_cv);
-                                data->gaze_direction = gaze_godot.normalized();
-                            }
+                            _stage_8_unroll_to_canonical_godot_camera(data);
                         }
                         else
                         {
-                            prev_roll_rad = 0.0f; // Reset roll if face is lost
+                            prev_roll_rad = 0.0f;
                         }
 
                         auto end_total = std::chrono::steady_clock::now();
@@ -388,13 +226,213 @@ namespace Gaze
                                      "face_ms", face_ms,
                                      "gaze_ms", gaze_ms,
                                      "total_ms", total_ms,
-                                     "frame_w", frame.width,
-                                     "frame_h", frame.height);
+                                     "frame_w", data->camera_width,
+                                     "frame_h", data->camera_height);
                         }
                     }
                 }
                 results_mailbox.put(data);
                 worker_busy = false;
+            }
+        }
+    }
+
+    void GazeTrackingPipeline::_stage_1_apply_roll_hint(GazeFrameData *data, Frame &working_frame)
+    {
+        if (data->auto_roll_enabled)
+        {
+            data->roll_hint_rad = prev_roll_rad;
+        }
+        Frame frame;
+        frame.width = data->camera_width;
+        frame.height = data->camera_height;
+        frame.data = data->camera_raw_bgr.data();
+        frame.timestamp = data->timestamp;
+
+        const unsigned char *working_data = frame.data;
+        if (std::abs(data->roll_hint_rad) > 1e-4f)
+        {
+            data->rotated_frame_bgr.resize(frame.width * frame.height * 3);
+            rotate_image(frame.data, frame.width, frame.height, data->rotated_frame_bgr.data(), -data->roll_hint_rad);
+            working_data = data->rotated_frame_bgr.data();
+        }
+        working_frame = frame;
+        working_frame.data = const_cast<unsigned char *>(working_data);
+    }
+
+    bool GazeTrackingPipeline::_stage_2_detect_face_bbox(GazeFrameData *data, const Frame &working_frame)
+    {
+        if (!face_detector) return false;
+        YuNetResult yunet_res;
+        bool success = face_detector->process_frame(working_frame, yunet_res, 0.0f);
+        data->face_detected = success && yunet_res.face_detected;
+        if (data->face_detected)
+        {
+            data->face_bbox = GazeRect(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
+        }
+        return data->face_detected;
+    }
+
+    bool GazeTrackingPipeline::_stage_3_extract_landmarks(GazeFrameData *data, const Frame &working_frame)
+    {
+        if (!landmark_model || !data->face_detected)
+        {
+            data->has_landmarks_2d = false;
+            return false;
+        }
+        data->landmarks_working_px.clear();
+        bool lm_ok = landmark_model->extract_landmarks(working_frame.data, working_frame.width, working_frame.height, data->face_bbox, data->landmarks_working_px, 0.0f);
+        data->has_landmarks_2d = (lm_ok && data->landmarks_working_px.size() == 35);
+        return data->has_landmarks_2d;
+    }
+
+    bool GazeTrackingPipeline::_stage_4_solve_head_pose(GazeFrameData *data, const Frame &working_frame, GazeVector3 &out_rvec, GazeVector3 &out_tvec)
+    {
+        if (!data->has_landmarks_2d || data->landmarks_working_px.size() != 35) return false;
+        double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : calculate_default_focal_length(static_cast<double>(working_frame.width));
+        double cx = working_frame.width * 0.5;
+        double cy = working_frame.height * 0.5;
+        static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
+        bool pnp_ok = solve_pnp_lm(model_35pt, data->landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec, false);
+        if (!pnp_ok) return false;
+
+        data->head_transform = CoordinateConversions::opencv_pose_to_godot_camera_transform(out_tvec, out_rvec);
+        data->head_rotation = out_rvec;
+        data->head_translation = out_tvec;
+        return true;
+    }
+
+    void GazeTrackingPipeline::_stage_5_extract_eye_crops(GazeFrameData *data, const Frame &working_frame, const GazeVector3 &rvec, const GazeVector3 &tvec)
+    {
+        if (!data->has_landmarks_2d || data->landmarks_working_px.size() != 35) return;
+
+        // Landmarks: [0..1] = Image Left eye (Anatomical Right), [2..3] = Image Right eye (Anatomical Left)
+        float r_cx = (data->landmarks_working_px[0].x + data->landmarks_working_px[1].x) * 0.5f;
+        float r_cy = (data->landmarks_working_px[0].y + data->landmarks_working_px[1].y) * 0.5f;
+        float r_dx = data->landmarks_working_px[0].x - data->landmarks_working_px[1].x;
+        float r_dy = data->landmarks_working_px[0].y - data->landmarks_working_px[1].y;
+        float r_w = std::sqrt(r_dx * r_dx + r_dy * r_dy);
+
+        float l_cx = (data->landmarks_working_px[2].x + data->landmarks_working_px[3].x) * 0.5f;
+        float l_cy = (data->landmarks_working_px[2].y + data->landmarks_working_px[3].y) * 0.5f;
+        float l_dx = data->landmarks_working_px[2].x - data->landmarks_working_px[3].x;
+        float l_dy = data->landmarks_working_px[2].y - data->landmarks_working_px[3].y;
+        float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
+
+        float eye_box_sz = std::max({24.0f, r_w * 1.8f, l_w * 1.8f});
+
+        data->eye_crops.face_detected = true;
+        data->eye_crops.head_pose_translation = tvec;
+        data->eye_crops.head_pose_rotation = rvec;
+
+        GazeBasis3D head_rot = rodrigues_to_basis(rvec);
+        data->eye_crops.right_eye_center_cam = head_rot.multiply_vector(GazeVector3(-31.5f, -32.0f, 0.0f)) + tvec;
+        data->eye_crops.left_eye_center_cam = head_rot.multiply_vector(GazeVector3(31.5f, -32.0f, 0.0f)) + tvec;
+
+        crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
+                            r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                            data->eye_crops.right_eye_data, 60, 60);
+
+        crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
+                            l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                            data->eye_crops.left_eye_data, 60, 60);
+
+        if (data->left_eye_buffer)
+        {
+            std::memcpy(data->left_eye_buffer, data->eye_crops.left_eye_data, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
+        }
+        if (data->right_eye_buffer)
+        {
+            std::memcpy(data->right_eye_buffer, data->eye_crops.right_eye_data, EYE_CROP_SIZE * EYE_CROP_SIZE * 3);
+        }
+        if (data->full_crop_buffer && data->full_crop_bytes >= 160 * 128 * 3)
+        {
+            crop_and_resize_bgr_to_rgb(data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
+                                      data->face_bbox.x, data->face_bbox.y, data->face_bbox.width, data->face_bbox.height,
+                                      data->full_crop_buffer, 160, 128);
+        }
+    }
+
+    void GazeTrackingPipeline::_stage_6_estimate_eye_state(GazeFrameData *data)
+    {
+        if (!eye_state_model || !data->face_detected) return;
+        eye_state_model->estimate_openness(data->eye_crops.left_eye_data, data->left_eye_openness);
+        eye_state_model->estimate_openness(data->eye_crops.right_eye_data, data->right_eye_openness);
+    }
+
+    void GazeTrackingPipeline::_stage_7_estimate_gaze_direction(GazeFrameData *data)
+    {
+        if (!gaze_estimator || !data->face_detected)
+        {
+            data->gaze_success = false;
+            return;
+        }
+        GazeVector3 raw_gaze_dir_cv;
+        bool success = gaze_estimator->estimate_raw_gaze(data->eye_crops, raw_gaze_dir_cv);
+        if (!success)
+        {
+            data->gaze_success = false;
+            return;
+        }
+        data->gaze_success = true;
+
+        // Raw gaze mapped into Space::GodotCameraHintRolled
+        GazeVector3 gaze_hint_rolled = CoordinateConversions::openvino_gaze_to_godot_cam(raw_gaze_dir_cv);
+        data->gaze_direction = gaze_hint_rolled.normalized();
+
+        GazeVector3 eye_mid_cv = (data->eye_crops.right_eye_center_cam + data->eye_crops.left_eye_center_cam) * 0.5;
+        data->gaze_origin = CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(eye_mid_cv);
+    }
+
+    void GazeTrackingPipeline::_stage_8_unroll_to_canonical_godot_camera(GazeFrameData *data)
+    {
+        if (!data->face_detected)
+        {
+            prev_roll_rad = 0.0f;
+            return;
+        }
+
+        // 1. Unroll 3D Head Transform from GodotCameraHintRolled to canonical GodotCamera
+        data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, +data->roll_hint_rad);
+        data->head_translation = data->head_transform.origin;
+        GazeBasis3D head_rot = rodrigues_to_basis(data->head_rotation);
+        float solved_roll = std::atan2(head_rot.x.y, head_rot.x.x);
+        data->head_rotation.z = solved_roll + data->roll_hint_rad;
+        prev_roll_rad = static_cast<float>(data->head_rotation.z);
+
+        // 2. Unroll 2D Landmarks back to original camera pixel coordinates
+        if (data->has_landmarks_2d && data->landmarks_working_px.size() == 35)
+        {
+            for (size_t i = 0; i < 35; ++i)
+            {
+                GazeVector2 pt = data->landmarks_working_px[i];
+                if (std::abs(data->roll_hint_rad) > 1e-4f)
+                {
+                    pt = rotate_point_2d(pt, +data->roll_hint_rad, data->camera_width, data->camera_height);
+                }
+                data->landmarks_2d_px[i * 2 + 0] = pt.x;
+                data->landmarks_2d_px[i * 2 + 1] = pt.y;
+            }
+        }
+
+        // 3. Unroll 3D Gaze Ray
+        if (data->gaze_success)
+        {
+            if (std::abs(data->roll_hint_rad) > 1e-4f)
+            {
+                double cos_r = std::cos(data->roll_hint_rad);
+                double sin_r = std::sin(data->roll_hint_rad);
+
+                double gx = cos_r * data->gaze_direction.x + sin_r * data->gaze_direction.y;
+                double gy = -sin_r * data->gaze_direction.x + cos_r * data->gaze_direction.y;
+                data->gaze_direction.x = gx;
+                data->gaze_direction.y = gy;
+                data->gaze_direction = data->gaze_direction.normalized();
+
+                double ox = cos_r * data->gaze_origin.x + sin_r * data->gaze_origin.y;
+                double oy = -sin_r * data->gaze_origin.x + cos_r * data->gaze_origin.y;
+                data->gaze_origin.x = ox;
+                data->gaze_origin.y = oy;
             }
         }
     }

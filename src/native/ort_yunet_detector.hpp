@@ -31,9 +31,6 @@ namespace Gaze
         GazeVector2 mouth_left_px;
 
         HeadPose head_pose;
-
-        uint8_t left_eye_crop[60 * 60 * 3];
-        uint8_t right_eye_crop[60 * 60 * 3];
     };
 
     class ORTYuNetDetector

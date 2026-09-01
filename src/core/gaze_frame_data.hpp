@@ -2,6 +2,7 @@
 #include <vector>
 #include <cstdint>
 #include "math_defs.hpp"
+#include "face_pipeline.hpp"
 
 namespace Gaze {
 
@@ -11,12 +12,18 @@ constexpr size_t EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANN
 
 struct GazeFrameData {
     std::vector<uint8_t> camera_raw_bgr;
-    std::vector<uint8_t> rotated_frame_bgr; // Pre-allocated scratch space for roll un-rotation
+    std::vector<uint8_t> rotated_frame_bgr; // Pre-allocated scratch space for working hint-rolled buffer
     int camera_width = 0;
     int camera_height = 0;
     double timestamp = 0.0;
     double camera_focal_length_px = -1.0;
     double camera_fov_degrees = DEFAULT_CAMERA_FOV_DEGREES;
+
+    float roll_hint_rad = 0.0f;
+    bool auto_roll_enabled = true;
+    GazeRect face_bbox;
+    std::vector<GazeVector2> landmarks_working_px;
+    EyeCrops eye_crops;
 
     bool face_detected = false;
     bool gaze_success = false;

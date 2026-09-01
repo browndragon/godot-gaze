@@ -31,9 +31,9 @@ namespace Gaze
         const std::vector<const char *> input_names = {"left_eye_image", "right_eye_image", "head_pose_angles"};
         const std::vector<const char *> output_names = {"gaze_vector/sink_port_0"};
 
-        void preprocess_eye_crop(const uint8_t *raw_crop, float *out_buffer);
-
     public:
+        static void preprocess_eye_crop(const uint8_t *raw_crop, float *out_buffer);
+
         ORTGazeModel(const std::string &gaze_ort_path);
         ORTGazeModel(const std::vector<uint8_t> &ort_buffer);
         ORTGazeModel(const std::vector<uint8_t> &xml_buffer, const std::vector<uint8_t> &bin_buffer); // Compatibility fallback

@@ -30,16 +30,17 @@ namespace Gaze
         static constexpr double DEFAULT_NOSE_Z = 0.0;
 
         /**
-         * @brief 5-point face model used specifically for YuNet initial face alignment.
+         * @brief 5-point face model matching YuNet keypoints, derived directly from canonical 35-point model.
          */
         static inline std::vector<GazeVector3> get_5pt_model_points()
         {
+            auto pts_35 = get_canonical_35pt_face_model();
             return {
-                GazeVector3(0.0, 0.0, 0.0),            // 0: Nose Tip
-                GazeVector3(EYE_X, EYE_Y, EYE_Z),      // 1: Right Eye (Anatomical Right, +X)
-                GazeVector3(-EYE_X, EYE_Y, EYE_Z),     // 2: Left Eye (Anatomical Left, -X)
-                GazeVector3(MOUTH_X, MOUTH_Y, MOUTH_Z),// 3: Right Mouth Corner (Anatomical Right, +X)
-                GazeVector3(-MOUTH_X, MOUTH_Y, MOUTH_Z)// 4: Left Mouth Corner (Anatomical Left, -X)
+                pts_35[5],                                                                     // 0: Nose Tip (Origin)
+                GazeVector3((pts_35[0].x + pts_35[1].x) * 0.5f, (pts_35[0].y + pts_35[1].y) * 0.5f, (pts_35[0].z + pts_35[1].z) * 0.5f), // 1: Right Eye (Image Left)
+                GazeVector3((pts_35[2].x + pts_35[3].x) * 0.5f, (pts_35[2].y + pts_35[3].y) * 0.5f, (pts_35[2].z + pts_35[3].z) * 0.5f), // 2: Left Eye (Image Right)
+                pts_35[8],                                                                     // 3: Right Mouth Corner
+                pts_35[9]                                                                      // 4: Left Mouth Corner
             };
         }
 
@@ -49,16 +50,6 @@ namespace Gaze
         static inline std::vector<GazeVector3> get_canonical_35pt_model_points()
         {
             return get_canonical_35pt_face_model();
-        }
-
-        /**
-         * @brief 18-point rigid facial core model points (Eyes 0..3, Nose 4..7, Mouth 8..11, Eyebrows 12..17).
-         * Excludes moving jawline contour points (18..34) to achieve expression-invariant PnP tracking.
-         */
-        static inline std::vector<GazeVector3> get_rigid_18pt_model_points()
-        {
-            auto pts_35 = get_canonical_35pt_face_model();
-            return std::vector<GazeVector3>(pts_35.begin(), pts_35.begin() + 18);
         }
 
         /**

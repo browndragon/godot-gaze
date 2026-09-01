@@ -9,15 +9,22 @@
 
   // TODO: What keeps this in sync with the C++ version? Strongly recommend at least linking both with an if-this-then-that change guard.
   // Better would be to introspect these values from the C++ version. Best would be to do it all in C++ ;)
+  // Canonical Anthropometric 3D Head Model Points (mm) in Head Local Space:
+  // Origin (0,0,0) = Nose Tip (Single Source of Truth: src/core/face_model_geometry.hpp)
   var FaceModelGeometry = {
-    EYE_X: 30.0,
-    EYE_Y: -28.676,
-    EYE_Z: 0.0,
-    DEFAULT_NOSE_Y: -0.5,
-    DEFAULT_NOSE_Z: -52.0,
-    MOUTH_X: 18.462,
-    MOUTH_Y: 31.712,
-    MOUTH_Z: -4.55,
+    DEFAULT_HFOV_DEG: 65.0,
+    DEFAULT_FOCAL_TAN_HALF: 0.6370702608,
+    calculateDefaultFocalLength: function (width) {
+      return width / (2.0 * 0.6370702608);
+    },
+    EYE_X: 30.5,
+    EYE_Y: -32.0,
+    EYE_Z: 39.0,
+    DEFAULT_NOSE_Y: 0.0,
+    DEFAULT_NOSE_Z: 0.0,
+    MOUTH_X: 25.0,
+    MOUTH_Y: 32.0,
+    MOUTH_Z: 30.0,
   };
 
   // TODO: Does this need to be in the sidecar? Wouldn't it be easier to read, more efficient etc to perform this in wasm? I honestly don't know, that's a real question! The problem would be I _think_ we want ths available on the web worker thread off of main, which might affect things...?
@@ -791,7 +798,7 @@
                 var fx =
                   self.cameraFocalLength > 0.0
                     ? self.cameraFocalLength
-                    : w * 1.5625;
+                    : FaceModelGeometry.calculateDefaultFocalLength(w);
 
                 var rvec = [0.0, 0.0, 0.0];
                 var tvec = [0.0, 0.0, 700.0];

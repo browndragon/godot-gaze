@@ -36,27 +36,100 @@ var face_rid: RID
 var eye_rid: RID
 var dev_cal: MockDeviceCalibration
 
-var target_points_mm: Dictionary = {
-	"self_center.jpg": Vector2(0.0, 0.0),
-	"self_center2.jpg": Vector2(0.0, 0.0),
-	"self_left_left.jpg": Vector2(-150.75, 0.0),
-	"self_right_right.jpg": Vector2(150.75, 0.0),
-	"self_top_top.jpg": Vector2(0.0, -94.25),
-	"self_down_down.jpg": Vector2(0.0, 94.25),
-	"self_nosedown_eyesup.jpg": Vector2(0.0, 0.0),
-	"self_noseleft_eyesright.jpg": Vector2(150.75, 0.0),
-	"self_noseright_eyesleft.jpg": Vector2(-150.75, 0.0),
-	"self_nosetop_eyesdown.jpg": Vector2(0.0, 94.25),
-	"self_roll_left.jpg": Vector2(0.0, 0.0),
-	"self_roll_right.jpg": Vector2(0.0, 0.0),
-	"self_yaw_left_roll_left.jpg": Vector2(-150.75, 0.0),
-	"self_yaw_right_roll_left.jpg": Vector2(150.75, 0.0),
-	"eyes_both_open.jpg": Vector2(0.0, 0.0),
-	"eyes_both_wink.jpg": Vector2(0.0, 0.0),
-	"eyes_anatomical_left_wink.jpg": Vector2(0.0, 0.0),
-	"eyes_anatomical_right_wink.jpg": Vector2(0.0, 0.0),
-	"eyes_tilted_anatomical_right_wink.jpg": Vector2(0.0, 0.0),
-	"eyes_anatomical_left_obscured.jpg": Vector2(0.0, 0.0),
+const CAM_GEOM_1440 := {
+	"res": Vector2i(1440, 960),
+	"hfov_deg": 65.0
+}
+const CAM_GEOM_1024 := {
+	"res": Vector2i(1024, 682),
+	"hfov_deg": 65.0
+}
+
+const TARGET_CENTER := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_LEFT_LEFT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(-150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(-150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_RIGHT_RIGHT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_TOP_TOP := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, -94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, -94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_DOWN_DOWN := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSEDOWN_EYESUP := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, 94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, -94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSELEFT_EYESRIGHT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(-150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSERIGHT_EYESLEFT := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(150.75, 0.0),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(-150.75, 0.0),
+	"eye_error": Vector2(25.0, 35.0),
+}
+const TARGET_NOSETOP_EYESDOWN := {
+	"relative_to": Vector2(0.0, -50.0),
+	"nose": Vector2(0.0, -94.25),
+	"nose_error": Vector2(25.0, 35.0),
+	"eye": Vector2(0.0, 94.25),
+	"eye_error": Vector2(25.0, 35.0),
+}
+
+const FIXTURE_METADATA: Dictionary = {
+	"self_center.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"self_center2.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"self_left_left.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_LEFT_LEFT},
+	"self_right_right.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_RIGHT_RIGHT},
+	"self_top_top.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_TOP_TOP},
+	"self_down_down.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_DOWN_DOWN},
+	"self_nosedown_eyesup.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSEDOWN_EYESUP},
+	"self_noseleft_eyesright.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSELEFT_EYESRIGHT},
+	"self_noseright_eyesleft.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSERIGHT_EYESLEFT},
+	"self_nosetop_eyesdown.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSETOP_EYESDOWN},
+	"self_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_CENTER},
+	"self_roll_right.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_CENTER},
+	"self_yaw_left_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_LEFT_LEFT},
+	"self_yaw_right_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_RIGHT_RIGHT},
+	"eyes_both_open.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"eyes_both_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"eyes_anatomical_left_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"eyes_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
+	"eyes_tilted_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 20.0, "target": TARGET_CENTER},
+	"eyes_anatomical_left_obscured.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 }
 
 func _init() -> void:
@@ -140,6 +213,19 @@ func run_tool() -> void:
 			printerr("Skipping unreadable fixture: ", img_path)
 			continue
 
+		var meta = FIXTURE_METADATA.get(img_name, {})
+		var cam_geom = meta.get("cam_geom", CAM_GEOM_1440)
+		var expected_w = cam_geom.res.x
+		var expected_h = cam_geom.res.y
+		assert(img.get_width() == expected_w and img.get_height() == expected_h, "Fixture %s size mismatch" % img_name)
+		var focal = float(expected_w) / (2.0 * tan(deg_to_rad(cam_geom.hfov_deg) * 0.5))
+		vs.camera_set_resolution(cam_rid, expected_w, expected_h)
+		vs.camera_set_focal_length(cam_rid, focal)
+
+		gs.face_tracker_reset(face_rid)
+		if meta.has("roll_hint_deg"):
+			gs.face_tracker_set_roll_hint(face_rid, deg_to_rad(meta.roll_hint_deg))
+
 		var ok = await inject_and_sync_frame(img)
 		if not ok or not gs.is_face_detected(face_rid):
 			print("[WARN] %-30s -> Face not detected or pipeline timeout" % img_name)
@@ -176,52 +262,40 @@ func run_tool() -> void:
 		var nose_screen_reported = nose_win_reported + Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
 		var eye_screen_reported = eye_win_reported + Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
 
-		# 3. Analytical 3D Ray-Plane Intersections
-		var nose_screen_analytical = analytical_ray_plane_screen_pt(head_pos, head_fwd)
-		var eye_screen_analytical = analytical_ray_plane_screen_pt(eye_orig, gaze_dir)
+		# 3. Target Ground Truth
+		var target_info = meta.get("target", TARGET_CENTER)
+		var rel_offset = target_info.get("relative_to", Vector2(0.0, -50.0))
+		var target_nose_mm = rel_offset + target_info.get("nose", Vector2(0.0, 0.0))
+		var target_eye_mm = rel_offset + target_info.get("eye", Vector2(0.0, 0.0))
+		var target_nose_screen_pt = mm_to_screen_pt(target_nose_mm)
+		var target_eye_screen_pt = mm_to_screen_pt(target_eye_mm)
 
-		if img_name == "self_left_left.jpg":
-			print("DEBUG self_left_left: head_pos=", head_pos, " head_fwd=", head_fwd, " eye_orig=", eye_orig, " gaze_dir=", gaze_dir)
+		var err_nose_mm = (nose_screen_reported - target_nose_screen_pt).length() * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
+		var err_eye_mm = (eye_screen_reported - target_eye_screen_pt).length() * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
 
-		# 4. Target Ground Truth
-		var target_mm = target_points_mm.get(img_name, Vector2(0.0, 0.0))
-		var target_screen_pt = mm_to_screen_pt(target_mm)
-
-		# 5. Discrepancy Deltas
-		var delta_nose_pt = (nose_screen_analytical - nose_screen_reported).length()
-		var delta_eye_pt = (eye_screen_analytical - eye_screen_reported).length()
-		var delta_nose_mm = delta_nose_pt * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
-		var delta_eye_mm = delta_eye_pt * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
-
-		var err_nose_mm = (nose_screen_reported - target_screen_pt).length() * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
-		var err_eye_mm = (eye_screen_reported - target_screen_pt).length() * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
-
-		var status_str = "OK" if (delta_nose_mm < 0.5 and delta_eye_mm < 0.5) else "MATH_DRIFT"
-
-		print("  -> %-30s | Nose: (%6.1f, %6.1f) | Gaze: (%6.1f, %6.1f) | ΔNose: %4.1fmm | ΔEye: %4.1fmm | %s" % [
+		print("  -> %-30s | Nose: (%6.1f, %6.1f) | Gaze: (%6.1f, %6.1f) | ErrNose: %4.1fmm | ErrEye: %4.1fmm" % [
 			img_name, nose_screen_reported.x, nose_screen_reported.y,
 			eye_screen_reported.x, eye_screen_reported.y,
-			delta_nose_mm, delta_eye_mm, status_str
+			err_nose_mm, err_eye_mm
 		])
 
-		summary_rows.append("| %s | (%d,%d) | (%d,%d) | %.1f mm | %.1f mm | %.1f mm | %.1f mm | %s |" % [
+		summary_rows.append("| %s | (%d,%d) | (%d,%d) | %.1f mm | %.1f mm |" % [
 			img_name, int(nose_screen_reported.x), int(nose_screen_reported.y),
 			int(eye_screen_reported.x), int(eye_screen_reported.y),
-			delta_nose_mm, delta_eye_mm, err_nose_mm, err_eye_mm, status_str
+			err_nose_mm, err_eye_mm
 		])
 
-		# 6. Render Left Panel (Camera View + 3D Axes + Eye Crop Insets)
+		# 4. Render Left Panel (Camera View + 3D Axes + Eye Crop Insets)
 		var left_panel = render_left_panel(camera_img, head_pos, head_xform, eye_orig, gaze_dir, lm_pts, left_crop, right_crop)
 
-		# 7. Render Right Panel (Physical Display Mockup + Central Window with Titlebar & Mirror Photo)
+		# 5. Render Right Panel (Physical Display Mockup + Central Window with Titlebar & Mirror Photo)
 		var right_panel = render_right_panel(
-			camera_img, img_name, target_screen_pt,
-			nose_screen_analytical, eye_screen_analytical,
+			camera_img, img_name, target_nose_screen_pt, target_eye_screen_pt,
 			nose_screen_reported, eye_screen_reported,
-			delta_nose_mm, delta_eye_mm, err_nose_mm, err_eye_mm
+			err_nose_mm, err_eye_mm
 		)
 
-		# 8. Create Side-by-Side Composite
+		# 6. Create Side-by-Side Composite
 		var composite = create_side_by_side_composite(left_panel, right_panel, img_name)
 		var out_png_path = global_out_dir + "/" + img_name.replace(".jpg", "_diagnostic.png")
 		composite.save_png(out_png_path)
@@ -266,8 +340,9 @@ func project_cam_3d_to_img_2d(p3d: Vector3, img_w: float, img_h: float) -> Vecto
 	var z_depth = -p3d.z
 	if z_depth <= 1.0:
 		return Vector2(-9999.0, -9999.0)
-	var u = (img_w * 0.5) + (CAM_FOCAL_PX * p3d.x) / z_depth
-	var v = (img_h * 0.5) - (CAM_FOCAL_PX * p3d.y) / z_depth
+	var focal = img_w / (2.0 * 0.6370702608) # 65 deg HFOV: tan(65 deg / 2) = 0.6370702608
+	var u = (img_w * 0.5) + (focal * p3d.x) / z_depth
+	var v = (img_h * 0.5) - (focal * p3d.y) / z_depth
 	return Vector2(u, v)
 
 func analytical_ray_plane_screen_pt(origin_cam: Vector3, dir_cam: Vector3) -> Vector2:
@@ -349,23 +424,23 @@ func render_left_panel(
 
 	var crop_display_sz = 100
 
-	# Left Crop (Anatomical Left / Image Right)
-	if left_crop:
-		var lc = left_crop.duplicate()
-		lc.convert(Image.FORMAT_RGBA8)
-		lc.resize(crop_display_sz, crop_display_sz, Image.INTERPOLATE_BILINEAR)
-		panel.blit_rect(lc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(28, card_y + 32))
-		draw_rect(panel, 28, card_y + 32, crop_display_sz, crop_display_sz, Color.CYAN, 1)
-		draw_bitmap_text(panel, 36, card_y + 136, "LEFT EYE", Color.WHITE, 1)
-
-	# Right Crop (Anatomical Right / Image Left)
+	# Left Card: Image Left Eye (p0..p1 / Anatomical Right)
 	if right_crop:
 		var rc = right_crop.duplicate()
 		rc.convert(Image.FORMAT_RGBA8)
 		rc.resize(crop_display_sz, crop_display_sz, Image.INTERPOLATE_BILINEAR)
-		panel.blit_rect(rc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(180, card_y + 32))
+		panel.blit_rect(rc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(28, card_y + 32))
+		draw_rect(panel, 28, card_y + 32, crop_display_sz, crop_display_sz, Color.CYAN, 1)
+		draw_bitmap_text(panel, 36, card_y + 136, "IMG LEFT (p0-1)", Color.WHITE, 1)
+
+	# Right Card: Image Right Eye (p2..p3 / Anatomical Left)
+	if left_crop:
+		var lc = left_crop.duplicate()
+		lc.convert(Image.FORMAT_RGBA8)
+		lc.resize(crop_display_sz, crop_display_sz, Image.INTERPOLATE_BILINEAR)
+		panel.blit_rect(lc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(180, card_y + 32))
 		draw_rect(panel, 180, card_y + 32, crop_display_sz, crop_display_sz, Color.CYAN, 1)
-		draw_bitmap_text(panel, 184, card_y + 136, "RIGHT EYE", Color.WHITE, 1)
+		draw_bitmap_text(panel, 184, card_y + 136, "IMG RIGHT (p2-3)", Color.WHITE, 1)
 
 	return panel
 
@@ -374,10 +449,8 @@ func render_left_panel(
 # ==============================================================================
 
 func render_right_panel(
-	img: Image, _img_name: String, target_pt: Vector2,
-	nose_ana: Vector2, eye_ana: Vector2,
+	img: Image, _img_name: String, target_nose_pt: Vector2, target_eye_pt: Vector2,
 	nose_rep: Vector2, eye_rep: Vector2,
-	delta_nose_mm: float, delta_eye_mm: float,
 	err_nose_mm: float, err_eye_mm: float
 ) -> Image:
 	# Canvas dimensions with margin around 1512x982 display
@@ -395,34 +468,28 @@ func render_right_panel(
 	draw_filled_rect(canvas, screen_x, screen_y, int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT), Color(0.14, 0.14, 0.17, 1.0))
 	draw_rect(canvas, screen_x, screen_y, int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT), Color(0.5, 0.5, 0.55, 1.0), 3)
 
-	# Screen Center Crosshair (Subtle gray)
-	var screen_cx = screen_x + int(SCREEN_WIDTH_PT * 0.5)
-	var screen_cy = screen_y + int(SCREEN_HEIGHT_PT * 0.5)
-	draw_crosshair(canvas, screen_cx, screen_cy, 24, Color(0.35, 0.35, 0.40, 1.0))
+	# MacBook Notch / Camera Point (Top Center: X = W/2, Y = 0 mm)
+	var cam_px_x = screen_x + int(SCREEN_WIDTH_PT * 0.5)
+	var cam_px_y = screen_y + 4
+	draw_filled_rect(canvas, cam_px_x - 30, screen_y, 60, 12, Color(0.05, 0.05, 0.07, 1.0))
+	draw_circle(canvas, cam_px_x, cam_px_y, 4, Color(0.1, 0.8, 1.0, 0.8)) # Webcam lens
 
-	# Webcam Notch / Bezel Indicator (Top center)
-	var cam_px_x = screen_cx
-	var cam_px_y = screen_y
-	draw_circle(canvas, cam_px_x, cam_px_y, 8, Color.DARK_RED)
-	draw_circle(canvas, cam_px_x, cam_px_y, 4, Color.RED)
+	# Central Window (756 x 491 pt) representing the running Godot game window
+	var win_w = 756
+	var win_h = 491
+	var win_x = screen_x + WIN_POS_X_PT
+	var win_y = screen_y + WIN_POS_Y_PT
 
-	# Inset Centered Game Viewport Window (756x491 pt)
-	var win_x = screen_x + int(WIN_POS_X_PT)
-	var win_y = screen_y + int(WIN_POS_Y_PT)
-	var win_w = int(WIN_WIDTH_PT)
-	var win_h = int(WIN_HEIGHT_PT)
-
-	# 1. Window Mock Title Bar (macOS Style)
+	# Window frame & titlebar
 	var titlebar_h = 28
-	draw_filled_rect(canvas, win_x, win_y, win_w, titlebar_h, Color(0.20, 0.20, 0.24, 1.0))
-	draw_rect(canvas, win_x, win_y, win_w, win_h, Color(0.3, 0.6, 1.0, 1.0), 2)
-	draw_line(canvas, win_x, win_y + titlebar_h, win_x + win_w, win_y + titlebar_h, Color(0.3, 0.3, 0.35, 1.0), 1)
+	draw_filled_rect(canvas, win_x, win_y, win_w, win_h, Color(0.10, 0.10, 0.12, 1.0))
+	draw_rect(canvas, win_x, win_y, win_w, win_h, Color(0.35, 0.55, 0.85, 1.0), 2)
+	draw_filled_rect(canvas, win_x, win_y, win_w, titlebar_h, Color(0.18, 0.18, 0.22, 1.0))
 
 	# Traffic light buttons
 	draw_circle(canvas, win_x + 16, win_y + 14, 5, Color(1.0, 0.38, 0.35, 1.0)) # Close (Red)
 	draw_circle(canvas, win_x + 32, win_y + 14, 5, Color(1.0, 0.75, 0.25, 1.0)) # Minimize (Yellow)
 	draw_circle(canvas, win_x + 48, win_y + 14, 5, Color(0.30, 0.85, 0.40, 1.0)) # Maximize (Green)
-	draw_bitmap_text(canvas, win_x + 70, win_y + 9, "Godot Gaze Game Viewport (756x491 pt)", Color(0.8, 0.8, 0.85, 1.0), 1)
 
 	# 2. Interior Viewport: Full Horizontally-Mirrored Letterboxed Camera Frame
 	var interior_x = win_x + 2
@@ -456,32 +523,27 @@ func render_right_panel(
 		return Vector2i(screen_x + int(p_screen.x), screen_y + int(p_screen.y))
 
 	# Draw Ray Intersections:
-	# 1. Target Point (Red)
-	if is_valid_pt(target_pt):
-		var cp = to_canvas.call(target_pt)
+	# 1. Nose Target Point (Red)
+	if is_valid_pt(target_nose_pt):
+		var cp = to_canvas.call(target_nose_pt)
 		draw_circle(canvas, cp.x, cp.y, 8, Color.RED)
 		draw_crosshair(canvas, cp.x, cp.y, 16, Color.RED)
 
-	# 2. Analytical 3D Nose Ray-Plane (Dim Green)
-	if is_valid_pt(nose_ana):
-		var cp = to_canvas.call(nose_ana)
-		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.1, 0.6, 0.2, 0.35), 2)
-		draw_circle(canvas, cp.x, cp.y, 10, Color(0.1, 0.7, 0.2, 0.7))
+	# 2. Eye Target Point (Orange/Yellow - when distinct from Nose Target)
+	var targets_differ = (target_nose_pt - target_eye_pt).length() > 5.0
+	if is_valid_pt(target_eye_pt) and targets_differ:
+		var cp = to_canvas.call(target_eye_pt)
+		draw_circle(canvas, cp.x, cp.y, 8, Color(1.0, 0.65, 0.0, 1.0))
+		draw_crosshair(canvas, cp.x, cp.y, 16, Color(1.0, 0.65, 0.0, 1.0))
 
-	# 3. Analytical 3D Eye Gaze Ray-Plane (Dim Teal)
-	if is_valid_pt(eye_ana):
-		var cp = to_canvas.call(eye_ana)
-		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.0, 0.6, 0.7, 0.35), 2)
-		draw_circle(canvas, cp.x, cp.y, 10, Color(0.0, 0.7, 0.8, 0.7))
-
-	# 4. GazeServer Reported 2D Nose Point (Bright Green)
+	# 3. GazeServer Reported 2D Nose Point (Bright Green)
 	if is_valid_pt(nose_rep):
 		var cp = to_canvas.call(nose_rep)
 		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.2, 1.0, 0.3, 0.6), 2)
 		draw_circle(canvas, cp.x, cp.y, 8, Color(0.2, 1.0, 0.3, 1.0))
 		draw_crosshair(canvas, cp.x, cp.y, 14, Color.WHITE)
 
-	# 5. GazeServer Reported 2D Eye Gaze Point (Bright Teal)
+	# 4. GazeServer Reported 2D Eye Gaze Point (Bright Teal)
 	if is_valid_pt(eye_rep):
 		var cp = to_canvas.call(eye_rep)
 		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.0, 0.95, 1.0, 0.6), 2)
@@ -490,7 +552,7 @@ func render_right_panel(
 
 	# Crisp Legible Legend Box (Top Left)
 	var leg_w = 480
-	var leg_h = 175
+	var leg_h = 135 if targets_differ else 115
 	var leg_x = screen_x + 16
 	var leg_y = screen_y + 16
 	draw_filled_rect(canvas, leg_x, leg_y, leg_w, leg_h, Color(0.04, 0.04, 0.07, 0.94))
@@ -500,25 +562,23 @@ func render_right_panel(
 	draw_bitmap_text(canvas, leg_x + 14, leg_y + 12, "SCREEN PROJECTION DIAGNOSTICS", Color(0.3, 0.8, 1.0, 1.0), 1)
 
 	# Legend Items with Crisp Text
-	# Target Point
 	draw_circle(canvas, leg_x + 22, leg_y + 36, 6, Color.RED)
-	draw_bitmap_text(canvas, leg_x + 36, leg_y + 32, "Target Point: (%d, %d) pt" % [int(target_pt.x), int(target_pt.y)], Color(1.0, 0.6, 0.6, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 36, leg_y + 32, "Nose Target:  (%d, %d) pt" % [int(target_nose_pt.x), int(target_nose_pt.y)], Color(1.0, 0.6, 0.6, 1.0), 1)
+
+	var next_y = leg_y + 58
+	if targets_differ:
+		draw_circle(canvas, leg_x + 22, next_y + 4, 6, Color(1.0, 0.65, 0.0, 1.0))
+		draw_bitmap_text(canvas, leg_x + 36, next_y, "Eye Target:   (%d, %d) pt" % [int(target_eye_pt.x), int(target_eye_pt.y)], Color(1.0, 0.8, 0.4, 1.0), 1)
+		next_y += 22
 
 	# Nose Point
-	draw_circle(canvas, leg_x + 22, leg_y + 58, 6, Color(0.2, 1.0, 0.3, 1.0))
-	draw_bitmap_text(canvas, leg_x + 36, leg_y + 54, "Nose Gaze:    (%d, %d) pt  | Err: %.1f mm" % [int(nose_rep.x), int(nose_rep.y), err_nose_mm], Color(0.6, 1.0, 0.6, 1.0), 1)
+	draw_circle(canvas, leg_x + 22, next_y + 4, 6, Color(0.2, 1.0, 0.3, 1.0))
+	draw_bitmap_text(canvas, leg_x + 36, next_y, "Nose Gaze:    (%d, %d) pt  | Err: %.1f mm" % [int(nose_rep.x), int(nose_rep.y), err_nose_mm], Color(0.6, 1.0, 0.6, 1.0), 1)
+	next_y += 22
 
 	# Eye Point
-	draw_circle(canvas, leg_x + 22, leg_y + 80, 6, Color(0.0, 0.95, 1.0, 1.0))
-	draw_bitmap_text(canvas, leg_x + 36, leg_y + 76, "Eye Gaze:     (%d, %d) pt  | Err: %.1f mm" % [int(eye_rep.x), int(eye_rep.y), err_eye_mm], Color(0.5, 0.95, 1.0, 1.0), 1)
-
-	# Delta Indicators
-	var delta_box_col = Color(0.1, 0.7, 0.2, 1.0) if (delta_nose_mm < 0.5 and delta_eye_mm < 0.5) else Color(1.0, 0.4, 0.2, 1.0)
-	draw_filled_rect(canvas, leg_x + 10, leg_y + 104, leg_w - 20, 58, Color(0.08, 0.08, 0.12, 1.0))
-	draw_rect(canvas, leg_x + 10, leg_y + 104, leg_w - 20, 58, delta_box_col, 1)
-
-	draw_bitmap_text(canvas, leg_x + 18, leg_y + 114, "MATH DELTA (Analytical vs GazeServer):", Color.WHITE, 1)
-	draw_bitmap_text(canvas, leg_x + 18, leg_y + 136, "Delta Nose = %.2f mm  |  Delta Eye = %.2f mm  [%s]" % [delta_nose_mm, delta_eye_mm, "EXACT 0.0mm" if delta_nose_mm < 0.01 else "MISMATCH"], delta_box_col, 1)
+	draw_circle(canvas, leg_x + 22, next_y + 4, 6, Color(0.0, 0.95, 1.0, 1.0))
+	draw_bitmap_text(canvas, leg_x + 36, next_y, "Eye Gaze:     (%d, %d) pt  | Err: %.1f mm" % [int(eye_rep.x), int(eye_rep.y), err_eye_mm], Color(0.5, 0.95, 1.0, 1.0), 1)
 
 	return canvas
 

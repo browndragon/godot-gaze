@@ -43,9 +43,16 @@ namespace Gaze
         bool config_dirty = false;
         std::atomic<bool> worker_busy{false};
         float prev_roll_rad = 0.0f;
-        std::vector<unsigned char> rotated_frame_buffer;
 
         void _worker_loop();
+        void _stage_1_apply_roll_hint(GazeFrameData *data, Frame &working_frame);
+        bool _stage_2_detect_face_bbox(GazeFrameData *data, const Frame &working_frame);
+        bool _stage_3_extract_landmarks(GazeFrameData *data, const Frame &working_frame);
+        bool _stage_4_solve_head_pose(GazeFrameData *data, const Frame &working_frame, GazeVector3 &out_rvec, GazeVector3 &out_tvec);
+        void _stage_5_extract_eye_crops(GazeFrameData *data, const Frame &working_frame, const GazeVector3 &rvec, const GazeVector3 &tvec);
+        void _stage_6_estimate_eye_state(GazeFrameData *data);
+        void _stage_7_estimate_gaze_direction(GazeFrameData *data);
+        void _stage_8_unroll_to_canonical_godot_camera(GazeFrameData *data);
 
     public:
         Pool<GazeFrameData, 2> frame_pool;
@@ -65,6 +72,7 @@ namespace Gaze
         void push_frame_request(GazeFrameData *p_req);
         bool pop_result(GazeFrameData** out_res);
         void clear_work_queue();
+        void reset_tracker() { prev_roll_rad = 0.0f; }
         bool is_busy() const { return worker_busy.load() || request_mailbox.is_pending(); }
     };
 

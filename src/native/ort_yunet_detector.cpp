@@ -136,7 +136,13 @@ namespace Gaze
 
     std::vector<GazeVector3> ORTYuNetDetector::get_canonical_godot_model_points() const
     {
-        return FaceModelGeometry::get_5pt_model_points();
+        auto cv_pts = FaceModelGeometry::get_5pt_model_points();
+        std::vector<GazeVector3> godot_pts(cv_pts.size());
+        for (size_t i = 0; i < cv_pts.size(); ++i)
+        {
+            godot_pts[i] = GazeVector3(-cv_pts[i].x, -cv_pts[i].y, cv_pts[i].z);
+        }
+        return godot_pts;
     }
 
     std::vector<ORTYuNetDetector::Anchor> ORTYuNetDetector::generate_anchors(int width, int height)
@@ -188,7 +194,7 @@ namespace Gaze
         if (std::abs(roll_deg) > 1e-3f)
         {
             frame_bgr.resize(width * height * 3);
-            rotate_image_bgr(frame.data, width, height, frame_bgr.data(), -roll_rad);
+            rotate_image(frame.data, width, height, frame_bgr.data(), -roll_rad);
             src_data = frame_bgr.data();
         }
 
@@ -405,7 +411,7 @@ namespace Gaze
             out_result.mouth_right_px = ldm[3];
             out_result.mouth_left_px = ldm[4];
 
-            std::vector<GazeVector3> model_pts = get_canonical_godot_model_points();
+            std::vector<GazeVector3> model_pts = FaceModelGeometry::get_5pt_model_points();
             std::vector<GazeVector2> img_pts = {
                 out_result.nose_tip_px,
                 out_result.right_eye_px,
@@ -428,24 +434,6 @@ namespace Gaze
             out_result.head_pose.trans_x_mm = static_cast<float>(tvec.x);
             out_result.head_pose.trans_y_mm = static_cast<float>(tvec.y);
             out_result.head_pose.trans_z_mm = static_cast<float>(tvec.z);
-
-            float dx = out_result.left_eye_px.x - out_result.right_eye_px.x;
-            float dy = out_result.left_eye_px.y - out_result.right_eye_px.y;
-            float ipd_px = std::sqrt(dx * dx + dy * dy);
-            float dynamic_crop_size = std::max(50.0f, ipd_px * 0.75f);
-            float half_s = dynamic_crop_size * 0.5f;
-
-            crop_and_resize_bgr(
-                frame.data, width, height,
-                out_result.left_eye_px.x - half_s, out_result.left_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
-                out_result.left_eye_crop, 60, 60
-            );
-
-            crop_and_resize_bgr(
-                frame.data, width, height,
-                out_result.right_eye_px.x - half_s, out_result.right_eye_px.y - half_s, dynamic_crop_size, dynamic_crop_size,
-                out_result.right_eye_crop, 60, 60
-            );
 
             return true;
         }

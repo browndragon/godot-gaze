@@ -787,6 +787,30 @@ namespace Gaze
     }
 
     /**
+     * @brief Projects a 3D ray in GodotCamera space directly onto 2D display screen pixels/points.
+     */
+    inline bool project_ray_to_screen_px(
+        const GazeVector3 &origin_cam,
+        const GazeVector3 &dir_cam,
+        const GazeVector3 &camera_offset,
+        double camera_tilt_deg,
+        const GazeVector2 &screen_physical_size_mm,
+        const GazeVector2 &screen_logical_size_px,
+        GazeVector2 &out_pos_px)
+    {
+        GazeVector2 pos_mm;
+        if (!project_ray_to_screen_mm(origin_cam, dir_cam, camera_offset, camera_tilt_deg, screen_physical_size_mm, pos_mm))
+        {
+            return false;
+        }
+        double scale_x = screen_logical_size_px.x / screen_physical_size_mm.x;
+        double scale_y = screen_logical_size_px.y / screen_physical_size_mm.y;
+        out_pos_px.x = pos_mm.x * scale_x;
+        out_pos_px.y = pos_mm.y * scale_y;
+        return true;
+    }
+
+    /**
      * @brief Canonical 35-point anthropometric 3D face model defined in OpenCV model space
      * (+X image right / left ear, +Y down towards chin, +Z back into skull, face facing camera at rvec = 0).
      *
@@ -802,36 +826,36 @@ namespace Gaze
     inline std::vector<GazeVector3> get_canonical_35pt_face_model()
     {
         std::vector<GazeVector3> pts(35);
-        // Eyes (IPD approx 63mm, standard anthropometric plane Z=0)
-        pts[0] = GazeVector3(-15.0f, -32.0f,   0.0f); // Image Left Eye Inner Canthus (Anatomical Right)
-        pts[1] = GazeVector3(-46.0f, -32.0f,   8.0f); // Image Left Eye Outer Canthus
-        pts[2] = GazeVector3( 15.0f, -32.0f,   0.0f); // Image Right Eye Inner Canthus (Anatomical Left)
-        pts[3] = GazeVector3( 46.0f, -32.0f,   8.0f); // Image Right Eye Outer Canthus
+        // Eyes (IPD approx 63mm, positioned +35mm behind nose tip in Z)
+        pts[0] = GazeVector3(-15.0f, -32.0f,  35.0f); // Image Left Eye Inner Canthus (Anatomical Right)
+        pts[1] = GazeVector3(-46.0f, -32.0f,  43.0f); // Image Left Eye Outer Canthus
+        pts[2] = GazeVector3( 15.0f, -32.0f,  35.0f); // Image Right Eye Inner Canthus (Anatomical Left)
+        pts[3] = GazeVector3( 46.0f, -32.0f,  43.0f); // Image Right Eye Outer Canthus
 
-        // Nose (Protruding forward along -Z)
-        pts[4] = GazeVector3(  0.0f, -22.0f, -15.0f); // Nose Bridge Top
-        pts[5] = GazeVector3(  0.0f,   0.0f, -35.0f); // Nose Tip (furthest forward towards camera)
-        pts[6] = GazeVector3(-16.0f,   6.0f, -15.0f); // Right Nose Wing (Image Left)
-        pts[7] = GazeVector3( 16.0f,   6.0f, -15.0f); // Left Nose Wing (Image Right)
+        // Nose (Pt 5 is the Nose Tip Origin (0,0,0))
+        pts[4] = GazeVector3(  0.0f, -22.0f,  20.0f); // Nose Bridge Top
+        pts[5] = GazeVector3(  0.0f,   0.0f,   0.0f); // Nose Tip Origin (0,0,0)
+        pts[6] = GazeVector3(-16.0f,   6.0f,  20.0f); // Right Nose Wing (Image Left)
+        pts[7] = GazeVector3( 16.0f,   6.0f,  20.0f); // Left Nose Wing (Image Right)
 
         // Mouth
-        pts[8]  = GazeVector3(-25.0f,  32.0f,  -5.0f); // Right Mouth Corner (Image Left)
-        pts[9]  = GazeVector3( 25.0f,  32.0f,  -5.0f); // Left Mouth Corner (Image Right)
-        pts[10] = GazeVector3(  0.0f,  26.0f, -12.0f); // Upper Lip Center
-        pts[11] = GazeVector3(  0.0f,  40.0f,  -8.0f); // Lower Lip Center
+        pts[8]  = GazeVector3(-25.0f,  32.0f,  30.0f); // Right Mouth Corner (Image Left)
+        pts[9]  = GazeVector3( 25.0f,  32.0f,  30.0f); // Left Mouth Corner (Image Right)
+        pts[10] = GazeVector3(  0.0f,  26.0f,  23.0f); // Upper Lip Center
+        pts[11] = GazeVector3(  0.0f,  40.0f,  27.0f); // Lower Lip Center
 
         // Eyebrows
-        pts[12] = GazeVector3(-12.0f, -48.0f,   0.0f); // Right Eyebrow Inner (Image Left)
-        pts[13] = GazeVector3(-32.0f, -52.0f,   5.0f); // Right Eyebrow Mid
-        pts[14] = GazeVector3(-50.0f, -48.0f,   8.0f); // Right Eyebrow Outer
-        pts[15] = GazeVector3( 12.0f, -48.0f,   0.0f); // Left Eyebrow Inner (Image Right)
-        pts[16] = GazeVector3( 32.0f, -52.0f,   5.0f); // Left Eyebrow Mid
-        pts[17] = GazeVector3( 50.0f, -48.0f,   8.0f); // Left Eyebrow Outer
+        pts[12] = GazeVector3(-12.0f, -48.0f,  35.0f); // Right Eyebrow Inner (Image Left)
+        pts[13] = GazeVector3(-32.0f, -52.0f,  40.0f); // Right Eyebrow Mid
+        pts[14] = GazeVector3(-50.0f, -48.0f,  43.0f); // Right Eyebrow Outer
+        pts[15] = GazeVector3( 12.0f, -48.0f,  35.0f); // Left Eyebrow Inner (Image Right)
+        pts[16] = GazeVector3( 32.0f, -52.0f,  40.0f); // Left Eyebrow Mid
+        pts[17] = GazeVector3( 50.0f, -48.0f,  43.0f); // Left Eyebrow Outer
 
         // 17-point Jawline Contour (Pts 18..34) from Image Left / Right Ear to Chin Apex (Pt 26) to Image Right / Left Ear
         float jaw_x[] = {-70.0f, -68.0f, -64.0f, -58.0f, -50.0f, -40.0f, -28.0f, -15.0f, 0.0f, 15.0f, 28.0f, 40.0f, 50.0f, 58.0f, 64.0f, 68.0f, 70.0f};
         float jaw_y[] = {-35.0f, -20.0f,  -5.0f,  12.0f,  28.0f,  44.0f,  58.0f,  68.0f, 70.0f, 68.0f, 58.0f, 44.0f, 28.0f, 12.0f, -5.0f, -20.0f, -35.0f};
-        float jaw_z[] = { 35.0f,  30.0f,  24.0f,  16.0f,   8.0f,   2.0f,  -2.0f,  -4.0f,  0.0f, -4.0f, -2.0f,   2.0f,  8.0f, 16.0f, 24.0f, 30.0f, 35.0f};
+        float jaw_z[] = { 70.0f,  65.0f,  59.0f,  51.0f,  43.0f,  37.0f,  33.0f,  31.0f, 35.0f, 31.0f, 33.0f, 37.0f, 43.0f, 51.0f, 59.0f, 65.0f, 70.0f};
 
         for (int i = 0; i < 17; ++i)
         {
@@ -841,7 +865,11 @@ namespace Gaze
         return pts;
     }
 
-    inline void rotate_image_bgr(const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)
+    /**
+     * @brief Rotates a 3-channel 8-bit image by angle_rad around its center.
+     * Operates identically on 3-byte-per-pixel buffers regardless of channel order.
+     */
+    inline void rotate_image(const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)
     {
         float cos_a = std::cos(angle_rad);
         float sin_a = std::sin(angle_rad);

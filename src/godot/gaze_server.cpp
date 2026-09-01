@@ -65,6 +65,8 @@ struct GazeServerImpl {
         Gaze::GazeVector3 head_pose_translation;
         Gaze::GazeVector3 head_pose_rotation;
         PackedVector2Array landmarks_2d;
+        float roll_hint_rad = 0.0f;
+        bool auto_roll_enabled = true;
     };
 
     struct EyeInfo {
@@ -201,7 +203,16 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("face_tracker_create", "camera_rid"), &GazeServer::face_tracker_create);
     ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
     ClassDB::bind_method(D_METHOD("face_tracker_set_pose", "face_rid", "translation", "rotation", "detected"), &GazeServer::face_tracker_set_pose);
+    ClassDB::bind_method(D_METHOD("face_tracker_set_roll_hint", "face_rid", "roll_hint_rad"), &GazeServer::face_tracker_set_roll_hint);
+    ClassDB::bind_method(D_METHOD("face_tracker_get_roll_hint", "face_rid"), &GazeServer::face_tracker_get_roll_hint);
+    ClassDB::bind_method(D_METHOD("face_tracker_set_auto_roll_enabled", "face_rid", "enabled"), &GazeServer::face_tracker_set_auto_roll_enabled);
+    ClassDB::bind_method(D_METHOD("face_tracker_is_auto_roll_enabled", "face_rid"), &GazeServer::face_tracker_is_auto_roll_enabled);
+    ClassDB::bind_method(D_METHOD("face_tracker_reset", "face_rid"), &GazeServer::face_tracker_reset);
     ClassDB::bind_method(D_METHOD("face_tracker_free", "face_rid"), &GazeServer::face_tracker_free);
+    ClassDB::bind_method(D_METHOD("set_roll_hint", "roll_hint_rad"), &GazeServer::set_roll_hint);
+    ClassDB::bind_method(D_METHOD("get_roll_hint"), &GazeServer::get_roll_hint);
+    ClassDB::bind_method(D_METHOD("set_auto_roll_enabled", "enabled"), &GazeServer::set_auto_roll_enabled);
+    ClassDB::bind_method(D_METHOD("is_auto_roll_enabled"), &GazeServer::is_auto_roll_enabled);
     ClassDB::bind_method(D_METHOD("get_head_rotation_from_face_tracker", "face_rid"), &GazeServer::get_head_rotation_from_face_tracker);
     ClassDB::bind_method(D_METHOD("get_head_translation_from_face_tracker", "face_rid"), &GazeServer::get_head_translation_from_face_tracker);
     ClassDB::bind_method(D_METHOD("get_head_pose_origin_mm", "face_rid"), &GazeServer::get_head_pose_origin_mm);
@@ -886,7 +897,13 @@ Vector3 GazeServer::get_head_pose_euler_deg(RID p_face) const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
     FaceInfo *info = impl->face_owner.get_or_null(p_face);
     ERR_FAIL_NULL_V(info, Vector3());
-    return Vector3(Math::rad_to_deg(info->head_pose_rotation.x), Math::rad_to_deg(info->head_pose_rotation.y), Math::rad_to_deg(info->head_pose_rotation.z));
+    Gaze::GazeBasis3D b(
+        Gaze::GazeVector3(info->relative_transform.basis.rows[0].x, info->relative_transform.basis.rows[0].y, info->relative_transform.basis.rows[0].z),
+        Gaze::GazeVector3(info->relative_transform.basis.rows[1].x, info->relative_transform.basis.rows[1].y, info->relative_transform.basis.rows[1].z),
+        Gaze::GazeVector3(info->relative_transform.basis.rows[2].x, info->relative_transform.basis.rows[2].y, info->relative_transform.basis.rows[2].z)
+    );
+    Gaze::GazeVector3 deg = b.get_euler_deg();
+    return Vector3(deg.x, deg.y, deg.z);
 }
 
 void GazeServer::face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks) {
@@ -901,6 +918,66 @@ PackedVector2Array GazeServer::get_face_landmarks_2d(RID p_face) const {
     FaceInfo *info = impl->face_owner.get_or_null(p_face);
     ERR_FAIL_NULL_V(info, PackedVector2Array());
     return info->landmarks_2d;
+}
+
+void GazeServer::face_tracker_set_roll_hint(RID p_face, float p_roll_hint_rad) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    ERR_FAIL_NULL(info);
+    info->roll_hint_rad = p_roll_hint_rad;
+    info->auto_roll_enabled = false;
+}
+
+float GazeServer::face_tracker_get_roll_hint(RID p_face) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    const FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    ERR_FAIL_NULL_V(info, 0.0f);
+    return info->roll_hint_rad;
+}
+
+void GazeServer::face_tracker_set_auto_roll_enabled(RID p_face, bool p_enabled) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    ERR_FAIL_NULL(info);
+    info->auto_roll_enabled = p_enabled;
+}
+
+bool GazeServer::face_tracker_is_auto_roll_enabled(RID p_face) const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    const FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    ERR_FAIL_NULL_V(info, true);
+    return info->auto_roll_enabled;
+}
+
+void GazeServer::face_tracker_reset(RID p_face) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    FaceInfo *info = impl->face_owner.get_or_null(p_face);
+    if (info) {
+        info->roll_hint_rad = 0.0f;
+        info->auto_roll_enabled = true;
+        info->detected = false;
+    }
+#ifndef WEB_ENABLED
+    if (pipeline) {
+        pipeline->reset_tracker();
+    }
+#endif
+}
+
+void GazeServer::set_roll_hint(float p_roll_hint_rad) {
+    face_tracker_set_roll_hint(default_face_rid, p_roll_hint_rad);
+}
+
+float GazeServer::get_roll_hint() const {
+    return face_tracker_get_roll_hint(default_face_rid);
+}
+
+void GazeServer::set_auto_roll_enabled(bool p_enabled) {
+    face_tracker_set_auto_roll_enabled(default_face_rid, p_enabled);
+}
+
+bool GazeServer::is_auto_roll_enabled() const {
+    return face_tracker_is_auto_roll_enabled(default_face_rid);
 }
 
 // Eye Tracker RID Management
@@ -1457,6 +1534,17 @@ void GazeServer::trigger_process() {
 
                         write_data->face_rid_val = face_rid.get_id();
                         write_data->eye_rid_val = eye_rid.get_id();
+
+                        if (face_rid.is_valid()) {
+                            FaceInfo *face = impl->face_owner.get_or_null(face_rid);
+                            if (face) {
+                                write_data->auto_roll_enabled = face->auto_roll_enabled;
+                                write_data->roll_hint_rad = face->roll_hint_rad;
+                            } else {
+                                write_data->auto_roll_enabled = true;
+                                write_data->roll_hint_rad = 0.0f;
+                            }
+                        }
 
                         GazeFrame* wrapper = static_cast<GazeFrame*>(write_data->userdata);
                         if (wrapper) {

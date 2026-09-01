@@ -353,7 +353,7 @@ godot_render_overlays_run = env.Command(
     "build/tests/logs/tools.render_overlays.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tools/render_diagnostic_overlays.gd"]
+    TEST_CMD=["./scripts/godot.sh", "--headless", "--timeout", "120", "-s", "addons/godot-gaze/tools/render_diagnostic_overlays.gd"]
 )
 env.AlwaysBuild(godot_render_overlays_run)
 env.Alias("tools/render_overlays", godot_render_overlays_run)
@@ -405,6 +405,7 @@ web_sidecar_run = env.Command(
 )
 env.AlwaysBuild(web_sidecar_run)
 
+env.Alias("tests/web/sidecar", web_sidecar_run)
 env.Alias("tests/web", [web_run, web_sidecar_run])
 
 # Android E2E test target

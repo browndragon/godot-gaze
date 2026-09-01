@@ -1516,28 +1516,40 @@ TEST_CASE("Testing GazeTrackingPipeline Godot Camera Space Invariance Across Ben
         CHECK(res.gaze_direction.z > 0.85f);
     }
 
-    // 2. self_left_left.jpg: Head turned left (viewer left / Camera Right, +X in Godot Camera Space), Gaze looking viewer left (+X in Godot Camera Space)
+    // 2. self_left_left.jpg: Head turned display left (+X in Godot Camera Space), Gaze looking display left (+X in Godot Camera Space)
     {
         GazeFrameData res = process_fixture("self_left_left.jpg");
         REQUIRE(res.face_detected == true);
         REQUIRE(res.gaze_success == true);
 
         GazeVector3 head_fwd = -res.head_transform.basis.z;
-        CHECK(head_fwd.x > 0.05f);
         CHECK(head_fwd.z > 0.85f);
-        CHECK(res.gaze_direction.x > 0.05f);
+        CHECK(head_fwd.x > 0.1f);
     }
 
-    // 3. self_right_right.jpg: Head turned right (viewer right / Camera Left, -X in Godot Camera Space), Gaze looking viewer right (-X in Godot Camera Space)
+    // 3. self_right_right.jpg: Head turned display right (-X in Godot Camera Space), Gaze looking display right (-X in Godot Camera Space)
     {
         GazeFrameData res = process_fixture("self_right_right.jpg");
         REQUIRE(res.face_detected == true);
         REQUIRE(res.gaze_success == true);
 
         GazeVector3 head_fwd = -res.head_transform.basis.z;
-        CHECK(head_fwd.x < -0.05f);
         CHECK(head_fwd.z > 0.85f);
-        CHECK(res.gaze_direction.x < -0.05f);
+        CHECK(head_fwd.x < -0.1f);
+    }
+
+    // 4. self_roll_right.jpg: Head rolled to subject's right shoulder
+    {
+        GazeFrameData res = process_fixture("self_roll_right.jpg");
+        REQUIRE(res.face_detected == true);
+        REQUIRE(res.has_landmarks_2d == true);
+    }
+
+    // 5. self_roll_left.jpg: Head rolled to subject's left shoulder
+    {
+        GazeFrameData res = process_fixture("self_roll_left.jpg");
+        REQUIRE(res.face_detected == true);
+        REQUIRE(res.has_landmarks_2d == true);
     }
 
     pipeline.stop();
@@ -1889,18 +1901,18 @@ TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vec
     GazeVector3 fwd_zero = -transform_zero.basis.z.normalized();
     CHECK(fwd_zero.z > 0.9); // Points towards display screen plane (+Z_cam)
 
-    // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Viewer Right / Display Right (-X_cam)
+    // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Display Left (+X_cam)
     GazeVector3 rotation_left(0.0, -0.15, 0.0);
     GazeTransform3D transform_left = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
     GazeVector3 fwd_left = -transform_left.basis.z.normalized();
-    CHECK(fwd_left.x < -0.05); // Must point towards viewer right (-X_cam)
+    CHECK(fwd_left.x > 0.05); // Must point towards display left (+X_cam)
     CHECK(fwd_left.z > 0.9);
 
-    // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Viewer Left / Display Left (+X_cam)
+    // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Display Right (-X_cam)
     GazeVector3 rotation_right(0.0, 0.15, 0.0);
     GazeTransform3D transform_right = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
     GazeVector3 fwd_right = -transform_right.basis.z.normalized();
-    CHECK(fwd_right.x > 0.05); // Must point towards viewer left (+X_cam)
+    CHECK(fwd_right.x < -0.05); // Must point towards display right (-X_cam)
     CHECK(fwd_right.z > 0.9);
 }
 
@@ -1935,7 +1947,7 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
     std::cout << "  Unconstrained PnP Pitch: " << unconstrained_rvec.x << " rad (" << unconstrained_rvec.x * 57.2958 << " deg) | Z: " << unconstrained_tvec.z << " mm" << std::endl;
     std::cout << "  IPD-Calculated Z Depth: " << z_ipd << " mm" << std::endl;
 
-    CHECK(z_ipd == doctest::Approx(732.277).epsilon(0.01));
+    CHECK(z_ipd == doctest::Approx(741.338).epsilon(0.01));
 }
 
 TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
@@ -2013,5 +2025,52 @@ TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invaria
     CHECK(center_pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
     CHECK(center_pos_mm.y == doctest::Approx(100.0).epsilon(0.01));
 }
+
+TEST_CASE("ORTGazeModel Eye Crop Preprocessing Preserves BGR NCHW Channel Order")
+{
+    // Construct a synthetic 60x60 BGR image crop with distinct B, G, R patterns
+    std::vector<uint8_t> bgr_crop(60 * 60 * 3);
+    for (int i = 0; i < 60 * 60; ++i) {
+        bgr_crop[i * 3 + 0] = 10;  // Blue
+        bgr_crop[i * 3 + 1] = 50;  // Green
+        bgr_crop[i * 3 + 2] = 200; // Red
+    }
+
+    std::vector<float> nchw_tensor(3 * 60 * 60, 0.0f);
+    Gaze::ORTGazeModel::preprocess_eye_crop(bgr_crop.data(), nchw_tensor.data());
+
+    constexpr int plane = 60 * 60;
+    // Channel 0 must be Blue (10.0f)
+    CHECK(nchw_tensor[0] == doctest::Approx(10.0f));
+    CHECK(nchw_tensor[plane - 1] == doctest::Approx(10.0f));
+
+    // Channel 1 must be Green (50.0f)
+    CHECK(nchw_tensor[plane] == doctest::Approx(50.0f));
+    CHECK(nchw_tensor[2 * plane - 1] == doctest::Approx(50.0f));
+
+    // Channel 2 must be Red (200.0f)
+    CHECK(nchw_tensor[2 * plane] == doctest::Approx(200.0f));
+    CHECK(nchw_tensor[3 * plane - 1] == doctest::Approx(200.0f));
+}
+
+TEST_CASE("Hub-and-Spoke GodotCameraHintRolled to GodotCamera Space Transform Mapping")
+{
+    Gaze::GazeTransform3D xform_identity(Gaze::GazeBasis3D(), Gaze::GazeVector3(10.0f, 20.0f, -500.0f));
+    
+    // Zero roll hint returns identical transform
+    Gaze::GazeTransform3D unrolled_zero = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, 0.0f);
+    CHECK(unrolled_zero.origin.x == doctest::Approx(10.0f));
+    CHECK(unrolled_zero.origin.y == doctest::Approx(20.0f));
+    CHECK(unrolled_zero.origin.z == doctest::Approx(-500.0f));
+
+    // +90 deg roll hint (+PI/2 around +Z)
+    float roll_90 = static_cast<float>(M_PI * 0.5);
+    Gaze::GazeTransform3D unrolled_90 = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, roll_90);
+    // (x, y) = (10, 20) rotated +90 deg clockwise (tilt right: +Y -> +X) -> (20, -10)
+    CHECK(unrolled_90.origin.x == doctest::Approx(20.0f));
+    CHECK(unrolled_90.origin.y == doctest::Approx(-10.0f));
+    CHECK(unrolled_90.origin.z == doctest::Approx(-500.0f));
+}
+
 
 

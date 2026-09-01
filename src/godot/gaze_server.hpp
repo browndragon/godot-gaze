@@ -199,6 +199,16 @@ public:
     Vector3 get_head_pose_euler_deg(RID p_face) const;
     void face_tracker_set_landmarks_2d(RID p_face, const PackedVector2Array &p_landmarks);
     PackedVector2Array get_face_landmarks_2d(RID p_face) const;
+    void face_tracker_set_roll_hint(RID p_face, float p_roll_hint_rad);
+    float face_tracker_get_roll_hint(RID p_face) const;
+    void face_tracker_set_auto_roll_enabled(RID p_face, bool p_enabled);
+    bool face_tracker_is_auto_roll_enabled(RID p_face) const;
+    void face_tracker_reset(RID p_face);
+
+    void set_roll_hint(float p_roll_hint_rad);
+    float get_roll_hint() const;
+    void set_auto_roll_enabled(bool p_enabled);
+    bool is_auto_roll_enabled() const;
 
     RID eye_tracker_create(RID p_face);
     void eye_tracker_set_gaze(RID p_eye, Vector3 p_origin_cam, Vector3 p_direction_cam);

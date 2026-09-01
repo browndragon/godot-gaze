@@ -30,11 +30,11 @@ struct GazeFrameData {
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
 
-    GazeTransform3D head_transform;
-    GazeVector3 head_translation;
-    GazeVector3 head_rotation;
-    GazeVector3 gaze_origin;
-    GazeVector3 gaze_direction;
+    GazeTransform3D head_transform = GazeTransform3D::identity();
+    GazeVector3 head_translation = GazeVector3(0.0, 0.0, 0.0);
+    GazeVector3 head_rotation = GazeVector3(0.0, 0.0, 0.0);
+    GazeVector3 gaze_origin = GazeVector3(0.0, 0.0, 0.0);
+    GazeVector3 gaze_direction = GazeVector3(0.0, 0.0, -1.0);
 
     bool has_landmarks_2d = false;
     float landmarks_2d_px[35 * 2] = {0.0f};

@@ -165,6 +165,7 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_eye_crops", "left_crop", "right_crop"), &GazeServer::set_eye_crops);
     ClassDB::bind_method(D_METHOD("get_camera_texture"), &GazeServer::get_camera_texture);
     ClassDB::bind_method(D_METHOD("set_camera_preview_requested", "requested"), &GazeServer::set_camera_preview_requested);
+    ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "requested"), &GazeServer::set_camera_preview_requested);
     ClassDB::bind_method(D_METHOD("is_camera_preview_requested"), &GazeServer::is_camera_preview_requested);
     ClassDB::bind_method(D_METHOD("emit_camera_frame_ready", "vision_camera_rid"), &GazeServer::emit_camera_frame_ready);
 
@@ -971,6 +972,9 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     event->set_screen_velocity(screen_vel);
 
     Transform3D head_xform = get_head_transform();
+    if (!head_xform.basis.is_rotation()) {
+        head_xform.basis = Basis();
+    }
     event->set_head_transform(head_xform);
 
     Vector3 gaze_d = Vector3(0, 0, -1);
@@ -980,7 +984,13 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         gaze_o = reinterpret_cast<const Vector3&>(active_read_data->gaze_origin);
     }
     Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
+    if (norm_gaze_dir.length_squared() < 1e-4) {
+        norm_gaze_dir = Vector3(0, 0, -1);
+    }
     Basis gaze_basis = Basis::looking_at(norm_gaze_dir, Vector3(0, 1, 0));
+    if (!gaze_basis.is_rotation()) {
+        gaze_basis = Basis();
+    }
     event->set_gaze_transform(Transform3D(gaze_basis, gaze_o));
 
     return event;
@@ -1084,6 +1094,12 @@ void GazeServer::trigger_process() {
                     Vector3(gb.y.x, gb.y.y, gb.y.z),
                     Vector3(gb.z.x, gb.z.y, gb.z.z)
                 );
+                if (!godot_basis.is_orthogonal() || !godot_basis.is_rotation()) {
+                    godot_basis.orthonormalize();
+                }
+                if (!godot_basis.is_rotation()) {
+                    godot_basis = Basis();
+                }
                 Transform3D godot_xform(godot_basis, head_t);
                 set_face_transform(godot_xform, head_r, true);
                 set_face_landmarks_2d(lm_array);

@@ -199,16 +199,30 @@ namespace Gaze
                             {
                                 GazeVector3 rvec(0.0f, 0.0f, 0.0f);
                                 GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-                                _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
-                                _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
-                                _stage_6_estimate_eye_state(data);
+                                bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                                if (pose_ok)
+                                {
+                                    _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
+                                    _stage_6_estimate_eye_state(data);
 
-                                auto start_gaze = std::chrono::steady_clock::now();
-                                _stage_7_estimate_gaze_direction(data);
-                                auto end_gaze = std::chrono::steady_clock::now();
-                                gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+                                    auto start_gaze = std::chrono::steady_clock::now();
+                                    _stage_7_estimate_gaze_direction(data);
+                                    auto end_gaze = std::chrono::steady_clock::now();
+                                    gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+                                }
+                                else
+                                {
+                                    data->face_detected = false;
+                                }
                             }
-                            _stage_8_unroll_to_canonical_godot_camera(data);
+                            else
+                            {
+                                data->face_detected = false;
+                            }
+                            if (data->face_detected)
+                            {
+                                _stage_8_unroll_to_canonical_godot_camera(data);
+                            }
                         }
                         else
                         {

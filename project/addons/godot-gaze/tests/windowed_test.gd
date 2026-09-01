@@ -57,7 +57,7 @@ func _init():
 	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
 	vs.camera_start(cam_rid)
 
-	gs.camera_set_vision_rid(gs.get_default_camera_rid(), cam_rid)
+	gs.set_camera_vision_rid(cam_rid)
 	gs.start_processing()
 
 	# Load the real face image from tests/resources/self_left_left.jpg

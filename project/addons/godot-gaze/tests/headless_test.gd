@@ -166,7 +166,7 @@ func run_tests():
 	fixture_dev.physical_size_mm = Vector2(301.5, 188.5)
 	fixture_dev.camera_offset = Vector3(0.0, 94.25, 0.0)
 	fixture_dev.camera_tilt = 0.0
-	fixture_dev.set_window_position(Vector2(0, 0))
+	fixture_dev.set_window_position_lpix(Vector2(0, 0))
 	gs.set_device_calibration(fixture_dev)
 
 	gs.set_camera_offsets(Vector3(0.0, 94.25, 0.0), 0.0)

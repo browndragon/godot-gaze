@@ -156,7 +156,7 @@ func run_tool() -> void:
 	dev_cal.logical_size_px = Vector2i(int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT))
 	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0) # Top bezel center (X=150.75mm, Y=0.0mm)
 	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position(Vector2(WIN_POS_X_PT, WIN_POS_Y_PT))
+	dev_cal.set_window_position_lpix(Vector2(WIN_POS_X_PT, WIN_POS_Y_PT))
 	gs.set_device_calibration(dev_cal)
 
 	gs.set_camera_offsets(Vector3(0.0, 0.0, 0.0), 0.0)

@@ -27,19 +27,34 @@ public:
     DeviceCalibration() = default;
     virtual ~DeviceCalibration() = default;
 
+    /**
+     * @brief Returns physical display dimensions in millimeters (width_mm, height_mm).
+     */
     virtual Vector2 get_physical_size_mm() const;
     virtual void set_physical_size_mm(Vector2 p_size);
 
+    /**
+     * @brief Returns logical display dimensions in logical pixels (width_lpix, height_lpix).
+     */
     virtual Vector2i get_logical_size_px() const;
     virtual void set_logical_size_px(Vector2i p_size);
 
+    /**
+     * @brief Returns 3D offset of camera from display center in millimeters (x_mm, y_mm, z_mm).
+     */
     virtual Vector3 get_camera_offset() const;
     virtual void set_camera_offset(Vector3 p_offset);
 
+    /**
+     * @brief Returns downward tilt of camera relative to screen in degrees.
+     */
     virtual double get_camera_tilt() const;
     virtual void set_camera_tilt(double p_tilt);
 
-    virtual Vector2 get_window_position() const;
+    /**
+     * @brief Returns OS window top-left position on desktop in logical pixels (x_lpix, y_lpix).
+     */
+    virtual Vector2 get_window_position_lpix() const;
 
     Vector2 get_pixel_size_mm() const;
     Vector2 get_dpi() const;
@@ -63,7 +78,7 @@ public:
     virtual Vector2i get_logical_size_px() const override;
     virtual Vector3 get_camera_offset() const override;
     virtual double get_camera_tilt() const override;
-    virtual Vector2 get_window_position() const override;
+    virtual Vector2 get_window_position_lpix() const override;
 };
 
 class StoredDeviceCalibration : public DeviceCalibration {
@@ -76,7 +91,7 @@ public:
     StoredDeviceCalibration();
     virtual ~StoredDeviceCalibration() = default;
 
-    virtual Vector2 get_window_position() const override;
+    virtual Vector2 get_window_position_lpix() const override;
 };
 
 class MockDeviceCalibration : public DeviceCalibration {
@@ -92,8 +107,8 @@ public:
     MockDeviceCalibration();
     virtual ~MockDeviceCalibration() = default;
 
-    void set_window_position(Vector2 p_pos) { window_position_px = p_pos; emit_changed(); }
-    virtual Vector2 get_window_position() const override { return window_position_px; }
+    void set_window_position_lpix(Vector2 p_pos) { window_position_px = p_pos; emit_changed(); }
+    virtual Vector2 get_window_position_lpix() const override { return window_position_px; }
 };
 
 class DefaultDeviceCalibration : public DeviceCalibration {
@@ -122,7 +137,7 @@ public:
     virtual double get_camera_tilt() const override;
     virtual void set_camera_tilt(double p_tilt) override;
 
-    virtual Vector2 get_window_position() const override;
+    virtual Vector2 get_window_position_lpix() const override;
 };
 
 class BioCalibration : public Resource {

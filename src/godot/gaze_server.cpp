@@ -668,7 +668,7 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
     Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
     Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
     double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
-    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position() : Vector2(0.0, 0.0);
+    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position_lpix() : Vector2(0.0, 0.0);
 
     Vector3 calibrated_dir = p_direction_cam;
     if (impl->display.bio_data.is_valid) {
@@ -820,7 +820,7 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
     Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
     Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
     double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
-    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position() : Vector2(0.0, 0.0);
+    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position_lpix() : Vector2(0.0, 0.0);
 
     Vector3 calibrated_dir = p_direction_cam;
     if (p_apply_bio_calibration && impl->display.bio_data.is_valid) {
@@ -946,7 +946,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     Vector2 win_pos = Vector2(0, 0);
     Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
     if (dev_cal.is_valid()) {
-        win_pos = dev_cal->get_window_position();
+        win_pos = dev_cal->get_window_position_lpix();
     }
     Vector2 screen_pos = local_pos + win_pos;
 

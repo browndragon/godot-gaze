@@ -62,10 +62,12 @@ flowchart TD
    - Wraps ONNX Runtime (`onnxruntime_cxx_api.h`).
    - Implements multi-threaded inference pipelining (`GazeTrackingPipeline`).
    - Does not depend on Godot engine types or GDScript bindings.
+   - For detailed neural model specifications, tensor formats, and provenances, see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md).
 
 3. **Layer 3 (Platforms & Servers - `src/godot/`, `src/windows/`, `src/web/`):**
    - Implements Godot's RID (Resource Identifier) server architecture (`GazeServer`, `VisionServer`).
    - Manages platform camera feeds (Windows Media Foundation, Godot CameraFeed, Web `getUserMedia`).
+   - Normalizes hardware capture frames to packed BGR8 working buffers (see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md#1-camera-ingestion-architecture--color-formats)).
    - Enforces Pimpl (`GazeServerImpl`) encapsulation to insulate Godot bindings from native allocations.
 
 4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & `eyecandy`):**

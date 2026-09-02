@@ -29,7 +29,7 @@ void DeviceCalibration::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_camera_tilt"), &DeviceCalibration::get_camera_tilt);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_tilt"), "set_camera_tilt", "get_camera_tilt");
 
-    ClassDB::bind_method(D_METHOD("get_window_position"), &DeviceCalibration::get_window_position);
+    ClassDB::bind_method(D_METHOD("get_window_position_lpix"), &DeviceCalibration::get_window_position_lpix);
     ClassDB::bind_method(D_METHOD("get_pixel_size_mm"), &DeviceCalibration::get_pixel_size_mm);
     ClassDB::bind_method(D_METHOD("get_dpi"), &DeviceCalibration::get_dpi);
 
@@ -87,7 +87,7 @@ void DeviceCalibration::set_camera_tilt(double p_tilt) {
     emit_changed();
 }
 
-Vector2 DeviceCalibration::get_window_position() const {
+Vector2 DeviceCalibration::get_window_position_lpix() const {
     return Vector2(0.0, 0.0);
 }
 
@@ -138,7 +138,7 @@ StoredDeviceCalibration::StoredDeviceCalibration() {
 // ==================== MockDeviceCalibration ====================
 
 void MockDeviceCalibration::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_window_position", "pos"), &MockDeviceCalibration::set_window_position);
+    ClassDB::bind_method(D_METHOD("set_window_position_lpix", "pos"), &MockDeviceCalibration::set_window_position_lpix);
 }
 
 MockDeviceCalibration::MockDeviceCalibration() {
@@ -235,8 +235,8 @@ void DefaultDeviceCalibration::set_camera_tilt(double p_tilt) {
     get_actual_calibration()->set_camera_tilt(p_tilt);
 }
 
-Vector2 DefaultDeviceCalibration::get_window_position() const {
-    return get_actual_calibration()->get_window_position();
+Vector2 DefaultDeviceCalibration::get_window_position_lpix() const {
+    return get_actual_calibration()->get_window_position_lpix();
 }
 
 // ==================== BioCalibration ====================

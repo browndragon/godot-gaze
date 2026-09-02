@@ -59,13 +59,13 @@ double GuessDeviceCalibration::get_camera_tilt() const {
     return 0.0;
 }
 
-Vector2 GuessDeviceCalibration::get_window_position() const {
+Vector2 GuessDeviceCalibration::get_window_position_lpix() const {
     double left = em_eval_float("(function() { var canvas = (typeof Module !== 'undefined' && Module.canvas) || document.getElementById('canvas') || document.querySelector('canvas'); return canvas ? (window.screenX + canvas.getBoundingClientRect().left) : window.screenX; })()");
     double top = em_eval_float("(function() { var canvas = (typeof Module !== 'undefined' && Module.canvas) || document.getElementById('canvas') || document.querySelector('canvas'); return canvas ? (window.screenY + canvas.getBoundingClientRect().top) : window.screenY; })()");
     return Vector2(left, top);
 }
 
-Vector2 StoredDeviceCalibration::get_window_position() const {
+Vector2 StoredDeviceCalibration::get_window_position_lpix() const {
     double left = em_eval_float("(function() { var canvas = (typeof Module !== 'undefined' && Module.canvas) || document.getElementById('canvas') || document.querySelector('canvas'); return canvas ? (window.screenX + canvas.getBoundingClientRect().left) : window.screenX; })()");
     double top = em_eval_float("(function() { var canvas = (typeof Module !== 'undefined' && Module.canvas) || document.getElementById('canvas') || document.querySelector('canvas'); return canvas ? (window.screenY + canvas.getBoundingClientRect().top) : window.screenY; })()");
     return Vector2(left, top);

@@ -217,7 +217,7 @@ func update_diagnostics_ui() -> void:
 		if dev_cal:
 			var phys_mm = dev_cal.get_physical_size_mm()
 			var log_px = dev_cal.get_logical_size_px()
-			var w_pos = dev_cal.get_window_position()
+			var w_pos = dev_cal.get_window_position_lpix()
 			var c_off = dev_cal.get_camera_offset()
 			lines.append("  Screen Size: [color=yellow]%.1fx%.1f mm ( %dx%d px )[/color]" % [phys_mm.x, phys_mm.y, log_px.x, log_px.y])
 			lines.append("  Window Pos: [color=yellow](%.1f, %.1f)[/color]" % [w_pos.x, w_pos.y])
@@ -271,7 +271,7 @@ func _on_copy_button_pressed():
 		if dev_cal:
 			data["screen_physical_mm"] = [dev_cal.get_physical_size_mm().x, dev_cal.get_physical_size_mm().y]
 			data["screen_logical_px"] = [dev_cal.get_logical_size_px().x, dev_cal.get_logical_size_px().y]
-			data["window_position_px"] = [dev_cal.get_window_position().x, dev_cal.get_window_position().y]
+			data["window_position_px"] = [dev_cal.get_window_position_lpix().x, dev_cal.get_window_position_lpix().y]
 			data["camera_offset_mm"] = [dev_cal.get_camera_offset().x, dev_cal.get_camera_offset().y, dev_cal.get_camera_offset().z]
 		data["bio_calibration"] = bio_cal.get_class() if bio_cal else "Null"
 		var ev = gs.get_most_recent_event()

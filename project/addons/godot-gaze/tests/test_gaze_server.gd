@@ -30,14 +30,14 @@ func test_gaze_server_device_calibration_injection():
 	var calib = MockDeviceCalibration.new()
 	calib.set_logical_size_px(Vector2i(1920, 1080))
 	calib.set_physical_size_mm(Vector2(345.0, 215.0))
-	calib.set_window_position(Vector2(50.0, 25.0))
+	calib.set_window_position_lpix(Vector2(50.0, 25.0))
 
 	gs.set_device_calibration(calib)
 	var active_calib = gs.get_device_calibration()
 	assert_not_null(active_calib, "Active device calibration should not be null")
 	assert_eq(active_calib.get_logical_size_px(), Vector2i(1920, 1080), "Logical size matches")
 	assert_eq(active_calib.get_physical_size_mm(), Vector2(345.0, 215.0), "Physical size matches")
-	assert_eq(active_calib.get_window_position(), Vector2(50.0, 25.0), "Window position matches")
+	assert_eq(active_calib.get_window_position_lpix(), Vector2(50.0, 25.0), "Window position matches")
 
 func test_gaze_server_tracking_lifecycle_and_camera_recovery():
 	var gs = Engine.get_singleton("GazeServer")

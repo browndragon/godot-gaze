@@ -65,7 +65,7 @@ namespace Gaze
         }
     }
 
-    void ORTLandmarkModel::preprocess_face_crop(const uint8_t *raw_crop_rgb, float *out_buffer)
+    void ORTLandmarkModel::preprocess_face_crop(const uint8_t *raw_crop_bgr, float *out_buffer)
     {
         // 60x60 BGR format [1, 3, 60, 60] with raw float pixel intensities [0.0, 255.0]
         constexpr int width = 60;
@@ -78,9 +78,9 @@ namespace Gaze
 
         for (int i = 0; i < plane_size; ++i)
         {
-            b_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 0]);
-            g_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 1]);
-            r_plane[i] = static_cast<float>(raw_crop_rgb[i * 3 + 2]);
+            b_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 0]);
+            g_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 1]);
+            r_plane[i] = static_cast<float>(raw_crop_bgr[i * 3 + 2]);
         }
     }
 

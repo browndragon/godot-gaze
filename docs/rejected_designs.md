@@ -22,6 +22,14 @@ This document records architectural decisions, technical theories, and design pa
    * **False Assumption**: Streaming raw camera frames directly on GPU to ONNX Runtime without CPU memory roundtrips.
    * **Fact**: Partial CPU-GPU-CPU synchronization stalls for facial crop extraction negated any compute speedups. Abandoned in favor of the self-contained CPU pipeline (see `TODO.md` Item 8).
 
+5. **DisplayServer Coordinates on HiDPI / Retina Displays**:
+   * **False Assumption**: Assuming `DisplayServer.screen_get_size()` or `DisplayServer.window_get_position()` return physical hardware pixels that must be divided by `DisplayServer.screen_get_scale()`.
+   * **Fact**: In Godot 4 on macOS, `DisplayServer` coordinates are already expressed in logical screen points/pixels (`lpix`), matching 2D viewport coordinates. Dividing by `scale` halves the screen and window coordinates, causing projection misalignment by a factor of 2. All Godot-facing spatial APIs must consistently use logical pixels (`lpix`).
+
+6. **CameraFeed Formats & ONNX Model Color Spaces**:
+   * **False Assumption**: Assuming all camera feeds deliver ready `FORMAT_RGB8` directly, or that all deep learning models take RGB.
+   * **Fact**: All four neural models in `godot-gaze` (YuNet, ADAS Landmarker, ADAS Gaze, and Eye Openness) require **BGR** input channel ordering. Camera ingestion normalizes OS frames (`RGBA8`, `RGB8`, `R8`, `NV12`) directly into packed BGR8 working buffers without redundant intermediate color permutations. For full model provenances, tensor layouts, and hardware capture characteristics, see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md).
+
 ---
 
 ## 2. Code Style & Integration Guidelines

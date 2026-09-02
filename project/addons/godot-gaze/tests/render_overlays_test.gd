@@ -19,7 +19,7 @@ func run_render():
 	dev_cal.logical_size_px = Vector2i(1512, 982)
 	dev_cal.camera_offset = Vector3(0.0, 94.25, 0.0) # top center
 	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position(Vector2(180, 167)) # Centered 1152x648 window
+	dev_cal.set_window_position_lpix(Vector2(180, 167)) # Centered 1152x648 window
 	gs.set_device_calibration(dev_cal)
 
 	var cam_rid = vs.camera_create()
@@ -82,7 +82,7 @@ func run_render():
 		var eye_win = gs.get_gaze_screen_px(false)
 
 		# Screen coordinates
-		var win_pos = dev_cal.get_window_position()
+		var win_pos = dev_cal.get_window_position_lpix()
 		var nose_screen = nose_win + win_pos
 		var eye_screen = eye_win + win_pos
 

@@ -117,51 +117,88 @@ func _init():
 
 	print("PASS: Face and gaze estimation executed successfully on still frame.")
 
-	# 4. Test Dynamic Window Position/Size Synchronization
-	print("=================== E2E TEST: DYNAMIC WINDOW POSITION SYNC ===================")
-	# Center the window first
+	# 4. Test Dynamic Window Position/Size Synchronization & Corner Invariance
+	print("=================== E2E TEST: DYNAMIC WINDOW POSITION SYNC & CORNER INVARIANCE ===================")
 	var screen_id = DisplayServer.window_get_current_screen()
 	var screen_size = DisplayServer.screen_get_size(screen_id)
 	var window_size = DisplayServer.window_get_size()
-	var initial_pos = (screen_size - window_size) / 2
-	DisplayServer.window_set_position(initial_pos)
-	
-	# Wait for OS window movements to settle
-	await create_timer(0.5).timeout
-	
-	# Inject texture a few times to get initial gaze coordinate
-	var initial_gaze = Vector2.ZERO
-	for frame_step in range(30):
-		vs.inject_texture(cam_rid, face_tex)
-		gs.trigger_process()
-		await create_timer(0.05).timeout
-		var ev = gs.get_most_recent_event()
-		if ev is InputEventGaze and ev.position != Vector2.ZERO:
-			initial_gaze = ev.position
-			break
-			
-	var test_scale = DisplayServer.screen_get_scale(DisplayServer.window_get_current_screen())
-	print("Initial window position: ", DisplayServer.window_get_position(), " | Initial scale: ", test_scale)
-	print("Initial gaze: ", initial_gaze)
-	if initial_gaze == Vector2.ZERO:
-		printerr("FAIL: Could not obtain a valid initial gaze estimation.")
+	var test_scale = DisplayServer.screen_get_scale(screen_id)
+	print("Screen size (lpix): ", screen_size, " | Window size (lpix): ", window_size, " | Scale: ", test_scale)
+
+	# 4a. Centered Window Test
+	var center_pos = (screen_size - window_size) / 2
+	DisplayServer.window_set_position(center_pos)
+	await create_timer(0.3).timeout
+
+	var proj_center = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
+	print("Centered Window Position: ", DisplayServer.window_get_position(), " -> Proj Center: ", proj_center)
+	var expected_center_x = window_size.x / 2.0
+	print("Expected Center X (window center): ", expected_center_x, " | Actual: ", proj_center.x)
+	if abs(proj_center.x - expected_center_x) > 2.0:
+		printerr("FAIL: Camera optical center ray did not hit window horizontal center! Expected ", expected_center_x, ", got ", proj_center.x)
 		quit(1)
 		return
-		
+	print("PASS: Camera optical axis hits exact window horizontal center.")
+
+	# 4b. 4-Corner Window Invariance Test
+	var test_positions = {
+		"Top-Left": Vector2i(0, 0),
+		"Top-Right": Vector2i(screen_size.x - window_size.x, 0),
+		"Bottom-Left": Vector2i(0, screen_size.y - window_size.y),
+		"Bottom-Right": Vector2i(screen_size.x - window_size.x, screen_size.y - window_size.y)
+	}
+
+	for corner_name in test_positions:
+		var target_pos = test_positions[corner_name]
+		DisplayServer.window_set_position(target_pos)
+		await create_timer(0.3).timeout
+		var actual_pos = DisplayServer.window_get_position()
+		var proj_corner = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
+		var expected_x = (screen_size.x / 2.0) - actual_pos.x
+		print("Corner [", corner_name, "] at ", actual_pos, " -> Proj: ", proj_corner, " (Expected X: ", expected_x, ")")
+		if abs(proj_corner.x - expected_x) > 2.0:
+			printerr("FAIL: Corner [", corner_name, "] projection mismatch! Expected X ", expected_x, ", got ", proj_corner.x)
+			quit(1)
+			return
+		print("PASS: Corner [", corner_name, "] verified.")
+
 	# Clean up synthetic camera
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)
 	vs.camera_free(cam_rid)
 
-	# 4. Test Physical Camera Device 0 and CameraServer Query
-	print("=================== E2E TEST: PHYSICAL CAMERA SERVER (DEVICE 0) ===================")
+	# 5. Test Physical Camera Device 0 and Telemetry Probe
+	print("=================== E2E TEST: PHYSICAL CAMERA SERVER (DEVICE 0) & TELEMETRY ===================")
 	var phys_cam_rid = vs.camera_create()
 	vs.camera_set_device_id(phys_cam_rid, 0)
-	var started = vs.camera_start(phys_cam_rid)
-	print("Physical camera start (device 0) returned: ", started)
-	if started:
-		print("PASS: Physical camera device 0 started successfully.")
-		vs.camera_stop(phys_cam_rid)
+	gs.set_camera_vision_rid(phys_cam_rid)
+	var started = gs.start_tracking()
+	print("GazeServer start_tracking (device 0) returned: ", started)
+	if vs.camera_is_active(phys_cam_rid):
+		print("PASS: Physical camera device 0 active.")
+		var cs = Engine.get_singleton("CameraServer")
+		if cs:
+			var feeds = cs.feeds()
+			print("CameraServer Feed Count: ", feeds.size())
+			for f in feeds:
+				if f:
+					print(" -> Feed ID: ", f.get_id(), " Name: ", f.get_name(), " Active: ", f.is_active(), " Datatype: ", f.get_datatype(), " Position: ", f.get_position())
+		gs.camera_set_preview_requested(true)
+		
+		# Poll frames for 1 second
+		for i in range(20):
+			gs.trigger_process()
+			await create_timer(0.05).timeout
+
+		var cur_tex = gs.get_camera_texture()
+		if cur_tex:
+			print(" -> Current Texture Size: ", cur_tex.get_size())
+			var img = cur_tex.get_image()
+			if img:
+				print(" -> Captured Image Format: ", img.get_format(), " (FORMAT_RGB8=4, FORMAT_RGBA8=5, FORMAT_L8=0, FORMAT_R8=1) Width: ", img.get_width(), " Height: ", img.get_height(), " Data size: ", img.get_data().size())
+		else:
+			print(" -> Current Texture is null (camera feed may be headless/mock).")
+		gs.stop_tracking(true)
 	else:
 		print("INFO: Physical camera device 0 not active or feeds unavailable in this test session (cleanly handled).")
 	vs.camera_free(phys_cam_rid)

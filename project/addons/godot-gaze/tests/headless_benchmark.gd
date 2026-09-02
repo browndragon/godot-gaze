@@ -151,7 +151,7 @@ func run_benchmark():
 	dev_cal.physical_size_mm = Vector2(301.5, 188.5)
 	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0)
 	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position(Vector2(0, 0))
+	dev_cal.set_window_position_lpix(Vector2(0, 0))
 	gs.set_device_calibration(dev_cal)
 
 	var cam_rid = vs.camera_create()

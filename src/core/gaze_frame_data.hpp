@@ -22,6 +22,8 @@ struct GazeFrameData {
     float roll_hint_rad = 0.0f;
     bool auto_roll_enabled = true;
     GazeRect face_bbox;
+    float face_score = 0.0f;
+    float eye_box_sz = 0.0f;
     std::vector<GazeVector2> landmarks_working_px;
     EyeCrops eye_crops;
 

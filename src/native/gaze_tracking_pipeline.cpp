@@ -64,6 +64,49 @@ namespace Gaze
         return false;
     }
 
+    bool GazeTrackingPipeline::initialize(
+        const std::string &yunet_model_path,
+        const std::string &gaze_model_path,
+        const std::string &eye_openness_model_path,
+        const std::string &landmark_model_path)
+    {
+        std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
+        std::lock_guard<std::mutex> lock(state_mutex);
+
+        face_detector = std::make_unique<ORTYuNetDetector>(yunet_model_path);
+        eye_state_model = std::make_unique<ORTEyeStateModel>(eye_openness_model_path);
+        gaze_estimator = std::make_unique<ORTGazeModel>(gaze_model_path);
+
+        std::string lm_path = landmark_model_path;
+        if (lm_path.empty())
+        {
+            lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+            std::ifstream f(lm_path.c_str());
+            if (!f.good()) lm_path = "../" + lm_path;
+        }
+        landmark_model = std::make_unique<ORTLandmarkModel>(lm_path);
+
+        gaze_estimator->set_config(active_config);
+
+        bool face_ok = face_detector->initialize();
+        bool eye_ok = eye_state_model->initialize();
+        bool gaze_ok = gaze_estimator->initialize();
+        if (landmark_model)
+        {
+            landmark_model->initialize();
+        }
+
+        if (face_ok && eye_ok && gaze_ok)
+        {
+            initialized = true;
+            log_info("GazeTrackingPipeline_Initialized");
+            return true;
+        }
+
+        log_error("GazeTrackingPipeline_InitializeFailed");
+        return false;
+    }
+
     void GazeTrackingPipeline::start()
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
@@ -168,107 +211,115 @@ namespace Gaze
             if (has_request && thread_running && data)
             {
                 worker_busy = true;
-                {
-                    std::lock_guard<std::mutex> lock(state_mutex);
-                    if (initialized)
-                    {
-                        if (config_dirty)
-                        {
-                            if (face_detector)
-                                face_detector->set_config(active_config);
-                            if (gaze_estimator)
-                                gaze_estimator->set_config(active_config);
-                            config_dirty = false;
-                        }
-
-                        auto start_total = std::chrono::steady_clock::now();
-
-                        Frame working_frame;
-                        _stage_1_apply_roll_hint(data, working_frame);
-
-                        auto start_face = std::chrono::steady_clock::now();
-                        bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
-                        if (!face_ok && std::abs(data->roll_hint_rad) > 1e-4f)
-                        {
-                            // Multi-pass fallback: if detection failed with roll hint, try raw unrotated frame
-                            Frame raw_frame;
-                            raw_frame.width = data->camera_width;
-                            raw_frame.height = data->camera_height;
-                            raw_frame.data = data->camera_raw_bgr.data();
-                            raw_frame.timestamp = data->timestamp;
-                            data->roll_hint_rad = 0.0f;
-                            face_ok = _stage_2_detect_face_bbox(data, raw_frame);
-                            if (face_ok)
-                            {
-                                working_frame = raw_frame;
-                            }
-                        }
-                        auto end_face = std::chrono::steady_clock::now();
-                        double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
-
-                        double gaze_ms = 0.0;
-                        if (face_ok)
-                        {
-                            bool lm_ok = _stage_3_extract_landmarks(data, working_frame);
-                            if (lm_ok)
-                            {
-                                GazeVector3 rvec(0.0f, 0.0f, 0.0f);
-                                GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-                                bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
-                                if (pose_ok)
-                                {
-                                    _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
-                                    _stage_6_estimate_eye_state(data);
-
-                                    auto start_gaze = std::chrono::steady_clock::now();
-                                    _stage_7_estimate_gaze_direction(data);
-                                    auto end_gaze = std::chrono::steady_clock::now();
-                                    gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
-                                }
-                                else
-                                {
-                                    data->face_detected = false;
-                                }
-                            }
-                            else
-                            {
-                                data->face_detected = false;
-                            }
-                            if (data->face_detected)
-                            {
-                                _stage_8_unroll_to_canonical_godot_camera(data);
-                            }
-                        }
-
-                        if (!data->face_detected)
-                        {
-                            // Graceful decay instead of instant snap to 0
-                            pipeline_roll_rad *= 0.5f;
-                            if (std::abs(pipeline_roll_rad) < 0.02f)
-                            {
-                                pipeline_roll_rad = 0.0f;
-                            }
-                        }
-
-                        auto end_total = std::chrono::steady_clock::now();
-                        double total_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
-
-                        static int stats_count = 0;
-                        int verbosity = get_log_verbosity().load(std::memory_order_acquire);
-                        if (verbosity >= 3 || (verbosity >= 1 && stats_count++ % 30 == 0))
-                        {
-                            log_info(verbosity >= 3 ? 3 : 1, "Pipeline_PerformanceStats",
-                                     "face_ms", face_ms,
-                                     "gaze_ms", gaze_ms,
-                                     "total_ms", total_ms,
-                                     "frame_w", data->camera_width,
-                                     "frame_h", data->camera_height);
-                        }
-                    }
-                }
+                process_frame_synchronous(data);
                 results_mailbox.put(data);
                 worker_busy = false;
             }
+        }
+    }
+
+    void GazeTrackingPipeline::process_frame_synchronous(GazeFrameData *data)
+    {
+        if (!data) return;
+        std::lock_guard<std::mutex> lock(state_mutex);
+        if (!initialized)
+        {
+            data->face_detected = false;
+            data->gaze_success = false;
+            return;
+        }
+
+        if (config_dirty)
+        {
+            if (face_detector)
+                face_detector->set_config(active_config);
+            if (gaze_estimator)
+                gaze_estimator->set_config(active_config);
+            config_dirty = false;
+        }
+
+        auto start_total = std::chrono::steady_clock::now();
+
+        Frame working_frame;
+        _stage_1_apply_roll_hint(data, working_frame);
+
+        auto start_face = std::chrono::steady_clock::now();
+        bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
+        if (!face_ok && std::abs(data->roll_hint_rad) > 1e-4f)
+        {
+            // Multi-pass fallback: if detection failed with roll hint, try raw unrotated frame
+            Frame raw_frame;
+            raw_frame.width = data->camera_width;
+            raw_frame.height = data->camera_height;
+            raw_frame.data = data->camera_raw_bgr.data();
+            raw_frame.timestamp = data->timestamp;
+            data->roll_hint_rad = 0.0f;
+            face_ok = _stage_2_detect_face_bbox(data, raw_frame);
+            if (face_ok)
+            {
+                working_frame = raw_frame;
+            }
+        }
+        auto end_face = std::chrono::steady_clock::now();
+        double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
+
+        double gaze_ms = 0.0;
+        if (face_ok)
+        {
+            bool lm_ok = _stage_3_extract_landmarks(data, working_frame);
+            if (lm_ok)
+            {
+                GazeVector3 rvec(0.0f, 0.0f, 0.0f);
+                GazeVector3 tvec(0.0f, 0.0f, 600.0f);
+                bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                if (pose_ok)
+                {
+                    _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
+                    _stage_6_estimate_eye_state(data);
+
+                    auto start_gaze = std::chrono::steady_clock::now();
+                    _stage_7_estimate_gaze_direction(data);
+                    auto end_gaze = std::chrono::steady_clock::now();
+                    gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+                }
+                else
+                {
+                    data->face_detected = false;
+                }
+            }
+            else
+            {
+                data->face_detected = false;
+            }
+            if (data->face_detected)
+            {
+                _stage_8_unroll_to_canonical_godot_camera(data);
+            }
+        }
+
+        if (!data->face_detected)
+        {
+            // Graceful decay instead of instant snap to 0
+            pipeline_roll_rad *= 0.5f;
+            if (std::abs(pipeline_roll_rad) < 0.02f)
+            {
+                pipeline_roll_rad = 0.0f;
+            }
+        }
+
+        auto end_total = std::chrono::steady_clock::now();
+        double total_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
+
+        static int stats_count = 0;
+        int verbosity = get_log_verbosity().load(std::memory_order_acquire);
+        if (verbosity >= 3 || (verbosity >= 1 && stats_count++ % 30 == 0))
+        {
+            log_info(verbosity >= 3 ? 3 : 1, "Pipeline_PerformanceStats",
+                     "face_ms", face_ms,
+                     "gaze_ms", gaze_ms,
+                     "total_ms", total_ms,
+                     "frame_w", data->camera_width,
+                     "frame_h", data->camera_height);
         }
     }
 
@@ -304,6 +355,11 @@ namespace Gaze
         if (data->face_detected)
         {
             data->face_bbox = GazeRect(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
+            data->face_score = yunet_res.score;
+        }
+        else
+        {
+            data->face_score = 0.0f;
         }
         return data->face_detected;
     }
@@ -355,6 +411,7 @@ namespace Gaze
         float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
 
         float eye_box_sz = std::max({24.0f, r_w * 1.8f, l_w * 1.8f});
+        data->eye_box_sz = eye_box_sz;
 
         data->eye_crops.face_detected = true;
         data->eye_crops.head_pose_translation = tvec;

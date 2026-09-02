@@ -65,8 +65,15 @@ namespace Gaze
             const std::vector<uint8_t> &gaze_model_data,
             const std::vector<uint8_t> &eye_openness_model_data = {},
             const std::vector<uint8_t> &landmark_model_data = {});
+        bool initialize(
+            const std::string &yunet_model_path,
+            const std::string &gaze_model_path,
+            const std::string &eye_openness_model_path = {},
+            const std::string &landmark_model_path = {});
         void start();
         void stop();
+
+        void process_frame_synchronous(GazeFrameData *data);
 
         void set_config(const PipelineConfig &p_config);
         void push_frame_request(GazeFrameData *p_req);

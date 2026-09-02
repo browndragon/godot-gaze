@@ -162,6 +162,42 @@ func _init():
 			return
 		print("PASS: Corner [", corner_name, "] verified.")
 
+	# 4c. Fullscreen Window Mode Test
+	print("=================== E2E TEST: FULLSCREEN WINDOW MODE PROJECTION ===================")
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	await create_timer(0.5).timeout
+	var fs_mode = DisplayServer.window_get_mode()
+	var fs_win_pos = DisplayServer.window_get_position()
+	var fs_win_size = DisplayServer.window_get_size()
+	var fs_screen_size = DisplayServer.screen_get_size(screen_id)
+	print("Fullscreen Mode: ", fs_mode, " | Win Pos: ", fs_win_pos, " | Win Size: ", fs_win_size, " | Screen Size: ", fs_screen_size)
+	print("Root Viewport Size: ", root.size, " | Visible Rect: ", root.get_visible_rect(), " | Final Xform: ", root.get_final_transform())
+	print("DeviceCal Win Pos: ", dev_cal.get_window_position_lpix(), " | Logical Size: ", dev_cal.get_logical_size_px(), " | Physical Size: ", dev_cal.get_physical_size_mm())
+
+	var fs_proj = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
+	print("Fullscreen Center Ray Projection (Window Space): ", fs_proj)
+	var expected_fs_x = fs_win_size.x / 2.0
+	print("Expected Fullscreen Center X (Window Space): ", expected_fs_x, " | Actual X: ", fs_proj.x)
+	if abs(fs_proj.x - expected_fs_x) > 2.0:
+		printerr("FAIL: Fullscreen window space center ray mismatch! Expected ", expected_fs_x, ", got ", fs_proj.x)
+		quit(1)
+		return
+
+	var canvas_proj = root.get_final_transform().affine_inverse() * fs_proj
+	var expected_canvas_center = root.get_visible_rect().size / 2.0
+	print("Fullscreen Center Ray Projection (Canvas Space): ", canvas_proj, " | Expected Canvas Center: ", expected_canvas_center)
+	if abs(canvas_proj.x - expected_canvas_center.x) > 2.0:
+		printerr("FAIL: Fullscreen canvas space center ray mismatch! Expected ", expected_canvas_center.x, ", got ", canvas_proj.x)
+		quit(1)
+		return
+	print("PASS: Fullscreen window and canvas projection verified.")
+
+	# Restore windowed mode
+	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	DisplayServer.window_set_size(window_size)
+	DisplayServer.window_set_position(center_pos)
+	await create_timer(0.5).timeout
+
 	# Clean up synthetic camera
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)

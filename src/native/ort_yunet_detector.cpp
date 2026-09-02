@@ -426,7 +426,7 @@ namespace Gaze
 
             GazeVector3 rvec(0, 0, 0);
             GazeVector3 tvec(0, 0, 600.0);
-            solve_pnp_lm(model_pts, img_pts, focal, focal, cx, cy, rvec, tvec, false);
+            SQPnPSolver::solve_rvec(model_pts, img_pts, focal, focal, cx, cy, rvec, tvec);
 
             out_result.head_pose.pitch_rad = static_cast<float>(rvec.x);
             out_result.head_pose.yaw_rad = static_cast<float>(rvec.y);

@@ -97,7 +97,7 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
         double cy = frame.height * 0.5;
         Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f);
         Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-        bool pnp_ok = Gaze::solve_pnp_lm(model_35pt, landmarks, focal, focal, cx, cy, rvec, tvec, false);
+        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks, focal, focal, cx, cy, rvec, tvec);
         if (!pnp_ok) return false;
 
         Gaze::EyeCrops crops;
@@ -194,7 +194,7 @@ TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
         Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f), tvec(0.0f, 0.0f, 600.0f);
-        if (!Gaze::solve_pnp_lm(model_35, landmarks, focal, focal, cx, cy, rvec, tvec, false)) continue;
+        if (!Gaze::SQPnPSolver::solve_rvec(model_35, landmarks, focal, focal, cx, cy, rvec, tvec)) continue;
 
         // Extract crops: out_right_crop (pts 0..1, image-left), out_left_crop (pts 2..3, image-right)
         std::vector<uint8_t> crop_img_left(60 * 60 * 3);  // anatomical right
@@ -294,8 +294,8 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
         Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f), tvec(0.0f, 0.0f, 600.0f);
-        if (!Gaze::solve_pnp_lm(model_35, landmarks_35, focal, focal, cx, cy, rvec, tvec, false)) {
-            std::cout << "[DEBUG process_fixture] solve_pnp_lm failed for " << fixture_name << "\n";
+        if (!Gaze::SQPnPSolver::solve_rvec(model_35, landmarks_35, focal, focal, cx, cy, rvec, tvec)) {
+            std::cout << "[DEBUG process_fixture] SQPnPSolver::solve_rvec failed for " << fixture_name << "\n";
             return false;
         }
 

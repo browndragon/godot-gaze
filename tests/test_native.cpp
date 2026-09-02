@@ -538,7 +538,7 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         // Run PnP solver with un-warmed default guess (rvec = 0, tvec = 700)
         Gaze::GazeVector3 est_rvec(0.0, 0.0, 0.0);
         Gaze::GazeVector3 est_tvec(0.0, 0.0, 700.0);
-        bool pnp_ok = Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, est_rvec, est_tvec, true);
+        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, est_rvec, est_tvec);
         REQUIRE(pnp_ok == true);
 
         // Check recovered pitch angle (rvec.x)
@@ -589,12 +589,12 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         // Cold start (rvec=0, tvec=700)
         Gaze::GazeVector3 cold_rvec(0.0, 0.0, 0.0);
         Gaze::GazeVector3 cold_tvec(0.0, 0.0, 700.0);
-        Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, cold_rvec, cold_tvec, true);
+        Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, cold_rvec, cold_tvec);
 
         // Warm start (starting near previous frame pose)
         Gaze::GazeVector3 warm_rvec(0.18, 0.0, 0.0);
         Gaze::GazeVector3 warm_tvec(0.0, 28.0, 648.0);
-        Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, warm_rvec, warm_tvec, true);
+        Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, warm_rvec, warm_tvec);
 
         std::cout << "[PnP Noise Test] Cold pitch: " << cold_rvec.x << " | Warm pitch: " << warm_rvec.x << std::endl;
         CHECK(warm_rvec.x > 0.10);
@@ -852,10 +852,10 @@ TEST_CASE("Testing Native Math Solvers and Warping Parity")
             img_pts[i] = GazeVector2(fx * P_cam.x / P_cam.z + cx, fy * P_cam.y / P_cam.z + cy);
         }
 
-        // Run native LM PnP
+        // Run native SQPnP
         GazeVector3 est_rvec(0.0, 0.0, 0.0);
         GazeVector3 est_tvec(0.0, 0.0, 700.0);
-        bool pnp_ok = solve_pnp_lm(model_pts, img_pts, fx, fy, cx, cy, est_rvec, est_tvec, true);
+        bool pnp_ok = SQPnPSolver::solve_rvec(model_pts, img_pts, fx, fy, cx, cy, est_rvec, est_tvec);
         REQUIRE(pnp_ok);
 
         // Assert native solver converges directly to the true pose used to project the points
@@ -1035,11 +1035,11 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
                 est_tvec = GazeVector3(true_tvec.x + dist_trans_xy(rng) * 0.1, true_tvec.y + dist_trans_xy(rng) * 0.1, true_tvec.z + dist_trans_z(rng) * 0.1);
             }
 
-            // Run native LM solver and measure time
+            // Run native SQPnP solver and measure time
             GazeVector3 native_rvec = est_rvec;
             GazeVector3 native_tvec = est_tvec;
             auto t0 = std::chrono::high_resolution_clock::now();
-            bool native_ok = solve_pnp_lm(current_model_pts, img_pts, fx, fy, cx, cy, native_rvec, native_tvec, sc.use_extrinsic_guess);
+            bool native_ok = SQPnPSolver::solve_rvec(current_model_pts, img_pts, fx, fy, cx, cy, native_rvec, native_tvec);
             auto t1 = std::chrono::high_resolution_clock::now();
             double duration_native = std::chrono::duration<double, std::milli>(t1 - t0).count();
 
@@ -2013,7 +2013,7 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
     // Run unconstrained PnP
     Gaze::GazeVector3 unconstrained_rvec(0.0, 0.0, 0.0);
     Gaze::GazeVector3 unconstrained_tvec(0.0, 0.0, 700.0);
-    Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, unconstrained_rvec, unconstrained_tvec, false);
+    Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, unconstrained_rvec, unconstrained_tvec);
 
     std::cout << "[PnP Foreshortening Test] True Pitch: " << true_rvec.x << " rad (" << true_rvec.x * 57.2958 << " deg)" << std::endl;
     std::cout << "  Unconstrained PnP Pitch: " << unconstrained_rvec.x << " rad (" << unconstrained_rvec.x * 57.2958 << " deg) | Z: " << unconstrained_tvec.z << " mm" << std::endl;
@@ -2044,7 +2044,7 @@ TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
     }
 
     Gaze::GazeVector3 pnp_rvec, pnp_tvec;
-    bool pnp_ok = Gaze::solve_pnp_lm(model_points, img_pts, fx, fx, cx, cy, pnp_rvec, pnp_tvec);
+    bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, pnp_rvec, pnp_tvec);
     REQUIRE(pnp_ok == true);
 
     CHECK(pnp_tvec.z == doctest::Approx(680.0).epsilon(0.05));

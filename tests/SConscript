@@ -271,6 +271,10 @@ if env["platform"] != "javascript":
         target="#" + os.path.join(gaze_variant_dir, "tests/test_input_event_gaze" + core_env["OBJSUFFIX"]),
         source="#tests/test_input_event_gaze.cpp"
     ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_concurrency" + core_env["OBJSUFFIX"]),
+        source="#tests/test_concurrency.cpp"
+    ))
 
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"

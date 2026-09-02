@@ -150,7 +150,7 @@ TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP 
         Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
 
         auto t0 = std::chrono::high_resolution_clock::now();
-        bool pnp_ok = Gaze::solve_pnp_lm(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec, false);
+        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec);
         auto t1 = std::chrono::high_resolution_clock::now();
         double dt_us = std::chrono::duration<double, std::micro>(t1 - t0).count();
 
@@ -245,7 +245,7 @@ TEST_CASE("PnP Pose Correctness for 35-point Face Model")
         }
 
         Gaze::GazeVector3 solved_r, solved_t;
-        bool ok = Gaze::solve_pnp_lm(model_35pt, img_pts, fx, fy, cx, cy, solved_r, solved_t);
+        bool ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, img_pts, fx, fy, cx, cy, solved_r, solved_t);
         REQUIRE(ok);
 
         float roll_error_deg = std::abs(solved_r.z * (180.0f / 3.14159265f) - roll_deg);
@@ -326,7 +326,7 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
 
         Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f);
         Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-        bool pnp_ok = Gaze::solve_pnp_lm(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec, false);
+        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec);
         REQUIRE(pnp_ok);
 
         Gaze::GazeBasis3D R_up = Gaze::rodrigues_to_basis(rvec);

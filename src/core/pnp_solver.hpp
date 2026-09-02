@@ -21,19 +21,16 @@ namespace Gaze
  * @param fy Focal length Y.
  * @param cx Principal point X.
  * @param cy Principal point Y.
- * @param rvec Output/Input Rodrigues rotation vector in camera space.
- * @param tvec Output/Input Translation vector in camera space.
- * @param use_extrinsic_guess Whether to seed with initial extrinsic guess (optional in SQPnP).
+ * @param rvec Output Rodrigues rotation vector in camera space.
+ * @param tvec Output Translation vector in camera space.
  * @return true if convergence succeeded.
  */
-inline bool solve_pnp_lm(
+inline bool solve_pnp_rvec(
     const std::vector<GazeVector3> &model_points,
     const std::vector<GazeVector2> &image_points,
     double fx, double fy, double cx, double cy,
-    GazeVector3 &rvec, GazeVector3 &tvec,
-    bool use_extrinsic_guess = false)
+    GazeVector3 &rvec, GazeVector3 &tvec)
 {
-    (void)use_extrinsic_guess;
     return SQPnPSolver::solve_rvec(model_points, image_points, fx, fy, cx, cy, rvec, tvec);
 }
 

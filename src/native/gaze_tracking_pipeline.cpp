@@ -328,7 +328,7 @@ namespace Gaze
         double cx = working_frame.width * 0.5;
         double cy = working_frame.height * 0.5;
         static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
-        bool pnp_ok = solve_pnp_lm(model_35pt, data->landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec, false);
+        bool pnp_ok = SQPnPSolver::solve_rvec(model_35pt, data->landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec);
         if (!pnp_ok) return false;
 
         data->head_transform = CoordinateConversions::opencv_pose_to_godot_camera_transform(out_tvec, out_rvec);

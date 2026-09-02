@@ -3,8 +3,8 @@
 
 #include "../core/camera_interface.hpp"
 #include "../core/pipeline_config.hpp"
-#include "../core/atomic_mailbox.hpp"
-#include "../core/pool.hpp"
+#include "../core/concurrency/atomic_mailbox.hpp"
+#include "../core/concurrency/pool.hpp"
 #include "../core/gaze_frame_data.hpp"
 #include "ort_yunet_detector.hpp"
 #include "ort_landmark_model.hpp"

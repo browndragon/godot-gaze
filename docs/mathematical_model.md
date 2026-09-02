@@ -13,7 +13,8 @@ graph TD
     INF_FACE["Canonical 35-pt 3D Face Model"] -- "Head Pose (rvec, tvec)" --> INF_CAM["Inference Camera Space (OpenCV)"]
     INF_CAM -- "180° Pitch (X-axis Flip)" --> GG_CAM["Godot Camera Space"]
     GG_CAM -- "Camera Offset (O_cam) & Tilt (theta)" --> DISP["Physical Display Space (mm)"]
-    DISP -- "Pixel Pitch (s_x, s_y) & Window Offset" --> PIX["Viewport Pixel Space"]
+    DISP -- "Pixel Pitch (s_x, s_y) & Window Offset" --> WIN["OS Window Space (lpix)"]
+    WIN -- "Viewport Canvas Transform (M_canvas^-1)" --> CANV["Godot Viewport Canvas Space (2D)"]
 ```
 
 ### 1.1. Inference Camera Space (OpenCV Standard)
@@ -61,6 +62,16 @@ This centered millimeter coordinate system defines symmetric screen planes:
 * **Y-axis**: Vertical, pointing down (in mm).
 * **Z-axis**: Perpendicular to the screen plane, pointing toward the user (in mm).
 * The flat display plane is defined by the equation $z_{\text{screen}} = 0$.
+
+### 1.7. OS Window Space (Logical Pixels / `lpix`)
+* **Origin**: Top-left corner of the application's OS window.
+* **Units**: Logical screen pixels (`lpix`), matching Godot's `DisplayServer.window_get_position()` and `DisplayServer.window_get_size()`.
+* On macOS Retina / HiDPI displays, `DisplayServer` APIs operate in logical points ($1\text{ lpix} = 2\text{ physical device pixels}$ on 2x scale). Spatial projection math maintains 1:1 scale invariance by working exclusively in `lpix`.
+
+### 1.8. Godot Viewport Canvas 2D Space
+* **Origin**: Top-left corner of the Godot Viewport 2D drawing canvas.
+* **Units**: Virtual canvas coordinates used by `Control` nodes, 2D nodes, and `_draw()` methods.
+* Relates to OS Window Space via the viewport's affine transformation matrix $M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$.
 
 ---
 
@@ -111,14 +122,26 @@ And transform it to the display physical coordinates $(x_s, y_s)$ in mm relative
 $$x_s = P_{\text{int\_cam}}.x + x_{\text{off}}$$
 $$y_s = -(P_{\text{int\_cam}}.y \cos\theta + P_{\text{int\_cam}}.z \sin\theta + y_{\text{off}})$$
 
-### 3.2. Monitor-to-Viewport Pixel Mapping
-We map $(x_s, y_s)$ in mm relative to the screen center to monitor-absolute pixels $(x_{\text{px}}, y_{\text{px}})$, where the top-left of the monitor is $(0, 0)$:
-$$x_{\text{px}} = \frac{W_{\text{pixels}}}{2} + \frac{x_s}{s_x}$$
-$$y_{\text{px}} = \frac{H_{\text{pixels}}}{2} + \frac{y_s}{s_y}$$
+### 3.2. Physical Display Space to OS Window Space (Logical Pixels)
+We map $(x_s, y_s)$ in mm relative to the screen center to desktop monitor logical pixels $(x_{\text{lpix}}, y_{\text{lpix}})$, where the top-left of the display monitor is $(0, 0)$:
+$$x_{\text{lpix}} = \frac{W_{\text{lpix}}}{2} + \frac{x_s}{s_x}$$
+$$y_{\text{lpix}} = \frac{H_{\text{lpix}}}{2} + \frac{y_s}{s_y}$$
 
-In a windowed Godot game, the final viewport/window-local coordinate is computed by subtracting the window offset:
-$$x_{\text{viewport}} = x_{\text{px}} - \text{window\_pos.x}$$
-$$y_{\text{viewport}} = y_{\text{px}} - \text{window\_pos.y}$$
+The application window-local coordinate $\mathbf{p}_{\text{window}} = (x_{\text{win}}, y_{\text{win}})$ is computed by subtracting the window top-left desktop offset:
+$$x_{\text{win}} = x_{\text{lpix}} - \text{window\_pos.x}$$
+$$y_{\text{win}} = y_{\text{lpix}} - \text{window\_pos.y}$$
+
+On HiDPI / Retina displays, all desktop quantities ($W_{\text{lpix}}, H_{\text{lpix}}, \text{window\_pos}$) are processed in logical screen points (`lpix`).
+
+### 3.3. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)
+When Godot project stretch modes are configured (e.g., `window/stretch/mode = "canvas_items"` or `"viewport"` with `aspect = "expand"` / `"keep"`), the 2D Viewport Canvas maintains a virtual base coordinate space that is scaled and letterboxed relative to the physical OS window:
+$$M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$$
+
+To map an OS Window coordinate $\mathbf{p}_{\text{window}}$ (such as the output from `GazeServer.project_ray_to_viewport()`) into the 2D drawing canvas coordinate space $\mathbf{p}_{\text{canvas}}$ used by `Control` nodes and `_draw()` routines:
+$$\mathbf{p}_{\text{canvas}} = M_{\text{canvas}}^{-1} \cdot \mathbf{p}_{\text{window}}$$
+
+* **Windowed Mode ($1152 \times 648$)**: $M_{\text{canvas}} = I$, thus $\mathbf{p}_{\text{canvas}} = \mathbf{p}_{\text{window}}$.
+* **Fullscreen Mode (e.g. $3024 \times 1890$)**: $M_{\text{canvas}}$ applies a uniform scale factor $s = \frac{3024}{1152} = 2.625$. Applying $M_{\text{canvas}}^{-1}$ scales coordinates by $\frac{1}{2.625}$, keeping 2D visual projections centered and invariant across all display modes and window sizes.
 
 ---
 

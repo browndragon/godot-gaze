@@ -34,8 +34,8 @@ namespace Gaze
 
         bool project_to_viewport(
             const ProjectionEngine &engine,
-            const GazeVector3 &origin_cam,
-            const GazeVector3 &dir_cam,
+            const GodotCameraVector3 &origin_cam,
+            const GodotCameraVector3 &dir_cam,
             GazeVector2 &out_viewport_pixel) const;
 
         GazeVector2 map_viewport_to_screen_px(const GazeVector2 &logical_pixel) const;

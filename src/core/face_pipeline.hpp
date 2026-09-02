@@ -12,6 +12,7 @@
 #include <cstdint>
 #include "camera_interface.hpp"
 #include "math_defs.hpp"
+#include "opencv_space_conversions.hpp"
 #include "pipeline_config.hpp"
 
 namespace Gaze
@@ -56,10 +57,9 @@ namespace Gaze
         uint8_t left_eye_data[EYE_CROP_SIZE] = {0};
         uint8_t right_eye_data[EYE_CROP_SIZE] = {0};
 
-        // 3D coordinates of left and right eye centers in camera space (in mm)
-        // Used to calculate Z distance based on IPD (Interpupillary Distance)
-        GazeVector3 left_eye_center_cam;
-        GazeVector3 right_eye_center_cam;
+        // 3D coordinates of left and right eye centers in canonical Godot Camera space (in mm)
+        GodotCameraVector3 left_eye_center_cam;
+        GodotCameraVector3 right_eye_center_cam;
     };
 
     class FacePipeline

@@ -76,16 +76,16 @@ TEST_CASE("Testing Projection Engine Math (Zero Tilt)")
     engine.set_camera_placement(placement);
 
     // Gaze origin (user's eyes) straight in front at -500mm, looking forward along Z axis
-    GazeVector3 origin(0.0, 0.0, -500.0);
-    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at camera on top bezel
+    GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -500.0));
+    GodotCameraVector3 dir(GazeVector3(0.0, 0.0, 1.0)); // Looking straight at camera on top bezel
 
-    GazeVector2 pixel;
+    GodotDisplayVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
 
     REQUIRE(success == true);
     // Center of screen horizontally, top of screen vertically (hits top-bezel camera at Y=0)
-    CHECK(pixel.x == doctest::Approx(960.0));
-    CHECK(pixel.y == doctest::Approx(0.0));
+    CHECK(pixel->x == doctest::Approx(960.0));
+    CHECK(pixel->y == doctest::Approx(0.0));
 }
 
 TEST_CASE("Testing Projection Sensitivity under Retina Dimensions")
@@ -98,16 +98,16 @@ TEST_CASE("Testing Projection Sensitivity under Retina Dimensions")
     CameraPlacement placement(GazeVector3(0.0, 0.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
-    GazeVector3 origin(0.0, 0.0, -500.0);
-    GazeVector3 dir(-0.1, 0.0, 1.0); // 5.7 degrees right rotation (-X in camera space = screen right)
+    GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -500.0));
+    GodotCameraVector3 dir(GazeVector3(-0.1, 0.0, 1.0)); // 5.7 degrees right rotation (-X in camera space = screen right)
 
-    GazeVector2 pixel;
+    GodotDisplayVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
     REQUIRE(success == true);
 
     // With correct logical scale (high sensitivity), X should project to approx 1153 px (right of center).
     // We assert that the projected X coordinate remains right of screen center:
-    CHECK(pixel.x > 1000.0);
+    CHECK(pixel->x > 1000.0);
 }
 
 TEST_CASE("Testing Projection Engine Math (With Tilt)")
@@ -120,17 +120,17 @@ TEST_CASE("Testing Projection Engine Math (With Tilt)")
     CameraPlacement placement(GazeVector3(0.0, 0.0, 10.0), 15.0);
     engine.set_camera_placement(placement);
 
-    GazeVector3 origin(0.0, 0.0, -500.0);
-    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight along camera optical axis
+    GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -500.0));
+    GodotCameraVector3 dir(GazeVector3(0.0, 0.0, 1.0)); // Looking straight along camera optical axis
 
-    GazeVector2 pixel;
+    GodotDisplayVector2 pixel;
     bool success = engine.project_gaze(origin, dir, pixel);
 
     REQUIRE(success == true);
     // Check that vertical coordinate incorporates the 15-degree tilt
-    CHECK(pixel.x == doctest::Approx(960.0));
+    CHECK(pixel->x == doctest::Approx(960.0));
     // Looking straight at the tilted camera lands at Y = 0 mm
-    CHECK(pixel.y == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(pixel->y == doctest::Approx(0.0).epsilon(0.01));
 }
 
 TEST_CASE("Testing Monotonicity and Calibration Mappings from User Logs")
@@ -309,12 +309,12 @@ TEST_CASE("TDD: Thorough physical verification of Camera-to-Screen Transform & P
 
         // 2. Verify Ray Intersection in ProjectionEngine
         GazeVector3 V_cam = (P_cam_target - sc.head_position_cam).normalized();
-        GazeVector2 projected;
-        bool success = engine.project_gaze(sc.head_position_cam, V_cam, projected);
+        GodotDisplayVector2 projected;
+        bool success = engine.project_gaze(GodotCameraVector3(sc.head_position_cam), GodotCameraVector3(V_cam), projected);
         REQUIRE(success == true);
 
-        CHECK(projected.x == doctest::Approx(sc.target_screen_px.x).epsilon(0.001));
-        CHECK(projected.y == doctest::Approx(sc.target_screen_px.y).epsilon(0.001));
+        CHECK(projected->x == doctest::Approx(sc.target_screen_px.x).epsilon(0.001));
+        CHECK(projected->y == doctest::Approx(sc.target_screen_px.y).epsilon(0.001));
 
         // 3. Verify Camera-to-Screen Matrix (simulated get_camera_to_screen_transform)
         // 3. Verify Camera-to-Screen Matrix
@@ -414,7 +414,7 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)")
             CameraPlacement placement(offset, tilt);
             engine.set_camera_placement(placement);
 
-            GazeVector3 origin(0.0, 0.0, -500.0);
+            GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -500.0));
 
             // Sweep yaw from left to right:
             // In Godot camera space: looking left is +vx, looking right is -vx.
@@ -424,22 +424,22 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Yaw Sweep)")
             {
                 double vx = 0.5 - (i * 0.05); // +0.5 (left) down to -0.5 (right)
                 double vz = std::sqrt(1.0 - vx * vx);
-                GazeVector3 dir(vx, 0.0, vz);
+                GodotCameraVector3 dir(GazeVector3(vx, 0.0, vz));
 
-                GazeVector2 pixel;
+                GodotDisplayVector2 pixel;
                 bool success = engine.project_gaze(origin, dir, pixel);
                 REQUIRE(success == true);
 
                 if (i > 0)
                 {
                     // Check strict increase: moving gaze to user right -> larger pixel.x
-                    CHECK_MESSAGE(pixel.x > prev_pixel_x,
+                    CHECK_MESSAGE(pixel->x > prev_pixel_x,
                                   "Yaw sweep monotonicity failed at tilt=" << tilt
                                                                            << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
-                                                                           << ", vx=" << vx << ", current_pixel_x=" << pixel.x
+                                                                           << ", vx=" << vx << ", current_pixel_x=" << pixel->x
                                                                            << ", previous_pixel_x=" << prev_pixel_x);
                 }
-                prev_pixel_x = pixel.x;
+                prev_pixel_x = pixel->x;
             }
         }
     }
@@ -466,7 +466,7 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)")
             CameraPlacement placement(offset, tilt);
             engine.set_camera_placement(placement);
 
-            GazeVector3 origin(0.0, 0.0, -500.0);
+            GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -500.0));
 
             // Sweep pitch from up to down (looking up is +y, looking down is -y)
             // So we step gaze direction v.y from 0.5 (looking up) down to -0.5 (looking down)
@@ -476,22 +476,22 @@ TEST_CASE("Testing Gaze Projection Invariance and Monotonicity (Pitch Sweep)")
             {
                 double vy = 0.5 - (i * 0.05); // 0.5 down to -0.5
                 double vz = std::sqrt(1.0 - vy * vy);
-                GazeVector3 dir(0.0, vy, vz);
+                GodotCameraVector3 dir(GazeVector3(0.0, vy, vz));
 
-                GazeVector2 pixel;
+                GodotDisplayVector2 pixel;
                 bool success = engine.project_gaze(origin, dir, pixel);
                 REQUIRE(success == true);
 
                 if (i > 0)
                 {
                     // Check strict increase: user looking down -> larger pixel.y
-                    CHECK_MESSAGE(pixel.y > prev_pixel_y,
+                    CHECK_MESSAGE(pixel->y > prev_pixel_y,
                                   "Pitch sweep monotonicity failed at tilt=" << tilt
                                                                              << ", offset=(" << offset.x << "," << offset.y << "," << offset.z << ")"
-                                                                             << ", vy=" << vy << ", current_pixel_y=" << pixel.y
+                                                                             << ", vy=" << vy << ", current_pixel_y=" << pixel->y
                                                                              << ", previous_pixel_y=" << prev_pixel_y);
                 }
-                prev_pixel_y = pixel.y;
+                prev_pixel_y = pixel->y;
             }
         }
     }
@@ -508,7 +508,7 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)")
     engine.set_camera_placement(placement);
 
     // Gaze direction is straight forward
-    GazeVector3 dir(0.0, 0.0, 1.0);
+    GodotCameraVector3 dir(GazeVector3(0.0, 0.0, 1.0));
 
     // Sweep head X from left to right:
     // In Godot camera space: moving left is +ox, moving right is -ox.
@@ -517,20 +517,20 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)")
     for (int i = 0; i <= 20; ++i)
     {
         double ox = 100.0 - (i * 10.0); // 100 down to -100
-        GazeVector3 origin(ox, 0.0, -500.0);
+        GodotCameraVector3 origin(GazeVector3(ox, 0.0, -500.0));
 
-        GazeVector2 pixel;
+        GodotDisplayVector2 pixel;
         bool success = engine.project_gaze(origin, dir, pixel);
         REQUIRE(success == true);
 
         if (i > 0)
         {
-            CHECK_MESSAGE(pixel.x > prev_pixel_x,
+            CHECK_MESSAGE(pixel->x > prev_pixel_x,
                           "Head X translation sweep failed: ox=" << ox
-                                                                 << ", current_pixel_x=" << pixel.x
+                                                                 << ", current_pixel_x=" << pixel->x
                                                                  << ", previous_pixel_x=" << prev_pixel_x);
         }
-        prev_pixel_x = pixel.x;
+        prev_pixel_x = pixel->x;
     }
 
     // Sweep head Y from up to down (moving up is positive Y in camera space)
@@ -540,20 +540,20 @@ TEST_CASE("Testing Gaze Projection Invariance (Head Translation Sweep)")
     for (int i = 0; i <= 20; ++i)
     {
         double oy = 100.0 - (i * 10.0); // 100 down to -100
-        GazeVector3 origin(0.0, oy, -500.0);
+        GodotCameraVector3 origin(GazeVector3(0.0, oy, -500.0));
 
-        GazeVector2 pixel;
+        GodotDisplayVector2 pixel;
         bool success = engine.project_gaze(origin, dir, pixel);
         REQUIRE(success == true);
 
         if (i > 0)
         {
-            CHECK_MESSAGE(pixel.y > prev_pixel_y,
+            CHECK_MESSAGE(pixel->y > prev_pixel_y,
                           "Head Y translation sweep failed: oy=" << oy
-                                                                 << ", current_pixel_y=" << pixel.y
+                                                                 << ", current_pixel_y=" << pixel->y
                                                                  << ", previous_pixel_y=" << prev_pixel_y);
         }
-        prev_pixel_y = pixel.y;
+        prev_pixel_y = pixel->y;
     }
 }
 
@@ -570,23 +570,23 @@ TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations")
     engine.set_camera_placement(placement);
 
     // Gaze origin (user's eyes) straight in front at -500mm (aligned with screen center vertically at y = -95.5mm), looking forward along Z axis
-    GazeVector3 origin(0.0, -95.5, -500.0);
-    GazeVector3 dir(0.0, 0.0, 1.0); // Looking straight at screen center
+    GodotCameraVector3 origin(GazeVector3(0.0, -95.5, -500.0));
+    GodotCameraVector3 dir(GazeVector3(0.0, 0.0, 1.0)); // Looking straight at screen center
 
-    GazeVector2 physical_pixel;
+    GodotDisplayVector2 physical_pixel;
     bool success = engine.project_gaze(origin, dir, physical_pixel);
     REQUIRE(success == true);
 
     // Physical pixel center should be (960, 540)
-    CHECK(physical_pixel.x == doctest::Approx(960.0));
-    CHECK(physical_pixel.y == doctest::Approx(540.0));
+    CHECK(physical_pixel->x == doctest::Approx(960.0));
+    CHECK(physical_pixel->y == doctest::Approx(540.0));
 
     // Let's test varying DPR values
     double dprs[] = {1.0, 1.5, 2.0, 3.0};
     for (double dpr : dprs)
     {
         // Logical pixel center is physical_pixel / dpr
-        GazeVector2 logical_pixel(physical_pixel.x / dpr, physical_pixel.y / dpr);
+        GazeVector2 logical_pixel(physical_pixel->x / dpr, physical_pixel->y / dpr);
 
         // Logical screen size is screen_size_pixels / dpr
         GazeVector2 screen_size_logical(1920.0 / dpr, 1080.0 / dpr);

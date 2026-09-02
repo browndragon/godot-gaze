@@ -54,10 +54,86 @@ struct Spaced
 };
 
 template <Space S>
-using SpacedVector3 = Spaced<GazeVector3, S>;
+struct SpacedVector3
+{
+    GazeVector3 value;
+
+    SpacedVector3() : value(0.0, 0.0, 0.0) {}
+    explicit SpacedVector3(const GazeVector3 &v) : value(v) {}
+    SpacedVector3(double x, double y, double z) : value(x, y, z) {}
+
+    const GazeVector3 *operator->() const { return &value; }
+    GazeVector3 *operator->() { return &value; }
+    const GazeVector3 &get() const { return value; }
+    GazeVector3 &get() { return value; }
+
+    bool operator==(const SpacedVector3<S> &other) const { return value == other.value; }
+    bool operator!=(const SpacedVector3<S> &other) const { return value != other.value; }
+
+    SpacedVector3<S> operator+(const SpacedVector3<S> &other) const { return SpacedVector3<S>(value + other.value); }
+    SpacedVector3<S> operator-(const SpacedVector3<S> &other) const { return SpacedVector3<S>(value - other.value); }
+    SpacedVector3<S> operator*(double scalar) const { return SpacedVector3<S>(value * scalar); }
+    SpacedVector3<S> operator/(double scalar) const { return SpacedVector3<S>(value * (1.0 / scalar)); }
+    SpacedVector3<S> operator-() const { return SpacedVector3<S>(-value); }
+
+    double length() const { return value.length(); }
+    double length_squared() const { return value.dot(value); }
+    SpacedVector3<S> normalized() const { return SpacedVector3<S>(value.normalized()); }
+};
 
 template <Space S>
-using SpacedVector2 = Spaced<GazeVector2, S>;
+inline double dot(const SpacedVector3<S> &a, const SpacedVector3<S> &b)
+{
+    return a.value.dot(b.value);
+}
+
+template <Space S>
+inline SpacedVector3<S> cross(const SpacedVector3<S> &a, const SpacedVector3<S> &b)
+{
+    return SpacedVector3<S>(a.value.cross(b.value));
+}
+
+template <Space S>
+inline SpacedVector3<S> operator*(double scalar, const SpacedVector3<S> &v)
+{
+    return v * scalar;
+}
+
+template <Space S>
+struct SpacedVector2
+{
+    GazeVector2 value;
+
+    SpacedVector2() : value(0.0, 0.0) {}
+    explicit SpacedVector2(const GazeVector2 &v) : value(v) {}
+    SpacedVector2(double x, double y) : value(x, y) {}
+
+    const GazeVector2 *operator->() const { return &value; }
+    GazeVector2 *operator->() { return &value; }
+    const GazeVector2 &get() const { return value; }
+    GazeVector2 &get() { return value; }
+
+    bool operator==(const SpacedVector2<S> &other) const { return value == other.value; }
+    bool operator!=(const SpacedVector2<S> &other) const { return value != other.value; }
+
+    SpacedVector2<S> operator+(const SpacedVector2<S> &other) const { return SpacedVector2<S>(value + other.value); }
+    SpacedVector2<S> operator-(const SpacedVector2<S> &other) const { return SpacedVector2<S>(value - other.value); }
+    SpacedVector2<S> operator*(double scalar) const { return SpacedVector2<S>(value * scalar); }
+    SpacedVector2<S> operator/(double scalar) const { return SpacedVector2<S>(value / scalar); }
+    SpacedVector2<S> operator-() const { return SpacedVector2<S>(-value); }
+
+    double length() const { return value.length(); }
+    SpacedVector2<S> normalized() const {
+        double len = value.length();
+        return len > 1e-6 ? SpacedVector2<S>(value.x / len, value.y / len) : SpacedVector2<S>(0.0, 0.0);
+    }
+};
+
+template <Space S>
+inline SpacedVector2<S> operator*(double scalar, const SpacedVector2<S> &v)
+{
+    return v * scalar;
+}
 
 /**
  * @brief Type-safe basis matrix transforming 3D vectors from space 'From' to space 'To'.
@@ -95,6 +171,18 @@ struct SpacedTransform3D
     }
 };
 
+/**
+ * @brief Canonical Hub and Spoke Type Aliases.
+ */
+using GodotCameraVector3 = SpacedVector3<Space::GodotCamera>;
+using GodotFaceVector3 = SpacedVector3<Space::GodotFaceLocal>;
+using GodotCameraImageVector2 = SpacedVector2<Space::GodotCameraImagePixels>;
+using GodotDisplayVector2 = SpacedVector2<Space::GodotDisplayPx>;
+using GodotFaceTransform3D = SpacedTransform3D<Space::GodotFaceLocal, Space::GodotCamera>;
+using OpenCVCameraVector3 = SpacedVector3<Space::OpenCVCamera>;
+using OpenCVFaceVector3 = SpacedVector3<Space::OpenCVFaceModel>;
+using OpenVINOGazeVector3 = SpacedVector3<Space::OpenVINOADASGaze>;
+
 namespace CoordinateConversions
 {
 
@@ -131,29 +219,31 @@ namespace CoordinateConversions
         GazeVector3( 0.0, 0.0, -1.0)
     );
 
-    /**
-     * @brief Transforms OpenVINO ADAS raw Cartesian gaze output vector (+x user right, +y up, +z forward)
-     * into Godot Camera Space (+X camera right, +Y up, +Z forward towards screen plane).
-     * @param gaze_openvino Raw vector from gaze-estimation-adas-0002 model.
-     * @return GazeVector3 Vector in Godot Camera Space.
-     */
+    inline GodotCameraVector3 to_godot_camera(const OpenCVCameraVector3 &cv_vec)
+    {
+        return GodotCameraVector3(OPENCV_CAM_TO_GODOT_CAM.multiply_vector(cv_vec.get()));
+    }
+
+    inline GodotCameraVector3 to_godot_camera(const OpenVINOGazeVector3 &onnx_gaze)
+    {
+        return GodotCameraVector3(ONNX_GAZE_TO_GODOT_CAM.multiply_vector(onnx_gaze.get()));
+    }
+
+    inline OpenCVFaceVector3 to_opencv_face(const GodotFaceVector3 &godot_face_pt)
+    {
+        return OpenCVFaceVector3(GODOT_FACE_TO_OPENCV_FACE.multiply_vector(godot_face_pt.get()));
+    }
+
+    inline GodotFaceVector3 to_godot_face(const OpenCVFaceVector3 &cv_face_pt)
+    {
+        return GodotFaceVector3(GODOT_FACE_TO_OPENCV_FACE.multiply_vector(cv_face_pt.get()));
+    }
+
     inline GazeVector3 openvino_gaze_to_godot_cam(const GazeVector3 &gaze_openvino)
     {
         return ONNX_GAZE_TO_GODOT_CAM.multiply_vector(gaze_openvino);
     }
 
-    /**
-     * @brief Converts OpenCV PnP Rodrigues rotation vector into OpenVINO ADAS Euler angles [yaw, pitch, roll] in degrees.
-     *
-     * In OpenCV model space (with canonical face geometry), the Rodrigues vector components directly express
-     * head rotation in radians relative to camera image plane (where 0 is facing straight into camera):
-     * - cv_rvec.y = Yaw (Turn head: viewer left / subject right is positive, viewer right / subject left is negative)
-     * - cv_rvec.x = Pitch (Nod head: down is positive, up is negative)
-     * - cv_rvec.z = Roll (Tilt head: right shoulder is positive, left shoulder is negative)
-     *
-     * @param cv_rvec Rodrigues rotation vector in OpenCV head space.
-     * @return GazeVector3 containing (yaw_deg, pitch_deg, roll_deg).
-     */
     inline GazeVector3 opencv_head_pose_to_openvino_angles_deg(const GazeVector3 &cv_rvec)
     {
         return GazeVector3(
@@ -163,12 +253,16 @@ namespace CoordinateConversions
         );
     }
 
-    /**
-     * @brief Converts OpenCV PnP pose (translation and Rodrigues rotation) to Godot Camera Space Transform.
-     * @param cv_translation Translation vector in OpenCV camera space.
-     * @param cv_rvec Rodrigues rotation vector in OpenCV model/camera space.
-     * @return GazeTransform3D expressing Godot Face Local Space in Godot Camera Space.
-     */
+    inline GodotFaceTransform3D opencv_pose_to_godot_camera_transform(
+        const OpenCVCameraVector3 &cv_translation,
+        const OpenCVCameraVector3 &cv_rvec)
+    {
+        GazeBasis3D R_cv = rodrigues_to_basis(cv_rvec.get());
+        GazeBasis3D R_godot = OPENCV_CAM_TO_GODOT_CAM * R_cv * GODOT_FACE_TO_OPENCV_FACE;
+        GodotCameraVector3 origin_godot(OPENCV_CAM_TO_GODOT_CAM.multiply_vector(cv_translation.get()));
+        return GodotFaceTransform3D(SpacedBasis<Space::GodotFaceLocal, Space::GodotCamera>(R_godot), origin_godot);
+    }
+
     inline GazeTransform3D opencv_pose_to_godot_camera_transform(
         const GazeVector3 &cv_translation,
         const GazeVector3 &cv_rvec)
@@ -179,12 +273,49 @@ namespace CoordinateConversions
         return GazeTransform3D(R_godot, origin_godot);
     }
 
-    /**
-     * @brief Maps a transform from GodotCameraHintRolled to GodotCamera space by applying roll_hint around Z.
-     * @param transform_hint_rolled Face transform in hint-rolled camera space.
-     * @param roll_hint_rad Roll hint angle in radians.
-     * @return GazeTransform3D in unrolled GodotCamera space.
-     */
+    inline GodotFaceTransform3D godot_camera_hint_rolled_to_godot_camera(
+        const GodotFaceTransform3D &transform_hint_rolled,
+        float roll_hint_rad)
+    {
+        if (std::abs(roll_hint_rad) < 1e-5f)
+        {
+            return transform_hint_rolled;
+        }
+        float cos_a = std::cos(roll_hint_rad);
+        float sin_a = std::sin(roll_hint_rad);
+        GazeBasis3D R_roll(
+            GazeVector3(cos_a, -sin_a, 0.0f),
+            GazeVector3(sin_a,  cos_a, 0.0f),
+            GazeVector3( 0.0f,   0.0f, 1.0f)
+        );
+        GazeBasis3D R_cam = R_roll * transform_hint_rolled.basis.basis;
+        GodotCameraVector3 t_cam(R_roll.multiply_vector(transform_hint_rolled.origin.get()));
+        return GodotFaceTransform3D(SpacedBasis<Space::GodotFaceLocal, Space::GodotCamera>(R_cam), t_cam);
+    }
+
+    inline GodotFaceTransform3D godot_camera_hint_rolled_to_godot_camera(
+        const SpacedTransform3D<Space::GodotFaceLocal, Space::GodotCameraHintRolled> &transform_hint_rolled,
+        float roll_hint_rad)
+    {
+        if (std::abs(roll_hint_rad) < 1e-5f)
+        {
+            return GodotFaceTransform3D(
+                SpacedBasis<Space::GodotFaceLocal, Space::GodotCamera>(transform_hint_rolled.basis.basis),
+                GodotCameraVector3(transform_hint_rolled.origin.get())
+            );
+        }
+        float cos_a = std::cos(roll_hint_rad);
+        float sin_a = std::sin(roll_hint_rad);
+        GazeBasis3D R_roll(
+            GazeVector3(cos_a, -sin_a, 0.0f),
+            GazeVector3(sin_a,  cos_a, 0.0f),
+            GazeVector3( 0.0f,   0.0f, 1.0f)
+        );
+        GazeBasis3D R_cam = R_roll * transform_hint_rolled.basis.basis;
+        GodotCameraVector3 t_cam(R_roll.multiply_vector(transform_hint_rolled.origin.get()));
+        return GodotFaceTransform3D(SpacedBasis<Space::GodotFaceLocal, Space::GodotCamera>(R_cam), t_cam);
+    }
+
     inline GazeTransform3D godot_camera_hint_rolled_to_godot_camera(
         const GazeTransform3D &transform_hint_rolled,
         float roll_hint_rad)
@@ -195,9 +326,6 @@ namespace CoordinateConversions
         }
         float cos_a = std::cos(roll_hint_rad);
         float sin_a = std::sin(roll_hint_rad);
-        // In GodotCamera space (+X Right, +Y Up, +Z towards screen):
-        // Rotation by +roll_hint_rad around viewing axis:
-        // col 0 = (cos_a, -sin_a, 0), col 1 = (sin_a, cos_a, 0), col 2 = (0, 0, 1)
         GazeBasis3D R_roll(
             GazeVector3(cos_a, -sin_a, 0.0f),
             GazeVector3(sin_a,  cos_a, 0.0f),

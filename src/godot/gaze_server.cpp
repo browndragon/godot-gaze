@@ -1067,13 +1067,13 @@ void GazeServer::trigger_process() {
             gaze_frame->set_right_eye_openness(completed_data->right_eye_openness);
             gaze_frame->set_timestamp(completed_data->timestamp);
 
-            const Vector3& head_t = reinterpret_cast<const Vector3&>(completed_data->head_translation);
-            const Vector3& head_r = reinterpret_cast<const Vector3&>(completed_data->head_rotation);
+            const Vector3& head_t = reinterpret_cast<const Vector3&>(completed_data->head_translation.get());
+            const Vector3& head_r = reinterpret_cast<const Vector3&>(completed_data->head_rotation.get());
             gaze_frame->set_head_translation(head_t);
             gaze_frame->set_head_rotation(head_r);
 
-            const Vector3& gaze_o = reinterpret_cast<const Vector3&>(completed_data->gaze_origin);
-            const Vector3& gaze_d = reinterpret_cast<const Vector3&>(completed_data->gaze_direction);
+            const Vector3& gaze_o = reinterpret_cast<const Vector3&>(completed_data->gaze_origin.get());
+            const Vector3& gaze_d = reinterpret_cast<const Vector3&>(completed_data->gaze_direction.get());
             gaze_frame->set_gaze_origin(gaze_o);
             gaze_frame->set_gaze_direction(gaze_d);
 
@@ -1088,7 +1088,7 @@ void GazeServer::trigger_process() {
             gaze_frame->post_process();
 
             if (completed_data->face_detected) {
-                const Gaze::GazeBasis3D &gb = completed_data->head_transform.basis;
+                const Gaze::GazeBasis3D &gb = completed_data->head_transform.basis.basis;
                 Basis godot_basis(
                     Vector3(gb.x.x, gb.x.y, gb.x.z),
                     Vector3(gb.y.x, gb.y.y, gb.y.z),

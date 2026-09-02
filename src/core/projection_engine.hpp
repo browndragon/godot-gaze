@@ -12,6 +12,7 @@
 #include "camera_placement.hpp"
 #include "gaze_calibration.hpp"
 #include "math_defs.hpp"
+#include "opencv_space_conversions.hpp"
 
 namespace Gaze
 {
@@ -48,18 +49,18 @@ namespace Gaze
         double estimate_depth_z(double eye_distance_px, double ipd_mm = 63.0) const;
 
         // Convert screen pixel coordinates to screen millimeter coordinates (relative to center, Y-down +)
-        GazeVector2 pixel_to_millimeter(const GazeVector2 &pixel) const;
+        GazeVector2 pixel_to_millimeter(const GodotDisplayVector2 &pixel) const;
 
         // Map screen millimeter coordinates (relative to center, Y-down +) to 3D position in Camera Space
-        GazeVector3 screen_mm_to_camera_space(const GazeVector2 &screen_mm) const;
+        GodotCameraVector3 screen_mm_to_camera_space(const GazeVector2 &screen_mm) const;
 
         // Apply pitch/yaw angular bias to raw 3D gaze vector
-        GazeVector3 apply_3d_bias(const GazeVector3 &raw_gaze_dir) const;
+        GodotCameraVector3 apply_3d_bias(const GodotCameraVector3 &raw_gaze_dir) const;
 
         // Projects the raw gaze vector and returns pixel coordinates (applying all biases)
-        bool project_gaze(const GazeVector3 &gaze_origin_cam,
-                          const GazeVector3 &raw_gaze_dir_cam,
-                          GazeVector2 &out_pixel) const;
+        bool project_gaze(const GodotCameraVector3 &gaze_origin_cam,
+                          const GodotCameraVector3 &raw_gaze_dir_cam,
+                          GodotDisplayVector2 &out_pixel) const;
     };
 
 } // namespace Gaze

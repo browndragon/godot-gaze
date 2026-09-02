@@ -12,7 +12,7 @@ constexpr size_t EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANN
 
 struct GazeFrameData {
     std::vector<uint8_t> camera_raw_bgr;
-    std::vector<uint8_t> rotated_frame_bgr; // Pre-allocated scratch space for working hint-rolled buffer
+    std::vector<uint8_t> internal_rotated_frame_bgr; // Pre-allocated scratch space for working hint-rolled buffer
     int camera_width = 0;
     int camera_height = 0;
     double timestamp = 0.0;
@@ -24,7 +24,7 @@ struct GazeFrameData {
     GazeRect face_bbox;
     float face_score = 0.0f;
     float eye_box_sz = 0.0f;
-    std::vector<GazeVector2> landmarks_working_px;
+    std::vector<GazeVector2> internal_landmarks_working_px;
     EyeCrops eye_crops;
 
     bool face_detected = false;
@@ -32,11 +32,11 @@ struct GazeFrameData {
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
 
-    GazeTransform3D head_transform = GazeTransform3D::identity();
-    GazeVector3 head_translation = GazeVector3(0.0, 0.0, 0.0);
-    GazeVector3 head_rotation = GazeVector3(0.0, 0.0, 0.0);
-    GazeVector3 gaze_origin = GazeVector3(0.0, 0.0, 0.0);
-    GazeVector3 gaze_direction = GazeVector3(0.0, 0.0, -1.0);
+    GodotFaceTransform3D head_transform;
+    GodotCameraVector3 head_translation = GodotCameraVector3(0.0, 0.0, 0.0);
+    GodotCameraVector3 head_rotation = GodotCameraVector3(0.0, 0.0, 0.0);
+    GodotCameraVector3 gaze_origin = GodotCameraVector3(0.0, 0.0, 0.0);
+    GodotCameraVector3 gaze_direction = GodotCameraVector3(0.0, 0.0, 1.0);
 
     bool has_landmarks_2d = false;
     float landmarks_2d_px[35 * 2] = {0.0f};

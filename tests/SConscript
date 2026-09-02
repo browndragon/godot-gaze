@@ -279,6 +279,10 @@ if env["platform"] != "javascript":
         target="#" + os.path.join(gaze_variant_dir, "tests/test_pipeline_stages" + core_env["OBJSUFFIX"]),
         source="#tests/test_pipeline_stages.cpp"
     ))
+    test_objs.append(core_env.Object(
+        target="#" + os.path.join(gaze_variant_dir, "tests/test_coordinate_calculus" + core_env["OBJSUFFIX"]),
+        source="#tests/test_coordinate_calculus.cpp"
+    ))
 
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"

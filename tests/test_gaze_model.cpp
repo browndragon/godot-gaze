@@ -305,10 +305,12 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         out_head_euler = head_xform.basis.get_euler_deg();
 
         // Project Nose Gaze
-        if (!engine.project_gaze(head_xform.origin, head_fwd, out_nose_px)) {
+        Gaze::GodotDisplayVector2 nose_px_spaced;
+        if (!engine.project_gaze(Gaze::GodotCameraVector3(head_xform.origin), Gaze::GodotCameraVector3(head_fwd), nose_px_spaced)) {
             std::cout << "[DEBUG process_fixture] project_gaze nose failed for " << fixture_name << "\n";
             return false;
         }
+        out_nose_px = nose_px_spaced.get();
 
         // Extract eye crops and run gaze model
         Gaze::EyeCrops crops;
@@ -332,12 +334,14 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         Gaze::GazeVector3 eye_mid_cv = head_rot_cv.multiply_vector(Gaze::GazeVector3(0.0f, -32.0f, 0.0f)) + tvec;
         Gaze::GazeVector3 eye_orig_godot = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(eye_mid_cv);
 
-        if (!engine.project_gaze(eye_orig_godot, gaze_dir_godot, out_gaze_px)) {
+        Gaze::GodotDisplayVector2 gaze_px_spaced;
+        if (!engine.project_gaze(Gaze::GodotCameraVector3(eye_orig_godot), Gaze::GodotCameraVector3(gaze_dir_godot), gaze_px_spaced)) {
             std::cout << "[DEBUG process_fixture] project_gaze eye failed for " << fixture_name 
                       << " | origin=(" << eye_orig_godot.x << ", " << eye_orig_godot.y << ", " << eye_orig_godot.z << ")"
                       << " | dir=(" << gaze_dir_godot.x << ", " << gaze_dir_godot.y << ", " << gaze_dir_godot.z << ")\n";
             return false;
         }
+        out_gaze_px = gaze_px_spaced.get();
 
         return true;
     };

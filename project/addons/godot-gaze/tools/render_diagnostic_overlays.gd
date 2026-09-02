@@ -118,13 +118,13 @@ const FIXTURE_METADATA: Dictionary = {
 	"self_nosetop_eyesdown.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSETOP_EYESDOWN},
 	"self_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_CENTER},
 	"self_roll_right.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_CENTER},
-	"self_yaw_left_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_LEFT_LEFT},
-	"self_yaw_right_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_RIGHT_RIGHT},
+	"self_yaw_left_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_LEFT_LEFT},
+	"self_yaw_right_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_RIGHT_RIGHT},
 	"eyes_both_open.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 	"eyes_both_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 	"eyes_anatomical_left_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 	"eyes_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
-	"eyes_tilted_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 20.0, "target": TARGET_CENTER},
+	"eyes_tilted_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 	"eyes_anatomical_left_obscured.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER},
 }
 

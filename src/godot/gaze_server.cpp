@@ -1112,6 +1112,14 @@ void GazeServer::trigger_process() {
             } else {
                 set_face_transform(Transform3D(), Vector3(), false);
                 set_face_landmarks_2d(PackedVector2Array());
+                set_eye_openness(0.0f, 0.0f);
+                set_eye_crops(Ref<Image>(), Ref<Image>());
+                impl->eye.gaze_origin_cam = Vector3();
+                impl->eye.gaze_direction_cam = Vector3();
+                impl->eye.latest_projected_gaze = Vector2();
+                impl->eye.latest_filtered_gaze = Vector2();
+                impl->eye.latest_projected_gaze_mm = Vector2();
+                impl->eye.latest_filtered_gaze_mm = Vector2();
             }
 
             emit_signal("gaze_frame_began", gaze_frame);

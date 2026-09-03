@@ -25,7 +25,11 @@ private:
     float blend_progress = 0.0f; // 0.0 = pure camera gaze, 1.0 = pure mouse gaze
 
     Vector2 last_mouse_pos = Vector2(-9999.0, -9999.0);
+    Vector2 last_screen_mouse_pos = Vector2(-9999.0, -9999.0);
+    Vector2 last_window_pos = Vector2(-9999.0, -9999.0);
+    DisplayServer::WindowMode last_window_mode = DisplayServer::WINDOW_MODE_WINDOWED;
     bool has_last_mouse_pos = false;
+    bool has_last_window_state = false;
 
     Vector2 last_cam_gaze_pos = Vector2(0, 0);
     Transform3D last_cam_head_xform;

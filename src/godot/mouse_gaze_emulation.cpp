@@ -15,6 +15,7 @@ void MouseGazeEmulation::reset() {
     dwell_timer = 0.0f;
     blend_progress = 0.0f;
     has_last_mouse_pos = false;
+    has_last_window_state = false;
     has_camera_data = false;
 }
 
@@ -50,19 +51,29 @@ void MouseGazeEmulation::update(
         return;
     }
 
-    Vector2 mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position() - p_ds->window_get_position()) : Vector2(0, 0);
+    Vector2 screen_mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position()) : Vector2(0, 0);
+    Vector2 window_pos = p_ds ? Vector2(p_ds->window_get_position()) : Vector2(0, 0);
+    DisplayServer::WindowMode window_mode = p_ds ? p_ds->window_get_mode() : DisplayServer::WINDOW_MODE_WINDOWED;
+    Vector2 mouse_pos = screen_mouse_pos - window_pos;
 
     Input* input = Input::get_singleton();
     bool mouse_clicked = input && (input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) || input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_RIGHT));
 
-    if (has_last_mouse_pos) {
-        float move_dist = (mouse_pos - last_mouse_pos).length();
+    bool window_changed = has_last_window_state && (window_pos != last_window_pos || window_mode != last_window_mode);
+
+    if (has_last_mouse_pos && !window_changed) {
+        float move_dist = (screen_mouse_pos - last_screen_mouse_pos).length();
         if (move_dist >= motion_threshold_px || mouse_clicked) {
             dwell_timer = dwell_time_sec;
         }
     }
+
     last_mouse_pos = mouse_pos;
+    last_screen_mouse_pos = screen_mouse_pos;
+    last_window_pos = window_pos;
+    last_window_mode = window_mode;
     has_last_mouse_pos = true;
+    has_last_window_state = true;
 
     if (dwell_timer > 0.0f) {
         dwell_timer = std::max(0.0f, dwell_timer - (float)p_delta_sec);

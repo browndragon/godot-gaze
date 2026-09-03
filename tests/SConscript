@@ -454,16 +454,26 @@ style_run = env.Command(
 env.AlwaysBuild(style_run)
 env.Alias("tests/style", style_run)
 
-# Standard local quick tests run (native + python + headless + style)
+# Godot movies dynamic regression test target
+godot_movies_run = env.Command(
+    "build/tests/logs/tests.godot_movies.log",
+    [library],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tests/test_godot_movies.gd"]
+)
+env.AlwaysBuild(godot_movies_run)
+env.Alias("tests/godot_movies", godot_movies_run)
+
+# Standard local quick tests run (native + python + headless + movies + style)
 local_tests = ["tests/python", "tests/style"]
 if env["platform"] != "javascript":
-    local_tests.extend(["tests/native", "tests/benchmark", "tests/godot/headless"])
+    local_tests.extend(["tests/native", "tests/benchmark", "tests/godot_movies", "tests/godot/headless"])
 
 env.Alias("tests", local_tests)
 env.Alias("test", local_tests)
 
 # Run all E2E targets
-all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot/windowed", "tests/web", "tests/android_managed"]
+all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot_movies", "tests/godot/windowed", "tests/web", "tests/android_managed"]
 if env["platform"] != "javascript":
     all_tests.extend(["tests/native", "tests/benchmark"])
 env.Alias("tests/all", all_tests)

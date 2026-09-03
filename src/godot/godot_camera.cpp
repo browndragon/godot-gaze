@@ -276,13 +276,6 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
 
 void GodotCamera::release() {
     log_info(2, "GodotCamera_Release_Began");
-    if (feed.is_valid()) {
-        log_info(2, "GodotCamera_Release_SetActiveFalse_Began", "feed_id", feed->get_id());
-        feed->set_active(false);
-        log_info(2, "GodotCamera_Release_SetActiveFalse_Finished");
-        log_info(2, "GodotCamera_Released", "feed_id", feed->get_id());
-        feed.unref();
-    }
     if (camera_texture.is_valid()) {
         log_info(2, "GodotCamera_Release_CameraTextureActiveFalse_Began");
         camera_texture->set_camera_active(false);
@@ -300,6 +293,20 @@ void GodotCamera::release() {
         cbcr_texture->set_camera_active(false);
         log_info(2, "GodotCamera_Release_CbCrTextureActiveFalse_Finished");
         cbcr_texture.unref();
+    }
+    if (feed.is_valid()) {
+        log_info(2, "GodotCamera_Release_SetActiveFalse_Began", "feed_id", feed->get_id());
+        feed->set_active(false);
+        log_info(2, "GodotCamera_Release_SetActiveFalse_Finished");
+        log_info(2, "GodotCamera_Released", "feed_id", feed->get_id());
+        feed.unref();
+    }
+    godot::Engine* eng = godot::Engine::get_singleton();
+    if (eng && eng->has_singleton("CameraServer")) {
+        godot::CameraServer* cs = godot::CameraServer::get_singleton();
+        if (cs) {
+            cs->set_monitoring_feeds(false);
+        }
     }
     log_info(2, "GodotCamera_Release_Finished");
 }

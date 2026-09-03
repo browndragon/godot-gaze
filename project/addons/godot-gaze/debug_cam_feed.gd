@@ -59,6 +59,10 @@ func _release_preview_state() -> void:
 
 func _exit_tree():
 	_release_preview_state()
+	camera_feed_texture = null
+	left_eye_texture = null
+	right_eye_texture = null
+	active_canvas = null
 
 func _process(delta: float) -> void:
 	if not Engine.is_editor_hint():

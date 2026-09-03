@@ -192,6 +192,8 @@ void VisionServer::camera_free(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
     if (data) {
         camera_stop(p_camera);
+        data->current_texture.unref();
+        data->current_image.unref();
         camera_owner.free(p_camera);
         memdelete(data);
         for (auto it = allocated_cameras.begin(); it != allocated_cameras.end(); ++it) {
@@ -204,14 +206,16 @@ void VisionServer::camera_free(RID p_camera) {
 }
 
 Ref<Texture2D> VisionServer::get_camera_current_texture(RID p_camera) {
+    if (!p_camera.is_valid()) return Ref<Texture2D>();
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, Ref<Texture2D>());
+    if (!data) return Ref<Texture2D>();
     return data->current_texture;
 }
 
 Ref<Image> VisionServer::camera_get_current_image(RID p_camera) {
+    if (!p_camera.is_valid()) return Ref<Image>();
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, Ref<Image>());
+    if (!data) return Ref<Image>();
     return data->current_image;
 }
 

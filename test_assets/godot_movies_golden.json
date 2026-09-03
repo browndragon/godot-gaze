@@ -1,0 +1,50 @@
+{
+  "version": "1.0",
+  "description": "Golden reference metrics for tests/godot_movies regression suite",
+  "total_frames": 60,
+  "total_bytes": 516394,
+  "sequences": {
+    "seq_01_center_fixation": {
+      "description": "Steady gaze fixation on center screen marker",
+      "frames": 12,
+      "bytes": 95316,
+      "type": "fixation",
+      "expected_lock_rate": 1.0,
+      "max_jitter_x_mm": 20.0,
+      "max_jitter_y_mm": 20.0
+    },
+    "seq_02_horizontal_saccade": {
+      "description": "Horizontal dynamic saccade across top display bezel (Left -> Right)",
+      "frames": 12,
+      "bytes": 94990,
+      "type": "saccade_horizontal",
+      "expected_lock_rate": 1.0,
+      "min_span_x_mm": 30.0
+    },
+    "seq_03_diagonal_saccade": {
+      "description": "Diagonal dynamic saccade across screen (Top-Right -> Bottom-Left)",
+      "frames": 12,
+      "bytes": 93870,
+      "type": "saccade_diagonal",
+      "expected_lock_rate": 1.0,
+      "min_span_x_mm": 25.0,
+      "min_span_y_mm": 25.0
+    },
+    "seq_04_dynamic_head_roll": {
+      "description": "Dynamic continuous head roll tilt transition (testing roll-hint tracking)",
+      "frames": 12,
+      "bytes": 137934,
+      "type": "head_roll",
+      "expected_lock_rate": 0.8,
+      "min_roll_span_deg": 30.0
+    },
+    "seq_05_eye_blink_wink": {
+      "description": "Eye openness dynamics during intentional blink / wink sequence",
+      "frames": 12,
+      "bytes": 94284,
+      "type": "eye_state",
+      "expected_lock_rate": 1.0,
+      "min_openness_delta": 0.5
+    }
+  }
+}

@@ -257,11 +257,9 @@ func run_benchmark():
 		print("Processing benchmark frame: ", img_file, " (", img.get_width(), "x", img.get_height(), ")")
 
 		var tex = ImageTexture.create_from_image(img)
-		for _k in range(20):
-			vs.inject_texture(cam_rid, tex)
-			gs.trigger_process()
-			await create_timer(0.04).timeout
+		vs.inject_texture(cam_rid, tex)
 		gs.trigger_process()
+		await gs.gaze_frame_ready
 
 		# Get tracking outputs from GazeServer
 		var face_detected = gs.is_face_detected()

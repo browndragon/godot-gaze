@@ -71,8 +71,9 @@ void VisionServer::camera_stop(RID p_camera) {
 }
 
 bool VisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) {
+    if (!p_camera.is_valid()) return false;
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, false);
+    if (!data) return false;
 
     if (!data->is_active) return false;
 

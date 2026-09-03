@@ -199,6 +199,31 @@ async function run() {
       throw new Error(`Assertion Failed: Canvas screen coordinates shifted during window resize.`);
     }
 
+    console.log("\n[TestRunner] Test Case 4b: Dynamic Canvas Aspect Ratio Viewport Resizing");
+    const canvasAspectRatios = [
+      { width: 1280, height: 720, label: "16:9 Landscape" },
+      { width: 1680, height: 720, label: "21:9 Ultrawide" },
+      { width: 1024, height: 768, label: "4:3 Tablet" },
+      { width: 450, height: 800, label: "9:16 Tall / Portrait" }
+    ];
+
+    for (const aspect of canvasAspectRatios) {
+      console.log(`  Testing canvas resize to ${aspect.label} (${aspect.width}x${aspect.height})...`);
+      await sendCommand("Runtime.evaluate", {
+        expression: `
+          var c = document.getElementById('testCanvas');
+          if (c) {
+            c.width = ${aspect.width};
+            c.height = ${aspect.height};
+          }
+        `,
+      });
+      const coords = await getCanvasGazeCoords();
+      if (isNaN(coords.canvasX) || isNaN(coords.canvasY)) {
+        throw new Error(`Assertion Failed: Canvas coordinates are NaN under aspect ratio ${aspect.label}`);
+      }
+    }
+
     console.log("\n--- Running Dynamic DPR Coordinate Scaling Tests ---");
     const dprValues = [1.0, 2.0, 3.0];
     const logicalX = 250;

@@ -1686,7 +1686,6 @@ TEST_CASE("Testing Dynamic Continuous Head Roll Sequence with Zero Frame Drops")
     for (int i = 0; i < total_frames; ++i) {
         float angle_deg = trajectory_deg[i];
         float angle_rad = angle_deg * (3.141592653589793f / 180.0f);
-
         std::vector<unsigned char> rot_bgr(base_img.width * base_img.height * 3);
         rotate_image(base_img.data.data(), base_img.width, base_img.height, rot_bgr.data(), -angle_rad);
 
@@ -1711,9 +1710,10 @@ TEST_CASE("Testing Dynamic Continuous Head Roll Sequence with Zero Frame Drops")
         if (res->face_detected) {
             detected_frames++;
             float solved_roll_deg = static_cast<float>(res->head_rotation.z * (180.0 / 3.141592653589793));
+            MESSAGE("Frame ", i, " [angle=", angle_deg, "] -> hint=", (res->roll_hint_rad * 180.0 / 3.14159265), " solved=", solved_roll_deg, " score=", res->face_score);
             CHECK(std::abs(solved_roll_deg - angle_deg) < 6.0f);
         } else {
-            MESSAGE("Dropped frame at angle: ", angle_deg, " deg (frame index ", i, ")");
+            MESSAGE("Frame ", i, " [angle=", angle_deg, "] -> DROP (hint=", (res->roll_hint_rad * 180.0 / 3.14159265), ")");
         }
 
         pipeline.frame_pool.release(res);

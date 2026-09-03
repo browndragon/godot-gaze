@@ -183,7 +183,7 @@ namespace Gaze
     {
         request_mailbox.clear();
         results_mailbox.clear();
-        pipeline_roll_rad = 0.0f;
+        roll_filter.reset(0.0f);
     }
 
     void GazeTrackingPipeline::_worker_loop()
@@ -245,21 +245,6 @@ namespace Gaze
 
         auto start_face = std::chrono::steady_clock::now();
         bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
-        if (!face_ok && std::abs(data->roll_hint_rad) > 1e-4f)
-        {
-            // Multi-pass fallback: if detection failed with roll hint, try raw unrotated frame
-            Frame raw_frame;
-            raw_frame.width = data->camera_width;
-            raw_frame.height = data->camera_height;
-            raw_frame.data = data->camera_raw_bgr.data();
-            raw_frame.timestamp = data->timestamp;
-            data->roll_hint_rad = 0.0f;
-            face_ok = _stage_2_detect_face_bbox(data, raw_frame);
-            if (face_ok)
-            {
-                working_frame = raw_frame;
-            }
-        }
         auto end_face = std::chrono::steady_clock::now();
         double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
@@ -297,15 +282,14 @@ namespace Gaze
             }
         }
 
-        if (!data->face_detected)
+        // Update temporal roll filter
+        float solved_roll = 0.0f;
+        if (data->face_detected)
         {
-            // Graceful decay instead of instant snap to 0
-            pipeline_roll_rad *= 0.5f;
-            if (std::abs(pipeline_roll_rad) < 0.02f)
-            {
-                pipeline_roll_rad = 0.0f;
-            }
+            solved_roll = static_cast<float>(data->head_rotation.z);
         }
+        float conf = std::clamp((data->face_score - 0.20f) / 0.60f, 0.25f, 1.0f);
+        roll_filter.update(data->face_detected, solved_roll, conf, data->timestamp);
 
         auto end_total = std::chrono::steady_clock::now();
         double total_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
@@ -327,7 +311,11 @@ namespace Gaze
     {
         if (data->auto_roll_enabled)
         {
-            data->roll_hint_rad = pipeline_roll_rad;
+            if (std::abs(roll_filter.get_value()) < 1e-4f && std::abs(data->roll_hint_rad) > 1e-4f)
+            {
+                roll_filter.reset(data->roll_hint_rad);
+            }
+            data->roll_hint_rad = roll_filter.get_value();
         }
         Frame frame;
         frame.width = data->camera_width;
@@ -339,7 +327,7 @@ namespace Gaze
         if (std::abs(data->roll_hint_rad) > 1e-4f)
         {
             data->internal_rotated_frame_bgr.resize(frame.width * frame.height * 3);
-            rotate_image(frame.data, frame.width, frame.height, data->internal_rotated_frame_bgr.data(), -data->roll_hint_rad);
+            rotate_image(frame.data, frame.width, frame.height, data->internal_rotated_frame_bgr.data(), +data->roll_hint_rad);
             working_data = data->internal_rotated_frame_bgr.data();
         }
         working_frame = frame;
@@ -492,13 +480,9 @@ namespace Gaze
         }
 
         // 1. Unroll 3D Head Transform from GodotCameraHintRolled to canonical GodotCamera
-        data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, +data->roll_hint_rad);
+        data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, -data->roll_hint_rad);
         data->head_translation = data->head_transform.origin;
         data->head_rotation = data->head_transform.basis.get_euler_rad();
-
-        float current_roll = static_cast<float>(data->head_rotation.z);
-        // 50% lerp tweening on pipeline_roll_rad for stable temporal feedback across frames
-        pipeline_roll_rad = pipeline_roll_rad * 0.5f + current_roll * 0.5f;
 
         // 2. Unroll 2D Landmarks back to original camera pixel coordinates
         if (data->has_landmarks_2d && data->internal_landmarks_working_px.size() == 35)
@@ -508,7 +492,7 @@ namespace Gaze
                 SpacedVector2<Space::GodotCameraWorkingImagePixels> pt = data->internal_landmarks_working_px[i];
                 if (std::abs(data->roll_hint_rad) > 1e-4f)
                 {
-                    pt = rotate_point_2d(pt, +data->roll_hint_rad, data->camera_width, data->camera_height);
+                    pt = rotate_point_2d(pt, -data->roll_hint_rad, data->camera_width, data->camera_height);
                 }
                 data->landmarks_2d_px[i * 2 + 0] = static_cast<float>(pt.x);
                 data->landmarks_2d_px[i * 2 + 1] = static_cast<float>(pt.y);
@@ -518,8 +502,8 @@ namespace Gaze
         // 3. Unroll 3D Gaze Ray and Eye Centers
         if (std::abs(data->roll_hint_rad) > 1e-4f)
         {
-            float cos_a = std::cos(data->roll_hint_rad);
-            float sin_a = std::sin(data->roll_hint_rad);
+            float cos_a = std::cos(-data->roll_hint_rad);
+            float sin_a = std::sin(-data->roll_hint_rad);
             SpacedBasis<Space::GodotCamera, Space::GodotCamera> R_roll(
                 GodotCameraVector3(cos_a, -sin_a, 0.0),
                 GodotCameraVector3(sin_a,  cos_a, 0.0),

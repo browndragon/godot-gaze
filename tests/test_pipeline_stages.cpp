@@ -123,6 +123,7 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Wink Fixtures with Signal Sep
 
     // 1. Both Open
     {
+        pipeline.reset_tracker();
         TestImage img = load_test_image("tests/resources/eyes_both_open.jpg");
         REQUIRE(img.valid());
         GazeFrameData data;
@@ -138,6 +139,7 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Wink Fixtures with Signal Sep
 
     // 2. Both Wink / Closed
     {
+        pipeline.reset_tracker();
         TestImage img = load_test_image("tests/resources/eyes_both_wink.jpg");
         REQUIRE(img.valid());
         GazeFrameData data;
@@ -153,6 +155,7 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Wink Fixtures with Signal Sep
 
     // 3. Left Wink (Anatomical Left Closed, Anatomical Right Open)
     {
+        pipeline.reset_tracker();
         TestImage img = load_test_image("tests/resources/eyes_anatomical_left_wink.jpg");
         REQUIRE(img.valid());
         GazeFrameData data;
@@ -170,12 +173,17 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Wink Fixtures with Signal Sep
 
     // 4. Right Wink (Anatomical Right Closed, Anatomical Left Open)
     {
+        pipeline.reset_tracker();
         TestImage img = load_test_image("tests/resources/eyes_anatomical_right_wink.jpg");
         REQUIRE(img.valid());
         GazeFrameData data;
         data.camera_raw_bgr = img.data;
         data.camera_width = img.width;
         data.camera_height = img.height;
+        data.auto_roll_enabled = true;
+        data.timestamp = 1.0;
+        pipeline.process_frame_synchronous(&data);
+        data.timestamp = 1.033;
         pipeline.process_frame_synchronous(&data);
 
         CHECK(data.face_detected == true);
@@ -197,6 +205,7 @@ TEST_CASE("Pipeline Obscured Face Graceful Handling") {
 
     TestImage img = load_test_image("tests/resources/eyes_anatomical_left_obscured.jpg");
     REQUIRE(img.valid());
+
     GazeFrameData data;
     data.camera_raw_bgr = img.data;
     data.camera_width = img.width;
@@ -224,6 +233,7 @@ TEST_CASE("Pipeline Stage 8: Eye Centers Invariant Under Head Roll") {
     };
 
     for (const auto& fix : roll_fixtures) {
+        pipeline.reset_tracker();
         TestImage img = load_test_image(fix.first);
         REQUIRE(img.valid());
 
@@ -244,4 +254,60 @@ TEST_CASE("Pipeline Stage 8: Eye Centers Invariant Under Head Roll") {
         CHECK(data.gaze_origin.y == doctest::Approx(eye_mid.y).epsilon(1e-3));
         CHECK(data.gaze_origin.z == doctest::Approx(eye_mid.z).epsilon(1e-3));
     }
+}
+
+TEST_CASE("Pipeline Auto-Roll Tracking with Sigmoidal Dropout Hold") {
+    std::string yunet_path = get_model_path("project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort");
+    std::string gaze_path = get_model_path("project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort");
+    std::string eye_state_path = get_model_path("project/addons/godot-gaze/models/open_closed_eye.ort");
+    std::string lm_path = get_model_path("project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort");
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage roll_img = load_test_image("tests/resources/self_roll_left.jpg");
+    REQUIRE(roll_img.valid());
+
+    TestImage obs_img = load_test_image("tests/resources/eyes_anatomical_left_obscured.jpg");
+    REQUIRE(obs_img.valid());
+
+    // 1. Process rolled frame sequence with initial roll hint = 0.785 rad (~45 deg)
+    double t = 1.0;
+    for (int i = 0; i < 5; ++i) {
+        GazeFrameData d;
+        d.camera_raw_bgr = roll_img.data;
+        d.camera_width = roll_img.width;
+        d.camera_height = roll_img.height;
+        d.timestamp = t;
+        d.auto_roll_enabled = true;
+        d.roll_hint_rad = 0.785f;
+        pipeline.process_frame_synchronous(&d);
+        REQUIRE(d.face_detected == true);
+        t += (1.0 / 60.0);
+    }
+
+    // 2. Feed an obscured frame at t = +16.6ms into dropout
+    GazeFrameData d2;
+    d2.camera_raw_bgr = obs_img.data;
+    d2.camera_width = obs_img.width;
+    d2.camera_height = obs_img.height;
+    d2.timestamp = t;
+    d2.auto_roll_enabled = true;
+
+    pipeline.process_frame_synchronous(&d2);
+    CHECK(d2.face_detected == false);
+    // Roll hint applied in Stage 1 should be held by grace period (>= 0.70 rad)
+    CHECK(d2.roll_hint_rad >= 0.70f);
+
+    // 3. Reset pipeline tracker
+    pipeline.reset_tracker();
+    GazeFrameData d3;
+    d3.camera_raw_bgr = obs_img.data;
+    d3.camera_width = obs_img.width;
+    d3.camera_height = obs_img.height;
+    d3.timestamp = 2.0;
+    d3.auto_roll_enabled = true;
+
+    pipeline.process_frame_synchronous(&d3);
+    CHECK(d3.roll_hint_rad == doctest::Approx(0.0f));
 }

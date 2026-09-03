@@ -214,34 +214,29 @@ namespace Gaze
 
                 int dst_idx = (y * w + x) * 3;
 
-                if (src_x >= 0.0f && src_x < w - 1 && src_y >= 0.0f && src_y < h - 1)
-                {
-                    int x0 = static_cast<int>(std::floor(src_x));
-                    int y0 = static_cast<int>(std::floor(src_y));
-                    int x1 = x0 + 1;
-                    int y1 = y0 + 1;
-                    float tx = src_x - x0;
-                    float ty = src_y - y0;
+                // Clamp to valid source coordinates (replicate border) to avoid CNN edge artifacts
+                src_x = std::max(0.0f, std::min(static_cast<float>(w - 1.001f), src_x));
+                src_y = std::max(0.0f, std::min(static_cast<float>(h - 1.001f), src_y));
 
-                    for (int c = 0; c < 3; ++c)
-                    {
-                        float p00 = src[(y0 * w + x0) * 3 + c];
-                        float p10 = src[(y0 * w + x1) * 3 + c];
-                        float p01 = src[(y1 * w + x0) * 3 + c];
-                        float p11 = src[(y1 * w + x1) * 3 + c];
+                int x0 = static_cast<int>(std::floor(src_x));
+                int y0 = static_cast<int>(std::floor(src_y));
+                int x1 = std::min(w - 1, x0 + 1);
+                int y1 = std::min(h - 1, y0 + 1);
+                float tx = src_x - x0;
+                float ty = src_y - y0;
 
-                        float val = (1.0f - tx) * (1.0f - ty) * p00 +
-                                    tx * (1.0f - ty) * p10 +
-                                    (1.0f - tx) * ty * p01 +
-                                    tx * ty * p11;
-                        dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
-                    }
-                }
-                else
+                for (int c = 0; c < 3; ++c)
                 {
-                    dst[dst_idx + 0] = 0;
-                    dst[dst_idx + 1] = 0;
-                    dst[dst_idx + 2] = 0;
+                    float p00 = src[(y0 * w + x0) * 3 + c];
+                    float p10 = src[(y0 * w + x1) * 3 + c];
+                    float p01 = src[(y1 * w + x0) * 3 + c];
+                    float p11 = src[(y1 * w + x1) * 3 + c];
+
+                    float val = (1.0f - tx) * (1.0f - ty) * p00 +
+                                tx * (1.0f - ty) * p10 +
+                                (1.0f - tx) * ty * p01 +
+                                tx * ty * p11;
+                    dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
                 }
             }
         }

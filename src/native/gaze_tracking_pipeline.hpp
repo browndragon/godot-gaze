@@ -6,6 +6,7 @@
 #include "../core/concurrency/atomic_mailbox.hpp"
 #include "../core/concurrency/pool.hpp"
 #include "../core/gaze_frame_data.hpp"
+#include "../core/sigmoidal_filter.hpp"
 #include "ort_yunet_detector.hpp"
 #include "ort_landmark_model.hpp"
 #include "ort_eye_state_model.hpp"
@@ -42,7 +43,7 @@ namespace Gaze
         bool initialized = false;
         bool config_dirty = false;
         std::atomic<bool> worker_busy{false};
-        float pipeline_roll_rad = 0.0f;
+        SigmoidalFilter roll_filter;
 
         void _worker_loop();
         void _stage_1_apply_roll_hint(GazeFrameData *data, Frame &working_frame);
@@ -79,7 +80,7 @@ namespace Gaze
         void push_frame_request(GazeFrameData *p_req);
         bool pop_result(GazeFrameData** out_res);
         void clear_work_queue();
-        void reset_tracker() { pipeline_roll_rad = 0.0f; }
+        void reset_tracker() { roll_filter.reset(0.0f); }
         bool is_initialized() const { return initialized; }
         bool is_busy() const { return worker_busy.load() || request_mailbox.is_pending(); }
     };

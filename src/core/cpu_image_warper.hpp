@@ -25,7 +25,7 @@ public:
         int src_width,
         int src_height,
         int src_channels,
-        const GazeVector2& eye_center,
+        const GodotCameraImageVector2& eye_center,
         double angle_deg,
         double scale,
         uint8_t* out_bgr_buffer

@@ -71,7 +71,7 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
 
     auto model_35pt = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
 
-    auto process_image = [&](const std::string &filename, Gaze::GazeVector3 &out_gaze_dir) -> bool {
+    auto process_image = [&](const std::string &filename, Gaze::GodotCameraVector3 &out_gaze_dir) -> bool {
         std::string path = "tests/resources/" + filename;
         if (!file_exists(path)) path = "../tests/resources/" + filename;
 
@@ -88,15 +88,15 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
         if (!det_ok || !det_res.face_detected) return false;
 
         Gaze::GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-        std::vector<Gaze::GazeVector2> landmarks;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks;
         bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
         if (!lm_ok || landmarks.size() != 35) return false;
 
         double focal = Gaze::calculate_default_focal_length(static_cast<double>(frame.width));
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
-        Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f);
-        Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
+        Gaze::OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
         bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks, focal, focal, cx, cy, rvec, tvec);
         if (!pnp_ok) return false;
 
@@ -107,14 +107,14 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
 
         extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks, crops.right_eye_data, crops.left_eye_data, 1.0f);
 
-        Gaze::GazeVector3 raw_gaze;
+        Gaze::OpenVINOGazeVector3 raw_gaze;
         if (!gaze_model.estimate_raw_gaze(crops, raw_gaze)) return false;
         std::cout << "[RAW OPENVINO] " << filename << " -> raw_gaze: (" << raw_gaze.x << ", " << raw_gaze.y << ", " << raw_gaze.z << ")\n";
-        out_gaze_dir = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze);
+        out_gaze_dir = Gaze::CoordinateConversions::to_godot_camera(raw_gaze);
         return true;
     };
 
-    Gaze::GazeVector3 gaze_center, gaze_left, gaze_right, gaze_noseleft_eyesright;
+    Gaze::GodotCameraVector3 gaze_center, gaze_left, gaze_right, gaze_noseleft_eyesright;
 
     bool ok_center = process_image("self_center.jpg", gaze_center);
     REQUIRE(ok_center);
@@ -123,7 +123,7 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
     // 1. Dominant camera forward (+Z) gaze invariant in Godot space
     double norm_c = std::sqrt(gaze_center.x * gaze_center.x + gaze_center.y * gaze_center.y + gaze_center.z * gaze_center.z);
     CHECK(norm_c == doctest::Approx(1.0).epsilon(1e-3));
-    CHECK(gaze_center.z > 0.0f); // points towards screen plane
+    CHECK(gaze_center.z > 0.0); // points towards screen plane
 
     bool ok_left = process_image("self_left_left.jpg", gaze_left);
     REQUIRE(ok_left);
@@ -139,7 +139,7 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
 
     // Godot Camera Space: +x = viewer left (camera right / display left), -x = viewer right (camera left / display right)
     // Decoupled: Eyes looking display right must produce negative X component in Godot Camera Space
-    CHECK(gaze_noseleft_eyesright.x < 0.0f);
+    CHECK(gaze_noseleft_eyesright.x < 0.0);
 }
 
 TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")
@@ -187,13 +187,13 @@ TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")
         if (!detector.process_frame(frame, det_res, 0.0f) || !det_res.face_detected) continue;
 
         Gaze::GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-        std::vector<Gaze::GazeVector2> landmarks;
-        if (!lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f)) continue;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks;
+        if (!lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f) || landmarks.size() != 35) continue;
 
         double focal = Gaze::calculate_default_focal_length(static_cast<double>(frame.width));
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
-        Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f), tvec(0.0f, 0.0f, 600.0f);
+        Gaze::OpenCVCameraVector3 rvec(0.0, 0.0, 0.0), tvec(0.0, 0.0, 600.0);
         if (!Gaze::SQPnPSolver::solve_rvec(model_35, landmarks, focal, focal, cx, cy, rvec, tvec)) continue;
 
         // Extract crops: out_right_crop (pts 0..1, image-left), out_left_crop (pts 2..3, image-right)
@@ -211,9 +211,9 @@ TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")
         std::memcpy(crops_std.left_eye_data, crop_img_right.data(), 60*60*3);
         std::memcpy(crops_std.right_eye_data, crop_img_left.data(), 60*60*3);
 
-        Gaze::GazeVector3 raw_gaze_std;
+        Gaze::OpenVINOGazeVector3 raw_gaze_std;
         gaze_model.estimate_raw_gaze(crops_std, raw_gaze_std);
-        Gaze::GazeVector3 gaze_godot_std = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_std);
+        Gaze::GodotCameraVector3 gaze_godot_std = Gaze::CoordinateConversions::to_godot_camera(raw_gaze_std);
 
         // 2. Swapped Routing (left_eye_image = image-left crop, right_eye_image = image-right crop)
         Gaze::EyeCrops crops_swapped;
@@ -223,11 +223,11 @@ TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")
         std::memcpy(crops_swapped.left_eye_data, crop_img_left.data(), 60*60*3);
         std::memcpy(crops_swapped.right_eye_data, crop_img_right.data(), 60*60*3);
 
-        Gaze::GazeVector3 raw_gaze_swapped;
+        Gaze::OpenVINOGazeVector3 raw_gaze_swapped;
         gaze_model.estimate_raw_gaze(crops_swapped, raw_gaze_swapped);
-        Gaze::GazeVector3 gaze_godot_swapped = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_swapped);
+        Gaze::GodotCameraVector3 gaze_godot_swapped = Gaze::CoordinateConversions::to_godot_camera(raw_gaze_swapped);
 
-        Gaze::GazeVector3 ov_angles = Gaze::CoordinateConversions::opencv_head_pose_to_openvino_angles_deg(rvec);
+        Gaze::SpacedVector3<Gaze::Space::OpenCVCamera> ov_angles = Gaze::CoordinateConversions::opencv_head_pose_to_openvino_angles_deg(rvec);
 
         std::cout << "Fixture: " << tc.filename << " (" << tc.description << ")\n";
         std::cout << "  Head Pose [Yaw, Pitch, Roll]: (" << ov_angles.x << ", " << ov_angles.y << ", " << ov_angles.z << ") deg\n";
@@ -261,17 +261,17 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
 
     // Standard Display: 1440x960 px, 300x200 mm, camera at top center (offset 0, 0 mm, 0)
     Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GazeVector2(1440.0, 960.0));
-    engine.set_screen_size_mm(Gaze::GazeVector2(300.0, 200.0));
-    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GazeVector3(0.0, 0.0, 0.0), 0.0));
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1440.0, 960.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(300.0, 200.0));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
 
-    auto model_35 = Gaze::get_canonical_35pt_face_model();
+    auto model_35 = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
 
     auto process_fixture = [&](const std::string& fixture_name,
-                               Gaze::GazeVector2& out_nose_px,
-                               Gaze::GazeVector2& out_gaze_px,
-                               Gaze::GazeVector3& out_head_euler,
-                               Gaze::GazeVector3& out_gaze_dir) -> bool {
+                               Gaze::GodotDisplayVector2& out_nose_px,
+                               Gaze::GodotDisplayVector2& out_gaze_px,
+                               Gaze::SpacedVector3<Gaze::Space::GodotCameraEuler>& out_head_euler,
+                               Gaze::GodotCameraVector3& out_gaze_dir) -> bool {
         LoadedImage img = load_image("tests/resources/" + fixture_name);
         if (img.data.empty()) return false;
 
@@ -283,7 +283,7 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         }
 
         Gaze::GazeRect bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-        std::vector<Gaze::GazeVector2> landmarks_35;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks_35;
         if (!lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks_35, 0.0f) || landmarks_35.size() != 35) {
             std::cout << "[DEBUG process_fixture] LM model failed for " << fixture_name << "\n";
             return false;
@@ -293,24 +293,24 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         double focal = Gaze::calculate_default_focal_length(static_cast<double>(frame.width));
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
-        Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f), tvec(0.0f, 0.0f, 600.0f);
+        Gaze::OpenCVCameraVector3 rvec(0.0, 0.0, 0.0), tvec(0.0, 0.0, 600.0);
         if (!Gaze::SQPnPSolver::solve_rvec(model_35, landmarks_35, focal, focal, cx, cy, rvec, tvec)) {
             std::cout << "[DEBUG process_fixture] SQPnPSolver::solve_rvec failed for " << fixture_name << "\n";
             return false;
         }
 
         // Compute Head Transform in Godot Camera Space
-        Gaze::GazeTransform3D head_xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(tvec, rvec);
-        Gaze::GazeVector3 head_fwd = -head_xform.basis.z.normalized();
-        out_head_euler = head_xform.basis.get_euler_deg();
+        Gaze::GodotFaceTransform3D head_xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(tvec, rvec);
+        Gaze::GodotCameraVector3 head_fwd = -head_xform.basis.z.normalized();
+        out_head_euler = head_xform.basis.get_euler_rad() * Gaze::RAD_TO_DEG;
 
         // Project Nose Gaze
         Gaze::GodotDisplayVector2 nose_px_spaced;
-        if (!engine.project_gaze(Gaze::GodotCameraVector3(head_xform.origin), Gaze::GodotCameraVector3(head_fwd), nose_px_spaced)) {
+        if (!engine.project_gaze(head_xform.origin, head_fwd, nose_px_spaced)) {
             std::cout << "[DEBUG process_fixture] project_gaze nose failed for " << fixture_name << "\n";
             return false;
         }
-        out_nose_px = nose_px_spaced.get();
+        out_nose_px = nose_px_spaced;
 
         // Extract eye crops and run gaze model
         Gaze::EyeCrops crops;
@@ -319,36 +319,36 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         crops.head_pose_rotation = rvec;
         extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks_35, crops.right_eye_data, crops.left_eye_data, 1.5f);
 
-        Gaze::GazeVector3 raw_gaze_dir_cam;
+        Gaze::OpenVINOGazeVector3 raw_gaze_dir_cam;
         if (!gaze_model.estimate_raw_gaze(crops, raw_gaze_dir_cam)) {
             std::cout << "[DEBUG process_fixture] estimate_raw_gaze failed for " << fixture_name << "\n";
             return false;
         }
 
-        // Apply ONNX_GAZE_TO_GODOT_CAM basis to convert raw ONNX gaze vector to Godot camera space
-        Gaze::GazeVector3 gaze_dir_godot = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM.multiply_vector(raw_gaze_dir_cam);
+        // Convert raw ONNX gaze vector to Godot camera space
+        Gaze::GodotCameraVector3 gaze_dir_godot = Gaze::CoordinateConversions::to_godot_camera(raw_gaze_dir_cam);
         out_gaze_dir = gaze_dir_godot;
 
         // Project Eye Gaze from canonical anatomical eye midpoint
-        Gaze::GazeBasis3D head_rot_cv = Gaze::rodrigues_to_basis(rvec);
-        Gaze::GazeVector3 eye_mid_cv = head_rot_cv.multiply_vector(Gaze::GazeVector3(0.0f, -32.0f, 0.0f)) + tvec;
-        Gaze::GazeVector3 eye_orig_godot = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(eye_mid_cv);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> head_rot_cv = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(rvec);
+        Gaze::OpenCVCameraVector3 eye_mid_cv = head_rot_cv.transform(Gaze::OpenCVFaceVector3(0.0, -32.0, 0.0)) + tvec;
+        Gaze::GodotCameraVector3 eye_orig_godot = Gaze::CoordinateConversions::to_godot_camera(eye_mid_cv);
 
         Gaze::GodotDisplayVector2 gaze_px_spaced;
-        if (!engine.project_gaze(Gaze::GodotCameraVector3(eye_orig_godot), Gaze::GodotCameraVector3(gaze_dir_godot), gaze_px_spaced)) {
+        if (!engine.project_gaze(eye_orig_godot, gaze_dir_godot, gaze_px_spaced)) {
             std::cout << "[DEBUG process_fixture] project_gaze eye failed for " << fixture_name 
                       << " | origin=(" << eye_orig_godot.x << ", " << eye_orig_godot.y << ", " << eye_orig_godot.z << ")"
                       << " | dir=(" << gaze_dir_godot.x << ", " << gaze_dir_godot.y << ", " << gaze_dir_godot.z << ")\n";
             return false;
         }
-        out_gaze_px = gaze_px_spaced.get();
+        out_gaze_px = gaze_px_spaced;
 
         return true;
     };
 
-    Gaze::GazeVector2 nose_center, gaze_center, nose_top_down, gaze_top_down, nose_top, gaze_top, nose_down, gaze_down, nose_left, gaze_left, nose_right, gaze_right, nose_nl_er, gaze_nl_er, nose_yr_rl, gaze_yr_rl;
-    Gaze::GazeVector3 head_rot_center, head_rot_top_down, head_rot_top, head_rot_down, head_rot_left, head_rot_right, head_rot_nl_er, head_rot_yr_rl;
-    Gaze::GazeVector3 gaze_dir_center, gaze_dir_top_down, gaze_dir_top, gaze_dir_down, gaze_dir_left, gaze_dir_right, gaze_dir_nl_er, gaze_dir_yr_rl;
+    Gaze::GodotDisplayVector2 nose_center, gaze_center, nose_top_down, gaze_top_down, nose_top, gaze_top, nose_down, gaze_down, nose_left, gaze_left, nose_right, gaze_right, nose_nl_er, gaze_nl_er, nose_yr_rl, gaze_yr_rl;
+    Gaze::SpacedVector3<Gaze::Space::GodotCameraEuler> head_rot_center, head_rot_top_down, head_rot_top, head_rot_down, head_rot_left, head_rot_right, head_rot_nl_er, head_rot_yr_rl;
+    Gaze::GodotCameraVector3 gaze_dir_center, gaze_dir_top_down, gaze_dir_top, gaze_dir_down, gaze_dir_left, gaze_dir_right, gaze_dir_nl_er, gaze_dir_yr_rl;
 
     REQUIRE(process_fixture("self_center.jpg", nose_center, gaze_center, head_rot_center, gaze_dir_center));
     REQUIRE(process_fixture("self_top_top.jpg", nose_top, gaze_top, head_rot_top, gaze_dir_top));

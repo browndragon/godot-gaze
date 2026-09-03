@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include "math_defs.hpp"
+#include "opencv_space_conversions.hpp"
 
 namespace Gaze
 {
@@ -16,10 +16,10 @@ namespace Gaze
     struct GazeCalibration
     {
         // Physical monitor pixel size in millimeters (width and height).
-        GazeVector2 pixel_size_mm = GazeVector2(0.25, 0.25);
+        SpacedVector2<Space::GodotDisplayMm> pixel_size_mm = SpacedVector2<Space::GodotDisplayMm>(0.25, 0.25);
 
-        // Camera offset relative to monitor center in millimeters (+X right, +Y up, +Z out of screen).
-        GazeVector3 camera_offset = GazeVector3(0.0, 148.0, 0.0);
+        // Camera offset relative to monitor center in millimeters in GodotCamera space.
+        GodotCameraVector3 camera_offset = GodotCameraVector3(0.0, 148.0, 0.0);
 
         // Tilt angle of the camera in degrees (downwards tilt is positive).
         double camera_tilt = 0.0;

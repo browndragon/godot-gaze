@@ -24,9 +24,6 @@
 #include <godot_cpp/classes/java_script_object.hpp>
 #endif
 
-static_assert(sizeof(Gaze::GazeVector3) == sizeof(godot::Vector3), "Size of GazeVector3 must match godot::Vector3");
-static_assert(alignof(Gaze::GazeVector3) == alignof(godot::Vector3), "Alignment of GazeVector3 must match godot::Vector3");
-
 namespace godot {
 
 // Structs definitions inside GazeServerImpl for direct singleton state management
@@ -59,8 +56,8 @@ struct GazeServerImpl {
         Transform3D relative_transform;
         bool detected = false;
         
-        Gaze::GazeVector3 head_pose_translation;
-        Gaze::GazeVector3 head_pose_rotation;
+        Gaze::GodotCameraVector3 head_pose_translation;
+        Gaze::GodotCameraVector3 head_pose_rotation;
         PackedVector2Array landmarks_2d;
         float roll_hint_rad = 0.0f;
         bool auto_roll_enabled = true;
@@ -574,8 +571,8 @@ Vector3 GazeServer::get_head_pose_euler_deg() const {
 void GazeServer::set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p_detected) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->face.detected = p_detected;
-    impl->face.head_pose_translation = Gaze::GazeVector3(p_translation.x, p_translation.y, p_translation.z);
-    impl->face.head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
+    impl->face.head_pose_translation = Gaze::GodotCameraVector3(p_translation.x, p_translation.y, p_translation.z);
+    impl->face.head_pose_rotation = Gaze::GodotCameraVector3(p_rotation.x, p_rotation.y, p_rotation.z);
     if (p_detected) {
         Basis b = Basis::from_euler(p_rotation);
         impl->face.relative_transform = Transform3D(b, p_translation);
@@ -587,8 +584,8 @@ void GazeServer::set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p
 void GazeServer::set_face_transform(const Transform3D &p_transform, const Vector3 &p_rotation, bool p_detected) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->face.detected = p_detected;
-    impl->face.head_pose_translation = Gaze::GazeVector3(p_transform.origin.x, p_transform.origin.y, p_transform.origin.z);
-    impl->face.head_pose_rotation = Gaze::GazeVector3(p_rotation.x, p_rotation.y, p_rotation.z);
+    impl->face.head_pose_translation = Gaze::GodotCameraVector3(p_transform.origin.x, p_transform.origin.y, p_transform.origin.z);
+    impl->face.head_pose_rotation = Gaze::GodotCameraVector3(p_rotation.x, p_rotation.y, p_rotation.z);
     impl->face.relative_transform = p_detected ? p_transform : Transform3D();
 }
 
@@ -672,24 +669,24 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
 
     Vector3 calibrated_dir = p_direction_cam;
     if (impl->display.bio_data.is_valid) {
-        Gaze::GazeVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-        Gaze::GazeVector3 calib_v = Gaze::apply_3d_bias_vector(
+        Gaze::GodotCameraVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+        Gaze::GodotCameraVector3 calib_v = Gaze::apply_3d_bias_vector(
             raw_dir,
-            Gaze::GazeVector2(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
-            Gaze::GazeVector2(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
+            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
+            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
         );
         calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
     }
 
-    Gaze::GazeVector2 pos_mm;
-    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GazeVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
+    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
     if (Gaze::project_ray_to_screen_mm(
             origin_godot,
             dir_godot,
-            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
+            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
             effective_tilt,
-            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
+            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
             pos_mm
         )) {
         double scale_x = (double)logical_sz.x / physical_sz.x;
@@ -824,24 +821,24 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
 
     Vector3 calibrated_dir = p_direction_cam;
     if (p_apply_bio_calibration && impl->display.bio_data.is_valid) {
-        Gaze::GazeVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-        Gaze::GazeVector3 calib_v = Gaze::apply_3d_bias_vector(
+        Gaze::GodotCameraVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+        Gaze::GodotCameraVector3 calib_v = Gaze::apply_3d_bias_vector(
             raw_dir,
-            Gaze::GazeVector2(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
-            Gaze::GazeVector2(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
+            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
+            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
         );
         calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
     }
 
-    Gaze::GazeVector2 pos_mm;
-    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GazeVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
+    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
     if (Gaze::project_ray_to_screen_mm(
             origin_godot,
             dir_godot,
-            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
+            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
             effective_tilt,
-            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
+            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
             pos_mm
         )) {
         double scale_x = (double)logical_sz.x / physical_sz.x;
@@ -859,15 +856,15 @@ Vector2 GazeServer::project_ray_to_screen_mm(const Vector3 &p_origin_cam, const 
     Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
     double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
 
-    Gaze::GazeVector2 pos_mm;
-    Gaze::GazeVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GazeVector3 dir_godot(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
+    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 dir_godot(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
     if (Gaze::project_ray_to_screen_mm(
             origin_godot,
             dir_godot,
-            Gaze::GazeVector3(effective_offset.x, effective_offset.y, effective_offset.z),
+            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
             effective_tilt,
-            Gaze::GazeVector2(physical_sz.x, physical_sz.y),
+            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
             pos_mm
         )) {
         return Vector2(pos_mm.x, pos_mm.y);
@@ -980,8 +977,8 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     Vector3 gaze_d = Vector3(0, 0, -1);
     Vector3 gaze_o = Vector3(0, 0, 0);
     if (active_read_data && active_read_data->gaze_success) {
-        gaze_d = reinterpret_cast<const Vector3&>(active_read_data->gaze_direction);
-        gaze_o = reinterpret_cast<const Vector3&>(active_read_data->gaze_origin);
+        gaze_d = Vector3(active_read_data->gaze_direction.x, active_read_data->gaze_direction.y, active_read_data->gaze_direction.z);
+        gaze_o = Vector3(active_read_data->gaze_origin.x, active_read_data->gaze_origin.y, active_read_data->gaze_origin.z);
     }
     Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
     if (norm_gaze_dir.length_squared() < 1e-4) {
@@ -1067,13 +1064,13 @@ void GazeServer::trigger_process() {
             gaze_frame->set_right_eye_openness(completed_data->right_eye_openness);
             gaze_frame->set_timestamp(completed_data->timestamp);
 
-            const Vector3& head_t = reinterpret_cast<const Vector3&>(completed_data->head_translation.get());
-            const Vector3& head_r = reinterpret_cast<const Vector3&>(completed_data->head_rotation.get());
+            Vector3 head_t(completed_data->head_translation.x, completed_data->head_translation.y, completed_data->head_translation.z);
+            Vector3 head_r(completed_data->head_rotation.x, completed_data->head_rotation.y, completed_data->head_rotation.z);
             gaze_frame->set_head_translation(head_t);
             gaze_frame->set_head_rotation(head_r);
 
-            const Vector3& gaze_o = reinterpret_cast<const Vector3&>(completed_data->gaze_origin.get());
-            const Vector3& gaze_d = reinterpret_cast<const Vector3&>(completed_data->gaze_direction.get());
+            Vector3 gaze_o(completed_data->gaze_origin.x, completed_data->gaze_origin.y, completed_data->gaze_origin.z);
+            Vector3 gaze_d(completed_data->gaze_direction.x, completed_data->gaze_direction.y, completed_data->gaze_direction.z);
             gaze_frame->set_gaze_origin(gaze_o);
             gaze_frame->set_gaze_direction(gaze_d);
 
@@ -1088,7 +1085,7 @@ void GazeServer::trigger_process() {
             gaze_frame->post_process();
 
             if (completed_data->face_detected) {
-                const Gaze::GazeBasis3D &gb = completed_data->head_transform.basis.basis;
+                const auto &gb = completed_data->head_transform.basis;
                 Basis godot_basis(
                     Vector3(gb.x.x, gb.x.y, gb.x.z),
                     Vector3(gb.y.x, gb.y.y, gb.y.z),

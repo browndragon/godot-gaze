@@ -15,20 +15,20 @@ struct Vertex {
 
 static double compute_loss(
     const std::vector<CalibrationSample>& samples,
-    const GazeVector2& screen_size_mm,
-    const GazeVector3& initial_camera_offset,
+    const SpacedVector2<Space::GodotDisplayMm>& screen_size_mm,
+    const GodotCameraVector3& initial_camera_offset,
     double initial_camera_tilt_deg,
     bool freeze_camera_params,
     const double params[6],
     const CalibrationWeights& weights
 ) {
-    GazeVector3 camera_offset;
+    GodotCameraVector3 camera_offset;
     double camera_tilt;
     if (freeze_camera_params) {
         camera_offset = initial_camera_offset;
         camera_tilt = initial_camera_tilt_deg;
     } else {
-        camera_offset = GazeVector3(params[0], params[1], params[2]);
+        camera_offset = GodotCameraVector3(params[0], params[1], params[2]);
         camera_tilt = params[3];
     }
     double bias_pitch = params[4];
@@ -56,20 +56,14 @@ static double compute_loss(
     if (bias_yaw > weights.max_bias)    { penalty += pm * std::pow(bias_yaw - weights.max_bias, 2);    bias_yaw = weights.max_bias; }
 
     double total_err_sq = 0.0;
-    double theta_rad = camera_tilt * DEG_TO_RAD;
-    double cos_t = std::cos(theta_rad);
-    double sin_t = std::sin(theta_rad);
-
-    double W_half = screen_size_mm.x * 0.5;
-    double H_half = screen_size_mm.y * 0.5;
 
     for (const auto& sample : samples) {
-        GazeVector3 biased_dir = apply_3d_bias_vector(
+        GodotCameraVector3 biased_dir = apply_3d_bias_vector(
             sample.gaze_direction,
-            GazeVector2(bias_pitch, bias_yaw)
+            SpacedVector2<Space::GodotCameraEuler>(bias_pitch, bias_yaw)
         );
 
-        GazeVector2 pos_mm;
+        SpacedVector2<Space::GodotDisplayMm> pos_mm;
         if (!project_ray_to_screen_mm(
                 sample.gaze_origin,
                 biased_dir,
@@ -109,11 +103,11 @@ static double compute_loss(
 
 bool CalibrationEstimator::estimate(
     const std::vector<CalibrationSample>& samples,
-    const GazeVector2& screen_size_mm,
-    const GazeVector3& initial_camera_offset,
+    const SpacedVector2<Space::GodotDisplayMm>& screen_size_mm,
+    const GodotCameraVector3& initial_camera_offset,
     double initial_camera_tilt_deg,
     bool freeze_camera_params,
-    GazeVector3& out_camera_offset,
+    GodotCameraVector3& out_camera_offset,
     double& out_camera_tilt_deg,
     double& out_bias_pitch,
     double& out_bias_yaw,

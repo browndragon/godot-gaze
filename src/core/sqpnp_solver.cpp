@@ -681,16 +681,17 @@ Vec9 runSQP(const Mat9x9 &omega, const Vec9 &r0)
     return r_hat;
 }
 
+template<Space S>
 double computeReprojectionError(
-    const std::vector<GazeVector3> &object_points,
-    const std::vector<GazeVector2> &image_points,
-    const GazeBasis3D &R, const GazeVector3 &t,
+    const std::vector<OpenCVFaceVector3> &object_points,
+    const std::vector<SpacedVector2<S>> &image_points,
+    const SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &R, const OpenCVCameraVector3 &t,
     double fx, double fy, double cx, double cy)
 {
     double sse = 0.0;
     for (size_t i = 0; i < object_points.size(); ++i)
     {
-        GazeVector3 p_cam = R.multiply_vector(object_points[i]) + t;
+        OpenCVCameraVector3 p_cam = R.transform(object_points[i]) + t;
         if (p_cam.z <= 0.001) return 1e9;
         double u_proj = fx * (p_cam.x / p_cam.z) + cx;
         double v_proj = fy * (p_cam.y / p_cam.z) + cy;
@@ -703,20 +704,21 @@ double computeReprojectionError(
 
 } // namespace
 
+template<Space S>
 bool SQPnPSolver::solve(
-    const std::vector<GazeVector3> &object_points,
-    const std::vector<GazeVector2> &image_points,
+    const std::vector<OpenCVFaceVector3> &object_points,
+    const std::vector<SpacedVector2<S>> &image_points,
     double fx, double fy, double cx, double cy,
-    GazeBasis3D &out_rotation,
-    GazeVector3 &out_translation)
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &out_rotation,
+    OpenCVCameraVector3 &out_translation)
 {
     size_t n = object_points.size();
     if (n < 4 || image_points.size() != n) return false;
 
     // Convert 2D image points to normalized camera rays (x, y)
-    std::vector<GazeVector2> norm_img(n);
-    GazeVector2 sum_img(0.0, 0.0);
-    GazeVector3 sum_obj(0.0, 0.0, 0.0);
+    std::vector<SpacedVector2<S>> norm_img(n);
+    SpacedVector2<S> sum_img(0.0, 0.0);
+    OpenCVFaceVector3 sum_obj(0.0, 0.0, 0.0);
     double sq_norm_sum = 0.0;
 
     for (size_t i = 0; i < n; ++i)
@@ -814,18 +816,18 @@ bool SQPnPSolver::solve(
     if (num_null == 0) num_null = 1;
 
     double min_reproj_err = std::numeric_limits<double>::max();
-    GazeBasis3D best_R;
-    GazeVector3 best_t;
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> best_R;
+    OpenCVCameraVector3 best_t;
     bool found_solution = false;
 
     auto test_candidate_r = [&](const Vec9 &r_hat) {
-        GazeBasis3D R_cand(
-            GazeVector3(r_hat[0], r_hat[3], r_hat[6]),
-            GazeVector3(r_hat[1], r_hat[4], r_hat[7]),
-            GazeVector3(r_hat[2], r_hat[5], r_hat[8])
+        SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R_cand(
+            OpenCVCameraVector3(r_hat[0], r_hat[3], r_hat[6]),
+            OpenCVCameraVector3(r_hat[1], r_hat[4], r_hat[7]),
+            OpenCVCameraVector3(r_hat[2], r_hat[5], r_hat[8])
         );
         // Translation t = P * r_hat
-        GazeVector3 t_cand(0.0, 0.0, 0.0);
+        OpenCVCameraVector3 t_cand(0.0, 0.0, 0.0);
         for (int k = 0; k < 9; ++k)
         {
             t_cand.x += p_mat[0][k] * r_hat[k];
@@ -880,20 +882,50 @@ bool SQPnPSolver::solve(
     return true;
 }
 
+template<Space S>
 bool SQPnPSolver::solve_rvec(
-    const std::vector<GazeVector3> &object_points,
-    const std::vector<GazeVector2> &image_points,
+    const std::vector<OpenCVFaceVector3> &object_points,
+    const std::vector<SpacedVector2<S>> &image_points,
     double fx, double fy, double cx, double cy,
-    GazeVector3 &out_rvec,
-    GazeVector3 &out_translation)
+    OpenCVCameraVector3 &out_rvec,
+    OpenCVCameraVector3 &out_translation)
 {
-    GazeBasis3D R;
-    if (!solve(object_points, image_points, fx, fy, cx, cy, R, out_translation))
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R;
+    if (!solve<S>(object_points, image_points, fx, fy, cx, cy, R, out_translation))
     {
         return false;
     }
-    out_rvec = basis_to_rodrigues(R);
+    out_rvec = basis_to_rodrigues<Space::OpenCVFaceModel, Space::OpenCVCamera>(R);
     return true;
 }
+
+// Explicit template instantiations for supported 2D spaces
+template bool SQPnPSolver::solve<Space::GodotCameraWorkingImagePixels>(
+    const std::vector<OpenCVFaceVector3> &,
+    const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &,
+    double, double, double, double,
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &,
+    OpenCVCameraVector3 &);
+
+template bool SQPnPSolver::solve<Space::GodotCameraImagePixels>(
+    const std::vector<OpenCVFaceVector3> &,
+    const std::vector<SpacedVector2<Space::GodotCameraImagePixels>> &,
+    double, double, double, double,
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &,
+    OpenCVCameraVector3 &);
+
+template bool SQPnPSolver::solve_rvec<Space::GodotCameraWorkingImagePixels>(
+    const std::vector<OpenCVFaceVector3> &,
+    const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &,
+    double, double, double, double,
+    OpenCVCameraVector3 &,
+    OpenCVCameraVector3 &);
+
+template bool SQPnPSolver::solve_rvec<Space::GodotCameraImagePixels>(
+    const std::vector<OpenCVFaceVector3> &,
+    const std::vector<SpacedVector2<Space::GodotCameraImagePixels>> &,
+    double, double, double, double,
+    OpenCVCameraVector3 &,
+    OpenCVCameraVector3 &);
 
 } // namespace Gaze

@@ -75,9 +75,9 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Canonical Center Fixture") {
     }
 
     // Stage 4: SQPnP 3D Head Pose
-    CHECK(data.head_translation->z < -300.0); // Facing camera ~350mm away in Godot camera space
-    CHECK(data.head_translation->z > -500.0);
-    CHECK(std::abs(data.head_rotation->z) < 10.0 * DEG_TO_RAD); // Upright roll < 10 deg
+    CHECK(data.head_translation.z < -300.0); // Facing camera ~350mm away in Godot camera space
+    CHECK(data.head_translation.z > -500.0);
+    CHECK(std::abs(data.head_rotation.z) < 10.0 * DEG_TO_RAD); // Upright roll < 10 deg
 
     // Stage 5: Dense Eye Crops
     CHECK(data.eye_crops.face_detected == true);
@@ -95,21 +95,21 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Canonical Center Fixture") {
     CHECK(data.gaze_success == true);
     CHECK(data.gaze_direction.length() == doctest::Approx(1.0).epsilon(1e-3));
     // Gaze pointing forward from user towards screen (+Z in Godot Camera space)
-    CHECK(data.gaze_direction->z > 0.5);
+    CHECK(data.gaze_direction.z > 0.5);
 
     // Stage 9: Screen Projection Integration
     ProjectionEngine proj;
-    proj.set_screen_size_pixels(GazeVector2(1440, 900));
-    proj.set_screen_size_mm(GazeVector2(304.1, 212.4));
-    proj.set_camera_placement(CameraPlacement(GazeVector3(0, 106.2, 0), 0.0));
+    proj.set_screen_size_pixels(GodotDisplayVector2(1440, 900));
+    proj.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(304.1, 212.4));
+    proj.set_camera_placement(CameraPlacement(GodotCameraVector3(0, 106.2, 0), 0.0));
 
     GodotDisplayVector2 screen_px;
     bool proj_ok = proj.project_gaze(data.gaze_origin, data.gaze_direction, screen_px);
     CHECK(proj_ok == true);
-    CHECK(screen_px->x >= 0.0);
-    CHECK(screen_px->x <= 1440.0);
-    CHECK(screen_px->y >= 0.0);
-    CHECK(screen_px->y <= 900.0);
+    CHECK(screen_px.x >= 0.0);
+    CHECK(screen_px.x <= 1440.0);
+    CHECK(screen_px.y >= 0.0);
+    CHECK(screen_px.y <= 900.0);
 }
 
 TEST_CASE("Pipeline Stage-by-Stage Verification on Wink Fixtures with Signal Separation") {
@@ -206,4 +206,42 @@ TEST_CASE("Pipeline Obscured Face Graceful Handling") {
     // Stage 2 detection fails gracefully
     CHECK(data.face_detected == false);
     CHECK(data.gaze_success == false);
+}
+
+TEST_CASE("Pipeline Stage 8: Eye Centers Invariant Under Head Roll") {
+    std::string yunet_path = get_model_path("project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort");
+    std::string gaze_path = get_model_path("project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort");
+    std::string eye_state_path = get_model_path("project/addons/godot-gaze/models/open_closed_eye.ort");
+    std::string lm_path = get_model_path("project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort");
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    const std::vector<std::pair<std::string, float>> roll_fixtures = {
+        {"tests/resources/self_roll_left.jpg", 0.785f},
+        {"tests/resources/self_roll_right.jpg", -0.785f},
+        {"tests/resources/self_yaw_left_roll_left.jpg", 0.785f}
+    };
+
+    for (const auto& fix : roll_fixtures) {
+        TestImage img = load_test_image(fix.first);
+        REQUIRE(img.valid());
+
+        GazeFrameData data;
+        data.camera_raw_bgr = img.data;
+        data.camera_width = img.width;
+        data.camera_height = img.height;
+        data.roll_hint_rad = fix.second;
+
+        pipeline.process_frame_synchronous(&data);
+
+        REQUIRE(data.face_detected == true);
+        REQUIRE(data.gaze_success == true);
+
+        // Invariant: Unrolled eye midpoint must match unrolled gaze origin in canonical GodotCamera space
+        GodotCameraVector3 eye_mid = (data.eye_crops.left_eye_center_cam + data.eye_crops.right_eye_center_cam) * 0.5;
+        CHECK(data.gaze_origin.x == doctest::Approx(eye_mid.x).epsilon(1e-3));
+        CHECK(data.gaze_origin.y == doctest::Approx(eye_mid.y).epsilon(1e-3));
+        CHECK(data.gaze_origin.z == doctest::Approx(eye_mid.z).epsilon(1e-3));
+    }
 }

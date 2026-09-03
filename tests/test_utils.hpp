@@ -59,7 +59,7 @@ namespace GazeTest
 
     inline void extract_dense_eye_crops_60x60(
         const uint8_t *frame_bgr, int width, int height,
-        const std::vector<Gaze::GazeVector2> &landmarks_35,
+        const std::vector<Gaze::GodotCameraImageVector2> &landmarks_35,
         uint8_t *out_right_crop_bgr, uint8_t *out_left_crop_bgr,
         float scale_factor = 1.5f)
     {

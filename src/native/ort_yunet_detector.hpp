@@ -14,6 +14,19 @@
 
 namespace Gaze
 {
+    struct HeadPose
+    {
+        float pitch_rad = 0.0f;
+        float yaw_rad = 0.0f;
+        float roll_rad = 0.0f;
+        float trans_x_mm = 0.0f;
+        float trans_y_mm = 0.0f;
+        float trans_z_mm = 0.0f;
+
+        OpenCVCameraVector3 rotation_vector() const { return OpenCVCameraVector3(pitch_rad, yaw_rad, roll_rad); }
+        OpenCVCameraVector3 translation() const { return OpenCVCameraVector3(trans_x_mm, trans_y_mm, trans_z_mm); }
+    };
+
     struct YuNetResult
     {
         bool face_detected = false;
@@ -24,11 +37,11 @@ namespace Gaze
         float roi_w = 0.0f;
         float roi_h = 0.0f;
 
-        GazeVector2 right_eye_px;
-        GazeVector2 left_eye_px;
-        GazeVector2 nose_tip_px;
-        GazeVector2 mouth_right_px;
-        GazeVector2 mouth_left_px;
+        GodotCameraImageVector2 right_eye_px;
+        GodotCameraImageVector2 left_eye_px;
+        GodotCameraImageVector2 nose_tip_px;
+        GodotCameraImageVector2 mouth_right_px;
+        GodotCameraImageVector2 mouth_left_px;
 
         HeadPose head_pose;
     };
@@ -81,7 +94,7 @@ namespace Gaze
         bool process_frame_single_pass(const Frame &frame, YuNetResult &out_result, float roll_deg);
         bool process_frame(const Frame &frame, YuNetResult &out_result, float roll_hint_rad = 0.0f);
 
-        std::vector<GazeVector3> get_canonical_godot_model_points() const;
+        std::vector<GodotFaceVector3> get_canonical_godot_model_points() const;
     };
 
 } // namespace Gaze

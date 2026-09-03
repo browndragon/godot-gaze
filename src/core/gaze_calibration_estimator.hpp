@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include "math_defs.hpp"
+#include "opencv_space_conversions.hpp"
 #include <vector>
 
 namespace Gaze
@@ -12,18 +12,11 @@ namespace Gaze
 
     struct CalibrationSample
     {
-        GazeVector3 gaze_origin;    // Eye center in camera space, mm
-        GazeVector3 gaze_direction; // Raw gaze direction unit vector in camera space
-        GazeVector2 target_pos_mm;  // Target position in screen millimeters (relative to center: +X right, +Y up)
+        GodotCameraVector3 gaze_origin;                           // Eye center in GodotCamera space, mm
+        GodotCameraVector3 gaze_direction;                        // Raw gaze direction unit vector in GodotCamera space (+Z towards screen)
+        SpacedVector2<Space::GodotDisplayMm> target_pos_mm;       // Target position in display millimeters from top-left (0..W_mm, 0..H_mm, +X right, +Y down)
     };
 
-    // TODO: Is this code still on the critical path/in use in our code?
-    // I don't love it: many of these values either seem automatically derivable or otherwise kind of weird.
-    // For instance, on macos we could examine the AVCaptureDevice for `position` == `front`, then use the display info to calculate information abt the notch on the screen to know about the camera.
-    // We're already writing our own windows equivalent, which should behave similarly. On android & ios, we can just _assume_ a connected/notched webcam.
-    // etc etc; the need to "solve for" camera offset xyz and tilt feels VERY bad to me.
-    // The one case we definitely do still need it has to do with browsers, where we know very little about the underlying machine.
-    // In those cases, we already MUST do display calibration for good results. Is it possible to do some sort of webcam calibration at the same time?
     struct CalibrationWeights
     {
         // Prior weights (regularization factors)
@@ -59,11 +52,11 @@ namespace Gaze
     public:
         static bool estimate(
             const std::vector<CalibrationSample> &samples,
-            const GazeVector2 &screen_size_mm,
-            const GazeVector3 &initial_camera_offset,
+            const SpacedVector2<Space::GodotDisplayMm> &screen_size_mm,
+            const GodotCameraVector3 &initial_camera_offset,
             double initial_camera_tilt_deg,
             bool freeze_camera_params,
-            GazeVector3 &out_camera_offset,
+            GodotCameraVector3 &out_camera_offset,
             double &out_camera_tilt_deg,
             double &out_bias_pitch,
             double &out_bias_yaw,

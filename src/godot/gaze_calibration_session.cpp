@@ -97,24 +97,24 @@ bool GazeCalibrationSession::calculate_calibration(const Ref<DeviceCalibration>&
         Vector3 dir_val = gaze_directions[i];
 
         Gaze::CalibrationSample sample;
-        sample.gaze_origin = Gaze::GazeVector3(orig_val.x, orig_val.y, orig_val.z);
-        sample.gaze_direction = Gaze::GazeVector3(dir_val.x, dir_val.y, dir_val.z);
-        sample.target_pos_mm = Gaze::GazeVector2(
+        sample.gaze_origin = Gaze::GodotCameraVector3(orig_val.x, orig_val.y, orig_val.z);
+        sample.gaze_direction = Gaze::GodotCameraVector3(dir_val.x, dir_val.y, dir_val.z);
+        sample.target_pos_mm = Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(
             (tgt_val.x / screen_sz_px.x) * screen_sz_mm.x,
             (tgt_val.y / screen_sz_px.y) * screen_sz_mm.y
         );
         core_samples.push_back(sample);
     }
 
-    Gaze::GazeVector3 out_off;
+    Gaze::GodotCameraVector3 out_off;
     double out_tilt = 0.0;
     double out_pitch = 0.0;
     double out_yaw = 0.0;
 
     bool success = Gaze::CalibrationEstimator::estimate(
         core_samples,
-        Gaze::GazeVector2(screen_sz_mm.x, screen_sz_mm.y),
-        Gaze::GazeVector3(init_off.x, init_off.y, init_off.z),
+        Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(screen_sz_mm.x, screen_sz_mm.y),
+        Gaze::GodotCameraVector3(init_off.x, init_off.y, init_off.z),
         init_tilt,
         freeze_camera_params,
         out_off,

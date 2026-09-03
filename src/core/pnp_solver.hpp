@@ -6,7 +6,6 @@
  */
 #pragma once
 
-#include "math_defs.hpp"
 #include "sqpnp_solver.hpp"
 #include <vector>
 
@@ -26,19 +25,19 @@ namespace Gaze
  * @return true if convergence succeeded.
  */
 inline bool solve_pnp_rvec(
-    const std::vector<GazeVector3> &model_points,
-    const std::vector<GazeVector2> &image_points,
+    const std::vector<OpenCVFaceVector3> &model_points,
+    const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &image_points,
     double fx, double fy, double cx, double cy,
-    GazeVector3 &rvec, GazeVector3 &tvec)
+    OpenCVCameraVector3 &rvec, OpenCVCameraVector3 &tvec)
 {
     return SQPnPSolver::solve_rvec(model_points, image_points, fx, fy, cx, cy, rvec, tvec);
 }
 
 inline bool solve_pnp(
-    const std::vector<GazeVector3> &model_points,
-    const std::vector<GazeVector2> &image_points,
+    const std::vector<OpenCVFaceVector3> &model_points,
+    const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &image_points,
     double fx, double fy, double cx, double cy,
-    GazeBasis3D &rotation, GazeVector3 &translation)
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &rotation, OpenCVCameraVector3 &translation)
 {
     return SQPnPSolver::solve(model_points, image_points, fx, fy, cx, cy, rotation, translation);
 }

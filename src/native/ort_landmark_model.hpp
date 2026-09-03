@@ -43,7 +43,7 @@ namespace Gaze
          * @param out_landmarks_norm Vector of 35 normalized (x, y) coordinates in [0, 1] relative to the face crop.
          * @return True if inference succeeded.
          */
-        bool extract_landmarks_norm(const uint8_t *raw_crop_bgr, std::vector<GazeVector2> &out_landmarks_norm);
+        bool extract_landmarks_norm(const uint8_t *raw_crop_bgr, std::vector<GodotCameraImageVector2> &out_landmarks_norm);
 
         /**
          * @brief Crops the face ROI from the full image, resizes to 60x60, and extracts 35 landmarks mapped back to original image space.
@@ -55,7 +55,8 @@ namespace Gaze
          * @param roll_hint_rad Optional head roll angle in radians to counter-rotate before cropping.
          * @return True if successful.
          */
-        bool extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GazeVector2> &out_landmarks_px, float roll_hint_rad = 0.0f);
+        bool extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GodotCameraImageVector2> &out_landmarks_px, float roll_hint_rad = 0.0f);
+        bool extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &out_landmarks_px, float roll_hint_rad = 0.0f);
     };
 
 } // namespace Gaze

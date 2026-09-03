@@ -269,8 +269,8 @@ namespace Gaze
             bool lm_ok = _stage_3_extract_landmarks(data, working_frame);
             if (lm_ok)
             {
-                GazeVector3 rvec(0.0f, 0.0f, 0.0f);
-                GazeVector3 tvec(0.0f, 0.0f, 600.0f);
+                OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
+                OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
                 bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
                 if (pose_ok)
                 {
@@ -371,13 +371,19 @@ namespace Gaze
             data->has_landmarks_2d = false;
             return false;
         }
-        data->internal_landmarks_working_px.clear();
         bool lm_ok = landmark_model->extract_landmarks(working_frame.data, working_frame.width, working_frame.height, data->face_bbox, data->internal_landmarks_working_px, 0.0f);
-        data->has_landmarks_2d = (lm_ok && data->internal_landmarks_working_px.size() == 35);
+        if (lm_ok && data->internal_landmarks_working_px.size() == 35)
+        {
+            data->has_landmarks_2d = true;
+        }
+        else
+        {
+            data->has_landmarks_2d = false;
+        }
         return data->has_landmarks_2d;
     }
 
-    bool GazeTrackingPipeline::_stage_4_solve_head_pose(GazeFrameData *data, const Frame &working_frame, GazeVector3 &out_rvec, GazeVector3 &out_tvec)
+    bool GazeTrackingPipeline::_stage_4_solve_head_pose(GazeFrameData *data, const Frame &working_frame, OpenCVCameraVector3 &out_rvec, OpenCVCameraVector3 &out_tvec)
     {
         if (!data->has_landmarks_2d || data->internal_landmarks_working_px.size() != 35) return false;
         double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : calculate_default_focal_length(static_cast<double>(working_frame.width));
@@ -387,28 +393,27 @@ namespace Gaze
         bool pnp_ok = SQPnPSolver::solve_rvec(model_35pt, data->internal_landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec);
         if (!pnp_ok) return false;
 
-        data->head_transform = CoordinateConversions::opencv_pose_to_godot_camera_transform(
-            OpenCVCameraVector3(out_tvec), OpenCVCameraVector3(out_rvec));
+        data->head_transform = CoordinateConversions::opencv_pose_to_godot_camera_transform(out_tvec, out_rvec);
         data->head_translation = data->head_transform.origin;
-        data->head_rotation = GodotCameraVector3(out_rvec);
+        data->head_rotation = data->head_transform.basis.get_euler_rad();
         return true;
     }
 
-    void GazeTrackingPipeline::_stage_5_extract_eye_crops(GazeFrameData *data, const Frame &working_frame, const GazeVector3 &rvec, const GazeVector3 &tvec)
+    void GazeTrackingPipeline::_stage_5_extract_eye_crops(GazeFrameData *data, const Frame &working_frame, const OpenCVCameraVector3 &rvec, const OpenCVCameraVector3 &tvec)
     {
         if (!data->has_landmarks_2d || data->internal_landmarks_working_px.size() != 35) return;
 
         // Landmarks: [0..1] = Image Left eye (Anatomical Right), [2..3] = Image Right eye (Anatomical Left)
-        float r_cx = (data->internal_landmarks_working_px[0].x + data->internal_landmarks_working_px[1].x) * 0.5f;
-        float r_cy = (data->internal_landmarks_working_px[0].y + data->internal_landmarks_working_px[1].y) * 0.5f;
-        float r_dx = data->internal_landmarks_working_px[0].x - data->internal_landmarks_working_px[1].x;
-        float r_dy = data->internal_landmarks_working_px[0].y - data->internal_landmarks_working_px[1].y;
+        float r_cx = static_cast<float>((data->internal_landmarks_working_px[0].x + data->internal_landmarks_working_px[1].x) * 0.5);
+        float r_cy = static_cast<float>((data->internal_landmarks_working_px[0].y + data->internal_landmarks_working_px[1].y) * 0.5);
+        float r_dx = static_cast<float>(data->internal_landmarks_working_px[0].x - data->internal_landmarks_working_px[1].x);
+        float r_dy = static_cast<float>(data->internal_landmarks_working_px[0].y - data->internal_landmarks_working_px[1].y);
         float r_w = std::sqrt(r_dx * r_dx + r_dy * r_dy);
 
-        float l_cx = (data->internal_landmarks_working_px[2].x + data->internal_landmarks_working_px[3].x) * 0.5f;
-        float l_cy = (data->internal_landmarks_working_px[2].y + data->internal_landmarks_working_px[3].y) * 0.5f;
-        float l_dx = data->internal_landmarks_working_px[2].x - data->internal_landmarks_working_px[3].x;
-        float l_dy = data->internal_landmarks_working_px[2].y - data->internal_landmarks_working_px[3].y;
+        float l_cx = static_cast<float>((data->internal_landmarks_working_px[2].x + data->internal_landmarks_working_px[3].x) * 0.5);
+        float l_cy = static_cast<float>((data->internal_landmarks_working_px[2].y + data->internal_landmarks_working_px[3].y) * 0.5);
+        float l_dx = static_cast<float>(data->internal_landmarks_working_px[2].x - data->internal_landmarks_working_px[3].x);
+        float l_dy = static_cast<float>(data->internal_landmarks_working_px[2].y - data->internal_landmarks_working_px[3].y);
         float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
 
         float eye_box_sz = std::max({24.0f, r_w * 1.8f, l_w * 1.8f});
@@ -418,11 +423,11 @@ namespace Gaze
         data->eye_crops.head_pose_translation = tvec;
         data->eye_crops.head_pose_rotation = rvec;
 
-        GazeBasis3D head_rot = rodrigues_to_basis(rvec);
-        GazeVector3 right_eye_cv = head_rot.multiply_vector(GazeVector3(-31.5f, -32.0f, 35.0f)) + tvec;
-        GazeVector3 left_eye_cv = head_rot.multiply_vector(GazeVector3(31.5f, -32.0f, 35.0f)) + tvec;
-        data->eye_crops.right_eye_center_cam = CoordinateConversions::to_godot_camera(OpenCVCameraVector3(right_eye_cv));
-        data->eye_crops.left_eye_center_cam = CoordinateConversions::to_godot_camera(OpenCVCameraVector3(left_eye_cv));
+        SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> head_rot = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(rvec);
+        OpenCVCameraVector3 right_eye_cv = head_rot.transform(OpenCVFaceVector3(-31.5, -32.0, 35.0)) + tvec;
+        OpenCVCameraVector3 left_eye_cv = head_rot.transform(OpenCVFaceVector3(31.5, -32.0, 35.0)) + tvec;
+        data->eye_crops.right_eye_center_cam = CoordinateConversions::to_godot_camera(right_eye_cv);
+        data->eye_crops.left_eye_center_cam = CoordinateConversions::to_godot_camera(left_eye_cv);
 
         crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
                             r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
@@ -462,8 +467,8 @@ namespace Gaze
             data->gaze_success = false;
             return;
         }
-        GazeVector3 raw_gaze_dir_cv;
-        bool success = gaze_estimator->estimate_raw_gaze(data->eye_crops, raw_gaze_dir_cv);
+        OpenVINOGazeVector3 raw_gaze_dir_openvino;
+        bool success = gaze_estimator->estimate_raw_gaze(data->eye_crops, raw_gaze_dir_openvino);
         if (!success)
         {
             data->gaze_success = false;
@@ -472,10 +477,10 @@ namespace Gaze
         data->gaze_success = true;
 
         // Raw gaze mapped directly into canonical Hub GodotCameraVector3
-        GodotCameraVector3 gaze_hint_rolled = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(raw_gaze_dir_cv));
+        GodotCameraVector3 gaze_hint_rolled = CoordinateConversions::to_godot_camera(raw_gaze_dir_openvino);
         data->gaze_direction = gaze_hint_rolled.normalized();
 
-        // Eye midpoint in canonical GodotCamera space
+        // Eye midpoint in hint-rolled GodotCamera space
         data->gaze_origin = (data->eye_crops.right_eye_center_cam + data->eye_crops.left_eye_center_cam) * 0.5;
     }
 
@@ -489,9 +494,9 @@ namespace Gaze
         // 1. Unroll 3D Head Transform from GodotCameraHintRolled to canonical GodotCamera
         data->head_transform = CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(data->head_transform, +data->roll_hint_rad);
         data->head_translation = data->head_transform.origin;
-        data->head_rotation = GodotCameraVector3(data->head_transform.basis.basis.get_euler_deg() * DEG_TO_RAD);
+        data->head_rotation = data->head_transform.basis.get_euler_rad();
 
-        float current_roll = static_cast<float>(data->head_rotation->z);
+        float current_roll = static_cast<float>(data->head_rotation.z);
         // 50% lerp tweening on pipeline_roll_rad for stable temporal feedback across frames
         pipeline_roll_rad = pipeline_roll_rad * 0.5f + current_roll * 0.5f;
 
@@ -500,31 +505,34 @@ namespace Gaze
         {
             for (size_t i = 0; i < 35; ++i)
             {
-                GazeVector2 pt = data->internal_landmarks_working_px[i];
+                SpacedVector2<Space::GodotCameraWorkingImagePixels> pt = data->internal_landmarks_working_px[i];
                 if (std::abs(data->roll_hint_rad) > 1e-4f)
                 {
                     pt = rotate_point_2d(pt, +data->roll_hint_rad, data->camera_width, data->camera_height);
                 }
-                data->landmarks_2d_px[i * 2 + 0] = pt.x;
-                data->landmarks_2d_px[i * 2 + 1] = pt.y;
+                data->landmarks_2d_px[i * 2 + 0] = static_cast<float>(pt.x);
+                data->landmarks_2d_px[i * 2 + 1] = static_cast<float>(pt.y);
             }
         }
 
-        // 3. Unroll 3D Gaze Ray
-        if (data->gaze_success)
+        // 3. Unroll 3D Gaze Ray and Eye Centers
+        if (std::abs(data->roll_hint_rad) > 1e-4f)
         {
-            if (std::abs(data->roll_hint_rad) > 1e-4f)
+            float cos_a = std::cos(data->roll_hint_rad);
+            float sin_a = std::sin(data->roll_hint_rad);
+            SpacedBasis<Space::GodotCamera, Space::GodotCamera> R_roll(
+                GodotCameraVector3(cos_a, -sin_a, 0.0),
+                GodotCameraVector3(sin_a,  cos_a, 0.0),
+                GodotCameraVector3( 0.0,   0.0, 1.0)
+            );
+            if (data->gaze_success)
             {
-                float cos_a = std::cos(data->roll_hint_rad);
-                float sin_a = std::sin(data->roll_hint_rad);
-                GazeBasis3D R_roll(
-                    GazeVector3(cos_a, -sin_a, 0.0f),
-                    GazeVector3(sin_a,  cos_a, 0.0f),
-                    GazeVector3( 0.0f,   0.0f, 1.0f)
-                );
-                data->gaze_direction = GodotCameraVector3(R_roll.multiply_vector(data->gaze_direction.get()).normalized());
-                data->gaze_origin = GodotCameraVector3(R_roll.multiply_vector(data->gaze_origin.get()));
+                data->gaze_direction = R_roll.transform(data->gaze_direction).normalized();
+                data->gaze_origin = R_roll.transform(data->gaze_origin);
             }
+            // CRITICAL FIX: Unroll eye crops eye centers so (left + right) * 0.5 == gaze_origin in canonical GodotCamera space!
+            data->eye_crops.left_eye_center_cam = R_roll.transform(data->eye_crops.left_eye_center_cam);
+            data->eye_crops.right_eye_center_cam = R_roll.transform(data->eye_crops.right_eye_center_cam);
         }
     }
 

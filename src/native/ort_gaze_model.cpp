@@ -94,7 +94,7 @@ void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop_bgr, float* out_b
     }
 }
 
-bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaze_dir_cv) {
+bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, OpenVINOGazeVector3& out_gaze_dir_openvino) {
     if (!session) return false;
 
     std::vector<float> left_eye_tensor_data(EyeCrops::EYE_CROP_SIZE, 0.0f);
@@ -113,7 +113,7 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
         return false;
     }
 
-    GazeVector3 openvino_angles = CoordinateConversions::opencv_head_pose_to_openvino_angles_deg(crops.head_pose_rotation);
+    SpacedVector3<Space::OpenCVCamera> openvino_angles = CoordinateConversions::opencv_head_pose_to_openvino_angles_deg(crops.head_pose_rotation);
     head_pose_tensor_data[0] = static_cast<float>(openvino_angles.x); // Yaw
     head_pose_tensor_data[1] = static_cast<float>(openvino_angles.y); // Pitch
     head_pose_tensor_data[2] = static_cast<float>(openvino_angles.z); // Roll
@@ -163,10 +163,10 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, GazeVector3& out_gaz
             double dx = std::sin(yaw) * cos_pitch;
             double dy = std::sin(pitch);
             double dz = std::cos(yaw) * cos_pitch;
-            out_gaze_dir_cv = GazeVector3(dx, -dy, dz).normalized();
+            out_gaze_dir_openvino = OpenVINOGazeVector3(dx, -dy, dz).normalized();
         } else if (num_elements == 3) {
             // OpenVINO ADAS gaze model outputs 3D gaze vector (dx, dy, dz) in subject frame:
-            out_gaze_dir_cv = GazeVector3(out_data[0], out_data[1], out_data[2]).normalized();
+            out_gaze_dir_openvino = OpenVINOGazeVector3(out_data[0], out_data[1], out_data[2]).normalized();
         } else {
             return false;
         }

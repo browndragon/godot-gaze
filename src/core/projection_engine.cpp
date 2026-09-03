@@ -1,5 +1,4 @@
 #include "projection_engine.hpp"
-#include "math_defs.hpp" // For PI & DEG_TO_RAD
 #include <cmath>
 
 namespace Gaze
@@ -14,10 +13,10 @@ namespace Gaze
 
     GodotCameraVector3 ProjectionEngine::apply_3d_bias(const GodotCameraVector3 &raw_gaze_dir) const
     {
-        return GodotCameraVector3(apply_3d_bias_vector(
-            raw_gaze_dir.get(),
-            GazeVector2(calibration.bias_pitch, calibration.bias_yaw),
-            GazeVector2(calibration.scale_pitch, calibration.scale_yaw)));
+        return apply_3d_bias_vector(
+            raw_gaze_dir,
+            SpacedVector2<Space::GodotCameraEuler>(calibration.bias_pitch, calibration.bias_yaw),
+            SpacedVector2<Space::GodotCameraEuler>(calibration.scale_pitch, calibration.scale_yaw));
     }
 
     bool ProjectionEngine::project_gaze(const GodotCameraVector3 &gaze_origin_cam,
@@ -30,10 +29,10 @@ namespace Gaze
             return false;
         }
 
-        GazeVector2 pos_mm;
+        SpacedVector2<Space::GodotDisplayMm> pos_mm;
         if (!project_ray_to_screen_mm(
-                gaze_origin_cam.get(),
-                raw_gaze_dir_cam.get(),
+                gaze_origin_cam,
+                raw_gaze_dir_cam,
                 placement.offset,
                 placement.tilt_degrees,
                 screen_size_mm,
@@ -44,29 +43,29 @@ namespace Gaze
 
         double scale_x = screen_size_pixels.x / screen_size_mm.x;
         double scale_y = screen_size_pixels.y / screen_size_mm.y;
-        out_pixel->x = pos_mm.x * scale_x;
-        out_pixel->y = pos_mm.y * scale_y;
+        out_pixel.x = pos_mm.x * scale_x;
+        out_pixel.y = pos_mm.y * scale_y;
         return true;
     }
 
-    GazeVector2 ProjectionEngine::pixel_to_millimeter(const GodotDisplayVector2 &pixel) const
+    SpacedVector2<Space::GodotDisplayMm> ProjectionEngine::pixel_to_millimeter(const GodotDisplayVector2 &pixel) const
     {
         if (screen_size_pixels.x <= 0.0 || screen_size_pixels.y <= 0.0 ||
             screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0)
         {
-            return GazeVector2(0.0, 0.0);
+            return SpacedVector2<Space::GodotDisplayMm>(0.0, 0.0);
         }
         double scale_x = screen_size_pixels.x / screen_size_mm.x;
         double scale_y = -screen_size_pixels.y / screen_size_mm.y;
         double W_half = screen_size_pixels.x / 2.0;
         double H_half = screen_size_pixels.y / 2.0;
 
-        return GazeVector2(
-            (pixel->x - W_half) / scale_x,
-            -((pixel->y - H_half) / scale_y));
+        return SpacedVector2<Space::GodotDisplayMm>(
+            (pixel.x - W_half) / scale_x,
+            -((pixel.y - H_half) / scale_y));
     }
 
-    GodotCameraVector3 ProjectionEngine::screen_mm_to_camera_space(const GazeVector2 &screen_mm) const
+    GodotCameraVector3 ProjectionEngine::screen_mm_to_camera_space(const SpacedVector2<Space::GodotDisplayMm> &screen_mm) const
     {
         double A = -screen_mm.y - placement.offset.y;
         double theta_rad = placement.tilt_degrees * DEG_TO_RAD;

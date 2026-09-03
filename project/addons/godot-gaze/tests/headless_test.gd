@@ -182,14 +182,21 @@ func run_tests():
 		if not img:
 			printerr("FAIL: E2E - Missing fixture: ", path)
 			return {}
+		var w = img.get_width()
+		var h = img.get_height()
+		var focal = float(w) * 1.5625
+		vs.camera_set_resolution(cam_rid, w, h)
+		vs.camera_set_focal_length(cam_rid, focal)
+		gs.reset()
 		var tex = ImageTexture.create_from_image(img)
-		for k in range(20):
+		for k in range(25):
 			vs.inject_texture(cam_rid, tex)
 			gs.trigger_process()
-			await get_tree().create_timer(0.05).timeout
+			await get_tree().create_timer(0.04).timeout
+		gs.trigger_process()
 		var head_trans = gs.get_head_position()
 		var head_xform = gs.get_head_transform()
-		var head_fwd = -head_xform.basis.z
+		var head_fwd = -head_xform.basis.z.normalized()
 		var nose_gaze = project_ray_to_screen_mm(head_trans, head_fwd)
 		var eye_gaze = gs.get_gaze_screen_mm(false)
 		print("  -> Image: ", img_name, " | Head Forward: ", head_fwd, " | Nose: ", nose_gaze, " | Gaze: ", eye_gaze)

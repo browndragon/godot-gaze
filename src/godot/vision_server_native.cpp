@@ -5,11 +5,6 @@
 #include "../core/math_defs.hpp"
 #include <cstring>
 
-#ifndef WEB_ENABLED
-
-static_assert(sizeof(Gaze::GazeVector3) == sizeof(godot::Vector3), "Size of GazeVector3 must match godot::Vector3");
-static_assert(alignof(Gaze::GazeVector3) == alignof(godot::Vector3), "Alignment of GazeVector3 must match godot::Vector3");
-
 #if defined(WINDOWS_ENABLED) || defined(_WIN32)
 #include "../windows/wmf_camera.hpp"
 using NativeCamera = Gaze::WMFCamera;
@@ -138,5 +133,3 @@ bool VisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) 
 }
 
 } // namespace godot
-
-#endif // WEB_ENABLED

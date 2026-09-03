@@ -87,15 +87,15 @@ TEST_CASE("Testing Native Pipeline Model Initialization & Inference")
         // 4. Test Gaze Model inference on mock crop data
         EyeCrops crops;
         crops.face_detected = true;
-        crops.head_pose_rotation = GazeVector3(0.0, 0.0, 0.0);
-        crops.head_pose_translation = GazeVector3(0.0, 0.0, 500.0);
+        crops.head_pose_rotation = OpenCVCameraVector3(0.0, 0.0, 0.0);
+        crops.head_pose_translation = OpenCVCameraVector3(0.0, 0.0, 500.0);
         crops.left_eye_center_cam = GodotCameraVector3(31.5, 0.0, 480.0);
         crops.right_eye_center_cam = GodotCameraVector3(-31.5, 0.0, 480.0);
 
         std::memset(crops.left_eye_data, 128, 10800);
         std::memset(crops.right_eye_data, 128, 10800);
 
-        GazeVector3 gaze_dir_cv;
+        OpenVINOGazeVector3 gaze_dir_cv;
         bool model_success = model.estimate_raw_gaze(crops, gaze_dir_cv);
         REQUIRE(model_success == true);
 
@@ -161,8 +161,8 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
     REQUIRE(yunet_res.face_detected == true);
 
     // Verify head forward vector direction in standard Camera Space
-    GazeTransform3D head_transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
-    GazeVector3 head_forward = head_transform.basis.multiply_vector(GazeVector3(0, 0, -1));
+    GodotFaceTransform3D head_transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(yunet_res.head_pose.translation(), yunet_res.head_pose.rotation_vector());
+    GodotCameraVector3 head_forward = -head_transform.basis.z;
 
     // For a forward-facing head, the forward vector should point towards the screen (+Z_cam in Godot camera space)
     CHECK(head_forward.z > 0.0);
@@ -171,32 +171,32 @@ TEST_CASE("Testing Facial Landmarks and Head Pose Diagnostics")
 TEST_CASE("Testing Viewport and High-DPI Projection Coordinates")
 {
     ProjectionEngine engine;
-    engine.set_screen_size_pixels(GazeVector2(3840.0, 2160.0)); // 4K physical screen
-    engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
-    engine.set_camera_placement(CameraPlacement(GazeVector3(0, 0, 0), 0.0));
+    engine.set_screen_size_pixels(GodotDisplayVector2(3840.0, 2160.0)); // 4K physical screen
+    engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
+    engine.set_camera_placement(CameraPlacement(GodotCameraVector3(0, 0, 0), 0.0));
 
     // Staring at the center of the screen (170mm below top bezel camera)
-    GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -600.0));
-    GodotCameraVector3 direction(GazeVector3(0.0, -170.0, 600.0).normalized());
+    GodotCameraVector3 origin(0.0, 0.0, -600.0);
+    GodotCameraVector3 direction = GodotCameraVector3(0.0, -170.0, 600.0).normalized();
     GodotDisplayVector2 pixel;
     REQUIRE(engine.project_gaze(origin, direction, pixel) == true);
 
     // Physical screen center check
-    CHECK(pixel->x == doctest::Approx(1920.0));
-    CHECK(pixel->y == doctest::Approx(1080.0));
+    CHECK(pixel.x == doctest::Approx(1920.0));
+    CHECK(pixel.y == doctest::Approx(1080.0));
 
     // Simulate high-DPI scaling: window logical position is at (500, 300) logical points, scale is 2.0
-    GazeVector2 window_pos_logical(500.0, 300.0);
+    GodotDisplayVector2 window_pos_logical(500.0, 300.0);
     double scale = 2.0;
-    GazeVector2 window_pos_physical(window_pos_logical.x * scale, window_pos_logical.y * scale);
+    GodotDisplayVector2 window_pos_physical(window_pos_logical.x * scale, window_pos_logical.y * scale);
 
     // Viewport-local physical position
-    GazeVector2 local_pos_physical(pixel->x - window_pos_physical.x, pixel->y - window_pos_physical.y);
+    GodotDisplayVector2 local_pos_physical(pixel.x - window_pos_physical.x, pixel.y - window_pos_physical.y);
     CHECK(local_pos_physical.x == doctest::Approx(920.0));
     CHECK(local_pos_physical.y == doctest::Approx(480.0));
 
     // Viewport-local logical position
-    GazeVector2 local_pos_logical(local_pos_physical.x / scale, local_pos_physical.y / scale);
+    GodotDisplayVector2 local_pos_logical(local_pos_physical.x / scale, local_pos_physical.y / scale);
     CHECK(local_pos_logical.x == doctest::Approx(460.0));
     CHECK(local_pos_logical.y == doctest::Approx(240.0));
 }
@@ -204,19 +204,19 @@ TEST_CASE("Testing Viewport and High-DPI Projection Coordinates")
 TEST_CASE("Testing HiDPI Scaling Settings and Coordinate Transforms")
 {
     // Screen parameters
-    GazeVector2 screen_size_lpix(1920, 1080);
+    GodotDisplayVector2 screen_size_lpix(1920, 1080);
     double os_screen_scale = 2.0;                                                                             // Retina screen
-    GazeVector2 screen_size_ppix(screen_size_lpix.x * os_screen_scale, screen_size_lpix.y * os_screen_scale); // (3840, 2160)
+    GodotDisplayVector2 screen_size_ppix(screen_size_lpix.x * os_screen_scale, screen_size_lpix.y * os_screen_scale); // (3840, 2160)
 
     // Projected pixel from ProjectionEngine (physical pixels)
-    GazeVector2 projected_pixel_physical(1920.0, 1080.0);
+    GodotDisplayVector2 projected_pixel_physical(1920.0, 1080.0);
 
     // Window position in logical points
-    GazeVector2 window_pos_logical(100.0, 50.0);
-    GazeVector2 window_pos_physical(window_pos_logical.x * os_screen_scale, window_pos_logical.y * os_screen_scale); // (200, 100)
+    GodotDisplayVector2 window_pos_logical(100.0, 50.0);
+    GodotDisplayVector2 window_pos_physical(window_pos_logical.x * os_screen_scale, window_pos_logical.y * os_screen_scale); // (200, 100)
 
     // Calculate local position in physical pixels
-    GazeVector2 local_pos_physical(projected_pixel_physical.x - window_pos_physical.x, projected_pixel_physical.y - window_pos_physical.y);
+    GodotDisplayVector2 local_pos_physical(projected_pixel_physical.x - window_pos_physical.x, projected_pixel_physical.y - window_pos_physical.y);
 
     // Test Scenario A: allow_hidpi = true (Godot window scale is 2.0)
     {
@@ -224,7 +224,7 @@ TEST_CASE("Testing HiDPI Scaling Settings and Coordinate Transforms")
         double window_to_screen_scale_ratio = godot_window_scale / os_screen_scale;
 
         // Scale local position to Godot window space
-        GazeVector2 local_pos_godot(local_pos_physical.x * window_to_screen_scale_ratio, local_pos_physical.y * window_to_screen_scale_ratio);
+        GodotDisplayVector2 local_pos_godot(local_pos_physical.x * window_to_screen_scale_ratio, local_pos_physical.y * window_to_screen_scale_ratio);
         CHECK(window_to_screen_scale_ratio == doctest::Approx(1.0));
         CHECK(local_pos_godot.x == doctest::Approx(local_pos_physical.x));
     }
@@ -235,7 +235,7 @@ TEST_CASE("Testing HiDPI Scaling Settings and Coordinate Transforms")
         double window_to_screen_scale_ratio = godot_window_scale / os_screen_scale;
 
         // Scale local position to Godot window space
-        GazeVector2 local_pos_godot(local_pos_physical.x * window_to_screen_scale_ratio, local_pos_physical.y * window_to_screen_scale_ratio);
+        GodotDisplayVector2 local_pos_godot(local_pos_physical.x * window_to_screen_scale_ratio, local_pos_physical.y * window_to_screen_scale_ratio);
         CHECK(window_to_screen_scale_ratio == doctest::Approx(0.5));
         CHECK(local_pos_godot.x == doctest::Approx(local_pos_physical.x * 0.5));
     }
@@ -244,9 +244,9 @@ TEST_CASE("Testing HiDPI Scaling Settings and Coordinate Transforms")
 TEST_CASE("Testing Web Geometry Scaling and Coordinate Mapping Parity")
 {
     // Web Screen metrics (Simulated Retina: 1512x982 logical, 3024x1964 physical)
-    GazeVector2 screen_size_lpix(1512.0, 982.0);
+    GodotDisplayVector2 screen_size_lpix(1512.0, 982.0);
     double dpr = 2.0;
-    GazeVector2 screen_size_ppix(screen_size_lpix.x * dpr, screen_size_lpix.y * dpr); // (3024, 1964)
+    GodotDisplayVector2 screen_size_ppix(screen_size_lpix.x * dpr, screen_size_lpix.y * dpr); // (3024, 1964)
 
     // Scenario A: godot_scale = 1.0 (Default Web export, HiDPI disabled)
     {
@@ -254,18 +254,18 @@ TEST_CASE("Testing Web Geometry Scaling and Coordinate Mapping Parity")
         double window_to_screen_scale_ratio = godot_scale / dpr; // 0.5
 
         // Gaze intersection point in physical pixels on the screen
-        GazeVector2 projected_pixel_physical(1512.0, 982.0);
+        GodotDisplayVector2 projected_pixel_physical(1512.0, 982.0);
 
         // Canvas position on the screen in physical pixels
-        GazeVector2 canvas_pos_physical(300.0 * dpr, 200.0 * dpr); // (600, 400)
+        GodotDisplayVector2 canvas_pos_physical(300.0 * dpr, 200.0 * dpr); // (600, 400)
 
         // Calculate local position in physical pixels
-        GazeVector2 local_pos_physical(
+        GodotDisplayVector2 local_pos_physical(
             projected_pixel_physical.x - canvas_pos_physical.x,
             projected_pixel_physical.y - canvas_pos_physical.y); // (912, 582)
 
         // Scale to Godot viewport space
-        GazeVector2 local_pos_godot(
+        GodotDisplayVector2 local_pos_godot(
             local_pos_physical.x * window_to_screen_scale_ratio,
             local_pos_physical.y * window_to_screen_scale_ratio);
 
@@ -279,14 +279,14 @@ TEST_CASE("Testing Web Geometry Scaling and Coordinate Mapping Parity")
         double godot_scale = 2.0;
         double window_to_screen_scale_ratio = godot_scale / dpr; // 1.0
 
-        GazeVector2 projected_pixel_physical(1512.0, 982.0);
-        GazeVector2 canvas_pos_physical(300.0 * dpr, 200.0 * dpr);
+        GodotDisplayVector2 projected_pixel_physical(1512.0, 982.0);
+        GodotDisplayVector2 canvas_pos_physical(300.0 * dpr, 200.0 * dpr);
 
-        GazeVector2 local_pos_physical(
+        GodotDisplayVector2 local_pos_physical(
             projected_pixel_physical.x - canvas_pos_physical.x,
             projected_pixel_physical.y - canvas_pos_physical.y);
 
-        GazeVector2 local_pos_godot(
+        GodotDisplayVector2 local_pos_godot(
             local_pos_physical.x * window_to_screen_scale_ratio,
             local_pos_physical.y * window_to_screen_scale_ratio);
 
@@ -300,23 +300,23 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping")
 {
     // 1. Setup projection engine mock metrics (MacBook Pro 15" logical sizing)
     Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GazeVector2(1440.0, 900.0)); // Logical screen width
-    engine.set_screen_size_mm(Gaze::GazeVector2(300.0, 195.0));      // Physical screen mm
-    Gaze::CameraPlacement placement(Gaze::GazeVector3(0.0, 95.5, 0.0), 0.0);
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1440.0, 900.0)); // Logical screen width
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(300.0, 195.0));      // Physical screen mm
+    Gaze::CameraPlacement placement(Gaze::GodotCameraVector3(0.0, 95.5, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
     // 2. Test standard window (positioned at 0,0)
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::derive_configuration(
-            Gaze::GazeVector2(0.0, 0.0), // Window pos in logical screen pixels
-            Gaze::GazeVector2(1.0, 1.0), // Viewport scale
-            Gaze::GazeVector2(0.0, 0.0)  // Viewport origin offset
+            Gaze::GodotDisplayVector2(0.0, 0.0), // Window pos in logical screen pixels
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(1.0, 1.0), // Viewport scale
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(0.0, 0.0)  // Viewport origin offset
         );
 
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -95.5, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(0.0, 0.0, 1.0));
+        Gaze::GodotCameraVector3 origin_cam(0.0, -95.5, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(0.0, 0.0, 1.0);
 
-        Gaze::GazeVector2 viewport_pixel;
+        Gaze::SpacedVector2<Gaze::Space::GodotViewportPx> viewport_pixel;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
 
         REQUIRE(ok);
@@ -327,15 +327,15 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping")
     // 3. Test window positioned at (180, 82) logical pixels
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::derive_configuration(
-            Gaze::GazeVector2(180.0, 82.0), // Window pos in logical screen pixels
-            Gaze::GazeVector2(1.0, 1.0),    // Viewport scale
-            Gaze::GazeVector2(0.0, 0.0)     // Viewport origin offset
+            Gaze::GodotDisplayVector2(180.0, 82.0), // Window pos in logical screen pixels
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(1.0, 1.0),    // Viewport scale
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(0.0, 0.0)     // Viewport origin offset
         );
 
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -95.5, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(0.0, 0.0, 1.0));
+        Gaze::GodotCameraVector3 origin_cam(0.0, -95.5, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(0.0, 0.0, 1.0);
 
-        Gaze::GazeVector2 viewport_pixel;
+        Gaze::SpacedVector2<Gaze::Space::GodotViewportPx> viewport_pixel;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
 
         REQUIRE(ok);
@@ -347,15 +347,15 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping")
     // 4. Test window positioned at (180, 82) logical pixels using from_godot_geometry
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(180.0, 82.0), // Window pos in logical pixels
-            Gaze::GazeVector2(1.0, 1.0),    // Viewport scale
-            Gaze::GazeVector2(0.0, 0.0)     // Viewport origin offset
+            Gaze::GodotDisplayVector2(180.0, 82.0), // Window pos in logical pixels
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(1.0, 1.0),    // Viewport scale
+            Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>(0.0, 0.0)     // Viewport origin offset
         );
 
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -95.5, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(0.0, 0.0, 1.0));
+        Gaze::GodotCameraVector3 origin_cam(0.0, -95.5, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(0.0, 0.0, 1.0);
 
-        Gaze::GazeVector2 viewport_pixel;
+        Gaze::SpacedVector2<Gaze::Space::GodotViewportPx> viewport_pixel;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, viewport_pixel);
 
         REQUIRE(ok);
@@ -365,35 +365,37 @@ TEST_CASE("Testing ScreenProjector Decoupled Coordinate Mapping")
 
 TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity")
 {
+    using ViewportPx = Gaze::SpacedVector2<Gaze::Space::GodotViewportPx>;
+
     // Setup projection engine mock metrics
     Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GazeVector2(1440.0, 900.0)); // Logical screen width
-    engine.set_screen_size_mm(Gaze::GazeVector2(302.0, 188.0));      // Physical screen mm
-    Gaze::CameraPlacement placement(Gaze::GazeVector3(0.0, 94.0, 0.0), 0.0);
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1440.0, 900.0)); // Logical screen width
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(302.0, 188.0));      // Physical screen mm
+    Gaze::CameraPlacement placement(Gaze::GodotCameraVector3(0.0, 94.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
     // 1. Standard Configuration
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(100.0, 50.0), // Window pos in logical screen pixels
-            Gaze::GazeVector2(1.0, 1.0),    // Logical viewport scale
-            Gaze::GazeVector2(0.0, 0.0)     // Logical viewport offset
+            Gaze::GodotDisplayVector2(100.0, 50.0), // Window pos in logical screen pixels
+            ViewportPx(1.0, 1.0),                  // Logical viewport scale
+            ViewportPx(0.0, 0.0)                   // Logical viewport offset
         );
 
-        Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
+        ViewportPx logical_pixel(512.0, 300.0);
+        Gaze::GodotDisplayVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
 
         CHECK(physical_pixel.x == doctest::Approx(612.0));
         CHECK(physical_pixel.y == doctest::Approx(350.0));
 
         // Setup raw gaze/origin in camera space and project it back to verify inverse parity
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -94.0, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(0.05, -0.02, 0.998)); // Random gaze direction pointing forward
-        Gaze::GazeVector2 proj_viewport;
+        Gaze::GodotCameraVector3 origin_cam(0.0, -94.0, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(0.05, -0.02, 0.998); // Random gaze direction pointing forward
+        ViewportPx proj_viewport;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         REQUIRE(ok);
 
-        Gaze::GazeVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
+        Gaze::GodotDisplayVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
 
         double local_x = proj_physical.x - projector.window_position_px.x;
         double local_y = proj_physical.y - projector.window_position_px.y;
@@ -407,24 +409,24 @@ TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity")
     // 2. Scaled viewport configuration (e.g. game viewport stretched by 2.0)
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(200.0, 100.0), // window position in logical pixels
-            Gaze::GazeVector2(2.0, 2.0),     // viewport scale
-            Gaze::GazeVector2(0.0, 0.0)      // offset
+            Gaze::GodotDisplayVector2(200.0, 100.0), // window position in logical pixels
+            ViewportPx(2.0, 2.0),                   // viewport scale
+            ViewportPx(0.0, 0.0)                    // offset
         );
 
-        Gaze::GazeVector2 logical_pixel(512.0, 300.0);
-        Gaze::GazeVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
+        ViewportPx logical_pixel(512.0, 300.0);
+        Gaze::GodotDisplayVector2 physical_pixel = projector.map_viewport_to_screen_px(logical_pixel);
         CHECK(physical_pixel.x == doctest::Approx(1224.0));
         CHECK(physical_pixel.y == doctest::Approx(700.0));
 
         // Assert inverse parity
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -94.0, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(-0.1, 0.05, 0.99));
-        Gaze::GazeVector2 proj_viewport;
+        Gaze::GodotCameraVector3 origin_cam(0.0, -94.0, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(-0.1, 0.05, 0.99);
+        ViewportPx proj_viewport;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         REQUIRE(ok);
 
-        Gaze::GazeVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
+        Gaze::GodotDisplayVector2 proj_physical = projector.map_viewport_to_screen_px(proj_viewport);
         double local_x = proj_physical.x - projector.window_position_px.x;
         double local_y = proj_physical.y - projector.window_position_px.y;
         double view_x = (local_x - projector.viewport_offset_px.x) / projector.viewport_scale.x;
@@ -437,13 +439,13 @@ TEST_CASE("Testing ScreenProjector Scaling & Inverse Parity")
     // 3. Check Safeguards & Division-by-Zero Protection
     {
         Gaze::ScreenProjector projector = Gaze::ScreenProjector::from_godot_geometry(
-            Gaze::GazeVector2(0.0, 0.0),
-            Gaze::GazeVector2(0.0, 0.0), // Scale = 0 (Division by zero risk!)
-            Gaze::GazeVector2(0.0, 0.0));
+            Gaze::GodotDisplayVector2(0.0, 0.0),
+            ViewportPx(0.0, 0.0), // Scale = 0 (Division by zero risk!)
+            ViewportPx(0.0, 0.0));
 
-        Gaze::GodotCameraVector3 origin_cam(Gaze::GazeVector3(0.0, -94.0, -800.0));
-        Gaze::GodotCameraVector3 dir_cam(Gaze::GazeVector3(0.0, 0.0, 1.0));
-        Gaze::GazeVector2 proj_viewport;
+        Gaze::GodotCameraVector3 origin_cam(0.0, -94.0, -800.0);
+        Gaze::GodotCameraVector3 dir_cam(0.0, 0.0, 1.0);
+        ViewportPx proj_viewport;
         bool ok = projector.project_to_viewport(engine, origin_cam, dir_cam, proj_viewport);
         CHECK_FALSE(ok); // Must fail gracefully
     }
@@ -454,10 +456,10 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     // Test case A: Logical math verification
     // 1. Staring straight ahead (near-zero rotation)
     {
-        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_straight(0.0, 0.0, 0.0);
-        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_straight);
-        Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
+        Gaze::OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+        Gaze::OpenCVCameraVector3 rotation_straight(0.0, 0.0, 0.0);
+        Gaze::GodotFaceTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_straight);
+        Gaze::GodotCameraVector3 head_forward = -transform.basis.z.normalized();
 
         // Z points towards the screen (positive Z in Godot camera space)
         CHECK(head_forward.z > 0.9);
@@ -467,10 +469,10 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
 
     // 2. Head tilted up (pitch rotation around X is negative in OpenCV: rvec.x < 0)
     {
-        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_up(-0.15, 0.0, 0.0); // ~8.6 degrees up
-        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_up);
-        Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
+        Gaze::OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+        Gaze::OpenCVCameraVector3 rotation_up(-0.15, 0.0, 0.0); // ~8.6 degrees up
+        Gaze::GodotFaceTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_up);
+        Gaze::GodotCameraVector3 head_forward = -transform.basis.z.normalized();
 
         // Pitch up must produce a positive Y component in camera space
         CHECK(head_forward.y > 0.05);
@@ -479,10 +481,10 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
 
     // 3. Head tilted down (pitch rotation around X is positive in OpenCV: rvec.x > 0)
     {
-        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_down(0.15, 0.0, 0.0); // ~8.6 degrees down
-        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_down);
-        Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
+        Gaze::OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+        Gaze::OpenCVCameraVector3 rotation_down(0.15, 0.0, 0.0); // ~8.6 degrees down
+        Gaze::GodotFaceTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_down);
+        Gaze::GodotCameraVector3 head_forward = -transform.basis.z.normalized();
 
         // Pitch down must produce a negative Y component in camera space
         CHECK(head_forward.y < -0.05);
@@ -491,10 +493,10 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
 
     // 4. Head turned left (yaw rotation around Y is negative in OpenCV: rvec.y < 0) -> Viewer Right (+X)
     {
-        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_left(0.0, -0.15, 0.0); // ~8.6 degrees left
-        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
-        Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
+        Gaze::OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+        Gaze::OpenCVCameraVector3 rotation_left(0.0, -0.15, 0.0); // ~8.6 degrees left
+        Gaze::GodotFaceTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
+        Gaze::GodotCameraVector3 head_forward = -transform.basis.z.normalized();
 
         // Turning left (facing camera's positive X direction / viewer right)
         CHECK(head_forward.x > 0.05);
@@ -503,10 +505,10 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
 
     // 5. Head turned right (yaw rotation around Y is positive in OpenCV: rvec.y > 0) -> Viewer Left (-X)
     {
-        Gaze::GazeVector3 translation(0.0, 0.0, 800.0);
-        Gaze::GazeVector3 rotation_right(0.0, 0.15, 0.0); // ~8.6 degrees right
-        Gaze::GazeTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
-        Gaze::GazeVector3 head_forward = -transform.basis.z.normalized();
+        Gaze::OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+        Gaze::OpenCVCameraVector3 rotation_right(0.0, 0.15, 0.0); // ~8.6 degrees right
+        Gaze::GodotFaceTransform3D transform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
+        Gaze::GodotCameraVector3 head_forward = -transform.basis.z.normalized();
 
         // Turning right (facing camera's negative X direction / viewer left)
         CHECK(head_forward.x < -0.05);
@@ -516,28 +518,22 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
     // 6. Test PnP solver recovery of pitch down from 2D projected landmarks
     {
         double fx = 1000.0, cx = 320.0, cy = 240.0;
-        std::vector<Gaze::GazeVector3> model_points = {
-            Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-            Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-            Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
-            Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
-            Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
-        };
+        std::vector<Gaze::OpenCVFaceVector3> model_points = Gaze::FaceModelGeometry::get_5pt_model_points();
 
         // True pose: pitched down by ~15 degrees (rvec.x = +0.2618)
-        Gaze::GazeVector3 true_rvec(0.2618, 0.0, 0.0);
-        Gaze::GazeVector3 true_tvec(0.0, 50.0, 650.0);
+        Gaze::OpenCVCameraVector3 true_rvec(0.2618, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 true_tvec(0.0, 50.0, 650.0);
 
-        Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
-        std::vector<Gaze::GazeVector2> img_pts(5);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_true = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(true_rvec);
+        std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> img_pts(5);
         for (size_t i = 0; i < 5; ++i) {
-            Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
-            img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+            Gaze::OpenCVCameraVector3 P_cam = R_true.transform(model_points[i]) + true_tvec;
+            img_pts[i] = Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
         }
 
         // Run PnP solver with un-warmed default guess (rvec = 0, tvec = 700)
-        Gaze::GazeVector3 est_rvec(0.0, 0.0, 0.0);
-        Gaze::GazeVector3 est_tvec(0.0, 0.0, 700.0);
+        Gaze::OpenCVCameraVector3 est_rvec(0.0, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 est_tvec(0.0, 0.0, 700.0);
         bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, est_rvec, est_tvec);
         REQUIRE(pnp_ok == true);
 
@@ -546,55 +542,49 @@ TEST_CASE("Testing Head Rotation Pitch and Yaw Coordinate Signs")
         CHECK(est_rvec.x > 0.15); // Must recover significant downward pitch
 
         // Project ray onto screen plane (600x340 mm screen, camera at top y=170mm)
-        Gaze::GazeTransform3D xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(est_tvec, est_rvec);
+        Gaze::GodotFaceTransform3D xform = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(est_tvec, est_rvec);
         Gaze::GodotCameraVector3 head_fwd(-xform.basis.z.normalized());
         Gaze::GodotCameraVector3 origin(xform.origin);
         
         Gaze::ProjectionEngine proj_engine;
-        proj_engine.set_screen_size_pixels(Gaze::GazeVector2(1920, 1080));
-        proj_engine.set_screen_size_mm(Gaze::GazeVector2(600, 340));
-        proj_engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GazeVector3(0, 170, 0), 0.0));
+        proj_engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1920, 1080));
+        proj_engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(600, 340));
+        proj_engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0, 170, 0), 0.0));
         
         Gaze::GodotDisplayVector2 projected_pixel;
         bool proj_ok = proj_engine.project_gaze(origin, head_fwd, projected_pixel);
-        std::cout << "[PnP Test] Head forward: (" << head_fwd->x << ", " << head_fwd->y << ", " << head_fwd->z << ") | Projected pixel: (" << projected_pixel->x << ", " << projected_pixel->y << ")" << std::endl;
+        std::cout << "[PnP Test] Head forward: (" << head_fwd.x << ", " << head_fwd.y << ", " << head_fwd.z << ") | Projected pixel: (" << projected_pixel.x << ", " << projected_pixel.y << ")" << std::endl;
         CHECK(proj_ok == true);
-        CHECK(projected_pixel->y > 540.0); // Pitch down must land in bottom half of screen (>540px)
+        CHECK(projected_pixel.y > 540.0); // Pitch down must land in bottom half of screen (>540px)
     }
 
     // 7. Test PnP solver sensitivity under landmark Y-noise (Cold-start vs Warm-start)
     {
         double fx = 1000.0, cx = 320.0, cy = 240.0;
-        std::vector<Gaze::GazeVector3> model_points = {
-            Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-            Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-            Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
-            Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
-            Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
-        };
+        std::vector<Gaze::OpenCVFaceVector3> model_points = Gaze::FaceModelGeometry::get_5pt_model_points();
 
         // Pitched down pose with 1.5px landmark Y-shift / noise (typical YuNet variance)
-        Gaze::GazeVector3 true_rvec(0.20, 0.0, 0.0); // ~11.5 deg pitch down
-        Gaze::GazeVector3 true_tvec(0.0, 30.0, 650.0);
+        Gaze::OpenCVCameraVector3 true_rvec(0.20, 0.0, 0.0); // ~11.5 deg pitch down
+        Gaze::OpenCVCameraVector3 true_tvec(0.0, 30.0, 650.0);
 
-        Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
-        std::vector<Gaze::GazeVector2> img_pts(5);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_true = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(true_rvec);
+        std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> img_pts(5);
         for (size_t i = 0; i < 5; ++i) {
-            Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
-            img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+            Gaze::OpenCVCameraVector3 P_cam = R_true.transform(model_points[i]) + true_tvec;
+            img_pts[i] = Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
         }
         // Add 1.5px Y distortion to nose & mouth (simulating foreshortening detection noise)
         img_pts[2].y -= 1.5; // Nose detected slightly higher
         img_pts[3].y += 1.5; // Mouth detected slightly lower
 
         // Cold start (rvec=0, tvec=700)
-        Gaze::GazeVector3 cold_rvec(0.0, 0.0, 0.0);
-        Gaze::GazeVector3 cold_tvec(0.0, 0.0, 700.0);
+        Gaze::OpenCVCameraVector3 cold_rvec(0.0, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 cold_tvec(0.0, 0.0, 700.0);
         Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, cold_rvec, cold_tvec);
 
         // Warm start (starting near previous frame pose)
-        Gaze::GazeVector3 warm_rvec(0.18, 0.0, 0.0);
-        Gaze::GazeVector3 warm_tvec(0.0, 28.0, 648.0);
+        Gaze::OpenCVCameraVector3 warm_rvec(0.18, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 warm_tvec(0.0, 28.0, 648.0);
         Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, warm_rvec, warm_tvec);
 
         std::cout << "[PnP Noise Test] Cold pitch: " << cold_rvec.x << " | Warm pitch: " << warm_rvec.x << std::endl;
@@ -688,25 +678,25 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
 
         EyeCrops crops;
         crops.face_detected = true;
-        crops.head_pose_translation = GazeVector3(0.0, 0.0, 500.0);
+        crops.head_pose_translation = OpenCVCameraVector3(0.0, 0.0, 500.0);
         crops.left_eye_center_cam = GodotCameraVector3(31.5, 0.0, 480.0);
         crops.right_eye_center_cam = GodotCameraVector3(-31.5, 0.0, 480.0);
         std::memset(crops.left_eye_data, 128, 10800);
         std::memset(crops.right_eye_data, 128, 10800);
 
         // Test with NaN rotation
-        crops.head_pose_rotation = GazeVector3(NAN, NAN, NAN);
-        GazeVector3 gaze_dir_cv;
+        crops.head_pose_rotation = OpenCVCameraVector3(NAN, NAN, NAN);
+        OpenVINOGazeVector3 gaze_dir_cv;
         bool success = model.estimate_raw_gaze(crops, gaze_dir_cv);
         CHECK((!success || std::isnan(gaze_dir_cv.x) || std::isnan(gaze_dir_cv.y) || std::isnan(gaze_dir_cv.z)));
 
         // Test with Infinity rotation
-        crops.head_pose_rotation = GazeVector3(INFINITY, -INFINITY, INFINITY);
+        crops.head_pose_rotation = OpenCVCameraVector3(INFINITY, -INFINITY, INFINITY);
         success = model.estimate_raw_gaze(crops, gaze_dir_cv);
         CHECK((!success || std::isnan(gaze_dir_cv.x) || std::isnan(gaze_dir_cv.y) || std::isnan(gaze_dir_cv.z)));
 
         // Test with extremely large rotation values (e.g. 1e12)
-        crops.head_pose_rotation = GazeVector3(1e12, -1e12, 1e12);
+        crops.head_pose_rotation = OpenCVCameraVector3(1e12, -1e12, 1e12);
         success = model.estimate_raw_gaze(crops, gaze_dir_cv);
         CHECK((success || !success));
     }
@@ -721,14 +711,14 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         {
             EyeCrops crops;
             crops.face_detected = true;
-            crops.head_pose_rotation = GazeVector3(0.05, -0.02, 0.01);
-            crops.head_pose_translation = GazeVector3(10.0, -15.0, 600.0);
+            crops.head_pose_rotation = OpenCVCameraVector3(0.05, -0.02, 0.01);
+            crops.head_pose_translation = OpenCVCameraVector3(10.0, -15.0, 600.0);
             crops.left_eye_center_cam = GodotCameraVector3(31.5, 0.0, 580.0);
             crops.right_eye_center_cam = GodotCameraVector3(-31.5, 0.0, 580.0);
             std::memset(crops.left_eye_data, 200, 10800);
             std::memset(crops.right_eye_data, 100, 10800);
 
-            GazeVector3 gaze_dir;
+            OpenVINOGazeVector3 gaze_dir;
             for (int i = 0; i < 50; ++i)
             {
                 bool ok = model.estimate_raw_gaze(crops, gaze_dir);
@@ -766,7 +756,7 @@ TEST_CASE("Testing Edge Conditions and Stress Scenarios")
         ORTGazeModel model(gaze_path);
         // Do NOT call initialize()
         EyeCrops crops;
-        GazeVector3 gaze_dir;
+        OpenVINOGazeVector3 gaze_dir;
         CHECK(model.estimate_raw_gaze(crops, gaze_dir) == false);
     }
 
@@ -797,17 +787,17 @@ TEST_CASE("Testing Native Math Solvers and Warping Parity")
 {
     // 1. Test Rodrigues Parity (Direct Math Roundtrip / Sanity Check)
     {
-        std::vector<GazeVector3> test_rvecs = {
-            GazeVector3(0.1, -0.2, 0.5),
-            GazeVector3(0.0, 0.0, 0.0),
-            GazeVector3(1e-7, -2e-7, 1e-7), // Near zero
-            GazeVector3(1.8, -1.8, 1.8)     // Large angle
+        std::vector<OpenCVCameraVector3> test_rvecs = {
+            OpenCVCameraVector3(0.1, -0.2, 0.5),
+            OpenCVCameraVector3(0.0, 0.0, 0.0),
+            OpenCVCameraVector3(1e-7, -2e-7, 1e-7), // Near zero
+            OpenCVCameraVector3(1.8, -1.8, 1.8)     // Large angle
         };
 
         for (const auto &rvec_orig : test_rvecs)
         {
-            GazeBasis3D R_basis = rodrigues_to_basis(rvec_orig);
-            GazeVector3 rvec_native = basis_to_rodrigues(R_basis);
+            SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R_basis = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(rvec_orig);
+            OpenCVCameraVector3 rvec_native = basis_to_rodrigues<Space::OpenCVFaceModel, Space::OpenCVCamera>(R_basis);
 
             // Assert native back-conversion matches original
             CHECK(rvec_native.x == doctest::Approx(rvec_orig.x).epsilon(5e-3));
@@ -833,29 +823,29 @@ TEST_CASE("Testing Native Math Solvers and Warping Parity")
 
     // 2. Test LM PnP Solver Convergence directly to True Pose
     {
-        std::vector<GazeVector3> model_pts = {
-            GazeVector3(-FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
-            GazeVector3(FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
-            GazeVector3(0.0, -0.5, -52.0),
-            GazeVector3(-FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z),
-            GazeVector3(FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z)};
+        std::vector<OpenCVFaceVector3> model_pts = {
+            OpenCVFaceVector3(-FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
+            OpenCVFaceVector3(FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
+            OpenCVFaceVector3(0.0, -0.5, -52.0),
+            OpenCVFaceVector3(-FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z),
+            OpenCVFaceVector3(FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z)};
 
-        GazeVector3 true_rvec(0.12, -0.08, 0.04);
-        GazeVector3 true_tvec(-15.0, 10.0, 580.0);
+        OpenCVCameraVector3 true_rvec(0.12, -0.08, 0.04);
+        OpenCVCameraVector3 true_tvec(-15.0, 10.0, 580.0);
         double fx = 960.0, fy = 960.0, cx = 320.0, cy = 240.0;
 
         // Generate 2D image points from true pose
-        std::vector<GazeVector2> img_pts(5);
+        std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> img_pts(5);
         for (int i = 0; i < 5; ++i)
         {
-            GazeBasis3D R = rodrigues_to_basis(true_rvec);
-            GazeVector3 P_cam = R.multiply_vector(model_pts[i]) + true_tvec;
-            img_pts[i] = GazeVector2(fx * P_cam.x / P_cam.z + cx, fy * P_cam.y / P_cam.z + cy);
+            SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(true_rvec);
+            OpenCVCameraVector3 P_cam = R.transform(model_pts[i]) + true_tvec;
+            img_pts[i] = SpacedVector2<Space::GodotCameraWorkingImagePixels>(fx * P_cam.x / P_cam.z + cx, fy * P_cam.y / P_cam.z + cy);
         }
 
         // Run native SQPnP
-        GazeVector3 est_rvec(0.0, 0.0, 0.0);
-        GazeVector3 est_tvec(0.0, 0.0, 700.0);
+        OpenCVCameraVector3 est_rvec(0.0, 0.0, 0.0);
+        OpenCVCameraVector3 est_tvec(0.0, 0.0, 700.0);
         bool pnp_ok = SQPnPSolver::solve_rvec(model_pts, img_pts, fx, fy, cx, cy, est_rvec, est_tvec);
         REQUIRE(pnp_ok);
 
@@ -884,14 +874,14 @@ TEST_CASE("Testing Native Math Solvers and Warping Parity")
             }
         }
 
-        GazePoint landmarks[5] = {
-            GazePoint(70.5f, 80.2f),  // right eye
-            GazePoint(130.8f, 85.6f), // left eye
-            GazePoint(100.0f, 110.0f),
-            GazePoint(80.0f, 140.0f),
-            GazePoint(120.0f, 142.0f)};
+        GodotCameraImageVector2 landmarks[5] = {
+            GodotCameraImageVector2(70.5, 80.2),  // right eye
+            GodotCameraImageVector2(130.8, 85.6), // left eye
+            GodotCameraImageVector2(100.0, 110.0),
+            GodotCameraImageVector2(80.0, 140.0),
+            GodotCameraImageVector2(120.0, 142.0)};
 
-        GazePoint eye_center = landmarks[0];
+        GodotCameraImageVector2 eye_center = landmarks[0];
         double roll_dx = landmarks[1].x - landmarks[0].x;
         double roll_dy = landmarks[1].y - landmarks[0].y;
         double angle = std::atan2(roll_dy, roll_dx) * (180.0 / 3.141592653589793);
@@ -900,8 +890,7 @@ TEST_CASE("Testing Native Math Solvers and Warping Parity")
 
         CPUImageWarper native_warper;
         unsigned char native_out[10800] = {0};
-        GazeVector2 eye_center_vec(eye_center.x, eye_center.y);
-        bool warp_success = native_warper.warp(dummy_src.data(), src_w, src_h, 3, eye_center_vec, angle, scale, native_out);
+        bool warp_success = native_warper.warp(dummy_src.data(), src_w, src_h, 3, eye_center, angle, scale, native_out);
         CHECK(warp_success);
 
         // Check that the output is not entirely blank/zeroed out
@@ -928,12 +917,12 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
     std::cout << "\n=== Running PnP Solver Stress Test and Benchmark ===" << std::endl;
 
     // 3D model points (standard canonical face geometry)
-    std::vector<GazeVector3> model_pts = {
-        GazeVector3(-FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
-        GazeVector3(FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
-        GazeVector3(0.0, -0.5, -52.0),
-        GazeVector3(-FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z),
-        GazeVector3(FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z)};
+    std::vector<OpenCVFaceVector3> model_pts = {
+        OpenCVFaceVector3(-FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
+        OpenCVFaceVector3(FaceModelGeometry::EYE_X, FaceModelGeometry::EYE_Y, FaceModelGeometry::EYE_Z),
+        OpenCVFaceVector3(0.0, -0.5, -52.0),
+        OpenCVFaceVector3(-FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z),
+        OpenCVFaceVector3(FaceModelGeometry::MOUTH_X, FaceModelGeometry::MOUTH_Y, FaceModelGeometry::MOUTH_Z)};
 
     // Camera parameters
     double fx = 960.0, fy = 960.0, cx = 320.0, cy = 240.0;
@@ -990,7 +979,7 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
                 ry = dist_extreme_rot(rng) * (rng() % 2 ? 1.0 : -1.0);
                 rz = dist_extreme_rot(rng) * (rng() % 2 ? 1.0 : -1.0);
             }
-            GazeVector3 true_rvec(rx, ry, rz);
+            OpenCVCameraVector3 true_rvec(rx, ry, rz);
 
             double tx = dist_trans_xy(rng);
             double ty = dist_trans_xy(rng);
@@ -1000,10 +989,10 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
                 // Extreme distances: either very close (100mm) or very far (3000mm)
                 tz = (run % 2) ? 100.0 : 3000.0;
             }
-            GazeVector3 true_tvec(tx, ty, tz);
+            OpenCVCameraVector3 true_tvec(tx, ty, tz);
 
             // Configure model points
-            std::vector<GazeVector3> current_model_pts = model_pts;
+            std::vector<OpenCVFaceVector3> current_model_pts = model_pts;
             if (sc.coplanar)
             {
                 // Make points almost coplanar by setting nose Z close to 0
@@ -1011,11 +1000,11 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
             }
 
             // Project model points to get true 2D image points
-            std::vector<GazeVector2> img_pts(5);
-            GazeBasis3D R = rodrigues_to_basis(true_rvec);
+            std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> img_pts(5);
+            SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(true_rvec);
             for (int i = 0; i < 5; ++i)
             {
-                GazeVector3 P_cam = R.multiply_vector(current_model_pts[i]) + true_tvec;
+                OpenCVCameraVector3 P_cam = R.transform(current_model_pts[i]) + true_tvec;
                 double px = fx * P_cam.x / P_cam.z + cx;
                 double py = fy * P_cam.y / P_cam.z + cy;
                 if (sc.noise_level > 0.0)
@@ -1023,22 +1012,22 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
                     px += dist_noise(rng) * sc.noise_level;
                     py += dist_noise(rng) * sc.noise_level;
                 }
-                img_pts[i] = GazeVector2(px, py);
+                img_pts[i] = SpacedVector2<Space::GodotCameraWorkingImagePixels>(px, py);
             }
 
             // Prepare initial guesses
-            GazeVector3 est_rvec(0.0, 0.0, 0.0);
-            GazeVector3 est_tvec(0.0, 0.0, 700.0);
+            OpenCVCameraVector3 est_rvec(0.0, 0.0, 0.0);
+            OpenCVCameraVector3 est_tvec(0.0, 0.0, 700.0);
             if (sc.use_extrinsic_guess)
             {
                 // Initial guess perturbed from the truth
-                est_rvec = GazeVector3(true_rvec.x + dist_rot(rng) * 0.1, true_rvec.y + dist_rot(rng) * 0.1, true_rvec.z + dist_rot(rng) * 0.1);
-                est_tvec = GazeVector3(true_tvec.x + dist_trans_xy(rng) * 0.1, true_tvec.y + dist_trans_xy(rng) * 0.1, true_tvec.z + dist_trans_z(rng) * 0.1);
+                est_rvec = OpenCVCameraVector3(true_rvec.x + dist_rot(rng) * 0.1, true_rvec.y + dist_rot(rng) * 0.1, true_rvec.z + dist_rot(rng) * 0.1);
+                est_tvec = OpenCVCameraVector3(true_tvec.x + dist_trans_xy(rng) * 0.1, true_tvec.y + dist_trans_xy(rng) * 0.1, true_tvec.z + dist_trans_z(rng) * 0.1);
             }
 
             // Run native SQPnP solver and measure time
-            GazeVector3 native_rvec = est_rvec;
-            GazeVector3 native_tvec = est_tvec;
+            OpenCVCameraVector3 native_rvec = est_rvec;
+            OpenCVCameraVector3 native_tvec = est_tvec;
             auto t0 = std::chrono::high_resolution_clock::now();
             bool native_ok = SQPnPSolver::solve_rvec(current_model_pts, img_pts, fx, fy, cx, cy, native_rvec, native_tvec);
             auto t1 = std::chrono::high_resolution_clock::now();
@@ -1108,18 +1097,12 @@ TEST_CASE("Testing Native PnP Solver Stress Test and Benchmark")
 
 TEST_CASE("Testing POD Math Structures and Frame Serializability & Layout Compatibility")
 {
+    using TestBasis = Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera>;
+
     // 1. Verify offsetof checks to ensure zero internal padding/gaps
-    CHECK(offsetof(Gaze::GazeVector2, x) == 0);
-    CHECK(offsetof(Gaze::GazeVector2, y) == 8);
-    CHECK(sizeof(Gaze::GazeVector2) == 16);
-
-    CHECK(offsetof(Gaze::GazeVector2i, x) == 0);
-    CHECK(offsetof(Gaze::GazeVector2i, y) == 4);
-    CHECK(sizeof(Gaze::GazeVector2i) == 8);
-
-    CHECK(offsetof(Gaze::GazePoint, x) == 0);
-    CHECK(offsetof(Gaze::GazePoint, y) == 8);
-    CHECK(sizeof(Gaze::GazePoint) == 16);
+    CHECK(offsetof(Gaze::GodotDisplayVector2, x) == 0);
+    CHECK(offsetof(Gaze::GodotDisplayVector2, y) == 8);
+    CHECK(sizeof(Gaze::GodotDisplayVector2) == 16);
 
     CHECK(offsetof(Gaze::GazeRect, x) == 0);
     CHECK(offsetof(Gaze::GazeRect, y) == 4);
@@ -1127,19 +1110,19 @@ TEST_CASE("Testing POD Math Structures and Frame Serializability & Layout Compat
     CHECK(offsetof(Gaze::GazeRect, height) == 12);
     CHECK(sizeof(Gaze::GazeRect) == 16);
 
-    CHECK(offsetof(Gaze::GazeVector3, x) == 0);
-    CHECK(offsetof(Gaze::GazeVector3, y) == 4);
-    CHECK(offsetof(Gaze::GazeVector3, z) == 8);
-    CHECK(sizeof(Gaze::GazeVector3) == 12);
+    CHECK(offsetof(Gaze::GodotCameraVector3, x) == 0);
+    CHECK(offsetof(Gaze::GodotCameraVector3, y) == 8);
+    CHECK(offsetof(Gaze::GodotCameraVector3, z) == 16);
+    CHECK(sizeof(Gaze::GodotCameraVector3) == 24);
 
-    CHECK(offsetof(Gaze::GazeBasis3D, x) == 0);
-    CHECK(offsetof(Gaze::GazeBasis3D, y) == 12);
-    CHECK(offsetof(Gaze::GazeBasis3D, z) == 24);
-    CHECK(sizeof(Gaze::GazeBasis3D) == 36);
+    CHECK(offsetof(TestBasis, x) == 0);
+    CHECK(offsetof(TestBasis, y) == 24);
+    CHECK(offsetof(TestBasis, z) == 48);
+    CHECK(sizeof(TestBasis) == 72);
 
-    CHECK(offsetof(Gaze::GazeTransform3D, basis) == 0);
-    CHECK(offsetof(Gaze::GazeTransform3D, origin) == 36);
-    CHECK(sizeof(Gaze::GazeTransform3D) == 48);
+    CHECK(offsetof(Gaze::GodotFaceTransform3D, basis) == 0);
+    CHECK(offsetof(Gaze::GodotFaceTransform3D, origin) == 72);
+    CHECK(sizeof(Gaze::GodotFaceTransform3D) == 96);
 
     CHECK(offsetof(Gaze::Frame, width) == 0);
     CHECK(offsetof(Gaze::Frame, height) == 4);
@@ -1149,31 +1132,13 @@ TEST_CASE("Testing POD Math Structures and Frame Serializability & Layout Compat
 
     // 2. Validate round-trip serializability via memcpy
     {
-        Gaze::GazeVector2 v2(1.23, 4.56);
-        unsigned char buf[sizeof(Gaze::GazeVector2)];
+        Gaze::GodotDisplayVector2 v2(1.23, 4.56);
+        unsigned char buf[sizeof(Gaze::GodotDisplayVector2)];
         std::memcpy(buf, &v2, sizeof(v2));
-        Gaze::GazeVector2 v2_out;
+        Gaze::GodotDisplayVector2 v2_out;
         std::memcpy(&v2_out, buf, sizeof(v2_out));
         CHECK(v2_out.x == v2.x);
         CHECK(v2_out.y == v2.y);
-    }
-    {
-        Gaze::GazeVector2i v2i(42, -99);
-        unsigned char buf[sizeof(Gaze::GazeVector2i)];
-        std::memcpy(buf, &v2i, sizeof(v2i));
-        Gaze::GazeVector2i v2i_out;
-        std::memcpy(&v2i_out, buf, sizeof(v2i_out));
-        CHECK(v2i_out.x == v2i.x);
-        CHECK(v2i_out.y == v2i.y);
-    }
-    {
-        Gaze::GazePoint pt(1.5f, 2.5f);
-        unsigned char buf[sizeof(Gaze::GazePoint)];
-        std::memcpy(buf, &pt, sizeof(pt));
-        Gaze::GazePoint pt_out;
-        std::memcpy(&pt_out, buf, sizeof(pt_out));
-        CHECK(pt_out.x == pt.x);
-        CHECK(pt_out.y == pt.y);
     }
     {
         Gaze::GazeRect rect(1.0f, 2.0f, 3.0f, 4.0f);
@@ -1187,20 +1152,20 @@ TEST_CASE("Testing POD Math Structures and Frame Serializability & Layout Compat
         CHECK(rect_out.height == rect.height);
     }
     {
-        Gaze::GazeVector3 v3(1.1f, -2.2f, 3.3f);
-        unsigned char buf[sizeof(Gaze::GazeVector3)];
+        Gaze::GodotCameraVector3 v3(1.1, -2.2, 3.3);
+        unsigned char buf[sizeof(Gaze::GodotCameraVector3)];
         std::memcpy(buf, &v3, sizeof(v3));
-        Gaze::GazeVector3 v3_out;
+        Gaze::GodotCameraVector3 v3_out;
         std::memcpy(&v3_out, buf, sizeof(v3_out));
         CHECK(v3_out.x == v3.x);
         CHECK(v3_out.y == v3.y);
         CHECK(v3_out.z == v3.z);
     }
     {
-        Gaze::GazeBasis3D basis(Gaze::GazeVector3(1.f, 2.f, 3.f), Gaze::GazeVector3(4.f, 5.f, 6.f), Gaze::GazeVector3(7.f, 8.f, 9.f));
-        unsigned char buf[sizeof(Gaze::GazeBasis3D)];
+        TestBasis basis(Gaze::GodotCameraVector3(1., 2., 3.), Gaze::GodotCameraVector3(4., 5., 6.), Gaze::GodotCameraVector3(7., 8., 9.));
+        unsigned char buf[sizeof(TestBasis)];
         std::memcpy(buf, &basis, sizeof(basis));
-        Gaze::GazeBasis3D basis_out;
+        TestBasis basis_out;
         std::memcpy(&basis_out, buf, sizeof(basis_out));
         CHECK(basis_out.x.x == basis.x.x);
         CHECK(basis_out.x.y == basis.x.y);
@@ -1213,12 +1178,12 @@ TEST_CASE("Testing POD Math Structures and Frame Serializability & Layout Compat
         CHECK(basis_out.z.z == basis.z.z);
     }
     {
-        Gaze::GazeTransform3D transform(
-            Gaze::GazeBasis3D(Gaze::GazeVector3(1.f, 2.f, 3.f), Gaze::GazeVector3(4.f, 5.f, 6.f), Gaze::GazeVector3(7.f, 8.f, 9.f)),
-            Gaze::GazeVector3(10.f, 11.f, 12.f));
-        unsigned char buf[sizeof(Gaze::GazeTransform3D)];
+        Gaze::GodotFaceTransform3D transform(
+            TestBasis(Gaze::GodotCameraVector3(1., 2., 3.), Gaze::GodotCameraVector3(4., 5., 6.), Gaze::GodotCameraVector3(7., 8., 9.)),
+            Gaze::GodotCameraVector3(10., 11., 12.));
+        unsigned char buf[sizeof(Gaze::GodotFaceTransform3D)];
         std::memcpy(buf, &transform, sizeof(transform));
-        Gaze::GazeTransform3D transform_out;
+        Gaze::GodotFaceTransform3D transform_out;
         std::memcpy(&transform_out, buf, sizeof(transform_out));
         CHECK(transform_out.basis.x.x == transform.basis.x.x);
         CHECK(transform_out.basis.y.y == transform.basis.y.y);
@@ -1500,21 +1465,21 @@ TEST_CASE("Testing GazeTrackingPipeline Godot Camera Space Invariance Across Ben
         REQUIRE(res.gaze_success == true);
 
         // In Godot Camera Space, head in front of camera is along -Z, below camera is along -Y
-        CHECK(res.head_translation->z < -200.0f);
-        CHECK(res.head_translation->y < 0.0f);
+        CHECK(res.head_translation.z < -200.0);
+        CHECK(res.head_translation.y < 0.0);
 
         // Head transform origin matches head_translation in Godot Camera Space
-        CHECK(res.head_transform.origin->x == doctest::Approx(res.head_translation->x));
-        CHECK(res.head_transform.origin->y == doctest::Approx(res.head_translation->y));
-        CHECK(res.head_transform.origin->z == doctest::Approx(res.head_translation->z));
+        CHECK(res.head_transform.origin.x == doctest::Approx(res.head_translation.x));
+        CHECK(res.head_transform.origin.y == doctest::Approx(res.head_translation.y));
+        CHECK(res.head_transform.origin.z == doctest::Approx(res.head_translation.z));
 
         // Forward vector -basis.z points towards the camera/screen (+Z > 0)
-        GazeVector3 head_fwd = -res.head_transform.basis.basis.z;
-        CHECK(head_fwd.z > 0.9f);
-        CHECK(std::abs(head_fwd.x) < 0.15f);
+        GodotCameraVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.z > 0.9);
+        CHECK(std::abs(head_fwd.x) < 0.15);
 
         // Gaze direction points towards the screen (+Z > 0)
-        CHECK(res.gaze_direction->z > 0.85f);
+        CHECK(res.gaze_direction.z > 0.85);
     }
 
     // 2. self_left_left.jpg: Head turned display left (+X in Godot Camera Space), Gaze looking display left (+X in Godot Camera Space)
@@ -1523,9 +1488,9 @@ TEST_CASE("Testing GazeTrackingPipeline Godot Camera Space Invariance Across Ben
         REQUIRE(res.face_detected == true);
         REQUIRE(res.gaze_success == true);
 
-        GazeVector3 head_fwd = -res.head_transform.basis.basis.z;
-        CHECK(head_fwd.z > 0.85f);
-        CHECK(head_fwd.x > 0.1f);
+        GodotCameraVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.z > 0.85);
+        CHECK(head_fwd.x > 0.1);
     }
 
     // 3. self_right_right.jpg: Head turned display right (-X in Godot Camera Space), Gaze looking display right (-X in Godot Camera Space)
@@ -1534,9 +1499,9 @@ TEST_CASE("Testing GazeTrackingPipeline Godot Camera Space Invariance Across Ben
         REQUIRE(res.face_detected == true);
         REQUIRE(res.gaze_success == true);
 
-        GazeVector3 head_fwd = -res.head_transform.basis.basis.z;
-        CHECK(head_fwd.z > 0.85f);
-        CHECK(head_fwd.x < -0.1f);
+        GodotCameraVector3 head_fwd = -res.head_transform.basis.z;
+        CHECK(head_fwd.z > 0.85);
+        CHECK(head_fwd.x < -0.1);
     }
 
     // 4. self_roll_right.jpg: Head rolled to subject's right shoulder
@@ -1745,7 +1710,7 @@ TEST_CASE("Testing Dynamic Continuous Head Roll Sequence with Zero Frame Drops")
 
         if (res->face_detected) {
             detected_frames++;
-            float solved_roll_deg = static_cast<float>(res->head_rotation->z * (180.0 / 3.141592653589793));
+            float solved_roll_deg = static_cast<float>(res->head_rotation.z * (180.0 / 3.141592653589793));
             CHECK(std::abs(solved_roll_deg - angle_deg) < 6.0f);
         } else {
             MESSAGE("Dropped frame at angle: ", angle_deg, " deg (frame index ", i, ")");
@@ -1808,73 +1773,73 @@ TEST_CASE("Testing Head Roll Landmark Detection")
 TEST_CASE("Testing Gaze Direction Vector Sign and Ray Projection in Calibration")
 {
     // Simulate raw gaze model output in OpenCV space: dx=0, dy=0, dz=1 (staring straight at camera)
-    GazeVector3 raw_gaze_dir_cv(0.0, 0.0, 1.0);
-    GazeVector3 origin_cv(0.0, 0.0, 600.0); // 600mm in front of camera
+    OpenCVCameraVector3 raw_gaze_dir_cv(0.0, 0.0, 1.0);
+    OpenCVCameraVector3 origin_cv(0.0, 0.0, 600.0); // 600mm in front of camera
 
-    // Convert using OPENCV_CAM_TO_GODOT_CAM
-    GazeVector3 origin_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(origin_cv);
-    GazeVector3 dir_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM.multiply_vector(GazeVector3(0.0, 0.0, -1.0)); // ray pointing towards camera in CV space
+    // Convert to Godot camera space
+    GodotCameraVector3 origin_cam = CoordinateConversions::to_godot_camera(origin_cv);
+    GodotCameraVector3 dir_cam = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(0.0, 0.0, -1.0));
 
     // Gaze origin in camera space must be at Z < 0 (in front of camera/screen plane)
     CHECK(origin_cam.z < 0.0);
 
     // Forward gaze direction vector in camera space MUST point towards screen (Z > 0)
-    CHECK(raw_gaze_dir_cv.z > 0.0);
+    CHECK(dir_cam.z > 0.0);
 
     // Test ray projection onto a 600x340 mm screen with camera at top offset (0, 170, 0)
     Gaze::ProjectionEngine proj_engine;
-    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
-    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
-    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+    proj_engine.set_screen_size_pixels(GodotDisplayVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GodotCameraVector3(0.0, 170.0, 0.0), 0.0));
 
     GodotDisplayVector2 pixel;
-    bool proj_success = proj_engine.project_gaze(GodotCameraVector3(origin_cam), GodotCameraVector3(raw_gaze_dir_cv), pixel);
+    bool proj_success = proj_engine.project_gaze(origin_cam, dir_cam, pixel);
     CHECK(proj_success == true);
 
     // Ray projection should land near center of screen
-    CHECK(pixel->x == doctest::Approx(960.0).epsilon(50.0));
-    CHECK(pixel->y == doctest::Approx(540.0).epsilon(50.0));
+    CHECK(pixel.x == doctest::Approx(960.0).epsilon(50.0));
+    CHECK(pixel.y == doctest::Approx(540.0).epsilon(50.0));
 }
 
 TEST_CASE("Testing BioCalibration Isolation on Eye Gaze vs Nose Gaze")
 {
     Gaze::ProjectionEngine proj_engine;
-    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
-    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
-    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+    proj_engine.set_screen_size_pixels(GodotDisplayVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GodotCameraVector3(0.0, 170.0, 0.0), 0.0));
 
-    GodotCameraVector3 uncal_dir(Gaze::BACKWARD);
-    GodotCameraVector3 head_fwd(Gaze::BACKWARD);
+    GodotCameraVector3 uncal_dir(0.0, 0.0, 1.0);
+    GodotCameraVector3 head_fwd(0.0, 0.0, 1.0);
 
     // 1. Uncalibrated state (bias = 0)
     proj_engine.set_calibration(Gaze::GazeCalibration(0.0, 0.0));
     GodotCameraVector3 biased_dir_zero = proj_engine.apply_3d_bias(uncal_dir);
-    CHECK(biased_dir_zero->x == doctest::Approx(0.0));
-    CHECK(biased_dir_zero->y == doctest::Approx(0.0));
-    CHECK(biased_dir_zero->z == doctest::Approx(1.0));
+    CHECK(biased_dir_zero.x == doctest::Approx(0.0));
+    CHECK(biased_dir_zero.y == doctest::Approx(0.0));
+    CHECK(biased_dir_zero.z == doctest::Approx(1.0));
 
     // 2. Set significant BioCalibration pitch/yaw bias
     proj_engine.set_calibration(Gaze::GazeCalibration(0.1, -0.08)); // 0.1 pitch, -0.08 yaw
     GodotCameraVector3 biased_dir_cal = proj_engine.apply_3d_bias(uncal_dir);
 
     // BioCalibration MUST mutate eye gaze direction
-    CHECK(biased_dir_cal->x != doctest::Approx(uncal_dir->x));
-    CHECK(biased_dir_cal->y != doctest::Approx(uncal_dir->y));
+    CHECK(biased_dir_cal.x != doctest::Approx(uncal_dir.x));
+    CHECK(biased_dir_cal.y != doctest::Approx(uncal_dir.y));
 
     // 3. Head pose / Nose gaze ray MUST remain uncalibrated
-    CHECK(head_fwd->x == doctest::Approx(0.0));
-    CHECK(head_fwd->y == doctest::Approx(0.0));
-    CHECK(head_fwd->z == doctest::Approx(1.0));
+    CHECK(head_fwd.x == doctest::Approx(0.0));
+    CHECK(head_fwd.y == doctest::Approx(0.0));
+    CHECK(head_fwd.z == doctest::Approx(1.0));
 }
 
 TEST_CASE("Testing Full Pipeline Rotation Counter-Measures")
 {
     // Test that head forward vector remains invariant under image rotation
-    GazeTransform3D t_unrot = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
-        GazeVector3(0.0, 0.0, 600.0),
-        GazeVector3(0.0, 0.0, 0.0)
+    GodotFaceTransform3D t_unrot = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(
+        OpenCVCameraVector3(0.0, 0.0, 600.0),
+        OpenCVCameraVector3(0.0, 0.0, 0.0)
     );
-    GazeVector3 head_fwd = -t_unrot.basis.z.normalized();
+    GodotCameraVector3 head_fwd = -t_unrot.basis.z.normalized();
     CHECK(head_fwd.x == doctest::Approx(0.0));
     CHECK(head_fwd.y == doctest::Approx(0.0));
     CHECK(head_fwd.z == doctest::Approx(1.0));
@@ -1883,108 +1848,85 @@ TEST_CASE("Testing Full Pipeline Rotation Counter-Measures")
 TEST_CASE("Testing Physical Gaze Ray Direction Invariants")
 {
     Gaze::ProjectionEngine proj_engine;
-    proj_engine.set_screen_size_pixels(GazeVector2(1920.0, 1080.0));
-    proj_engine.set_screen_size_mm(GazeVector2(600.0, 340.0));
-    proj_engine.set_camera_placement(Gaze::CameraPlacement(GazeVector3(0.0, 170.0, 0.0), 0.0));
+    proj_engine.set_screen_size_pixels(GodotDisplayVector2(1920.0, 1080.0));
+    proj_engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
+    proj_engine.set_camera_placement(Gaze::CameraPlacement(GodotCameraVector3(0.0, 170.0, 0.0), 0.0));
 
-    GodotCameraVector3 origin(GazeVector3(0.0, 0.0, -600.0));
+    GodotCameraVector3 origin(0.0, 0.0, -600.0);
     GodotDisplayVector2 center_pixel;
-    proj_engine.project_gaze(origin, GodotCameraVector3(Gaze::BACKWARD), center_pixel);
+    proj_engine.project_gaze(origin, GodotCameraVector3(0.0, 0.0, 1.0), center_pixel);
 
     // 1. Gazing Anatomic Left (Camera Right: +X) must project to screen LEFT (pixel.x < center_pixel.x)
-    GodotCameraVector3 left_dir(GazeVector3(0.2, 0.0, 0.98));
+    GodotCameraVector3 left_dir(0.2, 0.0, 0.98);
     GodotDisplayVector2 left_pixel;
     bool left_ok = proj_engine.project_gaze(origin, left_dir, left_pixel);
     CHECK(left_ok == true);
-    CHECK(left_pixel->x < center_pixel->x);
+    CHECK(left_pixel.x < center_pixel.x);
 
     // 2. Gazing Anatomic Right (Camera Left: -X) must project to screen RIGHT (pixel.x > center_pixel.x)
-    GodotCameraVector3 right_dir(GazeVector3(-0.2, 0.0, 0.98));
+    GodotCameraVector3 right_dir(-0.2, 0.0, 0.98);
     GodotDisplayVector2 right_pixel;
     bool right_ok = proj_engine.project_gaze(origin, right_dir, right_pixel);
     CHECK(right_ok == true);
-    CHECK(right_pixel->x > center_pixel->x);
+    CHECK(right_pixel.x > center_pixel.x);
 
     // 3. Gazing UP (Camera Up: +Y) must project towards screen TOP (pixel.y < center_pixel.y)
-    GodotCameraVector3 up_dir(GazeVector3(0.0, 0.2, 0.98));
+    GodotCameraVector3 up_dir(0.0, 0.2, 0.98);
     GodotDisplayVector2 up_pixel;
     bool up_ok = proj_engine.project_gaze(origin, up_dir, up_pixel);
     CHECK(up_ok == true);
-    CHECK(up_pixel->y < center_pixel->y);
+    CHECK(up_pixel.y < center_pixel.y);
 
     // 4. Gazing DOWN (Camera Down: -Y) must project towards screen BOTTOM (pixel.y > center_pixel.y)
-    GodotCameraVector3 down_dir(GazeVector3(0.0, -0.2, 0.98));
+    GodotCameraVector3 down_dir(0.0, -0.2, 0.98);
     GodotDisplayVector2 down_pixel;
     bool down_ok = proj_engine.project_gaze(origin, down_dir, down_pixel);
     CHECK(down_ok == true);
-    CHECK(down_pixel->y > center_pixel->y);
+    CHECK(down_pixel.y > center_pixel.y);
 }
 
 TEST_CASE("Coordinate Space Transformation Matrices Properties and Canonical Vector Mappings")
 {
-    // 1. OPENCV_CAM_TO_GODOT_CAM Matrix Basis Properties
-    GazeBasis3D r_cam = Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM;
-    CHECK(std::abs(r_cam.determinant()) == doctest::Approx(1.0));
-    // Verify orthogonality R^T * R = I
-    GazeBasis3D r_cam_t = r_cam.transposed();
-    GazeBasis3D r_cam_prod = r_cam_t * r_cam;
-    CHECK(r_cam_prod.x.x == doctest::Approx(1.0));
-    CHECK(r_cam_prod.y.y == doctest::Approx(1.0));
-    CHECK(r_cam_prod.z.z == doctest::Approx(1.0));
-
-    // 2. GODOT_FACE_TO_OPENCV_FACE Matrix Basis Properties
-    GazeBasis3D r_face = Gaze::CoordinateConversions::GODOT_FACE_TO_OPENCV_FACE;
-    CHECK(std::abs(r_face.determinant()) == doctest::Approx(1.0));
-    GazeBasis3D r_face_t = r_face.transposed();
-    GazeBasis3D r_face_prod = r_face_t * r_face;
-    CHECK(r_face_prod.x.x == doctest::Approx(1.0));
-    CHECK(r_face_prod.y.y == doctest::Approx(1.0));
-    CHECK(r_face_prod.z.z == doctest::Approx(1.0));
-
-    // 3. ONNX_GAZE_TO_GODOT_CAM Matrix Basis Properties (diag(1, 1, -1))
-    GazeBasis3D r_onnx = Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM;
-    CHECK(std::abs(r_onnx.determinant()) == doctest::Approx(1.0));
-    
     // Test canonical gaze direction vector mapping:
     // Gazing subject right / display left (+x_onnx, -z_onnx forward) -> +X_cam (camera right / display left), +Z_cam (screen plane)
-    GazeVector3 screen_left_gaze = r_onnx.multiply_vector(GazeVector3(0.5, 0.0, -0.866));
+    GodotCameraVector3 screen_left_gaze = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(0.5, 0.0, -0.866));
     CHECK(screen_left_gaze.x > 0.0);
     CHECK(screen_left_gaze.z > 0.0); // Points towards display screen plane (+Z)
 
     // Gazing subject left / display right (-x_onnx, -z_onnx forward) -> -X_cam (camera left / display right), +Z_cam
-    GazeVector3 screen_right_gaze = r_onnx.multiply_vector(GazeVector3(-0.5, 0.0, -0.866));
+    GodotCameraVector3 screen_right_gaze = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(-0.5, 0.0, -0.866));
     CHECK(screen_right_gaze.x < 0.0);
     CHECK(screen_right_gaze.z > 0.0);
 
     // Looking UP (+y_onnx in OpenVINO space) -> +Y_cam (screen top)
-    GazeVector3 up_gaze = r_onnx.multiply_vector(GazeVector3(0.0, 0.5, -0.866));
+    GodotCameraVector3 up_gaze = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(0.0, 0.5, -0.866));
     CHECK(up_gaze.y > 0.0);
     CHECK(up_gaze.z > 0.0);
 
     // Looking DOWN (-y_onnx in OpenVINO space) -> -Y_cam (screen bottom)
-    GazeVector3 down_gaze = r_onnx.multiply_vector(GazeVector3(0.0, -0.5, -0.866));
+    GodotCameraVector3 down_gaze = CoordinateConversions::to_godot_camera(OpenVINOGazeVector3(0.0, -0.5, -0.866));
     CHECK(down_gaze.y < 0.0);
     CHECK(down_gaze.z > 0.0);
 
-    // 4. Head Transform Chain Vector Mapping Test
+    // Head Transform Chain Vector Mapping Test
     // For unrotated head (rvec = 0), face forward vector in Godot face space is -Z (0, 0, -1)
-    GazeVector3 translation(0.0, 0.0, 800.0);
-    GazeVector3 rotation_zero(0.0, 0.0, 0.0);
-    GazeTransform3D transform_zero = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_zero);
-    GazeVector3 fwd_zero = -transform_zero.basis.z.normalized();
+    OpenCVCameraVector3 translation(0.0, 0.0, 800.0);
+    OpenCVCameraVector3 rotation_zero(0.0, 0.0, 0.0);
+    GodotFaceTransform3D transform_zero = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_zero);
+    GodotCameraVector3 fwd_zero = -transform_zero.basis.z.normalized();
     CHECK(fwd_zero.z > 0.9); // Points towards display screen plane (+Z_cam)
 
     // Head turned anatomic left (rvec.y < 0 in OpenCV PnP solver, CCW rotation about +Y down) -> Display Left (+X_cam)
-    GazeVector3 rotation_left(0.0, -0.15, 0.0);
-    GazeTransform3D transform_left = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
-    GazeVector3 fwd_left = -transform_left.basis.z.normalized();
+    OpenCVCameraVector3 rotation_left(0.0, -0.15, 0.0);
+    GodotFaceTransform3D transform_left = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_left);
+    GodotCameraVector3 fwd_left = -transform_left.basis.z.normalized();
     CHECK(fwd_left.x > 0.05); // Must point towards display left (+X_cam)
     CHECK(fwd_left.z > 0.9);
 
     // Head turned anatomic right (rvec.y > 0 in OpenCV PnP solver, CW rotation about +Y down) -> Display Right (-X_cam)
-    GazeVector3 rotation_right(0.0, 0.15, 0.0);
-    GazeTransform3D transform_right = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
-    GazeVector3 fwd_right = -transform_right.basis.z.normalized();
+    OpenCVCameraVector3 rotation_right(0.0, 0.15, 0.0);
+    GodotFaceTransform3D transform_right = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(translation, rotation_right);
+    GodotCameraVector3 fwd_right = -transform_right.basis.z.normalized();
     CHECK(fwd_right.x < -0.05); // Must point towards display right (-X_cam)
     CHECK(fwd_right.z > 0.9);
 }
@@ -1993,17 +1935,17 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
 {
     double fx = 1000.0, cx = 320.0, cy = 240.0;
 
-    std::vector<Gaze::GazeVector3> model_points = Gaze::FaceModelGeometry::get_5pt_model_points();
+    std::vector<Gaze::OpenCVFaceVector3> model_points = Gaze::FaceModelGeometry::get_5pt_model_points();
 
     // Simulate real 2D landmark foreshortening of a face tilting back by +30 deg (+0.523 rad) at Z=700mm
-    Gaze::GazeVector3 true_rvec(0.523, 0.0, 0.0); // +30 deg pitch up
-    Gaze::GazeVector3 true_tvec(0.0, 0.0, 700.0);
-    Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+    Gaze::OpenCVCameraVector3 true_rvec(0.523, 0.0, 0.0); // +30 deg pitch up
+    Gaze::OpenCVCameraVector3 true_tvec(0.0, 0.0, 700.0);
+    Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_true = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(true_rvec);
 
-    std::vector<Gaze::GazeVector2> img_pts(5);
+    std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> img_pts(5);
     for (size_t i = 0; i < 5; ++i) {
-        Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
-        img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+        Gaze::OpenCVCameraVector3 P_cam = R_true.transform(model_points[i]) + true_tvec;
+        img_pts[i] = Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
     }
 
     // Measure IPD in 2D image between Left Eye (2) and Right Eye (1)
@@ -2012,8 +1954,8 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
     double z_ipd = (ipd_3d * fx) / eye_dist_px;
 
     // Run unconstrained PnP
-    Gaze::GazeVector3 unconstrained_rvec(0.0, 0.0, 0.0);
-    Gaze::GazeVector3 unconstrained_tvec(0.0, 0.0, 700.0);
+    Gaze::OpenCVCameraVector3 unconstrained_rvec(0.0, 0.0, 0.0);
+    Gaze::OpenCVCameraVector3 unconstrained_tvec(0.0, 0.0, 700.0);
     Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, unconstrained_rvec, unconstrained_tvec);
 
     std::cout << "[PnP Foreshortening Test] True Pitch: " << true_rvec.x << " rad (" << true_rvec.x * 57.2958 << " deg)" << std::endl;
@@ -2026,25 +1968,25 @@ TEST_CASE("Investigating Pitch Clamping and PnP Sensitivity under Pitch Sweeps")
 TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
 {
     double fx = 1000.0, cx = 320.0, cy = 240.0;
-    std::vector<Gaze::GazeVector3> model_points = {
-        Gaze::GazeVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-        Gaze::GazeVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
-        Gaze::GazeVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
-        Gaze::GazeVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
-        Gaze::GazeVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
+    std::vector<Gaze::OpenCVFaceVector3> model_points = {
+        Gaze::OpenCVFaceVector3(-Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::OpenCVFaceVector3(Gaze::FaceModelGeometry::EYE_X, Gaze::FaceModelGeometry::EYE_Y, Gaze::FaceModelGeometry::EYE_Z),
+        Gaze::OpenCVFaceVector3(0.0, Gaze::FaceModelGeometry::DEFAULT_NOSE_Y, Gaze::FaceModelGeometry::DEFAULT_NOSE_Z),
+        Gaze::OpenCVFaceVector3(-Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z),
+        Gaze::OpenCVFaceVector3(Gaze::FaceModelGeometry::MOUTH_X, Gaze::FaceModelGeometry::MOUTH_Y, Gaze::FaceModelGeometry::MOUTH_Z)
     };
 
-    Gaze::GazeVector3 true_rvec(0.15, -0.10, 0.05);
-    Gaze::GazeVector3 true_tvec(20.0, -10.0, 680.0);
-    Gaze::GazeBasis3D R_true = Gaze::rodrigues_to_basis(true_rvec);
+    Gaze::OpenCVCameraVector3 true_rvec(0.15, -0.10, 0.05);
+    Gaze::OpenCVCameraVector3 true_tvec(20.0, -10.0, 680.0);
+    Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_true = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(true_rvec);
 
-    std::vector<Gaze::GazeVector2> img_pts(5);
+    std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> img_pts(5);
     for (size_t i = 0; i < 5; ++i) {
-        Gaze::GazeVector3 P_cam = R_true.multiply_vector(model_points[i]) + true_tvec;
-        img_pts[i] = Gaze::GazeVector2(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
+        Gaze::OpenCVCameraVector3 P_cam = R_true.transform(model_points[i]) + true_tvec;
+        img_pts[i] = Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>(fx * (P_cam.x / P_cam.z) + cx, fx * (P_cam.y / P_cam.z) + cy);
     }
 
-    Gaze::GazeVector3 pnp_rvec, pnp_tvec;
+    Gaze::OpenCVCameraVector3 pnp_rvec, pnp_tvec;
     bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_points, img_pts, fx, fx, cx, cy, pnp_rvec, pnp_tvec);
     REQUIRE(pnp_ok == true);
 
@@ -2054,22 +1996,22 @@ TEST_CASE("Testing Closed-Form DLT Pose Initialization (solve_pnp_dlt)")
 
 TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invariants")
 {
-    Gaze::GazeVector2 physical_size_mm(300.0, 200.0);
-    Gaze::GazeVector2 logical_size_px(1920.0, 1080.0);
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> physical_size_mm(300.0, 200.0);
+    Gaze::GodotDisplayVector2 logical_size_px(1920.0, 1080.0);
     
     // Top-bezel camera placement: (0, 0, 0) relative to top-bezel center
-    Gaze::GazeVector3 default_cam_offset(0.0, 0.0, 0.0);
+    Gaze::GodotCameraVector3 default_cam_offset(0.0, 0.0, 0.0);
     CHECK(default_cam_offset.y == doctest::Approx(0.0));
 
     // Pixel size calculation: physical / logical
-    Gaze::GazeVector2 pixel_size_mm(physical_size_mm.x / logical_size_px.x, physical_size_mm.y / logical_size_px.y);
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pixel_size_mm(physical_size_mm.x / logical_size_px.x, physical_size_mm.y / logical_size_px.y);
     CHECK(pixel_size_mm.x == doctest::Approx(300.0 / 1920.0));
     CHECK(pixel_size_mm.y == doctest::Approx(200.0 / 1080.0));
 
     // Forward ray straight into camera from (0, 0, -500)
-    Gaze::GazeVector3 origin(0.0, 0.0, -500.0);
-    Gaze::GazeVector3 dir = Gaze::BACKWARD; // (0, 0, 1) in Godot Camera Space
-    Gaze::GazeVector2 pos_mm;
+    Gaze::GodotCameraVector3 origin(0.0, 0.0, -500.0);
+    Gaze::GodotCameraVector3 dir(0.0, 0.0, 1.0); // (0, 0, 1) in Godot Camera Space
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
     bool ok = Gaze::project_ray_to_screen_mm(origin, dir, default_cam_offset, 0.0, physical_size_mm, pos_mm);
     REQUIRE(ok == true);
     
@@ -2080,19 +2022,19 @@ TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invaria
     // Screen pixel position: (960, 0)
     double scale_x = logical_size_px.x / physical_size_mm.x;
     double scale_y = logical_size_px.y / physical_size_mm.y;
-    Gaze::GazeVector2 screen_px(pos_mm.x * scale_x, pos_mm.y * scale_y);
+    Gaze::GodotDisplayVector2 screen_px(pos_mm.x * scale_x, pos_mm.y * scale_y);
     CHECK(screen_px.x == doctest::Approx(960.0).epsilon(0.01));
     CHECK(screen_px.y == doctest::Approx(0.0).epsilon(0.01));
 
     // When window is offset at (100, 50), local pixel position is (860, -50)
-    Gaze::GazeVector2 window_pos(100.0, 50.0);
-    Gaze::GazeVector2 local_px = screen_px - window_pos;
+    Gaze::GodotDisplayVector2 window_pos(100.0, 50.0);
+    Gaze::GodotDisplayVector2 local_px = screen_px - window_pos;
     CHECK(local_px.x == doctest::Approx(860.0).epsilon(0.01));
     CHECK(local_px.y == doctest::Approx(-50.0).epsilon(0.01));
 
     // Ray angled down toward screen center: origin=(0, 100, -500) pointing at (0, 0, 0) in screen coords
-    Gaze::GazeVector3 dir_to_center = GazeVector3(0.0, -100.0, 500.0).normalized();
-    GazeVector2 center_pos_mm;
+    Gaze::GodotCameraVector3 dir_to_center = Gaze::GodotCameraVector3(0.0, -100.0, 500.0).normalized();
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> center_pos_mm;
     bool center_ok = Gaze::project_ray_to_screen_mm(origin, dir_to_center, default_cam_offset, 0.0, physical_size_mm, center_pos_mm);
     REQUIRE(center_ok == true);
     CHECK(center_pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
@@ -2128,21 +2070,22 @@ TEST_CASE("ORTGazeModel Eye Crop Preprocessing Preserves BGR NCHW Channel Order"
 
 TEST_CASE("Hub-and-Spoke GodotCameraHintRolled to GodotCamera Space Transform Mapping")
 {
-    Gaze::GazeTransform3D xform_identity(Gaze::GazeBasis3D(), Gaze::GazeVector3(10.0f, 20.0f, -500.0f));
+    using TestBasis = Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera>;
+    Gaze::GodotFaceTransform3D xform_identity(TestBasis::identity(), Gaze::GodotCameraVector3(10.0, 20.0, -500.0));
     
     // Zero roll hint returns identical transform
-    Gaze::GazeTransform3D unrolled_zero = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, 0.0f);
-    CHECK(unrolled_zero.origin.x == doctest::Approx(10.0f));
-    CHECK(unrolled_zero.origin.y == doctest::Approx(20.0f));
-    CHECK(unrolled_zero.origin.z == doctest::Approx(-500.0f));
+    Gaze::GodotFaceTransform3D unrolled_zero = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, 0.0f);
+    CHECK(unrolled_zero.origin.x == doctest::Approx(10.0));
+    CHECK(unrolled_zero.origin.y == doctest::Approx(20.0));
+    CHECK(unrolled_zero.origin.z == doctest::Approx(-500.0));
 
     // +90 deg roll hint (+PI/2 around +Z)
     float roll_90 = static_cast<float>(M_PI * 0.5);
-    Gaze::GazeTransform3D unrolled_90 = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, roll_90);
+    Gaze::GodotFaceTransform3D unrolled_90 = Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera(xform_identity, roll_90);
     // (x, y) = (10, 20) rotated +90 deg clockwise (tilt right: +Y -> +X) -> (20, -10)
-    CHECK(unrolled_90.origin.x == doctest::Approx(20.0f));
-    CHECK(unrolled_90.origin.y == doctest::Approx(-10.0f));
-    CHECK(unrolled_90.origin.z == doctest::Approx(-500.0f));
+    CHECK(unrolled_90.origin.x == doctest::Approx(20.0));
+    CHECK(unrolled_90.origin.y == doctest::Approx(-10.0));
+    CHECK(unrolled_90.origin.z == doctest::Approx(-500.0));
 }
 
 

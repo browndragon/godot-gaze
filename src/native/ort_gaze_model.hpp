@@ -40,7 +40,7 @@ namespace Gaze
         virtual ~ORTGazeModel() = default;
 
         virtual bool initialize() override;
-        virtual bool estimate_raw_gaze(const EyeCrops &crops, GazeVector3 &out_gaze_dir_cv) override;
+        virtual bool estimate_raw_gaze(const EyeCrops &crops, OpenVINOGazeVector3 &out_gaze_dir_openvino) override;
         virtual void set_config(const PipelineConfig &cfg) override { config = cfg; }
     };
 

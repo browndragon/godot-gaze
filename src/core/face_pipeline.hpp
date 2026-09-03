@@ -30,7 +30,7 @@ namespace Gaze
             int src_width,
             int src_height,
             int src_channels,
-            const GazeVector2 &eye_center,
+            const GodotCameraImageVector2 &eye_center,
             double angle_deg,
             double scale,
             uint8_t *out_bgr_buffer) = 0;
@@ -47,11 +47,11 @@ namespace Gaze
         static constexpr int EYE_CROP_SIZE = EYE_CROP_WIDTH * EYE_CROP_HEIGHT * EYE_CROP_CHANNELS; // 10800 bytes
 
         bool face_detected = false;
-        GazePoint landmarks[5];
+        SpacedVector2<Space::GodotCameraWorkingImagePixels> landmarks[5];
 
-        // Estimated head pose vectors relative to camera (in mm and radians)
-        GazeVector3 head_pose_rotation;    // Rotational angles (pitch, yaw, roll)
-        GazeVector3 head_pose_translation; // Position of the head
+        // Estimated head pose vectors relative to camera (in mm and radians) in OpenCV camera space
+        OpenCVCameraVector3 head_pose_rotation;    // Rodrigues rotational vector (radians)
+        OpenCVCameraVector3 head_pose_translation; // Position of head origin in OpenCV camera space (mm)
 
         // Left and right eye crop buffers (60x60 px, 3-channel BGR)
         uint8_t left_eye_data[EYE_CROP_SIZE] = {0};

@@ -49,7 +49,7 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping & Eye State Classification on Baseline"
     REQUIRE(det_res.face_detected);
 
     GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-    std::vector<GazeVector2> landmarks;
+    std::vector<GodotCameraImageVector2> landmarks;
     bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
     REQUIRE(lm_ok);
     REQUIRE(landmarks.size() == 35);
@@ -98,7 +98,7 @@ TEST_CASE("Phase 4: Dynamic Eye Cropping Secondary Baseline (self_center2.jpg)")
     REQUIRE(det_ok);
 
     GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-    std::vector<GazeVector2> landmarks;
+    std::vector<GodotCameraImageVector2> landmarks;
     bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
     REQUIRE(lm_ok);
 
@@ -133,7 +133,7 @@ TEST_CASE("Phase 4: Eye Crop Feature Intensity Contrast & Pupil Content")
     detector.process_frame(frame, det_res, 0.0f);
 
     GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-    std::vector<GazeVector2> landmarks;
+    std::vector<GodotCameraImageVector2> landmarks;
     lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
 
     uint8_t r_crop[60 * 60 * 3];
@@ -207,7 +207,7 @@ TEST_CASE("Phase 4: Wink and Blink Strict Signal Separation Fixtures")
         REQUIRE(det_res.face_detected);
 
         GazeRect bbox(det_res.roi_x, det_res.roi_y, det_res.roi_w, det_res.roi_h);
-        std::vector<GazeVector2> landmarks;
+        std::vector<GodotCameraImageVector2> landmarks;
         bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, bbox, landmarks, 0.0f);
         REQUIRE(lm_ok);
         REQUIRE(landmarks.size() == 35);

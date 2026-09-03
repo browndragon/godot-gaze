@@ -58,6 +58,53 @@ namespace Gaze
         }
     }
 
+    static std::vector<int> nms(const std::vector<GazeRect> &bboxes, const std::vector<float> &scores, float nms_thresh)
+    {
+        std::vector<int> indices(scores.size());
+        std::iota(indices.begin(), indices.end(), 0);
+        std::sort(indices.begin(), indices.end(), [&scores](int a, int b) {
+            return scores[a] > scores[b];
+        });
+
+        std::vector<int> keep;
+        std::vector<bool> suppressed(scores.size(), false);
+
+        for (size_t i = 0; i < indices.size(); ++i)
+        {
+            int idx = indices[i];
+            if (suppressed[idx]) continue;
+            keep.push_back(idx);
+
+            const GazeRect &box_a = bboxes[idx];
+            float area_a = box_a.area();
+
+            for (size_t j = i + 1; j < indices.size(); ++j)
+            {
+                int next_idx = indices[j];
+                if (suppressed[next_idx]) continue;
+
+                const GazeRect &box_b = bboxes[next_idx];
+                float inter_x0 = std::max(box_a.x, box_b.x);
+                float inter_y0 = std::max(box_a.y, box_b.y);
+                float inter_x1 = std::min(box_a.x + box_a.width, box_b.x + box_b.width);
+                float inter_y1 = std::min(box_a.y + box_a.height, box_b.y + box_b.height);
+
+                float inter_w = std::max(0.0f, inter_x1 - inter_x0);
+                float inter_h = std::max(0.0f, inter_y1 - inter_y0);
+                float inter_area = inter_w * inter_h;
+
+                float union_area = area_a + box_b.area() - inter_area;
+                float iou = (union_area > 0.0f) ? (inter_area / union_area) : 0.0f;
+
+                if (iou > nms_thresh)
+                {
+                    suppressed[next_idx] = true;
+                }
+            }
+        }
+        return keep;
+    }
+
     ORTYuNetDetector::ORTYuNetDetector(const std::string &p_model_path, float score_thresh, float nms_thresh)
         : model_path(p_model_path), score_threshold(score_thresh), nms_threshold(nms_thresh),
           memory_info(Ort::MemoryInfo::CreateCpu(OrtDeviceAllocator, OrtMemTypeCPU))
@@ -134,13 +181,13 @@ namespace Gaze
         config = p_config;
     }
 
-    std::vector<GazeVector3> ORTYuNetDetector::get_canonical_godot_model_points() const
+    std::vector<GodotFaceVector3> ORTYuNetDetector::get_canonical_godot_model_points() const
     {
         auto cv_pts = FaceModelGeometry::get_5pt_model_points();
-        std::vector<GazeVector3> godot_pts(cv_pts.size());
+        std::vector<GodotFaceVector3> godot_pts(cv_pts.size());
         for (size_t i = 0; i < cv_pts.size(); ++i)
         {
-            godot_pts[i] = GazeVector3(-cv_pts[i].x, -cv_pts[i].y, cv_pts[i].z);
+            godot_pts[i] = GodotFaceVector3(-cv_pts[i].x, -cv_pts[i].y, cv_pts[i].z);
         }
         return godot_pts;
     }
@@ -175,7 +222,7 @@ namespace Gaze
     bool ORTYuNetDetector::process_frame_single_pass(const Frame &frame, YuNetResult &out_result, float roll_deg)
     {
         out_result = YuNetResult();
-        if (!session || frame.data == nullptr || frame.width <= 0 || frame.height <= 0)
+        if (!session || frame.data == nullptr || frame.width < 10 || frame.height < 10 || frame.width > 4096 || frame.height > 4096)
         {
             return false;
         }
@@ -281,7 +328,7 @@ namespace Gaze
 
             std::vector<GazeRect> candidate_bboxes;
             std::vector<float> candidate_scores;
-            std::vector<std::vector<GazeVector2>> candidate_landmarks;
+            std::vector<std::vector<GodotCameraImageVector2>> candidate_landmarks;
 
             int anchor_offset = 0;
             std::vector<int> strides = {8, 16, 32};
@@ -314,22 +361,22 @@ namespace Gaze
                         float y_top = cy - h / 2.0f;
 
                         // 4 Corners of predicted bbox in rotated square crop space
-                        GazeVector2 c1_crop(x_left / scale + crop_x0, y_top / scale + crop_y0);
-                        GazeVector2 c2_crop((x_left + w) / scale + crop_x0, y_top / scale + crop_y0);
-                        GazeVector2 c3_crop((x_left + w) / scale + crop_x0, (y_top + h) / scale + crop_y0);
-                        GazeVector2 c4_crop(x_left / scale + crop_x0, (y_top + h) / scale + crop_y0);
+                        GodotCameraImageVector2 c1_crop(x_left / scale + crop_x0, y_top / scale + crop_y0);
+                        GodotCameraImageVector2 c2_crop((x_left + w) / scale + crop_x0, y_top / scale + crop_y0);
+                        GodotCameraImageVector2 c3_crop((x_left + w) / scale + crop_x0, (y_top + h) / scale + crop_y0);
+                        GodotCameraImageVector2 c4_crop(x_left / scale + crop_x0, (y_top + h) / scale + crop_y0);
 
-                        GazeVector2 c1_orig = rotate_point_2d(c1_crop, roll_rad, width, height);
-                        GazeVector2 c2_orig = rotate_point_2d(c2_crop, roll_rad, width, height);
-                        GazeVector2 c3_orig = rotate_point_2d(c3_crop, roll_rad, width, height);
-                        GazeVector2 c4_orig = rotate_point_2d(c4_crop, roll_rad, width, height);
+                        GodotCameraImageVector2 c1_orig = rotate_point_2d(c1_crop, roll_rad, width, height);
+                        GodotCameraImageVector2 c2_orig = rotate_point_2d(c2_crop, roll_rad, width, height);
+                        GodotCameraImageVector2 c3_orig = rotate_point_2d(c3_crop, roll_rad, width, height);
+                        GodotCameraImageVector2 c4_orig = rotate_point_2d(c4_crop, roll_rad, width, height);
 
-                        float orig_xmin = std::min({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
-                        float orig_ymin = std::min({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
-                        float orig_xmax = std::max({c1_orig.x, c2_orig.x, c3_orig.x, c4_orig.x});
-                        float orig_ymax = std::max({c1_orig.y, c2_orig.y, c3_orig.y, c4_orig.y});
+                        float orig_xmin = std::min({static_cast<float>(c1_orig.x), static_cast<float>(c2_orig.x), static_cast<float>(c3_orig.x), static_cast<float>(c4_orig.x)});
+                        float orig_ymin = std::min({static_cast<float>(c1_orig.y), static_cast<float>(c2_orig.y), static_cast<float>(c3_orig.y), static_cast<float>(c4_orig.y)});
+                        float orig_xmax = std::max({static_cast<float>(c1_orig.x), static_cast<float>(c2_orig.x), static_cast<float>(c3_orig.x), static_cast<float>(c4_orig.x)});
+                        float orig_ymax = std::max({static_cast<float>(c1_orig.y), static_cast<float>(c2_orig.y), static_cast<float>(c3_orig.y), static_cast<float>(c4_orig.y)});
 
-                        std::vector<GazeVector2> ldm(5);
+                        std::vector<GodotCameraImageVector2> ldm(5);
                         for (int j = 0; j < 5; ++j)
                         {
                             float kx = kps_data[idx * 10 + j * 2 + 0] * anc.stride_x + anc.cx;
@@ -338,7 +385,7 @@ namespace Gaze
                             float crop_kx = kx / scale + crop_x0;
                             float crop_ky = ky / scale + crop_y0;
 
-                            ldm[j] = rotate_point_2d(GazeVector2(crop_kx, crop_ky), roll_rad, width, height);
+                            ldm[j] = rotate_point_2d(GodotCameraImageVector2(crop_kx, crop_ky), roll_rad, width, height);
                         }
 
                         candidate_bboxes.push_back(GazeRect(orig_xmin, orig_ymin, orig_xmax - orig_xmin, orig_ymax - orig_ymin));
@@ -351,81 +398,59 @@ namespace Gaze
 
             if (candidate_bboxes.empty())
             {
-                return false;
+                return true;
             }
 
-            std::vector<size_t> indices(candidate_scores.size());
-            std::iota(indices.begin(), indices.end(), 0);
-            std::sort(indices.begin(), indices.end(), [&](size_t a, size_t b)
-                      { return candidate_scores[a] > candidate_scores[b]; });
-
-            std::vector<bool> suppressed(candidate_scores.size(), false);
-            int best_idx = -1;
-
-            for (size_t i = 0; i < indices.size(); ++i)
+            std::vector<int> keep_indices = nms(candidate_bboxes, candidate_scores, nms_threshold);
+            if (keep_indices.empty())
             {
-                size_t idx = indices[i];
-                if (suppressed[idx]) continue;
+                return true;
+            }
 
-                if (best_idx < 0) best_idx = static_cast<int>(idx);
-
-                for (size_t j = i + 1; j < indices.size(); ++j)
+            // Find best score among kept detections
+            int best_idx = keep_indices[0];
+            float best_score = candidate_scores[best_idx];
+            for (size_t i = 1; i < keep_indices.size(); ++i)
+            {
+                int idx = keep_indices[i];
+                if (candidate_scores[idx] > best_score)
                 {
-                    size_t idx2 = indices[j];
-                    if (suppressed[idx2]) continue;
-
-                    GazeRect r1 = candidate_bboxes[idx];
-                    GazeRect r2 = candidate_bboxes[idx2];
-
-                    float inter_x1 = std::max(r1.x, r2.x);
-                    float inter_y1 = std::max(r1.y, r2.y);
-                    float inter_x2 = std::min(r1.x + r1.width, r2.x + r2.width);
-                    float inter_y2 = std::min(r1.y + r1.height, r2.y + r2.height);
-                    float inter_w = std::max(0.0f, inter_x2 - inter_x1);
-                    float inter_h = std::max(0.0f, inter_y2 - inter_y1);
-                    float inter_area = inter_w * inter_h;
-
-                    float union_area = r1.area() + r2.area() - inter_area;
-                    float iou = (union_area > 0.0f) ? (inter_area / union_area) : 0.0f;
-
-                    if (iou > nms_threshold)
-                    {
-                        suppressed[idx2] = true;
-                    }
+                    best_score = candidate_scores[idx];
+                    best_idx = idx;
                 }
             }
 
-            if (best_idx < 0) return false;
+            const GazeRect &best_box = candidate_bboxes[best_idx];
+            const std::vector<GodotCameraImageVector2> &ldm = candidate_landmarks[best_idx];
 
             out_result.face_detected = true;
-            out_result.score = candidate_scores[best_idx];
-            out_result.roi_x = candidate_bboxes[best_idx].x;
-            out_result.roi_y = candidate_bboxes[best_idx].y;
-            out_result.roi_w = candidate_bboxes[best_idx].width;
-            out_result.roi_h = candidate_bboxes[best_idx].height;
+            out_result.score = best_score;
+            out_result.roi_x = best_box.x;
+            out_result.roi_y = best_box.y;
+            out_result.roi_w = best_box.width;
+            out_result.roi_h = best_box.height;
 
-            const auto &ldm = candidate_landmarks[best_idx];
             out_result.right_eye_px = ldm[0];
             out_result.left_eye_px = ldm[1];
             out_result.nose_tip_px = ldm[2];
             out_result.mouth_right_px = ldm[3];
             out_result.mouth_left_px = ldm[4];
 
-            std::vector<GazeVector3> model_pts = FaceModelGeometry::get_5pt_model_points();
-            std::vector<GazeVector2> img_pts = {
-                out_result.nose_tip_px,
-                out_result.right_eye_px,
-                out_result.left_eye_px,
-                out_result.mouth_right_px,
-                out_result.mouth_left_px
+            std::vector<OpenCVFaceVector3> model_pts = FaceModelGeometry::get_5pt_model_points();
+            std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> img_pts = {
+                SpacedVector2<Space::GodotCameraWorkingImagePixels>(out_result.nose_tip_px.x, out_result.nose_tip_px.y),
+                SpacedVector2<Space::GodotCameraWorkingImagePixels>(out_result.right_eye_px.x, out_result.right_eye_px.y),
+                SpacedVector2<Space::GodotCameraWorkingImagePixels>(out_result.left_eye_px.x, out_result.left_eye_px.y),
+                SpacedVector2<Space::GodotCameraWorkingImagePixels>(out_result.mouth_right_px.x, out_result.mouth_right_px.y),
+                SpacedVector2<Space::GodotCameraWorkingImagePixels>(out_result.mouth_left_px.x, out_result.mouth_left_px.y)
             };
 
             double focal = std::max(width, height) * 1.5;
             double cx = width / 2.0;
             double cy = height / 2.0;
 
-            GazeVector3 rvec(0, 0, 0);
-            GazeVector3 tvec(0, 0, 600.0);
+            OpenCVCameraVector3 rvec(0, 0, 0);
+            OpenCVCameraVector3 tvec(0, 0, 600.0);
             SQPnPSolver::solve_rvec(model_pts, img_pts, focal, focal, cx, cy, rvec, tvec);
 
             out_result.head_pose.pitch_rad = static_cast<float>(rvec.x);

@@ -8,17 +8,17 @@
 namespace Gaze {
 
 ScreenProjector ScreenProjector::derive_configuration(
-    const GazeVector2& win_pos_px,
-    const GazeVector2& vp_scale,
-    const GazeVector2& vp_origin
+    const GodotDisplayVector2& win_pos_px,
+    const SpacedVector2<Space::GodotViewportPx>& vp_scale,
+    const SpacedVector2<Space::GodotViewportPx>& vp_origin
 ) {
     return ScreenProjector(win_pos_px, vp_scale, vp_origin);
 }
 
 ScreenProjector ScreenProjector::from_godot_geometry(
-    const GazeVector2& window_pos_logical,
-    const GazeVector2& viewport_scale_logical,
-    const GazeVector2& viewport_offset_logical
+    const GodotDisplayVector2& window_pos_logical,
+    const SpacedVector2<Space::GodotViewportPx>& viewport_scale_logical,
+    const SpacedVector2<Space::GodotViewportPx>& viewport_offset_logical
 ) {
     return ScreenProjector(
         window_pos_logical,
@@ -31,7 +31,7 @@ bool ScreenProjector::project_to_viewport(
     const ProjectionEngine& engine,
     const GodotCameraVector3& origin_cam,
     const GodotCameraVector3& dir_cam,
-    GazeVector2& out_viewport_pixel
+    SpacedVector2<Space::GodotViewportPx>& out_viewport_pixel
 ) const {
     GodotDisplayVector2 screen_pixel;
     
@@ -41,8 +41,8 @@ bool ScreenProjector::project_to_viewport(
     }
 
     // 2. Subtract window position to get window-local logical pixels
-    double local_x = screen_pixel->x - window_position_px.x;
-    double local_y = screen_pixel->y - window_position_px.y;
+    double local_x = screen_pixel.x - window_position_px.x;
+    double local_y = screen_pixel.y - window_position_px.y;
 
     // 3. Map window-local logical pixels to logical viewport coordinates
     if (std::abs(viewport_scale.x) < 1e-6 || std::abs(viewport_scale.y) < 1e-6) {
@@ -55,8 +55,8 @@ bool ScreenProjector::project_to_viewport(
     return true;
 }
 
-GazeVector2 ScreenProjector::map_viewport_to_screen_px(const GazeVector2& logical_pixel) const {
-    return GazeVector2(
+GodotDisplayVector2 ScreenProjector::map_viewport_to_screen_px(const SpacedVector2<Space::GodotViewportPx>& logical_pixel) const {
+    return GodotDisplayVector2(
         logical_pixel.x * viewport_scale.x + viewport_offset_px.x + window_position_px.x,
         logical_pixel.y * viewport_scale.y + viewport_offset_px.y + window_position_px.y
     );

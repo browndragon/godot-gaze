@@ -136,7 +136,7 @@ TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP 
         Gaze::GazeRect face_bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
 
         // 3. Extract 35 Landmarks directly from upright working_frame (1:1 scale)
-        std::vector<Gaze::GazeVector2> landmarks_35;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks_35;
         bool lm_ok = landmark_model.extract_landmarks(working_frame.data, working_frame.width, working_frame.height, face_bbox, landmarks_35, 0.0f);
         REQUIRE(lm_ok);
         REQUIRE(landmarks_35.size() == 35);
@@ -146,8 +146,8 @@ TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP 
         double cx = frame.width * 0.5;
         double cy = frame.height * 0.5;
 
-        Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f);
-        Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
+        Gaze::OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
 
         auto t0 = std::chrono::high_resolution_clock::now();
         bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec);
@@ -160,22 +160,22 @@ TEST_CASE("Phase 3 Head Pose Estimation: Dense 35-Point Levenberg-Marquardt PnP 
 
         REQUIRE(pnp_ok);
 
-        Gaze::GazeBasis3D R_up = Gaze::rodrigues_to_basis(rvec);
-        Gaze::GazeBasis3D R_z = Gaze::rodrigues_to_basis(Gaze::GazeVector3(0.0, 0.0, roll_hint_rad));
-        Gaze::GazeBasis3D R_orig = R_z * R_up;
-        Gaze::GazeVector3 t_orig = R_z.multiply_vector(tvec);
-        Gaze::GazeVector3 r_orig = Gaze::basis_to_rodrigues(R_orig);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_up = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(rvec);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVCamera, Gaze::Space::OpenCVCamera> R_z = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVCamera, Gaze::Space::OpenCVCamera>(Gaze::OpenCVCameraVector3(0.0, 0.0, roll_hint_rad));
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_orig = R_z * R_up;
+        Gaze::OpenCVCameraVector3 t_orig = R_z.transform(tvec);
+        Gaze::OpenCVCameraVector3 r_orig = Gaze::basis_to_rodrigues<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(R_orig);
 
         PnPResult res;
-        res.pitch_rad = r_orig.x;
-        res.yaw_rad = r_orig.y;
-        res.roll_rad = r_orig.z;
-        res.pitch_deg = r_orig.x * Gaze::RAD_TO_DEG;
-        res.yaw_deg = r_orig.y * Gaze::RAD_TO_DEG;
-        res.roll_deg = r_orig.z * Gaze::RAD_TO_DEG;
-        res.tx_mm = t_orig.x;
-        res.ty_mm = t_orig.y;
-        res.tz_mm = t_orig.z;
+        res.pitch_rad = static_cast<float>(r_orig.x);
+        res.yaw_rad = static_cast<float>(r_orig.y);
+        res.roll_rad = static_cast<float>(r_orig.z);
+        res.pitch_deg = static_cast<float>(r_orig.x * Gaze::RAD_TO_DEG);
+        res.yaw_deg = static_cast<float>(r_orig.y * Gaze::RAD_TO_DEG);
+        res.roll_deg = static_cast<float>(r_orig.z * Gaze::RAD_TO_DEG);
+        res.tx_mm = static_cast<float>(t_orig.x);
+        res.ty_mm = static_cast<float>(t_orig.y);
+        res.tz_mm = static_cast<float>(t_orig.z);
         res.time_us = dt_us;
 
         char buf_rot[64], buf_trans[64];
@@ -233,22 +233,22 @@ TEST_CASE("PnP Pose Correctness for 35-point Face Model")
     for (float roll_deg : {-45.0f, -30.0f, 0.0f, 30.0f, 45.0f})
     {
         float roll_rad = roll_deg * (3.14159265f / 180.0f);
-        Gaze::GazeVector3 true_rvec(0.0f, 0.0f, roll_rad);
-        Gaze::GazeBasis3D basis = Gaze::rodrigues_to_basis(true_rvec);
+        Gaze::OpenCVCameraVector3 true_rvec(0.0, 0.0, roll_rad);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> basis = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(true_rvec);
 
-        std::vector<Gaze::GazeVector2> img_pts(35);
+        std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> img_pts(35);
         for (size_t i = 0; i < 35; ++i)
         {
-            Gaze::GazeVector3 p_cam = basis * model_35pt[i] + Gaze::GazeVector3(0.0f, 0.0f, 600.0f);
+            Gaze::OpenCVCameraVector3 p_cam = basis.transform(model_35pt[i]) + Gaze::OpenCVCameraVector3(0.0, 0.0, 600.0);
             img_pts[i].x = (p_cam.x / p_cam.z) * fx + cx;
             img_pts[i].y = (p_cam.y / p_cam.z) * fy + cy;
         }
 
-        Gaze::GazeVector3 solved_r, solved_t;
+        Gaze::OpenCVCameraVector3 solved_r, solved_t;
         bool ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, img_pts, fx, fy, cx, cy, solved_r, solved_t);
         REQUIRE(ok);
 
-        float roll_error_deg = std::abs(solved_r.z * (180.0f / 3.14159265f) - roll_deg);
+        float roll_error_deg = static_cast<float>(std::abs(solved_r.z * (180.0 / 3.14159265358979323846) - roll_deg));
         CHECK(roll_error_deg < 2.0f);
     }
 }
@@ -293,7 +293,7 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
     Gaze::YuNetResult base_yunet_res;
     REQUIRE(detector.process_frame(base_frame, base_yunet_res, 0.0f));
     Gaze::GazeRect base_bbox(base_yunet_res.roi_x, base_yunet_res.roi_y, base_yunet_res.roi_w, base_yunet_res.roi_h);
-    std::vector<Gaze::GazeVector2> base_landmarks;
+    std::vector<Gaze::GodotCameraImageVector2> base_landmarks;
     REQUIRE(landmark_model.extract_landmarks(img.data.data(), img.width, img.height, base_bbox, base_landmarks, 0.0f));
     REQUIRE(base_landmarks.size() == 35);
 
@@ -319,31 +319,37 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
         REQUIRE(yunet_res.face_detected);
 
         Gaze::GazeRect face_bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-        std::vector<Gaze::GazeVector2> landmarks_35;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks_35;
         bool lm_ok = landmark_model.extract_landmarks(working_frame.data(), img.width, img.height, face_bbox, landmarks_35, 0.0f);
         REQUIRE(lm_ok);
         REQUIRE(landmarks_35.size() == 35);
 
-        Gaze::GazeVector3 rvec(0.0f, 0.0f, 0.0f);
-        Gaze::GazeVector3 tvec(0.0f, 0.0f, 600.0f);
-        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, landmarks_35, focal, focal, cx, cy, rvec, tvec);
+        std::vector<Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>> lm_working(35);
+        for (size_t i = 0; i < 35; ++i)
+        {
+            lm_working[i] = Gaze::SpacedVector2<Gaze::Space::GodotCameraWorkingImagePixels>(landmarks_35[i].x, landmarks_35[i].y);
+        }
+
+        Gaze::OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
+        Gaze::OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
+        bool pnp_ok = Gaze::SQPnPSolver::solve_rvec(model_35pt, lm_working, focal, focal, cx, cy, rvec, tvec);
         REQUIRE(pnp_ok);
 
-        Gaze::GazeBasis3D R_up = Gaze::rodrigues_to_basis(rvec);
-        Gaze::GazeBasis3D R_z = Gaze::rodrigues_to_basis(Gaze::GazeVector3(0.0, 0.0, current_roll_hint_rad));
-        Gaze::GazeBasis3D R_orig = R_z * R_up;
-        Gaze::GazeVector3 r_orig = Gaze::basis_to_rodrigues(R_orig);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_up = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(rvec);
+        Gaze::SpacedBasis<Gaze::Space::OpenCVCamera, Gaze::Space::OpenCVCamera> R_z = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVCamera, Gaze::Space::OpenCVCamera>(Gaze::OpenCVCameraVector3(0.0, 0.0, current_roll_hint_rad));
+        Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_orig = R_z * R_up;
+        Gaze::OpenCVCameraVector3 r_orig = Gaze::basis_to_rodrigues<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(R_orig);
 
-        float solved_roll_rad = r_orig.z;
-        float solved_roll_deg = solved_roll_rad * (180.0f / 3.14159265f);
+        float solved_roll_rad = static_cast<float>(r_orig.z);
+        float solved_roll_deg = static_cast<float>(solved_roll_rad * (180.0 / 3.14159265358979323846));
 
         // Verify that 2D landmarks unrotated back to camera space align with ground truth rotated face position
         for (size_t lm_idx : {0, 1, 2, 3, 30})
         {
-            Gaze::GazeVector2 expected_pt = Gaze::rotate_point_2d(base_landmarks[lm_idx], true_roll_rad, img.width, img.height);
-            Gaze::GazeVector2 unrotated_pt = Gaze::rotate_point_2d(landmarks_35[lm_idx], current_roll_hint_rad, img.width, img.height);
-            float dx = unrotated_pt.x - expected_pt.x;
-            float dy = unrotated_pt.y - expected_pt.y;
+            Gaze::GodotCameraImageVector2 expected_pt = Gaze::rotate_point_2d(base_landmarks[lm_idx], true_roll_rad, img.width, img.height);
+            Gaze::GodotCameraImageVector2 unrotated_pt = Gaze::rotate_point_2d(landmarks_35[lm_idx], current_roll_hint_rad, img.width, img.height);
+            float dx = static_cast<float>(unrotated_pt.x - expected_pt.x);
+            float dy = static_cast<float>(unrotated_pt.y - expected_pt.y);
             float dist_px = std::sqrt(dx * dx + dy * dy);
             CHECK(dist_px < 15.0f);
         }
@@ -358,7 +364,7 @@ TEST_CASE("Continuous Head Roll Tracking Feedback Loop")
 
 TEST_CASE("OpenCV to Godot Space Conversion 3D Projection Invariance Across All Octants")
 {
-    auto cv_pts = Gaze::get_canonical_35pt_face_model();
+    auto cv_pts = Gaze::FaceModelGeometry::get_canonical_35pt_model_points();
     auto godot_pts = Gaze::FaceModelGeometry::get_canonical_godot_model_points();
     REQUIRE(cv_pts.size() == 35);
     REQUIRE(godot_pts.size() == 35);
@@ -372,24 +378,24 @@ TEST_CASE("OpenCV to Godot Space Conversion 3D Projection Invariance Across All 
         {
             for (float roll_deg : {-25.0f, 0.0f, 25.0f})
             {
-                Gaze::GazeVector3 rvec(pitch_deg * Gaze::DEG_TO_RAD, yaw_deg * Gaze::DEG_TO_RAD, roll_deg * Gaze::DEG_TO_RAD);
-                Gaze::GazeVector3 tvec(20.0, -15.0, 550.0);
+                Gaze::OpenCVCameraVector3 rvec(pitch_deg * Gaze::DEG_TO_RAD, yaw_deg * Gaze::DEG_TO_RAD, roll_deg * Gaze::DEG_TO_RAD);
+                Gaze::OpenCVCameraVector3 tvec(20.0, -15.0, 550.0);
 
-                Gaze::GazeBasis3D R_cv = Gaze::rodrigues_to_basis(rvec);
+                Gaze::SpacedBasis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera> R_cv = Gaze::rodrigues_to_basis<Gaze::Space::OpenCVFaceModel, Gaze::Space::OpenCVCamera>(rvec);
 
                 // Compute Godot Head Transform
-                Gaze::GazeTransform3D T_godot = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(tvec, rvec);
+                Gaze::GodotFaceTransform3D T_godot = Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform(tvec, rvec);
 
                 // Check projection of all 35 points in both systems
                 for (size_t i = 0; i < 35; ++i)
                 {
                     // 1. OpenCV projection
-                    Gaze::GazeVector3 p_cam_cv = R_cv.multiply_vector(cv_pts[i]) + tvec;
+                    Gaze::OpenCVCameraVector3 p_cam_cv = R_cv.transform(cv_pts[i]) + tvec;
                     double px_cv = (p_cam_cv.x / p_cam_cv.z) * fx + cx;
                     double py_cv = (p_cam_cv.y / p_cam_cv.z) * fy + cy;
 
                     // 2. Godot debug overlay projection
-                    Gaze::GazeVector3 p_cam_godot = T_godot.basis.multiply_vector(godot_pts[i]) + T_godot.origin;
+                    Gaze::GodotCameraVector3 p_cam_godot = T_godot.transform_point(godot_pts[i]);
                     double depth = -p_cam_godot.z;
                     double px_godot = (p_cam_godot.x / depth) * fx + cx;
                     double py_godot = cy - (p_cam_godot.y / depth) * fy;
@@ -414,7 +420,7 @@ TEST_CASE("ORTLandmarkModel Degenerate Bounding Box Validation")
     REQUIRE(landmark_model.initialize() == true);
 
     std::vector<unsigned char> dummy_frame(640 * 480 * 3, 128);
-    std::vector<Gaze::GazeVector2> landmarks;
+    std::vector<Gaze::GodotCameraImageVector2> landmarks;
 
     // 1. Degenerately small width (< 20)
     Gaze::GazeRect small_w_box(100.0f, 100.0f, 10.0f, 100.0f);

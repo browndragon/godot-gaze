@@ -69,7 +69,7 @@ TEST_CASE("ORT Landmark Model 35-Point Boundary Invariants and Face Landmarking"
 
     // 1. Test synthetic 60x60 face crop normalized output invariants
     std::vector<uint8_t> dummy_crop(60 * 60 * 3, 128);
-    std::vector<Gaze::GazeVector2> norm_landmarks;
+    std::vector<Gaze::GodotCameraImageVector2> norm_landmarks;
     bool ok_dummy = lm_model.extract_landmarks_norm(dummy_crop.data(), norm_landmarks);
     REQUIRE(ok_dummy == true);
     REQUIRE(norm_landmarks.size() == 35);
@@ -101,7 +101,7 @@ TEST_CASE("ORT Landmark Model 35-Point Boundary Invariants and Face Landmarking"
     REQUIRE(yunet_res.face_detected == true);
 
     Gaze::GazeRect face_bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-    std::vector<Gaze::GazeVector2> landmarks_35_px;
+    std::vector<Gaze::GodotCameraImageVector2> landmarks_35_px;
     bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, face_bbox, landmarks_35_px);
     REQUIRE(lm_ok == true);
     REQUIRE(landmarks_35_px.size() == 35);
@@ -118,8 +118,8 @@ TEST_CASE("ORT Landmark Model 35-Point Boundary Invariants and Face Landmarking"
     float l_eye_x = (landmarks_35_px[2].x + landmarks_35_px[3].x) * 0.5f;
     float l_eye_y = (landmarks_35_px[2].y + landmarks_35_px[3].y) * 0.5f;
 
-    Gaze::GazeVector2 nose_tip = landmarks_35_px[5];
-    Gaze::GazeVector2 chin = landmarks_35_px[26];
+    Gaze::GodotCameraImageVector2 nose_tip = landmarks_35_px[5];
+    Gaze::GodotCameraImageVector2 chin = landmarks_35_px[26];
 
     // Assert that Right Eye (Viewer Left) is horizontally to the left of Left Eye (Viewer Right)
     CHECK(r_eye_x < l_eye_x);
@@ -194,7 +194,7 @@ TEST_CASE("ORT Landmark Model Full Benchmark Image Suite Invariants")
         CHECK_MESSAGE(yunet_res.face_detected == true, "No face found in: ", item.filename);
 
         Gaze::GazeRect face_bbox(yunet_res.roi_x, yunet_res.roi_y, yunet_res.roi_w, yunet_res.roi_h);
-        std::vector<Gaze::GazeVector2> landmarks_35;
+        std::vector<Gaze::GodotCameraImageVector2> landmarks_35;
         bool lm_ok = lm_model.extract_landmarks(frame.data, frame.width, frame.height, face_bbox, landmarks_35, item.roll_hint_rad);
         CHECK_MESSAGE(lm_ok == true, "Landmark extraction failed on: ", item.filename);
         CHECK_MESSAGE(landmarks_35.size() == 35, "Expected 35 landmarks for: ", item.filename);

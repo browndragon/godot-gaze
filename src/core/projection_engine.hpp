@@ -11,7 +11,6 @@
 
 #include "camera_placement.hpp"
 #include "gaze_calibration.hpp"
-#include "math_defs.hpp"
 #include "opencv_space_conversions.hpp"
 
 namespace Gaze
@@ -22,8 +21,8 @@ namespace Gaze
     private:
         CameraPlacement placement;
         GazeCalibration calibration;
-        GazeVector2 screen_size_pixels = GazeVector2(1920.0, 1080.0);
-        GazeVector2 screen_size_mm = GazeVector2(527.0, 296.0); // e.g. Typical 24-inch 16:9 monitor
+        GodotDisplayVector2 screen_size_pixels = GodotDisplayVector2(1920.0, 1080.0);
+        SpacedVector2<Space::GodotDisplayMm> screen_size_mm = SpacedVector2<Space::GodotDisplayMm>(527.0, 296.0); // e.g. Typical 24-inch 16:9 monitor
         double camera_focal_length_px = 1000.0;                 // For Z depth estimation if needed
 
     public:
@@ -36,11 +35,11 @@ namespace Gaze
         void set_calibration(const GazeCalibration &c) { calibration = c; }
         GazeCalibration get_calibration() const { return calibration; }
 
-        void set_screen_size_pixels(const GazeVector2 &size) { screen_size_pixels = size; }
-        GazeVector2 get_screen_size_pixels() const { return screen_size_pixels; }
+        void set_screen_size_pixels(const GodotDisplayVector2 &size) { screen_size_pixels = size; }
+        GodotDisplayVector2 get_screen_size_pixels() const { return screen_size_pixels; }
 
-        void set_screen_size_mm(const GazeVector2 &size) { screen_size_mm = size; }
-        GazeVector2 get_screen_size_mm() const { return screen_size_mm; }
+        void set_screen_size_mm(const SpacedVector2<Space::GodotDisplayMm> &size) { screen_size_mm = size; }
+        SpacedVector2<Space::GodotDisplayMm> get_screen_size_mm() const { return screen_size_mm; }
 
         void set_camera_focal_length_px(double f) { camera_focal_length_px = f; }
         double get_camera_focal_length_px() const { return camera_focal_length_px; }
@@ -49,10 +48,10 @@ namespace Gaze
         double estimate_depth_z(double eye_distance_px, double ipd_mm = 63.0) const;
 
         // Convert screen pixel coordinates to screen millimeter coordinates (relative to center, Y-down +)
-        GazeVector2 pixel_to_millimeter(const GodotDisplayVector2 &pixel) const;
+        SpacedVector2<Space::GodotDisplayMm> pixel_to_millimeter(const GodotDisplayVector2 &pixel) const;
 
         // Map screen millimeter coordinates (relative to center, Y-down +) to 3D position in Camera Space
-        GodotCameraVector3 screen_mm_to_camera_space(const GazeVector2 &screen_mm) const;
+        GodotCameraVector3 screen_mm_to_camera_space(const SpacedVector2<Space::GodotDisplayMm> &screen_mm) const;
 
         // Apply pitch/yaw angular bias to raw 3D gaze vector
         GodotCameraVector3 apply_3d_bias(const GodotCameraVector3 &raw_gaze_dir) const;

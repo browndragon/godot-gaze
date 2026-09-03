@@ -24,7 +24,7 @@ struct GazeFrameData {
     GazeRect face_bbox;
     float face_score = 0.0f;
     float eye_box_sz = 0.0f;
-    std::vector<GazeVector2> internal_landmarks_working_px;
+    std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> internal_landmarks_working_px;
     EyeCrops eye_crops;
 
     bool face_detected = false;
@@ -34,7 +34,7 @@ struct GazeFrameData {
 
     GodotFaceTransform3D head_transform;
     GodotCameraVector3 head_translation = GodotCameraVector3(0.0, 0.0, 0.0);
-    GodotCameraVector3 head_rotation = GodotCameraVector3(0.0, 0.0, 0.0);
+    SpacedVector3<Space::GodotCameraEuler> head_rotation = SpacedVector3<Space::GodotCameraEuler>(0.0, 0.0, 0.0);
     GodotCameraVector3 gaze_origin = GodotCameraVector3(0.0, 0.0, 0.0);
     GodotCameraVector3 gaze_direction = GodotCameraVector3(0.0, 0.0, 1.0);
 

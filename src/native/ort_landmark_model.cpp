@@ -84,7 +84,7 @@ namespace Gaze
         }
     }
 
-    bool ORTLandmarkModel::extract_landmarks_norm(const uint8_t *raw_crop_bgr, std::vector<GazeVector2> &out_landmarks_norm)
+    bool ORTLandmarkModel::extract_landmarks_norm(const uint8_t *raw_crop_bgr, std::vector<GodotCameraImageVector2> &out_landmarks_norm)
     {
         out_landmarks_norm.clear();
         if (!session || !raw_crop_bgr)
@@ -116,7 +116,7 @@ namespace Gaze
             out_landmarks_norm.resize(35);
             for (int i = 0; i < 35; ++i)
             {
-                out_landmarks_norm[i] = GazeVector2(raw_output[i * 2 + 0], raw_output[i * 2 + 1]);
+                out_landmarks_norm[i] = GodotCameraImageVector2(raw_output[i * 2 + 0], raw_output[i * 2 + 1]);
             }
 
             return true;
@@ -136,7 +136,7 @@ namespace Gaze
         return GazeRect(cx - sz * 0.5f, cy - sz * 0.5f, sz, sz);
     }
 
-    bool ORTLandmarkModel::extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GazeVector2> &out_landmarks_px, float roll_hint_rad)
+    bool ORTLandmarkModel::extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GodotCameraImageVector2> &out_landmarks_px, float roll_hint_rad)
     {
         out_landmarks_px.clear();
         if (!src_data || img_w <= 0 || img_h <= 0 || face_bbox.width < 20.0f || face_bbox.height < 20.0f)
@@ -162,7 +162,7 @@ namespace Gaze
 
             float cx = face_bbox.x + face_bbox.width * 0.5f;
             float cy = face_bbox.y + face_bbox.height * 0.5f;
-            GazeVector2 rot_center = rotate_point_2d(GazeVector2(cx, cy), -roll_hint_rad, img_w, img_h);
+            GodotCameraImageVector2 rot_center = rotate_point_2d(GodotCameraImageVector2(cx, cy), -roll_hint_rad, img_w, img_h);
             working_bbox = GazeRect(rot_center.x - face_bbox.width * 0.5f, rot_center.y - face_bbox.height * 0.5f, face_bbox.width, face_bbox.height);
         }
 
@@ -175,7 +175,7 @@ namespace Gaze
             adj_box.x, adj_box.y, adj_box.width, adj_box.height,
             crop_60.data(), 60, 60);
 
-        std::vector<GazeVector2> landmarks_norm;
+        std::vector<GodotCameraImageVector2> landmarks_norm;
         if (!extract_landmarks_norm(crop_60.data(), landmarks_norm))
         {
             return false;
@@ -186,7 +186,7 @@ namespace Gaze
         {
             float px_x = adj_box.x + landmarks_norm[i].x * adj_box.width;
             float px_y = adj_box.y + landmarks_norm[i].y * adj_box.height;
-            GazeVector2 pt(px_x, px_y);
+            GodotCameraImageVector2 pt(px_x, px_y);
             if (std::abs(roll_hint_rad) > 1e-4f)
             {
                 pt = rotate_point_2d(pt, roll_hint_rad, img_w, img_h);
@@ -194,6 +194,21 @@ namespace Gaze
             out_landmarks_px[i] = pt;
         }
 
+        return true;
+    }
+
+    bool ORTLandmarkModel::extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &out_landmarks_px, float roll_hint_rad)
+    {
+        std::vector<GodotCameraImageVector2> temp_lm;
+        if (!extract_landmarks(src_data, img_w, img_h, face_bbox, temp_lm, roll_hint_rad))
+        {
+            return false;
+        }
+        out_landmarks_px.resize(temp_lm.size());
+        for (size_t i = 0; i < temp_lm.size(); ++i)
+        {
+            out_landmarks_px[i] = SpacedVector2<Space::GodotCameraWorkingImagePixels>(temp_lm[i].x, temp_lm[i].y);
+        }
         return true;
     }
 

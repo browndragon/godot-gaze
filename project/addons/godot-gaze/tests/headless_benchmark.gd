@@ -120,8 +120,8 @@ func format_vec3(v: Vector3) -> String:
 func px_to_screen_mm(px: Vector2) -> Vector2:
 	if px.x == INF or px.y == INF or px.x <= -9000.0 or px.y <= -9000.0:
 		return Vector2(-9999.0, -9999.0)
-	var x_mm = (px.x - 3024.0 / 2.0) * (301.5 / 3024.0)
-	var y_mm = (px.y - 1964.0 / 2.0) * (188.5 / 1964.0)
+	var x_mm = (px.x - SCREEN_WIDTH_PT * 0.5) * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
+	var y_mm = (px.y - SCREEN_HEIGHT_PT * 0.5) * (SCREEN_HEIGHT_MM / SCREEN_HEIGHT_PT)
 	return Vector2(x_mm, y_mm)
 
 func mm_to_screen_pt(pos_mm_from_center: Vector2) -> Vector2:
@@ -152,7 +152,7 @@ func run_benchmark():
 		return
 
 	var profile = GazeDeviceProfile.new()
-	profile.set_logical_size_px(Vector2i(3024, 1964))
+	profile.set_logical_size_px(Vector2i(1512, 982))
 	profile.set_physical_size_mm(Vector2(301.5, 188.5))
 	profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0))
 	profile.set_camera_roll_deg(0.0)
@@ -281,6 +281,7 @@ func run_benchmark():
 			gaze_dir = head_fwd
 
 		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd)
+		var gaze_proj_px = gs.get_projected_gaze(false)
 		var nose_proj_mm = px_to_screen_mm(nose_proj_px)
 		var gaze_proj_mm = gs.get_projected_gaze_mm(false)
 
@@ -343,6 +344,7 @@ func run_benchmark():
 						status_str = "REGRESSION"
 						any_metric_regressed = true
 						fixture_regressed = true
+						printerr("REGRESSION: %s %s error regressed from %s to %s (delta: %s)" % [img_file, prop_key, prev_err_str, p["err_str"], delta_str])
 					elif delta < -15.0:
 						delta_str = "%.1f mm" % delta
 						status_str = "IMPROVEMENT"
@@ -376,7 +378,7 @@ func run_benchmark():
 		# Render Diagnostic Overlays
 		var diag_overlay_rel_path = "benchmark_overlays/" + base_fn + "_diagnostic.png"
 		var left_panel = render_camera_panel(img, head_trans, head_xform, eye_orig, gaze_dir, lm_pts, face_detected, meta.get("roll_hint_deg", 0.0), frame_focal, left_crop, right_crop)
-		var right_panel = render_display_panel(img, img_file, mm_to_screen_pt(nose_target), mm_to_screen_pt(gaze_target), mm_to_screen_pt(nose_proj_mm), mm_to_screen_pt(gaze_proj_mm))
+		var right_panel = render_display_panel(img, img_file, mm_to_screen_pt(nose_target), mm_to_screen_pt(gaze_target), nose_proj_px, gaze_proj_px)
 		var composite = create_side_by_side_composite(left_panel, right_panel, img_file)
 		composite.save_png(overlays_dir + "/" + base_fn + "_diagnostic.png")
 

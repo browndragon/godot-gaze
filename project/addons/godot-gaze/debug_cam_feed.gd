@@ -299,9 +299,7 @@ func _on_copy_button_pressed():
 			copy_btn.text = "📋 Copy Diagnostics"
 
 func _draw():
-	active_canvas = self
-	_perform_drawing()
-	active_canvas = null
+	pass
 
 func _on_overlay_draw():
 	if landmark_overlay:

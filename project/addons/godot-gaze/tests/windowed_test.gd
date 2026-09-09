@@ -172,7 +172,7 @@ func _init():
 	var fs_screen_size = DisplayServer.screen_get_size(screen_id)
 	print("Fullscreen Mode: ", fs_mode, " | Win Pos: ", fs_win_pos, " | Win Size: ", fs_win_size, " | Screen Size: ", fs_screen_size)
 	print("Root Viewport Size: ", root.size, " | Visible Rect: ", root.get_visible_rect(), " | Final Xform: ", root.get_final_transform())
-	print("DeviceCal Win Pos: ", dev_cal.get_window_position_lpix(), " | Logical Size: ", dev_cal.get_logical_size_px(), " | Physical Size: ", dev_cal.get_physical_size_mm())
+	print("Profile Logical Size: ", profile.get_logical_size_px(), " | Physical Size: ", profile.get_physical_size_mm())
 
 	var fs_proj = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
 	print("Fullscreen Center Ray Projection (Window Space): ", fs_proj)

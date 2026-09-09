@@ -41,8 +41,8 @@ func _on_fov_slider_changed(value: float):
 	_update_guide_box()
 
 func _update_guide_box():
-	# Retrieve expected pixel width of the card using our static DeviceCalibration helper
-	var card_width_px = DeviceCalibration.get_card_width_px(
+	# Retrieve expected pixel width of the card using our static GazeDeviceProfile helper
+	var card_width_px = GazeDeviceProfile.get_card_width_px(
 		current_fov,
 		card_distance_mm,
 		frame_width_pixels,

@@ -245,7 +245,7 @@ func run_tool() -> void:
 		var right_crop: Image = eye_crops[1] if eye_crops.size() > 1 and eye_crops[1] != null else null
 
 		# 2. GazeServer Reported Points (Viewport -> Screen)
-		var nose_win_reported = gs.project_ray_to_viewport(head_pos, head_fwd, false)
+		var nose_win_reported = gs.project_ray_to_viewport(head_pos, head_fwd)
 		var eye_win_reported = gs.get_gaze_screen_px(false)
 
 		var nose_screen_reported = nose_win_reported + Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)

@@ -77,13 +77,13 @@ func run_render():
 		var lm_pts = gs.get_face_landmarks_2d()
 
 		# Project to window coordinates
-		var nose_win = gs.project_ray_to_viewport(head_pos, head_fwd, false)
+		var nose_win = gs.project_ray_to_viewport(head_pos, head_fwd)
 		var eye_win = gs.get_gaze_screen_px(false)
 
 		# Screen coordinates
-		var win_pos = dev_cal.get_window_position_lpix()
-		var nose_screen = nose_win + win_pos
-		var eye_screen = eye_win + win_pos
+		var win_pos = DisplayServer.window_get_position()
+		var nose_screen = nose_win + Vector2(win_pos)
+		var eye_screen = eye_win + Vector2(win_pos)
 
 		print("--------------------------------------------------")
 		print("Image: ", img_name)

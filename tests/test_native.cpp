@@ -1571,6 +1571,42 @@ TEST_CASE("Testing Godot C++ Bindings Transform2D::xform_inv Scaling Bug")
     CHECK(correct_inverse.y == doctest::Approx(5.0));
 }
 
+TEST_CASE("Testing HiDPI Canvas Coordinate Transformation Invariance")
+{
+    // A 14" MacBook Pro Retina screen is 1512x945 logical points with scale 2.0 (3024x1890 physical render buffer).
+    // In Godot, a project with design resolution 1152x648 running fullscreen expand will have:
+    // Canvas visible size = (1152, 720)
+    // Viewport render target = (3024, 1890) (scale = 2.625)
+    // Transform2D final_xform: scale = (2.625, 2.625), origin = (0, 0)
+    
+    double screen_scale = 2.0;
+    godot::Vector2 logical_screen_size(1512.0, 945.0);
+    godot::Vector2 canvas_size(1152.0, 720.0);
+    godot::Vector2 render_target_size = logical_screen_size * screen_scale; // (3024, 1890)
+    
+    godot::Transform2D final_xform(
+        godot::Vector2(render_target_size.x / canvas_size.x, 0.0),
+        godot::Vector2(0.0, render_target_size.y / canvas_size.y),
+        godot::Vector2(0.0, 0.0)
+    );
+    godot::Transform2D canvas_xform = final_xform.affine_inverse();
+    
+    // Screen center in logical points:
+    godot::Vector2 logical_center = logical_screen_size * 0.5; // (756.0, 472.5)
+    
+    // 1. Bug Demonstration: Passing logical points directly to canvas_xform divides by 2.625 instead of 1.3125
+    godot::Vector2 flawed_canvas_pos = canvas_xform.xform(logical_center);
+    CHECK(flawed_canvas_pos.x == doctest::Approx(288.0)); // Halved!
+    CHECK(flawed_canvas_pos.y == doctest::Approx(180.0));
+    
+    // 2. Correct Formula: Multiplying by screen_scale before canvas_xform lands on exact canvas center (576.0, 360.0)
+    godot::Vector2 correct_canvas_pos = canvas_xform.xform(logical_center * screen_scale);
+    CHECK(correct_canvas_pos.x == doctest::Approx(576.0));
+    CHECK(correct_canvas_pos.y == doctest::Approx(360.0));
+    CHECK(correct_canvas_pos.x == doctest::Approx(canvas_size.x * 0.5));
+    CHECK(correct_canvas_pos.y == doctest::Approx(canvas_size.y * 0.5));
+}
+
 #include "log.hpp"
 #include <vector>
 #include <string>
@@ -2080,6 +2116,76 @@ TEST_CASE("Hub-and-Spoke GodotCameraHintRolled to GodotCamera Space Transform Ma
     CHECK(unrolled_90.origin.y == doctest::Approx(-10.0));
     CHECK(unrolled_90.origin.z == doctest::Approx(-500.0));
 }
+
+#include "gaze_display_types.hpp"
+#if defined(__APPLE__)
+#include "gaze_display_macos.hpp"
+#elif defined(_WIN32)
+#include "gaze_display_windows.hpp"
+#elif defined(__ANDROID__)
+#include "gaze_display_android.hpp"
+#else
+#include "gaze_display_fallback.hpp"
+#endif
+
+TEST_CASE("Platform Native Display Metrics Hardware Sanity")
+{
+#if defined(__APPLE__)
+    Gaze::GazeDisplayMetrics metrics = Gaze::gaze_macos_get_display_metrics(0);
+#elif defined(_WIN32)
+    Gaze::GazeDisplayMetrics metrics = Gaze::gaze_windows_get_display_metrics(0);
+#elif defined(__ANDROID__)
+    Gaze::GazeDisplayMetrics metrics = Gaze::gaze_android_get_display_metrics(0);
+#else
+    Gaze::GazeDisplayMetrics metrics = Gaze::gaze_fallback_get_display_metrics(0);
+#endif
+
+    // Physical dimensions must be positive non-zero and within realistic display hardware bounds
+    CHECK(metrics.width_mm >= 50.0);
+    CHECK(metrics.width_mm <= 1500.0);
+    CHECK(metrics.height_mm >= 50.0);
+    CHECK(metrics.height_mm <= 1000.0);
+    CHECK(metrics.pixel_width >= 320);
+    CHECK(metrics.pixel_height >= 240);
+    CHECK(metrics.scale_factor >= 0.5);
+    CHECK(metrics.scale_factor <= 4.0);
+
+    // Pixel pitch must be realistic (0.05 mm/pt to 0.50 mm/pt)
+    double pitch_x = metrics.width_mm / metrics.pixel_width;
+    double pitch_y = metrics.height_mm / metrics.pixel_height;
+    CHECK(pitch_x >= 0.05);
+    CHECK(pitch_x <= 0.50);
+    CHECK(pitch_y >= 0.05);
+    CHECK(pitch_y <= 0.50);
+}
+
+TEST_CASE("Platform Native Window Rect Sanity")
+{
+#if defined(__APPLE__)
+    Gaze::GazeWindowRect rect = Gaze::gaze_macos_get_window_rect(0);
+#elif defined(_WIN32)
+    Gaze::GazeWindowRect rect = Gaze::gaze_windows_get_window_rect(0);
+#elif defined(__ANDROID__)
+    Gaze::GazeWindowRect rect = Gaze::gaze_android_get_window_rect(0);
+#else
+    Gaze::GazeWindowRect rect = Gaze::gaze_fallback_get_window_rect(0);
+#endif
+
+    // Window dimensions should be non-negative and realistic
+    CHECK(rect.width >= 0);
+    CHECK(rect.height >= 0);
+    // If a window or screen is active, dimensions should be non-zero
+    if (rect.width > 0) {
+        CHECK(rect.width >= 100);
+        CHECK(rect.height >= 100);
+        CHECK(rect.x >= -5000);
+        CHECK(rect.x <= 10000);
+        CHECK(rect.y >= -5000);
+        CHECK(rect.y <= 10000);
+    }
+}
+
+
 
 
 

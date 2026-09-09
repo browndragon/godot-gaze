@@ -1,4 +1,5 @@
 #include "gaze_server.hpp"
+#include "gaze_display_server.hpp"
 #include "vision_server.hpp"
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
@@ -641,7 +642,7 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
         Vector2 phys_sz = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(1920 * 0.25, 1080 * 0.25);
         Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
         double x_disp_mm = phys_sz.x * 0.5 - (pt_cam.x + offset.x);
-        double y_disp_mm = -(pt_cam.y - offset.y);
+        double y_disp_mm = phys_sz.y * 0.5 - (pt_cam.y + offset.y);
         Vector2 pos_mm_center(x_disp_mm - phys_sz.x * 0.5, y_disp_mm - phys_sz.y * 0.5);
         impl->eye.latest_projected_gaze_mm = pos_mm_center;
         
@@ -782,10 +783,13 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
     Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
 
     double x_screen_px = (double)logical_size.x * 0.5 - (pt_cam.x + offset.x) / pixel_pitch.x;
-    double y_screen_px = -(pt_cam.y - offset.y) / pixel_pitch.y;
+    double y_screen_px = (double)logical_size.y * 0.5 - (pt_cam.y + offset.y) / pixel_pitch.y;
 
     Vector2 win_pos = Vector2(0.0, 0.0);
-    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+    if (gds) {
+        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
+    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         DisplayServer *ds = DisplayServer::get_singleton();
         if (ds) {
             win_pos = ds->window_get_position();
@@ -864,13 +868,17 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
 
     Vector2 local_pos = get_gaze_screen_px(true);
     Vector2 win_pos = Vector2(0, 0);
-    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+    if (gds) {
+        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
+    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         DisplayServer *ds = DisplayServer::get_singleton();
         if (ds) {
             win_pos = ds->window_get_position();
         }
     }
     Vector2 screen_pos = local_pos + win_pos;
+
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1091,7 +1099,18 @@ void GazeServer::trigger_process() {
 
                 if (emulate_mouse_from_gaze && input) {
                     Vector2 local_pos = get_gaze_screen_px(true);
-                    Vector2 rel = local_pos - last_gaze_pos;
+                    double scale = 1.0;
+                    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+                    if (gds) {
+                        scale = gds->get_screen_scale();
+                    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+                        DisplayServer *ds = DisplayServer::get_singleton();
+                        if (ds) {
+                            scale = ds->screen_get_scale();
+                        }
+                    }
+                    Vector2 physical_pos = local_pos * scale;
+                    Vector2 rel = (local_pos - last_gaze_pos) * scale;
                     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
                     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
                     if (dt < 0.0001f) dt = 0.0001f;
@@ -1099,8 +1118,8 @@ void GazeServer::trigger_process() {
 
                     Ref<InputEventMouseMotion> mm;
                     mm.instantiate();
-                    mm->set_position(local_pos);
-                    mm->set_global_position(local_pos);
+                    mm->set_position(physical_pos);
+                    mm->set_global_position(physical_pos);
                     mm->set_relative(rel);
                     mm->set_velocity(vel);
                     input->parse_input_event(mm);
@@ -1113,8 +1132,8 @@ void GazeServer::trigger_process() {
                             mb.instantiate();
                             mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
                             mb->set_pressed(true);
-                            mb->set_position(local_pos);
-                            mb->set_global_position(local_pos);
+                            mb->set_position(physical_pos);
+                            mb->set_global_position(physical_pos);
                             input->parse_input_event(mb);
                             was_both_closed = true;
                         }
@@ -1123,8 +1142,8 @@ void GazeServer::trigger_process() {
                         mb.instantiate();
                         mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
                         mb->set_pressed(false);
-                        mb->set_position(local_pos);
-                        mb->set_global_position(local_pos);
+                        mb->set_position(physical_pos);
+                        mb->set_global_position(physical_pos);
                         input->parse_input_event(mb);
                         was_both_closed = false;
                     }

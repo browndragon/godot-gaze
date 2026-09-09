@@ -50,6 +50,8 @@ func _init():
 		return
 
 	gs.set_device_profile(profile)
+	gs.set_emulate_gaze_from_mouse(false)
+	gs.set_emulate_mouse_from_gaze(false)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)
@@ -60,13 +62,14 @@ func _init():
 	gs.set_camera_vision_rid(cam_rid)
 	gs.start_processing()
 
-	# Load the real face image from tests/resources/self_left_left.jpg
+
+	# Load the real face image from tests/resources/self_center.jpg
 	var face_img = Image.new()
-	var err = face_img.load("../tests/resources/self_left_left.jpg")
+	var err = face_img.load("../tests/resources/self_center.jpg")
 	if err != OK:
-		err = face_img.load("res://tests/resources/self_left_left.jpg")
+		err = face_img.load("res://tests/resources/self_center.jpg")
 	if err != OK:
-		err = face_img.load("res://addons/godot-gaze/tests/resources/self_left_left.jpg")
+		err = face_img.load("res://addons/godot-gaze/tests/resources/self_center.jpg")
 	if err != OK:
 		printerr("FAIL: Shaders/Crops - Failed to load face image, code: ", err)
 		quit(1)
@@ -77,7 +80,7 @@ func _init():
 
 	# Wait a few frames for the asynchronous pipeline to execute, injecting the texture each frame
 	var latest_event: InputEventGaze = null
-	for frame_step in range(30):
+	for frame_step in range(60):
 		vs.inject_texture(cam_rid, face_tex)
 		gs.trigger_process()
 		await create_timer(0.05).timeout
@@ -85,6 +88,8 @@ func _init():
 		if ev is InputEventGaze and ev.head_transform.origin != Vector3(0, 0, -500) and ev.head_transform.origin != Vector3(0, 0, 500) and ev.head_transform.origin != Vector3.ZERO:
 			latest_event = ev
 			break
+
+
 
 	# Asserts
 	if not latest_event:
@@ -119,71 +124,119 @@ func _init():
 
 	# 4. Test Dynamic Window Position/Size Synchronization & Corner Invariance
 	print("=================== E2E TEST: DYNAMIC WINDOW POSITION SYNC & CORNER INVARIANCE ===================")
+	var gds = Engine.get_singleton("GazeDisplayServer")
 	var screen_id = DisplayServer.window_get_current_screen()
-	var screen_size = DisplayServer.screen_get_size(screen_id)
-	var window_size = DisplayServer.window_get_size()
-	var test_scale = DisplayServer.screen_get_scale(screen_id)
+	var screen_size = gds.get_screen_size_pixels(screen_id) if gds else Vector2(DisplayServer.screen_get_size(screen_id))
+	var win_rect = gds.get_window_rect_pixels() if gds else Rect2i(DisplayServer.window_get_position(), DisplayServer.window_get_size())
+	var window_size = win_rect.size
+	var test_scale = gds.get_screen_scale(screen_id) if gds else DisplayServer.screen_get_scale(screen_id)
 	print("Screen size (lpix): ", screen_size, " | Window size (lpix): ", window_size, " | Scale: ", test_scale)
 
 	# 4a. Centered Window Test
-	var center_pos = (screen_size - window_size) / 2
-	DisplayServer.window_set_position(center_pos)
+	var center_pos = Vector2i((int(screen_size.x) - window_size.x) / 2, (int(screen_size.y) - window_size.y) / 2)
+	DisplayServer.window_set_position(center_pos * test_scale)
 	await create_timer(0.3).timeout
 
-	var proj_center = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
-	print("Centered Window Position: ", DisplayServer.window_get_position(), " -> Proj Center: ", proj_center)
-	var expected_center_x = window_size.x / 2.0
-	print("Expected Center X (window center): ", expected_center_x, " | Actual: ", proj_center.x)
-	if abs(proj_center.x - expected_center_x) > 2.0:
-		printerr("FAIL: Camera optical center ray did not hit window horizontal center! Expected ", expected_center_x, ", got ", proj_center.x)
+	# 1. Camera optical axis ray (parallel to camera Z axis, hits top-center bezel)
+	var proj_cam_axis = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
+	var actual_win_pos = gds.get_window_rect_pixels().position if gds else DisplayServer.window_get_position()
+	print("Centered Window Position: ", actual_win_pos, " -> Cam Axis Proj: ", proj_cam_axis)
+	var expected_cam_axis_x = (screen_size.x / 2.0) - actual_win_pos.x
+	var expected_cam_axis_y = -float(actual_win_pos.y)
+	if abs(proj_cam_axis.x - expected_cam_axis_x) > 2.0:
+		printerr("FAIL: Camera optical axis ray did not hit window horizontal center! Expected ", expected_cam_axis_x, ", got ", proj_cam_axis.x)
 		quit(1)
 		return
-	print("PASS: Camera optical axis hits exact window horizontal center.")
+	if abs(proj_cam_axis.y - expected_cam_axis_y) > 2.0:
+		printerr("FAIL: Camera optical axis ray Y mismatch! Expected ", expected_cam_axis_y, ", got ", proj_cam_axis.y)
+		quit(1)
+		return
+	print("PASS: Camera optical axis hits top bezel center (X: window center, Y: top bezel).")
+
+	# 2. Physical Screen Center Ray (aimed from 500mm away at screen center (0, -H_mm/2, 0) in cam coords)
+	var screen_h_mm = profile.get_physical_size_mm().y
+	var screen_center_dir = (Vector3(0, -screen_h_mm * 0.5, 500.0) - Vector3(0, 0, 0)).normalized()
+	var proj_screen_center = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), screen_center_dir)
+	print("Screen Center Ray Proj on Centered Window: ", proj_screen_center)
+	var expected_win_center_x = (screen_size.x / 2.0) - actual_win_pos.x
+	var expected_win_center_y = (screen_size.y / 2.0) - actual_win_pos.y
+	if abs(proj_screen_center.x - expected_win_center_x) > 2.0:
+		printerr("FAIL: Screen center ray did not hit window horizontal center! Expected ", expected_win_center_x, ", got ", proj_screen_center.x)
+		quit(1)
+		return
+	if abs(proj_screen_center.y - expected_win_center_y) > 2.0:
+		printerr("FAIL: Screen center ray did not hit window vertical center! Expected ", expected_win_center_y, ", got ", proj_screen_center.y)
+		quit(1)
+		return
+	print("PASS: Screen center ray hits exact window center (both X and Y).")
+
+	# 3. Real face gaze projection lands inside screen bounds
+	var gaze_origin = latest_event.gaze_transform.origin
+	var gaze_dir = -latest_event.gaze_transform.basis.z.normalized()
+	var face_gaze_proj = gs.project_ray_to_viewport(gaze_origin, gaze_dir)
+	var face_nose_proj = gs.project_ray_to_viewport(nose_pos, head_forward)
+	print("Face Gaze Ray Proj on Window: ", face_gaze_proj, " | Nose Ray Proj: ", face_nose_proj, " | Event Screen Pos: ", latest_event.screen_position)
+	if !face_gaze_proj.is_finite():
+		printerr("FAIL: Face Gaze projection is not finite!")
+		quit(1)
+		return
+	if latest_event.screen_position.y < 0.0 or latest_event.screen_position.y > screen_size.y:
+		printerr("FAIL: Latest Event screen position Y is outside screen bounds! Y = ", latest_event.screen_position.y, " (screen height: ", screen_size.y, ")")
+		quit(1)
+		return
+	print("PASS: Face gaze projection and event position land strictly inside screen bounds.")
 
 	# 4b. 4-Corner Window Invariance Test
 	var test_positions = {
 		"Top-Left": Vector2i(0, 0),
-		"Top-Right": Vector2i(screen_size.x - window_size.x, 0),
-		"Bottom-Left": Vector2i(0, screen_size.y - window_size.y),
-		"Bottom-Right": Vector2i(screen_size.x - window_size.x, screen_size.y - window_size.y)
+		"Top-Right": Vector2i(int(screen_size.x) - window_size.x, 0),
+		"Bottom-Left": Vector2i(0, int(screen_size.y) - window_size.y),
+		"Bottom-Right": Vector2i(int(screen_size.x) - window_size.x, int(screen_size.y) - window_size.y)
 	}
 
 	for corner_name in test_positions:
 		var target_pos = test_positions[corner_name]
-		DisplayServer.window_set_position(target_pos)
+		DisplayServer.window_set_position(target_pos * test_scale)
 		await create_timer(0.3).timeout
-		var actual_pos = DisplayServer.window_get_position()
-		var proj_corner = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
+		var actual_pos = gds.get_window_rect_pixels().position if gds else DisplayServer.window_get_position()
+		var proj_corner = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), screen_center_dir)
 		var expected_x = (screen_size.x / 2.0) - actual_pos.x
-		print("Corner [", corner_name, "] at ", actual_pos, " -> Proj: ", proj_corner, " (Expected X: ", expected_x, ")")
+		var expected_y = (screen_size.y / 2.0) - actual_pos.y
+		print("Corner [", corner_name, "] at ", actual_pos, " -> Proj: ", proj_corner, " (Expected: ", expected_x, ", ", expected_y, ")")
 		if abs(proj_corner.x - expected_x) > 2.0:
-			printerr("FAIL: Corner [", corner_name, "] projection mismatch! Expected X ", expected_x, ", got ", proj_corner.x)
+			printerr("FAIL: Corner [", corner_name, "] X projection mismatch! Expected ", expected_x, ", got ", proj_corner.x)
+			quit(1)
+			return
+		if abs(proj_corner.y - expected_y) > 2.0:
+			printerr("FAIL: Corner [", corner_name, "] Y projection mismatch! Expected ", expected_y, ", got ", proj_corner.y)
 			quit(1)
 			return
 		print("PASS: Corner [", corner_name, "] verified.")
+
 
 	# 4c. Fullscreen Window Mode Test
 	print("=================== E2E TEST: FULLSCREEN WINDOW MODE PROJECTION ===================")
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 	await create_timer(0.5).timeout
 	var fs_mode = DisplayServer.window_get_mode()
-	var fs_win_pos = DisplayServer.window_get_position()
-	var fs_win_size = DisplayServer.window_get_size()
-	var fs_screen_size = DisplayServer.screen_get_size(screen_id)
+	var fs_win_rect = gds.get_window_rect_pixels() if gds else Rect2i(DisplayServer.window_get_position(), DisplayServer.window_get_size())
+	var fs_win_pos = fs_win_rect.position
+	var fs_win_size = fs_win_rect.size
+	var fs_screen_size = screen_size
 	print("Fullscreen Mode: ", fs_mode, " | Win Pos: ", fs_win_pos, " | Win Size: ", fs_win_size, " | Screen Size: ", fs_screen_size)
 	print("Root Viewport Size: ", root.size, " | Visible Rect: ", root.get_visible_rect(), " | Final Xform: ", root.get_final_transform())
 	print("Profile Logical Size: ", profile.get_logical_size_px(), " | Physical Size: ", profile.get_physical_size_mm())
 
 	var fs_proj = gs.project_ray_to_viewport(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
 	print("Fullscreen Center Ray Projection (Window Space): ", fs_proj)
-	var expected_fs_x = fs_win_size.x / 2.0
+	var expected_fs_x = (screen_size.x / 2.0) - fs_win_pos.x
 	print("Expected Fullscreen Center X (Window Space): ", expected_fs_x, " | Actual X: ", fs_proj.x)
 	if abs(fs_proj.x - expected_fs_x) > 2.0:
 		printerr("FAIL: Fullscreen window space center ray mismatch! Expected ", expected_fs_x, ", got ", fs_proj.x)
 		quit(1)
 		return
 
-	var canvas_proj = root.get_final_transform().affine_inverse() * fs_proj
+	var canvas_proj = root.get_final_transform().affine_inverse() * (fs_proj * test_scale)
 	var expected_canvas_center = root.get_visible_rect().size / 2.0
 	print("Fullscreen Center Ray Projection (Canvas Space): ", canvas_proj, " | Expected Canvas Center: ", expected_canvas_center)
 	if abs(canvas_proj.x - expected_canvas_center.x) > 2.0:
@@ -191,6 +244,8 @@ func _init():
 		quit(1)
 		return
 	print("PASS: Fullscreen window and canvas projection verified.")
+
+
 
 	# Restore windowed mode
 	DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)

@@ -159,7 +159,7 @@ if env["platform"] not in ["windows", "macos", "ios"]:
 
 # Set build target directory
 # TODO: checking this is still correct? I'd expect this was specific to current targets.
-env.Append(CPPPATH=["#src/core", "#src/native", "#src/web", "#src/godot", "#thirdparty/one_euro_filter"])
+env.Append(CPPPATH=["#src/core", "#src/native", "#src/macos", "#src/ios", "#src/windows", "#src/android", "#src/web", "#src/godot", "#thirdparty/one_euro_filter"])
 
 # Detect compilers and setup platform-specific flags
 if env["platform"] == "macos":
@@ -589,9 +589,10 @@ if env["platform"] != "web":
         env.Append(LIBS=win_libs)
         core_env.Append(LIBS=win_libs)
     elif env["platform"] == "macos":
-        mac_flags = ["-framework", "ApplicationServices", "-framework", "CoreFoundation", "-framework", "ImageIO", "-framework", "CoreGraphics", "-framework", "CoreVideo", "-framework", "CoreMedia", "-framework", "AVFoundation", "-framework", "Metal", "-framework", "Foundation"]
+        mac_flags = ["-framework", "ApplicationServices", "-framework", "CoreFoundation", "-framework", "ImageIO", "-framework", "CoreGraphics", "-framework", "CoreVideo", "-framework", "CoreMedia", "-framework", "AVFoundation", "-framework", "Metal", "-framework", "Foundation", "-framework", "AppKit"]
         env.Append(LINKFLAGS=mac_flags)
         core_env.Append(LINKFLAGS=mac_flags)
+
 
 # Generate in-editor GDExtension class reference documentation
 doc_data = env.GodotCPPDocData("src/gen/doc_data.gen.cpp", source=Glob("project/docs/classref/*.xml"))
@@ -644,6 +645,22 @@ if env["platform"] != "web":
             obj_file = os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["SHOBJSUFFIX"]))
             native_objs.append(core_env.SharedObject(target=obj_file, source=s))
 
+# Compile macOS objects using core_env (selective on platform)
+macos_objs = []
+if env["platform"] == "macos":
+    for s in Glob("src/macos/*.mm"):
+        rel_path = os.path.relpath(str(s), "src")
+        obj_file = os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["SHOBJSUFFIX"]))
+        macos_objs.append(core_env.SharedObject(target=obj_file, source=s))
+
+# Compile iOS objects using core_env (selective on platform)
+ios_objs = []
+if env["platform"] == "ios":
+    for s in Glob("src/ios/*.mm"):
+        rel_path = os.path.relpath(str(s), "src")
+        obj_file = os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["SHOBJSUFFIX"]))
+        ios_objs.append(core_env.SharedObject(target=obj_file, source=s))
+
 # Compile Windows objects using core_env (selective on platform)
 windows_objs = []
 if env["platform"] == "windows":
@@ -695,7 +712,7 @@ if env["platform"] in ["macos", "ios"]:
         thirdparty_objc_objs.append(core_env.SharedObject(source=s))
 
 # Combine all library objects
-library_objs = core_objs + native_objs + windows_objs + android_objs + godot_objs + web_objs + [doc_obj] + thirdparty_objc_objs
+library_objs = core_objs + native_objs + macos_objs + ios_objs + windows_objs + android_objs + godot_objs + web_objs + [doc_obj] + thirdparty_objc_objs
 
 # Output library name mapping
 if env["platform"] == "web":

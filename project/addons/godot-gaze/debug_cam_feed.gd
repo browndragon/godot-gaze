@@ -272,6 +272,13 @@ func _on_copy_button_pressed():
 			data["screen_physical_mm"] = [profile.get_physical_size_mm().x, profile.get_physical_size_mm().y]
 			data["screen_logical_px"] = [profile.get_logical_size_px().x, profile.get_logical_size_px().y]
 			data["camera_offset_mm"] = [profile.get_camera_offset_mm().x, profile.get_camera_offset_mm().y, profile.get_camera_offset_mm().z]
+		var gds = Engine.get_singleton("GazeDisplayServer")
+		if gds:
+			var wrect = gds.get_window_rect_pixels()
+			data["window_position_px"] = [wrect.position.x, wrect.position.y]
+		elif Engine.has_singleton("DisplayServer"):
+			var win_pos = DisplayServer.window_get_position()
+			data["window_position_px"] = [win_pos.x, win_pos.y]
 		var ev = gs.get_most_recent_event()
 		if ev is InputEventGaze and ev.is_face_tracked():
 			data["face_detected"] = true
@@ -402,13 +409,20 @@ func _perform_drawing():
 		gd_draw_line(pt_eye_org, pt_eye_fwd, Color(0.2, 1.0, 0.1, 1.0), 3.5)
 
 	# Full Viewport Screen Intersection Reticles
+	var scale = DisplayServer.screen_get_scale() if Engine.has_singleton("DisplayServer") else 1.0
+	var canvas_xform = get_viewport().get_final_transform().affine_inverse()
+
 	# 1. Nose Gaze Screen Intersection (Cyan: Color(0.0, 0.95, 1.0))
 	var nose_fwd = -xform.basis.z.normalized()
 	var pt_nose_screen = gs.project_ray_to_viewport(xform.origin, nose_fwd)
+	if pt_nose_screen != Vector2.INF:
+		pt_nose_screen = canvas_xform * (pt_nose_screen * scale)
 	_draw_screen_reticle(pt_nose_screen, Color(0.0, 0.95, 1.0, 0.95), 14.0)
 
 	# 2. Eye Gaze Screen Intersection (Green: Color(0.2, 1.0, 0.1))
 	var pt_eye_screen = ev.position
+	if pt_eye_screen != Vector2.ZERO:
+		pt_eye_screen = canvas_xform * (pt_eye_screen * scale)
 	_draw_screen_reticle(pt_eye_screen, Color(0.2, 1.0, 0.1, 0.95), 18.0)
 
 func calculate_clamped_reticle(pos: Vector2, vp_size: Vector2, inset: float = 18.0) -> Dictionary:

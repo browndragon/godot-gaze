@@ -134,14 +134,14 @@ $$y_{\text{win}} = y_{\text{lpix}} - \text{window\_pos.y}$$
 On HiDPI / Retina displays, all desktop quantities ($W_{\text{lpix}}, H_{\text{lpix}}, \text{window\_pos}$) are processed in logical screen points (`lpix`).
 
 ### 3.3. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)
-When Godot project stretch modes are configured (e.g., `window/stretch/mode = "canvas_items"` or `"viewport"` with `aspect = "expand"` / `"keep"`), the 2D Viewport Canvas maintains a virtual base coordinate space that is scaled and letterboxed relative to the physical OS window:
+When Godot project stretch modes are configured (e.g., `window/stretch/mode = "canvas_items"` or `"viewport"` with `aspect = "expand"` / `"keep"`), the 2D Viewport Canvas maintains a virtual base coordinate space that is scaled and letterboxed relative to the physical OS window backing render buffer:
 $$M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$$
 
-To map an OS Window coordinate $\mathbf{p}_{\text{window}}$ (such as the output from `GazeServer.project_ray_to_viewport()`) into the 2D drawing canvas coordinate space $\mathbf{p}_{\text{canvas}}$ used by `Control` nodes and `_draw()` routines:
-$$\mathbf{p}_{\text{canvas}} = M_{\text{canvas}}^{-1} \cdot \mathbf{p}_{\text{window}}$$
+Because $M_{\text{canvas}}$ transforms from 2D Canvas coordinates to **physical backing render buffer pixels**, mapping an OS Window coordinate $\mathbf{p}_{\text{window}}$ (in logical points `lpix`, such as the output from `GazeServer.project_ray_to_viewport()`) into 2D drawing canvas space $\mathbf{p}_{\text{canvas}}$ requires converting logical points to physical pixels first via display scale $s_{\text{scale}} = \text{DisplayServer.screen\_get\_scale()}$:
+$$\mathbf{p}_{\text{canvas}} = M_{\text{canvas}}^{-1} \cdot (\mathbf{p}_{\text{window}} \cdot s_{\text{scale}})$$
 
-* **Windowed Mode ($1152 \times 648$)**: $M_{\text{canvas}} = I$, thus $\mathbf{p}_{\text{canvas}} = \mathbf{p}_{\text{window}}$.
-* **Fullscreen Mode (e.g. $3024 \times 1890$)**: $M_{\text{canvas}}$ applies a uniform scale factor $s = \frac{3024}{1152} = 2.625$. Applying $M_{\text{canvas}}^{-1}$ scales coordinates by $\frac{1}{2.625}$, keeping 2D visual projections centered and invariant across all display modes and window sizes.
+* **Windowed Mode ($1152 \times 648$ at $2\times$ scale, render target $2304 \times 1296$)**: $M_{\text{canvas}}$ scales by $2.0$. Multiplying by $s_{\text{scale}} = 2.0$ and applying $M_{\text{canvas}}^{-1}$ yields $\mathbf{p}_{\text{canvas}} = \frac{1}{2.0} \cdot (\mathbf{p}_{\text{window}} \cdot 2.0) = \mathbf{p}_{\text{window}}$.
+* **Fullscreen Mode (e.g. $1512 \times 945\text{ pt}$ at $2\times$ scale, render target $3024 \times 1890$)**: $M_{\text{canvas}}$ applies a uniform scale factor $s = \frac{3024}{1152} = 2.625$. Multiplying by $s_{\text{scale}} = 2.0$ maps window center ($756\text{ pt}$) to physical render center ($1512\text{ px}$); applying $M_{\text{canvas}}^{-1}$ yields $\frac{1512}{2.625} = 576\text{ px}$ (exact Canvas Center), keeping 2D visual projections centered and invariant across all display modes and window sizes.
 
 ---
 

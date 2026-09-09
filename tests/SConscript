@@ -172,7 +172,7 @@ def run_command_and_log(target, source, env):
 VariantDir(gaze_variant_dir + "/tests", "tests", duplicate=0)
 
 # Add doctest and stb include path to core_env
-core_env.Append(CPPPATH=["#thirdparty/doctest", "#thirdparty/stb", "#thirdparty/godot-cpp/include", "#thirdparty/godot-cpp/gen/include"])
+core_env.Append(CPPPATH=["#src/macos", "#src/ios", "#src/windows", "#src/android", "#thirdparty/doctest", "#thirdparty/stb", "#thirdparty/godot-cpp/include", "#thirdparty/godot-cpp/gen/include"])
 
 # Configure native test target binaries (only on non-web/non-javascript platforms)
 if env["platform"] != "javascript":
@@ -209,7 +209,7 @@ if env["platform"] != "javascript":
         obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
         test_objs.append(core_env.Object(target=obj_file, source=f))
         
-    if env["platform"] != "windows":
+    if env["platform"] not in ["windows", "android"]:
         for f in Glob("#src/native/*.fallback.cpp"):
             rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
             obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".fallback.cpp", core_env["OBJSUFFIX"]))
@@ -219,6 +219,24 @@ if env["platform"] != "javascript":
         for f in Glob("#src/windows/*.cpp"):
             rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
             obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+
+    if env["platform"] == "android":
+        for f in Glob("#src/android/*.cpp"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+
+    if env["platform"] == "macos":
+        for f in Glob("#src/macos/*.mm"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["OBJSUFFIX"]))
+            test_objs.append(core_env.Object(target=obj_file, source=f))
+
+    if env["platform"] == "ios":
+        for f in Glob("#src/ios/*.mm"):
+            rel_path = os.path.relpath(f.abspath, Dir("#src").abspath)
+            obj_file = "#" + os.path.join(gaze_variant_dir, rel_path.replace(".mm", core_env["OBJSUFFIX"]))
             test_objs.append(core_env.Object(target=obj_file, source=f))
             
     if env["platform"] in ["macos", "ios"]:

@@ -3,6 +3,7 @@
  * @brief Implement GazeDeviceProfile resource
  */
 #include "gaze_device_profile.hpp"
+#include "gaze_display_server.hpp"
 #include "../core/math_defs.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
@@ -108,29 +109,21 @@ Ref<GazeDeviceProfile> GazeDeviceProfile::create_system_guess() {
     Ref<GazeDeviceProfile> profile;
     profile.instantiate();
 
-    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-        DisplayServer* ds = DisplayServer::get_singleton();
-        if (ds) {
-            int screen_id = ds->window_get_current_screen();
-            Vector2i size_lpix = ds->screen_get_size(screen_id);
-            if (size_lpix.x > 0 && size_lpix.y > 0) {
-                profile->set_logical_size_px(size_lpix);
-                double dpi = ds->screen_get_dpi(screen_id);
-                if (dpi <= 0.0) {
-                    double w_lpix = size_lpix.x;
-                    double dpi_lpix = 172.0 - 0.03 * w_lpix;
-                    if (dpi_lpix < 96.0) dpi_lpix = 96.0;
-                    dpi = dpi_lpix;
-                }
-                if (dpi > 0.0) {
-                    double pitch = 25.4 / dpi;
-                    profile->set_pixel_pitch_mm(Vector2(pitch, pitch));
-                }
-            }
-        }
+    GazeDisplayServer* gds = GazeDisplayServer::get_singleton();
+    if (gds) {
+        Vector2 size_px = gds->get_screen_size_pixels();
+        Vector2 pitch = gds->get_pixel_pitch_mm();
+        Vector3 cam_offset = gds->get_default_camera_offset_mm();
+
+        profile->set_logical_size_px(Vector2i((int)size_px.x, (int)size_px.y));
+        profile->set_pixel_pitch_mm(pitch);
+        profile->set_camera_offset_mm(cam_offset);
+    } else {
+        profile->set_logical_size_px(Vector2i(1920, 1080));
+        profile->set_pixel_pitch_mm(Vector2(0.26458, 0.26458));
+        profile->set_camera_offset_mm(Vector3(0.0, 142.875, 0.0));
     }
 
-    profile->set_camera_offset_mm(Vector3(0.0, 0.0, 0.0));
     profile->set_camera_roll_deg(0.0);
     profile->set_camera_hfov_deg(65.0);
 

@@ -9,6 +9,8 @@
 #include "gaze_frame.hpp"
 #include "gaze_event_factory.hpp"
 #include "gaze_tracker.hpp"
+#include "gaze_display_server.hpp"
+#include "mock_gaze_display_server.hpp"
 
 
 
@@ -36,6 +38,7 @@ namespace godot {
 
 static VisionServer* vision_server_singleton = nullptr;
 static GazeServer* gaze_server_singleton = nullptr;
+static GazeDisplayServer* gaze_display_server_singleton = nullptr;
 
 static void register_gaze_project_settings() {
     ProjectSettings *ps = ProjectSettings::get_singleton();
@@ -278,8 +281,13 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
         ClassDB::register_class<VisionServer>();
         ClassDB::register_class<MockVisionServer>();
+        ClassDB::register_class<GazeDisplayServer>();
+        ClassDB::register_class<MockGazeDisplayServer>();
         ClassDB::register_class<GazeFrame>();
         ClassDB::register_class<GazeServer>();
+
+        gaze_display_server_singleton = memnew(GazeDisplayServer);
+        Engine::get_singleton()->register_singleton("GazeDisplayServer", gaze_display_server_singleton);
 
         vision_server_singleton = memnew(VisionServer);
         Engine::get_singleton()->register_singleton("VisionServer", vision_server_singleton);
@@ -351,6 +359,12 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
             Engine::get_singleton()->unregister_singleton("VisionServer");
             memdelete(VisionServer::get_singleton());
             vision_server_singleton = nullptr;
+        }
+
+        if (GazeDisplayServer::get_singleton()) {
+            Engine::get_singleton()->unregister_singleton("GazeDisplayServer");
+            memdelete(GazeDisplayServer::get_singleton());
+            gaze_display_server_singleton = nullptr;
         }
 
         // Clean up registry

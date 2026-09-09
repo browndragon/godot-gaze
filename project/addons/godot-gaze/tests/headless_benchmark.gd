@@ -375,7 +375,7 @@ func run_benchmark():
 
 		# Render Diagnostic Overlays
 		var diag_overlay_rel_path = "benchmark_overlays/" + base_fn + "_diagnostic.png"
-		var left_panel = render_camera_panel(img, head_trans, head_xform, eye_orig, gaze_dir, lm_pts, face_detected, meta.get("roll_hint_deg", 0.0), frame_focal)
+		var left_panel = render_camera_panel(img, head_trans, head_xform, eye_orig, gaze_dir, lm_pts, face_detected, meta.get("roll_hint_deg", 0.0), frame_focal, left_crop, right_crop)
 		var right_panel = render_display_panel(img, img_file, mm_to_screen_pt(nose_target), mm_to_screen_pt(gaze_target), mm_to_screen_pt(nose_proj_mm), mm_to_screen_pt(gaze_proj_mm))
 		var composite = create_side_by_side_composite(left_panel, right_panel, img_file)
 		composite.save_png(overlays_dir + "/" + base_fn + "_diagnostic.png")
@@ -460,7 +460,8 @@ func run_benchmark():
 func render_camera_panel(
 	img: Image, head_pos: Vector3, head_xform: Transform3D,
 	eye_orig: Vector3, gaze_dir: Vector3, lm_pts: PackedVector2Array,
-	face_detected: bool, roll_hint_deg: float, focal: float
+	face_detected: bool, roll_hint_deg: float, focal: float,
+	left_crop: Image = null, right_crop: Image = null
 ) -> Image:
 	var panel = img.duplicate()
 	panel.convert(Image.FORMAT_RGBA8)
@@ -511,6 +512,35 @@ func render_camera_panel(
 	draw_filled_rect(panel, 0, 0, int(w), 36, Color(0.05, 0.05, 0.08, 0.90))
 	draw_bitmap_text(panel, 14, 10, "CAMERA VIEW, ORIENTED ROI & 3D AXES", Color.WHITE, 2)
 	draw_rect(panel, 0, 0, int(w), int(h), Color(0.3, 0.3, 0.35, 1.0), 2)
+
+	# Draw Inset Eye Crop Cards at bottom-left
+	if face_detected and (left_crop != null or right_crop != null):
+		var card_y = int(h) - 170
+		var card_w = 340
+		var card_h = 154
+		draw_filled_rect(panel, 16, card_y, card_w, card_h, Color(0.05, 0.05, 0.08, 0.92))
+		draw_rect(panel, 16, card_y, card_w, card_h, Color(0.3, 0.6, 0.9, 1.0), 2)
+		draw_bitmap_text(panel, 26, card_y + 10, "MODEL EYE CROP INPUTS (60x60)", Color(0.3, 0.8, 1.0, 1.0), 1)
+
+		var crop_display_sz = 100
+
+		# Left Card: Image Left Eye (p0..p1 / Anatomical Right)
+		if right_crop:
+			var rc = right_crop.duplicate()
+			rc.convert(Image.FORMAT_RGBA8)
+			rc.resize(crop_display_sz, crop_display_sz, Image.INTERPOLATE_BILINEAR)
+			panel.blit_rect(rc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(28, card_y + 32))
+			draw_rect(panel, 28, card_y + 32, crop_display_sz, crop_display_sz, Color.CYAN, 1)
+			draw_bitmap_text(panel, 36, card_y + 136, "IMG LEFT (p0-1)", Color.WHITE, 1)
+
+		# Right Card: Image Right Eye (p2..p3 / Anatomical Left)
+		if left_crop:
+			var lc = left_crop.duplicate()
+			lc.convert(Image.FORMAT_RGBA8)
+			lc.resize(crop_display_sz, crop_display_sz, Image.INTERPOLATE_BILINEAR)
+			panel.blit_rect(lc, Rect2i(0, 0, crop_display_sz, crop_display_sz), Vector2i(180, card_y + 32))
+			draw_rect(panel, 180, card_y + 32, crop_display_sz, crop_display_sz, Color.CYAN, 1)
+			draw_bitmap_text(panel, 184, card_y + 136, "IMG RIGHT (p2-3)", Color.WHITE, 1)
 
 	return panel
 

@@ -2185,6 +2185,49 @@ TEST_CASE("Platform Native Window Rect Sanity")
     }
 }
 
+TEST_CASE("GazeServer and ProjectionEngine Uniform Screen Projection Geometry")
+{
+    // Screen: 1920x1080 px, 600x340 mm, Top-bezel camera at (0, 0, 0) mm
+    GodotDisplayVector2 logical_sz(1920.0, 1080.0);
+    SpacedVector2<Space::GodotDisplayMm> phys_sz(600.0, 340.0);
+    GodotDisplayVector2 pixel_pitch(phys_sz.x / logical_sz.x, phys_sz.y / logical_sz.y);
+    GodotCameraVector3 camera_offset(0.0, 0.0, 0.0);
+
+    // Staring straight ahead along optical axis from 500mm away at camera plane Z=0
+    GodotCameraVector3 origin_cam(0.0, 0.0, -500.0);
+    GodotCameraVector3 dir_forward(0.0, 0.0, 1.0);
+
+    GodotCameraVector3 pt_cam = project_ray_to_camera_plane(origin_cam, dir_forward);
+    REQUIRE(pt_cam.is_finite() == true);
+    CHECK(pt_cam.x == doctest::Approx(0.0).epsilon(1e-4));
+    CHECK(pt_cam.y == doctest::Approx(0.0).epsilon(1e-4));
+
+    // Optical axis hits top bezel Y = 0 px
+    double y_screen_px_bezel = -(pt_cam.y + camera_offset.y) / pixel_pitch.y;
+    CHECK(y_screen_px_bezel == doctest::Approx(0.0).epsilon(1e-2));
+
+    // Staring toward screen center (0, -170 mm, 0) from (0, 0, -500 mm):
+    GodotCameraVector3 dir_center = GodotCameraVector3(0.0, -170.0, 500.0).normalized();
+    GodotCameraVector3 pt_center = project_ray_to_camera_plane(origin_cam, dir_center);
+    REQUIRE(pt_center.is_finite() == true);
+    CHECK(pt_center.y == doctest::Approx(-170.0).epsilon(1e-2));
+
+    // Screen center ray hits exactly Y = 540 px (screen center)
+    double y_screen_px_center = -(pt_center.y + camera_offset.y) / pixel_pitch.y;
+    CHECK(y_screen_px_center == doctest::Approx(540.0).epsilon(1e-2));
+
+    // Staring downward by -25 degrees from (0, 0, -500 mm):
+    double angle_down_rad = -25.0 * DEG_TO_RAD;
+    GodotCameraVector3 dir_down(0.0, std::sin(angle_down_rad), std::cos(angle_down_rad));
+    GodotCameraVector3 pt_down = project_ray_to_camera_plane(origin_cam, dir_down);
+    REQUIRE(pt_down.is_finite() == true);
+    CHECK(pt_down.y < -170.0);
+
+    double y_down_px = -(pt_down.y + camera_offset.y) / pixel_pitch.y;
+    CHECK(y_down_px > 540.0);
+    CHECK(y_down_px - 540.0 >= 150.0); // Signal separation >= 150px downward
+}
+
 
 
 

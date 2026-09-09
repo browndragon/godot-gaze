@@ -71,7 +71,7 @@ flowchart TD
 
 4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & downstream scenes):**
    - `GazeTracker` declarative node and `GazeTracker.track_node()` lifecycle manager.
-   - `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`, and resources (`DisplayProfile`, `DeviceCalibration`, `BioCalibration`).
+   - `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`, and resources (`GazeDeviceProfile`, `GazePipelineConfig`).
    - Communicates with backends solely by managing `GazeTracker` lifecycle, querying `GazeServer`, or receiving input events.
 
 ---

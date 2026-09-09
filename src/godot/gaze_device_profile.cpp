@@ -121,7 +121,7 @@ Ref<GazeDeviceProfile> GazeDeviceProfile::create_system_guess() {
     } else {
         profile->set_logical_size_px(Vector2i(1920, 1080));
         profile->set_pixel_pitch_mm(Vector2(0.26458, 0.26458));
-        profile->set_camera_offset_mm(Vector3(0.0, 142.875, 0.0));
+        profile->set_camera_offset_mm(Vector3(0.0, 0.0, 0.0));
     }
 
     profile->set_camera_roll_deg(0.0);

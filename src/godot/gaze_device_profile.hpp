@@ -18,7 +18,7 @@ class GazeDeviceProfile : public Resource {
 private:
     Vector2 pixel_pitch_mm = Vector2(0.25, 0.25);
     Vector2i logical_size_px = Vector2i(1920, 1080);
-    Vector3 camera_offset_mm = Vector3(0.0, 107.5, 0.0);
+    Vector3 camera_offset_mm = Vector3(0.0, 0.0, 0.0);
     double camera_roll_deg = 0.0;
     double camera_hfov_deg = 65.0;
 

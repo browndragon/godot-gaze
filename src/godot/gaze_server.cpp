@@ -642,7 +642,7 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
         Vector2 phys_sz = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(1920 * 0.25, 1080 * 0.25);
         Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
         double x_disp_mm = phys_sz.x * 0.5 - (pt_cam.x + offset.x);
-        double y_disp_mm = phys_sz.y * 0.5 - (pt_cam.y + offset.y);
+        double y_disp_mm = -(pt_cam.y + offset.y);
         Vector2 pos_mm_center(x_disp_mm - phys_sz.x * 0.5, y_disp_mm - phys_sz.y * 0.5);
         impl->eye.latest_projected_gaze_mm = pos_mm_center;
         
@@ -783,7 +783,7 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
     Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
 
     double x_screen_px = (double)logical_size.x * 0.5 - (pt_cam.x + offset.x) / pixel_pitch.x;
-    double y_screen_px = (double)logical_size.y * 0.5 - (pt_cam.y + offset.y) / pixel_pitch.y;
+    double y_screen_px = -(pt_cam.y + offset.y) / pixel_pitch.y;
 
     Vector2 win_pos = Vector2(0.0, 0.0);
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();

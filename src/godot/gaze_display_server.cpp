@@ -161,8 +161,7 @@ Rect2i GazeDisplayServer::get_window_rect_pixels(int p_window) const {
 
 
 Vector3 GazeDisplayServer::get_default_camera_offset_mm(int p_screen) const {
-    Vector2 mm = get_screen_size_mm(p_screen);
-    return Vector3(0.0, mm.y * 0.5, 0.0);
+    return Vector3(0.0, 0.0, 0.0);
 }
 
 } // namespace godot

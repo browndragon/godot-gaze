@@ -46,8 +46,7 @@ If you are developing this plugin locally and want to test changes in your own G
    - `gaze/general/autostart` (default `true`): Starts camera tracking automatically on startup.
    - `gaze/pointing/emulate_gaze_from_mouse` (default `true`): Emulates `InputEventGaze` from mouse cursor movements using 3D inverse kinematics when camera tracking is inactive.
    - `gaze/pointing/emulate_mouse_from_gaze` (default `false`): Dispatches synthetic mouse move events based on gaze coordinates.
-   - `gaze/calibration/device_calibration_path` (defaults to `user://calibrations/device_calibration.tres`).
-   - `gaze/calibration/bio_calibration_path` (defaults to `user://calibrations/bio_calibration.tres`).
+   - `gaze/calibration/device_profile_path` (defaults to `user://calibrations/device_profile.tres`).
 2. **Model Weights**:
    Model weights (`.ort` format) are pre-bundled inside `addons/godot-gaze/models/`.
 

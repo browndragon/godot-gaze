@@ -11,8 +11,7 @@
 - - `CameraSensor`: Frame ingestion and camera property wrapper.
 - - `FaceEstimator`: YuNet detector bindings.
 - - `EyeEstimator`: Gaze estimation model bindings.
-- - `DeviceCalibration`/`BioCalibration`: Serializable Godot Resource classes.
-- - `GazeCalibrationSession`: Interactive calibration coordinator.
+- - `GazeDeviceProfile`: Serializable Godot Resource class holding display geometry and camera placement.
 -
 - Ensure all public methods here are fully documented with Doxygen comments.
   */

@@ -252,12 +252,10 @@ func _on_copy_button_pressed():
 		"head_translation_mm": null,
 		"head_rotation_deg": null,
 		"head_forward": null,
-		"device_calibration": null,
 		"screen_physical_mm": null,
 		"screen_logical_px": null,
 		"window_position_px": null,
 		"camera_offset_mm": null,
-		"bio_calibration": null,
 		"screen_dpi": DisplayServer.screen_get_dpi() if Engine.has_singleton("DisplayServer") else 96,
 		"device_scale": DisplayServer.screen_get_scale() if Engine.has_singleton("DisplayServer") else 1.0,
 		"camera_width_height": "%dx%d" % [actual_cam_width, actual_cam_height]

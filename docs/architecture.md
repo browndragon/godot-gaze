@@ -2,7 +2,6 @@
 
 **Project:** `godot-gaze`  
 **Integration:** Godot 4 GDExtension Plugin  
-**Reference Application:** `eyecandy`  
 
 ---
 
@@ -70,9 +69,10 @@ flowchart TD
    - Normalizes hardware capture frames to packed BGR8 working buffers (see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md#1-camera-ingestion-architecture--color-formats)).
    - Enforces Pimpl (`GazeServerImpl`) encapsulation to insulate Godot bindings from native allocations.
 
-4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & `eyecandy`):**
+4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & downstream scenes):**
+   - `GazeTracker` declarative node and `GazeTracker.track_node()` lifecycle manager.
    - `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`, and resources (`DisplayProfile`, `DeviceCalibration`, `BioCalibration`).
-   - Communicates with backends solely by querying `GazeServer` or receiving input events.
+   - Communicates with backends solely by managing `GazeTracker` lifecycle, querying `GazeServer`, or receiving input events.
 
 ---
 

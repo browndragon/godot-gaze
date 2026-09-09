@@ -123,7 +123,7 @@ TEST_CASE("Gaze Input - Event Subclass Copying and Extension Invariant")
         float gaze_dir_x = 0.05f, gaze_dir_y = -0.02f, gaze_dir_z = -0.998f;
     } base_evt;
 
-    // Simulating downstream custom subclass (e.g. InputEventEyecandyGaze)
+    // Simulating downstream custom subclass (e.g. CustomGazeEvent)
     struct TestCustomEvent {
         // Base fields
         int64_t window_id = 0;

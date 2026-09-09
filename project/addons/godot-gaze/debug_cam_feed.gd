@@ -17,6 +17,7 @@ var active_canvas: CanvasItem = null
 var _active_preview_requested: bool = false
 
 func _ready():
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var copy_btn = get_node_or_null("Panel/CopyButton")
 	if copy_btn and not copy_btn.pressed.is_connected(_on_copy_button_pressed):
 		copy_btn.pressed.connect(_on_copy_button_pressed)
@@ -406,6 +407,70 @@ func _perform_drawing():
 
 	if pt_eye_org != Vector2.INF and pt_eye_fwd != Vector2.INF:
 		gd_draw_line(pt_eye_org, pt_eye_fwd, Color(0.2, 1.0, 0.1, 1.0), 3.5)
+
+	# Full Viewport Screen Intersection Reticles
+	# 1. Nose Gaze Screen Intersection (Cyan: Color(0.0, 0.95, 1.0))
+	var nose_fwd = -xform.basis.z.normalized()
+	var pt_nose_screen = gs.project_ray_to_viewport(xform.origin, nose_fwd, false)
+	_draw_screen_reticle(pt_nose_screen, Color(0.0, 0.95, 1.0, 0.95), 14.0)
+
+	# 2. Eye Gaze Screen Intersection (Green: Color(0.2, 1.0, 0.1))
+	var pt_eye_screen = ev.position
+	_draw_screen_reticle(pt_eye_screen, Color(0.2, 1.0, 0.1, 0.95), 18.0)
+
+func calculate_clamped_reticle(pos: Vector2, vp_size: Vector2, inset: float = 18.0) -> Dictionary:
+	if is_nan(pos.x) or is_nan(pos.y) or pos == Vector2.INF or abs(pos.x) > 20000.0 or abs(pos.y) > 20000.0:
+		return {"valid": false}
+	if vp_size.x <= 0 or vp_size.y <= 0:
+		return {"valid": false}
+		
+	var is_clamped = (pos.x < inset or pos.x > vp_size.x - inset or pos.y < inset or pos.y > vp_size.y - inset)
+	var draw_center = Vector2(
+		clamp(pos.x, inset, vp_size.x - inset),
+		clamp(pos.y, inset, vp_size.y - inset)
+	)
+	var dir = (pos - draw_center).normalized() if is_clamped else Vector2.ZERO
+	if is_clamped and dir.length_squared() < 0.001:
+		dir = Vector2(0, -1)
+		
+	return {
+		"valid": true,
+		"is_clamped": is_clamped,
+		"center": draw_center,
+		"direction": dir
+	}
+
+func _draw_screen_reticle(pos: Vector2, color: Color, radius: float) -> void:
+	if not active_canvas:
+		return
+		
+	var vp_size = get_viewport_rect().size
+	var reticle_data = calculate_clamped_reticle(pos, vp_size)
+	if not reticle_data.get("valid", false):
+		return
+		
+	var draw_center: Vector2 = reticle_data["center"]
+	var is_clamped: bool = reticle_data["is_clamped"]
+	
+	if is_clamped:
+		# Draw edge pinned marker with a directional arrow pointing off-screen
+		var dir: Vector2 = reticle_data["direction"]
+		var perp = Vector2(-dir.y, dir.x)
+		var p_tip = draw_center + dir * 12.0
+		var p_left = draw_center - dir * 4.0 + perp * 7.0
+		var p_right = draw_center - dir * 4.0 - perp * 7.0
+		
+		active_canvas.draw_polygon(PackedVector2Array([p_tip, p_left, p_right]), PackedColorArray([color, color, color]))
+		active_canvas.draw_circle(draw_center, 4.0, color)
+	else:
+		# Draw full on-screen reticle
+		active_canvas.draw_circle(draw_center, 2.5, color)
+		active_canvas.draw_arc(draw_center, radius, 0.0, TAU, 32, color, 2.0, true)
+		var tick_len = 7.0
+		active_canvas.draw_line(draw_center + Vector2(radius, 0), draw_center + Vector2(radius + tick_len, 0), color, 2.0)
+		active_canvas.draw_line(draw_center - Vector2(radius, 0), draw_center - Vector2(radius + tick_len, 0), color, 2.0)
+		active_canvas.draw_line(draw_center + Vector2(0, radius), draw_center + Vector2(0, radius + tick_len), color, 2.0)
+		active_canvas.draw_line(draw_center - Vector2(0, radius), draw_center - Vector2(0, radius + tick_len), color, 2.0)
 
 func gd_draw_circle(pos: Vector2, radius: float, color: Color):
 	if active_canvas:

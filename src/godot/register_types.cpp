@@ -9,6 +9,7 @@
 #include "gaze_server.hpp"
 #include "gaze_frame.hpp"
 #include "gaze_event_factory.hpp"
+#include "gaze_tracker.hpp"
 
 
 
@@ -337,6 +338,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
     }
 
     // Register Scene / Node classes
+    ClassDB::register_class<GazeTracker>();
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif

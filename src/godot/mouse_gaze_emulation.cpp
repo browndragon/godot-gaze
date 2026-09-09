@@ -85,10 +85,11 @@ void MouseGazeEmulation::update(
         target_blend = 1.0f; // Pure mouse fallback when camera tracking is inactive
     } else if (dwell_timer > 0.0f) {
         target_blend = 1.0f; // Active mouse interaction overrides camera gaze during dwell window
-    } else if (!p_face_detected) {
-        target_blend = 1.0f; // Lost face tracking falls back to mouse
-    } else {
+    } else if (p_face_detected) {
         target_blend = 0.0f; // Active face tracked without mouse movement uses pure camera gaze
+    } else {
+        // Face lost & mouse idle: freeze blend weight in place (no phantom drift!)
+        target_blend = blend_progress;
     }
 
     // Step blend_progress towards target_blend
@@ -144,7 +145,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     float blended_left_open = 1.0f;
     float blended_right_open = 1.0f;
 
-    if (has_camera_data && ease_factor < 0.999f) {
+    if (has_camera_data && last_cam_gaze_pos != Vector2(0, 0) && ease_factor < 0.999f) {
         blended_pos = last_cam_gaze_pos.lerp(mouse_pos, ease_factor);
         blended_head = last_cam_head_xform.interpolate_with(mouse_head_xform, ease_factor);
         blended_gaze = last_cam_gaze_xform.interpolate_with(mouse_gaze_xform, ease_factor);
@@ -175,8 +176,12 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     Vector2 screen_pos = blended_pos;
     if (p_ds) screen_pos += Vector2(p_ds->window_get_position());
 
-    Vector2 rel = blended_pos - r_last_gaze_pos;
-    Vector2 screen_rel = screen_pos - r_last_screen_pos;
+    Vector2 rel = Vector2(0, 0);
+    Vector2 screen_rel = Vector2(0, 0);
+    if (r_last_gaze_pos != Vector2(0, 0)) {
+        rel = blended_pos - r_last_gaze_pos;
+        screen_rel = screen_pos - r_last_screen_pos;
+    }
     Vector2 vel = rel / dt;
     Vector2 screen_vel = screen_rel / dt;
 

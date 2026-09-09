@@ -65,6 +65,11 @@ public:
         return blend_progress > 0.0001f;
     }
 
+    bool is_in_transition() const {
+        return blend_progress > 0.0001f && blend_progress < 0.9999f;
+    }
+
+    float get_dwell_timer() const { return dwell_timer; }
     float get_blend_progress() const { return blend_progress; }
     float get_eased_blend_factor() const;
 

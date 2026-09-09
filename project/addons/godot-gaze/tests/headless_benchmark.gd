@@ -151,13 +151,12 @@ func run_benchmark():
 		quit(1)
 		return
 
-	var dev_cal = MockDeviceCalibration.new()
-	dev_cal.logical_size_px = Vector2i(3024, 1964)
-	dev_cal.physical_size_mm = Vector2(301.5, 188.5)
-	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0)
-	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position_lpix(Vector2(0, 0))
-	gs.set_device_calibration(dev_cal)
+	var profile = GazeDeviceProfile.new()
+	profile.set_logical_size_px(Vector2i(3024, 1964))
+	profile.set_physical_size_mm(Vector2(301.5, 188.5))
+	profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0))
+	profile.set_camera_roll_deg(0.0)
+	gs.set_device_profile(profile)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)
@@ -281,7 +280,7 @@ func run_benchmark():
 		if gaze_dir == Vector3.ZERO:
 			gaze_dir = head_fwd
 
-		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd, false)
+		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd)
 		var nose_proj_mm = px_to_screen_mm(nose_proj_px)
 		var gaze_proj_mm = gs.get_projected_gaze_mm(false)
 

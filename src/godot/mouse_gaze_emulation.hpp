@@ -9,8 +9,7 @@
 #include <godot_cpp/variant/transform3d.hpp>
 
 #include "input_event_gaze.hpp"
-#include "display_profile.hpp"
-#include "gaze_calibration_resource.hpp"
+#include "gaze_device_profile.hpp"
 #include "gaze_event_factory.hpp"
 
 namespace godot {
@@ -42,14 +41,14 @@ public:
     MouseGazeEmulation();
     ~MouseGazeEmulation() = default;
 
-    void set_dwell_time_sec(float p_sec) { dwell_time_sec = (p_sec >= 0.0f) ? p_sec : 0.0f; }
-    float get_dwell_time_sec() const { return dwell_time_sec; }
+    void set_dwell_time(float p_sec) { dwell_time_sec = p_sec; }
+    float get_dwell_time() const { return dwell_time_sec; }
 
-    void set_transition_duration_sec(float p_sec) { transition_duration_sec = (p_sec >= 0.0f) ? p_sec : 0.0f; }
-    float get_transition_duration_sec() const { return transition_duration_sec; }
+    void set_transition_duration(float p_sec) { transition_duration_sec = p_sec; }
+    float get_transition_duration() const { return transition_duration_sec; }
 
-    void set_motion_threshold_px(float p_px) { motion_threshold_px = (p_px >= 0.0f) ? p_px : 0.0f; }
-    float get_motion_threshold_px() const { return motion_threshold_px; }
+    void set_motion_threshold(float p_px) { motion_threshold_px = p_px; }
+    float get_motion_threshold() const { return motion_threshold_px; }
 
     void notify_camera_event(const Ref<InputEventGazeBase>& p_cam_event);
 
@@ -62,7 +61,7 @@ public:
     );
 
     bool is_emulation_active() const {
-        return blend_progress > 0.0001f;
+        return blend_progress > 0.001f;
     }
 
     bool is_in_transition() const {
@@ -75,7 +74,7 @@ public:
 
     Ref<InputEventGazeBase> synthesize_event(
         DisplayServer* p_ds,
-        const Ref<DeviceCalibration>& p_dev_cal,
+        const Ref<GazeDeviceProfile>& p_profile,
         const Ref<GazeEventFactory>& p_event_factory,
         uint64_t &r_frame_id,
         uint64_t &r_last_event_time_usec,

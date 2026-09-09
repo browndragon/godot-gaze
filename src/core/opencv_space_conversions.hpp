@@ -14,6 +14,7 @@
 
 #include "math_defs.hpp"
 #include <cmath>
+#include <limits>
 
 namespace Gaze
 {
@@ -88,6 +89,18 @@ struct SpacedVector3
     SpacedVector3<S> normalized() const {
         double len = length();
         return len > 1e-6 ? (*this / len) : SpacedVector3<S>(0.0, 0.0, 0.0);
+    }
+
+    constexpr bool is_finite() const {
+        return std::isfinite(x) && std::isfinite(y) && std::isfinite(z);
+    }
+
+    static constexpr SpacedVector3<S> infinite() {
+        return SpacedVector3<S>(
+            std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity()
+        );
     }
 };
 
@@ -364,48 +377,37 @@ inline GodotCameraVector3 apply_3d_bias_vector(
     ).normalized();
 }
 
-inline bool project_ray_to_screen_mm(
+/**
+ * @brief Projects a 3D ray in GodotCamera space onto the camera's coplanar plane (Z = 0).
+ *
+ * In GodotCamera space:
+ * - Origin (0,0,0) is at camera optical center.
+ * - +X is Camera Right (User Left), +Y is Camera Up, -Z is toward user.
+ * - +Z is toward screen plane.
+ *
+ * If the ray points away from the plane (dir_cam.z <= 1e-6) or originates behind the plane (t < 0),
+ * returns an infinite vector (is_finite() == false).
+ */
+inline GodotCameraVector3 project_ray_to_camera_plane(
     const GodotCameraVector3 &origin_cam,
-    const GodotCameraVector3 &dir_cam,
-    const GodotCameraVector3 &camera_offset,
-    double camera_tilt_deg,
-    const SpacedVector2<Space::GodotDisplayMm> &screen_size_mm,
-    SpacedVector2<Space::GodotDisplayMm> &out_pos_mm)
+    const GodotCameraVector3 &dir_cam)
 {
-    double theta_rad = camera_tilt_deg * DEG_TO_RAD;
-    double cos_t = std::cos(theta_rad);
-    double sin_t = std::sin(theta_rad);
-
-    // Screen plane normal in camera space is (0, sin_t, cos_t)
-    double O_disp_z = sin_t * (origin_cam.y - camera_offset.y) + cos_t * (origin_cam.z - camera_offset.z);
-    double v_disp_z = sin_t * dir_cam.y + cos_t * dir_cam.z;
-
-    if (std::abs(v_disp_z) < 1e-6)
+    if (dir_cam.z <= 1e-6)
     {
-        return false;
+        return GodotCameraVector3::infinite();
     }
 
-    double t = -O_disp_z / v_disp_z;
+    double t = -origin_cam.z / dir_cam.z;
     if (t < 0.0)
     {
-        return false;
+        return GodotCameraVector3::infinite();
     }
 
-    double W_half = screen_size_mm.x * 0.5;
-
-    // Intersection point in camera space:
-    double int_x = origin_cam.x + t * dir_cam.x;
-    double int_y = origin_cam.y + t * dir_cam.y;
-    double int_z = origin_cam.z + t * dir_cam.z;
-
-    // Horizontal (+X_cam is Camera Right / User Left -> Display Left X=0, -X_cam is Camera Left / User Right -> Display Right X=W):
-    out_pos_mm.x = W_half - (int_x + camera_offset.x);
-
-    // Vertical (+Y_cam is Camera Up / Display Up):
-    // Top-bezel is at Y = 0 mm. Moving down screen plane (+Y_disp) corresponds to -Y_cam / +Z_cam:
-    out_pos_mm.y = -(int_y - camera_offset.y) * cos_t + (int_z - camera_offset.z) * sin_t;
-
-    return true;
+    return GodotCameraVector3(
+        origin_cam.x + t * dir_cam.x,
+        origin_cam.y + t * dir_cam.y,
+        0.0
+    );
 }
 
 namespace CoordinateConversions

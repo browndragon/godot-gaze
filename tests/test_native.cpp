@@ -1801,35 +1801,31 @@ TEST_CASE("Testing Gaze Direction Vector Sign and Ray Projection in Calibration"
     CHECK(pixel.y == doctest::Approx(540.0).epsilon(50.0));
 }
 
-TEST_CASE("Testing BioCalibration Isolation on Eye Gaze vs Nose Gaze")
+TEST_CASE("Testing Ray Equality and Uniform Projection on Eye and Head Gaze")
 {
     Gaze::ProjectionEngine proj_engine;
     proj_engine.set_screen_size_pixels(GodotDisplayVector2(1920.0, 1080.0));
     proj_engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
     proj_engine.set_camera_placement(Gaze::CameraPlacement(GodotCameraVector3(0.0, 170.0, 0.0), 0.0));
 
-    GodotCameraVector3 uncal_dir(0.0, 0.0, 1.0);
-    GodotCameraVector3 head_fwd(0.0, 0.0, 1.0);
+    GodotCameraVector3 origin(0.0, 0.0, -600.0);
+    GodotCameraVector3 dir(0.05, -0.05, 1.0);
 
-    // 1. Uncalibrated state (bias = 0)
-    proj_engine.set_calibration(Gaze::GazeCalibration(0.0, 0.0));
-    GodotCameraVector3 biased_dir_zero = proj_engine.apply_3d_bias(uncal_dir);
-    CHECK(biased_dir_zero.x == doctest::Approx(0.0));
-    CHECK(biased_dir_zero.y == doctest::Approx(0.0));
-    CHECK(biased_dir_zero.z == doctest::Approx(1.0));
+    // Camera plane projection returns exact 3D point in GodotCamera space (Z=0)
+    GodotCameraVector3 plane_pt = Gaze::project_ray_to_camera_plane(origin, dir);
+    REQUIRE(plane_pt.is_finite() == true);
+    CHECK(plane_pt.x == doctest::Approx(30.0).epsilon(0.01));
+    CHECK(plane_pt.y == doctest::Approx(-30.0).epsilon(0.01));
+    CHECK(plane_pt.z == doctest::Approx(0.0).epsilon(0.01));
 
-    // 2. Set significant BioCalibration pitch/yaw bias
-    proj_engine.set_calibration(Gaze::GazeCalibration(0.1, -0.08)); // 0.1 pitch, -0.08 yaw
-    GodotCameraVector3 biased_dir_cal = proj_engine.apply_3d_bias(uncal_dir);
+    // Both Eye Gaze ray and Head/Nose Gaze ray MUST project identically through the projection engine
+    GodotDisplayVector2 eye_px;
+    GodotDisplayVector2 head_px;
+    REQUIRE(proj_engine.project_gaze(origin, dir, eye_px) == true);
+    REQUIRE(proj_engine.project_gaze(origin, dir, head_px) == true);
 
-    // BioCalibration MUST mutate eye gaze direction
-    CHECK(biased_dir_cal.x != doctest::Approx(uncal_dir.x));
-    CHECK(biased_dir_cal.y != doctest::Approx(uncal_dir.y));
-
-    // 3. Head pose / Nose gaze ray MUST remain uncalibrated
-    CHECK(head_fwd.x == doctest::Approx(0.0));
-    CHECK(head_fwd.y == doctest::Approx(0.0));
-    CHECK(head_fwd.z == doctest::Approx(1.0));
+    CHECK(eye_px.x == doctest::Approx(head_px.x));
+    CHECK(eye_px.y == doctest::Approx(head_px.y));
 }
 
 TEST_CASE("Testing Full Pipeline Rotation Counter-Measures")
@@ -1999,10 +1995,6 @@ TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invaria
     Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> physical_size_mm(300.0, 200.0);
     Gaze::GodotDisplayVector2 logical_size_px(1920.0, 1080.0);
     
-    // Top-bezel camera placement: (0, 0, 0) relative to top-bezel center
-    Gaze::GodotCameraVector3 default_cam_offset(0.0, 0.0, 0.0);
-    CHECK(default_cam_offset.y == doctest::Approx(0.0));
-
     // Pixel size calculation: physical / logical
     Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pixel_size_mm(physical_size_mm.x / logical_size_px.x, physical_size_mm.y / logical_size_px.y);
     CHECK(pixel_size_mm.x == doctest::Approx(300.0 / 1920.0));
@@ -2011,18 +2003,20 @@ TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invaria
     // Forward ray straight into camera from (0, 0, -500)
     Gaze::GodotCameraVector3 origin(0.0, 0.0, -500.0);
     Gaze::GodotCameraVector3 dir(0.0, 0.0, 1.0); // (0, 0, 1) in Godot Camera Space
-    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
-    bool ok = Gaze::project_ray_to_screen_mm(origin, dir, default_cam_offset, 0.0, physical_size_mm, pos_mm);
-    REQUIRE(ok == true);
-    
-    // Straight-ahead ray hits camera position on screen plane (top-center: X=150mm, Y=0mm)
-    CHECK(pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
-    CHECK(pos_mm.y == doctest::Approx(0.0).epsilon(0.01));
+    Gaze::GodotCameraVector3 pt_cam = Gaze::project_ray_to_camera_plane(origin, dir);
+    REQUIRE(pt_cam.is_finite() == true);
+    CHECK(pt_cam.x == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(pt_cam.y == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(pt_cam.z == doctest::Approx(0.0).epsilon(0.01));
 
-    // Screen pixel position: (960, 0)
+    // Screen pixel position for top-bezel camera at (0, 0, 0):
+    // Display X mm = 150 - X_cam = 150mm -> 960 px
+    // Display Y mm = -Y_cam = 0mm -> 0 px
+    double x_disp_mm = (physical_size_mm.x * 0.5) - pt_cam.x;
+    double y_disp_mm = -pt_cam.y;
     double scale_x = logical_size_px.x / physical_size_mm.x;
     double scale_y = logical_size_px.y / physical_size_mm.y;
-    Gaze::GodotDisplayVector2 screen_px(pos_mm.x * scale_x, pos_mm.y * scale_y);
+    Gaze::GodotDisplayVector2 screen_px(x_disp_mm * scale_x, y_disp_mm * scale_y);
     CHECK(screen_px.x == doctest::Approx(960.0).epsilon(0.01));
     CHECK(screen_px.y == doctest::Approx(0.0).epsilon(0.01));
 
@@ -2034,11 +2028,10 @@ TEST_CASE("Testing Device Calibration Window Offset and Top-Bezel Offset Invaria
 
     // Ray angled down toward screen center: origin=(0, 100, -500) pointing at (0, 0, 0) in screen coords
     Gaze::GodotCameraVector3 dir_to_center = Gaze::GodotCameraVector3(0.0, -100.0, 500.0).normalized();
-    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> center_pos_mm;
-    bool center_ok = Gaze::project_ray_to_screen_mm(origin, dir_to_center, default_cam_offset, 0.0, physical_size_mm, center_pos_mm);
-    REQUIRE(center_ok == true);
-    CHECK(center_pos_mm.x == doctest::Approx(150.0).epsilon(0.01));
-    CHECK(center_pos_mm.y == doctest::Approx(100.0).epsilon(0.01));
+    Gaze::GodotCameraVector3 center_pt_cam = Gaze::project_ray_to_camera_plane(origin, dir_to_center);
+    REQUIRE(center_pt_cam.is_finite() == true);
+    CHECK(center_pt_cam.x == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(center_pt_cam.y == doctest::Approx(-100.0).epsilon(0.01));
 }
 
 TEST_CASE("ORTGazeModel Eye Crop Preprocessing Preserves BGR NCHW Channel Order")

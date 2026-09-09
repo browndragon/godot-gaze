@@ -18,6 +18,9 @@
 #include <algorithm>
 #include "godot_files.hpp"
 #include "../core/opencv_space_conversions.hpp"
+#ifndef WEB_ENABLED
+#include "../native/gaze_tracking_pipeline.hpp"
+#endif
 
 #ifdef WEB_ENABLED
 #include <godot_cpp/classes/java_script_bridge.hpp>
@@ -29,26 +32,10 @@ namespace godot {
 // Structs definitions inside GazeServerImpl for direct singleton state management
 struct GazeServerImpl {
     struct DisplayInfo {
-        Vector2 logical_size_px = Vector2(1920, 1080);
-        Vector2 physical_size_mm = Vector2(345.0, 215.0);
-        Ref<DeviceCalibration> device_calibration;
-        Ref<BioCalibration> bio_calibration;
-
-        struct BioCalibrationData {
-            bool is_valid = false;
-            double bias_pitch = 0.0;
-            double bias_yaw = 0.0;
-            double scale_yaw = 1.0;
-            double scale_pitch = 1.0;
-        } bio_data;
-
-        Vector2 window_position_px = Vector2(0.0, 0.0);
-        Transform2D viewport_transform;
+        Ref<GazeDeviceProfile> device_profile;
     } display;
 
     struct CameraInfo {
-        Vector3 offset = Vector3(0.0, 107.5, 0.0);
-        double tilt = 0.0;
         RID vision_camera_rid;
     } camera;
 
@@ -95,6 +82,10 @@ using EyeInfo = GazeServerImpl::EyeInfo;
 
 GazeServer *GazeServer::singleton = nullptr;
 
+GazeServer *GazeServer::get_singleton() {
+    return singleton;
+}
+
 void GazeServer::_bind_methods() {
     // High level lifecycle
     ClassDB::bind_method(D_METHOD("start_tracking"), &GazeServer::start_tracking);
@@ -109,11 +100,9 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("reset"), &GazeServer::reset);
     ClassDB::bind_method(D_METHOD("get_active_tracker_count"), &GazeServer::get_active_tracker_count);
 
-    // Calibration & Hardware Configuration
-    ClassDB::bind_method(D_METHOD("set_device_calibration", "calibration"), &GazeServer::set_device_calibration);
-    ClassDB::bind_method(D_METHOD("get_device_calibration"), &GazeServer::get_device_calibration);
-    ClassDB::bind_method(D_METHOD("set_bio_calibration", "calibration"), &GazeServer::set_bio_calibration);
-    ClassDB::bind_method(D_METHOD("get_bio_calibration"), &GazeServer::get_bio_calibration);
+    // Hardware Profile & Configuration
+    ClassDB::bind_method(D_METHOD("set_device_profile", "profile"), &GazeServer::set_device_profile);
+    ClassDB::bind_method(D_METHOD("get_device_profile"), &GazeServer::get_device_profile);
     ClassDB::bind_method(D_METHOD("set_camera_offsets", "offset", "tilt_deg"), &GazeServer::set_camera_offsets);
     ClassDB::bind_method(D_METHOD("get_camera_offset"), &GazeServer::get_camera_offset);
     ClassDB::bind_method(D_METHOD("get_camera_tilt"), &GazeServer::get_camera_tilt);
@@ -167,8 +156,8 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("emit_camera_frame_ready", "vision_camera_rid"), &GazeServer::emit_camera_frame_ready);
 
     // Ray Projection Math
-    ClassDB::bind_method(D_METHOD("project_ray_to_viewport", "origin_cam", "direction_cam", "apply_bio_calibration"), &GazeServer::project_ray_to_viewport, DEFVAL(false));
-    ClassDB::bind_method(D_METHOD("project_ray_to_screen_mm", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_screen_mm);
+    ClassDB::bind_method(D_METHOD("project_ray_to_camera_plane", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_camera_plane);
+    ClassDB::bind_method(D_METHOD("project_ray_to_viewport", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_viewport);
 
     // Event Factory & Emulation
     ClassDB::bind_method(D_METHOD("set_event_factory", "factory"), &GazeServer::set_event_factory);
@@ -207,13 +196,7 @@ GazeServer::GazeServer() {
     sm.instantiate();
     impl->eye.screen_smoother = sm;
 
-    Ref<DefaultDeviceCalibration> def_dev;
-    def_dev.instantiate();
-    set_device_calibration(def_dev);
-
-    Ref<DefaultBioCalibration> def_bio;
-    def_bio.instantiate();
-    set_bio_calibration(def_bio);
+    impl->display.device_profile = GazeDeviceProfile::create_system_guess();
 
     VisionServer *vs = VisionServer::get_singleton();
     if (vs) {
@@ -239,10 +222,10 @@ GazeServer::GazeServer() {
             emulate_mouse_from_gaze = ps->get_setting("gaze/pointing/emulate_mouse_from_gaze");
         }
         if (ps->has_setting("gaze/pointing/mouse_emulation_dwell_sec")) {
-            mouse_emulation.set_dwell_time_sec(ps->get_setting("gaze/pointing/mouse_emulation_dwell_sec"));
+            mouse_emulation.set_dwell_time(ps->get_setting("gaze/pointing/mouse_emulation_dwell_sec"));
         }
         if (ps->has_setting("gaze/pointing/mouse_emulation_transition_sec")) {
-            mouse_emulation.set_transition_duration_sec(ps->get_setting("gaze/pointing/mouse_emulation_transition_sec"));
+            mouse_emulation.set_transition_duration(ps->get_setting("gaze/pointing/mouse_emulation_transition_sec"));
         }
     }
 
@@ -461,57 +444,41 @@ int GazeServer::get_active_tracker_count() const {
     return active_trackers;
 }
 
-// --- Calibrations & Hardware Setup ---
+// --- Hardware Profile & Setup ---
 
-void GazeServer::set_device_calibration(const Ref<DeviceCalibration>& p_calibration) {
+void GazeServer::set_device_profile(const Ref<GazeDeviceProfile>& p_profile) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    impl->display.device_calibration = p_calibration;
-    if (p_calibration.is_valid()) {
-        impl->display.logical_size_px = p_calibration->get_logical_size_px();
-        impl->display.physical_size_mm = p_calibration->get_physical_size_mm();
-        impl->camera.offset = p_calibration->get_camera_offset();
-        impl->camera.tilt = p_calibration->get_camera_tilt();
-    }
+    impl->display.device_profile = p_profile;
 }
 
-Ref<DeviceCalibration> GazeServer::get_device_calibration() const {
+Ref<GazeDeviceProfile> GazeServer::get_device_profile() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return impl->display.device_calibration;
-}
-
-void GazeServer::set_bio_calibration(const Ref<BioCalibration>& p_calibration) {
-    std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    impl->display.bio_calibration = p_calibration;
-    if (p_calibration.is_valid()) {
-        impl->display.bio_data.is_valid = true;
-        impl->display.bio_data.bias_pitch = p_calibration->get_bias_pitch();
-        impl->display.bio_data.bias_yaw = p_calibration->get_bias_yaw();
-        impl->display.bio_data.scale_yaw = p_calibration->get_scale_yaw();
-        impl->display.bio_data.scale_pitch = p_calibration->get_scale_pitch();
-    } else {
-        impl->display.bio_data.is_valid = false;
-    }
-}
-
-Ref<BioCalibration> GazeServer::get_bio_calibration() const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return impl->display.bio_calibration;
+    return impl->display.device_profile;
 }
 
 void GazeServer::set_camera_offsets(Vector3 p_offset, double p_tilt) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    impl->camera.offset = p_offset;
-    impl->camera.tilt = p_tilt;
+    if (impl->display.device_profile.is_null()) {
+        impl->display.device_profile = GazeDeviceProfile::create_system_guess();
+    }
+    impl->display.device_profile->set_camera_offset_mm(p_offset);
+    impl->display.device_profile->set_camera_roll_deg(p_tilt);
 }
 
 Vector3 GazeServer::get_camera_offset() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return impl->camera.offset;
+    if (impl->display.device_profile.is_valid()) {
+        return impl->display.device_profile->get_camera_offset_mm();
+    }
+    return Vector3(0.0, 107.5, 0.0);
 }
 
 double GazeServer::get_camera_tilt() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return impl->camera.tilt;
+    if (impl->display.device_profile.is_valid()) {
+        return impl->display.device_profile->get_camera_roll_deg();
+    }
+    return 0.0;
 }
 
 void GazeServer::set_camera_vision_rid(RID p_vision_camera) {
@@ -665,43 +632,17 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
     impl->eye.gaze_origin_cam = p_origin_cam;
     impl->eye.gaze_direction_cam = p_direction_cam;
 
-    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
-    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
-    Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
-    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
-    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position_lpix() : Vector2(0.0, 0.0);
-
-    Vector3 calibrated_dir = p_direction_cam;
-    if (impl->display.bio_data.is_valid) {
-        Gaze::GodotCameraVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-        Gaze::GodotCameraVector3 calib_v = Gaze::apply_3d_bias_vector(
-            raw_dir,
-            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
-            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
-        );
-        calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
-    }
-
-    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
-    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GodotCameraVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
-    if (Gaze::project_ray_to_screen_mm(
-            origin_godot,
-            dir_godot,
-            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
-            effective_tilt,
-            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
-            pos_mm
-        )) {
-        double scale_x = (double)logical_sz.x / physical_sz.x;
-        double scale_y = (double)logical_sz.y / physical_sz.y;
-        Vector2 px(pos_mm.x * scale_x, pos_mm.y * scale_y);
-
-        px = px - win_pos;
-
+    Vector2 px = project_ray_to_viewport(p_origin_cam, p_direction_cam);
+    if (px.is_finite()) {
         impl->eye.latest_projected_gaze = px;
-        Vector2 pos_mm_center(pos_mm.x - physical_sz.x * 0.5, pos_mm.y - physical_sz.y * 0.5);
+
+        Vector3 pt_cam = project_ray_to_camera_plane(p_origin_cam, p_direction_cam);
+        Ref<GazeDeviceProfile> profile = impl->display.device_profile;
+        Vector2 phys_sz = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(1920 * 0.25, 1080 * 0.25);
+        Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
+        double x_disp_mm = phys_sz.x * 0.5 - (pt_cam.x + offset.x);
+        double y_disp_mm = -(pt_cam.y - offset.y);
+        Vector2 pos_mm_center(x_disp_mm - phys_sz.x * 0.5, y_disp_mm - phys_sz.y * 0.5);
         impl->eye.latest_projected_gaze_mm = pos_mm_center;
         
         if (impl->eye.screen_smoother.is_valid()) {
@@ -815,66 +756,43 @@ void GazeServer::emit_camera_frame_ready(RID p_vision_camera) {
 
 // --- Ray Projection Math ---
 
-Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
-    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
-    Vector2i logical_sz = dev_cal.is_valid() ? dev_cal->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
-    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
-    Vector2 win_pos = dev_cal.is_valid() ? dev_cal->get_window_position_lpix() : Vector2(0.0, 0.0);
-
-    Vector3 calibrated_dir = p_direction_cam;
-    if (p_apply_bio_calibration && impl->display.bio_data.is_valid) {
-        Gaze::GodotCameraVector3 raw_dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-        Gaze::GodotCameraVector3 calib_v = Gaze::apply_3d_bias_vector(
-            raw_dir,
-            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.bias_pitch, impl->display.bio_data.bias_yaw),
-            Gaze::SpacedVector2<Gaze::Space::GodotCameraEuler>(impl->display.bio_data.scale_pitch, impl->display.bio_data.scale_yaw)
-        );
-        calibrated_dir = Vector3(calib_v.x, calib_v.y, calib_v.z);
+Vector3 GazeServer::project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
+    Gaze::GodotCameraVector3 origin(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 direction(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    Gaze::GodotCameraVector3 pt = Gaze::project_ray_to_camera_plane(origin, direction);
+    if (!pt.is_finite()) {
+        return Vector3(INFINITY, INFINITY, INFINITY);
     }
-
-    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
-    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GodotCameraVector3 dir_godot(calibrated_dir.x, calibrated_dir.y, calibrated_dir.z);
-    if (Gaze::project_ray_to_screen_mm(
-            origin_godot,
-            dir_godot,
-            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
-            effective_tilt,
-            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
-            pos_mm
-        )) {
-        double scale_x = (double)logical_sz.x / physical_sz.x;
-        double scale_y = (double)logical_sz.y / physical_sz.y;
-        Vector2 px(pos_mm.x * scale_x, pos_mm.y * scale_y);
-        return px - win_pos;
-    }
-    return Vector2(INFINITY, INFINITY);
+    return Vector3(pt.x, pt.y, pt.z);
 }
 
-Vector2 GazeServer::project_ray_to_screen_mm(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
+Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
-    Vector2 physical_sz = dev_cal.is_valid() ? dev_cal->get_physical_size_mm() : Vector2(345.0, 215.0);
-    Vector3 effective_offset = dev_cal.is_valid() ? dev_cal->get_camera_offset() : impl->camera.offset;
-    double effective_tilt = dev_cal.is_valid() ? dev_cal->get_camera_tilt() : impl->camera.tilt;
-
-    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> pos_mm;
-    Gaze::GodotCameraVector3 origin_godot(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GodotCameraVector3 dir_godot(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-    if (Gaze::project_ray_to_screen_mm(
-            origin_godot,
-            dir_godot,
-            Gaze::GodotCameraVector3(effective_offset.x, effective_offset.y, effective_offset.z),
-            effective_tilt,
-            Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(physical_sz.x, physical_sz.y),
-            pos_mm
-        )) {
-        return Vector2(pos_mm.x, pos_mm.y);
+    Vector3 pt_cam = project_ray_to_camera_plane(p_origin_cam, p_direction_cam);
+    if (!pt_cam.is_finite()) {
+        return Vector2(INFINITY, INFINITY);
     }
-    return Vector2(INFINITY, INFINITY);
+
+    Ref<GazeDeviceProfile> profile = impl->display.device_profile;
+    Vector2 pixel_pitch = profile.is_valid() ? profile->get_pixel_pitch_mm() : Vector2(0.25, 0.25);
+    if (pixel_pitch.x <= 0.0 || pixel_pitch.y <= 0.0) {
+        pixel_pitch = Vector2(0.25, 0.25);
+    }
+    Vector2i logical_size = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
+    Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
+
+    double x_screen_px = (double)logical_size.x * 0.5 - (pt_cam.x + offset.x) / pixel_pitch.x;
+    double y_screen_px = -(pt_cam.y - offset.y) / pixel_pitch.y;
+
+    Vector2 win_pos = Vector2(0.0, 0.0);
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds) {
+            win_pos = ds->window_get_position();
+        }
+    }
+
+    return Vector2(x_screen_px - win_pos.x, y_screen_px - win_pos.y);
 }
 
 // --- Event Factory ---
@@ -946,9 +864,11 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
 
     Vector2 local_pos = get_gaze_screen_px(true);
     Vector2 win_pos = Vector2(0, 0);
-    Ref<DeviceCalibration> dev_cal = impl->display.device_calibration;
-    if (dev_cal.is_valid()) {
-        win_pos = dev_cal->get_window_position_lpix();
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds) {
+            win_pos = ds->window_get_position();
+        }
     }
     Vector2 screen_pos = local_pos + win_pos;
 
@@ -1031,22 +951,22 @@ bool GazeServer::get_emulate_mouse_from_gaze() const {
 
 void GazeServer::set_mouse_emulation_dwell_sec(float p_sec) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    mouse_emulation.set_dwell_time_sec(p_sec);
+    mouse_emulation.set_dwell_time(p_sec);
 }
 
 float GazeServer::get_mouse_emulation_dwell_sec() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return mouse_emulation.get_dwell_time_sec();
+    return mouse_emulation.get_dwell_time();
 }
 
 void GazeServer::set_mouse_emulation_transition_sec(float p_sec) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
-    mouse_emulation.set_transition_duration_sec(p_sec);
+    mouse_emulation.set_transition_duration(p_sec);
 }
 
 float GazeServer::get_mouse_emulation_transition_sec() const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    return mouse_emulation.get_transition_duration_sec();
+    return mouse_emulation.get_transition_duration();
 }
 
 void GazeServer::trigger_process() {
@@ -1270,9 +1190,9 @@ void GazeServer::trigger_process() {
 #endif
 
     if (mouse_emulation.is_emulation_active() && input) {
-        Ref<DeviceCalibration> dev_cal = get_device_calibration();
+        Ref<GazeDeviceProfile> profile = get_device_profile();
         Ref<InputEventGazeBase> syn_event = mouse_emulation.synthesize_event(
-            ds, dev_cal, event_factory,
+            ds, profile, event_factory,
             current_frame_id, last_event_time_usec, last_gaze_pos, last_screen_pos
         );
         if (syn_event.is_valid()) {

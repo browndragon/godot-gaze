@@ -45,22 +45,13 @@
 			<return type="int"></return>
 			<description></description>
 		</method>
-		<method name="set_device_calibration">
+		<method name="set_device_profile">
 			<return type="void"></return>
-			<param index="0" name="calibration" type="const Ref<DeviceCalibration> &amp;"></param>
+			<param index="0" name="profile" type="const Ref<GazeDeviceProfile> &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_device_calibration">
-			<return type="Ref<DeviceCalibration>"></return>
-			<description></description>
-		</method>
-		<method name="set_bio_calibration">
-			<return type="void"></return>
-			<param index="0" name="calibration" type="const Ref<BioCalibration> &amp;"></param>
-			<description></description>
-		</method>
-		<method name="get_bio_calibration">
-			<return type="Ref<BioCalibration>"></return>
+		<method name="get_device_profile">
+			<return type="Ref<GazeDeviceProfile>"></return>
 			<description></description>
 		</method>
 		<method name="set_camera_offsets">
@@ -275,14 +266,13 @@
 			<param index="0" name="vision_camera_rid" type="RID"></param>
 			<description></description>
 		</method>
-		<method name="project_ray_to_viewport">
-			<return type="Vector2"></return>
+		<method name="project_ray_to_camera_plane">
+			<return type="Vector3"></return>
 			<param index="0" name="origin_cam" type="Vector3"></param>
 			<param index="1" name="direction_cam" type="Vector3"></param>
-			<param index="2" name="apply_bio_calibration" type="bool" default="false"></param>
 			<description></description>
 		</method>
-		<method name="project_ray_to_screen_mm">
+		<method name="project_ray_to_viewport">
 			<return type="Vector2"></return>
 			<param index="0" name="origin_cam" type="Vector3"></param>
 			<param index="1" name="direction_cam" type="Vector3"></param>

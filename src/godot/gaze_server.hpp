@@ -13,7 +13,7 @@
 #include <godot_cpp/classes/time.hpp>
 #include "../core/projection_engine.hpp"
 #include "../core/face_model_geometry.hpp"
-#include "gaze_calibration_resource.hpp"
+#include "gaze_device_profile.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
 #include "mouse_gaze_emulation.hpp"
@@ -28,60 +28,50 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
-#include <atomic>
 
-#ifndef WEB_ENABLED
-#include "../native/gaze_tracking_pipeline.hpp"
-#endif
+namespace Gaze {
+class GazeTrackingPipeline;
+}
 
 namespace godot {
-
-class GazeServer;
-
-struct GazeServerImpl;
 
 class GazeServer : public Object {
     GDCLASS(GazeServer, Object);
 
 private:
     static GazeServer *singleton;
-    std::unique_ptr<GazeServerImpl> impl;
-#ifndef WEB_ENABLED
-    std::unique_ptr<Gaze::GazeTrackingPipeline> pipeline;
-#endif
+    std::unique_ptr<struct GazeServerImpl> impl;
+    mutable std::recursive_mutex state_mutex;
 
-    Ref<GazeEventFactory> event_factory;
+    Gaze::GazeFrameData* active_read_data = nullptr;
+    std::shared_ptr<Gaze::GazeTrackingPipeline> pipeline;
+    Gaze::PipelineConfig active_config;
+
+    MouseGazeEmulation mouse_emulation;
+    uint64_t current_frame_id = 0;
+    uint64_t last_event_time_usec = 0;
+    Vector2 last_gaze_pos = Vector2(0, 0);
+    Vector2 last_screen_pos = Vector2(0, 0);
 
     Ref<InputEventGazeBase> most_recent_event;
-    uint64_t current_frame_id = 0;
-    Vector2 last_gaze_pos;
-    Vector2 last_screen_pos;
-    uint64_t last_event_time_usec = 0;
+    Ref<GazeEventFactory> event_factory;
 
+    int active_trackers = 0;
     bool emulate_gaze_from_mouse = true;
     bool emulate_mouse_from_gaze = false;
-    bool was_both_closed = false;
     uint64_t last_camera_face_detected_usec = 0;
-    MouseGazeEmulation mouse_emulation;
-
-    Ref<ImageTexture> camera_debug_texture;
+    bool was_both_closed = false;
 
 protected:
     static void _bind_methods();
 
-    Gaze::PipelineConfig active_config;
-    mutable std::recursive_mutex state_mutex;
-    int active_trackers = 0;
-
 public:
-    Gaze::GazeFrameData* active_read_data = nullptr;
+    static GazeServer *get_singleton();
 
     GazeServer();
     virtual ~GazeServer();
 
-    static GazeServer *get_singleton() { return singleton; }
-
-    // --- High-Level Lifecycle Management ---
+    // --- High-Level Lifecycle & Processing ---
     bool start_tracking();
     void stop_tracking(bool p_immediate = false);
     void _deferred_stop_check();
@@ -95,12 +85,9 @@ public:
     void reset();
     int get_active_tracker_count() const;
 
-    // --- Calibrations & Hardware Setup ---
-    void set_device_calibration(const Ref<DeviceCalibration>& p_calibration);
-    Ref<DeviceCalibration> get_device_calibration() const;
-
-    void set_bio_calibration(const Ref<BioCalibration>& p_calibration);
-    Ref<BioCalibration> get_bio_calibration() const;
+    // --- Hardware Profile & Configuration ---
+    void set_device_profile(const Ref<GazeDeviceProfile>& p_profile);
+    Ref<GazeDeviceProfile> get_device_profile() const;
 
     void set_camera_offsets(Vector3 p_offset, double p_tilt);
     Vector3 get_camera_offset() const;
@@ -165,8 +152,8 @@ public:
     void emit_camera_frame_ready(RID p_vision_camera);
 
     // --- Ray Projection Math ---
-    Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, bool p_apply_bio_calibration = false) const;
-    Vector2 project_ray_to_screen_mm(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
+    Vector3 project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
+    Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 
     // --- Event Factory ---
     void set_event_factory(const Ref<GazeEventFactory>& p_factory);

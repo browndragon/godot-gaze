@@ -19,18 +19,18 @@ func project_ray_to_screen_mm(origin_godot: Vector3, dir_godot: Vector3) -> Vect
 func run_tests():
 	print("=================== HEADLESS INTEGRATION TESTS ===================")
 	
-	# 1. Test DeviceCalibration Resource
-	var dev_cal = MockDeviceCalibration.new()
-	dev_cal.logical_size_px = Vector2i(1920, 1080)
-	dev_cal.physical_size_mm = Vector2(345.0, 215.0)
+	# 1. Test GazeDeviceProfile Resource
+	var profile = GazeDeviceProfile.new()
+	profile.set_logical_size_px(Vector2i(1920, 1080))
+	profile.set_physical_size_mm(Vector2(345.0, 215.0))
 	
-	var dpi = dev_cal.get_dpi()
-	print("DeviceCalibration DPI: ", dpi)
+	var dpi = profile.get_dpi()
+	print("GazeDeviceProfile DPI: ", dpi)
 	if abs(dpi.x - 141.35) > 0.1 or abs(dpi.y - 127.64) > 0.1:
-		printerr("FAIL: DeviceCalibration DPI calculation incorrect")
+		printerr("FAIL: GazeDeviceProfile DPI calculation incorrect")
 		quit(1)
 		return
-	print("PASS: DeviceCalibration resource verified.")
+	print("PASS: GazeDeviceProfile resource verified.")
 	
 	# 2. Test InputEventGazeBase, InputEventGaze, and InputEventGazeMissing ClassDB registration & polymorphism
 	if not ClassDB.class_exists("InputEventGazeBase"):
@@ -67,7 +67,7 @@ func run_tests():
 		quit(1)
 		return
 
-	gs.set_device_calibration(dev_cal)
+	gs.set_device_profile(profile)
 	# Ensure stopped before testing 0->1 transition
 	gs.stop_tracking(true)
 	var started_fresh = gs.start_tracking()
@@ -92,30 +92,31 @@ func run_tests():
 		return
 	print("PASS: GazeServer refcounted lifecycle verified.")
 
-	# =================== E2E TEST: FEATURE F1 (Calibration Resource) ===================
-	print("=================== E2E TEST: FEATURE F1 (Calibration Resource) ===================")
-	var default_calib = Engine.get_singleton("GazeDeviceEstimatedCalibration")
-	if not default_calib:
-		printerr("FAIL: F1 - GazeDeviceEstimatedCalibration singleton not found")
+	# =================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================
+	print("=================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================")
+	var guess_profile = GazeDeviceProfile.create_system_guess()
+	if not guess_profile:
+		printerr("FAIL: F1 - GazeDeviceProfile.create_system_guess() returned null")
 		quit(1)
 		return
+	print("GazeDeviceProfile created system guess successfully.")
 
-	var dev_calib = default_calib.get_calibration()
-	if not dev_calib:
-		printerr("FAIL: F1 - Failed to resolve default DeviceCalibration")
+	guess_profile.calibrate_from_card_width(342.412, 85.603)
+	var pitch = guess_profile.get_pixel_pitch_mm()
+	if abs(pitch.x - 0.25) > 0.01 or abs(pitch.y - 0.25) > 0.01:
+		printerr("FAIL: F1 - calibrate_from_card_width pixel pitch incorrect: ", pitch)
 		quit(1)
 		return
-	print("GazeDeviceEstimatedCalibration resolved default calibration successfully.")
-
-	var session = GazeCalibrationSession.new()
-	session.add_sample(Vector2(960, 540), Vector3(0, 0, -500), Vector3(0, 0, 1))
-	session.add_sample(Vector2(480, 270), Vector3(-100, -50, -500), Vector3(-0.2, -0.1, 0.95))
-	var solved_ok = session.calculate_calibration(dev_cal)
-	if not solved_ok or not session.get_device_calibration() or not session.get_bio_calibration():
-		printerr("FAIL: F1 - GazeCalibrationSession output missing calibration resources or returned false")
+	var card_dpi = guess_profile.get_dpi()
+	if abs(card_dpi.x - 101.6) > 0.1:
+		printerr("FAIL: F1 - card DPI calculation incorrect: ", card_dpi)
 		quit(1)
 		return
-	print("GazeCalibrationSession sample math and estimation successfully triggered and solved.")
+	var fl = guess_profile.get_focal_length_px(1440.0)
+	if abs(fl - 1130.16) > 1.0:
+		printerr("FAIL: F1 - focal length calculation incorrect: ", fl)
+		quit(1)
+		return
 	print("PASS: F1 Decoupled Resource-Based Calibration E2E verification complete.")
 
 	# =================== E2E TEST: FEATURE F3 (CI/CD Release Validation) ===================
@@ -127,8 +128,7 @@ func run_tests():
 		"gaze/models/search_paths",
 		"gaze/models/yunet_prefix",
 		"gaze/models/gaze_prefix",
-		"gaze/calibration/device_calibration_path",
-		"gaze/calibration/bio_calibration_path",
+		"gaze/calibration/device_profile_path",
 		"gaze/debug/overlay_scene_path"
 	]
 	
@@ -139,7 +139,7 @@ func run_tests():
 			return
 		print("ProjectSetting registered: ", setting, " = ", ProjectSettings.get_setting(setting))
 		
-	var required_singletons = ["VisionServer", "GazeServer", "GazeDeviceEstimatedCalibration"]
+	var required_singletons = ["VisionServer", "GazeServer"]
 	for sing in required_singletons:
 		if not Engine.has_singleton(sing):
 			printerr("FAIL: F3 - Engine singleton '", sing, "' is not registered")
@@ -161,15 +161,13 @@ func run_tests():
 	vs.camera_set_focal_length(cam_rid, 1440.0 * 1.5625)
 	vs.camera_start(cam_rid)
 
-	var fixture_dev = MockDeviceCalibration.new()
-	fixture_dev.logical_size_px = Vector2i(3024, 1964)
-	fixture_dev.physical_size_mm = Vector2(301.5, 188.5)
-	fixture_dev.camera_offset = Vector3(0.0, 94.25, 0.0)
-	fixture_dev.camera_tilt = 0.0
-	fixture_dev.set_window_position_lpix(Vector2(0, 0))
-	gs.set_device_calibration(fixture_dev)
+	var fixture_dev = GazeDeviceProfile.new()
+	fixture_dev.set_logical_size_px(Vector2i(3024, 1964))
+	fixture_dev.set_physical_size_mm(Vector2(301.5, 188.5))
+	fixture_dev.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0))
+	fixture_dev.set_camera_roll_deg(0.0)
+	gs.set_device_profile(fixture_dev)
 
-	gs.set_camera_offsets(Vector3(0.0, 94.25, 0.0), 0.0)
 	gs.set_camera_vision_rid(cam_rid)
 
 	gs.start_processing()
@@ -197,8 +195,8 @@ func run_tests():
 		var head_trans = gs.get_head_position()
 		var head_xform = gs.get_head_transform()
 		var head_fwd = -head_xform.basis.z.normalized()
-		var nose_gaze = project_ray_to_screen_mm(head_trans, head_fwd)
-		var eye_gaze = gs.get_gaze_screen_mm(false)
+		var nose_gaze = gs.project_ray_to_viewport(head_trans, head_fwd)
+		var eye_gaze = gs.get_gaze_screen_px(false)
 		print("  -> Image: ", img_name, " | Head Forward: ", head_fwd, " | Nose: ", nose_gaze, " | Gaze: ", eye_gaze)
 		return {
 			"face_detected": gs.is_face_detected(),

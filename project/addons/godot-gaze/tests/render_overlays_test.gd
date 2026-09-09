@@ -14,13 +14,12 @@ func run_render():
 		return
 
 	# Setup calibrated MacBook Pro 14" geometry
-	var dev_cal = MockDeviceCalibration.new()
-	dev_cal.physical_size_mm = Vector2(301.5, 188.5)
-	dev_cal.logical_size_px = Vector2i(1512, 982)
-	dev_cal.camera_offset = Vector3(0.0, 94.25, 0.0) # top center
-	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position_lpix(Vector2(180, 167)) # Centered 1152x648 window
-	gs.set_device_calibration(dev_cal)
+	var profile = GazeDeviceProfile.new()
+	profile.set_physical_size_mm(Vector2(301.5, 188.5))
+	profile.set_logical_size_px(Vector2i(1512, 982))
+	profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0)) # top center
+	profile.set_camera_roll_deg(0.0)
+	gs.set_device_profile(profile)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)

@@ -30,7 +30,7 @@ const CAM_CY_PX: float = 480.0
 var vs: VisionServer
 var gs: GazeServer
 var cam_rid: RID
-var dev_cal: DeviceCalibration
+var profile: GazeDeviceProfile
 
 const CAM_GEOM_1440 := {
 	"res": Vector2i(1440, 960),
@@ -151,13 +151,12 @@ func run_tool() -> void:
 	vs.camera_start(cam_rid)
 
 	# Configure Reference Snapshot Geometry (2021 14" MacBook Pro Capture Hardware)
-	dev_cal = MockDeviceCalibration.new()
-	dev_cal.physical_size_mm = Vector2(SCREEN_WIDTH_MM, SCREEN_HEIGHT_MM)
-	dev_cal.logical_size_px = Vector2i(int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT))
-	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0) # Top bezel center (X=150.75mm, Y=0.0mm)
-	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position_lpix(Vector2(WIN_POS_X_PT, WIN_POS_Y_PT))
-	gs.set_device_calibration(dev_cal)
+	profile = GazeDeviceProfile.new()
+	profile.set_physical_size_mm(Vector2(SCREEN_WIDTH_MM, SCREEN_HEIGHT_MM))
+	profile.set_logical_size_px(Vector2i(int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT)))
+	profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0)) # Top bezel center
+	profile.set_camera_roll_deg(0.0)
+	gs.set_device_profile(profile)
 
 	gs.set_camera_offsets(Vector3(0.0, 0.0, 0.0), 0.0)
 	gs.set_camera_vision_rid(cam_rid)

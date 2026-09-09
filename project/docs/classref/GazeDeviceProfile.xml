@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeDeviceProfile" inherits="Resource">
+	<brief_description>Resource encapsulating physical display dimensions, pixel pitch, and camera geometric placement for gaze projection.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="calibrate_from_card_width">
+			<return type="void"></return>
+			<param index="0" name="card_width_lpix" type="float"></param>
+			<param index="1" name="card_width_mm" type="float" default="85.603"></param>
+			<description></description>
+		</method>
+		<method name="create_system_guess" qualifiers="static">
+			<return type="Ref<GazeDeviceProfile>"></return>
+			<description></description>
+		</method>
+		<method name="diagonal_to_horizontal_fov" qualifiers="static">
+			<return type="float"></return>
+			<param index="0" name="diagonal_fov_degrees" type="float"></param>
+			<param index="1" name="width" type="float"></param>
+			<param index="2" name="height" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_camera_hfov_deg">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_offset_mm">
+			<return type="Vector3"></return>
+			<description></description>
+		</method>
+		<method name="get_camera_roll_deg">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="get_card_width_px" qualifiers="static">
+			<return type="float"></return>
+			<param index="0" name="fov_degrees" type="float"></param>
+			<param index="1" name="card_distance_mm" type="float"></param>
+			<param index="2" name="frame_width" type="float"></param>
+			<param index="3" name="card_width_mm" type="float" default="85.603"></param>
+			<description></description>
+		</method>
+		<method name="get_dpi">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_focal_length_px">
+			<return type="float"></return>
+			<param index="0" name="frame_width_px" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_focal_length_under_scaling" qualifiers="static">
+			<return type="float"></return>
+			<param index="0" name="f_original" type="float"></param>
+			<param index="1" name="original_dim" type="float"></param>
+			<param index="2" name="new_dim" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_logical_size_px">
+			<return type="Vector2i"></return>
+			<description></description>
+		</method>
+		<method name="get_physical_size_mm">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="get_pixel_pitch_mm">
+			<return type="Vector2"></return>
+			<description></description>
+		</method>
+		<method name="set_camera_hfov_deg">
+			<return type="void"></return>
+			<param index="0" name="hfov" type="float"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_offset_mm">
+			<return type="void"></return>
+			<param index="0" name="offset" type="Vector3"></param>
+			<description></description>
+		</method>
+		<method name="set_camera_roll_deg">
+			<return type="void"></return>
+			<param index="0" name="roll" type="float"></param>
+			<description></description>
+		</method>
+		<method name="set_logical_size_px">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2i"></param>
+			<description></description>
+		</method>
+		<method name="set_physical_size_mm">
+			<return type="void"></return>
+			<param index="0" name="size" type="Vector2"></param>
+			<description></description>
+		</method>
+		<method name="set_pixel_pitch_mm">
+			<return type="void"></return>
+			<param index="0" name="pitch" type="Vector2"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members>
+		<member name="camera_hfov_deg" type="float" setter="set_camera_hfov_deg" getter="get_camera_hfov_deg" default="65.0"></member>
+		<member name="camera_offset_mm" type="Vector3" setter="set_camera_offset_mm" getter="get_camera_offset_mm" default="Vector3(0, 0, 0)"></member>
+		<member name="camera_roll_deg" type="float" setter="set_camera_roll_deg" getter="get_camera_roll_deg" default="0.0"></member>
+		<member name="logical_size_px" type="Vector2i" setter="set_logical_size_px" getter="get_logical_size_px" default="Vector2i(1920, 1080)"></member>
+		<member name="physical_size_mm" type="Vector2" setter="set_physical_size_mm" getter="get_physical_size_mm"></member>
+		<member name="pixel_pitch_mm" type="Vector2" setter="set_pixel_pitch_mm" getter="get_pixel_pitch_mm" default="Vector2(0.25, 0.25)"></member>
+	</members>
+</class>

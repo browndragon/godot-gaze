@@ -589,226 +589,27 @@ TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations")
     }
 }
 
-#include "gaze_calibration.hpp"
-#include "gaze_calibration_estimator.hpp"
-
-TEST_CASE("Testing GazeCalibration Layout and Defaults")
+TEST_CASE("Testing Camera Plane Coplanar Projection Invariants")
 {
-    GazeCalibration cal;
-    CHECK(cal.pixel_size_mm.x == doctest::Approx(0.25));
-    CHECK(cal.pixel_size_mm.y == doctest::Approx(0.25));
-    CHECK(cal.camera_offset.x == doctest::Approx(0.0));
-    CHECK(cal.camera_offset.y == doctest::Approx(148.0));
-    CHECK(cal.camera_offset.z == doctest::Approx(0.0));
-    CHECK(cal.camera_tilt == doctest::Approx(0.0));
-    CHECK(cal.bias_pitch == doctest::Approx(0.0));
-    CHECK(cal.bias_yaw == doctest::Approx(0.0));
-    CHECK(cal.scale_pitch == doctest::Approx(1.0));
-    CHECK(cal.scale_yaw == doctest::Approx(1.0));
-}
+    // Origin 600mm away, looking straight forward (0, 0, 1) -> hits (0, 0, 0)
+    GodotCameraVector3 origin(0.0, 0.0, -600.0);
+    GodotCameraVector3 dir_fwd(0.0, 0.0, 1.0);
+    GodotCameraVector3 pt_fwd = project_ray_to_camera_plane(origin, dir_fwd);
+    REQUIRE(pt_fwd.is_finite() == true);
+    CHECK(pt_fwd.x == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(pt_fwd.y == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(pt_fwd.z == doctest::Approx(0.0).epsilon(0.01));
 
-TEST_CASE("Testing CalibrationEstimator simplex convergence (Unconstrained 6D)")
-{
-    // We simulate ground truth parameters:
-    SpacedVector2<Space::GodotDisplayMm> gt_pixel_size(0.26, 0.26);
-    GodotCameraVector3 gt_camera_offset(0.0, 0.0, 15.0);
-    double gt_camera_tilt = 12.0; // degrees
-    double gt_bias_pitch = 0.02;  // rad
-    double gt_bias_yaw = -0.01;   // rad
+    // Angled gaze: 30mm right, 60mm down on screen plane
+    GodotCameraVector3 dir_angled = GodotCameraVector3(30.0, -60.0, 600.0).normalized();
+    GodotCameraVector3 pt_angled = project_ray_to_camera_plane(origin, dir_angled);
+    REQUIRE(pt_angled.is_finite() == true);
+    CHECK(pt_angled.x == doctest::Approx(30.0).epsilon(0.01));
+    CHECK(pt_angled.y == doctest::Approx(-60.0).epsilon(0.01));
+    CHECK(pt_angled.z == doctest::Approx(0.0).epsilon(0.01));
 
-    // Configure a mock screen: 1920x1080
-    GodotDisplayVector2 screen_res(1920.0, 1080.0);
-    double screen_mm_x = screen_res.x * gt_pixel_size.x;
-    double screen_mm_y = screen_res.y * gt_pixel_size.y;
-
-    ProjectionEngine engine;
-    engine.set_screen_size_pixels(screen_res);
-    engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(screen_mm_x, screen_mm_y));
-    CameraPlacement placement(gt_camera_offset, gt_camera_tilt);
-    engine.set_camera_placement(placement);
-
-    // We simulate a user at a distance of ~600mm
-    // Generate 5 target pixel points: Center, Top-Left, Top-Right, Bottom-Left, Bottom-Right
-    std::vector<GodotDisplayVector2> targets = {
-        GodotDisplayVector2(960.0, 540.0),  // Center
-        GodotDisplayVector2(192.0, 108.0),  // Top-Left
-        GodotDisplayVector2(1728.0, 108.0), // Top-Right
-        GodotDisplayVector2(192.0, 972.0),  // Bottom-Left
-        GodotDisplayVector2(1728.0, 972.0)  // Bottom-Right
-    };
-
-    std::vector<CalibrationSample> samples;
-
-    double theta_rad = gt_camera_tilt * DEG_TO_RAD;
-    double cos_t = std::cos(theta_rad);
-    double sin_t = std::sin(theta_rad);
-
-    for (const auto &tgt : targets)
-    {
-        CalibrationSample sample;
-        sample.target_pos_mm = SpacedVector2<Space::GodotDisplayMm>(
-            (tgt.x / screen_res.x) * screen_mm_x,
-            (tgt.y / screen_res.y) * screen_mm_y);
-
-        // Simulate gaze origin at different minor head offsets
-        sample.gaze_origin = GodotCameraVector3((tgt.x - 960.0) * 0.05, 0.0, -600.0);
-
-        // Compute where the target point is in camera space (mm)
-        // using the ground truth parameters
-        double target_x_mm = tgt.x * gt_pixel_size.x;
-        double target_y_mm = tgt.y * gt_pixel_size.y;
-
-        double P_cam_x = screen_mm_x * 0.5 - target_x_mm - gt_camera_offset.x;
-        double P_cam_y = gt_camera_offset.y - target_y_mm * cos_t;
-        double P_cam_z = gt_camera_offset.z + target_y_mm * sin_t;
-
-        GodotCameraVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
-
-        // Ground-truth gaze direction ray from origin to target in camera space
-        GodotCameraVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
-
-        // Undo the biological bias to get the simulated raw gaze direction
-        double pitch = std::asin(std::max(-1.0, std::min(1.0, biased_dir.y)));
-        double yaw = std::atan2(biased_dir.x, biased_dir.z);
-        double raw_pitch = pitch - gt_bias_pitch;
-        double raw_yaw = yaw - gt_bias_yaw;
-
-        double cos_raw_pitch = std::cos(raw_pitch);
-        sample.gaze_direction = GodotCameraVector3(
-                                    std::sin(raw_yaw) * cos_raw_pitch,
-                                    std::sin(raw_pitch),
-                                    std::cos(raw_yaw) * cos_raw_pitch)
-                                    .normalized();
-
-        samples.push_back(sample);
-    }
-
-    // Run the solver starting from slightly off guesses (e.g. camera 5mm off)
-    GodotCameraVector3 init_camera_offset(0.0, 5.0, 0.0);
-    double init_camera_tilt = 0.0;
-
-    GodotCameraVector3 est_off;
-    double est_tilt = 0.0;
-    double est_pitch = 0.0;
-    double est_yaw = 0.0;
-
-    CalibrationWeights weights;
-    weights.offset_x = 0.0;
-    weights.offset_y = 0.0;
-    weights.offset_z = 0.0;
-    weights.tilt = 0.0;
-    weights.bias = 0.0;
-
-    bool success = CalibrationEstimator::estimate(
-        samples,
-        SpacedVector2<Space::GodotDisplayMm>(screen_mm_x, screen_mm_y),
-        init_camera_offset,
-        init_camera_tilt,
-        false, // freeze_camera_params = false
-        est_off,
-        est_tilt,
-        est_pitch,
-        est_yaw,
-        weights);
-
-    REQUIRE(success == true);
-
-    // Verify optimized values converge close to ground truth
-    CHECK(std::abs(est_off.y - gt_camera_offset.y) < 3.0); // within 3mm
-    CHECK(std::abs(est_off.z - gt_camera_offset.z) < 3.0);
-    CHECK(std::abs(est_tilt - gt_camera_tilt) < 1.5);  // within 1.5 degrees
-    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02); // within 0.02 rad
-    CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
-}
-
-TEST_CASE("Testing CalibrationEstimator simplex convergence (Frozen camera parameters)")
-{
-    GodotDisplayVector2 screen_res(1920.0, 1080.0);
-    double screen_mm_x = 527.0;
-    double screen_mm_y = 296.0;
-
-    GodotCameraVector3 gt_camera_offset(0.0, 148.0, 10.0);
-    double gt_camera_tilt = 15.0;
-    double gt_bias_pitch = 0.05;
-    double gt_bias_yaw = -0.04;
-
-    SpacedVector2<Space::GodotDisplayMm> gt_pixel_size(screen_mm_x / screen_res.x, screen_mm_y / screen_res.y);
-    double theta_rad = gt_camera_tilt * Gaze::DEG_TO_RAD;
-    double cos_t = std::cos(theta_rad);
-    double sin_t = std::sin(theta_rad);
-
-    std::vector<GodotDisplayVector2> calib_targets = {
-        GodotDisplayVector2(192.0, 108.0),
-        GodotDisplayVector2(1728.0, 108.0),
-        GodotDisplayVector2(960.0, 540.0),
-        GodotDisplayVector2(192.0, 972.0),
-        GodotDisplayVector2(1728.0, 972.0)};
-
-    std::vector<CalibrationSample> samples;
-    for (const auto &tgt : calib_targets)
-    {
-        CalibrationSample sample;
-        sample.target_pos_mm = SpacedVector2<Space::GodotDisplayMm>(
-            (tgt.x / screen_res.x) * screen_mm_x,
-            (tgt.y / screen_res.y) * screen_mm_y);
-
-        sample.gaze_origin = GodotCameraVector3(0.0, 0.0, -600.0);
-
-        double target_x_mm = tgt.x * gt_pixel_size.x;
-        double target_y_mm = tgt.y * gt_pixel_size.y;
-
-        double P_cam_x = screen_mm_x * 0.5 - target_x_mm - gt_camera_offset.x;
-        double P_cam_y = gt_camera_offset.y - target_y_mm * cos_t;
-        double P_cam_z = gt_camera_offset.z + target_y_mm * sin_t;
-
-        GodotCameraVector3 target_cam(P_cam_x, P_cam_y, P_cam_z);
-        GodotCameraVector3 biased_dir = (target_cam - sample.gaze_origin).normalized();
-
-        // Undo the biological bias to get the simulated raw gaze direction
-        double pitch = std::asin(std::max(-1.0, std::min(1.0, biased_dir.y)));
-        double yaw = std::atan2(biased_dir.x, biased_dir.z);
-        double raw_pitch = pitch - gt_bias_pitch;
-        double raw_yaw = yaw - gt_bias_yaw;
-
-        double cos_raw_pitch = std::cos(raw_pitch);
-        sample.gaze_direction = GodotCameraVector3(
-                                    std::sin(raw_yaw) * cos_raw_pitch,
-                                    std::sin(raw_pitch),
-                                    std::cos(raw_yaw) * cos_raw_pitch)
-                                    .normalized();
-
-        samples.push_back(sample);
-    }
-
-    GodotCameraVector3 est_off;
-    double est_tilt = 0.0;
-    double est_pitch = 0.0;
-    double est_yaw = 0.0;
-
-    CalibrationWeights weights;
-    weights.bias = 2.0;
-
-    bool success = CalibrationEstimator::estimate(
-        samples,
-        SpacedVector2<Space::GodotDisplayMm>(screen_mm_x, screen_mm_y),
-        gt_camera_offset, // camera offsets frozen to ground truth
-        gt_camera_tilt,
-        true, // freeze_camera_params = true (locks camera to initial values)
-        est_off,
-        est_tilt,
-        est_pitch,
-        est_yaw,
-        weights);
-
-    REQUIRE(success == true);
-
-    // Camera parameters should remain exactly locked to initial values
-    CHECK(est_off.x == doctest::Approx(gt_camera_offset.x));
-    CHECK(est_off.y == doctest::Approx(gt_camera_offset.y));
-    CHECK(est_off.z == doctest::Approx(gt_camera_offset.z));
-    CHECK(est_tilt == doctest::Approx(gt_camera_tilt));
-
-    // Biological gaze bias should be solved accurately
-    CHECK(std::abs(est_pitch - gt_bias_pitch) < 0.02);
-    CHECK(std::abs(est_yaw - gt_bias_yaw) < 0.02);
+    // Gaze pointing backward into room (Z < 0) returns non-finite / infinite
+    GodotCameraVector3 dir_back(0.0, 0.0, -1.0);
+    GodotCameraVector3 pt_back = project_ray_to_camera_plane(origin, dir_back);
+    CHECK(pt_back.is_finite() == false);
 }

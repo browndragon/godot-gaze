@@ -40,9 +40,7 @@ func load_test_scene():
 	
 	var gs = Engine.get_singleton("GazeServer")
 	if gs:
-		if active_calibration_dict.has("device_calibration"):
-			gs.set_device_calibration(active_calibration_dict["device_calibration"])
-		if active_calibration_dict.has("bio_calibration"):
-			gs.set_bio_calibration(active_calibration_dict["bio_calibration"])
+		if active_calibration_dict.has("device_profile") and active_calibration_dict["device_profile"] != null:
+			gs.set_device_profile(active_calibration_dict["device_profile"])
 	
 	add_child(inst)

@@ -4,8 +4,8 @@ extends SceneTree
 func _init():
 	print("=================== WINDOWED GPU INTEGRATION TESTS ===================")
 	
-	# 1. Setup DeviceCalibration
-	var dev_cal = GuessDeviceCalibration.new()
+	# 1. Setup GazeDeviceProfile
+	var profile = GazeDeviceProfile.create_system_guess()
 
 	# 2. Test GPU Native Handle Resolution Verification Test
 	print("=================== E2E TEST: GPU NATIVE HANDLE RESOLUTION (WINDOWED) ===================")
@@ -49,7 +49,7 @@ func _init():
 		quit(1)
 		return
 
-	gs.set_device_calibration(dev_cal)
+	gs.set_device_profile(profile)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)

@@ -5,7 +5,6 @@ signal calibration_completed(resource)
 
 @export var target_hold_time: float = 1.5
 
-var calib_session: GazeCalibrationSession
 var latest_gaze_event: InputEventGaze = null
 var calib_points = [
 	Vector2(0.5, 0.5),   # Center
@@ -19,6 +18,7 @@ var current_target_idx = 0
 var target_timer = 0.0
 var current_target_screen_pos = Vector2.ZERO
 var draw_target = true
+var target_errors: Array[float] = []
 
 func _ready():
 	# Center the window on start
@@ -35,14 +35,11 @@ func _ready():
 	var gs = Engine.get_singleton("GazeServer")
 	if gs:
 		gs.start_tracking()
-		gs.set_device_calibration(null)
-		gs.set_bio_calibration(null)
 		
-	calib_session = GazeCalibrationSession.new()
-	calib_session.clear()
 	current_target_idx = 0
 	target_timer = 0.0
 	draw_target = true
+	target_errors.clear()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventGaze:
@@ -62,9 +59,9 @@ func _process(delta):
 	
 	if target_timer >= target_hold_time:
 		if latest_gaze_event != null and latest_gaze_event.is_face_tracked():
-			var gaze_orig = latest_gaze_event.gaze_transform.origin
-			var gaze_dir = latest_gaze_event.gaze_transform.basis.z * -1.0
-			calib_session.add_sample(current_target_screen_pos, gaze_orig, gaze_dir)
+			var gaze_pos = latest_gaze_event.position
+			var err = gaze_pos.distance_to(target_window_pos)
+			target_errors.append(err)
 			
 		current_target_idx += 1
 		target_timer = 0.0
@@ -76,19 +73,17 @@ func _process(delta):
 
 func complete_calibration():
 	draw_target = false
-	var success = calib_session.calculate_calibration(null)
-	var dev_cal = calib_session.get_device_calibration()
-	var bio_cal = calib_session.get_bio_calibration()
 	var gs = Engine.get_singleton("GazeServer")
-	if gs and success:
-		if dev_cal:
-			gs.set_device_calibration(dev_cal)
-		if bio_cal:
-			gs.set_bio_calibration(bio_cal)
+	var profile = gs.get_device_profile() if gs else null
+	var avg_err = 0.0
+	if target_errors.size() > 0:
+		for e in target_errors:
+			avg_err += e
+		avg_err /= float(target_errors.size())
 	var res_dict = {
-		"success": success,
-		"device_calibration": dev_cal,
-		"bio_calibration": bio_cal
+		"success": true,
+		"device_profile": profile,
+		"average_error_px": avg_err
 	}
 	calibration_completed.emit(res_dict)
 

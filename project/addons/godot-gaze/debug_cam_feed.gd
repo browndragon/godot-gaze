@@ -215,19 +215,15 @@ func update_diagnostics_ui() -> void:
 				lines.append("\n[b]Event Domain Telemetry:[/b]")
 				lines.append("  " + " | ".join(domain_lines))
 
-		var dev_cal = gs.get_device_calibration()
-		var bio_cal = gs.get_bio_calibration()
+		var profile = gs.get_device_profile()
 		lines.append("\n[b]Calibration & Geometry:[/b]")
-		lines.append("  Device Cal: [color=aqua]%s[/color]" % (dev_cal.get_class() if dev_cal else "Guess (Fallback)"))
-		if dev_cal:
-			var phys_mm = dev_cal.get_physical_size_mm()
-			var log_px = dev_cal.get_logical_size_px()
-			var w_pos = dev_cal.get_window_position_lpix()
-			var c_off = dev_cal.get_camera_offset()
+		lines.append("  Device Profile: [color=aqua]%s[/color]" % (profile.get_class() if profile else "Guess (Fallback)"))
+		if profile:
+			var phys_mm = profile.get_physical_size_mm()
+			var log_px = profile.get_logical_size_px()
+			var c_off = profile.get_camera_offset_mm()
 			lines.append("  Screen Size: [color=yellow]%.1fx%.1f mm ( %dx%d px )[/color]" % [phys_mm.x, phys_mm.y, log_px.x, log_px.y])
-			lines.append("  Window Pos: [color=yellow](%.1f, %.1f)[/color]" % [w_pos.x, w_pos.y])
 			lines.append("  Cam Offset: [color=yellow](%.1f, %.1f, %.1f) mm[/color]" % [c_off.x, c_off.y, c_off.z])
-		lines.append("  User Bio Cal: [color=aqua]%s[/color]" % (bio_cal.get_class() if bio_cal else "Default (No adjustment)"))
 
 		lines.append("\n[b]Camera Feed:[/b]")
 		lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
@@ -270,15 +266,12 @@ func _on_copy_button_pressed():
 	var gs = Engine.get_singleton("GazeServer")
 	if gs:
 		data["gaze_tracker_active"] = gs.is_tracking_active()
-		var dev_cal = gs.get_device_calibration()
-		var bio_cal = gs.get_bio_calibration()
-		data["device_calibration"] = dev_cal.get_class() if dev_cal else "Null"
-		if dev_cal:
-			data["screen_physical_mm"] = [dev_cal.get_physical_size_mm().x, dev_cal.get_physical_size_mm().y]
-			data["screen_logical_px"] = [dev_cal.get_logical_size_px().x, dev_cal.get_logical_size_px().y]
-			data["window_position_px"] = [dev_cal.get_window_position_lpix().x, dev_cal.get_window_position_lpix().y]
-			data["camera_offset_mm"] = [dev_cal.get_camera_offset().x, dev_cal.get_camera_offset().y, dev_cal.get_camera_offset().z]
-		data["bio_calibration"] = bio_cal.get_class() if bio_cal else "Null"
+		var profile = gs.get_device_profile()
+		data["device_profile"] = profile.get_class() if profile else "Null"
+		if profile:
+			data["screen_physical_mm"] = [profile.get_physical_size_mm().x, profile.get_physical_size_mm().y]
+			data["screen_logical_px"] = [profile.get_logical_size_px().x, profile.get_logical_size_px().y]
+			data["camera_offset_mm"] = [profile.get_camera_offset_mm().x, profile.get_camera_offset_mm().y, profile.get_camera_offset_mm().z]
 		var ev = gs.get_most_recent_event()
 		if ev is InputEventGaze and ev.is_face_tracked():
 			data["face_detected"] = true
@@ -411,7 +404,7 @@ func _perform_drawing():
 	# Full Viewport Screen Intersection Reticles
 	# 1. Nose Gaze Screen Intersection (Cyan: Color(0.0, 0.95, 1.0))
 	var nose_fwd = -xform.basis.z.normalized()
-	var pt_nose_screen = gs.project_ray_to_viewport(xform.origin, nose_fwd, false)
+	var pt_nose_screen = gs.project_ray_to_viewport(xform.origin, nose_fwd)
 	_draw_screen_reticle(pt_nose_screen, Color(0.0, 0.95, 1.0, 0.95), 14.0)
 
 	# 2. Eye Gaze Screen Intersection (Green: Color(0.2, 1.0, 0.1))

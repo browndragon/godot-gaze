@@ -103,7 +103,7 @@ void MouseGazeEmulation::update(
 
 Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     DisplayServer* p_ds,
-    const Ref<DeviceCalibration>& p_dev_cal,
+    const Ref<GazeDeviceProfile>& p_profile,
     const Ref<GazeEventFactory>& p_event_factory,
     uint64_t &r_frame_id,
     uint64_t &r_last_event_time_usec,
@@ -112,20 +112,18 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 ) {
     Vector2 mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position() - p_ds->window_get_position()) : Vector2(0, 0);
 
-    Ref<DeviceCalibration> dev_cal = p_dev_cal;
-    if (!dev_cal.is_valid()) {
-        Ref<GuessDeviceCalibration> guess;
-        guess.instantiate();
-        dev_cal = guess;
+    Ref<GazeDeviceProfile> profile = p_profile;
+    if (!profile.is_valid()) {
+        profile = GazeDeviceProfile::create_system_guess();
     }
-    Vector2i log_sz = dev_cal->get_logical_size_px();
-    Vector2 phys_sz = dev_cal->get_physical_size_mm();
+    Vector2i log_sz = profile->get_logical_size_px();
+    Vector2 phys_sz = profile->get_physical_size_mm();
     if (log_sz.x <= 0) log_sz.x = 1920;
     if (log_sz.y <= 0) log_sz.y = 1080;
     if (phys_sz.x <= 0.0) phys_sz.x = 345.0;
     if (phys_sz.y <= 0.0) phys_sz.y = 215.0;
 
-    Vector3 cam_offset = dev_cal->get_camera_offset();
+    Vector3 cam_offset = profile->get_camera_offset_mm();
 
     float x_s = (mouse_pos.x / log_sz.x - 0.5f) * phys_sz.x;
     float y_s = (mouse_pos.y / log_sz.y - 0.5f) * phys_sz.y;

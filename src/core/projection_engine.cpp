@@ -11,13 +11,6 @@ namespace Gaze
         return (ipd_mm * camera_focal_length_px) / eye_distance_px;
     }
 
-    GodotCameraVector3 ProjectionEngine::apply_3d_bias(const GodotCameraVector3 &raw_gaze_dir) const
-    {
-        return apply_3d_bias_vector(
-            raw_gaze_dir,
-            SpacedVector2<Space::GodotCameraEuler>(calibration.bias_pitch, calibration.bias_yaw),
-            SpacedVector2<Space::GodotCameraEuler>(calibration.scale_pitch, calibration.scale_yaw));
-    }
 
     bool ProjectionEngine::project_gaze(const GodotCameraVector3 &gaze_origin_cam,
                                         const GodotCameraVector3 &raw_gaze_dir_cam,
@@ -29,22 +22,53 @@ namespace Gaze
             return false;
         }
 
-        SpacedVector2<Space::GodotDisplayMm> pos_mm;
-        if (!project_ray_to_screen_mm(
-                gaze_origin_cam,
-                raw_gaze_dir_cam,
-                placement.offset,
-                placement.tilt_degrees,
-                screen_size_mm,
-                pos_mm))
+        double x_disp_mm = 0.0;
+        double y_disp_mm = 0.0;
+
+        if (std::abs(placement.tilt_degrees) < 1e-4 && std::abs(placement.offset.z) < 1e-4)
         {
-            return false;
+            GodotCameraVector3 pt_cam = project_ray_to_camera_plane(gaze_origin_cam, raw_gaze_dir_cam);
+            if (!pt_cam.is_finite())
+            {
+                return false;
+            }
+            double W_half = screen_size_mm.x * 0.5;
+            x_disp_mm = W_half - (pt_cam.x + placement.offset.x);
+            y_disp_mm = -(pt_cam.y - placement.offset.y);
+        }
+        else
+        {
+            double theta_rad = placement.tilt_degrees * DEG_TO_RAD;
+            double cos_t = std::cos(theta_rad);
+            double sin_t = std::sin(theta_rad);
+
+            double O_disp_z = sin_t * (gaze_origin_cam.y - placement.offset.y) + cos_t * (gaze_origin_cam.z - placement.offset.z);
+            double v_disp_z = sin_t * raw_gaze_dir_cam.y + cos_t * raw_gaze_dir_cam.z;
+
+            if (std::abs(v_disp_z) < 1e-6)
+            {
+                return false;
+            }
+
+            double t = -O_disp_z / v_disp_z;
+            if (t < 0.0)
+            {
+                return false;
+            }
+
+            double W_half = screen_size_mm.x * 0.5;
+            double int_x = gaze_origin_cam.x + t * raw_gaze_dir_cam.x;
+            double int_y = gaze_origin_cam.y + t * raw_gaze_dir_cam.y;
+            double int_z = gaze_origin_cam.z + t * raw_gaze_dir_cam.z;
+
+            x_disp_mm = W_half - (int_x + placement.offset.x);
+            y_disp_mm = -(int_y - placement.offset.y) * cos_t + (int_z - placement.offset.z) * sin_t;
         }
 
         double scale_x = screen_size_pixels.x / screen_size_mm.x;
         double scale_y = screen_size_pixels.y / screen_size_mm.y;
-        out_pixel.x = pos_mm.x * scale_x;
-        out_pixel.y = pos_mm.y * scale_y;
+        out_pixel.x = x_disp_mm * scale_x;
+        out_pixel.y = y_disp_mm * scale_y;
         return true;
     }
 

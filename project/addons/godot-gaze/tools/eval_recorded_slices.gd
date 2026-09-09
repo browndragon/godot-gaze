@@ -27,13 +27,12 @@ func _run_eval() -> void:
 	var logical_sz = Vector2i(3024, 1964)
 	var physical_mm = Vector2(301.5, 188.5)
 
-	var dev_cal = MockDeviceCalibration.new()
-	dev_cal.logical_size_px = logical_sz
-	dev_cal.physical_size_mm = physical_mm
-	dev_cal.camera_offset = Vector3(0.0, 0.0, 0.0)
-	dev_cal.camera_tilt = 0.0
-	dev_cal.set_window_position_lpix(Vector2(0, 0))
-	gs.set_device_calibration(dev_cal)
+	var profile = GazeDeviceProfile.new()
+	profile.set_logical_size_px(logical_sz)
+	profile.set_physical_size_mm(physical_mm)
+	profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0))
+	profile.set_camera_roll_deg(0.0)
+	gs.set_device_profile(profile)
 
 	var cam_rid = vs.camera_create()
 	vs.camera_set_device_id(cam_rid, -1)

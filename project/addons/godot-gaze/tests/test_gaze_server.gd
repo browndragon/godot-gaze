@@ -23,21 +23,21 @@ func test_gaze_server_camera_preview_refcounting():
 	gs.camera_set_preview_requested(false)
 	assert_false(gs.is_camera_preview_requested(), "Preview should be inactive after all consumers release")
 
-func test_gaze_server_device_calibration_injection():
+func test_gaze_server_device_profile_injection():
 	var gs = Engine.get_singleton("GazeServer")
 	assert_not_null(gs, "GazeServer singleton must exist")
 
-	var calib = MockDeviceCalibration.new()
-	calib.set_logical_size_px(Vector2i(1920, 1080))
-	calib.set_physical_size_mm(Vector2(345.0, 215.0))
-	calib.set_window_position_lpix(Vector2(50.0, 25.0))
+	var profile = GazeDeviceProfile.new()
+	profile.set_logical_size_px(Vector2i(1920, 1080))
+	profile.set_physical_size_mm(Vector2(345.0, 215.0))
+	profile.set_camera_offset_mm(Vector3(10.0, 100.0, 0.0))
 
-	gs.set_device_calibration(calib)
-	var active_calib = gs.get_device_calibration()
-	assert_not_null(active_calib, "Active device calibration should not be null")
-	assert_eq(active_calib.get_logical_size_px(), Vector2i(1920, 1080), "Logical size matches")
-	assert_eq(active_calib.get_physical_size_mm(), Vector2(345.0, 215.0), "Physical size matches")
-	assert_eq(active_calib.get_window_position_lpix(), Vector2(50.0, 25.0), "Window position matches")
+	gs.set_device_profile(profile)
+	var active_profile = gs.get_device_profile()
+	assert_not_null(active_profile, "Active device profile should not be null")
+	assert_eq(active_profile.get_logical_size_px(), Vector2i(1920, 1080), "Logical size matches")
+	assert_eq(active_profile.get_physical_size_mm(), Vector2(345.0, 215.0), "Physical size matches")
+	assert_eq(active_profile.get_camera_offset_mm(), Vector3(10.0, 100.0, 0.0), "Camera offset matches")
 
 func test_gaze_server_tracking_lifecycle_and_camera_recovery():
 	var gs = Engine.get_singleton("GazeServer")

@@ -1,10 +1,10 @@
 # Dimension Calibration Screen: calibrates the logical pixel-to-millimeter mapping using a physical card reference.
 extends Control
 
-signal dimension_calibration_completed(calibration)
+signal dimension_calibration_completed(profile)
 signal dimension_calibration_cancelled()
 
-@export var device_calibration: DeviceCalibration = null
+@export var device_profile: GazeDeviceProfile = null
 
 # Credit card ISO/IEC 7810 ID-1 standard dimensions: 85.60 mm x 53.98 mm
 const CARD_PHYSICAL_WIDTH_MM = 85.6
@@ -29,17 +29,17 @@ func _ready():
 	anchor_right = 1.0
 	anchor_bottom = 1.0
 	
-	if not device_calibration:
-		device_calibration = GuessDeviceCalibration.new()
+	if not device_profile:
+		device_profile = GazeDeviceProfile.create_system_guess()
 		
-	var log_sz = device_calibration.get_logical_size_px()
+	var log_sz = device_profile.get_logical_size_px()
 	screen_size_lpix = Vector2(log_sz.x, log_sz.y)
 	var viewport_size = get_viewport().get_visible_rect().size
 	screen_width_viewport = viewport_size.x
 	
-	# Configure default slider value from the DeviceCalibration
+	# Configure default slider value from the GazeDeviceProfile
 	var current_width_lpix = 300.0
-	var phys_size = device_calibration.get_physical_size_mm()
+	var phys_size = device_profile.get_physical_size_mm()
 	if phys_size.x > 0.0:
 		var px_per_mm = screen_width_viewport / phys_size.x
 		current_width_lpix = px_per_mm * CARD_PHYSICAL_WIDTH_MM
@@ -169,24 +169,24 @@ func _on_save_pressed():
 	var px_per_mm_logical = px_per_mm_viewport * (screen_size_lpix.x / screen_width_viewport)
 	var physical_size = screen_size_lpix / px_per_mm_logical
 	
-	if not device_calibration:
-		device_calibration = GuessDeviceCalibration.new()
+	if not device_profile:
+		device_profile = GazeDeviceProfile.create_system_guess()
 	
-	device_calibration.set_logical_size_px(Vector2i(int(screen_size_lpix.x), int(screen_size_lpix.y)))
-	device_calibration.set_physical_size_mm(physical_size)
+	device_profile.set_logical_size_px(Vector2i(int(screen_size_lpix.x), int(screen_size_lpix.y)))
+	device_profile.set_physical_size_mm(physical_size)
 	
 	var gs = Engine.get_singleton("GazeServer")
 	if gs:
-		gs.set_device_calibration(device_calibration)
+		gs.set_device_profile(device_profile)
 	
-	print("[DimensionCalibration] Saved device calibration size: %s mm" % physical_size)
+	print("[DimensionCalibration] Saved device profile physical size: %s mm" % physical_size)
 	
 	# Fade-out animation before completion
 	var tween = create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 	await tween.finished
 	
-	dimension_calibration_completed.emit(device_calibration)
+	dimension_calibration_completed.emit(device_profile)
 	queue_free()
 
 func _on_cancel_pressed():

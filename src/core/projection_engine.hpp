@@ -10,7 +10,6 @@
 #pragma once
 
 #include "camera_placement.hpp"
-#include "gaze_calibration.hpp"
 #include "opencv_space_conversions.hpp"
 
 namespace Gaze
@@ -20,7 +19,6 @@ namespace Gaze
     {
     private:
         CameraPlacement placement;
-        GazeCalibration calibration;
         GodotDisplayVector2 screen_size_pixels = GodotDisplayVector2(1920.0, 1080.0);
         SpacedVector2<Space::GodotDisplayMm> screen_size_mm = SpacedVector2<Space::GodotDisplayMm>(527.0, 296.0); // e.g. Typical 24-inch 16:9 monitor
         double camera_focal_length_px = 1000.0;                 // For Z depth estimation if needed
@@ -31,9 +29,6 @@ namespace Gaze
         // Setters / Getters
         void set_camera_placement(const CameraPlacement &p) { placement = p; }
         CameraPlacement get_camera_placement() const { return placement; }
-
-        void set_calibration(const GazeCalibration &c) { calibration = c; }
-        GazeCalibration get_calibration() const { return calibration; }
 
         void set_screen_size_pixels(const GodotDisplayVector2 &size) { screen_size_pixels = size; }
         GodotDisplayVector2 get_screen_size_pixels() const { return screen_size_pixels; }
@@ -53,10 +48,7 @@ namespace Gaze
         // Map screen millimeter coordinates (relative to center, Y-down +) to 3D position in Camera Space
         GodotCameraVector3 screen_mm_to_camera_space(const SpacedVector2<Space::GodotDisplayMm> &screen_mm) const;
 
-        // Apply pitch/yaw angular bias to raw 3D gaze vector
-        GodotCameraVector3 apply_3d_bias(const GodotCameraVector3 &raw_gaze_dir) const;
-
-        // Projects the raw gaze vector and returns pixel coordinates (applying all biases)
+        // Projects the raw gaze vector and returns pixel coordinates
         bool project_gaze(const GodotCameraVector3 &gaze_origin_cam,
                           const GodotCameraVector3 &raw_gaze_dir_cam,
                           GodotDisplayVector2 &out_pixel) const;

@@ -1,7 +1,6 @@
 #include "register_types.hpp"
 #include "input_event_gaze.hpp"
-#include "gaze_calibration_resource.hpp"
-#include "gaze_calibration_session.hpp"
+#include "gaze_device_profile.hpp"
 #include "gaze_pipeline_config.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
@@ -35,7 +34,6 @@ bool g_is_exiting = false;
 
 namespace godot {
 
-static GazeDeviceEstimatedCalibration* default_calib = nullptr;
 static VisionServer* vision_server_singleton = nullptr;
 static GazeServer* gaze_server_singleton = nullptr;
 
@@ -198,23 +196,14 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_force_cpu);
         ps->set_initial_value("gaze/config/force_cpu", false);
 
-        if (!ps->has_setting("gaze/calibration/device_calibration_path")) {
-            ps->set_setting("gaze/calibration/device_calibration_path", "user://calibrations/device_calibration.tres");
+        if (!ps->has_setting("gaze/calibration/device_profile_path")) {
+            ps->set_setting("gaze/calibration/device_profile_path", "user://calibrations/device_profile.tres");
         }
         Dictionary prop_device;
-        prop_device["name"] = "gaze/calibration/device_calibration_path";
+        prop_device["name"] = "gaze/calibration/device_profile_path";
         prop_device["type"] = Variant::STRING;
         ps->add_property_info(prop_device);
-        ps->set_initial_value("gaze/calibration/device_calibration_path", "user://calibrations/device_calibration.tres");
-
-        if (!ps->has_setting("gaze/calibration/bio_calibration_path")) {
-            ps->set_setting("gaze/calibration/bio_calibration_path", "user://calibrations/bio_calibration.tres");
-        }
-        Dictionary prop_bio;
-        prop_bio["name"] = "gaze/calibration/bio_calibration_path";
-        prop_bio["type"] = Variant::STRING;
-        ps->add_property_info(prop_bio);
-        ps->set_initial_value("gaze/calibration/bio_calibration_path", "user://calibrations/bio_calibration.tres");
+        ps->set_initial_value("gaze/calibration/device_profile_path", "user://calibrations/device_profile.tres");
 
         if (!ps->has_setting("gaze/debug/overlay_scene_path")) {
             ps->set_setting("gaze/debug/overlay_scene_path", "res://addons/godot-gaze/debug_cam_feed.tscn");
@@ -284,20 +273,8 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         ClassDB::register_class<OneEuroSmoother>();
         ClassDB::register_internal_class<OneEuroFilterState>();
 
-        ClassDB::register_class<DeviceCalibration>();
-        ClassDB::register_class<GuessDeviceCalibration>();
-        ClassDB::register_class<StoredDeviceCalibration>();
-        ClassDB::register_class<MockDeviceCalibration>();
-        ClassDB::register_class<DefaultDeviceCalibration>();
-
-        ClassDB::register_class<BioCalibration>();
-        ClassDB::register_class<GuessBioCalibration>();
-        ClassDB::register_class<StoredBioCalibration>();
-        ClassDB::register_class<DefaultBioCalibration>();
-
-        ClassDB::register_class<GazeCalibrationSession>();
+        ClassDB::register_class<GazeDeviceProfile>();
         ClassDB::register_class<GazePipelineConfig>();
-        ClassDB::register_class<GazeDeviceEstimatedCalibration>();
 
         ClassDB::register_class<VisionServer>();
         ClassDB::register_class<MockVisionServer>();
@@ -309,9 +286,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
         gaze_server_singleton = memnew(GazeServer);
         Engine::get_singleton()->register_singleton("GazeServer", gaze_server_singleton);
-
-        default_calib = memnew(GazeDeviceEstimatedCalibration);
-        Engine::get_singleton()->register_singleton("GazeDeviceEstimatedCalibration", default_calib);
 
         register_gaze_project_settings();
         return;
@@ -365,12 +339,6 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
         Input *input = Input::get_singleton();
         if (input) {
             input->flush_buffered_events();
-        }
-
-        if (default_calib) {
-            Engine::get_singleton()->unregister_singleton("GazeDeviceEstimatedCalibration");
-            memdelete(default_calib);
-            default_calib = nullptr;
         }
 
         if (GazeServer::get_singleton()) {

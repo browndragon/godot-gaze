@@ -97,6 +97,13 @@ while [[ $# -gt 0 ]]; do
             fi
             if [[ "$ARG" == "project/"* && ("$PROJECT_PATH" == "project" || "$PROJECT_PATH" == *"/project") ]]; then
                 ARG="res://${ARG#project/}"
+            elif [[ "$ARG" == "addons/"* ]]; then
+                ARG="res://${ARG}"
+            elif [[ "$ARG" == *".tscn" || "$ARG" == *".scn" ]]; then
+                ARG="res://${ARG}"
+            fi
+            if [[ "$ARG" == *".tscn" || "$ARG" == *".scn" ]]; then
+                TEST_MODE=false
             fi
             GODOT_ARGS+=("$ARG")
             shift

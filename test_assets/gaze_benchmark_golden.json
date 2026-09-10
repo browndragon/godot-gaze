@@ -1,62 +1,176 @@
 {
+  "eyes_anatomical_left_obscured.jpg": {
+    "gaze_mm": "NO_FACE",
+    "head_pos_mm": "NO_FACE",
+    "head_rot_deg": "NO_FACE",
+    "nose_mm": "NO_FACE"
+  },
+  "eyes_anatomical_left_wink.jpg": {
+    "gaze_mm": "(-56.8,83.5)",
+    "head_pos_mm": "(10.0,-17.0,-448.7)",
+    "head_rot_deg": "(9.6,171.5,5.0)",
+    "nose_mm": "(63.8,-53.5)"
+  },
+  "eyes_anatomical_right_wink.jpg": {
+    "gaze_mm": "(-14.4,137.8)",
+    "head_pos_mm": "(16.6,-14.4,-448.7)",
+    "head_rot_deg": "(10.5,178.1,1.2)",
+    "nose_mm": "(-0.0,-68.5)"
+  },
+  "eyes_both_open.jpg": {
+    "gaze_mm": "(-20.2,-18.6)",
+    "head_pos_mm": "(16.8,-20.4,-453.0)",
+    "head_rot_deg": "(9.5,178.6,1.2)",
+    "nose_mm": "(-3.8,-55.5)"
+  },
+  "eyes_both_wink.jpg": {
+    "gaze_mm": "(-295.5,283.0)",
+    "head_pos_mm": "(18.2,-18.8,-454.3)",
+    "head_rot_deg": "(11.9,178.7,0.5)",
+    "nose_mm": "(-7.2,-77.3)"
+  },
+  "eyes_tilted_anatomical_right_wink.jpg": {
+    "gaze_mm": "(268.7,79.4)",
+    "head_pos_mm": "(-17.6,-21.2,-457.1)",
+    "head_rot_deg": "(7.6,152.8,5.8)",
+    "nose_mm": "(258.0,-23.0)"
+  },
+  "landscape_center.jpg": {
+    "gaze_mm": "(-211.9,-152.1)",
+    "head_pos_mm": "(57.3,97.1,-252.9)",
+    "head_rot_deg": "(-0.6,179.5,-0.6)",
+    "nose_mm": "(-149.5,-94.4)"
+  },
+  "landscape_down_down.jpg": {
+    "gaze_mm": "(-225.5,-116.5)",
+    "head_pos_mm": "(60.7,84.5,-251.2)",
+    "head_rot_deg": "(-6.8,-179.3,-0.3)",
+    "nose_mm": "(-157.9,-54.4)"
+  },
+  "landscape_left_left.jpg": {
+    "gaze_mm": "(-266.7,-126.2)",
+    "head_pos_mm": "(82.7,94.8,-254.2)",
+    "head_rot_deg": "(-6.3,-170.0,2.0)",
+    "nose_mm": "(-222.8,-68.1)"
+  },
+  "landscape_nosedown_eyesup.jpg": {
+    "gaze_mm": "(-215.5,-175.2)",
+    "head_pos_mm": "(58.0,87.8,-249.5)",
+    "head_rot_deg": "(-8.9,177.4,-0.1)",
+    "nose_mm": "(-140.7,-48.7)"
+  },
+  "landscape_noseleft_eyesright.jpg": {
+    "gaze_mm": "(-149.8,-139.5)",
+    "head_pos_mm": "(80.7,102.8,-246.8)",
+    "head_rot_deg": "(-3.1,-170.0,2.1)",
+    "nose_mm": "(-218.9,-90.9)"
+  },
+  "landscape_noseright_eyesleft.jpg": {
+    "gaze_mm": "(-203.5,-150.1)",
+    "head_pos_mm": "(27.6,104.4,-256.7)",
+    "head_rot_deg": "(-2.1,164.8,0.8)",
+    "nose_mm": "(-52.1,-93.9)"
+  },
+  "landscape_nosetop_eyesdown.jpg": {
+    "gaze_mm": "(-164.8,-133.6)",
+    "head_pos_mm": "(57.5,144.9,-275.3)",
+    "head_rot_deg": "(9.0,174.2,-1.1)",
+    "nose_mm": "(-124.6,-189.5)"
+  },
+  "landscape_right_right.jpg": {
+    "gaze_mm": "(-131.6,-162.4)",
+    "head_pos_mm": "(36.2,97.0,-258.4)",
+    "head_rot_deg": "(-4.0,167.7,-0.4)",
+    "nose_mm": "(-73.8,-79.0)"
+  },
+  "landscape_top_top.jpg": {
+    "gaze_mm": "(-175.6,-205.4)",
+    "head_pos_mm": "(59.1,140.9,-271.2)",
+    "head_rot_deg": "(9.6,176.0,-1.2)",
+    "nose_mm": "(-135.5,-187.0)"
+  },
   "self_center.jpg": {
-    "head_pos_mm": { "val": "(7.1,-7.0,-369.9)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-5.4,175.5,0.5)", "err": "(-11.1,-5.6,0.5)", "err_mag": 12.4 },
-    "nose_mm": { "val": "(21.8,-52.0)", "err": "21.9 mm", "err_mag": 21.9 },
-    "gaze_mm": { "val": "(-92.0,-89.1)", "err": "100.0 mm", "err_mag": 100.0 }
+    "gaze_mm": "(-92.0,5.1)",
+    "head_pos_mm": "(7.1,-7.0,-369.9)",
+    "head_rot_deg": "(-5.4,175.5,0.5)",
+    "nose_mm": "(21.8,42.2)"
   },
   "self_center2.jpg": {
-    "head_pos_mm": { "val": "(10.1,-36.5,-349.1)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-1.9,177.7,0.4)", "err": "(-3.1,-4.0,0.4)", "err_mag": 5.1 },
-    "nose_mm": { "val": "(4.1,-46.3)", "err": "5.5 mm", "err_mag": 5.5 },
-    "gaze_mm": { "val": "(-49.9,-99.5)", "err": "70.3 mm", "err_mag": 70.3 }
-  },
-  "self_left_left.jpg": {
-    "head_pos_mm": { "val": "(57.2,-5.9,-342.6)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-11.5,-157.9,3.9)", "err": "(-17.0,-9.1,3.9)", "err_mag": 19.7 },
-    "nose_mm": { "val": "(-201.2,-22.4)", "err": "57.5 mm", "err_mag": 57.5 },
-    "gaze_mm": { "val": "(-268.3,-86.2)", "err": "123.0 mm", "err_mag": 123.0 }
-  },
-  "self_right_right.jpg": {
-    "head_pos_mm": { "val": "(-27.0,-14.2,-348.7)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-16.4,155.9,-0.5)", "err": "(-20.8,2.9,-0.5)", "err_mag": 21.0 },
-    "nose_mm": { "val": "(183.8,31.1)", "err": "87.6 mm", "err_mag": 87.6 },
-    "gaze_mm": { "val": "(108.3,-10.9)", "err": "57.7 mm", "err_mag": 57.7 }
-  },
-  "self_top_top.jpg": {
-    "head_pos_mm": { "val": "(16.7,7.8,-365.1)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(0.3,178.4,2.0)", "err": "(6.8,-4.3,2.0)", "err_mag": 8.3 },
-    "nose_mm": { "val": "(-6.2,-103.4)", "err": "41.3 mm", "err_mag": 41.3 },
-    "gaze_mm": { "val": "(-44.3,-163.5)", "err": "48.3 mm", "err_mag": 48.3 }
+    "gaze_mm": "(-49.9,-5.3)",
+    "head_pos_mm": "(10.1,-36.5,-349.1)",
+    "head_rot_deg": "(-1.9,177.7,0.4)",
+    "nose_mm": "(4.1,47.9)"
   },
   "self_down_down.jpg": {
-    "head_pos_mm": { "val": "(19.0,-20.9,-374.0)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-8.8,176.0,0.4)", "err": "(-26.2,-6.9,0.4)", "err_mag": 27.1 },
-    "nose_mm": { "val": "(7.1,-15.1)", "err": "59.7 mm", "err_mag": 59.7 },
-    "gaze_mm": { "val": "-74.1,-113.4)", "err": "174.2 mm", "err_mag": 174.2 }
+    "gaze_mm": "(-74.1,-19.2)",
+    "head_pos_mm": "(19.0,-20.9,-374.0)",
+    "head_rot_deg": "(-8.8,176.0,0.4)",
+    "nose_mm": "(7.1,79.2)"
+  },
+  "self_left_left.jpg": {
+    "gaze_mm": "(-268.3,8.1)",
+    "head_pos_mm": "(57.2,-5.9,-342.6)",
+    "head_rot_deg": "(-11.5,-157.9,3.9)",
+    "nose_mm": "(-201.2,71.8)"
   },
   "self_nosedown_eyesup.jpg": {
-    "head_pos_mm": { "val": "(18.9,-51.4,-351.9)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-13.6,174.4,0.7)", "err": "(-27.5,-8.7,0.7)", "err_mag": 28.8 },
-    "nose_mm": { "val": "(14.6,42.9)", "err": "14.7 mm", "err_mag": 14.7 },
-    "gaze_mm": { "val": "(7.8,-110.3)", "err": "34.9 mm", "err_mag": 34.9 }
+    "gaze_mm": "(7.8,-16.0)",
+    "head_pos_mm": "(18.9,-51.4,-351.9)",
+    "head_rot_deg": "(-13.6,174.4,0.7)",
+    "nose_mm": "(14.6,137.2)"
   },
   "self_noseleft_eyesright.jpg": {
-    "head_pos_mm": { "val": "(43.0,-29.3,-350.2)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-9.3,-176.9,3.0)", "err": "(-11.4,-25.9,3.0)", "err_mag": 28.5 },
-    "nose_mm": { "val": "(-64.9,-8.8)", "err": "95.2 mm", "err_mag": 95.2 },
-    "gaze_mm": { "val": "(124.1,-80.1)", "err": "40.2 mm", "err_mag": 40.2 }
+    "gaze_mm": "(124.1,14.2)",
+    "head_pos_mm": "(43.0,-29.3,-350.2)",
+    "head_rot_deg": "(-9.3,-176.9,3.0)",
+    "nose_mm": "(-64.9,85.4)"
   },
   "self_noseright_eyesleft.jpg": {
-    "head_pos_mm": { "val": "(-24.2,-21.8,-327.4)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(-10.8,155.4,-5.0)", "err": "(-14.2,3.5,-5.0)", "err_mag": 15.5 },
-    "nose_mm": { "val": "(179.6,-17.2)", "err": "43.7 mm", "err_mag": 43.7 },
-    "gaze_mm": { "val": "(3.7,-81.3)", "err": "157.6 mm", "err_mag": 157.6 }
+    "gaze_mm": "(3.7,13.0)",
+    "head_pos_mm": "(-24.2,-21.8,-327.4)",
+    "head_rot_deg": "(-10.8,155.4,-5.0)",
+    "nose_mm": "(179.6,77.1)"
   },
   "self_nosetop_eyesdown.jpg": {
-    "head_pos_mm": { "val": "(21.5,32.2,-365.5)", "err": "N/A", "err_mag": 0.0 },
-    "head_rot_deg": { "val": "(12.2,179.6,1.5)", "err": "(15.0,-3.7,1.5)", "err_mag": 15.5 },
-    "nose_mm": { "val": "(-17.0,-205.2)", "err": "63.3 mm", "err_mag": 63.3 },
-    "gaze_mm": { "val": "(-172.7,-157.8)", "err": "265.8 mm", "err_mag": 265.8 }
+    "gaze_mm": "(-172.7,-63.5)",
+    "head_pos_mm": "(21.5,32.2,-365.5)",
+    "head_rot_deg": "(12.2,179.6,1.5)",
+    "nose_mm": "(-17.0,-110.9)"
+  },
+  "self_right_right.jpg": {
+    "gaze_mm": "(108.3,83.4)",
+    "head_pos_mm": "(-27.0,-14.2,-348.7)",
+    "head_rot_deg": "(-16.4,155.9,-0.5)",
+    "nose_mm": "(183.8,125.4)"
+  },
+  "self_roll_left.jpg": {
+    "gaze_mm": "(106.8,-46.8)",
+    "head_pos_mm": "(-4.0,-7.7,-386.3)",
+    "head_rot_deg": "(-0.6,-177.3,47.2)",
+    "nose_mm": "(-11.4,-2.9)"
+  },
+  "self_roll_right.jpg": {
+    "gaze_mm": "(-99.5,-35.1)",
+    "head_pos_mm": "(53.6,-15.0,-362.6)",
+    "head_rot_deg": "(-8.1,164.9,-49.8)",
+    "nose_mm": "(50.1,-25.1)"
+  },
+  "self_top_top.jpg": {
+    "gaze_mm": "(-44.3,-69.3)",
+    "head_pos_mm": "(16.7,7.8,-365.1)",
+    "head_rot_deg": "(0.3,178.4,2.0)",
+    "nose_mm": "(-6.2,-9.2)"
+  },
+  "self_yaw_left_roll_left.jpg": {
+    "gaze_mm": "(-146.1,138.0)",
+    "head_pos_mm": "(96.4,-30.0,-416.7)",
+    "head_rot_deg": "(-9.0,-153.5,-26.8)",
+    "nose_mm": "(-248.8,189.6)"
+  },
+  "self_yaw_right_roll_left.jpg": {
+    "gaze_mm": "(-86.3,11.3)",
+    "head_pos_mm": "(9.4,25.7,-411.3)",
+    "head_rot_deg": "(-6.7,151.2,-38.2)",
+    "nose_mm": "(202.0,-122.3)"
   }
 }

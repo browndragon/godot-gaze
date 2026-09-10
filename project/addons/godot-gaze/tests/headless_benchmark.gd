@@ -29,51 +29,101 @@ const CAM_GEOM_1024 := {
 	"res": Vector2i(1024, 682),
 	"hfov_deg": 65.0
 }
+const CAM_GEOM_1920 := {
+	"res": Vector2i(1920, 1080),
+	"hfov_deg": 65.0
+}
 
 const TARGET_CENTER := {
-	"relative_to": Vector2(0.0, -50.0),
+	"relative_to": Vector2(0.0, 0.0),
 	"nose": Vector2(0.0, 0.0),
 	"eye": Vector2(0.0, 0.0),
 }
 const TARGET_LEFT_LEFT := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(-150.75, 0.0),
-	"eye": Vector2(-150.75, 0.0),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(-138.7, 0.0),
+	"eye": Vector2(-138.7, 0.0),
 }
 const TARGET_RIGHT_RIGHT := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(150.75, 0.0),
-	"eye": Vector2(150.75, 0.0),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(138.7, 0.0),
+	"eye": Vector2(138.7, 0.0),
 }
 const TARGET_TOP_TOP := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(0.0, -94.25),
-	"eye": Vector2(0.0, -94.25),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, -86.7),
+	"eye": Vector2(0.0, -86.7),
 }
 const TARGET_DOWN_DOWN := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(0.0, 94.25),
-	"eye": Vector2(0.0, 94.25),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, 86.7),
+	"eye": Vector2(0.0, 86.7),
 }
 const TARGET_NOSEDOWN_EYESUP := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(0.0, 94.25),
-	"eye": Vector2(0.0, -94.25),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, 86.7),
+	"eye": Vector2(0.0, -86.7),
 }
 const TARGET_NOSELEFT_EYESRIGHT := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(-150.75, 0.0),
-	"eye": Vector2(150.75, 0.0),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(-138.7, 0.0),
+	"eye": Vector2(138.7, 0.0),
 }
 const TARGET_NOSERIGHT_EYESLEFT := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(150.75, 0.0),
-	"eye": Vector2(-150.75, 0.0),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(138.7, 0.0),
+	"eye": Vector2(-138.7, 0.0),
 }
 const TARGET_NOSETOP_EYESDOWN := {
-	"relative_to": Vector2(0.0, -50.0),
-	"nose": Vector2(0.0, -94.25),
-	"eye": Vector2(0.0, 94.25),
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, -86.7),
+	"eye": Vector2(0.0, 86.7),
+}
+
+const TARGET_LANDSCAPE_CENTER := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, 0.0),
+	"eye": Vector2(0.0, 0.0),
+}
+const TARGET_LANDSCAPE_LEFT_LEFT := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(-86.7, 0.0),
+	"eye": Vector2(-86.7, 0.0),
+}
+const TARGET_LANDSCAPE_RIGHT_RIGHT := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(86.7, 0.0),
+	"eye": Vector2(86.7, 0.0),
+}
+const TARGET_LANDSCAPE_TOP_TOP := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, -138.7),
+	"eye": Vector2(0.0, -138.7),
+}
+const TARGET_LANDSCAPE_DOWN_DOWN := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, 138.7),
+	"eye": Vector2(0.0, 138.7),
+}
+const TARGET_LANDSCAPE_NOSEDOWN_EYESUP := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, 138.7),
+	"eye": Vector2(0.0, -138.7),
+}
+const TARGET_LANDSCAPE_NOSELEFT_EYESRIGHT := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(-86.7, 0.0),
+	"eye": Vector2(86.7, 0.0),
+}
+const TARGET_LANDSCAPE_NOSERIGHT_EYESLEFT := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(86.7, 0.0),
+	"eye": Vector2(-86.7, 0.0),
+}
+const TARGET_LANDSCAPE_NOSETOP_EYESDOWN := {
+	"relative_to": Vector2(0.0, 0.0),
+	"nose": Vector2(0.0, -138.7),
+	"eye": Vector2(0.0, 138.7),
 }
 
 const FIXTURE_METADATA: Dictionary = {
@@ -87,16 +137,25 @@ const FIXTURE_METADATA: Dictionary = {
 	"self_noseleft_eyesright.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSELEFT_EYESRIGHT, "is_eye_test": false},
 	"self_noseright_eyesleft.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSERIGHT_EYESLEFT, "is_eye_test": false},
 	"self_nosetop_eyesdown.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_NOSETOP_EYESDOWN, "is_eye_test": false},
-	"self_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_CENTER, "is_eye_test": false},
-	"self_roll_right.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_CENTER, "is_eye_test": false},
-	"self_yaw_left_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_LEFT_LEFT, "is_eye_test": false},
-	"self_yaw_right_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_RIGHT_RIGHT, "is_eye_test": false},
+	"self_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": 25.0, "target": TARGET_CENTER, "is_eye_test": false},
+	"self_roll_right.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_CENTER, "is_eye_test": false},
+	"self_yaw_left_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_LEFT_LEFT, "is_eye_test": false},
+	"self_yaw_right_roll_left.jpg": {"cam_geom": CAM_GEOM_1024, "roll_hint_deg": -25.0, "target": TARGET_RIGHT_RIGHT, "is_eye_test": false},
 	"eyes_both_open.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
 	"eyes_both_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
 	"eyes_anatomical_left_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
 	"eyes_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
 	"eyes_tilted_anatomical_right_wink.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
 	"eyes_anatomical_left_obscured.jpg": {"cam_geom": CAM_GEOM_1440, "roll_hint_deg": 0.0, "target": TARGET_CENTER, "is_eye_test": true},
+	"landscape_center.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_CENTER, "is_eye_test": false},
+	"landscape_left_left.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_LEFT_LEFT, "is_eye_test": false},
+	"landscape_right_right.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_RIGHT_RIGHT, "is_eye_test": false},
+	"landscape_top_top.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_TOP_TOP, "is_eye_test": false},
+	"landscape_down_down.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_DOWN_DOWN, "is_eye_test": false},
+	"landscape_nosedown_eyesup.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_NOSEDOWN_EYESUP, "is_eye_test": false},
+	"landscape_noseleft_eyesright.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_NOSELEFT_EYESRIGHT, "is_eye_test": false},
+	"landscape_noseright_eyesleft.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_NOSERIGHT_EYESLEFT, "is_eye_test": false},
+	"landscape_nosetop_eyesdown.jpg": {"cam_geom": CAM_GEOM_1920, "sensor_orientation_deg": -90.0, "screen_pt": Vector2(982.0, 1512.0), "screen_mm": Vector2(188.5, 301.5), "camera_offset_mm": Vector3(94.25, 0.0, 0.0), "target": TARGET_LANDSCAPE_NOSETOP_EYESDOWN, "is_eye_test": false},
 }
 
 func _init():
@@ -117,16 +176,16 @@ func format_vec2(v: Vector2) -> String:
 func format_vec3(v: Vector3) -> String:
 	return "(%.1f,%.1f,%.1f)" % [v.x, v.y, v.z]
 
-func px_to_screen_mm(px: Vector2) -> Vector2:
+func px_to_screen_mm(px: Vector2, scr_pt: Vector2, scr_mm: Vector2) -> Vector2:
 	if px.x == INF or px.y == INF or px.x <= -9000.0 or px.y <= -9000.0:
 		return Vector2(-9999.0, -9999.0)
-	var x_mm = (px.x - SCREEN_WIDTH_PT * 0.5) * (SCREEN_WIDTH_MM / SCREEN_WIDTH_PT)
-	var y_mm = (px.y - SCREEN_HEIGHT_PT * 0.5) * (SCREEN_HEIGHT_MM / SCREEN_HEIGHT_PT)
+	var x_mm = (px.x - scr_pt.x * 0.5) * (scr_mm.x / scr_pt.x)
+	var y_mm = (px.y - scr_pt.y * 0.5) * (scr_mm.y / scr_pt.y)
 	return Vector2(x_mm, y_mm)
 
-func mm_to_screen_pt(pos_mm_from_center: Vector2) -> Vector2:
-	var x_pt = (pos_mm_from_center.x * (SCREEN_WIDTH_PT / SCREEN_WIDTH_MM)) + (SCREEN_WIDTH_PT * 0.5)
-	var y_pt = (pos_mm_from_center.y * (SCREEN_HEIGHT_PT / SCREEN_HEIGHT_MM)) + (SCREEN_HEIGHT_PT * 0.5)
+func mm_to_screen_pt(pos_mm_from_center: Vector2, scr_pt: Vector2, scr_mm: Vector2) -> Vector2:
+	var x_pt = (pos_mm_from_center.x * (scr_pt.x / scr_mm.x)) + (scr_pt.x * 0.5)
+	var y_pt = (pos_mm_from_center.y * (scr_pt.y / scr_mm.y)) + (scr_pt.y * 0.5)
 	return Vector2(x_pt, y_pt)
 
 func project_cam_3d_to_img_2d(p3d: Vector3, img_w: float, img_h: float, focal: float) -> Vector2:
@@ -217,6 +276,7 @@ func run_benchmark():
 	]
 
 	var any_metric_regressed = false
+	var any_metric_improved = false
 	var current_results_json: Dictionary = {}
 	var html_table_rows: Array[Dictionary] = []
 	var gallery_cards: Array[Dictionary] = []
@@ -224,6 +284,11 @@ func run_benchmark():
 	var total_fixtures_count = 0
 	var passed_fixtures_count = 0
 	var regressed_fixtures_count = 0
+	var identical_count = 0
+	var similar_count = 0
+	var change_better_count = 0
+	var change_worse_count = 0
+	var no_face_count = 0
 
 	for img_file in FIXTURE_METADATA.keys():
 		total_fixtures_count += 1
@@ -242,12 +307,31 @@ func run_benchmark():
 			continue
 
 		var cam_geom = meta.get("cam_geom", CAM_GEOM_1440)
-		var expected_w = cam_geom.res.x
-		var expected_h = cam_geom.res.y
-		assert(img.get_width() == expected_w and img.get_height() == expected_h, "Fixture %s size mismatch" % img_file)
-		var frame_focal = float(expected_w) / (2.0 * tan(deg_to_rad(cam_geom.hfov_deg) * 0.5))
-		vs.camera_set_resolution(cam_rid, expected_w, expected_h)
+		var sensor_rot_deg = meta.get("sensor_orientation_deg", 0.0)
+
+		# Sensor orientation compensation: rotate sideways camera captures
+		if sensor_rot_deg == -90.0:
+			img.rotate_90(COUNTERCLOCKWISE)
+		elif sensor_rot_deg == 90.0:
+			img.rotate_90(CLOCKWISE)
+		elif sensor_rot_deg == 180.0:
+			img.rotate_180()
+
+		var cur_w = img.get_width()
+		var cur_h = img.get_height()
+		var frame_focal = float(cur_w) / (2.0 * tan(deg_to_rad(cam_geom.hfov_deg) * 0.5))
+		vs.camera_set_resolution(cam_rid, cur_w, cur_h)
 		vs.camera_set_focal_length(cam_rid, frame_focal)
+
+		var cur_screen_pt = meta.get("screen_pt", Vector2(SCREEN_WIDTH_PT, SCREEN_HEIGHT_PT))
+		var cur_screen_mm = meta.get("screen_mm", Vector2(SCREEN_WIDTH_MM, SCREEN_HEIGHT_MM))
+		var cur_cam_offset_mm = meta.get("camera_offset_mm", Vector3(0.0, 0.0, 0.0))
+
+		profile.set_logical_size_px(Vector2i(int(cur_screen_pt.x), int(cur_screen_pt.y)))
+		profile.set_physical_size_mm(cur_screen_mm)
+		profile.set_camera_offset_mm(cur_cam_offset_mm)
+		profile.set_camera_roll_deg(0.0)
+		gs.set_device_profile(profile)
 
 		gs.reset()
 		if meta.has("roll_hint_deg"):
@@ -280,31 +364,16 @@ func run_benchmark():
 		if gaze_dir == Vector3.ZERO:
 			gaze_dir = head_fwd
 
-		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd)
-		var gaze_proj_px = gs.get_projected_gaze(false)
-		var nose_proj_mm = px_to_screen_mm(nose_proj_px)
-		var gaze_proj_mm = gs.get_projected_gaze_mm(false)
+		var target_spec = meta.get("target", TARGET_CENTER)
+		var rel_offset = target_spec.get("relative_to", Vector2(0.0, 0.0))
+		var nose_target = rel_offset + target_spec.get("nose", Vector2(0.0, 0.0))
+		var gaze_target = rel_offset + target_spec.get("eye", Vector2(0.0, 0.0))
+		var rot_target_deg = target_spec.get("head_rot_deg", null)
 
-		var target_info = meta.get("target", TARGET_CENTER)
-		var rel_offset = target_info.get("relative_to", Vector2(0.0, -50.0))
-		var nose_target = rel_offset + target_info.get("nose", Vector2(0.0, 0.0))
-		var gaze_target = rel_offset + target_info.get("eye", Vector2(0.0, 0.0))
-
-		# Compute rotation target error
-		var P_cam_target = Vector3(nose_target.x, -(nose_target.y + 94.25), 0.0)
-		var diff_vec = P_cam_target - head_trans
-		var rot_err_str = "N/A"
-		var rot_err_mag = 0.0
-		if diff_vec.length() > 0.0 and face_detected:
-			var pitch_exp = rad_to_deg(atan2(-diff_vec.y, sqrt(diff_vec.x * diff_vec.x + diff_vec.z * diff_vec.z)))
-			var yaw_exp = rad_to_deg(atan2(diff_vec.x, -diff_vec.z))
-			var yaw_diff = head_rot.y - yaw_exp
-			while yaw_diff > 180.0: yaw_diff -= 360.0
-			while yaw_diff < -180.0: yaw_diff += 360.0
-			var pitch_diff = head_rot.x - pitch_exp
-			var roll_diff = head_rot.z
-			rot_err_str = format_vec3(Vector3(pitch_diff, yaw_diff, roll_diff))
-			rot_err_mag = sqrt(pitch_diff * pitch_diff + yaw_diff * yaw_diff + roll_diff * roll_diff)
+		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd) if face_detected else Vector2(-9999.0, -9999.0)
+		var gaze_proj_px = gs.get_projected_gaze(false) if face_detected else Vector2(-9999.0, -9999.0)
+		var nose_proj_mm = px_to_screen_mm(nose_proj_px, cur_screen_pt, cur_screen_mm) if face_detected else Vector2(-9999.0, -9999.0)
+		var gaze_proj_mm = gs.get_projected_gaze_mm(false) if face_detected else Vector2(-9999.0, -9999.0)
 
 		var nose_diff = nose_proj_mm - nose_target
 		var nose_err_mag = sqrt(nose_diff.x * nose_diff.x + nose_diff.y * nose_diff.y) if is_valid_pt(nose_proj_mm) else 9999.0
@@ -312,7 +381,29 @@ func run_benchmark():
 		var gaze_diff = gaze_proj_mm - gaze_target
 		var gaze_err_mag = sqrt(gaze_diff.x * gaze_diff.x + gaze_diff.y * gaze_diff.y) if is_valid_pt(gaze_proj_mm) else 9999.0
 
+		var head_err_deg = Vector3.ZERO
+		var rot_err_mag = 0.0
+		var rot_err_str = "N/A"
+		if rot_target_deg != null and face_detected:
+			head_err_deg = head_rot - rot_target_deg
+			rot_err_mag = sqrt(head_err_deg.x * head_err_deg.x + head_err_deg.y * head_err_deg.y + head_err_deg.z * head_err_deg.z)
+			rot_err_str = "%.1f deg" % rot_err_mag
+		elif face_detected:
+			var P_cam_target = Vector3(nose_target.x, -(nose_target.y + (cur_screen_mm.y * 0.5)), 0.0)
+			var diff_vec = P_cam_target - head_trans
+			if diff_vec.length() > 0.0:
+				var pitch_exp = rad_to_deg(atan2(-diff_vec.y, sqrt(diff_vec.x * diff_vec.x + diff_vec.z * diff_vec.z)))
+				var yaw_exp = rad_to_deg(atan2(diff_vec.x, -diff_vec.z))
+				var yaw_diff = head_rot.y - yaw_exp
+				while yaw_diff > 180.0: yaw_diff -= 360.0
+				while yaw_diff < -180.0: yaw_diff += 360.0
+				var pitch_diff = head_rot.x - pitch_exp
+				rot_err_mag = sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff)
+				rot_err_str = "%.1f deg" % rot_err_mag
+
 		var fixture_regressed = false
+		var fixture_improved = false
+		var fixture_similar = false
 		var fixture_record: Dictionary = {}
 
 		var props = [
@@ -324,32 +415,114 @@ func run_benchmark():
 
 		var golden_fixture = golden_data.get(img_file, {})
 
+		var card_metrics: Array[Dictionary] = []
 		for p in props:
 			var prop_key = p["prop"]
-			fixture_record[prop_key] = {"val": p["val"], "err": p["err_str"], "err_mag": p["err_mag"]}
+			fixture_record[prop_key] = p["val"]
 
+			var prev_val_str = "N/A"
 			var prev_err_str = "N/A"
 			var delta_str = "0.0 mm"
-			var status_str = "OK"
+			var status_str = "IDENTICAL"
 
 			if golden_fixture.has(prop_key):
 				var prev_entry = golden_fixture[prop_key]
-				prev_err_str = prev_entry.get("err", "N/A")
-				var prev_mag = prev_entry.get("err_mag", 0.0)
+				if prev_entry is Dictionary:
+					prev_val_str = prev_entry.get("val", "N/A")
+				elif prev_entry is String:
+					prev_val_str = prev_entry
+				else:
+					prev_val_str = str(prev_entry)
 
-				if prev_mag > 0.0 and p["err_mag"] > 0.0 and not meta.get("is_eye_test", false):
+				var prev_mag = 0.0
+				var has_prev_err = false
+
+				if prev_val_str != "N/A" and prev_val_str != "NO_FACE":
+					if prop_key == "nose_mm":
+						var v = parse_vector(prev_val_str)
+						var pt = Vector2(v.x, v.y)
+						if is_valid_pt(pt):
+							var diff = pt - nose_target
+							prev_mag = diff.length()
+							prev_err_str = "%.1f mm" % prev_mag
+							has_prev_err = true
+					elif prop_key == "gaze_mm":
+						var v = parse_vector(prev_val_str)
+						var pt = Vector2(v.x, v.y)
+						if is_valid_pt(pt):
+							var diff = pt - gaze_target
+							prev_mag = diff.length()
+							prev_err_str = "%.1f mm" % prev_mag
+							has_prev_err = true
+					elif prop_key == "head_rot_deg":
+						var prev_rot = parse_vector(prev_val_str)
+						if rot_target_deg != null:
+							var diff = prev_rot - rot_target_deg
+							prev_mag = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z)
+							prev_err_str = "%.1f deg" % prev_mag
+							has_prev_err = true
+						else:
+							var prev_pos_entry = golden_fixture.get("head_pos_mm", null)
+							var prev_pos_str = ""
+							if prev_pos_entry is Dictionary:
+								prev_pos_str = prev_pos_entry.get("val", "")
+							elif prev_pos_entry is String:
+								prev_pos_str = prev_pos_entry
+							if prev_pos_str != "" and prev_pos_str != "NO_FACE":
+								var prev_pos = parse_vector(prev_pos_str)
+								var P_cam = Vector3(nose_target.x, -(nose_target.y + (cur_screen_mm.y * 0.5)), 0.0)
+								var diff_vec = P_cam - prev_pos
+								if diff_vec.length() > 0.0:
+									var pitch_exp = rad_to_deg(atan2(-diff_vec.y, sqrt(diff_vec.x * diff_vec.x + diff_vec.z * diff_vec.z)))
+									var yaw_exp = rad_to_deg(atan2(diff_vec.x, -diff_vec.z))
+									var yaw_diff = prev_rot.y - yaw_exp
+									while yaw_diff > 180.0: yaw_diff -= 360.0
+									while yaw_diff < -180.0: yaw_diff += 360.0
+									var pitch_diff = prev_rot.x - pitch_exp
+									prev_mag = sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff)
+									prev_err_str = "%.1f deg" % prev_mag
+									has_prev_err = true
+
+				if has_prev_err and p["err_mag"] > 0.0 and not meta.get("is_eye_test", false):
 					var delta = p["err_mag"] - prev_mag
+					var unit = "deg" if prop_key == "head_rot_deg" else "mm"
 					if delta > 15.0:
-						delta_str = "+%.1f mm" % delta
-						status_str = "REGRESSION"
+						delta_str = "+%.1f %s" % [delta, unit]
+						status_str = "CHANGE_WORSE"
 						any_metric_regressed = true
 						fixture_regressed = true
-						printerr("REGRESSION: %s %s error regressed from %s to %s (delta: %s)" % [img_file, prop_key, prev_err_str, p["err_str"], delta_str])
+						printerr("CHANGE_WORSE (REGRESSION): %s %s error regressed from %s to %s (delta: %s)" % [img_file, prop_key, prev_err_str, p["err_str"], delta_str])
 					elif delta < -15.0:
-						delta_str = "%.1f mm" % delta
-						status_str = "IMPROVEMENT"
+						delta_str = "%.1f %s" % [delta, unit]
+						status_str = "CHANGE_BETTER"
+						any_metric_improved = true
+						fixture_improved = true
+						print("CHANGE_BETTER (IMPROVEMENT): %s %s error improved from %s to %s (delta: %s)" % [img_file, prop_key, prev_err_str, p["err_str"], delta_str])
+					elif abs(delta) > 0.1:
+						delta_str = ("+%.1f %s" % [delta, unit]) if delta > 0 else ("%.1f %s" % [delta, unit])
+						status_str = "SIMILAR"
+						fixture_similar = true
 					else:
-						delta_str = "0.0 mm"
+						delta_str = "0.0 %s" % unit
+						status_str = "IDENTICAL"
+				elif prev_val_str == p["val"]:
+					status_str = "IDENTICAL"
+				else:
+					status_str = "SIMILAR"
+					fixture_similar = true
+			else:
+				status_str = "SIMILAR"
+				fixture_similar = true
+
+			card_metrics.append({
+				"name": prop_key,
+				"val": p["val"],
+				"err": p["err_str"],
+				"prev_val": prev_val_str,
+				"prev_err": prev_err_str,
+				"delta": delta_str,
+				"status": status_str
+			})
 
 			report_lines.append("| %s | %s | %s | %s | %s | %s | %s |" % [
 				img_file, prop_key, p["val"], p["err_str"], prev_err_str, delta_str, status_str
@@ -357,10 +530,34 @@ func run_benchmark():
 
 		current_results_json[img_file] = fixture_record
 
-		if fixture_regressed:
-			regressed_fixtures_count += 1
+		var card_status = "IDENTICAL"
+		var chip_class = "chip-same"
+		var chip_label = "IDENTICAL"
+		if not face_detected:
+			card_status = "NO_FACE"
+			chip_class = "chip-noface"
+			chip_label = "NO_FACE"
+			no_face_count += 1
+		elif fixture_regressed:
+			card_status = "CHANGE_WORSE"
+			chip_class = "chip-worse"
+			chip_label = "CHANGE_WORSE"
+			change_worse_count += 1
+		elif fixture_improved:
+			card_status = "CHANGE_BETTER"
+			chip_class = "chip-better"
+			chip_label = "CHANGE_BETTER"
+			change_better_count += 1
+		elif fixture_similar:
+			card_status = "SIMILAR"
+			chip_class = "chip-diff"
+			chip_label = "SIMILAR"
+			similar_count += 1
 		else:
-			passed_fixtures_count += 1
+			card_status = "IDENTICAL"
+			chip_class = "chip-same"
+			chip_label = "IDENTICAL"
+			identical_count += 1
 
 		# Export Standalone Eye Crops
 		var base_fn = img_file.get_basename()
@@ -375,31 +572,45 @@ func run_benchmark():
 			right_crop.save_png(rc_png)
 			right_eye_rel_path = "benchmark_overlays/" + base_fn + "_right_eye.png"
 
+		# Extract Previous Golden Gaze & Nose points
+		var prev_nose_entry = golden_fixture.get("nose_mm", "")
+		var prev_gaze_entry = golden_fixture.get("gaze_mm", "")
+		var prev_nose_mm_str = prev_nose_entry.get("val", "") if prev_nose_entry is Dictionary else str(prev_nose_entry)
+		var prev_gaze_mm_str = prev_gaze_entry.get("val", "") if prev_gaze_entry is Dictionary else str(prev_gaze_entry)
+		var prev_nose_vec = parse_vector(prev_nose_mm_str)
+		var prev_gaze_vec = parse_vector(prev_gaze_mm_str)
+		var prev_nose_pt = mm_to_screen_pt(Vector2(prev_nose_vec.x, prev_nose_vec.y), cur_screen_pt, cur_screen_mm) if prev_nose_mm_str != "" and prev_nose_mm_str != "NO_FACE" else Vector2(-9999.0, -9999.0)
+		var prev_gaze_pt = mm_to_screen_pt(Vector2(prev_gaze_vec.x, prev_gaze_vec.y), cur_screen_pt, cur_screen_mm) if prev_gaze_mm_str != "" and prev_gaze_mm_str != "NO_FACE" else Vector2(-9999.0, -9999.0)
+
+		var target_nose_pt = mm_to_screen_pt(nose_target, cur_screen_pt, cur_screen_mm)
+		var target_eye_pt = mm_to_screen_pt(gaze_target, cur_screen_pt, cur_screen_mm)
+
 		# Render Diagnostic Overlays
 		var diag_overlay_rel_path = "benchmark_overlays/" + base_fn + "_diagnostic.png"
 		var left_panel = render_camera_panel(img, head_trans, head_xform, eye_orig, gaze_dir, lm_pts, face_detected, meta.get("roll_hint_deg", 0.0), frame_focal, left_crop, right_crop)
-		var right_panel = render_display_panel(img, img_file, mm_to_screen_pt(nose_target), mm_to_screen_pt(gaze_target), nose_proj_px, gaze_proj_px)
+		var right_panel = render_display_panel(
+			img, img_file, cur_screen_pt, cur_screen_mm, cur_cam_offset_mm,
+			nose_target, gaze_target,
+			target_nose_pt, target_eye_pt,
+			nose_proj_px, gaze_proj_px,
+			prev_nose_pt, prev_gaze_pt,
+			nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0,
+			gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0
+		)
 		var composite = create_side_by_side_composite(left_panel, right_panel, img_file)
 		composite.save_png(overlays_dir + "/" + base_fn + "_diagnostic.png")
 
-		html_table_rows.append({
-			"file": img_file,
-			"face_detected": face_detected,
-			"head_rot": format_vec3(head_rot) if face_detected else "N/A",
-			"nose_err": ("%.1f mm" % nose_err_mag) if is_valid_pt(nose_proj_mm) else "N/A",
-			"gaze_err": ("%.1f mm" % gaze_err_mag) if is_valid_pt(gaze_proj_mm) else "N/A",
-			"left_open": "%.2f" % left_open,
-			"right_open": "%.2f" % right_open,
-			"status": "REGRESSED" if fixture_regressed else ("OK" if face_detected else "NO_FACE"),
-			"overlay_rel": diag_overlay_rel_path
-		})
-
 		gallery_cards.append({
 			"file": img_file,
-			"status": "REGRESSED" if fixture_regressed else ("OK" if face_detected else "NO_FACE"),
+			"anchor_id": img_file.replace(".", "_"),
+			"status": card_status,
+			"chip_class": chip_class,
+			"chip_label": chip_label,
 			"roll_hint": meta.get("roll_hint_deg", 0.0),
+			"sensor_orient": meta.get("sensor_orientation_deg", 0.0),
 			"left_open": left_open,
 			"right_open": right_open,
+			"metrics": card_metrics,
 			"nose_err": nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0,
 			"gaze_err": gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0,
 			"overlay_rel": diag_overlay_rel_path,
@@ -422,9 +633,15 @@ func run_benchmark():
 		parent_file.store_string(full_report)
 		parent_file.close()
 
+	var has_significant_change = any_metric_regressed or any_metric_improved
+
 	# Generate HTML Dashboard Report
 	var html_report_path = global_artifacts_dir + "/benchmark_report.html"
-	generate_html_report(html_report_path, html_table_rows, gallery_cards, total_fixtures_count, passed_fixtures_count, regressed_fixtures_count, any_metric_regressed)
+	generate_html_report(
+		html_report_path, gallery_cards, total_fixtures_count,
+		identical_count, similar_count, change_better_count, change_worse_count, no_face_count,
+		has_significant_change
+	)
 
 	print("\n" + full_report)
 	print("Benchmark candidate JSON written to: ", current_json_path)
@@ -437,14 +654,15 @@ func run_benchmark():
 	# Assert that HTML report and overlays were successfully generated
 	assert(FileAccess.file_exists(html_report_path), "HTML report was not generated!")
 
-	if any_metric_regressed:
+	if has_significant_change:
 		printerr("\n==========================================================")
-		printerr("GAZE BENCHMARK FAILED: METRICS REGRESSED FROM GOLDENFILE!")
+		printerr("GAZE BENCHMARK: SIGNIFICANT METRIC CHANGES DETECTED!")
+		printerr("CHANGE_WORSE: %d | CHANGE_BETTER: %d | SIMILAR: %d | IDENTICAL: %d" % [change_worse_count, change_better_count, similar_count, identical_count])
 		printerr("Visual Report:    ", html_report_path)
 		printerr("Candidate Golden: ", current_json_path)
 		printerr("")
 		printerr("NOTE: Golden baselines must NOT be updated without human review.")
-		printerr("If regressions are verified and approved by project leadership:")
+		printerr("If changes are verified and approved by project leadership:")
 		printerr("Run: python3 scripts/promote_benchmark_golden.py")
 		printerr("==========================================================\n")
 		quit(1)
@@ -601,58 +819,128 @@ func draw_oriented_face_bbox(panel: Image, lm_pts: PackedVector2Array, roll_deg:
 		draw_thick_line(panel, int(p0.x), int(p0.y), int(p1.x), int(p1.y), col, 2)
 
 func render_display_panel(
-	img: Image, _img_name: String, target_nose_pt: Vector2, target_eye_pt: Vector2,
-	nose_rep: Vector2, eye_rep: Vector2
+	img: Image, _img_name: String,
+	screen_pt_size: Vector2, _screen_mm_size: Vector2, cam_offset_mm: Vector3,
+	_target_nose_mm: Vector2, _target_eye_mm: Vector2,
+	target_nose_pt: Vector2, target_eye_pt: Vector2,
+	nose_rep: Vector2, eye_rep: Vector2,
+	prev_nose_pt: Vector2, prev_gaze_pt: Vector2,
+	nose_err_mm: float, gaze_err_mm: float
 ) -> Image:
-	var margin_x = 160
-	var margin_y = 120
-	var canvas_w = int(SCREEN_WIDTH_PT) + margin_x * 2
-	var canvas_h = int(SCREEN_HEIGHT_PT) + margin_y * 2
+	var disp_w = screen_pt_size.x
+	var disp_h = screen_pt_size.y
+	var disp_center_pt = Vector2(disp_w * 0.5, disp_h * 0.5)
 
+	# Physical Camera Notch location on display perimeter
+	var cam_notch_pt = Vector2(disp_w * 0.5, 0.0) # Top bezel default
+	if cam_offset_mm.x > 30.0:
+		cam_notch_pt = Vector2(disp_w, disp_h * 0.5) # Right bezel
+	elif cam_offset_mm.x < -30.0:
+		cam_notch_pt = Vector2(0.0, disp_h * 0.5) # Left bezel
+
+	# Window inside display
+	var win_w = disp_w * 0.5
+	var win_h = disp_h * 0.5
+	var win_pos = Vector2(disp_w * 0.25, disp_h * 0.25)
+	if disp_w < disp_h: # Portrait orientation
+		win_w = disp_w * 0.75
+		win_h = disp_h * 0.38
+		win_pos = Vector2(disp_w * 0.125, disp_h * 0.31)
+
+	# Dynamic world bounding box
+	var min_x = 0.0
+	var max_x = disp_w
+	var min_y = 0.0
+	var max_y = disp_h
+
+	var pts_to_check = [cam_notch_pt, disp_center_pt, target_eye_pt, target_nose_pt, eye_rep, nose_rep, prev_gaze_pt, prev_nose_pt]
+	for p in pts_to_check:
+		if is_valid_pt(p):
+			min_x = min(min_x, p.x)
+			max_x = max(max_x, p.x)
+			min_y = min(min_y, p.y)
+			max_y = max(max_y, p.y)
+
+	var pad_x = max(260.0, (max_x - min_x) * 0.25)
+	var pad_y = max(220.0, (max_y - min_y) * 0.25)
+	min_x -= pad_x
+	max_x += pad_x
+	min_y -= pad_y
+	max_y += pad_y
+
+	var world_w = max_x - min_x
+	var world_h = max_y - min_y
+
+	var canvas_w = 1600
+	var canvas_h = 1200
 	var canvas = Image.create(canvas_w, canvas_h, false, Image.FORMAT_RGBA8)
-	canvas.fill(Color(0.08, 0.08, 0.10, 1.0))
+	canvas.fill(Color(0.07, 0.07, 0.09, 1.0))
 
-	var screen_x = margin_x
-	var screen_y = margin_y
-	draw_filled_rect(canvas, screen_x, screen_y, int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT), Color(0.14, 0.14, 0.17, 1.0))
-	draw_rect(canvas, screen_x, screen_y, int(SCREEN_WIDTH_PT), int(SCREEN_HEIGHT_PT), Color(0.5, 0.5, 0.55, 1.0), 3)
+	var scale = min(float(canvas_w) / world_w, float(canvas_h) / world_h) * 0.94
+	var offset_x = (canvas_w - world_w * scale) * 0.5 - min_x * scale
+	var offset_y = (canvas_h - world_h * scale) * 0.5 - min_y * scale
 
-	var cam_px_x = screen_x + int(SCREEN_WIDTH_PT * 0.5)
-	var cam_px_y = screen_y + 4
-	draw_filled_rect(canvas, cam_px_x - 30, screen_y, 60, 12, Color(0.05, 0.05, 0.07, 1.0))
-	draw_circle(canvas, cam_px_x, cam_px_y, 4, Color(0.1, 0.8, 1.0, 0.8))
+	var to_canvas = func(p: Vector2) -> Vector2i:
+		return Vector2i(int(p.x * scale + offset_x), int(p.y * scale + offset_y))
 
-	var win_w = 756
-	var win_h = 491
-	var win_x = screen_x + int(WIN_POS_X_PT)
-	var win_y = screen_y + int(WIN_POS_Y_PT)
+	# 1. Screen Bezel & Display Area
+	var s0 = to_canvas.call(Vector2(0, 0))
+	var s1 = to_canvas.call(Vector2(disp_w, disp_h))
+	var sw = s1.x - s0.x
+	var sh = s1.y - s0.y
 
-	var titlebar_h = 28
-	draw_filled_rect(canvas, win_x, win_y, win_w, win_h, Color(0.10, 0.10, 0.12, 1.0))
-	draw_rect(canvas, win_x, win_y, win_w, win_h, Color(0.35, 0.55, 0.85, 1.0), 2)
-	draw_filled_rect(canvas, win_x, win_y, win_w, titlebar_h, Color(0.18, 0.18, 0.22, 1.0))
+	# Outer device bezel
+	draw_filled_rect(canvas, s0.x - 12, s0.y - 12, sw + 24, sh + 24, Color(0.12, 0.12, 0.15, 1.0))
+	draw_rect(canvas, s0.x - 12, s0.y - 12, sw + 24, sh + 24, Color(0.35, 0.35, 0.40, 1.0), 2)
 
-	draw_circle(canvas, win_x + 16, win_y + 14, 5, Color(1.0, 0.38, 0.35, 1.0))
-	draw_circle(canvas, win_x + 32, win_y + 14, 5, Color(1.0, 0.75, 0.25, 1.0))
-	draw_circle(canvas, win_x + 48, win_y + 14, 5, Color(0.30, 0.85, 0.40, 1.0))
+	# Inner display glass
+	draw_filled_rect(canvas, s0.x, s0.y, sw, sh, Color(0.14, 0.14, 0.18, 1.0))
+	draw_rect(canvas, s0.x, s0.y, sw, sh, Color(0.45, 0.45, 0.55, 1.0), 2)
 
-	var interior_x = win_x + 2
-	var interior_y = win_y + titlebar_h + 1
-	var interior_w = win_w - 4
-	var interior_h = win_h - titlebar_h - 3
-	draw_filled_rect(canvas, interior_x, interior_y, interior_w, interior_h, Color(0.06, 0.06, 0.08, 1.0))
+	# 2. Camera Notch
+	var cn_c = to_canvas.call(cam_notch_pt)
+	if cam_offset_mm.x > 30.0: # Right bezel
+		draw_filled_rect(canvas, s1.x, cn_c.y - 20, 10, 40, Color(0.04, 0.04, 0.06, 1.0))
+		draw_circle(canvas, s1.x + 5, cn_c.y, 4, Color(0.1, 0.85, 1.0, 1.0))
+	elif cam_offset_mm.x < -30.0: # Left bezel
+		draw_filled_rect(canvas, s0.x - 10, cn_c.y - 20, 10, 40, Color(0.04, 0.04, 0.06, 1.0))
+		draw_circle(canvas, s0.x - 5, cn_c.y, 4, Color(0.1, 0.85, 1.0, 1.0))
+	else: # Top bezel
+		draw_filled_rect(canvas, cn_c.x - 20, s0.y - 10, 40, 10, Color(0.04, 0.04, 0.06, 1.0))
+		draw_circle(canvas, cn_c.x, s0.y - 5, 4, Color(0.1, 0.85, 1.0, 1.0))
+
+	# 3. Game Window & Mirrored Feed
+	var w0 = to_canvas.call(win_pos)
+	var w1 = to_canvas.call(win_pos + Vector2(win_w, win_h))
+	var ww = w1.x - w0.x
+	var wh = w1.y - w0.y
+	var titlebar_h = 24
+
+	draw_filled_rect(canvas, w0.x, w0.y, ww, wh, Color(0.09, 0.09, 0.11, 1.0))
+	draw_rect(canvas, w0.x, w0.y, ww, wh, Color(0.35, 0.55, 0.85, 1.0), 2)
+	draw_filled_rect(canvas, w0.x, w0.y, ww, titlebar_h, Color(0.18, 0.18, 0.22, 1.0))
+
+	draw_circle(canvas, w0.x + 12, w0.y + 12, 4, Color(1.0, 0.38, 0.35, 1.0))
+	draw_circle(canvas, w0.x + 24, w0.y + 12, 4, Color(1.0, 0.75, 0.25, 1.0))
+	draw_circle(canvas, w0.x + 36, w0.y + 12, 4, Color(0.30, 0.85, 0.40, 1.0))
+
+	var iw = ww - 4
+	var ih = wh - titlebar_h - 3
+	var ix = w0.x + 2
+	var iy = w0.y + titlebar_h + 1
+	draw_filled_rect(canvas, ix, iy, iw, ih, Color(0.05, 0.05, 0.07, 1.0))
 
 	var aspect_src = float(img.get_width()) / float(img.get_height())
-	var aspect_dst = float(interior_w) / float(interior_h)
-	var fit_w = interior_w
-	var fit_h = interior_h
+	var aspect_dst = float(iw) / float(ih)
+	var fit_w = iw
+	var fit_h = ih
 	if aspect_src > aspect_dst:
-		fit_h = int(float(interior_w) / aspect_src)
+		fit_h = int(float(iw) / aspect_src)
 	else:
-		fit_w = int(float(interior_h) * aspect_src)
+		fit_w = int(float(ih) * aspect_src)
 
-	var fit_x = interior_x + (interior_w - fit_w) / 2
-	var fit_y = interior_y + (interior_h - fit_h) / 2
+	var fit_x = ix + (iw - fit_w) / 2
+	var fit_y = iy + (ih - fit_h) / 2
 
 	var mirrored_img = img.duplicate()
 	mirrored_img.convert(Image.FORMAT_RGBA8)
@@ -661,33 +949,88 @@ func render_display_panel(
 	canvas.blit_rect(mirrored_img, Rect2i(0, 0, fit_w, fit_h), Vector2i(fit_x, fit_y))
 	draw_rect(canvas, fit_x, fit_y, fit_w, fit_h, Color(0.2, 0.5, 0.8, 0.4), 1)
 
-	var to_canvas = func(p_screen: Vector2) -> Vector2i:
-		return Vector2i(screen_x + int(p_screen.x), screen_y + int(p_screen.y))
+	# 4. Screen Center Marker
+	var sc_c = to_canvas.call(disp_center_pt)
+	draw_crosshair(canvas, sc_c.x, sc_c.y, 8, Color(0.7, 0.7, 0.8, 0.8))
+	draw_circle(canvas, sc_c.x, sc_c.y, 3, Color(0.9, 0.9, 1.0, 0.9))
 
-	# 1. Target Points
+	# 5. Target Markers: White for Nose Target, Faint for Eye Target
+	var te_c = to_canvas.call(target_eye_pt) if is_valid_pt(target_eye_pt) else Vector2i(-9999, -9999)
+	var tn_c = to_canvas.call(target_nose_pt) if is_valid_pt(target_nose_pt) else Vector2i(-9999, -9999)
+
+	# Nose Target: Distinct White Crosshair & Ring
 	if is_valid_pt(target_nose_pt):
-		var cp = to_canvas.call(target_nose_pt)
-		draw_circle(canvas, cp.x, cp.y, 8, Color.RED)
-		draw_crosshair(canvas, cp.x, cp.y, 16, Color.RED)
+		draw_circle(canvas, tn_c.x, tn_c.y, 7, Color(1.0, 1.0, 1.0, 0.9))
+		draw_crosshair(canvas, tn_c.x, tn_c.y, 14, Color.WHITE)
+		draw_bitmap_text(canvas, tn_c.x + 10, tn_c.y - 12, "NOSE TARGET", Color(1.0, 1.0, 1.0, 0.9), 1)
 
-	var targets_differ = (target_nose_pt - target_eye_pt).length() > 5.0
-	if is_valid_pt(target_eye_pt) and targets_differ:
-		var cp = to_canvas.call(target_eye_pt)
-		draw_circle(canvas, cp.x, cp.y, 8, Color(1.0, 0.65, 0.0, 1.0))
-		draw_crosshair(canvas, cp.x, cp.y, 16, Color(1.0, 0.65, 0.0, 1.0))
+	# Eye Target: Faint Mark
+	if is_valid_pt(target_eye_pt):
+		draw_circle(canvas, te_c.x, te_c.y, 5, Color(1.0, 1.0, 1.0, 0.35))
+		draw_crosshair(canvas, te_c.x, te_c.y, 10, Color(1.0, 1.0, 1.0, 0.45))
+		if (target_eye_pt - target_nose_pt).length() > 20.0:
+			draw_bitmap_text(canvas, te_c.x + 10, te_c.y + 6, "EYE TARGET", Color(0.8, 0.8, 0.8, 0.5), 1)
 
-	# 2. Reported Gaze Rays
-	if is_valid_pt(nose_rep):
-		var cp = to_canvas.call(nose_rep)
-		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.2, 1.0, 0.3, 0.6), 2)
-		draw_circle(canvas, cp.x, cp.y, 8, Color(0.2, 1.0, 0.3, 1.0))
-		draw_crosshair(canvas, cp.x, cp.y, 14, Color.WHITE)
+	# 6. Previous Golden Baselines (Desaturated Lines & Smaller Markers)
+	# Prev Eye Gaze: Center -> Prev Gaze Pt -> Target Eye Pt (Desaturated Cyan)
+	if is_valid_pt(prev_gaze_pt):
+		var pge_c = to_canvas.call(prev_gaze_pt)
+		var desat_cyan = Color(0.25, 0.55, 0.60, 0.55)
+		draw_thick_line(canvas, sc_c.x, sc_c.y, pge_c.x, pge_c.y, desat_cyan, 2)
+		if is_valid_pt(target_eye_pt):
+			draw_thick_line(canvas, pge_c.x, pge_c.y, te_c.x, te_c.y, desat_cyan, 2)
+		draw_circle(canvas, pge_c.x, pge_c.y, 4, desat_cyan)
+		draw_bitmap_text(canvas, pge_c.x + 8, pge_c.y - 12, "PREV GAZE", desat_cyan, 1)
 
+	# Prev Nose: Center -> Prev Nose Pt -> Target Nose Pt (Desaturated Green)
+	if is_valid_pt(prev_nose_pt):
+		var pnr_c = to_canvas.call(prev_nose_pt)
+		var desat_green = Color(0.30, 0.60, 0.35, 0.55)
+		draw_thick_line(canvas, sc_c.x, sc_c.y, pnr_c.x, pnr_c.y, desat_green, 2)
+		if is_valid_pt(target_nose_pt):
+			draw_thick_line(canvas, pnr_c.x, pnr_c.y, tn_c.x, tn_c.y, desat_green, 2)
+		draw_circle(canvas, pnr_c.x, pnr_c.y, 4, desat_green)
+		draw_bitmap_text(canvas, pnr_c.x + 8, pnr_c.y + 4, "PREV NOSE", desat_green, 1)
+
+	# 7. Current Eye Gaze: Center -> Current Gaze Pt -> Target Eye Pt (Cyan)
 	if is_valid_pt(eye_rep):
-		var cp = to_canvas.call(eye_rep)
-		draw_thick_line(canvas, cam_px_x, cam_px_y, cp.x, cp.y, Color(0.0, 0.95, 1.0, 0.6), 2)
-		draw_circle(canvas, cp.x, cp.y, 8, Color(0.0, 0.95, 1.0, 1.0))
-		draw_crosshair(canvas, cp.x, cp.y, 14, Color.WHITE)
+		var ge_c = to_canvas.call(eye_rep)
+		var cyan_col = Color(0.0, 0.95, 1.0, 0.90)
+		draw_thick_line(canvas, sc_c.x, sc_c.y, ge_c.x, ge_c.y, cyan_col, 3)
+		if is_valid_pt(target_eye_pt):
+			draw_thick_line(canvas, ge_c.x, ge_c.y, te_c.x, te_c.y, cyan_col, 2)
+		draw_circle(canvas, ge_c.x, ge_c.y, 8, cyan_col)
+		draw_crosshair(canvas, ge_c.x, ge_c.y, 14, Color.WHITE)
+		draw_bitmap_text(canvas, ge_c.x + 12, ge_c.y - 14, "EYE GAZE (%.1fmm)" % gaze_err_mm, cyan_col, 1)
+
+	# 8. Current Nose Gaze: Center -> Current Nose Pt -> Target Nose Pt (Green)
+	if is_valid_pt(nose_rep):
+		var nr_c = to_canvas.call(nose_rep)
+		var green_col = Color(0.15, 1.0, 0.30, 0.95)
+		draw_thick_line(canvas, sc_c.x, sc_c.y, nr_c.x, nr_c.y, green_col, 3)
+		if is_valid_pt(target_nose_pt):
+			draw_thick_line(canvas, nr_c.x, nr_c.y, tn_c.x, tn_c.y, green_col, 2)
+		draw_circle(canvas, nr_c.x, nr_c.y, 7, green_col)
+		draw_crosshair(canvas, nr_c.x, nr_c.y, 12, Color.WHITE)
+		draw_bitmap_text(canvas, nr_c.x + 10, nr_c.y + 6, "NOSE GAZE (%.1fmm)" % nose_err_mm, green_col, 1)
+
+	# 9. Header Bar & Legend Card
+	draw_filled_rect(canvas, 0, 0, canvas_w, 36, Color(0.05, 0.05, 0.08, 0.90))
+	draw_bitmap_text(canvas, 14, 10, "DISPLAY PROJECTION MOCKUP (CENTER-ORIGIN PATHS)", Color.WHITE, 2)
+	draw_rect(canvas, 0, 0, canvas_w, canvas_h, Color(0.3, 0.3, 0.35, 1.0), 2)
+
+	var leg_w = 480
+	var leg_h = 130
+	var leg_x = 16
+	var leg_y = canvas_h - leg_h - 16
+	draw_filled_rect(canvas, leg_x, leg_y, leg_w, leg_h, Color(0.05, 0.05, 0.08, 0.92))
+	draw_rect(canvas, leg_x, leg_y, leg_w, leg_h, Color(0.3, 0.4, 0.5, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 12, "CYAN:       CURRENT EYE GAZE (CENTER -> GAZE -> TARGET)", Color(0.0, 0.95, 1.0, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 32, "GREEN:      CURRENT NOSE GAZE (CENTER -> NOSE -> TARGET)", Color(0.2, 1.0, 0.3, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 52, "DESAT CYAN: PREVIOUS GOLDEN EYE GAZE", Color(0.35, 0.65, 0.70, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 72, "DESAT GRN:  PREVIOUS GOLDEN NOSE GAZE", Color(0.4, 0.7, 0.45, 1.0), 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 92, "WHITE MARK: NOSE TARGET CUE", Color.WHITE, 1)
+	draw_bitmap_text(canvas, leg_x + 12, leg_y + 110, "FAINT MARK: EYE TARGET CUE", Color(0.7, 0.7, 0.7, 1.0), 1)
 
 	return canvas
 
@@ -724,11 +1067,13 @@ func create_side_by_side_composite(left_panel: Image, right_panel: Image, title:
 # ==============================================================================
 
 func generate_html_report(
-	out_path: String, table_rows: Array[Dictionary], cards: Array[Dictionary],
-	total_cnt: int, passed_cnt: int, regressed_cnt: int, has_regression: bool
+	out_path: String, cards: Array[Dictionary],
+	total_cnt: int,
+	identical_cnt: int, similar_cnt: int, change_better_cnt: int, change_worse_cnt: int, no_face_cnt: int,
+	has_significant_change: bool
 ):
-	var status_class = "status-failed" if has_regression else "status-passed"
-	var status_text = "FAILED (REGRESSIONS DETECTED)" if has_regression else "PASSED (ALL MATCH GOLDENFILE)"
+	var status_class = "status-failed" if has_significant_change else "status-passed"
+	var status_text = "CHANGES DETECTED (TRIAGE REQUIRED)" if has_significant_change else "PASSED (ALL IDENTICAL / SIMILAR)"
 
 	var html = """<!DOCTYPE html>
 <html lang="en">
@@ -748,7 +1093,9 @@ func generate_html_report(
     --blue: #58a6ff;
     --cyan: #39c5bb;
     --yellow: #d29922;
+    --grey: #8b949e;
   }
+  html { scroll-behavior: smooth; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
     background-color: var(--bg);
@@ -762,13 +1109,13 @@ func generate_html_report(
     border: 1px solid var(--border);
     border-radius: 8px;
     padding: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   .header-title h1 { margin: 0 0 8px 0; color: var(--text-bright); font-size: 24px; }
-  .header-title p { margin: 0; color: #8b949e; font-size: 14px; }
+  .header-title p { margin: 0; color: var(--grey); font-size: 14px; }
   .badge {
     padding: 6px 14px;
     border-radius: 20px;
@@ -778,13 +1125,16 @@ func generate_html_report(
   }
   .status-passed { background: rgba(46, 160, 67, 0.2); color: var(--green); border: 1px solid var(--green); }
   .status-failed { background: rgba(248, 81, 73, 0.2); color: var(--red); border: 1px solid var(--red); }
-  .badge-ok { background: rgba(46, 160, 67, 0.15); color: var(--green); }
-  .badge-reg { background: rgba(248, 81, 73, 0.2); color: var(--red); }
-  .badge-imp { background: rgba(88, 166, 255, 0.2); color: var(--blue); }
-  .badge-noface { background: rgba(139, 148, 158, 0.2); color: #8b949e; }
+  
+  .badge-same { background: rgba(46, 160, 67, 0.15); color: var(--green); border: 1px solid rgba(46, 160, 67, 0.4); }
+  .badge-diff { background: rgba(139, 148, 158, 0.15); color: var(--grey); border: 1px solid rgba(139, 148, 158, 0.3); }
+  .badge-better { background: rgba(88, 166, 255, 0.18); color: var(--blue); border: 1px solid rgba(88, 166, 255, 0.5); }
+  .badge-worse { background: rgba(248, 81, 73, 0.2); color: var(--red); border: 1px solid rgba(248, 81, 73, 0.5); }
+  .badge-noface { background: rgba(110, 118, 129, 0.1); color: #6e7681; border: 1px solid #30363d; }
+  
   .kpi-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
   }
@@ -796,43 +1146,141 @@ func generate_html_report(
     text-align: center;
   }
   .kpi-val { font-size: 28px; font-weight: 700; color: var(--text-bright); margin-top: 4px; }
-  .kpi-lbl { font-size: 12px; text-transform: uppercase; color: #8b949e; letter-spacing: 0.5px; }
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  .kpi-lbl { font-size: 12px; text-transform: uppercase; color: var(--grey); letter-spacing: 0.5px; }
+  
+  /* Quick Navigation Grid */
+  .nav-grid-container {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    padding: 20px;
     margin-bottom: 32px;
   }
-  th, td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid var(--border);
+  .nav-grid-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  th { background: #21262d; color: var(--text-bright); font-size: 13px; font-weight: 600; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover { background: rgba(255, 255, 255, 0.02); }
+  .nav-legend {
+    font-size: 12px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .nav-legend-item { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-same { background: var(--green); }
+  .dot-diff { background: var(--grey); }
+  .dot-better { background: var(--blue); }
+  .dot-worse { background: var(--red); }
+  .dot-noface { background: #484f58; }
+
+  .nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .nav-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .nav-chip:hover {
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .chip-same {
+    background: rgba(46, 160, 67, 0.10);
+    border: 1px solid rgba(46, 160, 67, 0.4);
+    color: #3fb950;
+  }
+  .chip-diff {
+    background: rgba(139, 148, 158, 0.10);
+    border: 1px solid rgba(139, 148, 158, 0.35);
+    color: #8b949e;
+  }
+  .chip-better {
+    background: rgba(88, 166, 255, 0.12);
+    border: 1px solid rgba(88, 166, 255, 0.45);
+    color: #79c0ff;
+  }
+  .chip-worse {
+    background: rgba(248, 81, 73, 0.15);
+    border: 1px solid rgba(248, 81, 73, 0.6);
+    color: #ff7b72;
+  }
+  .chip-noface {
+    background: rgba(110, 118, 129, 0.08);
+    border: 1px solid #30363d;
+    color: #6e7681;
+  }
+  .chip-fn { font-family: monospace; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+  .chip-tag { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 10px; }
+  .chip-same .chip-tag { background: rgba(46, 160, 67, 0.25); color: #3fb950; }
+  .chip-diff .chip-tag { background: rgba(139, 148, 158, 0.25); color: #8b949e; }
+  .chip-better .chip-tag { background: rgba(88, 166, 255, 0.3); color: #79c0ff; }
+  .chip-worse .chip-tag { background: rgba(248, 81, 73, 0.3); color: #ff7b72; }
+  .chip-noface .chip-tag { background: rgba(110, 118, 129, 0.2); color: #6e7681; }
+
+  /* Gallery Fixture Cards */
   .gallery-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
+    gap: 28px;
   }
   .fixture-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 20px;
+    padding: 24px;
+    scroll-margin-top: 24px;
   }
-  .fixture-card.regressed { border-color: var(--red); }
+  .fixture-card.card-worse { border-color: var(--red); }
+  .fixture-card.card-better { border-color: var(--blue); }
   .fixture-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
   }
-  .fixture-title { font-size: 18px; font-weight: 600; color: var(--text-bright); }
+  .fixture-title { font-size: 20px; font-weight: 600; color: var(--text-bright); font-family: monospace; }
+  .fixture-meta { font-size: 13px; color: var(--grey); margin-left: 10px; font-weight: normal; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+
+  /* Embedded Metrics Table */
+  .card-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .card-table th, .card-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid #21262d;
+  }
+  .card-table th { background: #161b22; color: var(--text-bright); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .card-table tr:last-child td { border-bottom: none; }
+  .card-table code { font-family: monospace; color: #79c0ff; }
+  .delta-ok { color: var(--green); font-weight: 600; }
+  .delta-reg { color: var(--red); font-weight: 700; }
+  .delta-imp { color: var(--blue); font-weight: 600; }
+  .delta-diff { color: var(--grey); }
+
   .fixture-body {
     display: grid;
     grid-template-columns: 180px 1fr;
@@ -852,14 +1300,16 @@ func generate_html_report(
     text-align: center;
   }
   .eye-box img { width: 100%; max-width: 120px; border-radius: 4px; display: block; margin: 0 auto 6px auto; }
-  .eye-lbl { font-size: 11px; color: #8b949e; font-weight: 600; }
+  .eye-lbl { font-size: 11px; color: var(--grey); font-weight: 600; }
   .eye-val { font-size: 12px; color: var(--cyan); font-weight: bold; }
   .overlay-col img {
     width: 100%;
     border-radius: 6px;
     border: 1px solid var(--border);
     display: block;
+    transition: opacity 0.15s ease;
   }
+  .overlay-col a:hover img { opacity: 0.95; }
   a { color: var(--blue); text-decoration: none; }
   a:hover { text-decoration: underline; }
 </style>
@@ -868,92 +1318,146 @@ func generate_html_report(
 <div class="container">
   <div class="header-card">
     <div class="header-title">
-      <h1>Godot-Gaze Visual Benchmark Report</h1>
-      <p>Generated on """ + Time.get_datetime_string_from_system(true) + """Z &bull; 20 Fixture Suite</p>
+      <h1>Godot-Gaze Visual Benchmark Dashboard</h1>
+      <p>Generated on """ + Time.get_datetime_string_from_system(true) + """Z &bull; Complete Fixture Suite</p>
     </div>
     <div class="badge """ + status_class + """">""" + status_text + """</div>
   </div>
 
   <div class="kpi-row">
     <div class="kpi-card"><div class="kpi-lbl">Total Fixtures</div><div class="kpi-val">""" + str(total_cnt) + """</div></div>
-    <div class="kpi-card"><div class="kpi-lbl">Passed</div><div class="kpi-val" style="color: var(--green);">""" + str(passed_cnt) + """</div></div>
-    <div class="kpi-card"><div class="kpi-lbl">Regressions</div><div class="kpi-val" style="color: """ + ("var(--red)" if regressed_cnt > 0 else "var(--text-bright)") + """;">""" + str(regressed_cnt) + """</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Identical</div><div class="kpi-val" style="color: var(--green);">""" + str(identical_cnt) + """</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Similar (&le;15mm)</div><div class="kpi-val" style="color: var(--grey);">""" + str(similar_cnt) + """</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Change Better</div><div class="kpi-val" style="color: var(--blue);">""" + str(change_better_cnt) + """</div></div>
+    <div class="kpi-card"><div class="kpi-lbl">Change Worse</div><div class="kpi-val" style="color: var(--red);">""" + str(change_worse_cnt) + """</div></div>
   </div>
 
-  <h2>Benchmark Metrics Table</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Fixture Image</th>
-        <th>Status</th>
-        <th>Head Pose (deg)</th>
-        <th>Nose Error</th>
-        <th>Gaze Error</th>
-        <th>Left Eye Open</th>
-        <th>Right Eye Open</th>
-        <th>Overlay Link</th>
-      </tr>
-    </thead>
-    <tbody>
+  <!-- Navigation Grid (Anchors to Cards Below) -->
+  <div class="nav-grid-container">
+    <div class="nav-grid-title">
+      <span>Fixture Index & Quick Navigation</span>
+      <div class="nav-legend">
+        <span class="nav-legend-item"><span class="dot dot-same"></span> Identical</span>
+        <span class="nav-legend-item"><span class="dot dot-diff"></span> Similar (&le; 15mm)</span>
+        <span class="nav-legend-item"><span class="dot dot-better"></span> Change Better (&lt; -15mm)</span>
+        <span class="nav-legend-item"><span class="dot dot-worse"></span> Change Worse (&gt; +15mm)</span>
+        <span class="nav-legend-item"><span class="dot dot-noface"></span> No Face</span>
+      </div>
+    </div>
+    <div class="nav-grid">
 """
 
-	for r in table_rows:
-		var badge_cls = "badge-ok"
-		if r["status"] == "REGRESSED": badge_cls = "badge-reg"
-		elif r["status"] == "NO_FACE": badge_cls = "badge-noface"
+	for c in cards:
+		html += """      <a href='#fixture-""" + c["anchor_id"] + """' class='nav-chip """ + c["chip_class"] + """'>
+        <span class='chip-fn'>""" + c["file"] + """</span>
+        <span class='chip-tag'>""" + c["chip_label"] + """</span>
+      </a>\n"""
 
-		html += """      <tr>
-        <td><strong>""" + r["file"] + """</strong></td>
-        <td><span class="badge """ + badge_cls + """">""" + r["status"] + """</span></td>
-        <td><code>""" + r["head_rot"] + """</code></td>
-        <td>""" + r["nose_err"] + """</td>
-        <td>""" + r["gaze_err"] + """</td>
-        <td>""" + r["left_open"] + """</td>
-        <td>""" + r["right_open"] + """</td>
-        <td><a href='""" + r["overlay_rel"] + """' target='_blank'>View Overlay</a></td>
-      </tr>\n"""
+	html += """    </div>
+  </div>
 
-	html += """    </tbody>
-  </table>
-
-  <h2>Diagnostic Visual Gallery</h2>
+  <!-- Diagnostic Fixture Gallery with Merged Metrics Tables -->
   <div class="gallery-grid">
 """
 
 	for c in cards:
-		var reg_card_cls = "regressed" if c["status"] == "REGRESSED" else ""
-		var badge_cls = "badge-ok"
-		if c["status"] == "REGRESSED": badge_cls = "badge-reg"
-		elif c["status"] == "NO_FACE": badge_cls = "badge-noface"
+		var card_modifier = ""
+		var badge_cls = "badge-same"
+		if c["status"] == "CHANGE_WORSE":
+			card_modifier = "card-worse"
+			badge_cls = "badge-worse"
+		elif c["status"] == "CHANGE_BETTER":
+			card_modifier = "card-better"
+			badge_cls = "badge-better"
+		elif c["status"] == "SIMILAR":
+			badge_cls = "badge-diff"
+		elif c["status"] == "NO_FACE":
+			badge_cls = "badge-noface"
 
-		html += """    <div class="fixture-card """ + reg_card_cls + """">
-      <div class="fixture-header">
-        <div class="fixture-title">""" + c["file"] + """ <span style="font-size: 13px; color: #8b949e; margin-left: 8px;">(Roll Hint: """ + str(c["roll_hint"]) + """&deg;)</span></div>
-        <div class="badge """ + badge_cls + """">""" + c["status"] + """</div>
+		var meta_str = "Roll Hint: %s&deg;" % str(c["roll_hint"])
+		if c.get("sensor_orient", 0.0) != 0.0:
+			meta_str += " &bull; Sensor Orient: %s&deg;" % str(c["sensor_orient"])
+
+		html += """    <div id='fixture-""" + c["anchor_id"] + """' class='fixture-card """ + card_modifier + """'>
+      <div class='fixture-header'>
+        <div class='fixture-title'>""" + c["file"] + """ <span class='fixture-meta'>(""" + meta_str + """)</span></div>
+        <div class='badge """ + badge_cls + """'>""" + c["status"] + """</div>
       </div>
-      <div class="fixture-body">
-        <div class="eye-crops-col">
+
+      <!-- Merged Property & Baseline Metric Table -->
+      <table class='card-table'>
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Actual Value</th>
+            <th>Actual Error</th>
+            <th>Prev Golden Value</th>
+            <th>Prev Golden Error</th>
+            <th>Delta</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+"""
+		for m in c["metrics"]:
+			var d_cls = "delta-diff"
+			var st_badge_cls = "badge-same"
+
+			if m["status"] == "CHANGE_WORSE":
+				d_cls = "delta-reg"
+				st_badge_cls = "badge-worse"
+			elif m["status"] == "CHANGE_BETTER":
+				d_cls = "delta-imp"
+				st_badge_cls = "badge-better"
+			elif m["status"] == "SIMILAR":
+				d_cls = "delta-diff"
+				st_badge_cls = "badge-diff"
+			elif m["status"] == "IDENTICAL":
+				d_cls = "delta-ok"
+				st_badge_cls = "badge-same"
+
+			html += """          <tr>
+            <td><strong>""" + m["name"] + """</strong></td>
+            <td><code>""" + m["val"] + """</code></td>
+            <td>""" + m["err"] + """</td>
+            <td><code>""" + m["prev_val"] + """</code></td>
+            <td>""" + m["prev_err"] + """</td>
+            <td><span class='""" + d_cls + """'>""" + m["delta"] + """</span></td>
+            <td><span class='badge """ + st_badge_cls + """' style='padding: 2px 8px; font-size: 11px;'>""" + m["status"] + """</span></td>
+          </tr>\n"""
+
+		# Openness summary row
+		html += """          <tr>
+            <td><strong>eye_openness</strong></td>
+            <td colspan='6'>Left Eye (p0-1): <code>""" + ("%.2f" % c["left_open"]) + """</code> &bull; Right Eye (p2-3): <code>""" + ("%.2f" % c["right_open"]) + """</code></td>
+          </tr>\n"""
+
+		html += """        </tbody>
+      </table>
+
+      <div class='fixture-body'>
+        <div class='eye-crops-col'>
 """
 		if c["left_eye_rel"] != "":
-			html += """          <div class="eye-box">
+			html += """          <div class='eye-box'>
             <img src='""" + c["left_eye_rel"] + """' alt='Left Eye' />
-            <div class="eye-lbl">LEFT EYE (p0-1)</div>
-            <div class="eye-val">""" + ("%.2f" % c["left_open"]) + """</div>
+            <div class='eye-lbl'>LEFT EYE (p0-1)</div>
+            <div class='eye-val'>""" + ("%.2f" % c["left_open"]) + """</div>
           </div>\n"""
 		if c["right_eye_rel"] != "":
-			html += """          <div class="eye-box">
+			html += """          <div class='eye-box'>
             <img src='""" + c["right_eye_rel"] + """' alt='Right Eye' />
-            <div class="eye-lbl">RIGHT EYE (p2-3)</div>
-            <div class="eye-val">""" + ("%.2f" % c["right_open"]) + """</div>
+            <div class='eye-lbl'>RIGHT EYE (p2-3)</div>
+            <div class='eye-val'>""" + ("%.2f" % c["right_open"]) + """</div>
           </div>\n"""
 		if c["left_eye_rel"] == "" and c["right_eye_rel"] == "":
-			html += """          <div class="eye-box" style="padding: 24px 8px; color: #8b949e; font-size: 11px;">
+			html += """          <div class='eye-box' style='padding: 24px 8px; color: #8b949e; font-size: 11px;'>
             NO FACE DETECTED
           </div>\n"""
 
 		html += """        </div>
-        <div class="overlay-col">
-          <a href='""" + c["overlay_rel"] + """' target='_blank'>
+        <div class='overlay-col'>
+          <a href='""" + c["overlay_rel"] + """' target='_blank' title='Click to open full resolution diagnostic overlay'>
             <img src='""" + c["overlay_rel"] + """' alt='Diagnostic Overlay' />
           </a>
         </div>

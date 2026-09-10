@@ -1,0 +1,120 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://addons/godot-gaze/calibration/camera_placement_step.gd" id="1_step"]
+
+[node name="CameraPlacementStep" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_step")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.08, 0.08, 0.1, 0.95)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -220.0
+offset_right = 320.0
+offset_bottom = 220.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "Step 3: Camera Bezel Location"
+horizontal_alignment = 1
+
+[node name="InstructionsLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Select which bezel edge holds the camera relative to your display:"
+horizontal_alignment = 1
+
+[node name="BezelContainer" type="GridContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 15
+theme_override_constants/v_separation = 15
+columns = 3
+
+[node name="Spacer1" type="Control" parent="VBoxContainer/BezelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopButton" type="Button" parent="VBoxContainer/BezelContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Top (Standard)"
+
+[node name="Spacer2" type="Control" parent="VBoxContainer/BezelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LeftButton" type="Button" parent="VBoxContainer/BezelContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Left Edge"
+
+[node name="ScreenPlaceholder" type="ColorRect" parent="VBoxContainer/BezelContainer"]
+custom_minimum_size = Vector2(160, 90)
+layout_mode = 2
+color = Color(0.15, 0.2, 0.3, 0.8)
+
+[node name="RightButton" type="Button" parent="VBoxContainer/BezelContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Right Edge"
+
+[node name="Spacer3" type="Control" parent="VBoxContainer/BezelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomButton" type="Button" parent="VBoxContainer/BezelContainer"]
+custom_minimum_size = Vector2(160, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Bottom Edge"
+
+[node name="Spacer4" type="Control" parent="VBoxContainer/BezelContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StatusLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Selected Mount: Top Bezel Center (Standard)"
+horizontal_alignment = 1
+
+[node name="ButtonContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(120, 35)
+layout_mode = 2
+text = "Cancel"
+
+[node name="ConfirmButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(160, 35)
+layout_mode = 2
+text = "Confirm & Next"

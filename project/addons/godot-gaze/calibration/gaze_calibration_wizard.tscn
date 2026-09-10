@@ -1,0 +1,40 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://addons/godot-gaze/calibration/gaze_calibration_wizard.gd" id="1_wiz"]
+[ext_resource type="PackedScene" path="res://addons/godot-gaze/calibration/display_size_step.tscn" id="2_display"]
+[ext_resource type="PackedScene" path="res://addons/godot-gaze/calibration/sensor_orientation_step.tscn" id="3_sensor"]
+[ext_resource type="PackedScene" path="res://addons/godot-gaze/calibration/camera_placement_step.tscn" id="4_camera"]
+[ext_resource type="PackedScene" path="res://addons/godot-gaze/calibration/screen_placement_step.tscn" id="5_screen"]
+[ext_resource type="PackedScene" path="res://addons/godot-gaze/calibration/corner_gaze_step.tscn" id="6_corner"]
+
+[node name="GazeCalibrationWizard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wiz")
+
+[node name="StepContainer" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DisplaySizeStep" parent="StepContainer" instance=ExtResource("2_display")]
+layout_mode = 1
+
+[node name="SensorOrientationStep" parent="StepContainer" instance=ExtResource("3_sensor")]
+layout_mode = 1
+
+[node name="CameraPlacementStep" parent="StepContainer" instance=ExtResource("4_camera")]
+layout_mode = 1
+
+[node name="ScreenPlacementStep" parent="StepContainer" instance=ExtResource("5_screen")]
+layout_mode = 1
+
+[node name="CornerGazeStep" parent="StepContainer" instance=ExtResource("6_corner")]
+layout_mode = 1

@@ -642,7 +642,7 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
         Vector2 phys_sz = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(1920 * 0.25, 1080 * 0.25);
         Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
         double x_disp_mm = phys_sz.x * 0.5 - (pt_cam.x + offset.x);
-        double y_disp_mm = -(pt_cam.y + offset.y);
+        double y_disp_mm = phys_sz.y * 0.5 - (pt_cam.y + offset.y);
         Vector2 pos_mm_center(x_disp_mm - phys_sz.x * 0.5, y_disp_mm - phys_sz.y * 0.5);
         impl->eye.latest_projected_gaze_mm = pos_mm_center;
         
@@ -769,10 +769,6 @@ Vector3 GazeServer::project_ray_to_camera_plane(const Vector3 &p_origin_cam, con
 
 Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-    Vector3 pt_cam = project_ray_to_camera_plane(p_origin_cam, p_direction_cam);
-    if (!pt_cam.is_finite()) {
-        return Vector2(INFINITY, INFINITY);
-    }
 
     Ref<GazeDeviceProfile> profile = impl->display.device_profile;
     Vector2 pixel_pitch = profile.is_valid() ? profile->get_pixel_pitch_mm() : Vector2(0.25, 0.25);
@@ -782,8 +778,10 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
     Vector2i logical_size = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
     Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
 
-    double x_screen_px = (double)logical_size.x * 0.5 - (pt_cam.x + offset.x) / pixel_pitch.x;
-    double y_screen_px = -(pt_cam.y + offset.y) / pixel_pitch.y;
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size.x, logical_size.y));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(logical_size.x * pixel_pitch.x, logical_size.y * pixel_pitch.y));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(offset.x, offset.y, offset.z), 0.0));
 
     Vector2 win_pos = Vector2(0.0, 0.0);
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
@@ -795,8 +793,16 @@ Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const V
             win_pos = ds->window_get_position();
         }
     }
+    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(win_pos.x, win_pos.y));
 
-    return Vector2(x_screen_px - win_pos.x, y_screen_px - win_pos.y);
+    Gaze::GodotCameraVector3 orig(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    Gaze::GodotDisplayVector2 out_px;
+
+    if (!engine.project_gaze(orig, dir, out_px)) {
+        return Vector2(INFINITY, INFINITY);
+    }
+    return Vector2(out_px.x, out_px.y);
 }
 
 // --- Event Factory ---

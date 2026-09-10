@@ -291,6 +291,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
         vision_server_singleton = memnew(VisionServer);
         Engine::get_singleton()->register_singleton("VisionServer", vision_server_singleton);
+        Engine::get_singleton()->register_singleton("GazeVisionServer", vision_server_singleton);
 
         gaze_server_singleton = memnew(GazeServer);
         Engine::get_singleton()->register_singleton("GazeServer", gaze_server_singleton);
@@ -357,6 +358,7 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
 
         if (VisionServer::get_singleton()) {
             Engine::get_singleton()->unregister_singleton("VisionServer");
+            Engine::get_singleton()->unregister_singleton("GazeVisionServer");
             memdelete(VisionServer::get_singleton());
             vision_server_singleton = nullptr;
         }

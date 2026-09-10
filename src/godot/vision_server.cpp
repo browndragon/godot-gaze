@@ -33,6 +33,8 @@ void VisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "camera_rid", "requested"), &VisionServer::camera_set_preview_requested);
     ClassDB::bind_method(D_METHOD("camera_is_preview_requested", "camera_rid"), &VisionServer::camera_is_preview_requested);
     ClassDB::bind_method(D_METHOD("inject_texture", "camera_rid", "texture"), &VisionServer::inject_texture);
+    ClassDB::bind_method(D_METHOD("get_raw_acceleration"), &VisionServer::get_raw_acceleration);
+    ClassDB::bind_method(D_METHOD("get_gravity_vector"), &VisionServer::get_gravity_vector);
 }
 
 bool VisionServer::camera_is_active(RID p_camera) {
@@ -224,6 +226,7 @@ Ref<Image> VisionServer::camera_get_current_image(RID p_camera) {
 
 void MockVisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("inject_texture", "camera_rid", "texture"), &MockVisionServer::inject_texture);
+    ClassDB::bind_method(D_METHOD("set_simulated_acceleration", "accel"), &MockVisionServer::set_simulated_acceleration);
 }
 
 RID MockVisionServer::camera_create() {

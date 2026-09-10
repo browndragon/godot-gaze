@@ -151,6 +151,68 @@ func run_tests():
 			quit(1)
 			return
 		print("Engine singleton verified: ", sing)
+	# =================== E2E TEST: TELEMETRY & GRAVITY ===================
+	print("=================== E2E TEST: TELEMETRY & GRAVITY ===================")
+	var accel = vs.get_raw_acceleration()
+	var grav = vs.get_gravity_vector()
+	print("Initial raw acceleration: ", accel, " gravity: ", grav)
+	if vs.has_method("set_simulated_acceleration"):
+		vs.set_simulated_acceleration(Vector3(0.0, -9.81, 0.0))
+		var grav_down = vs.get_gravity_vector()
+		if abs(grav_down.y - (-1.0)) > 0.05:
+			printerr("FAIL: Telemetry simulated gravity down failed: ", grav_down)
+			quit(1)
+			return
+		vs.set_simulated_acceleration(Vector3(9.81, 0.0, 0.0))
+		var grav_right = vs.get_gravity_vector()
+		if abs(grav_right.x - 1.0) > 0.05:
+			printerr("FAIL: Telemetry simulated gravity right failed: ", grav_right)
+			quit(1)
+			return
+		print("PASS: Telemetry acceleration injection and gravity derivation verified.")
+
+	# =================== E2E TEST: CALIBRATION WIZARD & MODULAR STEPS ===================
+	print("=================== E2E TEST: CALIBRATION WIZARD & MODULAR STEPS ===================")
+	var wizard_scene = load("res://addons/godot-gaze/calibration/gaze_calibration_wizard.tscn")
+	if not wizard_scene:
+		printerr("FAIL: Could not load gaze_calibration_wizard.tscn")
+		quit(1)
+		return
+	var wizard = wizard_scene.instantiate()
+	root.add_child(wizard)
+	var test_profile = GazeDeviceProfile.new()
+	test_profile.set_logical_size_px(Vector2i(1920, 1080))
+	test_profile.set_physical_size_mm(Vector2(345.0, 215.0))
+	test_profile.set_camera_offset_mm(Vector3(0.0, 0.0, 0.0))
+	
+	var wizard_state = {"done": false, "profile": null}
+	wizard.wizard_completed.connect(func(p):
+		wizard_state["done"] = true
+		wizard_state["profile"] = p
+	)
+	
+	wizard.start_wizard(test_profile)
+	if wizard._steps.size() != 5:
+		printerr("FAIL: Wizard does not contain expected 5 steps, got: ", wizard._steps.size())
+		quit(1)
+		return
+	
+	# Simulate finishing each step
+	for i in range(wizard._steps.size()):
+		var step = wizard._steps[i]
+		if not step.is_visible_in_tree():
+			printerr("FAIL: Step ", i, " is not visible when active")
+			quit(1)
+			return
+		step.complete_step()
+		
+	if not wizard_state["done"] or wizard_state["profile"] == null:
+		printerr("FAIL: Wizard failed to complete all steps and emit wizard_completed")
+		quit(1)
+		return
+	print("PASS: GazeCalibrationWizard sequential step execution verified.")
+	wizard.queue_free()
+
 	print("PASS: F3 CI/CD Release Validation E2E verification complete.")
 
 	# =================== E2E TEST: PHYSICAL DIRECTIONAL INVARIANTS (GODOT BINDINGS) ===================

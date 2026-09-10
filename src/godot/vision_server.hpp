@@ -53,6 +53,9 @@ protected:
     RID_PtrOwner<CameraData, true> camera_owner;
     std::vector<RID> allocated_cameras;
 
+    Vector3 raw_acceleration = Vector3(0.0, -9.81, 0.0);
+    Vector3 gravity_vector = Vector3(0.0, -1.0, 0.0);
+
 public:
     VisionServer();
     virtual ~VisionServer();
@@ -61,6 +64,16 @@ public:
      * @brief Get the VisionServer global singleton instance.
      */
     static VisionServer *get_singleton() { return singleton; }
+
+    /**
+     * @brief Retrieve the raw acceleration vector measured by hardware sensors (in m/s^2).
+     */
+    virtual Vector3 get_raw_acceleration() const { return raw_acceleration; }
+
+    /**
+     * @brief Retrieve the normalized unit gravity vector in camera space.
+     */
+    virtual Vector3 get_gravity_vector() const { return gravity_vector; }
 
     /**
      * @brief Create a new camera resource and return its unique RID.
@@ -166,11 +179,26 @@ public:
     virtual Ref<Image> camera_get_current_image(RID p_camera) override;
 
     /**
+     * @brief Set simulated acceleration in test scenarios, deriving unit gravity vector.
+     */
+    virtual void set_simulated_acceleration(const Vector3 &p_accel) {
+        raw_acceleration = p_accel;
+        if (p_accel.length_squared() > 1e-6) {
+            gravity_vector = p_accel.normalized();
+        } else {
+            gravity_vector = Vector3(0.0, -1.0, 0.0);
+        }
+    }
+
+    /**
      * @brief Manually inject a frame texture into the mock camera.
      * @param p_camera The mock camera RID.
      * @param p_texture The frame texture to inject.
      */
     void inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) override;
 };
+
+using GazeVisionServer = VisionServer;
+using GazeVisionServerMock = MockVisionServer;
 
 } // namespace godot

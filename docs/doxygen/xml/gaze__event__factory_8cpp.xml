@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__event__factory_8cpp" kind="file" language="C++">
+    <compoundname>gaze_event_factory.cpp</compoundname>
+    <includes refid="gaze__event__factory_8hpp" local="yes">gaze_event_factory.hpp</includes>
+    <includes refid="gaze__server_8hpp" local="yes">gaze_server.hpp</includes>
+    <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <incdepgraph>
+      <node id="47">
+        <label>camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>camera_placement.hpp</label>
+        <link refid="camera__placement_8hpp"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>../core/face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>../core/gaze_frame_data.hpp</label>
+        <link refid="gaze__frame__data_8hpp_source"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>opencv_space_conversions.hpp</label>
+        <link refid="opencv__space__conversions_8hpp"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>../core/projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>gaze_device_profile.hpp</label>
+        <link refid="gaze__device__profile_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/godot/gaze_event_factory.cpp</label>
+        <link refid="gaze__event__factory_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gaze_event_factory.hpp</label>
+        <link refid="gaze__event__factory_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>gaze_frame.hpp</label>
+        <link refid="gaze__frame_8hpp_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>input_event_gaze.hpp</label>
+        <link refid="input__event__gaze_8hpp_source"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>mouse_gaze_emulation.hpp</label>
+        <link refid="mouse__gaze__emulation_8hpp_source"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>one_euro_smoother.hpp</label>
+        <link refid="one__euro__smoother_8hpp_source"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>smoother.hpp</label>
+        <link refid="smoother_8hpp_source"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>algorithm</label>
+      </node>
+      <node id="23">
+        <label>cmath</label>
+      </node>
+      <node id="50">
+        <label>condition_variable</label>
+      </node>
+      <node id="25">
+        <label>cstdint</label>
+      </node>
+      <node id="39">
+        <label>godot_cpp/classes/display_server.hpp</label>
+      </node>
+      <node id="15">
+        <label>godot_cpp/classes/image.hpp</label>
+      </node>
+      <node id="16">
+        <label>godot_cpp/classes/image_texture.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/classes/input_event_action.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/object.hpp</label>
+      </node>
+      <node id="13">
+        <label>godot_cpp/classes/project_settings.hpp</label>
+      </node>
+      <node id="32">
+        <label>godot_cpp/classes/ref.hpp</label>
+      </node>
+      <node id="12">
+        <label>godot_cpp/classes/ref_counted.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="18">
+        <label>godot_cpp/classes/time.hpp</label>
+      </node>
+      <node id="51">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="17">
+        <label>godot_cpp/templates/safe_refcount.hpp</label>
+      </node>
+      <node id="34">
+        <label>godot_cpp/variant/array.hpp</label>
+      </node>
+      <node id="43">
+        <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="14">
+        <label>godot_cpp/variant/rid.hpp</label>
+      </node>
+      <node id="9">
+        <label>godot_cpp/variant/string.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/variant/transform3d.hpp</label>
+      </node>
+      <node id="35">
+        <label>godot_cpp/variant/variant.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/variant/vector2.hpp</label>
+      </node>
+      <node id="31">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+      <node id="28">
+        <label>limits</label>
+      </node>
+      <node id="46">
+        <label>memory</label>
+      </node>
+      <node id="49">
+        <label>mutex</label>
+      </node>
+      <node id="37">
+        <label>one_euro_filter.hpp</label>
+      </node>
+      <node id="48">
+        <label>thread</label>
+      </node>
+      <node id="24">
+        <label>type_traits</label>
+      </node>
+      <node id="27">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;gaze_event_factory.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;gaze_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>GazeEventFactory<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeEventFactory::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;create_gaze_event&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeEventFactory::create_gaze_event);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;create_missing_event&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;reason&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeEventFactory::create_missing_event);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal">Ref&lt;InputEventGazeBase&gt;<sp/>GazeEventFactory::create_gaze_event()<sp/>{</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGaze&gt;<sp/>evt;</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>evt.instantiate();</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>evt;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal">Ref&lt;InputEventGazeBase&gt;<sp/>GazeEventFactory::create_missing_event(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_reason)<sp/>{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGazeMissing&gt;<sp/>evt;</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>evt.instantiate();</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>evt-&gt;set_reason(</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">InputEventGazeMissing::MissingReason</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p_reason));</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>evt;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>GazeServerEventFactory<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeServerEventFactory::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal">Ref&lt;InputEventGazeBase&gt;<sp/>GazeServerEventFactory::create_gaze_event()<sp/>{</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/>GazeServer::get_singleton();</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(gs)<sp/>{</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>gs-&gt;create_default_event();</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGaze&gt;<sp/>evt;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>evt.instantiate();</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>evt;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal">Ref&lt;InputEventGazeBase&gt;<sp/>GazeServerEventFactory::create_missing_event(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_reason)<sp/>{</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/>GazeServer::get_singleton();</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(gs)<sp/>{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>gs-&gt;create_default_missing_event(p_reason);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGazeMissing&gt;<sp/>evt;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>evt.instantiate();</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/>evt-&gt;set_reason(</highlight><highlight class="keyword">static_cast&lt;</highlight><highlight class="normal">InputEventGazeMissing::MissingReason</highlight><highlight class="keyword">&gt;</highlight><highlight class="normal">(p_reason));</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>evt;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_event_factory.cpp"/>
+  </compounddef>
+</doxygen>

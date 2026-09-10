@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MockGazeDisplayServer" inherits="godot::GazeDisplayServer">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_screen_size_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve physical screen dimensions in millimeters.
+
+p_screen
+Screen index (-1 for default/current screen).
+Screen size Vector2(width_mm, height_mm).
+
+Screen index (-1 for default/current screen).
+
+Screen size Vector2(width_mm, height_mm).</description>
+		</method>
+		<method name="get_screen_size_pixels">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve screen logical pixel dimensions.
+
+p_screen
+Screen index (-1 for default/current screen).
+Screen resolution Vector2(width_px, height_px).
+
+Screen index (-1 for default/current screen).
+
+Screen resolution Vector2(width_px, height_px).</description>
+		</method>
+		<method name="get_pixel_pitch_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve physical pixel pitch in millimeters per pixel.
+
+p_screen
+Screen index (-1 for default/current screen).
+Vector2(pitch_x_mm, pitch_y_mm).
+
+Screen index (-1 for default/current screen).
+
+Vector2(pitch_x_mm, pitch_y_mm).</description>
+		</method>
+		<method name="get_screen_scale">
+			<return type="double"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve screen HiDPI scale factor.
+
+p_screen
+Screen index (-1 for default/current screen).
+Scale factor double.
+
+Screen index (-1 for default/current screen).
+
+Scale factor double.</description>
+		</method>
+		<method name="get_window_rect_pixels">
+			<return type="Rect2i"></return>
+			<param index="0" name="p_window" type="int"></param>
+			<description>Retrieve application window bounding rectangle in logical pixels.
+
+p_window
+Window index.
+Window Rect2i(x, y, width, height).
+
+Window index.
+
+Window Rect2i(x, y, width, height).</description>
+		</method>
+		<method name="set_screen_size_mm">
+			<return type="void"></return>
+			<param index="0" name="p_size_mm" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="set_screen_size_pixels">
+			<return type="void"></return>
+			<param index="0" name="p_size_pixels" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="set_window_rect_pixels">
+			<return type="void"></return>
+			<param index="0" name="p_rect" type="const Rect2i &amp;"></param>
+			<description></description>
+		</method>
+		<method name="set_screen_scale">
+			<return type="void"></return>
+			<param index="0" name="p_scale" type="double"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

@@ -1,0 +1,2009 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespace_gaze" kind="namespace" language="C++">
+    <compoundname>Gaze</compoundname>
+    <innerclass refid="class_gaze_1_1_camera_interface" prot="public">Gaze::CameraInterface</innerclass>
+    <innerclass refid="struct_gaze_1_1_camera_placement" prot="public">Gaze::CameraPlacement</innerclass>
+    <innerclass refid="class_gaze_1_1_c_p_u_image_warper" prot="public">Gaze::CPUImageWarper</innerclass>
+    <innerclass refid="class_gaze_1_1_eye_blink_estimator" prot="public">Gaze::EyeBlinkEstimator</innerclass>
+    <innerclass refid="struct_gaze_1_1_eye_crops" prot="public">Gaze::EyeCrops</innerclass>
+    <innerclass refid="class_gaze_1_1_face_model_geometry" prot="public">Gaze::FaceModelGeometry</innerclass>
+    <innerclass refid="class_gaze_1_1_face_pipeline" prot="public">Gaze::FacePipeline</innerclass>
+    <innerclass refid="struct_gaze_1_1_frame" prot="public">Gaze::Frame</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_display_metrics" prot="public">Gaze::GazeDisplayMetrics</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_frame_data" prot="public">Gaze::GazeFrameData</innerclass>
+    <innerclass refid="class_gaze_1_1_gaze_model" prot="public">Gaze::GazeModel</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_rect" prot="public">Gaze::GazeRect</innerclass>
+    <innerclass refid="class_gaze_1_1_gaze_tracking_pipeline" prot="public">Gaze::GazeTrackingPipeline</innerclass>
+    <innerclass refid="struct_gaze_1_1_gaze_window_rect" prot="public">Gaze::GazeWindowRect</innerclass>
+    <innerclass refid="class_gaze_1_1_godot_camera" prot="public">Gaze::GodotCamera</innerclass>
+    <innerclass refid="struct_gaze_1_1_head_pose" prot="public">Gaze::HeadPose</innerclass>
+    <innerclass refid="class_gaze_1_1_image_warper" prot="public">Gaze::ImageWarper</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_eye_state_model" prot="public">Gaze::ORTEyeStateModel</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_gaze_model" prot="public">Gaze::ORTGazeModel</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_landmark_model" prot="public">Gaze::ORTLandmarkModel</innerclass>
+    <innerclass refid="class_gaze_1_1_o_r_t_yu_net_detector" prot="public">Gaze::ORTYuNetDetector</innerclass>
+    <innerclass refid="struct_gaze_1_1_pipeline_config" prot="public">Gaze::PipelineConfig</innerclass>
+    <innerclass refid="class_gaze_1_1_projection_engine" prot="public">Gaze::ProjectionEngine</innerclass>
+    <innerclass refid="class_gaze_1_1_screen_projector" prot="public">Gaze::ScreenProjector</innerclass>
+    <innerclass refid="class_gaze_1_1_sigmoidal_filter" prot="public">Gaze::SigmoidalFilter</innerclass>
+    <innerclass refid="struct_gaze_1_1_spaced_basis" prot="public">Gaze::SpacedBasis</innerclass>
+    <innerclass refid="struct_gaze_1_1_spaced_transform3_d" prot="public">Gaze::SpacedTransform3D</innerclass>
+    <innerclass refid="struct_gaze_1_1_spaced_vector2" prot="public">Gaze::SpacedVector2</innerclass>
+    <innerclass refid="struct_gaze_1_1_spaced_vector3" prot="public">Gaze::SpacedVector3</innerclass>
+    <innerclass refid="class_gaze_1_1_s_q_pn_p_solver" prot="public">Gaze::SQPnPSolver</innerclass>
+    <innerclass refid="struct_gaze_1_1_yu_net_result" prot="public">Gaze::YuNetResult</innerclass>
+    <innernamespace refid="namespace_gaze_1_1_concurrency">Gaze::Concurrency</innernamespace>
+    <innernamespace refid="namespace_gaze_1_1_coordinate_conversions">Gaze::CoordinateConversions</innernamespace>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>Space</name>
+        <qualifiedname>Gaze::Space</qualifiedname>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" prot="public">
+          <name>GodotCamera</name>
+          <briefdescription>
+<para>Canonical 3D Hub: +X Display Left (Camera Right), +Y Up, -Z Forward into room / +Z towards screen. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" prot="public">
+          <name>GodotFaceLocal</name>
+          <briefdescription>
+<para>Canonical Head Local: +X User&apos;s Right Ear (Display Left), +Y Top of Head, -Z Forward out of face. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a8dde4b58b6594f2d420735074a14c388" prot="public">
+          <name>GodotCameraHintRolled</name>
+          <briefdescription>
+<para>Canonical 3D Hint-Rolled: <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kindref="member">Space::GodotCamera</ref> rotated by -roll_hint around Z. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981ad462c7d535695dce412ae8309a07bc07" prot="public">
+          <name>GodotCameraEuler</name>
+          <briefdescription>
+<para>3D Euler angles (pitch, yaw, roll in rad) in <ref refid="class_gaze_1_1_godot_camera" kindref="compound">GodotCamera</ref> frame </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a305c42b2a66e3a4f40e19597a68ae711" prot="public">
+          <name>GodotCameraImagePixels</name>
+          <briefdescription>
+<para>Canonical 2D Sensor Pixels: (u, v) in raw camera image. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" prot="public">
+          <name>GodotCameraWorkingImagePixels</name>
+          <briefdescription>
+<para>2D Sensor Pixels: (u, v) in hint-rolled working image </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0895d0a181c8ec1a9aeb37e9c5114399" prot="public">
+          <name>GodotDisplayPx</name>
+          <briefdescription>
+<para>Canonical 2D Display Pixels: Origin Top-Left (0,0), +X Right (0..W_px), +Y Down (0..H_px). </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" prot="public">
+          <name>GodotDisplayMm</name>
+          <briefdescription>
+<para>Canonical 2D Display Millimeters: Origin Top-Left (0,0), +X Right (0..W_mm), +Y Down (0..H_mm). </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" prot="public">
+          <name>GodotViewportPx</name>
+          <briefdescription>
+<para>Canonical 2D Viewport Pixels: Origin Top-Left (0,0), +X Right, +Y Down. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" prot="public">
+          <name>OpenCVCamera</name>
+          <briefdescription>
+<para>Spoke Model Internal: 3D mm: +X Right, +Y Down, +Z Away from camera into scene. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a176e67d736c71a43368f8f786e03a018" prot="public">
+          <name>OpenCVCameraHintRolled</name>
+          <briefdescription>
+<para>Spoke Model Internal: 3D mm with roll hint applied. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" prot="public">
+          <name>OpenCVFaceModel</name>
+          <briefdescription>
+<para>Spoke Model Internal: 3D mm: +X User&apos;s Left Ear, +Y Down towards chin, +Z Back into skull. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981abba911bdd9ffe248311458b4b40f3679" prot="public">
+          <name>OpenVINOADASGaze</name>
+          <briefdescription>
+<para>Spoke Model Internal: 3D mm: +X User&apos;s Right Ear (Display Left), +Y Up, +Z Forward towards camera. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Canonical Coordinate <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref> Identifiers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="25" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="26" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="enum" id="projection__engine_8hpp_1abb3b4a9b2a604ec4b0a72e3d7ab4ab98" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>DisplayOrientation</name>
+        <qualifiedname>Gaze::DisplayOrientation</qualifiedname>
+        <enumvalue id="projection__engine_8hpp_1abb3b4a9b2a604ec4b0a72e3d7ab4ab98a4fdcdcc2bc09ea6e0c1aa6e1d51f1eff" prot="public">
+          <name>ORIENTATION_0</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="projection__engine_8hpp_1abb3b4a9b2a604ec4b0a72e3d7ab4ab98af6fce6a84d5a77d74481aa0cbe238041" prot="public">
+          <name>ORIENTATION_90</name>
+          <initializer>= 90</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="projection__engine_8hpp_1abb3b4a9b2a604ec4b0a72e3d7ab4ab98af246a2452fbf18d000bf495cf688aec7" prot="public">
+          <name>ORIENTATION_180</name>
+          <initializer>= 180</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="projection__engine_8hpp_1abb3b4a9b2a604ec4b0a72e3d7ab4ab98aabcf50ca77d3546bf825e0044068ce5b" prot="public">
+          <name>ORIENTATION_270</name>
+          <initializer>= 270</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="18" column="5" bodyfile="src/core/projection_engine.hpp" bodystart="18" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="typedef">
+      <memberdef kind="typedef" id="atomic__mailbox_8hpp_1a0247439c8f801b88167c8ca4faa35c5e" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox" kindref="compound">Concurrency::AtomicMailbox</ref>&lt; T &gt;</type>
+        <definition>using Gaze::AtomicMailbox = Concurrency::AtomicMailbox&lt;T&gt;</definition>
+        <argsstring></argsstring>
+        <name>AtomicMailbox</name>
+        <qualifiedname>Gaze::AtomicMailbox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="81" column="1" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="pool_8hpp_1af9483f524165a0a59edeadc4085a82aa" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename T</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>SZ</declname>
+            <defname>SZ</defname>
+            <defval>2</defval>
+          </param>
+        </templateparamlist>
+        <type><ref refid="class_gaze_1_1_concurrency_1_1_pool" kindref="compound">Concurrency::Pool</ref>&lt; T, SZ &gt;</type>
+        <definition>using Gaze::Pool = Concurrency::Pool&lt;T, SZ&gt;</definition>
+        <argsstring></argsstring>
+        <name>Pool</name>
+        <qualifiedname>Gaze::Pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="92" column="1" bodyfile="src/core/concurrency/pool.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="log_8hpp_1aef7bed9f33c120fec062934ecc6e1fb8" prot="public" static="no">
+        <type>void(*)(bool, const char *)</type>
+        <definition>using Gaze::LogHandler = void(*)(bool, const char*)</definition>
+        <argsstring></argsstring>
+        <name>LogHandler</name>
+        <qualifiedname>Gaze::LogHandler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="19" column="1" bodyfile="src/core/log.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kindref="member">Space::GodotCamera</ref> &gt;</type>
+        <definition>using Gaze::GodotCameraVector3 = SpacedVector3&lt;Space::GodotCamera&gt;</definition>
+        <argsstring></argsstring>
+        <name>GodotCameraVector3</name>
+        <qualifiedname>Gaze::GodotCameraVector3</qualifiedname>
+        <briefdescription>
+<para>Canonical Hub and Spoke Type Aliases. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="336" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="336" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1ad61ec509ca803033a3f371b48d293f32" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" kindref="member">Space::GodotFaceLocal</ref> &gt;</type>
+        <definition>using Gaze::GodotFaceVector3 = SpacedVector3&lt;Space::GodotFaceLocal&gt;</definition>
+        <argsstring></argsstring>
+        <name>GodotFaceVector3</name>
+        <qualifiedname>Gaze::GodotFaceVector3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="337" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="337" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1aefb56cba853f877a4144993196849247" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a305c42b2a66e3a4f40e19597a68ae711" kindref="member">Space::GodotCameraImagePixels</ref> &gt;</type>
+        <definition>using Gaze::GodotCameraImageVector2 = SpacedVector2&lt;Space::GodotCameraImagePixels&gt;</definition>
+        <argsstring></argsstring>
+        <name>GodotCameraImageVector2</name>
+        <qualifiedname>Gaze::GodotCameraImageVector2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="338" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a5fa948ce0d1cfae08c98baf9273c0456" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0895d0a181c8ec1a9aeb37e9c5114399" kindref="member">Space::GodotDisplayPx</ref> &gt;</type>
+        <definition>using Gaze::GodotDisplayVector2 = SpacedVector2&lt;Space::GodotDisplayPx&gt;</definition>
+        <argsstring></argsstring>
+        <name>GodotDisplayVector2</name>
+        <qualifiedname>Gaze::GodotDisplayVector2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="339" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="339" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a7bf96eda25bf6eb74a7a5c75015151f8" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_transform3_d" kindref="compound">SpacedTransform3D</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" kindref="member">Space::GodotFaceLocal</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kindref="member">Space::GodotCamera</ref> &gt;</type>
+        <definition>using Gaze::GodotFaceTransform3D = SpacedTransform3D&lt;Space::GodotFaceLocal, Space::GodotCamera&gt;</definition>
+        <argsstring></argsstring>
+        <name>GodotFaceTransform3D</name>
+        <qualifiedname>Gaze::GodotFaceTransform3D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="340" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="340" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a58cfce8d474e554862de609b6123a6b1" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt;</type>
+        <definition>using Gaze::OpenCVCameraVector3 = SpacedVector3&lt;Space::OpenCVCamera&gt;</definition>
+        <argsstring></argsstring>
+        <name>OpenCVCameraVector3</name>
+        <qualifiedname>Gaze::OpenCVCameraVector3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="341" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a8f4cefe9688817f61b4c8007c84f5708" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref> &gt;</type>
+        <definition>using Gaze::OpenCVFaceVector3 = SpacedVector3&lt;Space::OpenCVFaceModel&gt;</definition>
+        <argsstring></argsstring>
+        <name>OpenCVFaceVector3</name>
+        <qualifiedname>Gaze::OpenCVFaceVector3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="342" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="342" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="opencv__space__conversions_8hpp_1a019b6468d0778b506b946bcdd079602f" prot="public" static="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981abba911bdd9ffe248311458b4b40f3679" kindref="member">Space::OpenVINOADASGaze</ref> &gt;</type>
+        <definition>using Gaze::OpenVINOGazeVector3 = SpacedVector3&lt;Space::OpenVINOADASGaze&gt;</definition>
+        <argsstring></argsstring>
+        <name>OpenVINOGazeVector3</name>
+        <qualifiedname>Gaze::OpenVINOGazeVector3</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="343" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="343" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1ab4d649fc24f81d0be82e7a69f1c8d8dd" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_SIZE</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_SIZE</name>
+        <qualifiedname>Gaze::EYE_CROP_SIZE</qualifiedname>
+        <initializer>= 60</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="9" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="9" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1a4678e7a0b3161cacb40a3a612ca953ca" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_CHANNELS</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_CHANNELS</name>
+        <qualifiedname>Gaze::EYE_CROP_CHANNELS</qualifiedname>
+        <initializer>= 3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="10" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="10" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="gaze__frame__data_8hpp_1a6554a0c267bed0f3816d1150570644d3" prot="public" static="no" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::EYE_CROP_BYTES</definition>
+        <argsstring></argsstring>
+        <name>EYE_CROP_BYTES</name>
+        <qualifiedname>Gaze::EYE_CROP_BYTES</qualifiedname>
+        <initializer>= EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANNELS</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_frame_data.hpp" line="11" column="18" bodyfile="src/core/gaze_frame_data.hpp" bodystart="11" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1aaabd53b70275dd09f6134c0371ed887a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::PI</definition>
+        <argsstring></argsstring>
+        <name>PI</name>
+        <qualifiedname>Gaze::PI</qualifiedname>
+        <initializer>= 3.14159265358979323846</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="122" column="29" bodyfile="src/core/math_defs.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1ab1d00d4a9145ef3d69320fbc645e1f31" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::TAU</definition>
+        <argsstring></argsstring>
+        <name>TAU</name>
+        <qualifiedname>Gaze::TAU</qualifiedname>
+        <initializer>= 6.28318530717958647692</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="123" column="29" bodyfile="src/core/math_defs.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a97438f8805f1361b33a9fa6ddd07c253" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEG_TO_RAD</definition>
+        <argsstring></argsstring>
+        <name>DEG_TO_RAD</name>
+        <qualifiedname>Gaze::DEG_TO_RAD</qualifiedname>
+        <initializer>= PI / 180.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="124" column="29" bodyfile="src/core/math_defs.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a4ac56bd607c627828ef9c833eb11dcc5" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::RAD_TO_DEG</definition>
+        <argsstring></argsstring>
+        <name>RAD_TO_DEG</name>
+        <qualifiedname>Gaze::RAD_TO_DEG</qualifiedname>
+        <initializer>= 180.0 / PI</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="125" column="29" bodyfile="src/core/math_defs.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a7061a980ac72084619f520d70a9cb4c4" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEFAULT_CAMERA_FOV_DEGREES</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_CAMERA_FOV_DEGREES</name>
+        <qualifiedname>Gaze::DEFAULT_CAMERA_FOV_DEGREES</qualifiedname>
+        <initializer>= 35.488537576579634</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="130" column="29" bodyfile="src/core/math_defs.hpp" bodystart="130" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="math__defs_8hpp_1a695977898a860cf2664056c17d90281e" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DEFAULT_FOCAL_TO_WIDTH_RATIO</definition>
+        <argsstring></argsstring>
+        <name>DEFAULT_FOCAL_TO_WIDTH_RATIO</name>
+        <qualifiedname>Gaze::DEFAULT_FOCAL_TO_WIDTH_RATIO</qualifiedname>
+        <initializer>= 1.5625</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="131" column="29" bodyfile="src/core/math_defs.hpp" bodystart="131" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="register__types_8cpp_1a8aa78114bd59aafab0ace66afaed635a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::g_is_exiting</definition>
+        <argsstring></argsstring>
+        <name>g_is_exiting</name>
+        <qualifiedname>Gaze::g_is_exiting</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="34" column="6" bodyfile="src/godot/register_types.cpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="log_8hpp_1a4e8b4a47826f4c164d7d60f397016f4b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::atomic&lt; LogHandler &gt; &amp;</type>
+        <definition>std::atomic&lt; LogHandler &gt; &amp; Gaze::get_log_handler</definition>
+        <argsstring>()</argsstring>
+        <name>get_log_handler</name>
+        <qualifiedname>Gaze::get_log_handler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="21" column="20" bodyfile="src/core/log.hpp" bodystart="21" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ab0a1a866820926f27fe9db889c06c50f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::register_log_handler</definition>
+        <argsstring>(LogHandler handler)</argsstring>
+        <name>register_log_handler</name>
+        <qualifiedname>Gaze::register_log_handler</qualifiedname>
+        <param>
+          <type>LogHandler</type>
+          <declname>handler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="26" column="13" bodyfile="src/core/log.hpp" bodystart="26" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a366b0861e58dddd38558309cc9cff88b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::log_kv_impl</definition>
+        <argsstring>(bool is_error, std::stringstream &amp;ss)</argsstring>
+        <name>log_kv_impl</name>
+        <qualifiedname>Gaze::log_kv_impl</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>is_error</declname>
+        </param>
+        <param>
+          <type>std::stringstream &amp;</type>
+          <declname>ss</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="30" column="13" bodyfile="src/core/log.hpp" bodystart="30" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a2e36db24f9e481a634d88e3703dfca3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename K</type>
+          </param>
+          <param>
+            <type>typename V</type>
+          </param>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_kv_impl</definition>
+        <argsstring>(bool is_error, std::stringstream &amp;ss, const K &amp;key, const V &amp;val, const Args &amp;... args)</argsstring>
+        <name>log_kv_impl</name>
+        <qualifiedname>Gaze::log_kv_impl</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>is_error</declname>
+        </param>
+        <param>
+          <type>std::stringstream &amp;</type>
+          <declname>ss</declname>
+        </param>
+        <param>
+          <type>const K &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type>const V &amp;</type>
+          <declname>val</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="42" column="6" bodyfile="src/core/log.hpp" bodystart="42" bodyend="45"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ad99700578624d0381239c9dd658be2ae" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>std::atomic&lt; int &gt; &amp;</type>
+        <definition>std::atomic&lt; int &gt; &amp; Gaze::get_log_verbosity</definition>
+        <argsstring>()</argsstring>
+        <name>get_log_verbosity</name>
+        <qualifiedname>Gaze::get_log_verbosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="47" column="20" bodyfile="src/core/log.hpp" bodystart="47" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1a2ec5bfa00ca71e4baa94dec238a2b13a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::set_log_verbosity</definition>
+        <argsstring>(int level)</argsstring>
+        <name>set_log_verbosity</name>
+        <qualifiedname>Gaze::set_log_verbosity</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="52" column="13" bodyfile="src/core/log.hpp" bodystart="52" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ad79944750084eb8fac105372d87313b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_info</definition>
+        <argsstring>(int level, const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_info</name>
+        <qualifiedname>Gaze::log_info</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="57" column="6" bodyfile="src/core/log.hpp" bodystart="57" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1abafa3f20c1fb6e3234e6d56d38131659" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_info</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_info</name>
+        <qualifiedname>Gaze::log_info</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="66" column="6" bodyfile="src/core/log.hpp" bodystart="66" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1ae5957a715620ce492f7f80c8cd77fc5f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_warning</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_warning</name>
+        <qualifiedname>Gaze::log_warning</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="71" column="6" bodyfile="src/core/log.hpp" bodystart="71" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="log_8hpp_1abcd6f53a7312a1fae64a14c3bd8d2989" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename...</type>
+            <declname>Args</declname>
+            <defname>Args</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void Gaze::log_error</definition>
+        <argsstring>(const std::string &amp;event, const Args &amp;... args)</argsstring>
+        <name>log_error</name>
+        <qualifiedname>Gaze::log_error</qualifiedname>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type>const Args &amp;...</type>
+          <declname>args</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/log.hpp" line="78" column="6" bodyfile="src/core/log.hpp" bodystart="78" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ae6da62914f1bba3510e826b1d196e27f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::resize_bgr_to_rgb</definition>
+        <argsstring>(const uint8_t *src, int src_w, int src_h, uint8_t *dst, int dst_w, int dst_h)</argsstring>
+        <name>resize_bgr_to_rgb</name>
+        <qualifiedname>Gaze::resize_bgr_to_rgb</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="20" column="17" bodyfile="src/core/math_defs.hpp" bodystart="20" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a945b5c3067c6ca03687e2ecf1cd125da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::crop_and_resize_bgr</definition>
+        <argsstring>(const unsigned char *src, int src_w, int src_h, float crop_x, float crop_y, float crop_w, float crop_h, unsigned char *dst, int dst_w, int dst_h)</argsstring>
+        <name>crop_and_resize_bgr</name>
+        <qualifiedname>Gaze::crop_and_resize_bgr</qualifiedname>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>crop_x</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>crop_y</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>crop_w</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>crop_h</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="54" column="17" bodyfile="src/core/math_defs.hpp" bodystart="54" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ae08ff5882cb209cac072def9526519ac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::crop_and_resize_bgr_to_rgb</definition>
+        <argsstring>(const uint8_t *src, int src_w, int src_h, float roi_x, float roi_y, float roi_w, float roi_h, uint8_t *dst, int dst_w, int dst_h)</argsstring>
+        <name>crop_and_resize_bgr_to_rgb</name>
+        <qualifiedname>Gaze::crop_and_resize_bgr_to_rgb</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roi_x</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roi_y</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roi_w</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roi_h</declname>
+        </param>
+        <param>
+          <type>uint8_t *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="99" column="17" bodyfile="src/core/math_defs.hpp" bodystart="99" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a598ea344cf8ef8b3d9083dde52cd3197" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_focal_length_px</definition>
+        <argsstring>(double width_px, double fov_degrees)</argsstring>
+        <name>get_focal_length_px</name>
+        <qualifiedname>Gaze::get_focal_length_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>width_px</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="134" column="19" bodyfile="src/core/math_defs.hpp" bodystart="134" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a61faa4b0cd24d89b41478d29adb054d6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_focal_length_under_scaling</definition>
+        <argsstring>(double f_original, double original_dim, double new_dim)</argsstring>
+        <name>get_focal_length_under_scaling</name>
+        <qualifiedname>Gaze::get_focal_length_under_scaling</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_original</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>original_dim</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>new_dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="140" column="19" bodyfile="src/core/math_defs.hpp" bodystart="140" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1aff4837e22126a78f320f88afafd46e6a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::get_card_width_px</definition>
+        <argsstring>(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm=85.603)</argsstring>
+        <name>get_card_width_px</name>
+        <qualifiedname>Gaze::get_card_width_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_distance_mm</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>frame_width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_width_mm</declname>
+          <defval>85.603</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="147" column="19" bodyfile="src/core/math_defs.hpp" bodystart="147" bodyend="154"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1ab5f0997d3b9b2bc468cba03eb7909257" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::diagonal_to_horizontal_fov</definition>
+        <argsstring>(double diagonal_fov_degrees, double width, double height)</argsstring>
+        <name>diagonal_to_horizontal_fov</name>
+        <qualifiedname>Gaze::diagonal_to_horizontal_fov</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>diagonal_fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="157" column="19" bodyfile="src/core/math_defs.hpp" bodystart="157" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a3d03452f9d85f2fa05c9f0bb14771fd0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::calculate_default_focal_length</definition>
+        <argsstring>(double frame_width, double hfov_deg=65.0)</argsstring>
+        <name>calculate_default_focal_length</name>
+        <qualifiedname>Gaze::calculate_default_focal_length</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>frame_width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>hfov_deg</declname>
+          <defval>65.0</defval>
+        </param>
+        <briefdescription>
+<para>Computes default pinhole focal length in pixels for a given frame width and horizontal FOV. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Standard webcam default: HFOV = 65.0 deg. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="189" column="19" bodyfile="src/core/math_defs.hpp" bodystart="189" bodyend="193"/>
+      </memberdef>
+      <memberdef kind="function" id="math__defs_8hpp_1a9ead7c039bb0664ab5145a5c3af96f60" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::rotate_image</definition>
+        <argsstring>(const unsigned char *src, int w, int h, unsigned char *dst, float angle_rad)</argsstring>
+        <name>rotate_image</name>
+        <qualifiedname>Gaze::rotate_image</qualifiedname>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>h</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>angle_rad</declname>
+        </param>
+        <briefdescription>
+<para>Rotates a 3-channel 8-bit image by angle_rad around its center. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Operates identically on 3-byte-per-pixel buffers regardless of channel order. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/math_defs.hpp" line="199" column="17" bodyfile="src/core/math_defs.hpp" bodystart="199" bodyend="243"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a39bb91ad586cc70d9972541e0181ebc4" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt;</type>
+        <definition>SpacedVector3&lt; S &gt; Gaze::operator*</definition>
+        <argsstring>(double scalar, const SpacedVector3&lt; S &gt; &amp;v)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>scalar</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="108" column="32" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="108" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1ad4b54f0a7702cf4ae42a2a3e9df94d7d" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double Gaze::dot</definition>
+        <argsstring>(const SpacedVector3&lt; S &gt; &amp;a, const SpacedVector3&lt; S &gt; &amp;b)</argsstring>
+        <name>dot</name>
+        <qualifiedname>Gaze::dot</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt; &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="113" column="25" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="113" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1af5794485a3baeae154d79350c580f906" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt;</type>
+        <definition>SpacedVector3&lt; S &gt; Gaze::cross</definition>
+        <argsstring>(const SpacedVector3&lt; S &gt; &amp;a, const SpacedVector3&lt; S &gt; &amp;b)</argsstring>
+        <name>cross</name>
+        <qualifiedname>Gaze::cross</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt; &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; S &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="118" column="32" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="118" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a22e6191c7d503004ace72ee439c9e886" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::operator*</definition>
+        <argsstring>(double scalar, const SpacedVector2&lt; S &gt; &amp;v)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>scalar</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="167" column="32" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="167" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1ac9b554e6cf7aee636059f390e6510856" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type>double</type>
+        <definition>double Gaze::dot</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;a, const SpacedVector2&lt; S &gt; &amp;b)</argsstring>
+        <name>dot</name>
+        <qualifiedname>Gaze::dot</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &amp;</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="172" column="25" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="172" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a65bb5f77662d3c11e2fe4d3ab70ddb51" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>A</declname>
+            <defname>A</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>B</declname>
+            <defname>B</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>C</declname>
+            <defname>C</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; A, C &gt;</type>
+        <definition>SpacedBasis&lt; A, C &gt; Gaze::operator*</definition>
+        <argsstring>(const SpacedBasis&lt; B, C &gt; &amp;m1, const SpacedBasis&lt; A, B &gt; &amp;m2)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; B, C &gt; &amp;</type>
+          <declname>m1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; A, B &gt; &amp;</type>
+          <declname>m2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="251" column="20" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="251" bodyend="257"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a81fba3e4858481c62407c944e83ec18f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>A</declname>
+            <defname>A</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>B</declname>
+            <defname>B</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>C</declname>
+            <defname>C</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_transform3_d" kindref="compound">SpacedTransform3D</ref>&lt; A, C &gt;</type>
+        <definition>SpacedTransform3D&lt; A, C &gt; Gaze::operator*</definition>
+        <argsstring>(const SpacedTransform3D&lt; B, C &gt; &amp;t1, const SpacedTransform3D&lt; A, B &gt; &amp;t2)</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::operator*</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_transform3_d" kindref="compound">SpacedTransform3D</ref>&lt; B, C &gt; &amp;</type>
+          <declname>t1</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_transform3_d" kindref="compound">SpacedTransform3D</ref>&lt; A, B &gt; &amp;</type>
+          <declname>t2</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="282" column="26" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="282" bodyend="287"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a64ae1441d6471084e7031f07d4db810c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>From</declname>
+            <defname>From</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>To</declname>
+            <defname>To</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; From, To &gt;</type>
+        <definition>SpacedBasis&lt; From, To &gt; Gaze::rodrigues_to_basis</definition>
+        <argsstring>(const SpacedVector3&lt; To &gt; &amp;r)</argsstring>
+        <name>rodrigues_to_basis</name>
+        <qualifiedname>Gaze::rodrigues_to_basis</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt; &amp;</type>
+          <declname>r</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="290" column="20" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="290" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a609db8a1e47ec7fa54b715b6b4c31876" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>From</declname>
+            <defname>From</defname>
+          </param>
+          <param>
+            <type>Space</type>
+            <declname>To</declname>
+            <defname>To</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt; To &gt; Gaze::basis_to_rodrigues</definition>
+        <argsstring>(const SpacedBasis&lt; From, To &gt; &amp;b)</argsstring>
+        <name>basis_to_rodrigues</name>
+        <qualifiedname>Gaze::basis_to_rodrigues</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; From, To &gt; &amp;</type>
+          <declname>b</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="310" column="22" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="310" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a6bee2080d513be65422cd310df3e8d43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>Space</type>
+            <declname>S</declname>
+            <defname>S</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::rotate_point_2d</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;pt, double angle_rad, double img_w, double img_h)</argsstring>
+        <name>rotate_point_2d</name>
+        <qualifiedname>Gaze::rotate_point_2d</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &amp;</type>
+          <declname>pt</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>angle_rad</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>img_w</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>img_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="346" column="22" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="346" bodyend="359"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1ad66af8b7aa6516c7e0e92e8c1dc9036e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::apply_3d_bias_vector</definition>
+        <argsstring>(const GodotCameraVector3 &amp;dir, const SpacedVector2&lt; Space::GodotCameraEuler &gt; &amp;bias_pitch_yaw, const SpacedVector2&lt; Space::GodotCameraEuler &gt; &amp;scale_pitch_yaw=SpacedVector2&lt; Space::GodotCameraEuler &gt;(1.0, 1.0))</argsstring>
+        <name>apply_3d_bias_vector</name>
+        <qualifiedname>Gaze::apply_3d_bias_vector</qualifiedname>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>dir</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981ad462c7d535695dce412ae8309a07bc07" kindref="member">Space::GodotCameraEuler</ref> &gt; &amp;</type>
+          <declname>bias_pitch_yaw</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981ad462c7d535695dce412ae8309a07bc07" kindref="member">Space::GodotCameraEuler</ref> &gt; &amp;</type>
+          <declname>scale_pitch_yaw</declname>
+          <defval><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981ad462c7d535695dce412ae8309a07bc07" kindref="member">Space::GodotCameraEuler</ref> &gt;(1.0, 1.0)</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="361" column="27" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="361" bodyend="378"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a8479afdd6055ba7cc0ca119848c4b0b0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::project_ray_to_camera_plane</definition>
+        <argsstring>(const GodotCameraVector3 &amp;origin_cam, const GodotCameraVector3 &amp;dir_cam)</argsstring>
+        <name>project_ray_to_camera_plane</name>
+        <qualifiedname>Gaze::project_ray_to_camera_plane</qualifiedname>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>dir_cam</declname>
+        </param>
+        <briefdescription>
+<para>Projects a 3D ray in <ref refid="class_gaze_1_1_godot_camera" kindref="compound">GodotCamera</ref> space onto the camera&apos;s coplanar plane (Z = 0). </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In <ref refid="class_gaze_1_1_godot_camera" kindref="compound">GodotCamera</ref> space:<itemizedlist>
+<listitem><para>Origin (0,0,0) is at camera optical center.</para>
+</listitem><listitem><para>+X is Camera Right (User Left), +Y is Camera Up, -Z is toward user.</para>
+</listitem><listitem><para>+Z is toward screen plane.</para>
+</listitem></itemizedlist>
+</para>
+<para>If the ray points away from the plane (dir_cam.z &lt;= 1e-6) or originates behind the plane (t &lt; 0), returns an infinite vector (is_finite() == false). </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="391" column="27" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="391" bodyend="411"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8hpp_1a7a498f1578b7bc2b65c7e6b687ea4a28" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::solve_pnp_rvec</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;model_points, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, OpenCVCameraVector3 &amp;rvec, OpenCVCameraVector3 &amp;tvec)</argsstring>
+        <name>solve_pnp_rvec</name>
+        <qualifiedname>Gaze::solve_pnp_rvec</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+          <declname>model_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref> &gt; &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>rvec</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>tvec</declname>
+        </param>
+        <briefdescription>
+<para>Solves the Perspective-n-Point pose using the globally optimal SQPnP algorithm. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>model_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>3D points in model space. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2D points in pixel coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>rvec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output Rodrigues rotation vector in camera space. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>tvec</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output Translation vector in camera space. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if convergence succeeded. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.hpp" line="27" column="13" bodyfile="src/core/pnp_solver.hpp" bodystart="27" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="pnp__solver_8hpp_1a836b53529a168a1bc4317e9efa26a2bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::solve_pnp</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;model_points, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;rotation, OpenCVCameraVector3 &amp;translation)</argsstring>
+        <name>solve_pnp</name>
+        <qualifiedname>Gaze::solve_pnp</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+          <declname>model_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref> &gt; &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt; &amp;</type>
+          <declname>rotation</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>translation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/pnp_solver.hpp" line="36" column="13" bodyfile="src/core/pnp_solver.hpp" bodystart="36" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="sqpnp__solver_8cpp_1ae18f58a8d0b68a2efc776b0c6d8289c4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template bool</type>
+        <definition>template bool Gaze::SQPnPSolver::solve&lt; Space::GodotCameraWorkingImagePixels &gt;</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;, double, double, double, double, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;, OpenCVCameraVector3 &amp;)</argsstring>
+        <name>SQPnPSolver::solve&lt; Space::GodotCameraWorkingImagePixels &gt;</name>
+        <qualifiedname>Gaze::solve&lt; Space::GodotCameraWorkingImagePixels &gt;</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref> &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt; &amp;</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.cpp" line="903" column="10" declfile="src/core/sqpnp_solver.cpp" declline="903" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="sqpnp__solver_8cpp_1a39534a7a9d8175f0cf51c29db3217297" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template bool</type>
+        <definition>template bool Gaze::SQPnPSolver::solve&lt; Space::GodotCameraImagePixels &gt;</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraImagePixels &gt; &gt; &amp;, double, double, double, double, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;, OpenCVCameraVector3 &amp;)</argsstring>
+        <name>SQPnPSolver::solve&lt; Space::GodotCameraImagePixels &gt;</name>
+        <qualifiedname>Gaze::solve&lt; Space::GodotCameraImagePixels &gt;</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a305c42b2a66e3a4f40e19597a68ae711" kindref="member">Space::GodotCameraImagePixels</ref> &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt; &amp;</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.cpp" line="910" column="10" declfile="src/core/sqpnp_solver.cpp" declline="910" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="sqpnp__solver_8cpp_1a9389d04e8db1e59eb38cb6346280f103" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template bool</type>
+        <definition>template bool Gaze::SQPnPSolver::solve_rvec&lt; Space::GodotCameraWorkingImagePixels &gt;</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;, double, double, double, double, OpenCVCameraVector3 &amp;, OpenCVCameraVector3 &amp;)</argsstring>
+        <name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraWorkingImagePixels &gt;</name>
+        <qualifiedname>Gaze::solve_rvec&lt; Space::GodotCameraWorkingImagePixels &gt;</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref> &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.cpp" line="917" column="10" declfile="src/core/sqpnp_solver.cpp" declline="917" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="sqpnp__solver_8cpp_1a7f0d640f836d1b3d20afe99a262ae6ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>template bool</type>
+        <definition>template bool Gaze::SQPnPSolver::solve_rvec&lt; Space::GodotCameraImagePixels &gt;</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraImagePixels &gt; &gt; &amp;, double, double, double, double, OpenCVCameraVector3 &amp;, OpenCVCameraVector3 &amp;)</argsstring>
+        <name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraImagePixels &gt;</name>
+        <qualifiedname>Gaze::solve_rvec&lt; Space::GodotCameraImagePixels &gt;</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a305c42b2a66e3a4f40e19597a68ae711" kindref="member">Space::GodotCameraImagePixels</ref> &gt; &gt; &amp;</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>double</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.cpp" line="924" column="10" declfile="src/core/sqpnp_solver.cpp" declline="924" declcolumn="10"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__display__fallback_8cpp_1a9330e5e2c14098ff364900ddad0b2f59" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref></type>
+        <definition>GazeDisplayMetrics Gaze::gaze_fallback_get_display_metrics</definition>
+        <argsstring>(int screen_index)</argsstring>
+        <name>gaze_fallback_get_display_metrics</name>
+        <qualifiedname>Gaze::gaze_fallback_get_display_metrics</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>screen_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_display_fallback.cpp" line="5" column="20" bodyfile="src/native/gaze_display_fallback.cpp" bodystart="5" bodyend="14" declfile="src/native/gaze_display_fallback.hpp" declline="7" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__display__fallback_8cpp_1aced30d546bea6b4f996998c729ccbef4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref></type>
+        <definition>GazeWindowRect Gaze::gaze_fallback_get_window_rect</definition>
+        <argsstring>(int window_index)</argsstring>
+        <name>gaze_fallback_get_window_rect</name>
+        <qualifiedname>Gaze::gaze_fallback_get_window_rect</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>window_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/gaze_display_fallback.cpp" line="16" column="16" bodyfile="src/native/gaze_display_fallback.cpp" bodystart="16" bodyend="23" declfile="src/native/gaze_display_fallback.hpp" declline="8" declcolumn="16"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__gaze__model_8hpp_1acc280d0d313f97f3deab08e12d3403f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>Ort::Env &amp;</type>
+        <definition>Ort::Env &amp; Gaze::get_ort_env</definition>
+        <argsstring>()</argsstring>
+        <name>get_ort_env</name>
+        <qualifiedname>Gaze::get_ort_env</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_gaze_model.hpp" line="13" column="21" bodyfile="src/native/ort_gaze_model.hpp" bodystart="13" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__landmark__model_8cpp_1a34cbf9587c03da28adf638c0bfc119f0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_rect" kindref="compound">GazeRect</ref></type>
+        <definition>static GazeRect Gaze::adjust_bounding_box</definition>
+        <argsstring>(const GazeRect &amp;bbox)</argsstring>
+        <name>adjust_bounding_box</name>
+        <qualifiedname>Gaze::adjust_bounding_box</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_rect" kindref="compound">GazeRect</ref> &amp;</type>
+          <declname>bbox</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_landmark_model.cpp" line="131" column="21" bodyfile="src/native/ort_landmark_model.cpp" bodystart="131" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__yunet__detector_8cpp_1a3a5bfeef24e334ab182b0048325905a0" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void Gaze::bilinear_resize_direct</definition>
+        <argsstring>(const unsigned char *src, int src_w, int src_h, unsigned char *dst, int dst_w, int dst_h)</argsstring>
+        <name>bilinear_resize_direct</name>
+        <qualifiedname>Gaze::bilinear_resize_direct</qualifiedname>
+        <param>
+          <type>const unsigned char *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>src_h</declname>
+        </param>
+        <param>
+          <type>unsigned char *</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dst_h</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.cpp" line="19" column="17" bodyfile="src/native/ort_yunet_detector.cpp" bodystart="19" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="ort__yunet__detector_8cpp_1a2ca870b83ddfea6fbd46037506ca580e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::vector&lt; int &gt;</type>
+        <definition>static std::vector&lt; int &gt; Gaze::nms</definition>
+        <argsstring>(const std::vector&lt; GazeRect &gt; &amp;bboxes, const std::vector&lt; float &gt; &amp;scores, float nms_thresh)</argsstring>
+        <name>nms</name>
+        <qualifiedname>Gaze::nms</qualifiedname>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_gaze_rect" kindref="compound">GazeRect</ref> &gt; &amp;</type>
+          <declname>bboxes</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; float &gt; &amp;</type>
+          <declname>scores</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>nms_thresh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.cpp" line="61" column="24" bodyfile="src/native/ort_yunet_detector.cpp" bodystart="61" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="platform__ort_8fallback_8cpp_1a1d0831bfa024ca9bdba9b785b4f9270f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt; Ort::Session &gt; Gaze::platform_create_ort_session</definition>
+        <argsstring>(Ort::Env &amp;env, const std::string &amp;path, Ort::SessionOptions *options)</argsstring>
+        <name>platform_create_ort_session</name>
+        <qualifiedname>Gaze::platform_create_ort_session</qualifiedname>
+        <param>
+          <type>Ort::Env &amp;</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::string &amp;</type>
+          <declname>path</declname>
+        </param>
+        <param>
+          <type>Ort::SessionOptions *</type>
+          <declname>options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/platform_ort.fallback.cpp" line="5" column="17" bodyfile="src/native/platform_ort.fallback.cpp" bodystart="5" bodyend="11" declfile="src/native/platform_ort.hpp" declline="10" declcolumn="21"/>
+      </memberdef>
+      <memberdef kind="function" id="platform__ort_8fallback_8cpp_1aa056d0da16f7a14294069d186098b1c0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::unique_ptr&lt; Ort::Session &gt;</type>
+        <definition>std::unique_ptr&lt; Ort::Session &gt; Gaze::platform_create_ort_session</definition>
+        <argsstring>(Ort::Env &amp;env, const std::vector&lt; uint8_t &gt; &amp;buffer, Ort::SessionOptions *options)</argsstring>
+        <name>platform_create_ort_session</name>
+        <qualifiedname>Gaze::platform_create_ort_session</qualifiedname>
+        <param>
+          <type>Ort::Env &amp;</type>
+          <declname>env</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; uint8_t &gt; &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <param>
+          <type>Ort::SessionOptions *</type>
+          <declname>options</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/platform_ort.fallback.cpp" line="13" column="17" bodyfile="src/native/platform_ort.fallback.cpp" bodystart="13" bodyend="19" declfile="src/native/platform_ort.hpp" declline="17" declcolumn="21"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__display__server__web_8cpp_1ad72d078b6ab3a1009145cb191727f5f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref></type>
+        <definition>GazeDisplayMetrics Gaze::gaze_web_get_display_metrics</definition>
+        <argsstring>(int screen_index)</argsstring>
+        <name>gaze_web_get_display_metrics</name>
+        <qualifiedname>Gaze::gaze_web_get_display_metrics</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>screen_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/gaze_display_server_web.cpp" line="74" column="20" bodyfile="src/web/gaze_display_server_web.cpp" bodystart="74" bodyend="82" declfile="src/web/gaze_display_server_web.hpp" declline="7" declcolumn="20"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__display__server__web_8cpp_1a47d593f6da185d51b81daf429be3ebac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref></type>
+        <definition>GazeWindowRect Gaze::gaze_web_get_window_rect</definition>
+        <argsstring>(int window_index)</argsstring>
+        <name>gaze_web_get_window_rect</name>
+        <qualifiedname>Gaze::gaze_web_get_window_rect</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>window_index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/web/gaze_display_server_web.cpp" line="84" column="16" bodyfile="src/web/gaze_display_server_web.cpp" bodystart="84" bodyend="91" declfile="src/web/gaze_display_server_web.hpp" declline="8" declcolumn="16"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/camera_interface.hpp" line="13" column="1"/>
+  </compounddef>
+</doxygen>

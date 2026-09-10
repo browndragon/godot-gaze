@@ -32,6 +32,11 @@ True if started successfully, false otherwise.</description>
 			<param index="0" name="p_camera" type="RID"></param>
 			<description>Retrieve the latest captured CPU image resource.</description>
 		</method>
+		<method name="set_simulated_acceleration">
+			<return type="void"></return>
+			<param index="0" name="p_accel" type="const Vector3 &amp;"></param>
+			<description>Set simulated acceleration in test scenarios, deriving unit gravity vector.</description>
+		</method>
 		<method name="inject_texture">
 			<return type="void"></return>
 			<param index="0" name="p_camera" type="RID"></param>

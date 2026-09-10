@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="face__model__geometry_8js" kind="file" language="C++">
+    <compoundname>face_model_geometry.js</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">//<sp/>AUTO-GENERATED<sp/>from<sp/>src/core/math_defs.hpp<sp/>by<sp/>tools/generate_web_geometry.py</highlight></codeline>
+<codeline><highlight class="normal">//<sp/>DO<sp/>NOT<sp/>EDIT<sp/>MANUALLY.<sp/>Single<sp/>Source<sp/>of<sp/>Truth<sp/>is<sp/>src/core/face_model_geometry.hpp<sp/>/<sp/>math_defs.hpp.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">(function<sp/>(root,<sp/>factory)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>if<sp/>(typeof<sp/>module<sp/>===<sp/>&apos;object&apos;<sp/>&amp;&amp;<sp/>module.exports)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>module.exports<sp/>=<sp/>factory();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}<sp/>else<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>root.FaceModelGeometry<sp/>=<sp/>factory();</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline><highlight class="normal">}(typeof<sp/>self<sp/>!==<sp/>&apos;undefined&apos;<sp/>?<sp/>self<sp/>:<sp/>this,<sp/>function<sp/>()<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>return<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>DEFAULT_HFOV_DEG:<sp/>65.0,</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>DEFAULT_FOCAL_TAN_HALF:<sp/>0.6370702608,<sp/>//<sp/>tan(65<sp/>deg<sp/>/<sp/>2)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>calculateDefaultFocalLength:<sp/>function<sp/>(width)<sp/>{</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>return<sp/>width<sp/>/<sp/>(2.0<sp/>*<sp/>0.6370702608);</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>},</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Canonical<sp/>35-point<sp/>OpenVINO<sp/>ADAS<sp/>face<sp/>model<sp/>(Nose<sp/>Tip<sp/>Pt<sp/>5<sp/>is<sp/>Origin<sp/>(0,0,0))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MODEL_POINTS_35:<sp/>[</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-15.0,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>35.0],<sp/>//<sp/>Pt<sp/>0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-46.0,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>1</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>15.0,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>35.0],<sp/>//<sp/>Pt<sp/>2</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>46.0,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>3</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/>-22.0,<sp/><sp/><sp/><sp/>20.0],<sp/>//<sp/>Pt<sp/>4</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/><sp/>0.0],<sp/>//<sp/>Pt<sp/>5</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-16.0,<sp/><sp/><sp/><sp/><sp/>6.0,<sp/><sp/><sp/><sp/>20.0],<sp/>//<sp/>Pt<sp/>6</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>16.0,<sp/><sp/><sp/><sp/><sp/>6.0,<sp/><sp/><sp/><sp/>20.0],<sp/>//<sp/>Pt<sp/>7</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-25.0,<sp/><sp/><sp/><sp/>32.0,<sp/><sp/><sp/><sp/>30.0],<sp/>//<sp/>Pt<sp/>8</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>25.0,<sp/><sp/><sp/><sp/>32.0,<sp/><sp/><sp/><sp/>30.0],<sp/>//<sp/>Pt<sp/>9</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/>26.0,<sp/><sp/><sp/><sp/>23.0],<sp/>//<sp/>Pt<sp/>10</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/>40.0,<sp/><sp/><sp/><sp/>27.0],<sp/>//<sp/>Pt<sp/>11</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-12.0,<sp/><sp/><sp/>-48.0,<sp/><sp/><sp/><sp/>35.0],<sp/>//<sp/>Pt<sp/>12</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-32.0,<sp/><sp/><sp/>-52.0,<sp/><sp/><sp/><sp/>40.0],<sp/>//<sp/>Pt<sp/>13</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-50.0,<sp/><sp/><sp/>-48.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>14</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>12.0,<sp/><sp/><sp/>-48.0,<sp/><sp/><sp/><sp/>35.0],<sp/>//<sp/>Pt<sp/>15</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>32.0,<sp/><sp/><sp/>-52.0,<sp/><sp/><sp/><sp/>40.0],<sp/>//<sp/>Pt<sp/>16</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>50.0,<sp/><sp/><sp/>-48.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>17</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-70.0,<sp/><sp/><sp/>-35.0,<sp/><sp/><sp/><sp/>70.0],<sp/>//<sp/>Pt<sp/>18</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-68.0,<sp/><sp/><sp/>-20.0,<sp/><sp/><sp/><sp/>65.0],<sp/>//<sp/>Pt<sp/>19</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-64.0,<sp/><sp/><sp/><sp/>-5.0,<sp/><sp/><sp/><sp/>59.0],<sp/>//<sp/>Pt<sp/>20</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-58.0,<sp/><sp/><sp/><sp/>12.0,<sp/><sp/><sp/><sp/>51.0],<sp/>//<sp/>Pt<sp/>21</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-50.0,<sp/><sp/><sp/><sp/>28.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>22</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-40.0,<sp/><sp/><sp/><sp/>44.0,<sp/><sp/><sp/><sp/>37.0],<sp/>//<sp/>Pt<sp/>23</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-28.0,<sp/><sp/><sp/><sp/>58.0,<sp/><sp/><sp/><sp/>33.0],<sp/>//<sp/>Pt<sp/>24</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-15.0,<sp/><sp/><sp/><sp/>68.0,<sp/><sp/><sp/><sp/>31.0],<sp/>//<sp/>Pt<sp/>25</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/>70.0,<sp/><sp/><sp/><sp/>35.0],<sp/>//<sp/>Pt<sp/>26</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>15.0,<sp/><sp/><sp/><sp/>68.0,<sp/><sp/><sp/><sp/>31.0],<sp/>//<sp/>Pt<sp/>27</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>28.0,<sp/><sp/><sp/><sp/>58.0,<sp/><sp/><sp/><sp/>33.0],<sp/>//<sp/>Pt<sp/>28</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>40.0,<sp/><sp/><sp/><sp/>44.0,<sp/><sp/><sp/><sp/>37.0],<sp/>//<sp/>Pt<sp/>29</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>50.0,<sp/><sp/><sp/><sp/>28.0,<sp/><sp/><sp/><sp/>43.0],<sp/>//<sp/>Pt<sp/>30</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>58.0,<sp/><sp/><sp/><sp/>12.0,<sp/><sp/><sp/><sp/>51.0],<sp/>//<sp/>Pt<sp/>31</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>64.0,<sp/><sp/><sp/><sp/>-5.0,<sp/><sp/><sp/><sp/>59.0],<sp/>//<sp/>Pt<sp/>32</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>68.0,<sp/><sp/><sp/>-20.0,<sp/><sp/><sp/><sp/>65.0],<sp/>//<sp/>Pt<sp/>33</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>70.0,<sp/><sp/><sp/>-35.0,<sp/><sp/><sp/><sp/>70.0],<sp/>//<sp/>Pt<sp/>34</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>],</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>//<sp/>Canonical<sp/>5-point<sp/>YuNet<sp/>alignment<sp/>model<sp/>(Pt<sp/>0<sp/>is<sp/>Nose<sp/>Tip<sp/>Origin<sp/>(0,0,0))</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MODEL_POINTS_5:<sp/>[</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/><sp/>0.0,<sp/><sp/><sp/><sp/><sp/>0.0],<sp/>//<sp/>Pt<sp/>0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-30.5,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>39.0],<sp/>//<sp/>Pt<sp/>1</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>30.5,<sp/><sp/><sp/>-32.0,<sp/><sp/><sp/><sp/>39.0],<sp/>//<sp/>Pt<sp/>2</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/>-25.0,<sp/><sp/><sp/><sp/>32.0,<sp/><sp/><sp/><sp/>30.0],<sp/>//<sp/>Pt<sp/>3</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>[<sp/><sp/><sp/>25.0,<sp/><sp/><sp/><sp/>32.0,<sp/><sp/><sp/><sp/>30.0],<sp/>//<sp/>Pt<sp/>4</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>};</highlight></codeline>
+<codeline><highlight class="normal">});</highlight></codeline>
+    </programlisting>
+    <location file="src/web/face_model_geometry.js"/>
+  </compounddef>
+</doxygen>

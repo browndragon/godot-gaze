@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::SQPnPSolver::Solution</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a98e3c1a21e28f256f8998fc2c6e0321a" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt;</type>
+        <definition>SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt; Gaze::SQPnPSolver::Solution::rotation</definition>
+        <argsstring></argsstring>
+        <name>rotation</name>
+        <qualifiedname>Gaze::SQPnPSolver::Solution::rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.hpp" line="24" column="21" bodyfile="src/core/sqpnp_solver.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a8e8bc6a594c3ba729b1ae01d21f9ff22" prot="public" static="no" mutable="no">
+        <type>OpenCVCameraVector3</type>
+        <definition>OpenCVCameraVector3 Gaze::SQPnPSolver::Solution::translation</definition>
+        <argsstring></argsstring>
+        <name>translation</name>
+        <qualifiedname>Gaze::SQPnPSolver::Solution::translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.hpp" line="25" column="29" bodyfile="src/core/sqpnp_solver.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a2fab929f6590f3219e53e0f563e4e944" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::SQPnPSolver::Solution::squared_error</definition>
+        <argsstring></argsstring>
+        <name>squared_error</name>
+        <qualifiedname>Gaze::SQPnPSolver::Solution::squared_error</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.hpp" line="26" column="16" bodyfile="src/core/sqpnp_solver.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::SQPnPSolver::Solution</label>
+        <link refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>rotation</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>translation</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_basis"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>x</edgelabel>
+          <edgelabel>y</edgelabel>
+          <edgelabel>z</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Gaze::SpacedVector3&lt; Space::OpenCVCamera &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector3"/>
+      </node>
+      <node id="3">
+        <label>Gaze::SpacedVector3&lt; To &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/sqpnp_solver.hpp" line="22" column="5" bodyfile="src/core/sqpnp_solver.hpp" bodystart="23" bodyend="27"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a98e3c1a21e28f256f8998fc2c6e0321a" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver::Solution</scope><name>rotation</name></member>
+      <member refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a2fab929f6590f3219e53e0f563e4e944" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver::Solution</scope><name>squared_error</name></member>
+      <member refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution_1a8e8bc6a594c3ba729b1ae01d21f9ff22" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver::Solution</scope><name>translation</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

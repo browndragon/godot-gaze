@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_screen_projector" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::ScreenProjector</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1a9d2c7bf548906c128f7eb335d4f311ab" prot="public" static="no" mutable="no">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ScreenProjector::window_position_px</definition>
+        <argsstring></argsstring>
+        <name>window_position_px</name>
+        <qualifiedname>Gaze::ScreenProjector::window_position_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="16" column="29" bodyfile="src/core/screen_projector.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1a7c54dbd6f1166503d57e2f21f1afe76d" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt;</type>
+        <definition>SpacedVector2&lt;Space::GodotViewportPx&gt; Gaze::ScreenProjector::viewport_scale</definition>
+        <argsstring></argsstring>
+        <name>viewport_scale</name>
+        <qualifiedname>Gaze::ScreenProjector::viewport_scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="17" column="23" bodyfile="src/core/screen_projector.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_screen_projector_1a9b46489f458c0244726c50ff8042b031" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt;</type>
+        <definition>SpacedVector2&lt;Space::GodotViewportPx&gt; Gaze::ScreenProjector::viewport_offset_px</definition>
+        <argsstring></argsstring>
+        <name>viewport_offset_px</name>
+        <qualifiedname>Gaze::ScreenProjector::viewport_offset_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="18" column="23" bodyfile="src/core/screen_projector.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1afcf156696c959983310f253ae84ab7c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ScreenProjector::ScreenProjector</definition>
+        <argsstring>()=default</argsstring>
+        <name>ScreenProjector</name>
+        <qualifiedname>Gaze::ScreenProjector::ScreenProjector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a94106580f1f8c8a4b02073aef70e3e26" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ScreenProjector::ScreenProjector</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;win_pos_px, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;vp_scale, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;vp_offset_px)</argsstring>
+        <name>ScreenProjector</name>
+        <qualifiedname>Gaze::ScreenProjector::ScreenProjector</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>win_pos_px</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>vp_scale</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>vp_offset_px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="21" column="9" bodyfile="src/core/screen_projector.hpp" bodystart="21" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a396fc6fbc63b8970a6d6179f7bd7f0f5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ScreenProjector::project_to_viewport</definition>
+        <argsstring>(const ProjectionEngine &amp;engine, const GodotCameraVector3 &amp;origin_cam, const GodotCameraVector3 &amp;dir_cam, SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;out_viewport_pixel) const</argsstring>
+        <name>project_to_viewport</name>
+        <qualifiedname>Gaze::ScreenProjector::project_to_viewport</qualifiedname>
+        <param>
+          <type>const <ref refid="class_gaze_1_1_projection_engine" kindref="compound">ProjectionEngine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>dir_cam</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>out_viewport_pixel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="37" column="14" bodyfile="src/core/screen_projector.cpp" bodystart="30" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1a157361b2d287f7e58bd0e30215e9f190" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ScreenProjector::map_viewport_to_screen_px</definition>
+        <argsstring>(const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;logical_pixel) const</argsstring>
+        <name>map_viewport_to_screen_px</name>
+        <qualifiedname>Gaze::ScreenProjector::map_viewport_to_screen_px</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>logical_pixel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="43" column="29" bodyfile="src/core/screen_projector.cpp" bodystart="58" bodyend="63"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1add06e98dabe396694cf2dd8d306c75ea" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ScreenProjector</type>
+        <definition>ScreenProjector Gaze::ScreenProjector::derive_configuration</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;win_pos_px, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;vp_scale, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;vp_origin)</argsstring>
+        <name>derive_configuration</name>
+        <qualifiedname>Gaze::ScreenProjector::derive_configuration</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>win_pos_px</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>vp_scale</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>vp_origin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="27" column="32" bodyfile="src/core/screen_projector.cpp" bodystart="10" bodyend="16"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_screen_projector_1ab3df65ef4f851f72149d1954b912b1e3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>ScreenProjector</type>
+        <definition>ScreenProjector Gaze::ScreenProjector::from_godot_geometry</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;window_pos_logical, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;viewport_scale_logical, const SpacedVector2&lt; Space::GodotViewportPx &gt; &amp;viewport_offset_logical)</argsstring>
+        <name>from_godot_geometry</name>
+        <qualifiedname>Gaze::ScreenProjector::from_godot_geometry</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>window_pos_logical</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>viewport_scale_logical</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0864cf64b8c9486bbf59e4f3701d2b9c" kindref="member">Space::GodotViewportPx</ref> &gt; &amp;</type>
+          <declname>viewport_offset_logical</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/screen_projector.hpp" line="32" column="32" bodyfile="src/core/screen_projector.cpp" bodystart="18" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::ScreenProjector</label>
+        <link refid="class_gaze_1_1_screen_projector"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>window_position_px</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>viewport_offset_px</edgelabel>
+          <edgelabel>viewport_scale</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::SpacedVector2&lt; Space::GodotDisplayPx &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector2"/>
+      </node>
+      <node id="3">
+        <label>Gaze::SpacedVector2&lt; Space::GodotViewportPx &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector2"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/screen_projector.hpp" line="13" column="5" bodyfile="src/core/screen_projector.hpp" bodystart="14" bodyend="44"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_screen_projector_1add06e98dabe396694cf2dd8d306c75ea" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>derive_configuration</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1ab3df65ef4f851f72149d1954b912b1e3" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>from_godot_geometry</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a157361b2d287f7e58bd0e30215e9f190" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>map_viewport_to_screen_px</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a396fc6fbc63b8970a6d6179f7bd7f0f5" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>project_to_viewport</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1afcf156696c959983310f253ae84ab7c8" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>ScreenProjector</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a94106580f1f8c8a4b02073aef70e3e26" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>ScreenProjector</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a9b46489f458c0244726c50ff8042b031" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>viewport_offset_px</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a7c54dbd6f1166503d57e2f21f1afe76d" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>viewport_scale</name></member>
+      <member refid="class_gaze_1_1_screen_projector_1a9d2c7bf548906c128f7eb335d4f311ab" prot="public" virt="non-virtual"><scope>Gaze::ScreenProjector</scope><name>window_position_px</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

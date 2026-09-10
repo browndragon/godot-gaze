@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespace_gaze_1_1_coordinate_conversions" kind="namespace" language="C++">
+    <compoundname>Gaze::CoordinateConversions</compoundname>
+    <sectiondef kind="var">
+      <memberdef kind="variable" id="opencv__space__conversions_8hpp_1a3ef4175bd5b2fbb656f82e2e33b627b1" prot="public" static="no" mutable="no">
+        <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kindref="member">Space::GodotCamera</ref> &gt;</type>
+        <definition>const SpacedBasis&lt; Space::OpenCVCamera, Space::GodotCamera &gt; Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM(GodotCameraVector3(1.0, 0.0, 0.0), GodotCameraVector3(0.0, -1.0, 0.0), GodotCameraVector3(0.0, 0.0, -1.0))</definition>
+        <argsstring>(GodotCameraVector3(1.0, 0.0, 0.0), GodotCameraVector3(0.0, -1.0, 0.0), GodotCameraVector3(0.0, 0.0, -1.0))</argsstring>
+        <name>OPENCV_CAM_TO_GODOT_CAM</name>
+        <qualifiedname>Gaze::CoordinateConversions::OPENCV_CAM_TO_GODOT_CAM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="416" column="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="opencv__space__conversions_8hpp_1a9b4c7a79e53b785cda36401a67fb481a" prot="public" static="no" mutable="no">
+        <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" kindref="member">Space::GodotFaceLocal</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref> &gt;</type>
+        <definition>const SpacedBasis&lt; Space::GodotFaceLocal, Space::OpenCVFaceModel &gt; Gaze::CoordinateConversions::GODOT_FACE_TO_OPENCV_FACE(OpenCVFaceVector3(-1.0, 0.0, 0.0), OpenCVFaceVector3(0.0, -1.0, 0.0), OpenCVFaceVector3(0.0, 0.0, 1.0))</definition>
+        <argsstring>(OpenCVFaceVector3(-1.0, 0.0, 0.0), OpenCVFaceVector3(0.0, -1.0, 0.0), OpenCVFaceVector3(0.0, 0.0, 1.0))</argsstring>
+        <name>GODOT_FACE_TO_OPENCV_FACE</name>
+        <qualifiedname>Gaze::CoordinateConversions::GODOT_FACE_TO_OPENCV_FACE</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="422" column="30"/>
+      </memberdef>
+      <memberdef kind="variable" id="opencv__space__conversions_8hpp_1a65bef65b23670db9fee79d3d5390f228" prot="public" static="no" mutable="no">
+        <type>const <ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981abba911bdd9ffe248311458b4b40f3679" kindref="member">Space::OpenVINOADASGaze</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kindref="member">Space::GodotCamera</ref> &gt;</type>
+        <definition>const SpacedBasis&lt; Space::OpenVINOADASGaze, Space::GodotCamera &gt; Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM(GodotCameraVector3(1.0, 0.0, 0.0), GodotCameraVector3(0.0, 1.0, 0.0), GodotCameraVector3(0.0, 0.0, -1.0))</definition>
+        <argsstring>(GodotCameraVector3(1.0, 0.0, 0.0), GodotCameraVector3(0.0, 1.0, 0.0), GodotCameraVector3(0.0, 0.0, -1.0))</argsstring>
+        <name>ONNX_GAZE_TO_GODOT_CAM</name>
+        <qualifiedname>Gaze::CoordinateConversions::ONNX_GAZE_TO_GODOT_CAM</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="428" column="30"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a0c1e31e3a985b69188cc1df2fc662e78" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::CoordinateConversions::to_godot_camera</definition>
+        <argsstring>(const OpenCVCameraVector3 &amp;cv_vec)</argsstring>
+        <name>to_godot_camera</name>
+        <qualifiedname>Gaze::CoordinateConversions::to_godot_camera</qualifiedname>
+        <param>
+          <type>const OpenCVCameraVector3 &amp;</type>
+          <declname>cv_vec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="434" column="31" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="434" bodyend="437"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1adafbc2e8360d3461a7ca715f26236a68" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::CoordinateConversions::to_godot_camera</definition>
+        <argsstring>(const OpenVINOGazeVector3 &amp;onnx_gaze)</argsstring>
+        <name>to_godot_camera</name>
+        <qualifiedname>Gaze::CoordinateConversions::to_godot_camera</qualifiedname>
+        <param>
+          <type>const OpenVINOGazeVector3 &amp;</type>
+          <declname>onnx_gaze</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="439" column="31" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="439" bodyend="442"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a1d4b363211e3e2fa41dece05eab79a7f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>OpenCVFaceVector3</type>
+        <definition>OpenCVFaceVector3 Gaze::CoordinateConversions::to_opencv_face</definition>
+        <argsstring>(const GodotFaceVector3 &amp;godot_face_pt)</argsstring>
+        <name>to_opencv_face</name>
+        <qualifiedname>Gaze::CoordinateConversions::to_opencv_face</qualifiedname>
+        <param>
+          <type>const GodotFaceVector3 &amp;</type>
+          <declname>godot_face_pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="444" column="30" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="444" bodyend="447"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1aa06fa2efa67d0e860744f89a13c6eade" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotFaceVector3</type>
+        <definition>GodotFaceVector3 Gaze::CoordinateConversions::to_godot_face</definition>
+        <argsstring>(const OpenCVFaceVector3 &amp;cv_face_pt)</argsstring>
+        <name>to_godot_face</name>
+        <qualifiedname>Gaze::CoordinateConversions::to_godot_face</qualifiedname>
+        <param>
+          <type>const OpenCVFaceVector3 &amp;</type>
+          <declname>cv_face_pt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="449" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="449" bodyend="452"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a5df6f24fd85440cf3f76a1a608292108" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt;</type>
+        <definition>SpacedVector3&lt; Space::OpenCVCamera &gt; Gaze::CoordinateConversions::opencv_head_pose_to_openvino_angles_deg</definition>
+        <argsstring>(const OpenCVCameraVector3 &amp;cv_rvec)</argsstring>
+        <name>opencv_head_pose_to_openvino_angles_deg</name>
+        <qualifiedname>Gaze::CoordinateConversions::opencv_head_pose_to_openvino_angles_deg</qualifiedname>
+        <param>
+          <type>const OpenCVCameraVector3 &amp;</type>
+          <declname>cv_rvec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="454" column="26" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="454" bodyend="461"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a0ee412a573e0f977204f0dba8fd7e283" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotFaceTransform3D</type>
+        <definition>GodotFaceTransform3D Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform</definition>
+        <argsstring>(const OpenCVCameraVector3 &amp;cv_translation, const OpenCVCameraVector3 &amp;cv_rvec)</argsstring>
+        <name>opencv_pose_to_godot_camera_transform</name>
+        <qualifiedname>Gaze::CoordinateConversions::opencv_pose_to_godot_camera_transform</qualifiedname>
+        <param>
+          <type>const OpenCVCameraVector3 &amp;</type>
+          <declname>cv_translation</declname>
+        </param>
+        <param>
+          <type>const OpenCVCameraVector3 &amp;</type>
+          <declname>cv_rvec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="463" column="33" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="463" bodyend="471"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a7eaa911e4692c4538b037b82e2dd4999" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotFaceTransform3D</type>
+        <definition>GodotFaceTransform3D Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera</definition>
+        <argsstring>(const GodotFaceTransform3D &amp;transform_hint_rolled, float roll_hint_rad)</argsstring>
+        <name>godot_camera_hint_rolled_to_godot_camera</name>
+        <qualifiedname>Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera</qualifiedname>
+        <param>
+          <type>const GodotFaceTransform3D &amp;</type>
+          <declname>transform_hint_rolled</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roll_hint_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="473" column="33" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="473" bodyend="491"/>
+      </memberdef>
+      <memberdef kind="function" id="opencv__space__conversions_8hpp_1a523812da8346802890718e0a3c38f316" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotFaceTransform3D</type>
+        <definition>GodotFaceTransform3D Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera</definition>
+        <argsstring>(const SpacedTransform3D&lt; Space::GodotFaceLocal, Space::GodotCameraHintRolled &gt; &amp;transform_hint_rolled, float roll_hint_rad)</argsstring>
+        <name>godot_camera_hint_rolled_to_godot_camera</name>
+        <qualifiedname>Gaze::CoordinateConversions::godot_camera_hint_rolled_to_godot_camera</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_transform3_d" kindref="compound">SpacedTransform3D</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" kindref="member">Space::GodotFaceLocal</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a8dde4b58b6594f2d420735074a14c388" kindref="member">Space::GodotCameraHintRolled</ref> &gt; &amp;</type>
+          <declname>transform_hint_rolled</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roll_hint_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="493" column="33" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="493" bodyend="518"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/opencv_space_conversions.hpp" line="413" column="1"/>
+  </compounddef>
+</doxygen>

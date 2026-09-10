@@ -1,0 +1,555 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_device_profile" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeDeviceProfile</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Resource</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_profile_1ae0d65b9f4b9d15044ae7fba2c7f87d6f" prot="private" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDeviceProfile::pixel_pitch_mm</definition>
+        <argsstring></argsstring>
+        <name>pixel_pitch_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::pixel_pitch_mm</qualifiedname>
+        <initializer>= Vector2(0.25, 0.25)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="19" column="13" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_profile_1a1c2516bcf60719cafe7c82b43906531a" prot="private" static="no" mutable="no">
+        <type>Vector2i</type>
+        <definition>Vector2i godot::GazeDeviceProfile::logical_size_px</definition>
+        <argsstring></argsstring>
+        <name>logical_size_px</name>
+        <qualifiedname>godot::GazeDeviceProfile::logical_size_px</qualifiedname>
+        <initializer>= Vector2i(1920, 1080)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="20" column="14" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_profile_1ad96796aa895b954a29ad1dfb1eded13e" prot="private" static="no" mutable="no">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeDeviceProfile::camera_offset_mm</definition>
+        <argsstring></argsstring>
+        <name>camera_offset_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::camera_offset_mm</qualifiedname>
+        <initializer>= Vector3(0.0, 0.0, 0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="21" column="13" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_profile_1ac01a8b0995238b429a6a802aaf0c8cf4" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::camera_roll_deg</definition>
+        <argsstring></argsstring>
+        <name>camera_roll_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::camera_roll_deg</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="22" column="12" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_device_profile_1ac48232eeebf65633c37dff903c9fbdd6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::camera_hfov_deg</definition>
+        <argsstring></argsstring>
+        <name>camera_hfov_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::camera_hfov_deg</qualifiedname>
+        <initializer>= 65.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="23" column="12" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ad7648431835f8ed0d6be93ae14fb078b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeDeviceProfile::GDCLASS</definition>
+        <argsstring>(GazeDeviceProfile, Resource)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeDeviceProfile::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeDeviceProfile</type>
+        </param>
+        <param>
+          <type>Resource</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="16" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1aec6c66bb88bbca4f77a4bd076fb26f77" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeDeviceProfile::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="26" column="17" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="15" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a335f57c97a0d0aac897d5f94a4fa146a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeDeviceProfile::GazeDeviceProfile</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeDeviceProfile</name>
+        <qualifiedname>godot::GazeDeviceProfile::GazeDeviceProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="29" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a24dcb05bfd5d7776891f903bfdaed812" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::GazeDeviceProfile::~GazeDeviceProfile</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeDeviceProfile</name>
+        <qualifiedname>godot::GazeDeviceProfile::~GazeDeviceProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="30" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a3283fa6836493c591607a9de16e367a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDeviceProfile::get_pixel_pitch_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_pixel_pitch_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_pixel_pitch_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="32" column="13" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a798835c4262338ce97feda56a4783e76" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_pixel_pitch_mm</definition>
+        <argsstring>(Vector2 p_pitch)</argsstring>
+        <name>set_pixel_pitch_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_pixel_pitch_mm</qualifiedname>
+        <param>
+          <type>Vector2</type>
+          <declname>p_pitch</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="33" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a370d9c7f70898ef68f541d1f9278a04b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector2i</type>
+        <definition>Vector2i godot::GazeDeviceProfile::get_logical_size_px</definition>
+        <argsstring>() const</argsstring>
+        <name>get_logical_size_px</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_logical_size_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="35" column="14" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ae1a5f5ebf84019ce7069a94c23cd9a1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_logical_size_px</definition>
+        <argsstring>(Vector2i p_size)</argsstring>
+        <name>set_logical_size_px</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_logical_size_px</qualifiedname>
+        <param>
+          <type>Vector2i</type>
+          <declname>p_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="36" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1afb57aeb0c2c721b019e75623d7e14e9f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeDeviceProfile::get_camera_offset_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_offset_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_camera_offset_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="38" column="13" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a17c5f82e05c28a962cb67c3fddeef320" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_camera_offset_mm</definition>
+        <argsstring>(Vector3 p_offset)</argsstring>
+        <name>set_camera_offset_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_camera_offset_mm</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>p_offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="39" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a39e6847212ed289d18a30c732732c2e6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::get_camera_roll_deg</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_roll_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_camera_roll_deg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="41" column="12" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ad19faab3f4b714ae155d1af122db6f03" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_camera_roll_deg</definition>
+        <argsstring>(double p_roll)</argsstring>
+        <name>set_camera_roll_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_camera_roll_deg</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_roll</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="42" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a0cd86629332f2c479eb44aefbbdfeae5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::get_camera_hfov_deg</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_hfov_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_camera_hfov_deg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="44" column="12" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ae5d1ab74834ee13f1b8b4ba6753d5f16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_camera_hfov_deg</definition>
+        <argsstring>(double p_hfov)</argsstring>
+        <name>set_camera_hfov_deg</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_camera_hfov_deg</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_hfov</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="45" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1aedfb9a01436888144ebc6cc7ef557127" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDeviceProfile::get_physical_size_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_physical_size_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_physical_size_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="47" column="13" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a3a444fff9909838adcf7064caf72c7cb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::set_physical_size_mm</definition>
+        <argsstring>(Vector2 p_size)</argsstring>
+        <name>set_physical_size_mm</name>
+        <qualifiedname>godot::GazeDeviceProfile::set_physical_size_mm</qualifiedname>
+        <param>
+          <type>Vector2</type>
+          <declname>p_size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="48" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="79" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1aa5f6b8d942a85ec7ff445f6515318b8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDeviceProfile::get_dpi</definition>
+        <argsstring>() const</argsstring>
+        <name>get_dpi</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_dpi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="50" column="13" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="86" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1af7dadedac119cbfb8f4458a1b73bf1a4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::get_focal_length_px</definition>
+        <argsstring>(double frame_width_px) const</argsstring>
+        <name>get_focal_length_px</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_focal_length_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>frame_width_px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="51" column="12" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="93" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1a3686ca33c38103c673c67faee53292f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeDeviceProfile::calibrate_from_card_width</definition>
+        <argsstring>(double card_width_lpix, double card_width_mm=85.603)</argsstring>
+        <name>calibrate_from_card_width</name>
+        <qualifiedname>godot::GazeDeviceProfile::calibrate_from_card_width</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>card_width_lpix</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_width_mm</declname>
+          <defval>85.603</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="53" column="10" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="100" bodyend="106"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ad64abe25c8b914ff1b1958cc417dc499" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; GazeDeviceProfile &gt;</type>
+        <definition>Ref&lt; GazeDeviceProfile &gt; godot::GazeDeviceProfile::create_system_guess</definition>
+        <argsstring>()</argsstring>
+        <name>create_system_guess</name>
+        <qualifiedname>godot::GazeDeviceProfile::create_system_guess</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="55" column="16" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="108" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ab4ef2ed9712404083c0dc23e9b5ec68a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::get_focal_length_under_scaling_static</definition>
+        <argsstring>(double f_original, double original_dim, double new_dim)</argsstring>
+        <name>get_focal_length_under_scaling_static</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_focal_length_under_scaling_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f_original</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>original_dim</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>new_dim</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="57" column="19" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="133" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1ab8f7786e502ec74bbd45faef3da20b20" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::get_card_width_px_static</definition>
+        <argsstring>(double fov_degrees, double card_distance_mm, double frame_width, double card_width_mm=85.603)</argsstring>
+        <name>get_card_width_px_static</name>
+        <qualifiedname>godot::GazeDeviceProfile::get_card_width_px_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_distance_mm</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>frame_width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>card_width_mm</declname>
+          <defval>85.603</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="58" column="19" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="137" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_device_profile_1af96d062532a042256ae0f07b1c406fff" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeDeviceProfile::diagonal_to_horizontal_fov_static</definition>
+        <argsstring>(double diagonal_fov_degrees, double width, double height)</argsstring>
+        <name>diagonal_to_horizontal_fov_static</name>
+        <qualifiedname>godot::GazeDeviceProfile::diagonal_to_horizontal_fov_static</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>diagonal_fov_degrees</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>width</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>height</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_device_profile.hpp" line="59" column="19" bodyfile="src/godot/gaze_device_profile.cpp" bodystart="141" bodyend="143"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeDeviceProfile</label>
+        <link refid="classgodot_1_1_gaze_device_profile"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeDeviceProfile</label>
+        <link refid="classgodot_1_1_gaze_device_profile"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_device_profile.hpp" line="15" column="1" bodyfile="src/godot/gaze_device_profile.hpp" bodystart="15" bodyend="60"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_device_profile_1aec6c66bb88bbca4f77a4bd076fb26f77" prot="protected" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a3686ca33c38103c673c67faee53292f3" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>calibrate_from_card_width</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ac48232eeebf65633c37dff903c9fbdd6" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>camera_hfov_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ad96796aa895b954a29ad1dfb1eded13e" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>camera_offset_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ac01a8b0995238b429a6a802aaf0c8cf4" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>camera_roll_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ad64abe25c8b914ff1b1958cc417dc499" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>create_system_guess</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1af96d062532a042256ae0f07b1c406fff" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>diagonal_to_horizontal_fov_static</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a335f57c97a0d0aac897d5f94a4fa146a" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>GazeDeviceProfile</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ad7648431835f8ed0d6be93ae14fb078b" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a0cd86629332f2c479eb44aefbbdfeae5" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_camera_hfov_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1afb57aeb0c2c721b019e75623d7e14e9f" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_camera_offset_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a39e6847212ed289d18a30c732732c2e6" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_camera_roll_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ab8f7786e502ec74bbd45faef3da20b20" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_card_width_px_static</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1aa5f6b8d942a85ec7ff445f6515318b8c" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_dpi</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1af7dadedac119cbfb8f4458a1b73bf1a4" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_focal_length_px</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ab4ef2ed9712404083c0dc23e9b5ec68a" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_focal_length_under_scaling_static</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a370d9c7f70898ef68f541d1f9278a04b" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_logical_size_px</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1aedfb9a01436888144ebc6cc7ef557127" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_physical_size_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a3283fa6836493c591607a9de16e367a1" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>get_pixel_pitch_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a1c2516bcf60719cafe7c82b43906531a" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>logical_size_px</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ae0d65b9f4b9d15044ae7fba2c7f87d6f" prot="private" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>pixel_pitch_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ae5d1ab74834ee13f1b8b4ba6753d5f16" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_camera_hfov_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a17c5f82e05c28a962cb67c3fddeef320" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_camera_offset_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ad19faab3f4b714ae155d1af122db6f03" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_camera_roll_deg</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1ae1a5f5ebf84019ce7069a94c23cd9a1d" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_logical_size_px</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a3a444fff9909838adcf7064caf72c7cb" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_physical_size_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a798835c4262338ce97feda56a4783e76" prot="public" virt="non-virtual"><scope>godot::GazeDeviceProfile</scope><name>set_pixel_pitch_mm</name></member>
+      <member refid="classgodot_1_1_gaze_device_profile_1a24dcb05bfd5d7776891f903bfdaed812" prot="public" virt="virtual"><scope>godot::GazeDeviceProfile</scope><name>~GazeDeviceProfile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

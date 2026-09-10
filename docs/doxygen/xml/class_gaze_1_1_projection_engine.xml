@@ -1,0 +1,580 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_projection_engine" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::ProjectionEngine</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a7bf651918a4b21f13e06e2fc401f86f8" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref></type>
+        <definition>CameraPlacement Gaze::ProjectionEngine::placement</definition>
+        <argsstring></argsstring>
+        <name>placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="28" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a2770522d5014ea9c0f0ca5653b44c1b2" prot="private" static="no" mutable="no">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ProjectionEngine::screen_size_pixels</definition>
+        <argsstring></argsstring>
+        <name>screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_size_pixels</qualifiedname>
+        <initializer>= GodotDisplayVector2(1920.0, 1080.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="29" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a0e4ff1a4976e1bb24b7d606ebb4ce795" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
+        <definition>SpacedVector2&lt;Space::GodotDisplayMm&gt; Gaze::ProjectionEngine::screen_size_mm</definition>
+        <argsstring></argsstring>
+        <name>screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_size_mm</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt;<ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref>&gt;(527.0, 296.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="30" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::camera_focal_length_px</definition>
+        <argsstring></argsstring>
+        <name>camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::camera_focal_length_px</qualifiedname>
+        <initializer>= 1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="31" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1ae0a100993eb9b58945a8d7941822b877" prot="private" static="no" mutable="no">
+        <type>DisplayOrientation</type>
+        <definition>DisplayOrientation Gaze::ProjectionEngine::display_orientation</definition>
+        <argsstring></argsstring>
+        <name>display_orientation</name>
+        <qualifiedname>Gaze::ProjectionEngine::display_orientation</qualifiedname>
+        <initializer>= DisplayOrientation::ORIENTATION_0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="32" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a62a80348be0cc6ca123209b8af68ae1c" prot="private" static="no" mutable="no">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::ProjectionEngine::gravity_vector</definition>
+        <argsstring></argsstring>
+        <name>gravity_vector</name>
+        <qualifiedname>Gaze::ProjectionEngine::gravity_vector</qualifiedname>
+        <initializer>= <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref>(0.0, -1.0, 0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="33" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a9b86a01c92ee772014c9b1d15f0da47e" prot="private" static="no" mutable="no">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ProjectionEngine::window_offset_pixels</definition>
+        <argsstring></argsstring>
+        <name>window_offset_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::window_offset_pixels</qualifiedname>
+        <initializer>= GodotDisplayVector2(0.0, 0.0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="34" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a6566993e238a96000ecff46c45e3377d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::ProjectionEngine::ProjectionEngine</definition>
+        <argsstring>()=default</argsstring>
+        <name>ProjectionEngine</name>
+        <qualifiedname>Gaze::ProjectionEngine::ProjectionEngine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="37" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9af4a8be2ff84ab6c2bd78cf1fae6e66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_camera_placement</definition>
+        <argsstring>(const CameraPlacement &amp;p)</argsstring>
+        <name>set_camera_placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_camera_placement</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref> &amp;</type>
+          <declname>p</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="40" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="40" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ab40c4ec2da44a8f6e9b71515fe6a44c0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref></type>
+        <definition>CameraPlacement Gaze::ProjectionEngine::get_camera_placement</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_placement</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_camera_placement</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="41" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="41" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a17b9fd667a65b9be8fdc41436edc4cd7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_screen_size_pixels</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;size)</argsstring>
+        <name>set_screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_screen_size_pixels</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="43" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a937cdd4eff810f3eb32c7a09fd1cea0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ProjectionEngine::get_screen_size_pixels</definition>
+        <argsstring>() const</argsstring>
+        <name>get_screen_size_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_screen_size_pixels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="44" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ad43c73f5f7deda86cca5da9cd8b3f1b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_screen_size_mm</definition>
+        <argsstring>(const SpacedVector2&lt; Space::GodotDisplayMm &gt; &amp;size)</argsstring>
+        <name>set_screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_screen_size_mm</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt; &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="46" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="46" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9d65e9d0e344e57b459dbc2656c4169d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
+        <definition>SpacedVector2&lt; Space::GodotDisplayMm &gt; Gaze::ProjectionEngine::get_screen_size_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_screen_size_mm</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_screen_size_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="47" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1aae392df178118a39b5ea9f68585eae12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_camera_focal_length_px</definition>
+        <argsstring>(double f)</argsstring>
+        <name>set_camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_camera_focal_length_px</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>f</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="49" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae678ec86b05c2be708d5ac65fbc9ee6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::get_camera_focal_length_px</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_focal_length_px</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_camera_focal_length_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="50" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ac9cbd8fef1dcbd8b085f49b338299835" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_display_orientation</definition>
+        <argsstring>(DisplayOrientation orientation)</argsstring>
+        <name>set_display_orientation</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_display_orientation</qualifiedname>
+        <param>
+          <type>DisplayOrientation</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="52" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="52" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a85503e45ba9999d72887c0170f55ceba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>DisplayOrientation</type>
+        <definition>DisplayOrientation Gaze::ProjectionEngine::get_display_orientation</definition>
+        <argsstring>() const</argsstring>
+        <name>get_display_orientation</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_display_orientation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="53" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a03062d3f1719cc530c2cdfdd347daf35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_gravity_vector</definition>
+        <argsstring>(const GodotCameraVector3 &amp;g)</argsstring>
+        <name>set_gravity_vector</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_gravity_vector</qualifiedname>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>g</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="55" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae30ec8c0a361322c4c7111a8876505c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::ProjectionEngine::get_gravity_vector</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gravity_vector</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_gravity_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="56" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a4ddd5f9909c7db378a378e26cec3e276" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::ProjectionEngine::set_window_offset_pixels</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;offset)</argsstring>
+        <name>set_window_offset_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::set_window_offset_pixels</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="58" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9c4686cf499c1c3df9f55443c9291ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>GodotDisplayVector2</type>
+        <definition>GodotDisplayVector2 Gaze::ProjectionEngine::get_window_offset_pixels</definition>
+        <argsstring>() const</argsstring>
+        <name>get_window_offset_pixels</name>
+        <qualifiedname>Gaze::ProjectionEngine::get_window_offset_pixels</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="59" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1afd883cbd9fac343f99f6c385fc54c8f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::ProjectionEngine::estimate_depth_z</definition>
+        <argsstring>(double eye_distance_px, double ipd_mm=63.0) const</argsstring>
+        <name>estimate_depth_z</name>
+        <qualifiedname>Gaze::ProjectionEngine::estimate_depth_z</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>eye_distance_px</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>ipd_mm</declname>
+          <defval>63.0</defval>
+        </param>
+        <briefdescription>
+<para>Estimate user Z depth from camera in millimeters using pinhole camera IPD triangulation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>eye_distance_px</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2D pixel distance between eye centers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>ipd_mm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Interpupillary distance in millimeters (default: 63.0mm). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Estimated depth Z in millimeters. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="67" column="16" bodyfile="src/core/projection_engine.cpp" bodystart="7" bodyend="12"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a702af3b59a4e742ea25e43e4f4af1d48" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
+        <definition>SpacedVector2&lt; Space::GodotDisplayMm &gt; Gaze::ProjectionEngine::pixel_to_millimeter</definition>
+        <argsstring>(const GodotDisplayVector2 &amp;pixel) const</argsstring>
+        <name>pixel_to_millimeter</name>
+        <qualifiedname>Gaze::ProjectionEngine::pixel_to_millimeter</qualifiedname>
+        <param>
+          <type>const GodotDisplayVector2 &amp;</type>
+          <declname>pixel</declname>
+        </param>
+        <briefdescription>
+<para>Convert screen pixel coordinates to screen millimeter coordinates relative to center (Y-down positive). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>pixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Screen coordinate in pixels. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Screen coordinate in millimeters. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="74" column="23" bodyfile="src/core/projection_engine.cpp" bodystart="115" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a283d1496569c8a418638f55d98b13f25" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
+        <definition>GodotCameraVector3 Gaze::ProjectionEngine::screen_mm_to_camera_space</definition>
+        <argsstring>(const SpacedVector2&lt; Space::GodotDisplayMm &gt; &amp;screen_mm) const</argsstring>
+        <name>screen_mm_to_camera_space</name>
+        <qualifiedname>Gaze::ProjectionEngine::screen_mm_to_camera_space</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt; &amp;</type>
+          <declname>screen_mm</declname>
+        </param>
+        <briefdescription>
+<para>Map screen millimeter coordinates relative to center to 3D position in Camera <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>screen_mm</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Screen coordinate in millimeters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>3D position vector in Camera <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="81" column="28" bodyfile="src/core/projection_engine.cpp" bodystart="132" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a3fe06d84bd683196bceae659cbab844f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ProjectionEngine::project_gaze</definition>
+        <argsstring>(const GodotCameraVector3 &amp;gaze_origin_cam, const GodotCameraVector3 &amp;raw_gaze_dir_cam, GodotDisplayVector2 &amp;out_pixel) const</argsstring>
+        <name>project_gaze</name>
+        <qualifiedname>Gaze::ProjectionEngine::project_gaze</qualifiedname>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>gaze_origin_cam</declname>
+        </param>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>raw_gaze_dir_cam</declname>
+        </param>
+        <param>
+          <type>GodotDisplayVector2 &amp;</type>
+          <declname>out_pixel</declname>
+        </param>
+        <briefdescription>
+<para>Project 3D camera-space gaze ray to 2D viewport pixel coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>gaze_origin_cam</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Gaze origin in 3D camera space. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>raw_gaze_dir_cam</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Unit gaze direction vector in 3D camera space. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out_pixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output projected 2D viewport coordinates in pixels. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if ray intersects display plane in front of user, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="90" column="14" bodyfile="src/core/projection_engine.cpp" bodystart="15" bodyend="113"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a76a235b72ada715947e5e75ca7d83e0e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>DisplayOrientation</type>
+        <definition>static DisplayOrientation Gaze::ProjectionEngine::gravity_to_orientation</definition>
+        <argsstring>(const GodotCameraVector3 &amp;gravity)</argsstring>
+        <name>gravity_to_orientation</name>
+        <qualifiedname>Gaze::ProjectionEngine::gravity_to_orientation</qualifiedname>
+        <param>
+          <type>const <ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref> &amp;</type>
+          <declname>gravity</declname>
+        </param>
+        <briefdescription>
+<para>Map 3D gravity vector to nearest orthogonal DisplayOrientation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>gravity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Gravity vector in camera space. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Derived DisplayOrientation. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/projection_engine.hpp" line="99" column="35"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/projection_engine.hpp" line="25" column="5" bodyfile="src/core/projection_engine.hpp" bodystart="26" bodyend="100"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae0a100993eb9b58945a8d7941822b877" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>display_orientation</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1afd883cbd9fac343f99f6c385fc54c8f1" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>estimate_depth_z</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae678ec86b05c2be708d5ac65fbc9ee6c" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ab40c4ec2da44a8f6e9b71515fe6a44c0" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_camera_placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a85503e45ba9999d72887c0170f55ceba" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_display_orientation</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ae30ec8c0a361322c4c7111a8876505c8" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_gravity_vector</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a9d65e9d0e344e57b459dbc2656c4169d" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a937cdd4eff810f3eb32c7a09fd1cea0e" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_screen_size_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a9c4686cf499c1c3df9f55443c9291ab5" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>get_window_offset_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a76a235b72ada715947e5e75ca7d83e0e" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>gravity_to_orientation</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a62a80348be0cc6ca123209b8af68ae1c" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>gravity_vector</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a702af3b59a4e742ea25e43e4f4af1d48" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>pixel_to_millimeter</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a7bf651918a4b21f13e06e2fc401f86f8" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a3fe06d84bd683196bceae659cbab844f" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>project_gaze</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a6566993e238a96000ecff46c45e3377d" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>ProjectionEngine</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a283d1496569c8a418638f55d98b13f25" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_mm_to_camera_space</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a0e4ff1a4976e1bb24b7d606ebb4ce795" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a2770522d5014ea9c0f0ca5653b44c1b2" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>screen_size_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1aae392df178118a39b5ea9f68585eae12" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_camera_focal_length_px</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a9af4a8be2ff84ab6c2bd78cf1fae6e66" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_camera_placement</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ac9cbd8fef1dcbd8b085f49b338299835" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_display_orientation</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a03062d3f1719cc530c2cdfdd347daf35" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_gravity_vector</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1ad43c73f5f7deda86cca5da9cd8b3f1b3" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_screen_size_mm</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a17b9fd667a65b9be8fdc41436edc4cd7" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_screen_size_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a4ddd5f9909c7db378a378e26cec3e276" prot="public" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>set_window_offset_pixels</name></member>
+      <member refid="class_gaze_1_1_projection_engine_1a9b86a01c92ee772014c9b1d15f0da47e" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>window_offset_pixels</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

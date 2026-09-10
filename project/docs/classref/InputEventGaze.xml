@@ -89,6 +89,11 @@
 			<return type="Transform3D"></return>
 			<description></description>
 		</method>
+		<method name="copy_from">
+			<return type="void"></return>
+			<param index="0" name="p_other" type="const Ref&lt; InputEventGaze &gt; &amp;"></param>
+			<description></description>
+		</method>
 		<method name="as_text">
 			<return type="String"></return>
 			<description></description>

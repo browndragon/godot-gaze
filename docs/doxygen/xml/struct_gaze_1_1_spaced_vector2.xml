@@ -1,0 +1,302 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_spaced_vector2" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::SpacedVector2</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
+        <declname>S</declname>
+        <defname>S</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_spaced_vector2_1a98fafafffdb4cb165517e66bac22bdfe" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::SpacedVector2&lt; S &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::SpacedVector2::x</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="125" column="12" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_spaced_vector2_1ac55731478e29b3d92ebe6a844ef924d1" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::SpacedVector2&lt; S &gt;::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::SpacedVector2::y</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="126" column="12" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="126" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a89c29e96f5df2ed9faab7d840aecc490" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::SpacedVector2&lt; S &gt;::SpacedVector2</definition>
+        <argsstring>()=default</argsstring>
+        <name>SpacedVector2</name>
+        <qualifiedname>Gaze::SpacedVector2::SpacedVector2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="128" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1ac319cffc43b354ca377b04cc193686a3" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::SpacedVector2&lt; S &gt;::SpacedVector2</definition>
+        <argsstring>(double px, double py)</argsstring>
+        <name>SpacedVector2</name>
+        <qualifiedname>Gaze::SpacedVector2::SpacedVector2</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>py</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="129" column="15" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="129" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a4784efa5b243a5899a53eb4d0d2fc013" prot="public" static="no" constexpr="yes" const="yes" explicit="yes" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::SpacedVector2&lt; S &gt;::operator bool</definition>
+        <argsstring>() const</argsstring>
+        <name>operator bool</name>
+        <qualifiedname>Gaze::SpacedVector2::operator bool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="131" column="24" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="131" bodyend="131"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a452e54e82869e144b95412ad0a433b33" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::SpacedVector2&lt; S &gt;::operator==</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;other) const</argsstring>
+        <name>operator==</name>
+        <qualifiedname>Gaze::SpacedVector2::operator==</qualifiedname>
+        <param>
+          <type>const SpacedVector2&lt; S &gt; &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="133" column="20" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="133" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a5002778a0d209cce3f0fe2eabe1a97cd" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::SpacedVector2&lt; S &gt;::operator!=</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;other) const</argsstring>
+        <name>operator!=</name>
+        <qualifiedname>Gaze::SpacedVector2::operator!=</qualifiedname>
+        <param>
+          <type>const SpacedVector2&lt; S &gt; &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="136" column="20" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="136" bodyend="138"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a158c6ce5ce091166bcfa4051e34d3407" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::operator-</definition>
+        <argsstring>() const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>Gaze::SpacedVector2::operator-</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="140" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a8d34507099503478230dd56428911059" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::operator+</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;other) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>Gaze::SpacedVector2::operator+</qualifiedname>
+        <param>
+          <type>const SpacedVector2&lt; S &gt; &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="142" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="142" bodyend="144"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a52f35dba551c0a91b39795f2e7d5801e" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::operator-</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;other) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>Gaze::SpacedVector2::operator-</qualifiedname>
+        <param>
+          <type>const SpacedVector2&lt; S &gt; &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="145" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="145" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a4ce2b9bb06125c63d5b314756c430203" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::operator*</definition>
+        <argsstring>(double scalar) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::SpacedVector2::operator*</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="148" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="148" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1a03de0f2fcbba3843b7ac0415bd32a4ca" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::operator/</definition>
+        <argsstring>(double scalar) const</argsstring>
+        <name>operator/</name>
+        <qualifiedname>Gaze::SpacedVector2::operator/</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>scalar</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="151" column="29" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="151" bodyend="153"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1abae7e5e43e0de7f9a78970e6c22eff79" prot="public" static="no" constexpr="yes" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::SpacedVector2&lt; S &gt;::dot</definition>
+        <argsstring>(const SpacedVector2&lt; S &gt; &amp;other) const</argsstring>
+        <name>dot</name>
+        <qualifiedname>Gaze::SpacedVector2::dot</qualifiedname>
+        <param>
+          <type>const SpacedVector2&lt; S &gt; &amp;</type>
+          <declname>other</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="155" column="22" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="155" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1aaf780a9a3facba15ab78d4f743d50fc9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::SpacedVector2&lt; S &gt;::length_squared</definition>
+        <argsstring>() const</argsstring>
+        <name>length_squared</name>
+        <qualifiedname>Gaze::SpacedVector2::length_squared</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="158" column="12" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="158" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1ab0b7ed67f84b752c844428847a66aa34" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::SpacedVector2&lt; S &gt;::length</definition>
+        <argsstring>() const</argsstring>
+        <name>length</name>
+        <qualifiedname>Gaze::SpacedVector2::length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="159" column="12" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="159" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector2_1ae72caf61393f68f77a0dcc1b93dea485" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector2&lt; S &gt;</type>
+        <definition>SpacedVector2&lt; S &gt; Gaze::SpacedVector2&lt; S &gt;::normalized</definition>
+        <argsstring>() const</argsstring>
+        <name>normalized</name>
+        <qualifiedname>Gaze::SpacedVector2::normalized</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="160" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="160" bodyend="163"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/opencv_space_conversions.hpp" line="123" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="124" bodyend="164"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_spaced_vector2_1abae7e5e43e0de7f9a78970e6c22eff79" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>dot</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1ab0b7ed67f84b752c844428847a66aa34" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>length</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1aaf780a9a3facba15ab78d4f743d50fc9" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>length_squared</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1ae72caf61393f68f77a0dcc1b93dea485" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>normalized</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a4784efa5b243a5899a53eb4d0d2fc013" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator bool</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a5002778a0d209cce3f0fe2eabe1a97cd" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator!=</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a4ce2b9bb06125c63d5b314756c430203" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator*</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a8d34507099503478230dd56428911059" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator+</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a158c6ce5ce091166bcfa4051e34d3407" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator-</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a52f35dba551c0a91b39795f2e7d5801e" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator-</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a03de0f2fcbba3843b7ac0415bd32a4ca" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator/</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a452e54e82869e144b95412ad0a433b33" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>operator==</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a89c29e96f5df2ed9faab7d840aecc490" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>SpacedVector2</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1ac319cffc43b354ca377b04cc193686a3" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>SpacedVector2</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1a98fafafffdb4cb165517e66bac22bdfe" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector2_1ac55731478e29b3d92ebe6a844ef924d1" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector2</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_display_info" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::DisplayInfo</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_display_info_1a88a4f9614537d9dee1407cc1a460104d" prot="public" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_profile" kindref="compound">GazeDeviceProfile</ref> &gt;</type>
+        <definition>Ref&lt;GazeDeviceProfile&gt; godot::GazeServerImpl::DisplayInfo::device_profile</definition>
+        <argsstring></argsstring>
+        <name>device_profile</name>
+        <qualifiedname>godot::GazeServerImpl::DisplayInfo::device_profile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="36" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="35" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="35" bodyend="37"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1a88a4f9614537d9dee1407cc1a460104d" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::DisplayInfo</scope><name>device_profile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

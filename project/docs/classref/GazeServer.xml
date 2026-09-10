@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="GazeServer" inherits="Object">
-	<brief_description>Central engine singleton managing camera acquisition, ML pipeline, calibrations, lifecycle, and dispatching InputEventGaze events into Godot's input tree.</brief_description>
+	<brief_description></brief_description>
 	<description></description>
 	<tutorials></tutorials>
 	<methods>
+		<method name="get_singleton">
+			<return type="GazeServer *"></return>
+			<description></description>
+		</method>
+		<method name="get_build_info">
+			<return type="String"></return>
+			<description></description>
+		</method>
+		<method name="get_build_timestamp">
+			<return type="String"></return>
+			<description></description>
+		</method>
 		<method name="start_tracking">
 			<return type="bool"></return>
-			<description>Request tracking start (increments refcount). Returns true on 0 to 1 transition.</description>
+			<description></description>
 		</method>
 		<method name="stop_tracking">
 			<return type="void"></return>
-			<param index="0" name="immediate" type="bool" default="false"></param>
-			<description>Request tracking stop (decrements refcount).</description>
+			<param index="0" name="p_immediate" type="bool"></param>
+			<description></description>
 		</method>
 		<method name="is_tracking_active">
 			<return type="bool"></return>
-			<description>Check whether gaze tracking or pipeline processing is actively running.</description>
+			<description></description>
 		</method>
 		<method name="get_most_recent_event">
-			<return type="Ref<InputEventGazeBase>"></return>
-			<description>Retrieve the most recent gaze input event.</description>
+			<return type="Ref&lt; InputEventGazeBase &gt;"></return>
+			<description></description>
 		</method>
 		<method name="ensure_process_connected">
 			<return type="void"></return>
@@ -27,7 +39,7 @@
 		</method>
 		<method name="trigger_process">
 			<return type="void"></return>
-			<description>Tick pipeline processing and dispatch events.</description>
+			<description></description>
 		</method>
 		<method name="start_processing">
 			<return type="void"></return>
@@ -39,7 +51,7 @@
 		</method>
 		<method name="reset">
 			<return type="void"></return>
-			<description>Reset face and eye tracker states.</description>
+			<description></description>
 		</method>
 		<method name="get_active_tracker_count">
 			<return type="int"></return>
@@ -47,17 +59,17 @@
 		</method>
 		<method name="set_device_profile">
 			<return type="void"></return>
-			<param index="0" name="profile" type="const Ref<GazeDeviceProfile> &amp;"></param>
+			<param index="0" name="p_profile" type="const Ref&lt; GazeDeviceProfile &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_device_profile">
-			<return type="Ref<GazeDeviceProfile>"></return>
+			<return type="Ref&lt; GazeDeviceProfile &gt;"></return>
 			<description></description>
 		</method>
 		<method name="set_camera_offsets">
 			<return type="void"></return>
-			<param index="0" name="offset" type="Vector3"></param>
-			<param index="1" name="tilt_deg" type="double"></param>
+			<param index="0" name="p_offset" type="Vector3"></param>
+			<param index="1" name="p_tilt" type="double"></param>
 			<description></description>
 		</method>
 		<method name="get_camera_offset">
@@ -70,7 +82,7 @@
 		</method>
 		<method name="set_camera_vision_rid">
 			<return type="void"></return>
-			<param index="0" name="vision_camera_rid" type="RID"></param>
+			<param index="0" name="p_vision_camera" type="RID"></param>
 			<description></description>
 		</method>
 		<method name="get_camera_vision_rid">
@@ -79,11 +91,11 @@
 		</method>
 		<method name="set_pipeline_config">
 			<return type="void"></return>
-			<param index="0" name="config" type="const Ref<GazePipelineConfig> &amp;"></param>
+			<param index="0" name="p_config" type="const Ref&lt; GazePipelineConfig &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_pipeline_config">
-			<return type="Ref<GazePipelineConfig>"></return>
+			<return type="Ref&lt; GazePipelineConfig &gt;"></return>
 			<description></description>
 		</method>
 		<method name="is_face_detected">
@@ -112,16 +124,16 @@
 		</method>
 		<method name="set_face_pose">
 			<return type="void"></return>
-			<param index="0" name="translation" type="Vector3"></param>
-			<param index="1" name="rotation" type="Vector3"></param>
-			<param index="2" name="detected" type="bool"></param>
+			<param index="0" name="p_translation" type="Vector3"></param>
+			<param index="1" name="p_rotation" type="Vector3"></param>
+			<param index="2" name="p_detected" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="set_face_transform">
 			<return type="void"></return>
-			<param index="0" name="transform" type="Transform3D"></param>
-			<param index="1" name="rotation" type="Vector3"></param>
-			<param index="2" name="detected" type="bool"></param>
+			<param index="0" name="p_transform" type="const Transform3D &amp;"></param>
+			<param index="1" name="p_rotation" type="const Vector3 &amp;"></param>
+			<param index="2" name="p_detected" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_face_landmarks_2d">
@@ -138,7 +150,7 @@
 		</method>
 		<method name="set_face_landmarks_2d">
 			<return type="void"></return>
-			<param index="0" name="landmarks" type="PackedVector2Array"></param>
+			<param index="0" name="p_landmarks" type="const PackedVector2Array &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_face_model_points">
@@ -147,7 +159,7 @@
 		</method>
 		<method name="set_roll_hint">
 			<return type="void"></return>
-			<param index="0" name="roll_hint_rad" type="float"></param>
+			<param index="0" name="p_roll_hint_rad" type="float"></param>
 			<description></description>
 		</method>
 		<method name="get_roll_hint">
@@ -156,7 +168,7 @@
 		</method>
 		<method name="set_auto_roll_enabled">
 			<return type="void"></return>
-			<param index="0" name="enabled" type="bool"></param>
+			<param index="0" name="p_enabled" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="is_auto_roll_enabled">
@@ -177,33 +189,33 @@
 		</method>
 		<method name="set_gaze">
 			<return type="void"></return>
-			<param index="0" name="origin_cam" type="Vector3"></param>
-			<param index="1" name="direction_cam" type="Vector3"></param>
+			<param index="0" name="p_origin_cam" type="Vector3"></param>
+			<param index="1" name="p_direction_cam" type="Vector3"></param>
 			<description></description>
 		</method>
 		<method name="get_gaze_screen_px">
 			<return type="Vector2"></return>
-			<param index="0" name="smoothed" type="bool" default="true"></param>
+			<param index="0" name="p_smoothed" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_gaze_screen_mm">
 			<return type="Vector2"></return>
-			<param index="0" name="smoothed" type="bool" default="true"></param>
+			<param index="0" name="p_smoothed" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_gaze_screen">
 			<return type="Vector2"></return>
-			<param index="0" name="smoothed" type="bool" default="true"></param>
+			<param index="0" name="p_smoothed" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_projected_gaze">
 			<return type="Vector2"></return>
-			<param index="0" name="smoothed" type="bool" default="false"></param>
+			<param index="0" name="p_smoothed" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_projected_gaze_mm">
 			<return type="Vector2"></return>
-			<param index="0" name="smoothed" type="bool" default="false"></param>
+			<param index="0" name="p_smoothed" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_left_eye_openness">
@@ -216,22 +228,22 @@
 		</method>
 		<method name="set_eye_openness">
 			<return type="void"></return>
-			<param index="0" name="left" type="float"></param>
-			<param index="1" name="right" type="float"></param>
+			<param index="0" name="p_left" type="float"></param>
+			<param index="1" name="p_right" type="float"></param>
 			<description></description>
 		</method>
 		<method name="set_smoother">
 			<return type="void"></return>
-			<param index="0" name="smoother" type="const Ref<Smoother> &amp;"></param>
+			<param index="0" name="p_smoother" type="const Ref&lt; Smoother &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_smoother">
-			<return type="Ref<Smoother>"></return>
+			<return type="Ref&lt; Smoother &gt;"></return>
 			<description></description>
 		</method>
 		<method name="set_crop_requested">
 			<return type="void"></return>
-			<param index="0" name="requested" type="bool"></param>
+			<param index="0" name="p_requested" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="is_crop_requested">
@@ -244,17 +256,17 @@
 		</method>
 		<method name="set_eye_crops">
 			<return type="void"></return>
-			<param index="0" name="left_crop" type="const Ref<Image> &amp;"></param>
-			<param index="1" name="right_crop" type="const Ref<Image> &amp;"></param>
+			<param index="0" name="p_left_crop" type="const Ref&lt; Image &gt; &amp;"></param>
+			<param index="1" name="p_right_crop" type="const Ref&lt; Image &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_camera_texture">
-			<return type="Ref<Texture2D>"></return>
+			<return type="Ref&lt; Texture2D &gt;"></return>
 			<description></description>
 		</method>
 		<method name="set_camera_preview_requested">
 			<return type="void"></return>
-			<param index="0" name="requested" type="bool"></param>
+			<param index="0" name="p_requested" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="is_camera_preview_requested">
@@ -263,42 +275,46 @@
 		</method>
 		<method name="emit_camera_frame_ready">
 			<return type="void"></return>
-			<param index="0" name="vision_camera_rid" type="RID"></param>
+			<param index="0" name="p_vision_camera" type="RID"></param>
 			<description></description>
 		</method>
 		<method name="project_ray_to_camera_plane">
 			<return type="Vector3"></return>
-			<param index="0" name="origin_cam" type="Vector3"></param>
-			<param index="1" name="direction_cam" type="Vector3"></param>
+			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
+			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
 			<description></description>
 		</method>
 		<method name="project_ray_to_viewport">
 			<return type="Vector2"></return>
-			<param index="0" name="origin_cam" type="Vector3"></param>
-			<param index="1" name="direction_cam" type="Vector3"></param>
+			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
+			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
 			<description></description>
 		</method>
 		<method name="set_event_factory">
 			<return type="void"></return>
-			<param index="0" name="factory" type="const Ref<GazeEventFactory> &amp;"></param>
+			<param index="0" name="p_factory" type="const Ref&lt; GazeEventFactory &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_event_factory">
-			<return type="Ref<GazeEventFactory>"></return>
+			<return type="Ref&lt; GazeEventFactory &gt;"></return>
+			<description></description>
+		</method>
+		<method name="initialize_scene_resources">
+			<return type="void"></return>
 			<description></description>
 		</method>
 		<method name="create_default_event">
-			<return type="Ref<InputEventGaze>"></return>
+			<return type="Ref&lt; InputEventGaze &gt;"></return>
 			<description></description>
 		</method>
 		<method name="create_default_missing_event">
-			<return type="Ref<InputEventGazeMissing>"></return>
-			<param index="0" name="reason" type="int"></param>
+			<return type="Ref&lt; InputEventGazeMissing &gt;"></return>
+			<param index="0" name="p_reason" type="int"></param>
 			<description></description>
 		</method>
 		<method name="set_emulate_gaze_from_mouse">
 			<return type="void"></return>
-			<param index="0" name="enable" type="bool"></param>
+			<param index="0" name="p_enable" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_emulate_gaze_from_mouse">
@@ -307,7 +323,7 @@
 		</method>
 		<method name="set_emulate_mouse_from_gaze">
 			<return type="void"></return>
-			<param index="0" name="enable" type="bool"></param>
+			<param index="0" name="p_enable" type="bool"></param>
 			<description></description>
 		</method>
 		<method name="get_emulate_mouse_from_gaze">
@@ -316,7 +332,7 @@
 		</method>
 		<method name="set_mouse_emulation_dwell_sec">
 			<return type="void"></return>
-			<param index="0" name="sec" type="float"></param>
+			<param index="0" name="p_sec" type="float"></param>
 			<description></description>
 		</method>
 		<method name="get_mouse_emulation_dwell_sec">
@@ -325,7 +341,7 @@
 		</method>
 		<method name="set_mouse_emulation_transition_sec">
 			<return type="void"></return>
-			<param index="0" name="sec" type="float"></param>
+			<param index="0" name="p_sec" type="float"></param>
 			<description></description>
 		</method>
 		<method name="get_mouse_emulation_transition_sec">
@@ -341,17 +357,7 @@
 			<return type="int"></return>
 			<description></description>
 		</method>
-		<method name="get_build_info">
-			<return type="String"></return>
-			<description></description>
-		</method>
-		<method name="get_build_timestamp">
-			<return type="String"></return>
-			<description></description>
-		</method>
 	</methods>
-	<members>
-		<member name="active_read_data" type="Gaze::GazeFrameData *" default="nullptr"></member>
-	</members>
+	<members></members>
 	<signals></signals>
 </class>

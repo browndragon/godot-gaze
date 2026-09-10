@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__display__server__web_8hpp" kind="file" language="C++">
+    <compoundname>gaze_display_server_web.hpp</compoundname>
+    <includes refid="gaze__display__types_8hpp" local="yes">../core/gaze_display_types.hpp</includes>
+    <includedby refid="gaze__display__server__web_8cpp" local="yes">src/web/gaze_display_server_web.cpp</includedby>
+    <incdepgraph>
+      <node id="2">
+        <label>../core/gaze_display_types.hpp</label>
+        <link refid="gaze__display__types_8hpp_source"/>
+      </node>
+      <node id="1">
+        <label>src/web/gaze_display_server_web.hpp</label>
+        <link refid="gaze__display__server__web_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespace_gaze">Gaze</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../core/gaze_display_types.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref><sp/>gaze_web_get_display_metrics(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_index<sp/>=<sp/>0);</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref><sp/>gaze_web_get_window_rect(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>window_index<sp/>=<sp/>0);</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/web/gaze_display_server_web.hpp"/>
+  </compounddef>
+</doxygen>

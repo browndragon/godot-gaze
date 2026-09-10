@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_head_pose" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::HeadPose</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1af70cbb49e7ad8ffc2a5d66447bf62bcc" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::pitch_rad</definition>
+        <argsstring></argsstring>
+        <name>pitch_rad</name>
+        <qualifiedname>Gaze::HeadPose::pitch_rad</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="19" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1ab33c18cffe26d8618ac1f4806eacc5e4" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::yaw_rad</definition>
+        <argsstring></argsstring>
+        <name>yaw_rad</name>
+        <qualifiedname>Gaze::HeadPose::yaw_rad</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="20" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1a6e3121375992b6169d02360890a98483" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::roll_rad</definition>
+        <argsstring></argsstring>
+        <name>roll_rad</name>
+        <qualifiedname>Gaze::HeadPose::roll_rad</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="21" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1a3d560f3a90a704cc9a7d1d37fe0ff496" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::trans_x_mm</definition>
+        <argsstring></argsstring>
+        <name>trans_x_mm</name>
+        <qualifiedname>Gaze::HeadPose::trans_x_mm</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="22" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1a7f97b07cf3628cca5dc3734931572101" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::trans_y_mm</definition>
+        <argsstring></argsstring>
+        <name>trans_y_mm</name>
+        <qualifiedname>Gaze::HeadPose::trans_y_mm</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="23" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_head_pose_1a6acb0c5346b1a86b2661acbcb7ba9828" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::HeadPose::trans_z_mm</definition>
+        <argsstring></argsstring>
+        <name>trans_z_mm</name>
+        <qualifiedname>Gaze::HeadPose::trans_z_mm</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="24" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_head_pose_1a5f69231827897198e85608fff179f096" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>OpenCVCameraVector3</type>
+        <definition>OpenCVCameraVector3 Gaze::HeadPose::rotation_vector</definition>
+        <argsstring>() const</argsstring>
+        <name>rotation_vector</name>
+        <qualifiedname>Gaze::HeadPose::rotation_vector</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="26" column="29" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="26" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_head_pose_1ab791056101d411f55ffaeec22e6c3923" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>OpenCVCameraVector3</type>
+        <definition>OpenCVCameraVector3 Gaze::HeadPose::translation</definition>
+        <argsstring>() const</argsstring>
+        <name>translation</name>
+        <qualifiedname>Gaze::HeadPose::translation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="27" column="29" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="27" bodyend="27"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/native/ort_yunet_detector.hpp" line="17" column="5" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="18" bodyend="28"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_head_pose_1af70cbb49e7ad8ffc2a5d66447bf62bcc" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>pitch_rad</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1a6e3121375992b6169d02360890a98483" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>roll_rad</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1a5f69231827897198e85608fff179f096" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>rotation_vector</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1a3d560f3a90a704cc9a7d1d37fe0ff496" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>trans_x_mm</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1a7f97b07cf3628cca5dc3734931572101" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>trans_y_mm</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1a6acb0c5346b1a86b2661acbcb7ba9828" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>trans_z_mm</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1ab791056101d411f55ffaeec22e6c3923" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>translation</name></member>
+      <member refid="struct_gaze_1_1_head_pose_1ab33c18cffe26d8618ac1f4806eacc5e4" prot="public" virt="non-virtual"><scope>Gaze::HeadPose</scope><name>yaw_rad</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

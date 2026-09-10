@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_concurrency_1_1_atomic_mailbox" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::Concurrency::AtomicMailbox</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a9592dc0039bde70e42f61e88899d3b62" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex Gaze::Concurrency::AtomicMailbox&lt; T &gt;::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="21" column="24" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a4e52e6adc8f9ac42121775c2b5f84184" prot="private" static="no" mutable="no">
+        <type>T</type>
+        <definition>T Gaze::Concurrency::AtomicMailbox&lt; T &gt;::slot</definition>
+        <argsstring></argsstring>
+        <name>slot</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::slot</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="22" column="7" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a98109c0a9130e61f20178c59d2943381" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::Concurrency::AtomicMailbox&lt; T &gt;::pending</definition>
+        <argsstring></argsstring>
+        <name>pending</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::pending</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="23" column="10" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a555f713394ea2d4a4ab3ee8f3a80752b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::AtomicMailbox&lt; T &gt;::AtomicMailbox</definition>
+        <argsstring>()=default</argsstring>
+        <name>AtomicMailbox</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::AtomicMailbox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="26" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a4abd882075a4eda3112f7c72e012c34e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::AtomicMailbox&lt; T &gt;::~AtomicMailbox</definition>
+        <argsstring>()=default</argsstring>
+        <name>~AtomicMailbox</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::~AtomicMailbox</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="27" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a0bfe1983f7a339e4f72ead468fa04091" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::AtomicMailbox&lt; T &gt;::AtomicMailbox</definition>
+        <argsstring>(const AtomicMailbox &amp;)=delete</argsstring>
+        <name>AtomicMailbox</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::AtomicMailbox</qualifiedname>
+        <param>
+          <type>const AtomicMailbox &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="29" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a837bd62f599704c7565750ea3f3bbbba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>AtomicMailbox &amp;</type>
+        <definition>AtomicMailbox &amp; Gaze::Concurrency::AtomicMailbox&lt; T &gt;::operator=</definition>
+        <argsstring>(const AtomicMailbox &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::operator=</qualifiedname>
+        <param>
+          <type>const AtomicMailbox &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="30" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1ad15d5386225ba400b49d64e8e68bc685" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::AtomicMailbox&lt; T &gt;::AtomicMailbox</definition>
+        <argsstring>(AtomicMailbox &amp;&amp;)=delete</argsstring>
+        <name>AtomicMailbox</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::AtomicMailbox</qualifiedname>
+        <param>
+          <type>AtomicMailbox &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="32" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a0819f2ef026609e9f8090e208348a442" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>AtomicMailbox &amp;</type>
+        <definition>AtomicMailbox &amp; Gaze::Concurrency::AtomicMailbox&lt; T &gt;::operator=</definition>
+        <argsstring>(AtomicMailbox &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::operator=</qualifiedname>
+        <param>
+          <type>AtomicMailbox &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="33" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a5d9f5dc5baaa30dc38dccf0cfb8ebaca" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::Concurrency::AtomicMailbox&lt; T &gt;::put</definition>
+        <argsstring>(T value)</argsstring>
+        <name>put</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::put</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+<para>Overwrite the slot with a new value and mark it as pending. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="38" column="10" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="38" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a20e672521d98fcce24394dca4844f604" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::Concurrency::AtomicMailbox&lt; T &gt;::take</definition>
+        <argsstring>(T &amp;out_value)</argsstring>
+        <name>take</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::take</qualifiedname>
+        <param>
+          <type>T &amp;</type>
+          <declname>out_value</declname>
+        </param>
+        <briefdescription>
+<para>Move the slot value out if pending, clearing the pending flag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>out_value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output reference to receive the moved value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if a pending value was retrieved, false if mailbox was empty. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="49" column="10" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="49" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1abbae97910f3f83690e897b7f0a464b10" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::Concurrency::AtomicMailbox&lt; T &gt;::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::clear</qualifiedname>
+        <briefdescription>
+<para>Reset the slot to default and clear the pending flag. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="62" column="10" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="62" bodyend="66"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a5e07c054a87963e1f6a2dc1e706dca99" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::Concurrency::AtomicMailbox&lt; T &gt;::is_pending</definition>
+        <argsstring>() const</argsstring>
+        <name>is_pending</name>
+        <qualifiedname>Gaze::Concurrency::AtomicMailbox::is_pending</qualifiedname>
+        <briefdescription>
+<para>Check if a new value is waiting in the slot. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/atomic_mailbox.hpp" line="71" column="10" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/concurrency/atomic_mailbox.hpp" line="19" column="1" bodyfile="src/core/concurrency/atomic_mailbox.hpp" bodystart="19" bodyend="75"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a555f713394ea2d4a4ab3ee8f3a80752b" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>AtomicMailbox</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a0bfe1983f7a339e4f72ead468fa04091" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>AtomicMailbox</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1ad15d5386225ba400b49d64e8e68bc685" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>AtomicMailbox</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1abbae97910f3f83690e897b7f0a464b10" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>clear</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a5e07c054a87963e1f6a2dc1e706dca99" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>is_pending</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a9592dc0039bde70e42f61e88899d3b62" prot="private" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>mutex</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a837bd62f599704c7565750ea3f3bbbba" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>operator=</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a0819f2ef026609e9f8090e208348a442" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>operator=</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a98109c0a9130e61f20178c59d2943381" prot="private" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>pending</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a5d9f5dc5baaa30dc38dccf0cfb8ebaca" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>put</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a4e52e6adc8f9ac42121775c2b5f84184" prot="private" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>slot</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a20e672521d98fcce24394dca4844f604" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>take</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a4abd882075a4eda3112f7c72e012c34e" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::AtomicMailbox</scope><name>~AtomicMailbox</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

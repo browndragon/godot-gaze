@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_concurrency_1_1_pool_1_1_item" kind="struct" language="C++" prot="private">
+    <compoundname>Gaze::Concurrency::Pool::Item</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_concurrency_1_1_pool_1_1_item_1ad66a4fd23d6c2e40bd9aa00f9c6f80fc" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T Gaze::Concurrency::Pool&lt; T, SZ &gt;::Item::instance</definition>
+        <argsstring></argsstring>
+        <name>instance</name>
+        <qualifiedname>Gaze::Concurrency::Pool::Item::instance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="22" column="11" bodyfile="src/core/concurrency/pool.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_concurrency_1_1_pool_1_1_item_1ae3e49b8a1b9249044fa2b5838e2b4369" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::Concurrency::Pool&lt; T, SZ &gt;::Item::in_use</definition>
+        <argsstring></argsstring>
+        <name>in_use</name>
+        <qualifiedname>Gaze::Concurrency::Pool::Item::in_use</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="23" column="14" bodyfile="src/core/concurrency/pool.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/concurrency/pool.hpp" line="21" column="5" bodyfile="src/core/concurrency/pool.hpp" bodystart="21" bodyend="24"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_concurrency_1_1_pool_1_1_item_1ae3e49b8a1b9249044fa2b5838e2b4369" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool::Item</scope><name>in_use</name></member>
+      <member refid="struct_gaze_1_1_concurrency_1_1_pool_1_1_item_1ad66a4fd23d6c2e40bd9aa00f9c6f80fc" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool::Item</scope><name>instance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeServerEventFactory" inherits="godot::GazeEventFactory">
+	<brief_description>Concrete C++ default event factory that mints standard InputEventGaze from GazeServer.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="create_gaze_event">
+			<return type="Ref&lt; InputEventGazeBase &gt;"></return>
+			<description></description>
+		</method>
+		<method name="create_missing_event">
+			<return type="Ref&lt; InputEventGazeBase &gt;"></return>
+			<param index="0" name="p_reason" type="int"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

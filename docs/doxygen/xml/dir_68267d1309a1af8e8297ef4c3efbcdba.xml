@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_68267d1309a1af8e8297ef4c3efbcdba" kind="dir">
+    <compoundname>src</compoundname>
+    <innerdir refid="dir_aebb8dcc11953d78e620bbef0b9e2183">src/core</innerdir>
+    <innerdir refid="dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0">src/godot</innerdir>
+    <innerdir refid="dir_f511ba0178b53c726d0a84462dac4106">src/native</innerdir>
+    <innerdir refid="dir_0d4dde2834ed44e47b6207c19e4aac26">src/web</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/"/>
+  </compounddef>
+</doxygen>

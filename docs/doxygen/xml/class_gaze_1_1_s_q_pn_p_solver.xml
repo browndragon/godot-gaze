@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_s_q_pn_p_solver" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::SQPnPSolver</compoundname>
+    <innerclass refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution" prot="public">Gaze::SQPnPSolver::Solution</innerclass>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
+            <declname>S</declname>
+            <defname>S</defname>
+            <defval><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref></defval>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool Gaze::SQPnPSolver::solve</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation)</argsstring>
+        <name>solve</name>
+        <qualifiedname>Gaze::SQPnPSolver::solve</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+          <declname>object_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9f7cea91de131e357cb21b321c8f2c60" kindref="member">Space::OpenCVFaceModel</ref>, <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a9dac42b4a752d30d5868ac6a04612103" kindref="member">Space::OpenCVCamera</ref> &gt; &amp;</type>
+          <declname>out_rotation</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>out_translation</declname>
+        </param>
+        <briefdescription>
+<para>Solves the PnP problem given 3D object points and corresponding 2D image points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>object_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>3D points in OpenCVFaceModel space (minimum 4 points). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>image_points</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>2D image points in working image pixels. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>fy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Focal length Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point X. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>cy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Principal point Y. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out_rotation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output optimal rotation basis from OpenCVFaceModel to OpenCVCamera. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>out_translation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Output optimal translation vector in OpenCVCamera space (+X right, +Y down, +Z forward). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>true if a valid pose solution was found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.hpp" line="42" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="708" bodyend="883"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
+            <declname>S</declname>
+            <defname>S</defname>
+            <defval><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref></defval>
+          </param>
+        </templateparamlist>
+        <type>bool</type>
+        <definition>bool Gaze::SQPnPSolver::solve_rvec</definition>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, OpenCVCameraVector3 &amp;out_rvec, OpenCVCameraVector3 &amp;out_translation)</argsstring>
+        <name>solve_rvec</name>
+        <qualifiedname>Gaze::SQPnPSolver::solve_rvec</qualifiedname>
+        <param>
+          <type>const std::vector&lt; OpenCVFaceVector3 &gt; &amp;</type>
+          <declname>object_points</declname>
+        </param>
+        <param>
+          <type>const std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; S &gt; &gt; &amp;</type>
+          <declname>image_points</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>fy</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cx</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>cy</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>out_rvec</declname>
+        </param>
+        <param>
+          <type>OpenCVCameraVector3 &amp;</type>
+          <declname>out_translation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sqpnp_solver.hpp" line="50" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="886" bodyend="900"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/sqpnp_solver.hpp" line="19" column="1" bodyfile="src/core/sqpnp_solver.hpp" bodystart="20" bodyend="56"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve</name></member>
+      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve_rvec</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_tracker" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeTracker</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Node</basecompoundref>
+    <includes refid="gaze__tracker_8hpp" local="no">gaze_tracker.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a032aa0bc381c279772c7327f7c9be050" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeTracker::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>godot::GazeTracker::enabled</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="26" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_tracker_1a57701e10ebf6a983fbbe673f0b0b9e5b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeTracker::is_tracking</definition>
+        <argsstring></argsstring>
+        <name>is_tracking</name>
+        <qualifiedname>godot::GazeTracker::is_tracking</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="27" column="10" bodyfile="src/godot/gaze_tracker.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a5660e6fd21e7bafb86e4763bc437755c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeTracker::GDCLASS</definition>
+        <argsstring>(GazeTracker, Node)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeTracker::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeTracker</type>
+        </param>
+        <param>
+          <type>Node</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="23" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1aa6deef3ea7f65ab1a84ede3b44be3d7c" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeTracker::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="30" column="17" bodyfile="src/godot/gaze_tracker.cpp" bodystart="19" bodyend="26"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a029baa3a0504c77e508ca8b7590cebff" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::_notification</definition>
+        <argsstring>(int p_what)</argsstring>
+        <name>_notification</name>
+        <qualifiedname>godot::GazeTracker::_notification</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>p_what</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="31" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="28" bodyend="53"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a5436148345c5124f8c6a8a546a43b6c5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeTracker::GazeTracker</definition>
+        <argsstring>()</argsstring>
+        <name>GazeTracker</name>
+        <qualifiedname>godot::GazeTracker::GazeTracker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="34" column="5" bodyfile="src/godot/gaze_tracker.cpp" bodystart="6" bodyend="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1ab41c830039e50b8fcc714f90957a3b97" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::GazeTracker::~GazeTracker</definition>
+        <argsstring>()</argsstring>
+        <name>~GazeTracker</name>
+        <qualifiedname>godot::GazeTracker::~GazeTracker</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="35" column="13" bodyfile="src/godot/gaze_tracker.cpp" bodystart="9" bodyend="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a45c1ade36bc0a7839a6a26348117c1c6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeTracker::set_enabled</definition>
+        <argsstring>(bool p_enabled)</argsstring>
+        <name>set_enabled</name>
+        <qualifiedname>godot::GazeTracker::set_enabled</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_enabled</declname>
+        </param>
+        <briefdescription>
+<para>Toggles tracker activation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>If disabled while inside the scene tree, releases its tracking reference count. If re-enabled while inside the scene tree, acquires a tracking reference count. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="42" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="55" bodyend="79"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a7be1b09ecb556a0381be07ec4d2e885d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeTracker::is_enabled</definition>
+        <argsstring>() const</argsstring>
+        <name>is_enabled</name>
+        <qualifiedname>godot::GazeTracker::is_enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="43" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="81" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a56bf0348a0518adcb5908f557cef3afa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeTracker::is_tracking_active</definition>
+        <argsstring>() const</argsstring>
+        <name>is_tracking_active</name>
+        <qualifiedname>godot::GazeTracker::is_tracking_active</qualifiedname>
+        <briefdescription>
+<para>Returns true if this specific <ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> instance is currently holding an active reference count in <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="49" column="10" bodyfile="src/godot/gaze_tracker.cpp" bodystart="85" bodyend="87"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_tracker_1a1bf374b119ac4a8df98fd336d882efee" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>GazeTracker *</type>
+        <definition>GazeTracker * godot::GazeTracker::track_node</definition>
+        <argsstring>(Node *p_node)</argsstring>
+        <name>track_node</name>
+        <qualifiedname>godot::GazeTracker::track_node</qualifiedname>
+        <param>
+          <type>Node *</type>
+          <declname>p_node</declname>
+        </param>
+        <briefdescription>
+<para>Programmatic helper to attach an internal <ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> child to an arbitrary node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>In GDScript: func _init() -&gt; void: GazeTracker.track_node(self)</para>
+<para>Uses Node::INTERNAL_MODE_FRONT so the child node is invisible to get_children(), not shown in the editor scene tree, and excluded from scene serialization. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_tracker.hpp" line="61" column="24" bodyfile="src/godot/gaze_tracker.cpp" bodystart="89" bodyend="106"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref>. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Declarative Scene Node for managing <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> tracking lifecycle.</para>
+<para>Attaching this node to a scene tree increments <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref>&apos;s reference counter on tree entry and decrements it on tree exit. Multiple <ref refid="classgodot_1_1_gaze_tracker" kindref="compound">GazeTracker</ref> nodes can safely coexist in the scene hierarchy; tracking is active as long as at least one tracker is in the active scene tree.</para>
+<para>It also provides the static helper <computeroutput>GazeTracker.track_node(node)</computeroutput> for programmatic lifecycle attachment from custom GDScript scripts. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Node</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeTracker</label>
+        <link refid="classgodot_1_1_gaze_tracker"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Node</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeTracker</label>
+        <link refid="classgodot_1_1_gaze_tracker"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_tracker.hpp" line="22" column="1" bodyfile="src/godot/gaze_tracker.hpp" bodystart="22" bodyend="62"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_tracker_1aa6deef3ea7f65ab1a84ede3b44be3d7c" prot="protected" virt="non-virtual"><scope>godot::GazeTracker</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a029baa3a0504c77e508ca8b7590cebff" prot="protected" virt="non-virtual"><scope>godot::GazeTracker</scope><name>_notification</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a032aa0bc381c279772c7327f7c9be050" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>enabled</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a5436148345c5124f8c6a8a546a43b6c5" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>GazeTracker</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a5660e6fd21e7bafb86e4763bc437755c" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a7be1b09ecb556a0381be07ec4d2e885d" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>is_enabled</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a57701e10ebf6a983fbbe673f0b0b9e5b" prot="private" virt="non-virtual"><scope>godot::GazeTracker</scope><name>is_tracking</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a56bf0348a0518adcb5908f557cef3afa" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>is_tracking_active</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a45c1ade36bc0a7839a6a26348117c1c6" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>set_enabled</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1a1bf374b119ac4a8df98fd336d882efee" prot="public" virt="non-virtual"><scope>godot::GazeTracker</scope><name>track_node</name></member>
+      <member refid="classgodot_1_1_gaze_tracker_1ab41c830039e50b8fcc714f90957a3b97" prot="public" virt="virtual"><scope>godot::GazeTracker</scope><name>~GazeTracker</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,268 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_concurrency_1_1_pool" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::Concurrency::Pool</compoundname>
+    <innerclass refid="struct_gaze_1_1_concurrency_1_1_pool_1_1_item" prot="private">Gaze::Concurrency::Pool::Item</innerclass>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+      <param>
+        <type>size_t</type>
+        <declname>SZ</declname>
+        <defname>SZ</defname>
+        <defval>2</defval>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_pool_1a955c6126b378938135451052c92729f6" prot="private" static="no" mutable="no">
+        <type>std::array&lt; Item, SZ &gt;</type>
+        <definition>std::array&lt;Item, SZ&gt; Gaze::Concurrency::Pool&lt; T, SZ &gt;::items</definition>
+        <argsstring></argsstring>
+        <name>items</name>
+        <qualifiedname>Gaze::Concurrency::Pool::items</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="27" column="16" bodyfile="src/core/concurrency/pool.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_pool_1ac4a51deeabb3c2ddb8d53bbb6348478c" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex Gaze::Concurrency::Pool&lt; T, SZ &gt;::mutex</definition>
+        <argsstring></argsstring>
+        <name>mutex</name>
+        <qualifiedname>Gaze::Concurrency::Pool::mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="28" column="24" bodyfile="src/core/concurrency/pool.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_concurrency_1_1_pool_1a2ac30cdb0fac812b7f1656fea4d7d562" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::Concurrency::Pool&lt; T, SZ &gt;::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>Gaze::Concurrency::Pool::size</qualifiedname>
+        <initializer>= SZ</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="31" column="29" bodyfile="src/core/concurrency/pool.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a863a1a51473d53f660e260929cdb0c00" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::Pool&lt; T, SZ &gt;::Pool</definition>
+        <argsstring>()=default</argsstring>
+        <name>Pool</name>
+        <qualifiedname>Gaze::Concurrency::Pool::Pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="33" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a9aed17c03b377b6383fb573b48532bde" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::Pool&lt; T, SZ &gt;::~Pool</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Pool</name>
+        <qualifiedname>Gaze::Concurrency::Pool::~Pool</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="34" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a7ff1b38279073ce22dbf5faed0a0773c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::Pool&lt; T, SZ &gt;::Pool</definition>
+        <argsstring>(const Pool &amp;)=delete</argsstring>
+        <name>Pool</name>
+        <qualifiedname>Gaze::Concurrency::Pool::Pool</qualifiedname>
+        <param>
+          <type>const Pool &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="36" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a02eafed5f79e6c762f5410915275c0b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pool &amp;</type>
+        <definition>Pool &amp; Gaze::Concurrency::Pool&lt; T, SZ &gt;::operator=</definition>
+        <argsstring>(const Pool &amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>Gaze::Concurrency::Pool::operator=</qualifiedname>
+        <param>
+          <type>const Pool &amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="37" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a2ff5e11d8b5d60ab7bc46b2205f4d113" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::Concurrency::Pool&lt; T, SZ &gt;::Pool</definition>
+        <argsstring>(Pool &amp;&amp;)=delete</argsstring>
+        <name>Pool</name>
+        <qualifiedname>Gaze::Concurrency::Pool::Pool</qualifiedname>
+        <param>
+          <type>Pool &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="39" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a9cd92e6f0c3cd13bef703203a989f167" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pool &amp;</type>
+        <definition>Pool &amp; Gaze::Concurrency::Pool&lt; T, SZ &gt;::operator=</definition>
+        <argsstring>(Pool &amp;&amp;)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>Gaze::Concurrency::Pool::operator=</qualifiedname>
+        <param>
+          <type>Pool &amp;&amp;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="40" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a40a341a8b922e20023aba00afd3ed6bc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Gaze::Concurrency::Pool&lt; T, SZ &gt;::take</definition>
+        <argsstring>()</argsstring>
+        <name>take</name>
+        <qualifiedname>Gaze::Concurrency::Pool::take</qualifiedname>
+        <briefdescription>
+<para>Checks out an idle instance from the pool and marks it in_use. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Pointer to checked-out instance, or nullptr if pool is exhausted. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="46" column="7" bodyfile="src/core/concurrency/pool.hpp" bodystart="46" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a6c903fa82affa5eccabb4d7e40fcf6dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::Concurrency::Pool&lt; T, SZ &gt;::release</definition>
+        <argsstring>(const T *instance)</argsstring>
+        <name>release</name>
+        <qualifiedname>Gaze::Concurrency::Pool::release</qualifiedname>
+        <param>
+          <type>const T *</type>
+          <declname>instance</declname>
+        </param>
+        <briefdescription>
+<para>Returns a checked-out instance back to the pool in O(1) time. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>instance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pointer previously returned by <ref refid="class_gaze_1_1_concurrency_1_1_pool_1a40a341a8b922e20023aba00afd3ed6bc" kindref="member">take()</ref>. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="61" column="10" bodyfile="src/core/concurrency/pool.hpp" bodystart="61" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1a58ab29e5e883ef196d790ab94b40cc5b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Gaze::Concurrency::Pool&lt; T, SZ &gt;::get</definition>
+        <argsstring>(size_t idx)</argsstring>
+        <name>get</name>
+        <qualifiedname>Gaze::Concurrency::Pool::get</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>Direct index access to underlying instance. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="73" column="7" bodyfile="src/core/concurrency/pool.hpp" bodystart="73" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_concurrency_1_1_pool_1af3ee43a99d4ef0261c64ea9c45bc2317" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>T *</type>
+        <definition>T * Gaze::Concurrency::Pool&lt; T, SZ &gt;::get_frame</definition>
+        <argsstring>(size_t idx)</argsstring>
+        <name>get_frame</name>
+        <qualifiedname>Gaze::Concurrency::Pool::get_frame</qualifiedname>
+        <param>
+          <type>size_t</type>
+          <declname>idx</declname>
+        </param>
+        <briefdescription>
+<para>Direct index access to underlying instance (alias). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/concurrency/pool.hpp" line="83" column="7" bodyfile="src/core/concurrency/pool.hpp" bodystart="83" bodyend="85"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/concurrency/pool.hpp" line="19" column="1" bodyfile="src/core/concurrency/pool.hpp" bodystart="19" bodyend="86"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a58ab29e5e883ef196d790ab94b40cc5b" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>get</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1af3ee43a99d4ef0261c64ea9c45bc2317" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>get_frame</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a955c6126b378938135451052c92729f6" prot="private" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>items</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1ac4a51deeabb3c2ddb8d53bbb6348478c" prot="private" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>mutex</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a02eafed5f79e6c762f5410915275c0b4" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>operator=</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a9cd92e6f0c3cd13bef703203a989f167" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>operator=</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a863a1a51473d53f660e260929cdb0c00" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>Pool</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a7ff1b38279073ce22dbf5faed0a0773c" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>Pool</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a2ff5e11d8b5d60ab7bc46b2205f4d113" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>Pool</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a6c903fa82affa5eccabb4d7e40fcf6dc" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>release</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a2ac30cdb0fac812b7f1656fea4d7d562" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>size</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a40a341a8b922e20023aba00afd3ed6bc" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>take</name></member>
+      <member refid="class_gaze_1_1_concurrency_1_1_pool_1a9aed17c03b377b6383fb573b48532bde" prot="public" virt="non-virtual"><scope>Gaze::Concurrency::Pool</scope><name>~Pool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

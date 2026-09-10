@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['get_0',['get',['../class_gaze_1_1_concurrency_1_1_pool.html#a58ab29e5e883ef196d790ab94b40cc5b',1,'Gaze::Concurrency::Pool']]],
+  ['get_5f5pt_5fmodel_5fpoints_1',['get_5pt_model_points',['../class_gaze_1_1_face_model_geometry.html#a6d96230baf87ff3ab96387090617445f',1,'Gaze::FaceModelGeometry']]],
+  ['get_5fcamera_5fcurrent_5fframe_2',['get_camera_current_frame',['../classgodot_1_1_vision_server.html#ad9768aeaf47648743bff2c0b57b10735',1,'godot::VisionServer']]],
+  ['get_5fcamera_5fcurrent_5ftexture_3',['get_camera_current_texture',['../classgodot_1_1_vision_server.html#a89c29bb40ca0e5453d3faf6e636397b8',1,'godot::VisionServer::get_camera_current_texture()'],['../classgodot_1_1_mock_vision_server.html#aacade9a5fbef9962053deb89231cdcd4',1,'godot::MockVisionServer::get_camera_current_texture()']]],
+  ['get_5fcanonical_5f35pt_5fmodel_5fpoints_4',['get_canonical_35pt_model_points',['../class_gaze_1_1_face_model_geometry.html#a654c8d6715600eec0575f81a00ccae57',1,'Gaze::FaceModelGeometry']]],
+  ['get_5fcanonical_5fgodot_5fmodel_5fpoints_5',['get_canonical_godot_model_points',['../class_gaze_1_1_face_model_geometry.html#a3ebd03884df5df60fb3e9526c46956cc',1,'Gaze::FaceModelGeometry']]],
+  ['get_5fdefault_5fcamera_5foffset_5fmm_6',['get_default_camera_offset_mm',['../classgodot_1_1_gaze_display_server.html#a385facf0158530c6ae0fb7ddc0d4bf14',1,'godot::GazeDisplayServer']]],
+  ['get_5fframe_7',['get_frame',['../class_gaze_1_1_concurrency_1_1_pool.html#af3ee43a99d4ef0261c64ea9c45bc2317',1,'Gaze::Concurrency::Pool']]],
+  ['get_5fgravity_5fvector_8',['get_gravity_vector',['../classgodot_1_1_vision_server.html#a067e714ed2f27d1cf4c4b581a3b65eb3',1,'godot::VisionServer']]],
+  ['get_5fpixel_5fpitch_5fmm_9',['get_pixel_pitch_mm',['../classgodot_1_1_gaze_display_server.html#a4ecf8b703f58b2acad09c8bc4b508a94',1,'godot::GazeDisplayServer::get_pixel_pitch_mm()'],['../classgodot_1_1_mock_gaze_display_server.html#ae5e5f53314ead3fe8521c60656625769',1,'godot::MockGazeDisplayServer::get_pixel_pitch_mm()']]],
+  ['get_5fraw_5facceleration_10',['get_raw_acceleration',['../classgodot_1_1_vision_server.html#a09127e37d532ad94f80ffb08e5bccbba',1,'godot::VisionServer']]],
+  ['get_5fscreen_5fscale_11',['get_screen_scale',['../classgodot_1_1_gaze_display_server.html#a3ee08268d01a6ad7c76a9e29c3b4632f',1,'godot::GazeDisplayServer::get_screen_scale()'],['../classgodot_1_1_mock_gaze_display_server.html#a4e2f80ac63e79325e85a531e98f31549',1,'godot::MockGazeDisplayServer::get_screen_scale()']]],
+  ['get_5fscreen_5fsize_5fmm_12',['get_screen_size_mm',['../classgodot_1_1_gaze_display_server.html#aec81508eb77a870a1a2f61c908d90c3b',1,'godot::GazeDisplayServer::get_screen_size_mm()'],['../classgodot_1_1_mock_gaze_display_server.html#ab5a25d0e4dba60296abd18d7544345a2',1,'godot::MockGazeDisplayServer::get_screen_size_mm()']]],
+  ['get_5fscreen_5fsize_5fpixels_13',['get_screen_size_pixels',['../classgodot_1_1_gaze_display_server.html#ad3f43e47d01af5e8120ff1a0116e9d48',1,'godot::GazeDisplayServer::get_screen_size_pixels()'],['../classgodot_1_1_mock_gaze_display_server.html#a5855a513786da0d611d1de43630ca20c',1,'godot::MockGazeDisplayServer::get_screen_size_pixels()']]],
+  ['get_5fsingleton_14',['get_singleton',['../classgodot_1_1_gaze_display_server.html#a4497e3c5df05fa0b65cfaab9227f2ecb',1,'godot::GazeDisplayServer::get_singleton()'],['../classgodot_1_1_vision_server.html#a090d7a967b756eac3a0054e8132331b5',1,'godot::VisionServer::get_singleton()']]],
+  ['get_5fwindow_5frect_5fpixels_15',['get_window_rect_pixels',['../classgodot_1_1_gaze_display_server.html#aa560e9bc3bb60be8aa7220821ad0eb7a',1,'godot::GazeDisplayServer::get_window_rect_pixels()'],['../classgodot_1_1_mock_gaze_display_server.html#ac558a079342a017ee92b0db0c155a0ba',1,'godot::MockGazeDisplayServer::get_window_rect_pixels()']]],
+  ['gravity_5fto_5forientation_16',['gravity_to_orientation',['../class_gaze_1_1_projection_engine.html#a76a235b72ada715947e5e75ca7d83e0e',1,'Gaze::ProjectionEngine']]]
+];

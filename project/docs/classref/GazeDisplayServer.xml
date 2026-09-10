@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeDisplayServer" inherits="Object">
+	<brief_description>Singleton query server providing physical display geometry, scale factors, and hardware camera offsets.</brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="get_screen_size_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve physical screen dimensions in millimeters.
+
+p_screen
+Screen index (-1 for default/current screen).
+Screen size Vector2(width_mm, height_mm).
+
+Screen index (-1 for default/current screen).
+
+Screen size Vector2(width_mm, height_mm).</description>
+		</method>
+		<method name="get_screen_size_pixels">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve screen logical pixel dimensions.
+
+p_screen
+Screen index (-1 for default/current screen).
+Screen resolution Vector2(width_px, height_px).
+
+Screen index (-1 for default/current screen).
+
+Screen resolution Vector2(width_px, height_px).</description>
+		</method>
+		<method name="get_pixel_pitch_mm">
+			<return type="Vector2"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve physical pixel pitch in millimeters per pixel.
+
+p_screen
+Screen index (-1 for default/current screen).
+Vector2(pitch_x_mm, pitch_y_mm).
+
+Screen index (-1 for default/current screen).
+
+Vector2(pitch_x_mm, pitch_y_mm).</description>
+		</method>
+		<method name="get_screen_scale">
+			<return type="double"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve screen HiDPI scale factor.
+
+p_screen
+Screen index (-1 for default/current screen).
+Scale factor double.
+
+Screen index (-1 for default/current screen).
+
+Scale factor double.</description>
+		</method>
+		<method name="get_window_rect_pixels">
+			<return type="Rect2i"></return>
+			<param index="0" name="p_window" type="int"></param>
+			<description>Retrieve application window bounding rectangle in logical pixels.
+
+p_window
+Window index.
+Window Rect2i(x, y, width, height).
+
+Window index.
+
+Window Rect2i(x, y, width, height).</description>
+		</method>
+		<method name="get_default_camera_offset_mm">
+			<return type="Vector3"></return>
+			<param index="0" name="p_screen" type="int"></param>
+			<description>Retrieve the default hardware camera placement offset for the display.
+
+p_screen
+Screen index (-1 for default/current screen).
+Camera offset Vector3 in millimeters.
+
+Screen index (-1 for default/current screen).
+
+Camera offset Vector3 in millimeters.</description>
+		</method>
+		<method name="get_singleton">
+			<return type="GazeDisplayServer *"></return>
+			<description>Get the GazeDisplayServer global singleton instance.
+
+Pointer to the singleton instance.
+
+Pointer to the singleton instance.</description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

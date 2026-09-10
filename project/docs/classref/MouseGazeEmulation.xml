@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="MouseGazeEmulation">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_dwell_time">
+			<return type="void"></return>
+			<param index="0" name="p_sec" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_dwell_time">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_transition_duration">
+			<return type="void"></return>
+			<param index="0" name="p_sec" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_transition_duration">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_motion_threshold">
+			<return type="void"></return>
+			<param index="0" name="p_px" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_motion_threshold">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="notify_camera_event">
+			<return type="void"></return>
+			<param index="0" name="p_cam_event" type="const Ref&lt; InputEventGazeBase &gt; &amp;"></param>
+			<description></description>
+		</method>
+		<method name="update">
+			<return type="void"></return>
+			<param index="0" name="p_delta_sec" type="double"></param>
+			<param index="1" name="p_camera_tracking_active" type="bool"></param>
+			<param index="2" name="p_face_detected" type="bool"></param>
+			<param index="3" name="p_emulate_gaze_from_mouse" type="bool"></param>
+			<param index="4" name="p_ds" type="DisplayServer *"></param>
+			<description></description>
+		</method>
+		<method name="is_emulation_active">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="is_in_transition">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="get_dwell_timer">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="get_blend_progress">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="get_eased_blend_factor">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="synthesize_event">
+			<return type="Ref&lt; InputEventGazeBase &gt;"></return>
+			<param index="0" name="p_ds" type="DisplayServer *"></param>
+			<param index="1" name="p_profile" type="const Ref&lt; GazeDeviceProfile &gt; &amp;"></param>
+			<param index="2" name="p_event_factory" type="const Ref&lt; GazeEventFactory &gt; &amp;"></param>
+			<param index="3" name="r_frame_id" type="uint64_t &amp;"></param>
+			<param index="4" name="r_last_event_time_usec" type="uint64_t &amp;"></param>
+			<param index="5" name="r_last_gaze_pos" type="Vector2 &amp;"></param>
+			<param index="6" name="r_last_screen_pos" type="Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="reset">
+			<return type="void"></return>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

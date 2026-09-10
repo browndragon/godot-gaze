@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="namespace_gaze_1_1_concurrency" kind="namespace" language="C++">
+    <compoundname>Gaze::Concurrency</compoundname>
+    <innerclass refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox" prot="public">Gaze::Concurrency::AtomicMailbox</innerclass>
+    <innerclass refid="class_gaze_1_1_concurrency_1_1_pool" prot="public">Gaze::Concurrency::Pool</innerclass>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/concurrency/atomic_mailbox.hpp" line="16" column="1"/>
+  </compounddef>
+</doxygen>

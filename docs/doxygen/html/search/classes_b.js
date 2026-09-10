@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['screenprojector_0',['ScreenProjector',['../class_gaze_1_1_screen_projector.html',1,'Gaze']]],
+  ['sigmoidalfilter_1',['SigmoidalFilter',['../class_gaze_1_1_sigmoidal_filter.html',1,'Gaze']]],
+  ['smoother_2',['Smoother',['../classgodot_1_1_smoother.html',1,'godot']]],
+  ['solution_3',['Solution',['../struct_gaze_1_1_s_q_pn_p_solver_1_1_solution.html',1,'Gaze::SQPnPSolver']]],
+  ['spacedbasis_4',['SpacedBasis',['../struct_gaze_1_1_spaced_basis.html',1,'Gaze']]],
+  ['spacedbasis_3c_20space_3a_3aopencvfacemodel_2c_20space_3a_3aopencvcamera_20_3e_5',['SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt;',['../struct_gaze_1_1_spaced_basis.html',1,'Gaze']]],
+  ['spacedtransform3d_6',['SpacedTransform3D',['../struct_gaze_1_1_spaced_transform3_d.html',1,'Gaze']]],
+  ['spacedtransform3d_3c_20space_3a_3agodotfacelocal_2c_20space_3a_3agodotcamera_20_3e_7',['SpacedTransform3D&lt; Space::GodotFaceLocal, Space::GodotCamera &gt;',['../struct_gaze_1_1_spaced_transform3_d.html',1,'Gaze']]],
+  ['spacedvector2_8',['SpacedVector2',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector2_3c_20space_3a_3agodotcameraimagepixels_20_3e_9',['SpacedVector2&lt; Space::GodotCameraImagePixels &gt;',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector2_3c_20space_3a_3agodotcameraworkingimagepixels_20_3e_10',['SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt;',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector2_3c_20space_3a_3agodotdisplaymm_20_3e_11',['SpacedVector2&lt; Space::GodotDisplayMm &gt;',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector2_3c_20space_3a_3agodotdisplaypx_20_3e_12',['SpacedVector2&lt; Space::GodotDisplayPx &gt;',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector2_3c_20space_3a_3agodotviewportpx_20_3e_13',['SpacedVector2&lt; Space::GodotViewportPx &gt;',['../struct_gaze_1_1_spaced_vector2.html',1,'Gaze']]],
+  ['spacedvector3_14',['SpacedVector3',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3agodotcamera_20_3e_15',['SpacedVector3&lt; Space::GodotCamera &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3agodotcameraeuler_20_3e_16',['SpacedVector3&lt; Space::GodotCameraEuler &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3agodotfacelocal_20_3e_17',['SpacedVector3&lt; Space::GodotFaceLocal &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3aopencvcamera_20_3e_18',['SpacedVector3&lt; Space::OpenCVCamera &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3aopencvfacemodel_20_3e_19',['SpacedVector3&lt; Space::OpenCVFaceModel &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20space_3a_3aopenvinoadasgaze_20_3e_20',['SpacedVector3&lt; Space::OpenVINOADASGaze &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['spacedvector3_3c_20to_20_3e_21',['SpacedVector3&lt; To &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
+  ['sqpnpsolver_22',['SQPnPSolver',['../class_gaze_1_1_s_q_pn_p_solver.html',1,'Gaze']]]
+];

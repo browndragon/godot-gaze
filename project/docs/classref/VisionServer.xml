@@ -12,6 +12,14 @@ src/native/vision_server.cpp : Implements native OpenCV camera capture and frame
 src/web/vision_server.cpp : Implements Web HTML5 JS/Emscripten canvas capture callbacks.</description>
 	<tutorials></tutorials>
 	<methods>
+		<method name="get_raw_acceleration">
+			<return type="Vector3"></return>
+			<description>Retrieve the raw acceleration vector measured by hardware sensors (in m/s^2).</description>
+		</method>
+		<method name="get_gravity_vector">
+			<return type="Vector3"></return>
+			<description>Retrieve the normalized unit gravity vector in camera space.</description>
+		</method>
 		<method name="camera_create">
 			<return type="RID"></return>
 			<description>Create a new camera resource and return its unique RID.</description>
@@ -74,6 +82,11 @@ The frame texture to inject.</description>
 True if started successfully, false otherwise.
 
 True if started successfully, false otherwise.</description>
+		</method>
+		<method name="camera_is_active">
+			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description></description>
 		</method>
 		<method name="camera_stop">
 			<return type="void"></return>

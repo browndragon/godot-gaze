@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_window_rect" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeWindowRect</compoundname>
+    <includes refid="gaze__display__types_8hpp" local="no">gaze_display_types.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_window_rect_1a0007cc15f434cdc1a42b6641e5920ff2" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeWindowRect::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeWindowRect::x</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="22" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_window_rect_1a2aa94384cd7eec33665f3a9a3e834e41" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeWindowRect::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeWindowRect::y</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="23" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_window_rect_1aad27d0a734439af0eb682e411f3c9e77" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeWindowRect::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>Gaze::GazeWindowRect::width</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="24" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_window_rect_1aac2039945fa5c5f63ca1389d58c5de3c" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int Gaze::GazeWindowRect::height</definition>
+        <argsstring></argsstring>
+        <name>height</name>
+        <qualifiedname>Gaze::GazeWindowRect::height</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="25" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Represents position and dimensions of an application window in logical pixels. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/gaze_display_types.hpp" line="21" column="1" bodyfile="src/core/gaze_display_types.hpp" bodystart="21" bodyend="26"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_window_rect_1aac2039945fa5c5f63ca1389d58c5de3c" prot="public" virt="non-virtual"><scope>Gaze::GazeWindowRect</scope><name>height</name></member>
+      <member refid="struct_gaze_1_1_gaze_window_rect_1aad27d0a734439af0eb682e411f3c9e77" prot="public" virt="non-virtual"><scope>Gaze::GazeWindowRect</scope><name>width</name></member>
+      <member refid="struct_gaze_1_1_gaze_window_rect_1a0007cc15f434cdc1a42b6641e5920ff2" prot="public" virt="non-virtual"><scope>Gaze::GazeWindowRect</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_window_rect_1a2aa94384cd7eec33665f3a9a3e834e41" prot="public" virt="non-virtual"><scope>Gaze::GazeWindowRect</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

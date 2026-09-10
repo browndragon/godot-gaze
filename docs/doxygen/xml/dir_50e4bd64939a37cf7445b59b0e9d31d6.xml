@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="dir_50e4bd64939a37cf7445b59b0e9d31d6" kind="dir">
+    <compoundname>src/core/concurrency</compoundname>
+    <innerfile refid="atomic__mailbox_8hpp">atomic_mailbox.hpp</innerfile>
+    <innerfile refid="pool_8hpp">pool.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/concurrency/"/>
+  </compounddef>
+</doxygen>

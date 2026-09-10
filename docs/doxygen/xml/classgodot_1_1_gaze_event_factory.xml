@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_event_factory" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeEventFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Resource</basecompoundref>
+    <derivedcompoundref refid="classgodot_1_1_gaze_server_event_factory" prot="public" virt="non-virtual">godot::GazeServerEventFactory</derivedcompoundref>
+    <includes refid="gaze__event__factory_8hpp" local="no">gaze_event_factory.hpp</includes>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1a9e1053588e39f4f457037a98ee9f2a00" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeEventFactory::GDCLASS</definition>
+        <argsstring>(GazeEventFactory, Resource)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeEventFactory::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeEventFactory</type>
+        </param>
+        <param>
+          <type>Resource</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="13" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1adf2e289df1ca6a66919b04bedbfd3ce8" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeEventFactory::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeEventFactory::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="16" column="17" bodyfile="src/godot/gaze_event_factory.cpp" bodystart="9" bodyend="12"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1a204d9b000a4e2b67f9100c455bc11fba" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeEventFactory::GazeEventFactory</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeEventFactory</name>
+        <qualifiedname>godot::GazeEventFactory::GazeEventFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="19" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1a481365bb52fc91bd35c780b3e5ef7192" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::GazeEventFactory::~GazeEventFactory</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeEventFactory</name>
+        <qualifiedname>godot::GazeEventFactory::~GazeEventFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="20" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1a85aa1b13a76538c318e15c6907c0f916" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
+        <definition>Ref&lt; InputEventGazeBase &gt; godot::GazeEventFactory::create_gaze_event</definition>
+        <argsstring>()</argsstring>
+        <name>create_gaze_event</name>
+        <qualifiedname>godot::GazeEventFactory::create_gaze_event</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_gaze_server_event_factory_1af9adab444b2d4e83613deb1440e550db">create_gaze_event</reimplementedby>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="22" column="17" bodyfile="src/godot/gaze_event_factory.cpp" bodystart="14" bodyend="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_event_factory_1ac2fbaca9d4f07991ac374eabb9b62806" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
+        <definition>Ref&lt; InputEventGazeBase &gt; godot::GazeEventFactory::create_missing_event</definition>
+        <argsstring>(int p_reason)</argsstring>
+        <name>create_missing_event</name>
+        <qualifiedname>godot::GazeEventFactory::create_missing_event</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_gaze_server_event_factory_1af351219502d4291170f9959101055046">create_missing_event</reimplementedby>
+        <param>
+          <type>int</type>
+          <declname>p_reason</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_event_factory.hpp" line="23" column="17" bodyfile="src/godot/gaze_event_factory.cpp" bodystart="20" bodyend="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Base Resource for constructing, enriching, and minting gaze input events. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeEventFactory</label>
+        <link refid="classgodot_1_1_gaze_event_factory"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>godot::GazeServerEventFactory</label>
+        <link refid="classgodot_1_1_gaze_server_event_factory"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeEventFactory</label>
+        <link refid="classgodot_1_1_gaze_event_factory"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_event_factory.hpp" line="12" column="1" bodyfile="src/godot/gaze_event_factory.hpp" bodystart="12" bodyend="24"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_event_factory_1adf2e289df1ca6a66919b04bedbfd3ce8" prot="protected" virt="non-virtual"><scope>godot::GazeEventFactory</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_event_factory_1a85aa1b13a76538c318e15c6907c0f916" prot="public" virt="virtual"><scope>godot::GazeEventFactory</scope><name>create_gaze_event</name></member>
+      <member refid="classgodot_1_1_gaze_event_factory_1ac2fbaca9d4f07991ac374eabb9b62806" prot="public" virt="virtual"><scope>godot::GazeEventFactory</scope><name>create_missing_event</name></member>
+      <member refid="classgodot_1_1_gaze_event_factory_1a204d9b000a4e2b67f9100c455bc11fba" prot="public" virt="non-virtual"><scope>godot::GazeEventFactory</scope><name>GazeEventFactory</name></member>
+      <member refid="classgodot_1_1_gaze_event_factory_1a9e1053588e39f4f457037a98ee9f2a00" prot="private" virt="non-virtual"><scope>godot::GazeEventFactory</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_event_factory_1a481365bb52fc91bd35c780b3e5ef7192" prot="public" virt="virtual"><scope>godot::GazeEventFactory</scope><name>~GazeEventFactory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

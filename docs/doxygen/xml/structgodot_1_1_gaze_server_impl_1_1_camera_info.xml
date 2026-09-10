@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="structgodot_1_1_gaze_server_impl_1_1_camera_info" kind="struct" language="C++" prot="public">
+    <compoundname>godot::GazeServerImpl::CameraInfo</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a86b6bb15ff6fe604b851ba02d2dd1772" prot="public" static="no" mutable="no">
+        <type>RID</type>
+        <definition>RID godot::GazeServerImpl::CameraInfo::vision_camera_rid</definition>
+        <argsstring></argsstring>
+        <name>vision_camera_rid</name>
+        <qualifiedname>godot::GazeServerImpl::CameraInfo::vision_camera_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="40" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/godot/gaze_server.cpp" line="39" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="39" bodyend="41"/>
+    <listofallmembers>
+      <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a86b6bb15ff6fe604b851ba02d2dd1772" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>vision_camera_rid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

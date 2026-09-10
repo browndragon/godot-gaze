@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_yu_net_result" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::YuNetResult</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1af19c961b9926bf425d0e5f5694dc41b3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::YuNetResult::face_detected</definition>
+        <argsstring></argsstring>
+        <name>face_detected</name>
+        <qualifiedname>Gaze::YuNetResult::face_detected</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="32" column="14" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1acb0d935415d59e6508fd2229f088f248" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetResult::score</definition>
+        <argsstring></argsstring>
+        <name>score</name>
+        <qualifiedname>Gaze::YuNetResult::score</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="33" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a1ccd0ce9a55f8dd992f54f22cbf0a0c6" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetResult::roi_x</definition>
+        <argsstring></argsstring>
+        <name>roi_x</name>
+        <qualifiedname>Gaze::YuNetResult::roi_x</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="35" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a6d2a5cf22e785753f1d621e8c0aa5267" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetResult::roi_y</definition>
+        <argsstring></argsstring>
+        <name>roi_y</name>
+        <qualifiedname>Gaze::YuNetResult::roi_y</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="36" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1af7a7e0d08a8dd64ef7ea36cfd55353f5" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetResult::roi_w</definition>
+        <argsstring></argsstring>
+        <name>roi_w</name>
+        <qualifiedname>Gaze::YuNetResult::roi_w</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="37" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1ab1811a6f012b3d3fd2c439c22cc7a51f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::YuNetResult::roi_h</definition>
+        <argsstring></argsstring>
+        <name>roi_h</name>
+        <qualifiedname>Gaze::YuNetResult::roi_h</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="38" column="15" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1aeddc96bf2cde75b7e06be57fd2ef4e70" prot="public" static="no" mutable="no">
+        <type>GodotCameraImageVector2</type>
+        <definition>GodotCameraImageVector2 Gaze::YuNetResult::right_eye_px</definition>
+        <argsstring></argsstring>
+        <name>right_eye_px</name>
+        <qualifiedname>Gaze::YuNetResult::right_eye_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="40" column="33" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1af1da8450aa5a85016dc3b13b3f4b6167" prot="public" static="no" mutable="no">
+        <type>GodotCameraImageVector2</type>
+        <definition>GodotCameraImageVector2 Gaze::YuNetResult::left_eye_px</definition>
+        <argsstring></argsstring>
+        <name>left_eye_px</name>
+        <qualifiedname>Gaze::YuNetResult::left_eye_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="41" column="33" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a099fc3e444b6c1156d58a187815deb10" prot="public" static="no" mutable="no">
+        <type>GodotCameraImageVector2</type>
+        <definition>GodotCameraImageVector2 Gaze::YuNetResult::nose_tip_px</definition>
+        <argsstring></argsstring>
+        <name>nose_tip_px</name>
+        <qualifiedname>Gaze::YuNetResult::nose_tip_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="42" column="33" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a658e03ca505148fdfa30392e16e97425" prot="public" static="no" mutable="no">
+        <type>GodotCameraImageVector2</type>
+        <definition>GodotCameraImageVector2 Gaze::YuNetResult::mouth_right_px</definition>
+        <argsstring></argsstring>
+        <name>mouth_right_px</name>
+        <qualifiedname>Gaze::YuNetResult::mouth_right_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="43" column="33" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a5446788ed8753356720a12e17f11daa4" prot="public" static="no" mutable="no">
+        <type>GodotCameraImageVector2</type>
+        <definition>GodotCameraImageVector2 Gaze::YuNetResult::mouth_left_px</definition>
+        <argsstring></argsstring>
+        <name>mouth_left_px</name>
+        <qualifiedname>Gaze::YuNetResult::mouth_left_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="44" column="33" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_yu_net_result_1a87093338f062e6226e3fb340d7d110f9" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_head_pose" kindref="compound">HeadPose</ref></type>
+        <definition>HeadPose Gaze::YuNetResult::head_pose</definition>
+        <argsstring></argsstring>
+        <name>head_pose</name>
+        <qualifiedname>Gaze::YuNetResult::head_pose</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_yunet_detector.hpp" line="46" column="18" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="3">
+        <label>Gaze::HeadPose</label>
+        <link refid="struct_gaze_1_1_head_pose"/>
+      </node>
+      <node id="2">
+        <label>Gaze::SpacedVector2&lt; Space::GodotCameraImagePixels &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector2"/>
+      </node>
+      <node id="1">
+        <label>Gaze::YuNetResult</label>
+        <link refid="struct_gaze_1_1_yu_net_result"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>left_eye_px</edgelabel>
+          <edgelabel>mouth_left_px</edgelabel>
+          <edgelabel>mouth_right_px</edgelabel>
+          <edgelabel>nose_tip_px</edgelabel>
+          <edgelabel>right_eye_px</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>head_pose</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/native/ort_yunet_detector.hpp" line="30" column="5" bodyfile="src/native/ort_yunet_detector.hpp" bodystart="31" bodyend="47"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_yu_net_result_1af19c961b9926bf425d0e5f5694dc41b3" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>face_detected</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a87093338f062e6226e3fb340d7d110f9" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>head_pose</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1af1da8450aa5a85016dc3b13b3f4b6167" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>left_eye_px</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a5446788ed8753356720a12e17f11daa4" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>mouth_left_px</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a658e03ca505148fdfa30392e16e97425" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>mouth_right_px</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a099fc3e444b6c1156d58a187815deb10" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>nose_tip_px</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1aeddc96bf2cde75b7e06be57fd2ef4e70" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>right_eye_px</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1ab1811a6f012b3d3fd2c439c22cc7a51f" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>roi_h</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1af7a7e0d08a8dd64ef7ea36cfd55353f5" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>roi_w</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a1ccd0ce9a55f8dd992f54f22cbf0a0c6" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>roi_x</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1a6d2a5cf22e785753f1d621e8c0aa5267" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>roi_y</name></member>
+      <member refid="struct_gaze_1_1_yu_net_result_1acb0d935415d59e6508fd2229f088f248" prot="public" virt="non-virtual"><scope>Gaze::YuNetResult</scope><name>score</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

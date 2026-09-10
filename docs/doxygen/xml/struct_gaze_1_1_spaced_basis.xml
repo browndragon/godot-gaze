@@ -1,0 +1,234 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_spaced_basis" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::SpacedBasis</compoundname>
+    <templateparamlist>
+      <param>
+        <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
+        <declname>From</declname>
+        <defname>From</defname>
+      </param>
+      <param>
+        <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
+        <declname>To</declname>
+        <defname>To</defname>
+      </param>
+    </templateparamlist>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_spaced_basis_1a8911d16b03b768653262d2f7492ff15a" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt;To&gt; Gaze::SpacedBasis&lt; From, To &gt;::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::SpacedBasis::x</qualifiedname>
+        <initializer>{1.0, 0.0, 0.0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="179" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_spaced_basis_1a5a577b6130e0a4969518ac76d2b93b68" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt;To&gt; Gaze::SpacedBasis&lt; From, To &gt;::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::SpacedBasis::y</qualifiedname>
+        <initializer>{0.0, 1.0, 0.0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="180" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="180" bodyend="180"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_spaced_basis_1a2b5f1bde3439b2191a8e0efa755f5ec4" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt;To&gt; Gaze::SpacedBasis&lt; From, To &gt;::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>Gaze::SpacedBasis::z</qualifiedname>
+        <initializer>{0.0, 0.0, 1.0}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="181" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="181" bodyend="181"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a8f02ff9facba8ce446deb5211d28aaaf" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::SpacedBasis&lt; From, To &gt;::SpacedBasis</definition>
+        <argsstring>()=default</argsstring>
+        <name>SpacedBasis</name>
+        <qualifiedname>Gaze::SpacedBasis::SpacedBasis</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="183" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a3cdf3b020095adb00be2f353ac79a65b" prot="public" static="no" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>constexpr</type>
+        <definition>Gaze::SpacedBasis&lt; From, To &gt;::SpacedBasis</definition>
+        <argsstring>(const SpacedVector3&lt; To &gt; &amp;px, const SpacedVector3&lt; To &gt; &amp;py, const SpacedVector3&lt; To &gt; &amp;pz)</argsstring>
+        <name>SpacedBasis</name>
+        <qualifiedname>Gaze::SpacedBasis::SpacedBasis</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt; &amp;</type>
+          <declname>px</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt; &amp;</type>
+          <declname>py</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt; &amp;</type>
+          <declname>pz</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="184" column="15" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="184" bodyend="185"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a63fd69c9fc56ff661bbf832ca90fc42c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt; To &gt; Gaze::SpacedBasis&lt; From, To &gt;::transform</definition>
+        <argsstring>(const SpacedVector3&lt; From &gt; &amp;v) const</argsstring>
+        <name>transform</name>
+        <qualifiedname>Gaze::SpacedBasis::transform</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; From &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="195" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="195" bodyend="201"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a00f399e4171ca0e787f01c90cd6e8472" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; To &gt;</type>
+        <definition>SpacedVector3&lt; To &gt; Gaze::SpacedBasis&lt; From, To &gt;::multiply_vector</definition>
+        <argsstring>(const SpacedVector3&lt; From &gt; &amp;v) const</argsstring>
+        <name>multiply_vector</name>
+        <qualifiedname>Gaze::SpacedBasis::multiply_vector</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; From &gt; &amp;</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="203" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="203" bodyend="205"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a5169369c1cea6c28cfd1f755d4a372e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedBasis&lt; To, From &gt;</type>
+        <definition>SpacedBasis&lt; To, From &gt; Gaze::SpacedBasis&lt; From, To &gt;::transposed</definition>
+        <argsstring>() const</argsstring>
+        <name>transposed</name>
+        <qualifiedname>Gaze::SpacedBasis::transposed</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="207" column="17" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="207" bodyend="213"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1a8a0b6aa72d9cbc555ab1ebbbefc5c247" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::SpacedBasis&lt; From, To &gt;::determinant</definition>
+        <argsstring>() const</argsstring>
+        <name>determinant</name>
+        <qualifiedname>Gaze::SpacedBasis::determinant</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="215" column="12" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="215" bodyend="219"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1ac92992adeccc99aecd69694e0870af55" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_spaced_vector3" kindref="compound">SpacedVector3</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981ad462c7d535695dce412ae8309a07bc07" kindref="member">Space::GodotCameraEuler</ref> &gt;</type>
+        <definition>SpacedVector3&lt; Space::GodotCameraEuler &gt; Gaze::SpacedBasis&lt; From, To &gt;::get_euler_rad</definition>
+        <argsstring>() const</argsstring>
+        <name>get_euler_rad</name>
+        <qualifiedname>Gaze::SpacedBasis::get_euler_rad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="221" column="19" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="221" bodyend="247"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_basis_1ad7c64f4d45fd016738d2f9a008b2d52a" prot="public" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedBasis&lt; From, To &gt;</type>
+        <definition>static constexpr SpacedBasis&lt; From, To &gt; Gaze::SpacedBasis&lt; From, To &gt;::identity</definition>
+        <argsstring>()</argsstring>
+        <name>identity</name>
+        <qualifiedname>Gaze::SpacedBasis::identity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="187" column="34" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="187" bodyend="193"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::SpacedBasis&lt; From, To &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_basis"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>x</edgelabel>
+          <edgelabel>y</edgelabel>
+          <edgelabel>z</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Gaze::SpacedVector3&lt; To &gt;</label>
+        <link refid="struct_gaze_1_1_spaced_vector3"/>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/opencv_space_conversions.hpp" line="177" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="178" bodyend="248"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_spaced_basis_1a8a0b6aa72d9cbc555ab1ebbbefc5c247" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>determinant</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1ac92992adeccc99aecd69694e0870af55" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>get_euler_rad</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1ad7c64f4d45fd016738d2f9a008b2d52a" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>identity</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a00f399e4171ca0e787f01c90cd6e8472" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>multiply_vector</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a8f02ff9facba8ce446deb5211d28aaaf" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>SpacedBasis</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a3cdf3b020095adb00be2f353ac79a65b" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>SpacedBasis</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a63fd69c9fc56ff661bbf832ca90fc42c" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>transform</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a5169369c1cea6c28cfd1f755d4a372e5" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>transposed</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a8911d16b03b768653262d2f7492ff15a" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a5a577b6130e0a4969518ac76d2b93b68" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>y</name></member>
+      <member refid="struct_gaze_1_1_spaced_basis_1a2b5f1bde3439b2191a8e0efa755f5ec4" prot="public" virt="non-virtual"><scope>Gaze::SpacedBasis</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

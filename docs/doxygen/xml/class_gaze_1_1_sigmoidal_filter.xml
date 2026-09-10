@@ -1,0 +1,470 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_sigmoidal_filter" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::SigmoidalFilter</compoundname>
+    <includes refid="sigmoidal__filter_8hpp" local="no">sigmoidal_filter.hpp</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a4777639f0ee5890e1e13ce7aab2df07e" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::current_val</definition>
+        <argsstring></argsstring>
+        <name>current_val</name>
+        <qualifiedname>Gaze::SigmoidalFilter::current_val</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="26" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a45b743c5003f74933c5fd0722412f3a9" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::last_valid_val</definition>
+        <argsstring></argsstring>
+        <name>last_valid_val</name>
+        <qualifiedname>Gaze::SigmoidalFilter::last_valid_val</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="27" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1af15a64aa7a1821aa71bdcf82f5387eb7" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::neutral_val</definition>
+        <argsstring></argsstring>
+        <name>neutral_val</name>
+        <qualifiedname>Gaze::SigmoidalFilter::neutral_val</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="28" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1af5037ed43fc558b043f541a81d60f02b" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::SigmoidalFilter::last_timestamp_s</definition>
+        <argsstring></argsstring>
+        <name>last_timestamp_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::last_timestamp_s</qualifiedname>
+        <initializer>= -1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="29" column="12" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1aed5bd481effda44b579142cb60b19ad1" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::SigmoidalFilter::time_lost_s</definition>
+        <argsstring></argsstring>
+        <name>time_lost_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::time_lost_s</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="30" column="12" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a8a10da6a05bee5740468a9442da26c82" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::hold_window_s</definition>
+        <argsstring></argsstring>
+        <name>hold_window_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::hold_window_s</qualifiedname>
+        <initializer>= 0.060f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="32" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a2e2ee0bed12fbb9ef1a7fbd07b5bc616" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::decay_window_s</definition>
+        <argsstring></argsstring>
+        <name>decay_window_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::decay_window_s</qualifiedname>
+        <initializer>= 0.250f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="33" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a5e030514dfadbeffb3dc1a5147466155" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::base_tau_track_s</definition>
+        <argsstring></argsstring>
+        <name>base_tau_track_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::base_tau_track_s</qualifiedname>
+        <initializer>= 0.003f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="34" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_sigmoidal_filter_1a0d15735f705579404445422fce82deee" prot="private" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::min_cutoff_delta</definition>
+        <argsstring></argsstring>
+        <name>min_cutoff_delta</name>
+        <qualifiedname>Gaze::SigmoidalFilter::min_cutoff_delta</qualifiedname>
+        <initializer>= 0.02f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="35" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1af10d554444b298065d2abf563b22ba48" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::SigmoidalFilter::SigmoidalFilter</definition>
+        <argsstring>(float neutral_value=0.0f, float hold_s=0.060f, float decay_s=0.250f, float base_tau_s=0.003f, float cutoff_delta=0.02f)</argsstring>
+        <name>SigmoidalFilter</name>
+        <qualifiedname>Gaze::SigmoidalFilter::SigmoidalFilter</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>neutral_value</declname>
+          <defval>0.0f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>hold_s</declname>
+          <defval>0.060f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>decay_s</declname>
+          <defval>0.250f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>base_tau_s</declname>
+          <defval>0.003f</defval>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>cutoff_delta</declname>
+          <defval>0.02f</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="38" column="5" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="38" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1ab18b78cfab74feb355b467af5b1b2e61" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::reset</definition>
+        <argsstring>(float initial_val=0.0f)</argsstring>
+        <name>reset</name>
+        <qualifiedname>Gaze::SigmoidalFilter::reset</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>initial_val</declname>
+          <defval>0.0f</defval>
+        </param>
+        <briefdescription>
+<para>Resets filter state and timestamps to specified initial/neutral value. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="54" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="54" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1a929cb19c5daa1ab9582cfb119491f73c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::update</definition>
+        <argsstring>(bool has_sample, float sample_val, float confidence=1.0f, double timestamp_s=-1.0)</argsstring>
+        <name>update</name>
+        <qualifiedname>Gaze::SigmoidalFilter::update</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>has_sample</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>sample_val</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>confidence</declname>
+          <defval>1.0f</defval>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>timestamp_s</declname>
+          <defval>-1.0</defval>
+        </param>
+        <briefdescription>
+<para>Updates filter state with a new sample observation or dropout. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>has_sample</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True if valid measurement is present; false if signal dropped out. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sample_val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Observed measurement value. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>confidence</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Detection / measurement confidence [0.0 .. 1.0]. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>timestamp_s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Current monotonic timestamp in seconds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Filtered output value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="70" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="70" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1a10913139abd44b8b53c9bed1e041c22a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::get_value</definition>
+        <argsstring>() const</argsstring>
+        <name>get_value</name>
+        <qualifiedname>Gaze::SigmoidalFilter::get_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="97" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1aa895cba2fe3b2e22ec1ca8090cc74ccc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::SigmoidalFilter::get_neutral_value</definition>
+        <argsstring>() const</argsstring>
+        <name>get_neutral_value</name>
+        <qualifiedname>Gaze::SigmoidalFilter::get_neutral_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="98" column="11" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1ae54598d32a83dd496b20d8d61b149125" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::SigmoidalFilter::get_time_lost_s</definition>
+        <argsstring>() const</argsstring>
+        <name>get_time_lost_s</name>
+        <qualifiedname>Gaze::SigmoidalFilter::get_time_lost_s</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="99" column="12" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1a984e359f6309ace6f0b177a123937e19" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::SigmoidalFilter::is_holding</definition>
+        <argsstring>() const</argsstring>
+        <name>is_holding</name>
+        <qualifiedname>Gaze::SigmoidalFilter::is_holding</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="100" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1a3b4ef9535508c777fd3d09991dca2a2b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::SigmoidalFilter::is_decaying</definition>
+        <argsstring>() const</argsstring>
+        <name>is_decaying</name>
+        <qualifiedname>Gaze::SigmoidalFilter::is_decaying</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="101" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="101" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1af826f0b6ade6f957d3df8e3ae1c57c2d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::set_hold_window</definition>
+        <argsstring>(float s)</argsstring>
+        <name>set_hold_window</name>
+        <qualifiedname>Gaze::SigmoidalFilter::set_hold_window</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="103" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1afa83f67bd2fff1efe301979c4fffc8e4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::set_decay_window</definition>
+        <argsstring>(float s)</argsstring>
+        <name>set_decay_window</name>
+        <qualifiedname>Gaze::SigmoidalFilter::set_decay_window</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="104" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1af57f9eddc91eb934230b29bdc84e4754" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::set_base_tau</definition>
+        <argsstring>(float s)</argsstring>
+        <name>set_base_tau</name>
+        <qualifiedname>Gaze::SigmoidalFilter::set_base_tau</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="105" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1adaf49faaf961ff5610c793c137bb1709" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::set_min_cutoff_delta</definition>
+        <argsstring>(float d)</argsstring>
+        <name>set_min_cutoff_delta</name>
+        <qualifiedname>Gaze::SigmoidalFilter::set_min_cutoff_delta</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="106" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_sigmoidal_filter_1ada98c74884c52b8dd8c61a55e028a1ec" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::SigmoidalFilter::set_neutral_value</definition>
+        <argsstring>(float v)</argsstring>
+        <name>set_neutral_value</name>
+        <qualifiedname>Gaze::SigmoidalFilter::set_neutral_value</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/sigmoidal_filter.hpp" line="107" column="10" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="107" bodyend="107"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Generic temporal filter with confidence-scaled convergence and smoothstep S-curve dropout decay. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Designed for signals that require smooth tracking during active sampling and graceful, non-penalizing decay during brief dropouts (e.g. tracking priors, orientation hints).</para>
+<para>Dual-regime dynamics:<orderedlist>
+<listitem><para>Active Sampling (has_sample == true): Filters values with exponential smoothing whose effective time constant scales inversely with confidence: tau_eff = base_tau_track / confidence. High confidence gives rapid convergence; low confidence dampens jitter.</para>
+</listitem><listitem><para>Dropout Decay (has_sample == false): Holds the last valid state over a configurable grace window (hold_window_s) with zero initial rate of change (w&apos;(0) = 0). Beyond the hold window, smoothly accelerates and decelerates decay towards the neutral baseline along a cubic Hermite smoothstep S-curve (w(t) = 1 - 3t^2 + 2t^3) over decay_window_s. </para>
+</listitem></orderedlist>
+</para>
+    </detaileddescription>
+    <location file="src/core/sigmoidal_filter.hpp" line="24" column="1" bodyfile="src/core/sigmoidal_filter.hpp" bodystart="24" bodyend="108"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a5e030514dfadbeffb3dc1a5147466155" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>base_tau_track_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a4777639f0ee5890e1e13ce7aab2df07e" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>current_val</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a2e2ee0bed12fbb9ef1a7fbd07b5bc616" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>decay_window_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1aa895cba2fe3b2e22ec1ca8090cc74ccc" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>get_neutral_value</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1ae54598d32a83dd496b20d8d61b149125" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>get_time_lost_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a10913139abd44b8b53c9bed1e041c22a" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>get_value</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a8a10da6a05bee5740468a9442da26c82" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>hold_window_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a3b4ef9535508c777fd3d09991dca2a2b" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>is_decaying</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a984e359f6309ace6f0b177a123937e19" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>is_holding</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1af5037ed43fc558b043f541a81d60f02b" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>last_timestamp_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a45b743c5003f74933c5fd0722412f3a9" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>last_valid_val</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a0d15735f705579404445422fce82deee" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>min_cutoff_delta</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1af15a64aa7a1821aa71bdcf82f5387eb7" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>neutral_val</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1ab18b78cfab74feb355b467af5b1b2e61" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>reset</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1af57f9eddc91eb934230b29bdc84e4754" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>set_base_tau</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1afa83f67bd2fff1efe301979c4fffc8e4" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>set_decay_window</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1af826f0b6ade6f957d3df8e3ae1c57c2d" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>set_hold_window</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1adaf49faaf961ff5610c793c137bb1709" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>set_min_cutoff_delta</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1ada98c74884c52b8dd8c61a55e028a1ec" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>set_neutral_value</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1af10d554444b298065d2abf563b22ba48" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>SigmoidalFilter</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1aed5bd481effda44b579142cb60b19ad1" prot="private" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>time_lost_s</name></member>
+      <member refid="class_gaze_1_1_sigmoidal_filter_1a929cb19c5daa1ab9582cfb119491f73c" prot="public" virt="non-virtual"><scope>Gaze::SigmoidalFilter</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

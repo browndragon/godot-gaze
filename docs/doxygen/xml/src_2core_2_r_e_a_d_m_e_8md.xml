@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="src_2core_2_r_e_a_d_m_e_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">/**</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>@dir<sp/>src/core</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>@brief<sp/>Core<sp/>tracking<sp/>logic<sp/>and<sp/>mathematical<sp/>definitions.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>This<sp/>directory<sp/>contains<sp/>platform-agnostic,<sp/>zero-dependency<sp/>C++<sp/>definitions</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*<sp/>for<sp/>gaze<sp/>tracking,<sp/>calibration,<sp/>geometry,<sp/>and<sp/>utility<sp/>helpers.</highlight></codeline>
+<codeline><highlight class="normal"><sp/>*/</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Core<sp/>Layer</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>Core<sp/>layer<sp/>contains<sp/>the<sp/>mathematics,<sp/>calibration<sp/>algorithms,<sp/>and<sp/>interface<sp/>definitions<sp/>for<sp/>the<sp/>godot-gaze<sp/>tracking<sp/>pipeline.<sp/>It<sp/>is<sp/>completely<sp/>independent<sp/>of<sp/>the<sp/>Godot<sp/>engine<sp/>and<sp/>platform-specific<sp/>windowing<sp/>or<sp/>capture<sp/>systems.</highlight></codeline>
+    </programlisting>
+    <location file="src/core/README.md"/>
+  </compounddef>
+</doxygen>

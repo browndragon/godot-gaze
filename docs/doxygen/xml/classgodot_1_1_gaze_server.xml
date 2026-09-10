@@ -1,0 +1,1765 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_server" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeServer</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Object</basecompoundref>
+    <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a3461f2ec537f43a7a43dcddf5405e72a" prot="private" static="yes" mutable="no">
+        <type>GazeServer *</type>
+        <definition>GazeServer * godot::GazeServer::singleton</definition>
+        <argsstring></argsstring>
+        <name>singleton</name>
+        <qualifiedname>godot::GazeServer::singleton</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="42" column="23" bodyfile="src/godot/gaze_server.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1ac0312c6b45c884e545c26e4ab5ccc9c4" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; struct <ref refid="structgodot_1_1_gaze_server_impl" kindref="compound">GazeServerImpl</ref> &gt;</type>
+        <definition>std::unique_ptr&lt;struct GazeServerImpl&gt; godot::GazeServer::impl</definition>
+        <argsstring></argsstring>
+        <name>impl</name>
+        <qualifiedname>godot::GazeServer::impl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="43" column="21" bodyfile="src/godot/gaze_server.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1ad5f1da8844b09ec60dafed378d4e1c61" prot="private" static="no" mutable="yes">
+        <type>std::recursive_mutex</type>
+        <definition>std::recursive_mutex godot::GazeServer::state_mutex</definition>
+        <argsstring></argsstring>
+        <name>state_mutex</name>
+        <qualifiedname>godot::GazeServer::state_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="44" column="34" bodyfile="src/godot/gaze_server.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a231b47d5a6f5a879a8906cfdfd9ecaf1" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_gaze_frame_data" kindref="compound">Gaze::GazeFrameData</ref> *</type>
+        <definition>Gaze::GazeFrameData* godot::GazeServer::active_read_data</definition>
+        <argsstring></argsstring>
+        <name>active_read_data</name>
+        <qualifiedname>godot::GazeServer::active_read_data</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="46" column="25" bodyfile="src/godot/gaze_server.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a0ff9b43ac2b858a691e90023fe3c6da7" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; <ref refid="class_gaze_1_1_gaze_tracking_pipeline" kindref="compound">Gaze::GazeTrackingPipeline</ref> &gt;</type>
+        <definition>std::shared_ptr&lt;Gaze::GazeTrackingPipeline&gt; godot::GazeServer::pipeline</definition>
+        <argsstring></argsstring>
+        <name>pipeline</name>
+        <qualifiedname>godot::GazeServer::pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="47" column="21" bodyfile="src/godot/gaze_server.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a070f996c860b3583534c447ef572d85d" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_pipeline_config" kindref="compound">Gaze::PipelineConfig</ref></type>
+        <definition>Gaze::PipelineConfig godot::GazeServer::active_config</definition>
+        <argsstring></argsstring>
+        <name>active_config</name>
+        <qualifiedname>godot::GazeServer::active_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="48" column="26" bodyfile="src/godot/gaze_server.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a2be41378d35470abeca82cbb35e386bd" prot="private" static="no" mutable="no">
+        <type><ref refid="classgodot_1_1_mouse_gaze_emulation" kindref="compound">MouseGazeEmulation</ref></type>
+        <definition>MouseGazeEmulation godot::GazeServer::mouse_emulation</definition>
+        <argsstring></argsstring>
+        <name>mouse_emulation</name>
+        <qualifiedname>godot::GazeServer::mouse_emulation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="50" column="24" bodyfile="src/godot/gaze_server.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a7c5afb606a0ec9dce75f7a0280978532" prot="private" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t godot::GazeServer::current_frame_id</definition>
+        <argsstring></argsstring>
+        <name>current_frame_id</name>
+        <qualifiedname>godot::GazeServer::current_frame_id</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="51" column="14" bodyfile="src/godot/gaze_server.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a62ebf5714bf72aad3548260b119a9145" prot="private" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t godot::GazeServer::last_event_time_usec</definition>
+        <argsstring></argsstring>
+        <name>last_event_time_usec</name>
+        <qualifiedname>godot::GazeServer::last_event_time_usec</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="52" column="14" bodyfile="src/godot/gaze_server.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a49da3dc9f0ece8f00da8cfc8167e5619" prot="private" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::last_gaze_pos</definition>
+        <argsstring></argsstring>
+        <name>last_gaze_pos</name>
+        <qualifiedname>godot::GazeServer::last_gaze_pos</qualifiedname>
+        <initializer>= Vector2(0, 0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="53" column="13" bodyfile="src/godot/gaze_server.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1aa0342129a65fe5f48fa43cf1284af75b" prot="private" static="no" mutable="no">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::last_screen_pos</definition>
+        <argsstring></argsstring>
+        <name>last_screen_pos</name>
+        <qualifiedname>godot::GazeServer::last_screen_pos</qualifiedname>
+        <initializer>= Vector2(0, 0)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="54" column="13" bodyfile="src/godot/gaze_server.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a0a1b73a01fc31e5d80abbcdae42c74c3" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
+        <definition>Ref&lt;InputEventGazeBase&gt; godot::GazeServer::most_recent_event</definition>
+        <argsstring></argsstring>
+        <name>most_recent_event</name>
+        <qualifiedname>godot::GazeServer::most_recent_event</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="56" column="9" bodyfile="src/godot/gaze_server.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a26ac1af3981bd5cfc65e31135e05aadb" prot="private" static="no" mutable="no">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_event_factory" kindref="compound">GazeEventFactory</ref> &gt;</type>
+        <definition>Ref&lt;GazeEventFactory&gt; godot::GazeServer::event_factory</definition>
+        <argsstring></argsstring>
+        <name>event_factory</name>
+        <qualifiedname>godot::GazeServer::event_factory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="57" column="9" bodyfile="src/godot/gaze_server.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1ab68c4c7c72bb93bdfa4a2a30e8747c2c" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int godot::GazeServer::active_trackers</definition>
+        <argsstring></argsstring>
+        <name>active_trackers</name>
+        <qualifiedname>godot::GazeServer::active_trackers</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="59" column="9" bodyfile="src/godot/gaze_server.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1aec790c04c4ec144b96a0ca6af9889c53" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::emulate_gaze_from_mouse</definition>
+        <argsstring></argsstring>
+        <name>emulate_gaze_from_mouse</name>
+        <qualifiedname>godot::GazeServer::emulate_gaze_from_mouse</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="60" column="10" bodyfile="src/godot/gaze_server.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a22ff5b2bdc82b756f92bda275b32f787" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::emulate_mouse_from_gaze</definition>
+        <argsstring></argsstring>
+        <name>emulate_mouse_from_gaze</name>
+        <qualifiedname>godot::GazeServer::emulate_mouse_from_gaze</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="61" column="10" bodyfile="src/godot/gaze_server.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a75d41700df5eb94c58f747732e6d892b" prot="private" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t godot::GazeServer::last_camera_face_detected_usec</definition>
+        <argsstring></argsstring>
+        <name>last_camera_face_detected_usec</name>
+        <qualifiedname>godot::GazeServer::last_camera_face_detected_usec</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="62" column="14" bodyfile="src/godot/gaze_server.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_gaze_server_1a0b8475e257ab179b7f271bb02f89ab37" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::was_both_closed</definition>
+        <argsstring></argsstring>
+        <name>was_both_closed</name>
+        <qualifiedname>godot::GazeServer::was_both_closed</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="63" column="10" bodyfile="src/godot/gaze_server.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a3768608882fa29f1315d5f153e9325ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeServer::GDCLASS</definition>
+        <argsstring>(GazeServer, Object)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeServer::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeServer</type>
+        </param>
+        <param>
+          <type>Object</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="39" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1abdaec16f7e618f7f7dbf81d859bef70f" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeServer::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="66" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="90" bodyend="187"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8b8ae459b933ffd1418be7e1bab0bdcf" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>GazeServer *</type>
+        <definition>GazeServer * godot::GazeServer::get_singleton</definition>
+        <argsstring>()</argsstring>
+        <name>get_singleton</name>
+        <qualifiedname>godot::GazeServer::get_singleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="69" column="23" bodyfile="src/godot/gaze_server.cpp" bodystart="86" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a1601eda7c599bafea6616eb4933678dd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>String</type>
+        <definition>String godot::GazeServer::get_build_info</definition>
+        <argsstring>()</argsstring>
+        <name>get_build_info</name>
+        <qualifiedname>godot::GazeServer::get_build_info</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="183" column="19" bodyfile="src/godot/gaze_server.cpp" bodystart="1244" bodyend="1246"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a09de30757865b32c833c06d1903ae7dc" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>String</type>
+        <definition>String godot::GazeServer::get_build_timestamp</definition>
+        <argsstring>()</argsstring>
+        <name>get_build_timestamp</name>
+        <qualifiedname>godot::GazeServer::get_build_timestamp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="184" column="19" bodyfile="src/godot/gaze_server.cpp" bodystart="1248" bodyend="1250"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aaa7e73383e8ddfad651448f3f410932a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeServer::GazeServer</definition>
+        <argsstring>()</argsstring>
+        <name>GazeServer</name>
+        <qualifiedname>godot::GazeServer::GazeServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="71" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="189" bodyend="250"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ae11a50420ef147f605b48be2e0b45429" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>godot::GazeServer::~GazeServer</definition>
+        <argsstring>()</argsstring>
+        <name>~GazeServer</name>
+        <qualifiedname>godot::GazeServer::~GazeServer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="72" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="252" bodyend="278"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8bd1cd3216c9bfbef0c36ad38c1e6d6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::start_tracking</definition>
+        <argsstring>()</argsstring>
+        <name>start_tracking</name>
+        <qualifiedname>godot::GazeServer::start_tracking</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="75" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="372" bodyend="389"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a775985238b7cffb0390acf2fb3586186" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::stop_tracking</definition>
+        <argsstring>(bool p_immediate=false)</argsstring>
+        <name>stop_tracking</name>
+        <qualifiedname>godot::GazeServer::stop_tracking</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_immediate</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="76" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="391" bodyend="403"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1acfcd847c410fc078fa3e8f467278941b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::_deferred_stop_check</definition>
+        <argsstring>()</argsstring>
+        <name>_deferred_stop_check</name>
+        <qualifiedname>godot::GazeServer::_deferred_stop_check</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="77" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="405" bodyend="410"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1adc8f400fc9004703a04f0a511374cfe2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_tracking_active</definition>
+        <argsstring>() const</argsstring>
+        <name>is_tracking_active</name>
+        <qualifiedname>godot::GazeServer::is_tracking_active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="78" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="412" bodyend="415"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a7816e27a1bf9d2ea7e1896e1e7393ecd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
+        <definition>Ref&lt; InputEventGazeBase &gt; godot::GazeServer::get_most_recent_event</definition>
+        <argsstring>() const</argsstring>
+        <name>get_most_recent_event</name>
+        <qualifiedname>godot::GazeServer::get_most_recent_event</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="79" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="417" bodyend="420"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8c24dd37784ddfea15b0f0e4d2d99255" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::ensure_process_connected</definition>
+        <argsstring>()</argsstring>
+        <name>ensure_process_connected</name>
+        <qualifiedname>godot::GazeServer::ensure_process_connected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="81" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="280" bodyend="285"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a9d81a069fba97ef90f81c4651c905221" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::trigger_process</definition>
+        <argsstring>()</argsstring>
+        <name>trigger_process</name>
+        <qualifiedname>godot::GazeServer::trigger_process</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="82" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="986" bodyend="1228"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a26c611815fc3e9d8d5844b350c1f00e4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::start_processing</definition>
+        <argsstring>()</argsstring>
+        <name>start_processing</name>
+        <qualifiedname>godot::GazeServer::start_processing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="83" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="287" bodyend="344"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a068ee3727ded8f206a8898d284bb7ca2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::stop_processing</definition>
+        <argsstring>()</argsstring>
+        <name>stop_processing</name>
+        <qualifiedname>godot::GazeServer::stop_processing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="84" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="346" bodyend="370"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1afc948682ecd5fe2317b82169d9916527" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>godot::GazeServer::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="85" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="422" bodyend="441"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a9109d8c9a0f034f68552618a88cbabda" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::GazeServer::get_active_tracker_count</definition>
+        <argsstring>() const</argsstring>
+        <name>get_active_tracker_count</name>
+        <qualifiedname>godot::GazeServer::get_active_tracker_count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="86" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="443" bodyend="446"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a9f06a6233350dbe044526719255f87b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_device_profile</definition>
+        <argsstring>(const Ref&lt; GazeDeviceProfile &gt; &amp;p_profile)</argsstring>
+        <name>set_device_profile</name>
+        <qualifiedname>godot::GazeServer::set_device_profile</qualifiedname>
+        <param>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_device_profile" kindref="compound">GazeDeviceProfile</ref> &gt; &amp;</type>
+          <declname>p_profile</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="89" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="450" bodyend="453"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a84899cb0aaa66991f20504eead1e7ef2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_device_profile" kindref="compound">GazeDeviceProfile</ref> &gt;</type>
+        <definition>Ref&lt; GazeDeviceProfile &gt; godot::GazeServer::get_device_profile</definition>
+        <argsstring>() const</argsstring>
+        <name>get_device_profile</name>
+        <qualifiedname>godot::GazeServer::get_device_profile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="90" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="455" bodyend="458"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8dfacc0a1776b333bef03fdf24bb664c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_camera_offsets</definition>
+        <argsstring>(Vector3 p_offset, double p_tilt)</argsstring>
+        <name>set_camera_offsets</name>
+        <qualifiedname>godot::GazeServer::set_camera_offsets</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>p_offset</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_tilt</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="92" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="460" bodyend="467"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ac083b079e13f32a51d9859cefd68e363" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_camera_offset</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_offset</name>
+        <qualifiedname>godot::GazeServer::get_camera_offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="93" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="469" bodyend="475"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a4a8f6dbbf0b2080afb15acc00ee34929" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::GazeServer::get_camera_tilt</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_tilt</name>
+        <qualifiedname>godot::GazeServer::get_camera_tilt</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="94" column="12" bodyfile="src/godot/gaze_server.cpp" bodystart="477" bodyend="483"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8dd9eaf9ec5b4d7087fbf7ee67608233" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_camera_vision_rid</definition>
+        <argsstring>(RID p_vision_camera)</argsstring>
+        <name>set_camera_vision_rid</name>
+        <qualifiedname>godot::GazeServer::set_camera_vision_rid</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_vision_camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="96" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="485" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a23ef211266a122096071770531bf0188" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>RID</type>
+        <definition>RID godot::GazeServer::get_camera_vision_rid</definition>
+        <argsstring>() const</argsstring>
+        <name>get_camera_vision_rid</name>
+        <qualifiedname>godot::GazeServer::get_camera_vision_rid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="97" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="490" bodyend="493"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a6c5dece3b44bcea175d4cc179b409560" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_pipeline_config</definition>
+        <argsstring>(const Ref&lt; GazePipelineConfig &gt; &amp;p_config)</argsstring>
+        <name>set_pipeline_config</name>
+        <qualifiedname>godot::GazeServer::set_pipeline_config</qualifiedname>
+        <param>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt; &amp;</type>
+          <declname>p_config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="99" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="495" bodyend="506"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aefd4ef4c71bc1b474274b1f97e0445ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt;</type>
+        <definition>Ref&lt; GazePipelineConfig &gt; godot::GazeServer::get_pipeline_config</definition>
+        <argsstring>() const</argsstring>
+        <name>get_pipeline_config</name>
+        <qualifiedname>godot::GazeServer::get_pipeline_config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="100" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="508" bodyend="511"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ac33a267ebac303ff9e94c1003776e9b3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_face_detected</definition>
+        <argsstring>() const</argsstring>
+        <name>is_face_detected</name>
+        <qualifiedname>godot::GazeServer::is_face_detected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="103" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="515" bodyend="518"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a3e32c11465ece904320d1ae711c0769a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Transform3D</type>
+        <definition>Transform3D godot::GazeServer::get_head_transform</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_transform</name>
+        <qualifiedname>godot::GazeServer::get_head_transform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="104" column="17" bodyfile="src/godot/gaze_server.cpp" bodystart="520" bodyend="523"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1af5cf0844dea36e86a1de240cd848e8d4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_head_position</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_position</name>
+        <qualifiedname>godot::GazeServer::get_head_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="105" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="525" bodyend="528"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a26360d82adce8cff33abf39cd378a726" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_head_rotation</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_rotation</name>
+        <qualifiedname>godot::GazeServer::get_head_rotation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="106" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="530" bodyend="533"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a9c84033e127ecfa6ded08076022fb381" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_head_pose_origin_mm</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_pose_origin_mm</name>
+        <qualifiedname>godot::GazeServer::get_head_pose_origin_mm</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="107" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="535" bodyend="537"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a301995dcbe7c593d29373db73f940e9e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_head_pose_euler_deg</definition>
+        <argsstring>() const</argsstring>
+        <name>get_head_pose_euler_deg</name>
+        <qualifiedname>godot::GazeServer::get_head_pose_euler_deg</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="108" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="539" bodyend="542"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8f171849382e69b4186aa25a4ad22503" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_face_pose</definition>
+        <argsstring>(Vector3 p_translation, Vector3 p_rotation, bool p_detected)</argsstring>
+        <name>set_face_pose</name>
+        <qualifiedname>godot::GazeServer::set_face_pose</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>p_translation</declname>
+        </param>
+        <param>
+          <type>Vector3</type>
+          <declname>p_rotation</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>p_detected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="110" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="544" bodyend="555"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a0db0740d2f0d179074d1ead83a91194a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_face_transform</definition>
+        <argsstring>(const Transform3D &amp;p_transform, const Vector3 &amp;p_rotation, bool p_detected)</argsstring>
+        <name>set_face_transform</name>
+        <qualifiedname>godot::GazeServer::set_face_transform</qualifiedname>
+        <param>
+          <type>const Transform3D &amp;</type>
+          <declname>p_transform</declname>
+        </param>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_rotation</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>p_detected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="111" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="557" bodyend="563"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a43d4718cc5e5d7a21b68a21f69bc8a99" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>PackedVector2Array</type>
+        <definition>PackedVector2Array godot::GazeServer::get_face_landmarks_2d</definition>
+        <argsstring>() const</argsstring>
+        <name>get_face_landmarks_2d</name>
+        <qualifiedname>godot::GazeServer::get_face_landmarks_2d</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="113" column="24" bodyfile="src/godot/gaze_server.cpp" bodystart="565" bodyend="568"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a5d88b346f9e1a6237ee15c1c1ef92068" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>PackedVector2Array</type>
+        <definition>PackedVector2Array godot::GazeServer::get_face_landmarks</definition>
+        <argsstring>() const</argsstring>
+        <name>get_face_landmarks</name>
+        <qualifiedname>godot::GazeServer::get_face_landmarks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="114" column="24" bodyfile="src/godot/gaze_server.cpp" bodystart="570" bodyend="572"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a0667e341f52790f2e381e6aaaa6a105f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>PackedVector2Array</type>
+        <definition>PackedVector2Array godot::GazeServer::get_debug_landmarks</definition>
+        <argsstring>() const</argsstring>
+        <name>get_debug_landmarks</name>
+        <qualifiedname>godot::GazeServer::get_debug_landmarks</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="115" column="24" bodyfile="src/godot/gaze_server.cpp" bodystart="574" bodyend="576"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa6b3cfe29fb3810f41d4ddb8d88833aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_face_landmarks_2d</definition>
+        <argsstring>(const PackedVector2Array &amp;p_landmarks)</argsstring>
+        <name>set_face_landmarks_2d</name>
+        <qualifiedname>godot::GazeServer::set_face_landmarks_2d</qualifiedname>
+        <param>
+          <type>const PackedVector2Array &amp;</type>
+          <declname>p_landmarks</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="116" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="578" bodyend="581"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a7099d489659b680dff02581ee03b746f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>PackedVector3Array</type>
+        <definition>PackedVector3Array godot::GazeServer::get_face_model_points</definition>
+        <argsstring>() const</argsstring>
+        <name>get_face_model_points</name>
+        <qualifiedname>godot::GazeServer::get_face_model_points</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="118" column="24" bodyfile="src/godot/gaze_server.cpp" bodystart="583" bodyend="591"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aca8573acacb93ac6a0d9aa3f7c5aaa27" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_roll_hint</definition>
+        <argsstring>(float p_roll_hint_rad)</argsstring>
+        <name>set_roll_hint</name>
+        <qualifiedname>godot::GazeServer::set_roll_hint</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_roll_hint_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="120" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="593" bodyend="597"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a7abe7e80202f1b8fb86e4d2af793f221" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::GazeServer::get_roll_hint</definition>
+        <argsstring>() const</argsstring>
+        <name>get_roll_hint</name>
+        <qualifiedname>godot::GazeServer::get_roll_hint</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="121" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="599" bodyend="602"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a7c2e555de48616c5403973a45538314a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_auto_roll_enabled</definition>
+        <argsstring>(bool p_enabled)</argsstring>
+        <name>set_auto_roll_enabled</name>
+        <qualifiedname>godot::GazeServer::set_auto_roll_enabled</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="122" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="604" bodyend="607"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a764983969d0341c4179ea805c89f6a27" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_auto_roll_enabled</definition>
+        <argsstring>() const</argsstring>
+        <name>is_auto_roll_enabled</name>
+        <qualifiedname>godot::GazeServer::is_auto_roll_enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="123" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="609" bodyend="612"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8d2e5af36e7e2835cef4552cc4d559ef" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_gaze_detected</definition>
+        <argsstring>() const</argsstring>
+        <name>is_gaze_detected</name>
+        <qualifiedname>godot::GazeServer::is_gaze_detected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="126" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="616" bodyend="619"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a86fdf783508c30527c1eb1a7c2f21b3b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_gaze_origin</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_origin</name>
+        <qualifiedname>godot::GazeServer::get_gaze_origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="127" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="621" bodyend="624"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ac2249168bec1a1b1e184a167babf10de" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::get_gaze_direction</definition>
+        <argsstring>() const</argsstring>
+        <name>get_gaze_direction</name>
+        <qualifiedname>godot::GazeServer::get_gaze_direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="128" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="626" bodyend="629"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ad7965f98a4207bed8c25ba736a2c1658" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_gaze</definition>
+        <argsstring>(Vector3 p_origin_cam, Vector3 p_direction_cam)</argsstring>
+        <name>set_gaze</name>
+        <qualifiedname>godot::GazeServer::set_gaze</qualifiedname>
+        <param>
+          <type>Vector3</type>
+          <declname>p_origin_cam</declname>
+        </param>
+        <param>
+          <type>Vector3</type>
+          <declname>p_direction_cam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="129" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="631" bodyend="659"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a1c44fde1217e97ac46d191150a674bcf" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::get_gaze_screen_px</definition>
+        <argsstring>(bool p_smoothed=true) const</argsstring>
+        <name>get_gaze_screen_px</name>
+        <qualifiedname>godot::GazeServer::get_gaze_screen_px</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_smoothed</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="131" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="661" bodyend="664"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa7035530f707a20e028495f8b7b69b06" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::get_gaze_screen_mm</definition>
+        <argsstring>(bool p_smoothed=true) const</argsstring>
+        <name>get_gaze_screen_mm</name>
+        <qualifiedname>godot::GazeServer::get_gaze_screen_mm</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_smoothed</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="132" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="666" bodyend="669"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa1d950de7895ef3f43bd6d67eabcf2ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::get_gaze_screen</definition>
+        <argsstring>(bool p_smoothed=true) const</argsstring>
+        <name>get_gaze_screen</name>
+        <qualifiedname>godot::GazeServer::get_gaze_screen</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_smoothed</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="133" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="671" bodyend="673"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a63375206a4c74088edb4500c6702a9a3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::get_projected_gaze</definition>
+        <argsstring>(bool p_smoothed=false) const</argsstring>
+        <name>get_projected_gaze</name>
+        <qualifiedname>godot::GazeServer::get_projected_gaze</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_smoothed</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="134" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="675" bodyend="677"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ac4390add8c2585c8caa0b4c14b994bdd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::get_projected_gaze_mm</definition>
+        <argsstring>(bool p_smoothed=false) const</argsstring>
+        <name>get_projected_gaze_mm</name>
+        <qualifiedname>godot::GazeServer::get_projected_gaze_mm</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_smoothed</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="135" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="679" bodyend="681"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aacf26a60eb26edf8f2ed09355d643021" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::GazeServer::get_left_eye_openness</definition>
+        <argsstring>() const</argsstring>
+        <name>get_left_eye_openness</name>
+        <qualifiedname>godot::GazeServer::get_left_eye_openness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="137" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="683" bodyend="686"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aeaacec721c84239197b9d69c74ebb7a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::GazeServer::get_right_eye_openness</definition>
+        <argsstring>() const</argsstring>
+        <name>get_right_eye_openness</name>
+        <qualifiedname>godot::GazeServer::get_right_eye_openness</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="138" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="688" bodyend="691"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a843b66b74a15a2c9286db6defc105c4e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_eye_openness</definition>
+        <argsstring>(float p_left, float p_right)</argsstring>
+        <name>set_eye_openness</name>
+        <qualifiedname>godot::GazeServer::set_eye_openness</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_left</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>p_right</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="139" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="693" bodyend="697"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa67b4952ec8027338dd01315160eff48" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_smoother</definition>
+        <argsstring>(const Ref&lt; Smoother &gt; &amp;p_smoother)</argsstring>
+        <name>set_smoother</name>
+        <qualifiedname>godot::GazeServer::set_smoother</qualifiedname>
+        <param>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_smoother" kindref="compound">Smoother</ref> &gt; &amp;</type>
+          <declname>p_smoother</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="141" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="699" bodyend="703"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a79d5a8c37d1d15bd4596343bf0491ca2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_smoother" kindref="compound">Smoother</ref> &gt;</type>
+        <definition>Ref&lt; Smoother &gt; godot::GazeServer::get_smoother</definition>
+        <argsstring>() const</argsstring>
+        <name>get_smoother</name>
+        <qualifiedname>godot::GazeServer::get_smoother</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="142" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="705" bodyend="708"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1af643b9aea66f1b084915594f17b1c0b9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_crop_requested</definition>
+        <argsstring>(bool p_requested)</argsstring>
+        <name>set_crop_requested</name>
+        <qualifiedname>godot::GazeServer::set_crop_requested</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_requested</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="144" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="710" bodyend="713"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a7a6a2ade53d7701ef3ad2fab1744a6f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_crop_requested</definition>
+        <argsstring>() const</argsstring>
+        <name>is_crop_requested</name>
+        <qualifiedname>godot::GazeServer::is_crop_requested</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="145" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="715" bodyend="718"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1acd32cb5bffc447f0b8c528985398075a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Array</type>
+        <definition>Array godot::GazeServer::get_eye_crops</definition>
+        <argsstring>()</argsstring>
+        <name>get_eye_crops</name>
+        <qualifiedname>godot::GazeServer::get_eye_crops</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="146" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="720" bodyend="726"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a90ea245c1f84160f5a5ce3adcc3e993e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_eye_crops</definition>
+        <argsstring>(const Ref&lt; Image &gt; &amp;p_left_crop, const Ref&lt; Image &gt; &amp;p_right_crop)</argsstring>
+        <name>set_eye_crops</name>
+        <qualifiedname>godot::GazeServer::set_eye_crops</qualifiedname>
+        <param>
+          <type>const Ref&lt; Image &gt; &amp;</type>
+          <declname>p_left_crop</declname>
+        </param>
+        <param>
+          <type>const Ref&lt; Image &gt; &amp;</type>
+          <declname>p_right_crop</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="147" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="728" bodyend="732"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa7fb873fe3a38434a1aaf6d6e0d02dbb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; Texture2D &gt;</type>
+        <definition>Ref&lt; Texture2D &gt; godot::GazeServer::get_camera_texture</definition>
+        <argsstring>()</argsstring>
+        <name>get_camera_texture</name>
+        <qualifiedname>godot::GazeServer::get_camera_texture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="149" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="734" bodyend="738"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a3f05e8e7855a3c22ceee621cec8b0ba8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_camera_preview_requested</definition>
+        <argsstring>(bool p_requested)</argsstring>
+        <name>set_camera_preview_requested</name>
+        <qualifiedname>godot::GazeServer::set_camera_preview_requested</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_requested</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="150" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="740" bodyend="746"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a56e26877b37e41f55f3d3917b15ca17a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::is_camera_preview_requested</definition>
+        <argsstring>() const</argsstring>
+        <name>is_camera_preview_requested</name>
+        <qualifiedname>godot::GazeServer::is_camera_preview_requested</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="151" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="748" bodyend="752"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a16b55bce0b64ed6f4cce27f65cfa1649" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::emit_camera_frame_ready</definition>
+        <argsstring>(RID p_vision_camera)</argsstring>
+        <name>emit_camera_frame_ready</name>
+        <qualifiedname>godot::GazeServer::emit_camera_frame_ready</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_vision_camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="152" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="754" bodyend="756"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a456c4cc19663f4186a12fcaa4ea9cc36" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::GazeServer::project_ray_to_camera_plane</definition>
+        <argsstring>(const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</argsstring>
+        <name>project_ray_to_camera_plane</name>
+        <qualifiedname>godot::GazeServer::project_ray_to_camera_plane</qualifiedname>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_origin_cam</declname>
+        </param>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_direction_cam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="155" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="760" bodyend="768"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a377fa1f5b94a4e157fc0e126d9688e31" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeServer::project_ray_to_viewport</definition>
+        <argsstring>(const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</argsstring>
+        <name>project_ray_to_viewport</name>
+        <qualifiedname>godot::GazeServer::project_ray_to_viewport</qualifiedname>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_origin_cam</declname>
+        </param>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_direction_cam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="156" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="770" bodyend="806"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8df80b0cde997e9fb236f6d66ef8a828" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_event_factory</definition>
+        <argsstring>(const Ref&lt; GazeEventFactory &gt; &amp;p_factory)</argsstring>
+        <name>set_event_factory</name>
+        <qualifiedname>godot::GazeServer::set_event_factory</qualifiedname>
+        <param>
+          <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_event_factory" kindref="compound">GazeEventFactory</ref> &gt; &amp;</type>
+          <declname>p_factory</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="159" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="810" bodyend="819"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a338a0aa6c726acedd3b84c5af25dad89" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_gaze_event_factory" kindref="compound">GazeEventFactory</ref> &gt;</type>
+        <definition>Ref&lt; GazeEventFactory &gt; godot::GazeServer::get_event_factory</definition>
+        <argsstring>()</argsstring>
+        <name>get_event_factory</name>
+        <qualifiedname>godot::GazeServer::get_event_factory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="160" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="854" bodyend="858"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a5a566a49e69687f0b5767c39c2c514d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::initialize_scene_resources</definition>
+        <argsstring>()</argsstring>
+        <name>initialize_scene_resources</name>
+        <qualifiedname>godot::GazeServer::initialize_scene_resources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="161" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="821" bodyend="823"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a49246a3dcee5da33ac885165812e0be1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::_ensure_event_factory_loaded</definition>
+        <argsstring>()</argsstring>
+        <name>_ensure_event_factory_loaded</name>
+        <qualifiedname>godot::GazeServer::_ensure_event_factory_loaded</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="162" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="825" bodyend="852"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1aa9545b9113275a2dab894a858d0db570" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze" kindref="compound">InputEventGaze</ref> &gt;</type>
+        <definition>Ref&lt; InputEventGaze &gt; godot::GazeServer::create_default_event</definition>
+        <argsstring>()</argsstring>
+        <name>create_default_event</name>
+        <qualifiedname>godot::GazeServer::create_default_event</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="163" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="860" bodyend="933"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1acd3a78080049bde148630357aedabc7c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_missing" kindref="compound">InputEventGazeMissing</ref> &gt;</type>
+        <definition>Ref&lt; InputEventGazeMissing &gt; godot::GazeServer::create_default_missing_event</definition>
+        <argsstring>(int p_reason)</argsstring>
+        <name>create_default_missing_event</name>
+        <qualifiedname>godot::GazeServer::create_default_missing_event</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>p_reason</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="164" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="935" bodyend="946"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1afba19bd41e7e4bb6bb5af21b4e1f872c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_emulate_gaze_from_mouse</definition>
+        <argsstring>(bool p_enable)</argsstring>
+        <name>set_emulate_gaze_from_mouse</name>
+        <qualifiedname>godot::GazeServer::set_emulate_gaze_from_mouse</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_enable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="167" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="950" bodyend="952"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1af9941e2c6bfebf948eeacbac67648750" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::get_emulate_gaze_from_mouse</definition>
+        <argsstring>() const</argsstring>
+        <name>get_emulate_gaze_from_mouse</name>
+        <qualifiedname>godot::GazeServer::get_emulate_gaze_from_mouse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="168" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="954" bodyend="956"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a01d82ad0c25e44ee8534ef2bd97c96ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_emulate_mouse_from_gaze</definition>
+        <argsstring>(bool p_enable)</argsstring>
+        <name>set_emulate_mouse_from_gaze</name>
+        <qualifiedname>godot::GazeServer::set_emulate_mouse_from_gaze</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_enable</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="169" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="958" bodyend="960"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a1435b15bf7bf0ff0c874284fdcfe3eb5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::GazeServer::get_emulate_mouse_from_gaze</definition>
+        <argsstring>() const</argsstring>
+        <name>get_emulate_mouse_from_gaze</name>
+        <qualifiedname>godot::GazeServer::get_emulate_mouse_from_gaze</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="170" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="962" bodyend="964"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a69aea5a350ec6f94e19994b549cc6d19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_mouse_emulation_dwell_sec</definition>
+        <argsstring>(float p_sec)</argsstring>
+        <name>set_mouse_emulation_dwell_sec</name>
+        <qualifiedname>godot::GazeServer::set_mouse_emulation_dwell_sec</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="171" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="966" bodyend="969"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ae0e1af81160134c07f3e6d8e8a9dde24" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::GazeServer::get_mouse_emulation_dwell_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_mouse_emulation_dwell_sec</name>
+        <qualifiedname>godot::GazeServer::get_mouse_emulation_dwell_sec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="172" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="971" bodyend="974"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a5a2a0eaa64ef70ccb6890350e1dd35fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_mouse_emulation_transition_sec</definition>
+        <argsstring>(float p_sec)</argsstring>
+        <name>set_mouse_emulation_transition_sec</name>
+        <qualifiedname>godot::GazeServer::set_mouse_emulation_transition_sec</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="173" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="976" bodyend="979"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a8fb306926594759c067502e92a386e71" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::GazeServer::get_mouse_emulation_transition_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_mouse_emulation_transition_sec</name>
+        <qualifiedname>godot::GazeServer::get_mouse_emulation_transition_sec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="174" column="11" bodyfile="src/godot/gaze_server.cpp" bodystart="981" bodyend="984"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1a410161fe022a9685b7ee2fb0df7c13b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeServer::set_verbosity</definition>
+        <argsstring>(int level)</argsstring>
+        <name>set_verbosity</name>
+        <qualifiedname>godot::GazeServer::set_verbosity</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>level</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="180" column="10" bodyfile="src/godot/gaze_server.cpp" bodystart="1236" bodyend="1238"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_server_1ac37737b8de2a00988eec04917be1aab3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int godot::GazeServer::get_verbosity</definition>
+        <argsstring>() const</argsstring>
+        <name>get_verbosity</name>
+        <qualifiedname>godot::GazeServer::get_verbosity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.hpp" line="181" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="1240" bodyend="1242"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeServer</label>
+        <link refid="classgodot_1_1_gaze_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Object</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeServer</label>
+        <link refid="classgodot_1_1_gaze_server"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_server.hpp" line="38" column="1" bodyfile="src/godot/gaze_server.hpp" bodystart="38" bodyend="185"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_server_1abdaec16f7e618f7f7dbf81d859bef70f" prot="protected" virt="non-virtual"><scope>godot::GazeServer</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_server_1acfcd847c410fc078fa3e8f467278941b" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>_deferred_stop_check</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a49246a3dcee5da33ac885165812e0be1" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>_ensure_event_factory_loaded</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a070f996c860b3583534c447ef572d85d" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>active_config</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a231b47d5a6f5a879a8906cfdfd9ecaf1" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>active_read_data</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ab68c4c7c72bb93bdfa4a2a30e8747c2c" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>active_trackers</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa9545b9113275a2dab894a858d0db570" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>create_default_event</name></member>
+      <member refid="classgodot_1_1_gaze_server_1acd3a78080049bde148630357aedabc7c" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>create_default_missing_event</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7c5afb606a0ec9dce75f7a0280978532" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>current_frame_id</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a16b55bce0b64ed6f4cce27f65cfa1649" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>emit_camera_frame_ready</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aec790c04c4ec144b96a0ca6af9889c53" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>emulate_gaze_from_mouse</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a22ff5b2bdc82b756f92bda275b32f787" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>emulate_mouse_from_gaze</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8c24dd37784ddfea15b0f0e4d2d99255" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>ensure_process_connected</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a26ac1af3981bd5cfc65e31135e05aadb" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>event_factory</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aaa7e73383e8ddfad651448f3f410932a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>GazeServer</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a3768608882fa29f1315d5f153e9325ba" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a9109d8c9a0f034f68552618a88cbabda" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_active_tracker_count</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a1601eda7c599bafea6616eb4933678dd" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_build_info</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a09de30757865b32c833c06d1903ae7dc" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_build_timestamp</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac083b079e13f32a51d9859cefd68e363" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_camera_offset</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa7fb873fe3a38434a1aaf6d6e0d02dbb" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_camera_texture</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a4a8f6dbbf0b2080afb15acc00ee34929" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_camera_tilt</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a23ef211266a122096071770531bf0188" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_camera_vision_rid</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a0667e341f52790f2e381e6aaaa6a105f" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_debug_landmarks</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a84899cb0aaa66991f20504eead1e7ef2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_device_profile</name></member>
+      <member refid="classgodot_1_1_gaze_server_1af9941e2c6bfebf948eeacbac67648750" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_emulate_gaze_from_mouse</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a1435b15bf7bf0ff0c874284fdcfe3eb5" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_emulate_mouse_from_gaze</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a338a0aa6c726acedd3b84c5af25dad89" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_event_factory</name></member>
+      <member refid="classgodot_1_1_gaze_server_1acd32cb5bffc447f0b8c528985398075a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_eye_crops</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a5d88b346f9e1a6237ee15c1c1ef92068" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_face_landmarks</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a43d4718cc5e5d7a21b68a21f69bc8a99" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_face_landmarks_2d</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7099d489659b680dff02581ee03b746f" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_face_model_points</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac2249168bec1a1b1e184a167babf10de" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_gaze_direction</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a86fdf783508c30527c1eb1a7c2f21b3b" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_gaze_origin</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa1d950de7895ef3f43bd6d67eabcf2ca" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_gaze_screen</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa7035530f707a20e028495f8b7b69b06" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_gaze_screen_mm</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a1c44fde1217e97ac46d191150a674bcf" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_gaze_screen_px</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a301995dcbe7c593d29373db73f940e9e" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_head_pose_euler_deg</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a9c84033e127ecfa6ded08076022fb381" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_head_pose_origin_mm</name></member>
+      <member refid="classgodot_1_1_gaze_server_1af5cf0844dea36e86a1de240cd848e8d4" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_head_position</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a26360d82adce8cff33abf39cd378a726" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_head_rotation</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a3e32c11465ece904320d1ae711c0769a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_head_transform</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aacf26a60eb26edf8f2ed09355d643021" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_left_eye_openness</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7816e27a1bf9d2ea7e1896e1e7393ecd" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_most_recent_event</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ae0e1af81160134c07f3e6d8e8a9dde24" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_mouse_emulation_dwell_sec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8fb306926594759c067502e92a386e71" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_mouse_emulation_transition_sec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aefd4ef4c71bc1b474274b1f97e0445ca" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_pipeline_config</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a63375206a4c74088edb4500c6702a9a3" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_projected_gaze</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac4390add8c2585c8caa0b4c14b994bdd" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_projected_gaze_mm</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aeaacec721c84239197b9d69c74ebb7a2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_right_eye_openness</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7abe7e80202f1b8fb86e4d2af793f221" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_roll_hint</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8b8ae459b933ffd1418be7e1bab0bdcf" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a79d5a8c37d1d15bd4596343bf0491ca2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_smoother</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac37737b8de2a00988eec04917be1aab3" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>get_verbosity</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac0312c6b45c884e545c26e4ab5ccc9c4" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>impl</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a5a566a49e69687f0b5767c39c2c514d2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>initialize_scene_resources</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a764983969d0341c4179ea805c89f6a27" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_auto_roll_enabled</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a56e26877b37e41f55f3d3917b15ca17a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_camera_preview_requested</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7a6a2ade53d7701ef3ad2fab1744a6f1" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_crop_requested</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ac33a267ebac303ff9e94c1003776e9b3" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_face_detected</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8d2e5af36e7e2835cef4552cc4d559ef" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_gaze_detected</name></member>
+      <member refid="classgodot_1_1_gaze_server_1adc8f400fc9004703a04f0a511374cfe2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>is_tracking_active</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a75d41700df5eb94c58f747732e6d892b" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>last_camera_face_detected_usec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a62ebf5714bf72aad3548260b119a9145" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>last_event_time_usec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a49da3dc9f0ece8f00da8cfc8167e5619" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>last_gaze_pos</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa0342129a65fe5f48fa43cf1284af75b" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>last_screen_pos</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a0a1b73a01fc31e5d80abbcdae42c74c3" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>most_recent_event</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a2be41378d35470abeca82cbb35e386bd" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>mouse_emulation</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a0ff9b43ac2b858a691e90023fe3c6da7" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>pipeline</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a456c4cc19663f4186a12fcaa4ea9cc36" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>project_ray_to_camera_plane</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a377fa1f5b94a4e157fc0e126d9688e31" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>project_ray_to_viewport</name></member>
+      <member refid="classgodot_1_1_gaze_server_1afc948682ecd5fe2317b82169d9916527" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>reset</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a7c2e555de48616c5403973a45538314a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_auto_roll_enabled</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8dfacc0a1776b333bef03fdf24bb664c" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_camera_offsets</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a3f05e8e7855a3c22ceee621cec8b0ba8" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_camera_preview_requested</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8dd9eaf9ec5b4d7087fbf7ee67608233" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_camera_vision_rid</name></member>
+      <member refid="classgodot_1_1_gaze_server_1af643b9aea66f1b084915594f17b1c0b9" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_crop_requested</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a9f06a6233350dbe044526719255f87b3" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_device_profile</name></member>
+      <member refid="classgodot_1_1_gaze_server_1afba19bd41e7e4bb6bb5af21b4e1f872c" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_emulate_gaze_from_mouse</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a01d82ad0c25e44ee8534ef2bd97c96ae" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_emulate_mouse_from_gaze</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8df80b0cde997e9fb236f6d66ef8a828" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_event_factory</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a90ea245c1f84160f5a5ce3adcc3e993e" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_eye_crops</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a843b66b74a15a2c9286db6defc105c4e" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_eye_openness</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa6b3cfe29fb3810f41d4ddb8d88833aa" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_face_landmarks_2d</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8f171849382e69b4186aa25a4ad22503" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_face_pose</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a0db0740d2f0d179074d1ead83a91194a" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_face_transform</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ad7965f98a4207bed8c25ba736a2c1658" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_gaze</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a69aea5a350ec6f94e19994b549cc6d19" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_mouse_emulation_dwell_sec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a5a2a0eaa64ef70ccb6890350e1dd35fd" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_mouse_emulation_transition_sec</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a6c5dece3b44bcea175d4cc179b409560" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_pipeline_config</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aca8573acacb93ac6a0d9aa3f7c5aaa27" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_roll_hint</name></member>
+      <member refid="classgodot_1_1_gaze_server_1aa67b4952ec8027338dd01315160eff48" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_smoother</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a410161fe022a9685b7ee2fb0df7c13b1" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>set_verbosity</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a3461f2ec537f43a7a43dcddf5405e72a" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>singleton</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a26c611815fc3e9d8d5844b350c1f00e4" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>start_processing</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a8bd1cd3216c9bfbef0c36ad38c1e6d6f" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>start_tracking</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ad5f1da8844b09ec60dafed378d4e1c61" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>state_mutex</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a068ee3727ded8f206a8898d284bb7ca2" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>stop_processing</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a775985238b7cffb0390acf2fb3586186" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>stop_tracking</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a9d81a069fba97ef90f81c4651c905221" prot="public" virt="non-virtual"><scope>godot::GazeServer</scope><name>trigger_process</name></member>
+      <member refid="classgodot_1_1_gaze_server_1a0b8475e257ab179b7f271bb02f89ab37" prot="private" virt="non-virtual"><scope>godot::GazeServer</scope><name>was_both_closed</name></member>
+      <member refid="classgodot_1_1_gaze_server_1ae11a50420ef147f605b48be2e0b45429" prot="public" virt="virtual"><scope>godot::GazeServer</scope><name>~GazeServer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

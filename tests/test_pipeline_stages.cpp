@@ -101,7 +101,7 @@ TEST_CASE("Pipeline Stage-by-Stage Verification on Canonical Center Fixture") {
     ProjectionEngine proj;
     proj.set_screen_size_pixels(GodotDisplayVector2(1440, 900));
     proj.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(304.1, 212.4));
-    proj.set_camera_placement(CameraPlacement(GodotCameraVector3(0, 106.2, 0), 0.0));
+    proj.set_camera_placement(CameraPlacement(GodotCameraVector3(0, 0, 0), 0.0));
 
     GodotDisplayVector2 screen_px;
     bool proj_ok = proj.project_gaze(data.gaze_origin, data.gaze_direction, screen_px);

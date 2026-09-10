@@ -175,9 +175,9 @@ TEST_CASE("Testing Viewport and High-DPI Projection Coordinates")
     engine.set_screen_size_mm(SpacedVector2<Space::GodotDisplayMm>(600.0, 340.0));
     engine.set_camera_placement(CameraPlacement(GodotCameraVector3(0, 0, 0), 0.0));
 
-    // Staring at the center of the screen (170mm below top bezel camera)
+    // Staring at the center of the screen
     GodotCameraVector3 origin(0.0, 0.0, -600.0);
-    GodotCameraVector3 direction = GodotCameraVector3(0.0, -170.0, 600.0).normalized();
+    GodotCameraVector3 direction(0.0, 0.0, 1.0);
     GodotDisplayVector2 pixel;
     REQUIRE(engine.project_gaze(origin, direction, pixel) == true);
 
@@ -2187,7 +2187,7 @@ TEST_CASE("Platform Native Window Rect Sanity")
 
 TEST_CASE("GazeServer and ProjectionEngine Uniform Screen Projection Geometry")
 {
-    // Screen: 1920x1080 px, 600x340 mm, Top-bezel camera at (0, 0, 0) mm
+    // Screen: 1920x1080 px, 600x340 mm, Screen-Center Virtual Origin Anchor with camera offset (0, 0, 0) mm
     GodotDisplayVector2 logical_sz(1920.0, 1080.0);
     SpacedVector2<Space::GodotDisplayMm> phys_sz(600.0, 340.0);
     GodotDisplayVector2 pixel_pitch(phys_sz.x / logical_sz.x, phys_sz.y / logical_sz.y);
@@ -2202,30 +2202,34 @@ TEST_CASE("GazeServer and ProjectionEngine Uniform Screen Projection Geometry")
     CHECK(pt_cam.x == doctest::Approx(0.0).epsilon(1e-4));
     CHECK(pt_cam.y == doctest::Approx(0.0).epsilon(1e-4));
 
-    // Optical axis hits top bezel Y = 0 px
-    double y_screen_px_bezel = -(pt_cam.y + camera_offset.y) / pixel_pitch.y;
-    CHECK(y_screen_px_bezel == doctest::Approx(0.0).epsilon(1e-2));
-
-    // Staring toward screen center (0, -170 mm, 0) from (0, 0, -500 mm):
-    GodotCameraVector3 dir_center = GodotCameraVector3(0.0, -170.0, 500.0).normalized();
-    GodotCameraVector3 pt_center = project_ray_to_camera_plane(origin_cam, dir_center);
-    REQUIRE(pt_center.is_finite() == true);
-    CHECK(pt_center.y == doctest::Approx(-170.0).epsilon(1e-2));
-
-    // Screen center ray hits exactly Y = 540 px (screen center)
-    double y_screen_px_center = -(pt_center.y + camera_offset.y) / pixel_pitch.y;
+    // Screen-Center Virtual Projection: optical axis forward ray hits exact Screen Center (960 px, 540 px)
+    double x_screen_px_center = (double)logical_sz.x * 0.5 - (pt_cam.x + camera_offset.x) / pixel_pitch.x;
+    double y_screen_px_center = (double)logical_sz.y * 0.5 - (pt_cam.y + camera_offset.y) / pixel_pitch.y;
+    CHECK(x_screen_px_center == doctest::Approx(960.0).epsilon(1e-2));
     CHECK(y_screen_px_center == doctest::Approx(540.0).epsilon(1e-2));
 
-    // Staring downward by -25 degrees from (0, 0, -500 mm):
-    double angle_down_rad = -25.0 * DEG_TO_RAD;
-    GodotCameraVector3 dir_down(0.0, std::sin(angle_down_rad), std::cos(angle_down_rad));
+    // Looking upward by +4.57 degrees (+40mm on glass at 500mm distance):
+    GodotCameraVector3 dir_up = GodotCameraVector3(0.0, 40.0, 500.0).normalized();
+    GodotCameraVector3 pt_up = project_ray_to_camera_plane(origin_cam, dir_up);
+    REQUIRE(pt_up.is_finite() == true);
+    CHECK(pt_up.y == doctest::Approx(40.0).epsilon(1e-2));
+
+    double y_up_px = (double)logical_sz.y * 0.5 - (pt_up.y + camera_offset.y) / pixel_pitch.y;
+    CHECK(y_up_px < 540.0);
+    CHECK(y_up_px == doctest::Approx(412.96).epsilon(1e-1));
+
+    // Looking downward by -4.57 degrees (-40mm on glass at 500mm distance):
+    GodotCameraVector3 dir_down = GodotCameraVector3(0.0, -40.0, 500.0).normalized();
     GodotCameraVector3 pt_down = project_ray_to_camera_plane(origin_cam, dir_down);
     REQUIRE(pt_down.is_finite() == true);
-    CHECK(pt_down.y < -170.0);
+    CHECK(pt_down.y == doctest::Approx(-40.0).epsilon(1e-2));
 
-    double y_down_px = -(pt_down.y + camera_offset.y) / pixel_pitch.y;
+    double y_down_px = (double)logical_sz.y * 0.5 - (pt_down.y + camera_offset.y) / pixel_pitch.y;
     CHECK(y_down_px > 540.0);
-    CHECK(y_down_px - 540.0 >= 150.0); // Signal separation >= 150px downward
+    CHECK(y_down_px == doctest::Approx(667.04).epsilon(1e-1));
+
+    // Assert vertical signal separation across normal +/-4.5 deg eye range >= 240px
+    CHECK(y_down_px - y_up_px >= 240.0);
 }
 
 

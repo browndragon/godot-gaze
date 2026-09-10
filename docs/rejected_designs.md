@@ -30,6 +30,14 @@ This document records architectural decisions, technical theories, and design pa
    * **False Assumption**: Assuming all camera feeds deliver ready `FORMAT_RGB8` directly, or that all deep learning models take RGB.
    * **Fact**: All four neural models in `godot-gaze` (YuNet, ADAS Landmarker, ADAS Gaze, and Eye Openness) require **BGR** input channel ordering. Camera ingestion normalizes OS frames (`RGBA8`, `RGB8`, `R8`, `NV12`) directly into packed BGR8 working buffers without redundant intermediate color permutations. For full model provenances, tensor layouts, and hardware capture characteristics, see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md).
 
+7. **Pure Top-Bezel Ray Anchoring for Gaze Models without Angular Gain**:
+   * **False Assumption**: Modeling vertical screen projection strictly at the physical camera location ($Y = 0\text{ px}$, top bezel) in the absence of an angular pitch gain multiplier or personalized multi-point polynomial calibration.
+   * **Fact**: Pre-trained appearance-based gaze estimation networks (such as OpenVINO ADAS-0002) predict subtle intra-socket eye vector deviations with compressed angular pitch ranges ($\approx \pm 5^\circ$ to $\pm 8^\circ$). When projected from the physical top bezel ($Y = 0$), a downward eye gaze of $-5^\circ$ at $500\text{ mm}$ eye relief only travels $43.7\text{ mm}$ ($\approx 218\text{ px}$), preventing the user from ever gazing below the screen midpoint ($Y = 540\text{ px}$). Centering the virtual optical axis at screen center ($Y = H/2$) provides symmetric vertical reach ($250\text{ px} \dots 830\text{ px}$) across typical viewing distances without requiring synthetic polynomial distortion.
+
+8. **Dynamic Physical Hardware Resizing on Display Rotation**:
+   * **False Assumption**: Swapping physical panel dimensions ($W_{\text{phys}} \leftrightarrow H_{\text{phys}}$) or assuming the mechanical camera mount position changes on device rotation.
+   * **Fact**: Physical hardware panel dimensions ($W_{\text{phys}}, H_{\text{phys}}$) and camera mechanical mount position ($\mathbf{O}_{\text{mount}}$) remain fixed constants of the device chassis. Device orientation ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) is strictly a software viewport orientation mapping ($R_{\text{display}}$) transforming physical display millimeter coordinates to viewport millimeter coordinates before pixel pitch scaling.
+
 ---
 
 ## 2. Code Style & Integration Guidelines

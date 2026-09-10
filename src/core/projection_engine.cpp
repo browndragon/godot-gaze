@@ -33,8 +33,9 @@ namespace Gaze
                 return false;
             }
             double W_half = screen_size_mm.x * 0.5;
+            double H_half = screen_size_mm.y * 0.5;
             x_disp_mm = W_half - (pt_cam.x + placement.offset.x);
-            y_disp_mm = -(pt_cam.y - placement.offset.y);
+            y_disp_mm = H_half - (pt_cam.y + placement.offset.y);
         }
         else
         {
@@ -51,7 +52,7 @@ namespace Gaze
             }
 
             double t = -O_disp_z / v_disp_z;
-            if (t < 0.0)
+            if (t <= 0.0)
             {
                 return false;
             }
@@ -65,10 +66,49 @@ namespace Gaze
             y_disp_mm = -(int_y - placement.offset.y) * cos_t + (int_z - placement.offset.z) * sin_t;
         }
 
-        double scale_x = screen_size_pixels.x / screen_size_mm.x;
-        double scale_y = screen_size_pixels.y / screen_size_mm.y;
-        out_pixel.x = x_disp_mm * scale_x;
-        out_pixel.y = y_disp_mm * scale_y;
+        double W_phys = screen_size_mm.x;
+        double H_phys = screen_size_mm.y;
+        double W_px = screen_size_pixels.x;
+        double H_px = screen_size_pixels.y;
+
+        double x_vp_mm = 0.0;
+        double y_vp_mm = 0.0;
+        double scale_x = W_px / W_phys;
+        double scale_y = H_px / H_phys;
+
+        switch (display_orientation)
+        {
+        case DisplayOrientation::ORIENTATION_0:
+            x_vp_mm = x_disp_mm;
+            y_vp_mm = y_disp_mm;
+            scale_x = W_px / W_phys;
+            scale_y = H_px / H_phys;
+            break;
+
+        case DisplayOrientation::ORIENTATION_90:
+            x_vp_mm = H_phys - y_disp_mm;
+            y_vp_mm = x_disp_mm;
+            scale_x = H_px / H_phys;
+            scale_y = W_px / W_phys;
+            break;
+
+        case DisplayOrientation::ORIENTATION_180:
+            x_vp_mm = W_phys - x_disp_mm;
+            y_vp_mm = H_phys - y_disp_mm;
+            scale_x = W_px / W_phys;
+            scale_y = H_px / H_phys;
+            break;
+
+        case DisplayOrientation::ORIENTATION_270:
+            x_vp_mm = y_disp_mm;
+            y_vp_mm = W_phys - x_disp_mm;
+            scale_x = H_px / H_phys;
+            scale_y = W_px / W_phys;
+            break;
+        }
+
+        out_pixel.x = x_vp_mm * scale_x - window_offset_pixels.x;
+        out_pixel.y = y_vp_mm * scale_y - window_offset_pixels.y;
         return true;
     }
 

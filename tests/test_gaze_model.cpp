@@ -370,29 +370,29 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
     std::cout << "self_yaw_right_roll_left.jpg-> Nose: (" << nose_yr_rl.x << ", " << nose_yr_rl.y << ") | Gaze: (" << gaze_yr_rl.x << ", " << gaze_yr_rl.y << ") | GazeDir: (" << gaze_dir_yr_rl.x << ", " << gaze_dir_yr_rl.y << ", " << gaze_dir_yr_rl.z << ")\n";
     std::cout << "=========================================================================\n\n";
 
-    // 1. INDEPENDENT FRAME DOMAIN BOUNDS (Top Bezel Camera: Y = 0 px top of screen):
-    // self_center.jpg: Centered gaze & nose in upper-central display region below top bezel
+    // 1. INDEPENDENT FRAME DOMAIN BOUNDS (Screen-Center Virtual Anchor: Y = 540 px center of 1080p screen):
+    // self_center.jpg: Centered gaze & nose in central display region around (960, 540)
     CHECK(nose_center.x > 600.0f);
     CHECK(nose_center.x < 1000.0f);
-    CHECK(nose_center.y > 100.0f);
-    CHECK(nose_center.y < 300.0f);
+    CHECK(nose_center.y > 500.0f);
+    CHECK(nose_center.y < 850.0f);
 
-    // self_top_top.jpg: Pitch near zero, projects above top bezel (nose y in [-200, 0], gaze y in [-350, 0])
+    // self_top_top.jpg: Pitch near zero, projects above center (nose y in [300, 600], gaze y in [100, 400])
     CHECK(head_rot_top.x >= -2.0f);
     CHECK(head_rot_top.x <= 2.0f);
-    CHECK(nose_top.y > -200.0f);
-    CHECK(nose_top.y < 0.0f);
-    CHECK(gaze_top.y > -350.0f);
-    CHECK(gaze_top.y < 0.0f);
+    CHECK(nose_top.y > 300.0f);
+    CHECK(nose_top.y < 600.0f);
+    CHECK(gaze_top.y > 100.0f);
+    CHECK(gaze_top.y < 400.0f);
 
-    // self_down_down.jpg: Pitch <= -3 deg, projects downward (nose y in [200, 400])
+    // self_down_down.jpg: Pitch <= -3 deg, projects downward (nose y in [650, 1050])
     CHECK(head_rot_down.x <= -3.0f);
-    CHECK(nose_down.y > 200.0f);
-    CHECK(nose_down.y < 400.0f);
+    CHECK(nose_down.y > 650.0f);
+    CHECK(nose_down.y < 1050.0f);
 
-    // self_nosetop_eyesdown.jpg: Head pitched up (pitch >= 10 deg), nose projected far above bezel (y < -500)
+    // self_nosetop_eyesdown.jpg: Head pitched up (pitch >= 10 deg), nose projected near or above screen top (y < 100)
     CHECK(head_rot_top_down.x >= 10.0f);
-    CHECK(nose_top_down.y < -500.0f);
+    CHECK(nose_top_down.y < 100.0f);
 
     // self_left_left.jpg: Yaw <= -10 deg (facing viewer left), nose projected left (x < 600)
     CHECK(head_rot_left.y <= -10.0f);

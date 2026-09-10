@@ -561,8 +561,8 @@ TEST_CASE("Testing High-DPI and Logical/Physical Coordinate Transformations")
     CameraPlacement placement(GodotCameraVector3(0.0, 0.0, 0.0), 0.0);
     engine.set_camera_placement(placement);
 
-    // Gaze origin (user's eyes) straight in front at -500mm (aligned with screen center vertically at y = -95.5mm), looking forward along Z axis
-    GodotCameraVector3 origin(0.0, -95.5, -500.0);
+    // Gaze origin straight in front at -500mm looking forward along Z axis hits screen center under virtual anchor
+    GodotCameraVector3 origin(0.0, 0.0, -500.0);
     GodotCameraVector3 dir(0.0, 0.0, 1.0); // Looking straight at screen center
 
     GodotDisplayVector2 physical_pixel;

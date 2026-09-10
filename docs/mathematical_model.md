@@ -118,14 +118,16 @@ $$t = - \frac{y_0 \sin\theta + z_0 \cos\theta + z_{\text{off}}}{v_y \sin\theta +
 If $t < 0$, the gaze ray points away from the screen (no intersection). Otherwise, we compute the camera-space intersection point:
 $$P_{\text{int\_cam}} = P_{0\_\text{cam}} + t \cdot V_{\text{cam}}$$
 
-And transform it to the display physical coordinates $(x_s, y_s)$ in mm relative to the screen center:
-$$x_s = P_{\text{int\_cam}}.x + x_{\text{off}}$$
-$$y_s = -(P_{\text{int\_cam}}.y \cos\theta + P_{\text{int\_cam}}.z \sin\theta + y_{\text{off}})$$
+### 3.2. Screen-Center Virtual Projection Anchor & OS Window Space (Logical Pixels)
+In physical setups, webcams are mounted on the top bezel. However, appearance-based neural gaze estimators (e.g. OpenVINO ADAS-0002) produce compressed pitch angular distributions ($\approx \pm 5^\circ - 8^\circ$) for intra-socket eye movements when the head is stationary.
 
-### 3.2. Physical Display Space to OS Window Space (Logical Pixels)
-We map $(x_s, y_s)$ in mm relative to the screen center to desktop monitor logical pixels $(x_{\text{lpix}}, y_{\text{lpix}})$, where the top-left of the display monitor is $(0, 0)$:
-$$x_{\text{lpix}} = \frac{W_{\text{lpix}}}{2} + \frac{x_s}{s_x}$$
-$$y_{\text{lpix}} = \frac{H_{\text{lpix}}}{2} + \frac{y_s}{s_y}$$
+If projected from the top bezel ($Y = 0$), a maximum $-5^\circ$ downward gaze at $500\text{ mm}$ user distance covers only $500 \cdot \tan(5^\circ) = 43.7\text{ mm} \approx 218\text{ px}$, which physically prevents eye gaze from ever crossing below the screen midpoint ($Y = 540\text{ px}$ on a $1080\text{p}$ monitor).
+
+To ensure full, symmetric vertical accessibility across the screen without requiring synthetic non-linear gain multipliers, `godot-gaze` anchors the neutral optical axis to the **Screen Center** ($W_{\text{lpix}}/2, H_{\text{lpix}}/2$):
+$$x_{\text{lpix}} = \frac{W_{\text{lpix}}}{2} + \frac{P_{\text{int\_cam}}.x + x_{\text{off}}}{s_x}$$
+$$y_{\text{lpix}} = \frac{H_{\text{lpix}}}{2} - \frac{P_{\text{int\_cam}}.y \cos\theta + P_{\text{int\_cam}}.z \sin\theta + y_{\text{off}}}{s_y}$$
+
+This maps a neutral straight-ahead gaze ($V_{\text{cam}} = (0, 0, 1)$) to the center of the display, and symmetrically maps the $\pm 5^\circ$ eye pitch range across the upper and lower halves of the screen ($Y \approx 250\text{ px} \dots 830\text{ px}$).
 
 The application window-local coordinate $\mathbf{p}_{\text{window}} = (x_{\text{win}}, y_{\text{win}})$ is computed by subtracting the window top-left desktop offset:
 $$x_{\text{win}} = x_{\text{lpix}} - \text{window\_pos.x}$$
@@ -133,7 +135,35 @@ $$y_{\text{win}} = y_{\text{lpix}} - \text{window\_pos.y}$$
 
 On HiDPI / Retina displays, all desktop quantities ($W_{\text{lpix}}, H_{\text{lpix}}, \text{window\_pos}$) are processed in logical screen points (`lpix`).
 
-### 3.3. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)
+### 3.3. Unified Gravity-Aware Display Orientation & Side-Bezel Geometry ($T_{\text{camera} \to \text{viewport}}$)
+When devices are rotated into portrait or landscape orientations ($0^\circ, 90^\circ, 180^\circ, 270^\circ$), the physical panel dimensions ($W_{\text{phys}}, H_{\text{phys}}$) and camera mechanical mount position ($\mathbf{O}_{\text{mount}}$) remain invariant physical constants of the hardware chassis. The device's spatial orientation is modeled strictly as a software coordinate mapping $R_{\text{display}}$ between physical display space and viewport space:
+
+1. **Physical Screen Coordinate Calculation (Centered Origin)**:
+   $$x_{\text{disp\_mm}} = \frac{W_{\text{phys}}}{2} + P_{\text{int\_cam}}.x + O_{\text{mount}}.x$$
+   $$y_{\text{disp\_mm}} = \frac{H_{\text{phys}}}{2} - (P_{\text{int\_cam}}.y \cos\theta + P_{\text{int\_cam}}.z \sin\theta + O_{\text{mount}}.y)$$
+
+2. **Display Orientation Transformation ($R_{\text{display}}$)**:
+   * **$0^\circ$ (ORIENTATION_0 / Standard Upright)**:
+     $$x_{\text{vp\_mm}} = x_{\text{disp\_mm}}, \quad y_{\text{vp\_mm}} = y_{\text{disp\_mm}}$$
+   * **$90^\circ$ (ORIENTATION_90 / Clockwise Landscape - Camera on Right Bezel)**:
+     $$x_{\text{vp\_mm}} = H_{\text{phys}} - y_{\text{disp\_mm}}, \quad y_{\text{vp\_mm}} = x_{\text{disp\_mm}}$$
+   * **$180^\circ$ (ORIENTATION_180 / Inverted)**:
+     $$x_{\text{vp\_mm}} = W_{\text{phys}} - x_{\text{disp\_mm}}, \quad y_{\text{vp\_mm}} = H_{\text{phys}} - y_{\text{disp\_mm}}$$
+   * **$270^\circ$ (ORIENTATION_270 / Counter-Clockwise Landscape - Camera on Left Bezel)**:
+     $$x_{\text{vp\_mm}} = y_{\text{disp\_mm}}, \quad y_{\text{vp\_mm}} = W_{\text{phys}} - x_{\text{disp\_mm}}$$
+
+3. **Pixel Pitch Scaling & Window Offset**:
+   $$x_{\text{vp\_px}} = x_{\text{vp\_mm}} \cdot \frac{W_{\text{lpix}}}{W_{\text{vp\_mm}}} - \text{window\_pos.x}$$
+   $$y_{\text{vp\_px}} = y_{\text{vp\_mm}} \cdot \frac{H_{\text{lpix}}}{H_{\text{vp\_mm}}} - \text{window\_pos.y}$$
+
+4. **Gravity Orientation Derivation**:
+   `ProjectionEngine::gravity_to_orientation(Vector3 gravity)` dynamically maps 3D accelerometer readings to `DisplayOrientation`:
+   * $g_y < -0.7 \implies \text{ORIENTATION\_0}$ (Standard Upright)
+   * $g_x > 0.7 \implies \text{ORIENTATION\_90}$ (Landscape Right)
+   * $g_y > 0.7 \implies \text{ORIENTATION\_180}$ (Inverted)
+   * $g_x < -0.7 \implies \text{ORIENTATION\_270}$ (Landscape Left)
+
+### 3.4. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)
 When Godot project stretch modes are configured (e.g., `window/stretch/mode = "canvas_items"` or `"viewport"` with `aspect = "expand"` / `"keep"`), the 2D Viewport Canvas maintains a virtual base coordinate space that is scaled and letterboxed relative to the physical OS window backing render buffer:
 $$M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$$
 

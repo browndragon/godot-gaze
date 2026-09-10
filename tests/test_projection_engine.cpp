@@ -100,31 +100,30 @@ TEST_CASE("Direct Camera Plane Projection Invariants")
 // behaves consistently across diverse form factors without implying dynamic sensor/device rotation support yet.
 TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, Tablet, and Ultrawide")
 {
-    // 1. Tall Screen with Top-Bezel Camera (Phone-like proportions: 71.5mm x 146.7mm, 1170 x 2532 px)
+    // 1. Tall Screen with Screen-Center Camera (Phone-like proportions: 71.5mm x 146.7mm, 1170 x 2532 px)
     {
         Gaze::ProjectionEngine engine;
         engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1170.0, 2532.0));
         engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(71.5, 146.7));
         engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
 
-        // Staring from (0, 0, -400) mm down at center of tall screen (X=35.75mm, Y=73.35mm in display space)
-        // Camera is at top center, so target in camera space is (0.0, -73.35, 0.0) mm
+        // Staring straight ahead from (0, 0, -400) mm hits screen center (X=585px, Y=1266px)
         Gaze::GodotCameraVector3 origin(0.0, 0.0, -400.0);
-        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, -73.35, 400.0).normalized();
+        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, 0.0, 1.0);
 
         Gaze::GodotDisplayVector2 px_out;
         REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
         CHECK(px_out.x == doctest::Approx(585.0).epsilon(1.0));   // 1170 / 2
         CHECK(px_out.y == doctest::Approx(1266.0).epsilon(1.0));  // 2532 / 2
 
-        // Top-edge gaze (Y = 0 px)
-        Gaze::GodotCameraVector3 dir_top = Gaze::GodotCameraVector3(0.0, 0.0, 400.0).normalized();
+        // Top-edge gaze (Y = 0 px): aim +73.35mm UP from center
+        Gaze::GodotCameraVector3 dir_top = Gaze::GodotCameraVector3(0.0, 73.35, 400.0).normalized();
         REQUIRE(engine.project_gaze(origin, dir_top, px_out) == true);
         CHECK(px_out.x == doctest::Approx(585.0).epsilon(1.0));
         CHECK(px_out.y == doctest::Approx(0.0).epsilon(1.0));
 
-        // Bottom-edge gaze (Y = 2532 px)
-        Gaze::GodotCameraVector3 dir_bottom = Gaze::GodotCameraVector3(0.0, -146.7, 400.0).normalized();
+        // Bottom-edge gaze (Y = 2532 px): aim -73.35mm DOWN from center
+        Gaze::GodotCameraVector3 dir_bottom = Gaze::GodotCameraVector3(0.0, -73.35, 400.0).normalized();
         REQUIRE(engine.project_gaze(origin, dir_bottom, px_out) == true);
         CHECK(px_out.x == doctest::Approx(585.0).epsilon(1.0));
         CHECK(px_out.y == doctest::Approx(2532.0).epsilon(1.0));
@@ -136,7 +135,6 @@ TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, 
         engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(2532.0, 1170.0));
         engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(146.7, 71.5));
         // Camera offset relative to display center is at left bezel: X = -73.35 mm, Y = 0 mm
-        // In Gaze placement convention, camera offset is the vector from screen reference to camera
         engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(-73.35, 0.0, 0.0), 0.0));
 
         Gaze::GodotCameraVector3 origin(0.0, 0.0, -400.0);
@@ -148,7 +146,6 @@ TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, 
         CHECK(px_out.y == doctest::Approx(585.0).epsilon(1.0));
 
         // Looking at display center (+73.35mm X in camera space) lands on center (X=1266 px, Y=585 px)
-        // Camera is at left edge (X = -73.35 in display space relative to center), display center is +73.35mm away in camera-left / display-right (-X_cam)
         Gaze::GodotCameraVector3 dir_to_center = Gaze::GodotCameraVector3(-73.35, 0.0, 400.0).normalized();
         REQUIRE(engine.project_gaze(origin, dir_to_center, px_out) == true);
         CHECK(px_out.x == doctest::Approx(1266.0).epsilon(1.0));
@@ -178,7 +175,7 @@ TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, 
         CHECK(px_out.y == doctest::Approx(585.0).epsilon(1.0));
     }
 
-    // 4. Tablet Form Factor (4:3 aspect ratio: 197.0mm x 148.0mm, 2048 x 1536 px, top center camera)
+    // 4. Tablet Form Factor (4:3 aspect ratio: 197.0mm x 148.0mm, 2048 x 1536 px, screen center camera)
     {
         Gaze::ProjectionEngine engine;
         engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(2048.0, 1536.0));
@@ -186,14 +183,14 @@ TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, 
         engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
 
         Gaze::GodotCameraVector3 origin(0.0, 0.0, -450.0);
-        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, -74.0, 450.0).normalized();
+        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, 0.0, 1.0);
         Gaze::GodotDisplayVector2 px_out;
         REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
         CHECK(px_out.x == doctest::Approx(1024.0).epsilon(1.0));
         CHECK(px_out.y == doctest::Approx(768.0).epsilon(1.0));
     }
 
-    // 5. Ultrawide Form Factor (21:9 aspect ratio: 800.0mm x 340.0mm, 3440 x 1440 px, top center camera)
+    // 5. Ultrawide Form Factor (21:9 aspect ratio: 800.0mm x 340.0mm, 3440 x 1440 px, screen center camera)
     {
         Gaze::ProjectionEngine engine;
         engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(3440.0, 1440.0));
@@ -202,20 +199,20 @@ TEST_CASE("Screen Shape & Bezel Matrix Invariants: Tall, Wide Left/Right Bezel, 
 
         Gaze::GodotCameraVector3 origin(0.0, 0.0, -700.0);
         // Center
-        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, -170.0, 700.0).normalized();
+        Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, 0.0, 1.0);
         Gaze::GodotDisplayVector2 px_out;
         REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
         CHECK(px_out.x == doctest::Approx(1720.0).epsilon(1.0));
         CHECK(px_out.y == doctest::Approx(720.0).epsilon(1.0));
 
         // Far Display Left (camera right +X = 350mm)
-        Gaze::GodotCameraVector3 dir_far_left = Gaze::GodotCameraVector3(350.0, -170.0, 700.0).normalized();
+        Gaze::GodotCameraVector3 dir_far_left = Gaze::GodotCameraVector3(350.0, 0.0, 700.0).normalized();
         REQUIRE(engine.project_gaze(origin, dir_far_left, px_out) == true);
         CHECK(px_out.x < 500.0);
         CHECK(px_out.x > 0.0);
 
         // Far Display Right (camera left -X = -350mm)
-        Gaze::GodotCameraVector3 dir_far_right = Gaze::GodotCameraVector3(-350.0, -170.0, 700.0).normalized();
+        Gaze::GodotCameraVector3 dir_far_right = Gaze::GodotCameraVector3(-350.0, 0.0, 700.0).normalized();
         REQUIRE(engine.project_gaze(origin, dir_far_right, px_out) == true);
         CHECK(px_out.x > 2940.0);
         CHECK(px_out.x < 3440.0);
@@ -245,4 +242,166 @@ TEST_CASE("Screen Projection Engine Out-of-Bounds & Parallel Ray Robustness")
     Gaze::GodotCameraVector3 dir_forward(0.0, 0.0, 1.0);
     CHECK(engine.project_gaze(origin_behind, dir_forward, px_out) == false);
 }
+
+TEST_CASE("Projection Engine Hardware Invariance and Display Orientation Transformations (0, 90, 180, 270 deg)")
+{
+    Gaze::ProjectionEngine engine;
+    // Physical hardware panel dimensions: 301.5mm x 188.5mm, 3024 x 1964 px (14" laptop screen)
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(3024.0, 1964.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(301.5, 188.5));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
+
+    Gaze::GodotCameraVector3 origin(0.0, 0.0, -500.0);
+    Gaze::GodotDisplayVector2 px_out;
+
+    Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, 0.0, 1.0);
+    Gaze::GodotCameraVector3 dir_top = Gaze::GodotCameraVector3(0.0, 94.25, 500.0).normalized();
+    Gaze::GodotCameraVector3 dir_bottom = Gaze::GodotCameraVector3(0.0, -94.25, 500.0).normalized();
+    Gaze::GodotCameraVector3 dir_left = Gaze::GodotCameraVector3(150.75, 0.0, 500.0).normalized();
+    Gaze::GodotCameraVector3 dir_right = Gaze::GodotCameraVector3(-150.75, 0.0, 500.0).normalized();
+
+    // -------------------------------------------------------------
+    // 1. ORIENTATION_0 (Natural Upright Landscape: 3024 x 1964 px)
+    // -------------------------------------------------------------
+    engine.set_display_orientation(Gaze::DisplayOrientation::ORIENTATION_0);
+
+    // (a) Gaze at screen center
+    REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(982.0).epsilon(1.0));
+
+    // (b) Gaze at top edge
+    REQUIRE(engine.project_gaze(origin, dir_top, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(0.0).epsilon(1.0));
+
+    // (c) Gaze at bottom edge
+    REQUIRE(engine.project_gaze(origin, dir_bottom, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1964.0).epsilon(1.0));
+
+    // (d) Gaze at left edge
+    REQUIRE(engine.project_gaze(origin, dir_left, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(0.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(982.0).epsilon(1.0));
+
+    // (e) Gaze at right edge
+    REQUIRE(engine.project_gaze(origin, dir_right, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(3024.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(982.0).epsilon(1.0));
+
+    // -------------------------------------------------------------
+    // 2. ORIENTATION_90 (Rotated 90 deg CW - Portrait Right: 1964 x 3024 px)
+    // Physical top is on the RIGHT bezel of the rotated viewport.
+    // -------------------------------------------------------------
+    engine.set_display_orientation(Gaze::DisplayOrientation::ORIENTATION_90);
+
+    // (a) Gaze at center
+    REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(982.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+
+    // (b) Gaze at physical top edge (now right edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_top, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1964.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+
+    // (c) Gaze at physical bottom edge (now left edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_bottom, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(0.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+
+    // (d) Gaze at physical left edge (now top edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_left, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(982.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(0.0).epsilon(1.0));
+
+    // (e) Gaze at physical right edge (now bottom edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_right, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(982.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(3024.0).epsilon(1.0));
+
+    // -------------------------------------------------------------
+    // 3. ORIENTATION_180 (Inverted Landscape: 3024 x 1964 px)
+    // Physical top is on the BOTTOM bezel of the inverted viewport.
+    // -------------------------------------------------------------
+    engine.set_display_orientation(Gaze::DisplayOrientation::ORIENTATION_180);
+
+    // (a) Gaze at center
+    REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(982.0).epsilon(1.0));
+
+    // (b) Gaze at physical top edge (now bottom edge of inverted screen)
+    REQUIRE(engine.project_gaze(origin, dir_top, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1964.0).epsilon(1.0));
+
+    // (c) Gaze at physical bottom edge (now top edge of inverted screen)
+    REQUIRE(engine.project_gaze(origin, dir_bottom, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1512.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(0.0).epsilon(1.0));
+
+    // -------------------------------------------------------------
+    // 4. ORIENTATION_270 (Rotated 270 deg CW - Portrait Left: 1964 x 3024 px)
+    // Physical top is on the LEFT bezel of the rotated viewport.
+    // -------------------------------------------------------------
+    engine.set_display_orientation(Gaze::DisplayOrientation::ORIENTATION_270);
+
+    // (a) Gaze at center
+    REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(982.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+
+    // (b) Gaze at physical top edge (now left edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_top, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(0.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+
+    // (c) Gaze at physical bottom edge (now right edge of portrait screen)
+    REQUIRE(engine.project_gaze(origin, dir_bottom, px_out) == true);
+    CHECK(px_out.x == doctest::Approx(1964.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(1512.0).epsilon(1.0));
+}
+
+TEST_CASE("Projection Engine Window Translation Offset (T_window)")
+{
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(3024.0, 1964.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(301.5, 188.5));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
+
+    // Set Godot game window offset: top-left at (200, 150) px
+    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(200.0, 150.0));
+
+    Gaze::GodotCameraVector3 origin(0.0, 0.0, -500.0);
+    Gaze::GodotCameraVector3 dir_center = Gaze::GodotCameraVector3(0.0, 0.0, 1.0);
+
+    Gaze::GodotDisplayVector2 px_out;
+    REQUIRE(engine.project_gaze(origin, dir_center, px_out) == true);
+
+    // Without window offset, screen center is (1512, 982).
+    // With window offset (200, 150), viewport position MUST be (1312, 832).
+    CHECK(px_out.x == doctest::Approx(1312.0).epsilon(1.0));
+    CHECK(px_out.y == doctest::Approx(832.0).epsilon(1.0));
+}
+
+TEST_CASE("Projection Engine Gravity Adaptation Invariants")
+{
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(3024.0, 1964.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(301.5, 188.5));
+
+    // Default upright gravity vector points in -Y_cam (gravity pulls down)
+    CHECK(engine.get_gravity_vector().x == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(engine.get_gravity_vector().y == doctest::Approx(-1.0).epsilon(0.01));
+    CHECK(engine.get_gravity_vector().z == doctest::Approx(0.0).epsilon(0.01));
+
+    // When rotated 90 deg clockwise, gravity in camera space pulls in -X_cam
+    engine.set_gravity_vector(Gaze::GodotCameraVector3(-1.0, 0.0, 0.0));
+    CHECK(engine.get_gravity_vector().x == doctest::Approx(-1.0).epsilon(0.01));
+    CHECK(engine.get_gravity_vector().y == doctest::Approx(0.0).epsilon(0.01));
+    CHECK(engine.get_gravity_vector().z == doctest::Approx(0.0).epsilon(0.01));
+}
+
 

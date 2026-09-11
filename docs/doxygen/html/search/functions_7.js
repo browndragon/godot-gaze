@@ -1,8 +1,23 @@
 var searchData=
 [
   ['screen_5fmm_5fto_5fcamera_5fspace_0',['screen_mm_to_camera_space',['../class_gaze_1_1_projection_engine.html#a283d1496569c8a418638f55d98b13f25',1,'Gaze::ProjectionEngine']]],
-  ['set_5fenabled_1',['set_enabled',['../classgodot_1_1_gaze_tracker.html#a45c1ade36bc0a7839a6a26348117c1c6',1,'godot::GazeTracker']]],
-  ['set_5fsimulated_5facceleration_2',['set_simulated_acceleration',['../classgodot_1_1_mock_vision_server.html#ac9ecd69c6d4fa719955a2b662ae0dec9',1,'godot::MockVisionServer']]],
-  ['solve_3',['solve',['../class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09',1,'Gaze::SQPnPSolver']]],
-  ['solve_5fpnp_5frvec_4',['solve_pnp_rvec',['../pnp__solver_8hpp.html#a7a498f1578b7bc2b65c7e6b687ea4a28',1,'Gaze']]]
+  ['set_5femulate_5fgaze_5ffrom_5fmouse_1',['set_emulate_gaze_from_mouse',['../classgodot_1_1_gaze_server.html#afba19bd41e7e4bb6bb5af21b4e1f872c',1,'godot::GazeServer']]],
+  ['set_5femulate_5fmouse_5ffrom_5fgaze_2',['set_emulate_mouse_from_gaze',['../classgodot_1_1_gaze_server.html#a01d82ad0c25e44ee8534ef2bd97c96ae',1,'godot::GazeServer']]],
+  ['set_5fenabled_3',['set_enabled',['../classgodot_1_1_gaze_tracker.html#a45c1ade36bc0a7839a6a26348117c1c6',1,'godot::GazeTracker']]],
+  ['set_5fevent_5ffactory_4',['set_event_factory',['../classgodot_1_1_gaze_server.html#a8df80b0cde997e9fb236f6d66ef8a828',1,'godot::GazeServer']]],
+  ['set_5feye_5fgaze_5',['set_eye_gaze',['../classgodot_1_1_input_event_gaze.html#a730a85ef2171143ea5d128a329a990ef',1,'godot::InputEventGaze']]],
+  ['set_5fframe_5fid_6',['set_frame_id',['../classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2',1,'godot::InputEventGazeBase']]],
+  ['set_5fgaze_5ftransform_7',['set_gaze_transform',['../classgodot_1_1_input_event_gaze.html#aa073d03ad8b1d31d6e4aa4b4869ef60d',1,'godot::InputEventGaze']]],
+  ['set_5fhead_5fpose_8',['set_head_pose',['../classgodot_1_1_input_event_gaze.html#a9c570885cf7e4d3f68a82b6c0622ce0a',1,'godot::InputEventGaze']]],
+  ['set_5fhead_5ftransform_9',['set_head_transform',['../classgodot_1_1_input_event_gaze.html#a351bb6237af43f80ad5750dae61d6fef',1,'godot::InputEventGaze']]],
+  ['set_5fleft_5feye_5fopenness_10',['set_left_eye_openness',['../classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462',1,'godot::InputEventGazeBase']]],
+  ['set_5fmouse_5femulation_5fdwell_5fsec_11',['set_mouse_emulation_dwell_sec',['../classgodot_1_1_gaze_server.html#a69aea5a350ec6f94e19994b549cc6d19',1,'godot::GazeServer']]],
+  ['set_5fmouse_5femulation_5ftransition_5fsec_12',['set_mouse_emulation_transition_sec',['../classgodot_1_1_gaze_server.html#a5a2a0eaa64ef70ccb6890350e1dd35fd',1,'godot::GazeServer']]],
+  ['set_5fnose_5fgaze_13',['set_nose_gaze',['../classgodot_1_1_input_event_gaze.html#a5840113c98ceae1342ca3ef230e5d7a9',1,'godot::InputEventGaze']]],
+  ['set_5freason_14',['set_reason',['../classgodot_1_1_input_event_gaze_missing.html#acec2f233fd39338f85b9e69afb6ce2ab',1,'godot::InputEventGazeMissing']]],
+  ['set_5fright_5feye_5fopenness_15',['set_right_eye_openness',['../classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f',1,'godot::InputEventGazeBase']]],
+  ['set_5fsimulated_5facceleration_16',['set_simulated_acceleration',['../classgodot_1_1_mock_vision_server.html#ac9ecd69c6d4fa719955a2b662ae0dec9',1,'godot::MockVisionServer']]],
+  ['set_5ftimestamp_5fusec_17',['set_timestamp_usec',['../classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4',1,'godot::InputEventGazeBase']]],
+  ['solve_18',['solve',['../class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09',1,'Gaze::SQPnPSolver']]],
+  ['solve_5fpnp_5frvec_19',['solve_pnp_rvec',['../pnp__solver_8hpp.html#a7a498f1578b7bc2b65c7e6b687ea4a28',1,'Gaze']]]
 ];

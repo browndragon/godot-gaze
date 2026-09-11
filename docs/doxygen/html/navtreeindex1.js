@@ -1,0 +1,19 @@
+var NAVTREEINDEX1 =
+{
+"struct_gaze_1_1_s_q_pn_p_solver_1_1_solution.html":[1,0,0,30,0],
+"struct_gaze_1_1_spaced_basis.html":[1,0,0,26],
+"struct_gaze_1_1_spaced_transform3_d.html":[1,0,0,27],
+"struct_gaze_1_1_spaced_vector2.html":[1,0,0,28],
+"struct_gaze_1_1_spaced_vector3.html":[1,0,0,29],
+"struct_gaze_1_1_stage_timings.html":[1,0,0,31],
+"struct_gaze_1_1_yu_net_result.html":[1,0,0,32],
+"structgodot_1_1_gaze_server_impl.html":[1,0,1,7],
+"structgodot_1_1_gaze_server_impl_1_1_camera_info.html":[1,0,1,7,1],
+"structgodot_1_1_gaze_server_impl_1_1_display_info.html":[1,0,1,7,0],
+"structgodot_1_1_gaze_server_impl_1_1_eye_info.html":[1,0,1,7,3],
+"structgodot_1_1_gaze_server_impl_1_1_face_info.html":[1,0,1,7,2],
+"structgodot_1_1_vision_server_1_1_camera_data.html":[1,0,1,18,0],
+"vision__server_8hpp_source.html":[2,0,0,1,16],
+"web__binding__state_8hpp.html":[2,0,0,3,1],
+"web__binding__state_8hpp_source.html":[2,0,0,3,1]
+};

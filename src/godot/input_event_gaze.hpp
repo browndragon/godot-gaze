@@ -33,18 +33,58 @@ public:
     void set_window_id(int64_t p_id) { window_id = p_id; }
     int64_t get_window_id() const { return window_id; }
 
+    /**
+     * @brief Sets the sequential video pipeline frame identifier.
+     * @param p_id Monotonically increasing frame counter.
+     */
     void set_frame_id(uint64_t p_id) { frame_id = p_id; }
+
+    /**
+     * @brief Retrieves the sequential video pipeline frame identifier.
+     * @return uint64_t Frame counter.
+     */
     uint64_t get_frame_id() const { return frame_id; }
 
+    /**
+     * @brief Sets the event creation timestamp in microseconds (from Time::get_ticks_usec()).
+     * @param p_time Timestamp in microseconds.
+     */
     void set_timestamp_usec(uint64_t p_time) { timestamp_usec = p_time; }
+
+    /**
+     * @brief Retrieves the event creation timestamp in microseconds.
+     * @return uint64_t Timestamp in microseconds.
+     */
     uint64_t get_timestamp_usec() const { return timestamp_usec; }
 
+    /**
+     * @brief Sets the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+     * @param p_val Openness value between 0.0 and 1.0.
+     */
     void set_left_eye_openness(float p_val) { left_eye_openness = p_val; }
+
+    /**
+     * @brief Retrieves the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+     * @return float Openness value between 0.0 and 1.0.
+     */
     float get_left_eye_openness() const { return left_eye_openness; }
 
+    /**
+     * @brief Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+     * @param p_val Openness value between 0.0 and 1.0.
+     */
     void set_right_eye_openness(float p_val) { right_eye_openness = p_val; }
+
+    /**
+     * @brief Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+     * @return float Openness value between 0.0 and 1.0.
+     */
     float get_right_eye_openness() const { return right_eye_openness; }
 
+    /**
+     * @brief Indicates whether valid face tracking data is present in this event.
+     * @return bool True if face is tracked; false for missing or lost tracking events.
+     */
     virtual bool is_face_tracked() const { return false; }
 
     void copy_from(const Ref<InputEventGazeBase> &p_other);
@@ -53,6 +93,9 @@ public:
 /**
  * @class InputEventGaze
  * @brief Input event emitted when face and eye gaze tracking is actively locked.
+ *
+ * Provides localized 2D gaze coordinates via get_eye_gaze() and get_nose_gaze(),
+ * as well as 3D head pose and eye gaze ray properties in Godot camera space.
  */
 class InputEventGaze : public InputEventGazeBase {
     GDCLASS(InputEventGaze, InputEventGazeBase);
@@ -72,22 +115,90 @@ public:
 
     virtual bool is_face_tracked() const override { return true; }
 
+    /**
+     * @brief Retrieves the 2D eye gaze coordinates on the viewport canvas or relative to a specified CanvasItem.
+     *
+     * @param p_local_to Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in
+     *                   canonical root Viewport Canvas space (pixels). If provided, transforms the position into
+     *                   the local coordinate space of that CanvasItem.
+     * @return Vector2 Gaze position in canvas space or local coordinates.
+     */
     Vector2 get_eye_gaze(const CanvasItem *p_local_to = nullptr) const;
+
+    /**
+     * @brief Sets the 2D eye gaze position in canonical root Viewport Canvas coordinates.
+     * @param p_pos Position in root Viewport Canvas coordinates.
+     */
     void set_eye_gaze(const Vector2 &p_pos);
 
+    /**
+     * @brief Retrieves the 2D nose gaze coordinates (nose-forward ray projected to the display) on the canvas or relative to a CanvasItem.
+     *
+     * Represents the forward projection of the head pose onto the screen surface.
+     *
+     * @param p_local_to Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in
+     *                   canonical root Viewport Canvas space (pixels). If provided, transforms the position into
+     *                   the local coordinate space of that CanvasItem.
+     * @return Vector2 Nose gaze projection in canvas space or local coordinates.
+     */
     Vector2 get_nose_gaze(const CanvasItem *p_local_to = nullptr) const;
+
+    /**
+     * @brief Sets the 2D nose gaze position in canonical root Viewport Canvas coordinates.
+     * @param p_pos Position in root Viewport Canvas coordinates.
+     */
     void set_nose_gaze(const Vector2 &p_pos);
 
+    /**
+     * @brief Retrieves the 3D head pose in Godot camera space.
+     *
+     * The transform origin is the 3D position of the nose tip in millimeters relative to the camera.
+     * The transform basis represents the 3D head orientation.
+     *
+     * @return Transform3D Head pose transform in camera space.
+     */
     Transform3D get_head_pose() const { return head_transform; }
+
+    /**
+     * @brief Sets the 3D head pose transform in Godot camera space.
+     * @param p_pose Head pose transform.
+     */
     void set_head_pose(const Transform3D &p_pose) { head_transform = p_pose; }
 
+    /**
+     * @brief Retrieves the 3D eye origin in Godot camera space (millimeters).
+     * @return Vector3 Origin point of the eye gaze ray in camera space.
+     */
     Vector3 get_eye_origin() const { return gaze_transform.origin; }
+
+    /**
+     * @brief Retrieves the 3D unit eye gaze direction vector in Godot camera space.
+     * @return Vector3 Normalized direction vector pointing in the gaze direction.
+     */
     Vector3 get_eye_direction() const { return -gaze_transform.basis.get_column(2); }
 
+    /**
+     * @brief Sets the underlying 3D head transform in Godot camera space.
+     * @param p_xform 3D transform of the head.
+     */
     void set_head_transform(const Transform3D &p_xform) { head_transform = p_xform; }
+
+    /**
+     * @brief Retrieves the underlying 3D head transform in Godot camera space.
+     * @return Transform3D Head transform.
+     */
     Transform3D get_head_transform() const { return head_transform; }
 
+    /**
+     * @brief Sets the underlying 3D gaze transform in Godot camera space.
+     * @param p_xform 3D transform of the eye gaze.
+     */
     void set_gaze_transform(const Transform3D &p_xform) { gaze_transform = p_xform; }
+
+    /**
+     * @brief Retrieves the underlying 3D gaze transform in Godot camera space.
+     * @return Transform3D Gaze transform.
+     */
     Transform3D get_gaze_transform() const { return gaze_transform; }
 
     void copy_from(const Ref<InputEventGaze> &p_other);
@@ -122,7 +233,16 @@ public:
 
     virtual bool is_face_tracked() const override { return false; }
 
+    /**
+     * @brief Sets the reason why gaze tracking was not achieved for this frame.
+     * @param p_reason MissingReason enum value.
+     */
     void set_reason(MissingReason p_reason) { reason = p_reason; }
+
+    /**
+     * @brief Retrieves the reason why gaze tracking was not achieved for this frame.
+     * @return MissingReason Enum value indicating the cause.
+     */
     MissingReason get_reason() const { return reason; }
 
     void copy_from(const Ref<InputEventGazeMissing> &p_other);

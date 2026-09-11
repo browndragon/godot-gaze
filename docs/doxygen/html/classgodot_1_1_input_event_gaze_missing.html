@@ -154,10 +154,11 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a280adacd326f635970e784b5eb6c06c1" id="r_a280adacd326f635970e784b5eb6c06c1"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="#a280adacd326f635970e784b5eb6c06c1">is_face_tracked</a> () const override</td></tr>
-<tr class="memitem:acec2f233fd39338f85b9e69afb6ce2ab" id="r_acec2f233fd39338f85b9e69afb6ce2ab"><td class="memItemLeft"><a id="acec2f233fd39338f85b9e69afb6ce2ab" name="acec2f233fd39338f85b9e69afb6ce2ab"></a>
-void&#160;</td><td class="memItemRight"><b>set_reason</b> (MissingReason p_reason)</td></tr>
-<tr class="memitem:a92cabd4dee375c9ea5cd79f7ac577500" id="r_a92cabd4dee375c9ea5cd79f7ac577500"><td class="memItemLeft"><a id="a92cabd4dee375c9ea5cd79f7ac577500" name="a92cabd4dee375c9ea5cd79f7ac577500"></a>
-MissingReason&#160;</td><td class="memItemRight"><b>get_reason</b> () const</td></tr>
+<tr class="memdesc:a280adacd326f635970e784b5eb6c06c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates whether valid face tracking data is present in this event.  <br /></td></tr>
+<tr class="memitem:acec2f233fd39338f85b9e69afb6ce2ab" id="r_acec2f233fd39338f85b9e69afb6ce2ab"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#acec2f233fd39338f85b9e69afb6ce2ab">set_reason</a> (MissingReason p_reason)</td></tr>
+<tr class="memdesc:acec2f233fd39338f85b9e69afb6ce2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the reason why gaze tracking was not achieved for this frame.  <br /></td></tr>
+<tr class="memitem:a92cabd4dee375c9ea5cd79f7ac577500" id="r_a92cabd4dee375c9ea5cd79f7ac577500"><td class="memItemLeft">MissingReason&#160;</td><td class="memItemRight"><a class="el" href="#a92cabd4dee375c9ea5cd79f7ac577500">get_reason</a> () const</td></tr>
+<tr class="memdesc:a92cabd4dee375c9ea5cd79f7ac577500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the reason why gaze tracking was not achieved for this frame.  <br /></td></tr>
 <tr class="memitem:a6f2fcf8119c8f5ed44bbec80a6ea8fa3" id="r_a6f2fcf8119c8f5ed44bbec80a6ea8fa3"><td class="memItemLeft"><a id="a6f2fcf8119c8f5ed44bbec80a6ea8fa3" name="a6f2fcf8119c8f5ed44bbec80a6ea8fa3"></a>
 void&#160;</td><td class="memItemRight"><b>copy_from</b> (const Ref&lt; InputEventGazeMissing &gt; &amp;p_other)</td></tr>
 <tr class="memitem:a0c3df13f1e310781113e97249c9149ac" id="r_a0c3df13f1e310781113e97249c9149ac"><td class="memItemLeft"><a id="a0c3df13f1e310781113e97249c9149ac" name="a0c3df13f1e310781113e97249c9149ac"></a>
@@ -167,22 +168,22 @@ String&#160;</td><td class="memItemRight"><b>as_text</b> () const</td></tr>
 void&#160;</td><td class="memItemRight"><b>set_window_id</b> (int64_t p_id)</td></tr>
 <tr class="memitem:a91c11eaad5ea5d890be6d2f24258597c pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a91c11eaad5ea5d890be6d2f24258597c"><td class="memItemLeft">
 int64_t&#160;</td><td class="memItemRight"><b>get_window_id</b> () const</td></tr>
-<tr class="memitem:a11f3a0812c0505f1f5d5730b61a02fb2 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a11f3a0812c0505f1f5d5730b61a02fb2"><td class="memItemLeft">
-void&#160;</td><td class="memItemRight"><b>set_frame_id</b> (uint64_t p_id)</td></tr>
-<tr class="memitem:a8cb9bdfda5fd1afa1cf8abe022727695 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8cb9bdfda5fd1afa1cf8abe022727695"><td class="memItemLeft">
-uint64_t&#160;</td><td class="memItemRight"><b>get_frame_id</b> () const</td></tr>
-<tr class="memitem:a816f584e0e7c29622e19584e51107aa4 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a816f584e0e7c29622e19584e51107aa4"><td class="memItemLeft">
-void&#160;</td><td class="memItemRight"><b>set_timestamp_usec</b> (uint64_t p_time)</td></tr>
-<tr class="memitem:aec4fe5aa9648434bfbbffa74ad45a204 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_aec4fe5aa9648434bfbbffa74ad45a204"><td class="memItemLeft">
-uint64_t&#160;</td><td class="memItemRight"><b>get_timestamp_usec</b> () const</td></tr>
-<tr class="memitem:a8c8526e2d2da7f512789ffd372cb6462 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8c8526e2d2da7f512789ffd372cb6462"><td class="memItemLeft">
-void&#160;</td><td class="memItemRight"><b>set_left_eye_openness</b> (float p_val)</td></tr>
-<tr class="memitem:a4ee9bf4e873112fb80342bcfe1e908ee pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a4ee9bf4e873112fb80342bcfe1e908ee"><td class="memItemLeft">
-float&#160;</td><td class="memItemRight"><b>get_left_eye_openness</b> () const</td></tr>
-<tr class="memitem:adc3848db74215ffe8d35c82e3f3f677f pub_methods_classgodot_1_1_input_event_gaze_base" id="r_adc3848db74215ffe8d35c82e3f3f677f"><td class="memItemLeft">
-void&#160;</td><td class="memItemRight"><b>set_right_eye_openness</b> (float p_val)</td></tr>
-<tr class="memitem:a8f174a146075dcd7dd371f9618598257 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8f174a146075dcd7dd371f9618598257"><td class="memItemLeft">
-float&#160;</td><td class="memItemRight"><b>get_right_eye_openness</b> () const</td></tr>
+<tr class="memitem:a11f3a0812c0505f1f5d5730b61a02fb2 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a11f3a0812c0505f1f5d5730b61a02fb2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2">set_frame_id</a> (uint64_t p_id)</td></tr>
+<tr class="memdesc:a11f3a0812c0505f1f5d5730b61a02fb2 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the sequential video pipeline frame identifier.  <br /></td></tr>
+<tr class="memitem:a8cb9bdfda5fd1afa1cf8abe022727695 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8cb9bdfda5fd1afa1cf8abe022727695"><td class="memItemLeft">uint64_t&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8cb9bdfda5fd1afa1cf8abe022727695">get_frame_id</a> () const</td></tr>
+<tr class="memdesc:a8cb9bdfda5fd1afa1cf8abe022727695 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the sequential video pipeline frame identifier.  <br /></td></tr>
+<tr class="memitem:a816f584e0e7c29622e19584e51107aa4 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a816f584e0e7c29622e19584e51107aa4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4">set_timestamp_usec</a> (uint64_t p_time)</td></tr>
+<tr class="memdesc:a816f584e0e7c29622e19584e51107aa4 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the event creation timestamp in microseconds (from Time::get_ticks_usec()).  <br /></td></tr>
+<tr class="memitem:aec4fe5aa9648434bfbbffa74ad45a204 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_aec4fe5aa9648434bfbbffa74ad45a204"><td class="memItemLeft">uint64_t&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#aec4fe5aa9648434bfbbffa74ad45a204">get_timestamp_usec</a> () const</td></tr>
+<tr class="memdesc:aec4fe5aa9648434bfbbffa74ad45a204 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the event creation timestamp in microseconds.  <br /></td></tr>
+<tr class="memitem:a8c8526e2d2da7f512789ffd372cb6462 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8c8526e2d2da7f512789ffd372cb6462"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462">set_left_eye_openness</a> (float p_val)</td></tr>
+<tr class="memdesc:a8c8526e2d2da7f512789ffd372cb6462 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
+<tr class="memitem:a4ee9bf4e873112fb80342bcfe1e908ee pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a4ee9bf4e873112fb80342bcfe1e908ee"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a4ee9bf4e873112fb80342bcfe1e908ee">get_left_eye_openness</a> () const</td></tr>
+<tr class="memdesc:a4ee9bf4e873112fb80342bcfe1e908ee pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
+<tr class="memitem:adc3848db74215ffe8d35c82e3f3f677f pub_methods_classgodot_1_1_input_event_gaze_base" id="r_adc3848db74215ffe8d35c82e3f3f677f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f">set_right_eye_openness</a> (float p_val)</td></tr>
+<tr class="memdesc:adc3848db74215ffe8d35c82e3f3f677f pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
+<tr class="memitem:a8f174a146075dcd7dd371f9618598257 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8f174a146075dcd7dd371f9618598257"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">get_right_eye_openness</a> () const</td></tr>
+<tr class="memdesc:a8f174a146075dcd7dd371f9618598257 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
 <tr class="memitem:a7ceed2d09d3e1b059ad3e1bd32b172bf pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a7ceed2d09d3e1b059ad3e1bd32b172bf"><td class="memItemLeft">
 void&#160;</td><td class="memItemRight"><b>copy_from</b> (const Ref&lt; InputEventGazeBase &gt; &amp;p_other)</td></tr>
 </table><table class="memberdecls">
@@ -211,6 +212,34 @@ float&#160;</td><td class="memItemRight"><b>right_eye_openness</b> = 0.0f</td></
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Input event emitted when face or eye tracking is lost or during full blink. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a92cabd4dee375c9ea5cd79f7ac577500" name="a92cabd4dee375c9ea5cd79f7ac577500"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92cabd4dee375c9ea5cd79f7ac577500">&#9670;&#160;</a></span>get_reason()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MissingReason godot::InputEventGazeMissing::get_reason </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the reason why gaze tracking was not achieved for this frame. </p>
+<dl class="section return"><dt>Returns</dt><dd>MissingReason Enum value indicating the cause. </dd></dl>
+
+</div>
+</div>
 <a id="a280adacd326f635970e784b5eb6c06c1" name="a280adacd326f635970e784b5eb6c06c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a280adacd326f635970e784b5eb6c06c1">&#9670;&#160;</a></span>is_face_tracked()</h2>
 
@@ -234,7 +263,43 @@ float&#160;</td><td class="memItemRight"><b>right_eye_openness</b> = 0.0f</td></
 </table>
 </div><div class="memdoc">
 
-<p>Reimplemented from <a class="el" href="classgodot_1_1_input_event_gaze_base.html">godot::InputEventGazeBase</a>.</p>
+<p>Indicates whether valid face tracking data is present in this event. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if face is tracked; false for missing or lost tracking events. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138">godot::InputEventGazeBase</a>.</p>
+
+</div>
+</div>
+<a id="acec2f233fd39338f85b9e69afb6ce2ab" name="acec2f233fd39338f85b9e69afb6ce2ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acec2f233fd39338f85b9e69afb6ce2ab">&#9670;&#160;</a></span>set_reason()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::InputEventGazeMissing::set_reason </td>
+          <td>(</td>
+          <td class="paramtype">MissingReason</td>          <td class="paramname"><span class="paramname"><em>p_reason</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the reason why gaze tracking was not achieved for this frame. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_reason</td><td>MissingReason enum value. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

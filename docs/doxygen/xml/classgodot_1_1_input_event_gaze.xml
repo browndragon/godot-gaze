@@ -5,103 +5,33 @@
     <basecompoundref refid="classgodot_1_1_input_event_gaze_base" prot="public" virt="non-virtual">godot::InputEventGazeBase</basecompoundref>
     <includes refid="input__event__gaze_8hpp" local="no">input_event_gaze.hpp</includes>
     <sectiondef kind="private-attrib">
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a402416be509a04314f9bf18c8df2c8b4" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a00366a78591bf34f9fff1b44d54b3b2a" prot="private" static="no" mutable="no">
         <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::position</definition>
+        <definition>Vector2 godot::InputEventGaze::eye_gaze_position</definition>
         <argsstring></argsstring>
-        <name>position</name>
-        <qualifiedname>godot::InputEventGaze::position</qualifiedname>
+        <name>eye_gaze_position</name>
+        <qualifiedname>godot::InputEventGaze::eye_gaze_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="59" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="59" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="103" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="103" bodyend="-1"/>
       </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a5ff5d2d0142887d11bc8ce732dfa6ee8" prot="private" static="no" mutable="no">
+      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1af2e058d12e7630c545985dab7a4d0005" prot="private" static="no" mutable="no">
         <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::global_position</definition>
+        <definition>Vector2 godot::InputEventGaze::nose_gaze_position</definition>
         <argsstring></argsstring>
-        <name>global_position</name>
-        <qualifiedname>godot::InputEventGaze::global_position</qualifiedname>
+        <name>nose_gaze_position</name>
+        <qualifiedname>godot::InputEventGaze::nose_gaze_position</qualifiedname>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="60" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="60" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a0ee7f3552730789cd4eb90b7e60ce8ba" prot="private" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::screen_position</definition>
-        <argsstring></argsstring>
-        <name>screen_position</name>
-        <qualifiedname>godot::InputEventGaze::screen_position</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="61" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="61" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a4625a5849bda3088a2eb2136ce2a3c2b" prot="private" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::relative</definition>
-        <argsstring></argsstring>
-        <name>relative</name>
-        <qualifiedname>godot::InputEventGaze::relative</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="62" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="62" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1aa00d41bf71d6cd48abe1f0e692e46814" prot="private" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::screen_relative</definition>
-        <argsstring></argsstring>
-        <name>screen_relative</name>
-        <qualifiedname>godot::InputEventGaze::screen_relative</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="63" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="63" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a2f55320de0ab6eebb15098e7af8efae1" prot="private" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::velocity</definition>
-        <argsstring></argsstring>
-        <name>velocity</name>
-        <qualifiedname>godot::InputEventGaze::velocity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="64" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="64" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a23f81363fea2dd12c0dc2648c84e56b4" prot="private" static="no" mutable="no">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::screen_velocity</definition>
-        <argsstring></argsstring>
-        <name>screen_velocity</name>
-        <qualifiedname>godot::InputEventGaze::screen_velocity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="65" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="65" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="104" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="104" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a5d48d7430a09d1fb62c6b175d74c987b" prot="private" static="no" mutable="no">
         <type>Transform3D</type>
@@ -115,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="67" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="67" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="106" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="106" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_1a1bc1e08450980659ffce502a8c39bafd" prot="private" static="no" mutable="no">
         <type>Transform3D</type>
@@ -129,7 +59,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="68" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="68" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="107" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="107" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -151,7 +81,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="56" column="5"/>
+        <location file="src/godot/input_event_gaze.hpp" line="101" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -167,7 +97,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="71" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="69" bodyend="108"/>
+        <location file="src/godot/input_event_gaze.hpp" line="110" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="87" bodyend="113"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -183,7 +113,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="74" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="55" bodyend="67"/>
+        <location file="src/godot/input_event_gaze.hpp" line="113" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="56" bodyend="63"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1ae538cf85b2ca5fa4b95341c3f1a18401" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -197,7 +127,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="75" column="13"/>
+        <location file="src/godot/input_event_gaze.hpp" line="114" column="13"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -207,236 +137,223 @@
         <qualifiedname>godot::InputEventGaze::is_face_tracked</qualifiedname>
         <reimplements refid="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138">is_face_tracked</reimplements>
         <briefdescription>
+<para>Indicates whether valid face tracking data is present in this event. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>bool True if face is tracked; false for missing or lost tracking events. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="77" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="77" bodyend="77"/>
+        <location file="src/godot/input_event_gaze.hpp" line="116" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="116" bodyend="116"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a71221e842a7a1358ed8e8361a2575133" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::InputEventGaze::get_eye_gaze</definition>
+        <argsstring>(const CanvasItem *p_local_to=nullptr) const</argsstring>
+        <name>get_eye_gaze</name>
+        <qualifiedname>godot::InputEventGaze::get_eye_gaze</qualifiedname>
+        <param>
+          <type>const CanvasItem *</type>
+          <declname>p_local_to</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Retrieves the 2D eye gaze coordinates on the viewport canvas or relative to a specified CanvasItem. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_local_to</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in canonical root Viewport Canvas space (pixels). If provided, transforms the position into the local coordinate space of that CanvasItem. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Vector2 Gaze position in canvas space or local coordinates. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/input_event_gaze.hpp" line="126" column="13" bodyfile="src/godot/input_event_gaze.cpp" bodystart="65" bodyend="70"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::InputEventGaze::set_position</definition>
+        <definition>void godot::InputEventGaze::set_eye_gaze</definition>
         <argsstring>(const Vector2 &amp;p_pos)</argsstring>
-        <name>set_position</name>
-        <qualifiedname>godot::InputEventGaze::set_position</qualifiedname>
+        <name>set_eye_gaze</name>
+        <qualifiedname>godot::InputEventGaze::set_eye_gaze</qualifiedname>
         <param>
           <type>const Vector2 &amp;</type>
           <declname>p_pos</declname>
         </param>
         <briefdescription>
+<para>Sets the 2D eye gaze position in canonical root Viewport Canvas coordinates. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position in root Viewport Canvas coordinates. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="79" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="79" bodyend="79"/>
+        <location file="src/godot/input_event_gaze.hpp" line="132" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="72" bodyend="74"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1aefcfd0ff25917e74fe9cc23674cc6148" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_position</definition>
-        <argsstring>() const</argsstring>
-        <name>get_position</name>
-        <qualifiedname>godot::InputEventGaze::get_position</qualifiedname>
+        <definition>Vector2 godot::InputEventGaze::get_nose_gaze</definition>
+        <argsstring>(const CanvasItem *p_local_to=nullptr) const</argsstring>
+        <name>get_nose_gaze</name>
+        <qualifiedname>godot::InputEventGaze::get_nose_gaze</qualifiedname>
+        <param>
+          <type>const CanvasItem *</type>
+          <declname>p_local_to</declname>
+          <defval>nullptr</defval>
+        </param>
         <briefdescription>
+<para>Retrieves the 2D nose gaze coordinates (nose-forward ray projected to the display) on the canvas or relative to a CanvasItem. </para>
         </briefdescription>
         <detaileddescription>
+<para>Represents the forward projection of the head pose onto the screen surface.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_local_to</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in canonical root Viewport Canvas space (pixels). If provided, transforms the position into the local coordinate space of that CanvasItem. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Vector2 Nose gaze projection in canvas space or local coordinates. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="80" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="80" bodyend="80"/>
+        <location file="src/godot/input_event_gaze.hpp" line="144" column="13" bodyfile="src/godot/input_event_gaze.cpp" bodystart="76" bodyend="81"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a1f10bd98f7b9f5931c0976a9b049064f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::InputEventGaze::set_global_position</definition>
+        <definition>void godot::InputEventGaze::set_nose_gaze</definition>
         <argsstring>(const Vector2 &amp;p_pos)</argsstring>
-        <name>set_global_position</name>
-        <qualifiedname>godot::InputEventGaze::set_global_position</qualifiedname>
+        <name>set_nose_gaze</name>
+        <qualifiedname>godot::InputEventGaze::set_nose_gaze</qualifiedname>
         <param>
           <type>const Vector2 &amp;</type>
           <declname>p_pos</declname>
         </param>
         <briefdescription>
+<para>Sets the 2D nose gaze position in canonical root Viewport Canvas coordinates. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Position in root Viewport Canvas coordinates. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="82" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="82" bodyend="82"/>
+        <location file="src/godot/input_event_gaze.hpp" line="150" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="83" bodyend="85"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a840d0191313058ef886db2546a8a6a6a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_global_position</definition>
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Transform3D</type>
+        <definition>Transform3D godot::InputEventGaze::get_head_pose</definition>
         <argsstring>() const</argsstring>
-        <name>get_global_position</name>
-        <qualifiedname>godot::InputEventGaze::get_global_position</qualifiedname>
+        <name>get_head_pose</name>
+        <qualifiedname>godot::InputEventGaze::get_head_pose</qualifiedname>
         <briefdescription>
+<para>Retrieves the 3D head pose in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para>The transform origin is the 3D position of the nose tip in millimeters relative to the camera. The transform basis represents the 3D head orientation.</para>
+<para><simplesect kind="return"><para>Transform3D Head pose transform in camera space. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="83" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="83" bodyend="83"/>
+        <location file="src/godot/input_event_gaze.hpp" line="160" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="160" bodyend="160"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a03c81800c82a06e45bb5432d84efeb1e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
-        <definition>void godot::InputEventGaze::set_screen_position</definition>
-        <argsstring>(const Vector2 &amp;p_pos)</argsstring>
-        <name>set_screen_position</name>
-        <qualifiedname>godot::InputEventGaze::set_screen_position</qualifiedname>
+        <definition>void godot::InputEventGaze::set_head_pose</definition>
+        <argsstring>(const Transform3D &amp;p_pose)</argsstring>
+        <name>set_head_pose</name>
+        <qualifiedname>godot::InputEventGaze::set_head_pose</qualifiedname>
         <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_pos</declname>
+          <type>const Transform3D &amp;</type>
+          <declname>p_pose</declname>
         </param>
         <briefdescription>
+<para>Sets the 3D head pose transform in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_pose</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Head pose transform. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="85" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="85" bodyend="85"/>
+        <location file="src/godot/input_event_gaze.hpp" line="166" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="166" bodyend="166"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a9324f97a750c246f3c72ef18642970c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_screen_position</definition>
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::InputEventGaze::get_eye_origin</definition>
         <argsstring>() const</argsstring>
-        <name>get_screen_position</name>
-        <qualifiedname>godot::InputEventGaze::get_screen_position</qualifiedname>
+        <name>get_eye_origin</name>
+        <qualifiedname>godot::InputEventGaze::get_eye_origin</qualifiedname>
         <briefdescription>
+<para>Retrieves the 3D eye origin in Godot camera space (millimeters). </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>Vector3 Origin point of the eye gaze ray in camera space. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="86" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="86" bodyend="86"/>
+        <location file="src/godot/input_event_gaze.hpp" line="172" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="172" bodyend="172"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a907eb781e7469c7dde9b2b65cfe99f84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::InputEventGaze::set_relative</definition>
-        <argsstring>(const Vector2 &amp;p_rel)</argsstring>
-        <name>set_relative</name>
-        <qualifiedname>godot::InputEventGaze::set_relative</qualifiedname>
-        <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_rel</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="88" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="88" bodyend="88"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a6e3f7e64d1c639af0fbd3c645b5acb6f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_relative</definition>
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Vector3</type>
+        <definition>Vector3 godot::InputEventGaze::get_eye_direction</definition>
         <argsstring>() const</argsstring>
-        <name>get_relative</name>
-        <qualifiedname>godot::InputEventGaze::get_relative</qualifiedname>
+        <name>get_eye_direction</name>
+        <qualifiedname>godot::InputEventGaze::get_eye_direction</qualifiedname>
         <briefdescription>
+<para>Retrieves the 3D unit eye gaze direction vector in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>Vector3 Normalized direction vector pointing in the gaze direction. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="89" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="89" bodyend="89"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1ac0b7988b29b50b2c80e691da434ae814" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::InputEventGaze::set_screen_relative</definition>
-        <argsstring>(const Vector2 &amp;p_rel)</argsstring>
-        <name>set_screen_relative</name>
-        <qualifiedname>godot::InputEventGaze::set_screen_relative</qualifiedname>
-        <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_rel</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="91" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="91" bodyend="91"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a2c8822b8408b989e4271ec197c702f9b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_screen_relative</definition>
-        <argsstring>() const</argsstring>
-        <name>get_screen_relative</name>
-        <qualifiedname>godot::InputEventGaze::get_screen_relative</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="92" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="92" bodyend="92"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1abd2c3201367a7c70ed50e6edb217fa71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::InputEventGaze::set_velocity</definition>
-        <argsstring>(const Vector2 &amp;p_vel)</argsstring>
-        <name>set_velocity</name>
-        <qualifiedname>godot::InputEventGaze::set_velocity</qualifiedname>
-        <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_vel</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="94" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="94" bodyend="94"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a75633e74061e7b8a2c3f863a51a55d9f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_velocity</definition>
-        <argsstring>() const</argsstring>
-        <name>get_velocity</name>
-        <qualifiedname>godot::InputEventGaze::get_velocity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="95" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="95" bodyend="95"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1ad8e5f9459ad6df3eca7615cdb983cf21" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
-        <type>void</type>
-        <definition>void godot::InputEventGaze::set_screen_velocity</definition>
-        <argsstring>(const Vector2 &amp;p_vel)</argsstring>
-        <name>set_screen_velocity</name>
-        <qualifiedname>godot::InputEventGaze::set_screen_velocity</qualifiedname>
-        <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_vel</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="97" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="97" bodyend="97"/>
-      </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a1a2695e104cb9b7da5d51e8773b08d2a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>Vector2 godot::InputEventGaze::get_screen_velocity</definition>
-        <argsstring>() const</argsstring>
-        <name>get_screen_velocity</name>
-        <qualifiedname>godot::InputEventGaze::get_screen_velocity</qualifiedname>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="98" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="98" bodyend="98"/>
+        <location file="src/godot/input_event_gaze.hpp" line="178" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="178" bodyend="178"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -449,12 +366,23 @@
           <declname>p_xform</declname>
         </param>
         <briefdescription>
+<para>Sets the underlying 3D head transform in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_xform</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>3D transform of the head. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="100" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="100" bodyend="100"/>
+        <location file="src/godot/input_event_gaze.hpp" line="184" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="184" bodyend="184"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Transform3D</type>
@@ -463,12 +391,16 @@
         <name>get_head_transform</name>
         <qualifiedname>godot::InputEventGaze::get_head_transform</qualifiedname>
         <briefdescription>
+<para>Retrieves the underlying 3D head transform in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>Transform3D Head transform. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="101" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="101" bodyend="101"/>
+        <location file="src/godot/input_event_gaze.hpp" line="190" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="190" bodyend="190"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -481,12 +413,23 @@
           <declname>p_xform</declname>
         </param>
         <briefdescription>
+<para>Sets the underlying 3D gaze transform in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_xform</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>3D transform of the eye gaze. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="103" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="103" bodyend="103"/>
+        <location file="src/godot/input_event_gaze.hpp" line="196" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="196" bodyend="196"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>Transform3D</type>
@@ -495,12 +438,16 @@
         <name>get_gaze_transform</name>
         <qualifiedname>godot::InputEventGaze::get_gaze_transform</qualifiedname>
         <briefdescription>
+<para>Retrieves the underlying 3D gaze transform in Godot camera space. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>Transform3D Gaze transform. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="104" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="104" bodyend="104"/>
+        <location file="src/godot/input_event_gaze.hpp" line="202" column="17" bodyfile="src/godot/input_event_gaze.hpp" bodystart="202" bodyend="202"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a2a012045ed15323894546f0fc13dd959" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -518,7 +465,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="106" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="110" bodyend="123"/>
+        <location file="src/godot/input_event_gaze.hpp" line="204" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="115" bodyend="123"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_1a2d5b5b04af966c2d93b68144afe67d16" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>String</type>
@@ -532,13 +479,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="108" column="12" bodyfile="src/godot/input_event_gaze.cpp" bodystart="125" bodyend="127"/>
+        <location file="src/godot/input_event_gaze.hpp" line="206" column="12" bodyfile="src/godot/input_event_gaze.cpp" bodystart="125" bodyend="127"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
 <para>Input event emitted when face and eye gaze tracking is actively locked. </para>
     </briefdescription>
     <detaileddescription>
+<para>Provides localized 2D gaze coordinates via <ref refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kindref="member">get_eye_gaze()</ref> and <ref refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kindref="member">get_nose_gaze()</ref>, as well as 3D head pose and eye gaze ray properties in Godot camera space. </para>
     </detaileddescription>
     <inheritancegraph>
       <node id="3">
@@ -574,57 +522,46 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/input_event_gaze.hpp" line="55" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="55" bodyend="109"/>
+    <location file="src/godot/input_event_gaze.hpp" line="100" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="100" bodyend="207"/>
     <listofallmembers>
       <member refid="classgodot_1_1_input_event_gaze_1a13b5fb43d138ce305ceeadc489f92caf" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a2d5b5b04af966c2d93b68144afe67d16" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>as_text</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a2a012045ed15323894546f0fc13dd959" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>copy_from</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" virt="non-virtual" ambiguityscope="godot::InputEventGazeBase::"><scope>godot::InputEventGaze</scope><name>copy_from</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a00366a78591bf34f9fff1b44d54b3b2a" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>eye_gaze_position</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1ab2587e100540bf1254f64fed52c5e658" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>frame_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a1bc1e08450980659ffce502a8c39bafd" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>gaze_transform</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1abfdca591beb0b4518c7c26a4b3930ba4" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_eye_direction</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_eye_gaze</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_eye_origin</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_frame_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_gaze_transform</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a840d0191313058ef886db2546a8a6a6a" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_global_position</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_head_pose</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_head_transform</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a4ee9bf4e873112fb80342bcfe1e908ee" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_left_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1aefcfd0ff25917e74fe9cc23674cc6148" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a6e3f7e64d1c639af0fbd3c645b5acb6f" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_relative</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_nose_gaze</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8f174a146075dcd7dd371f9618598257" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_right_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a9324f97a750c246f3c72ef18642970c1" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_screen_position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a2c8822b8408b989e4271ec197c702f9b" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_screen_relative</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a1a2695e104cb9b7da5d51e8773b08d2a" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_screen_velocity</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1aec4fe5aa9648434bfbbffa74ad45a204" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_timestamp_usec</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a75633e74061e7b8a2c3f863a51a55d9f" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_velocity</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a91c11eaad5ea5d890be6d2f24258597c" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>get_window_id</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a5ff5d2d0142887d11bc8ce732dfa6ee8" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>global_position</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a5d48d7430a09d1fb62c6b175d74c987b" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>head_transform</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a81f8f94e7db83ed5ec1d28ea6df60789" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>InputEventGaze</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a2a79556e6f3dbcd1cbd3c02ddba7082c" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>InputEventGazeBase</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" prot="public" virt="virtual"><scope>godot::InputEventGaze</scope><name>is_face_tracked</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8499db542b0f5194d722abf49761617c" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>left_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a402416be509a04314f9bf18c8df2c8b4" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a4625a5849bda3088a2eb2136ce2a3c2b" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>relative</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1af2e058d12e7630c545985dab7a4d0005" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>nose_gaze_position</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a5b5280b9f7126795425428aae1a3cfb1" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>right_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a0ee7f3552730789cd4eb90b7e60ce8ba" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>screen_position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1aa00d41bf71d6cd48abe1f0e692e46814" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>screen_relative</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a23f81363fea2dd12c0dc2648c84e56b4" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>screen_velocity</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_eye_gaze</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a11f3a0812c0505f1f5d5730b61a02fb2" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_frame_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_gaze_transform</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a1f10bd98f7b9f5931c0976a9b049064f" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_global_position</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_head_pose</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_head_transform</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8c8526e2d2da7f512789ffd372cb6462" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_left_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a71221e842a7a1358ed8e8361a2575133" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a907eb781e7469c7dde9b2b65cfe99f84" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_relative</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_nose_gaze</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1adc3848db74215ffe8d35c82e3f3f677f" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_right_eye_openness</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a03c81800c82a06e45bb5432d84efeb1e" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_screen_position</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1ac0b7988b29b50b2c80e691da434ae814" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_screen_relative</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1ad8e5f9459ad6df3eca7615cdb983cf21" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_screen_velocity</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a816f584e0e7c29622e19584e51107aa4" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_timestamp_usec</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1abd2c3201367a7c70ed50e6edb217fa71" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_velocity</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a2660431b4c118384a33406ff14aaecea" prot="public" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>set_window_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1ab85f397df770a1a1afc7bdae80c86a35" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>timestamp_usec</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_1a2f55320de0ab6eebb15098e7af8efae1" prot="private" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>velocity</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a5077992cb933e93ef69894bdf661d1ec" prot="protected" virt="non-virtual"><scope>godot::InputEventGaze</scope><name>window_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_1ae538cf85b2ca5fa4b95341c3f1a18401" prot="public" virt="virtual"><scope>godot::InputEventGaze</scope><name>~InputEventGaze</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a00c3f06deb9f6dd63b691ab34f49020a" prot="public" virt="virtual"><scope>godot::InputEventGaze</scope><name>~InputEventGazeBase</name></member>

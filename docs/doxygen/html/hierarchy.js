@@ -76,5 +76,6 @@ var hierarchy =
     [ "Gaze::SpacedVector2&lt; S &gt;", "struct_gaze_1_1_spaced_vector2.html", null ],
     [ "Gaze::SpacedVector3&lt; S &gt;", "struct_gaze_1_1_spaced_vector3.html", null ],
     [ "Gaze::SQPnPSolver", "class_gaze_1_1_s_q_pn_p_solver.html", null ],
+    [ "Gaze::StageTimings", "struct_gaze_1_1_stage_timings.html", null ],
     [ "Gaze::YuNetResult", "struct_gaze_1_1_yu_net_result.html", null ]
 ];

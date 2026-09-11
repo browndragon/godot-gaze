@@ -157,26 +157,121 @@ public:
     Dictionary get_pipeline_stage_timings() const;
 
     // --- Ray Projection Math ---
+    /**
+     * @brief Projects a 3D ray in Godot camera space onto the camera plane (Z = 0 plane in camera space).
+     *
+     * @param p_origin_cam Ray origin in camera space (millimeters).
+     * @param p_direction_cam Unit ray direction in camera space.
+     * @return Vector3 Intersection point on camera plane, or (INFINITY, INFINITY, INFINITY) if parallel.
+     */
     Vector3 project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
+
+    /**
+     * @brief Projects a 3D ray in Godot camera space onto the physical display surface and transforms the hit position
+     *        into canonical 2D Viewport Canvas space (or relative to a specified CanvasItem).
+     *
+     * Automatically accounts for physical camera offsets, screen size and pitch from the active GazeDeviceProfile,
+     * the current window position on screen, and display DPI scaling.
+     *
+     * @param p_origin_cam Ray origin in camera space (millimeters).
+     * @param p_direction_cam Unit ray direction in camera space.
+     * @param p_local_to Optional CanvasItem (Node2D or Control). If null (default), returns position in canonical
+     *                   root Viewport Canvas coordinates. If specified, transforms the point into the local space of that CanvasItem.
+     * @return Vector2 Intersection point in canvas space or local coordinates, or (INFINITY, INFINITY) if no intersection.
+     */
     Vector2 project_ray_to_canvas(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, const CanvasItem *p_local_to = nullptr) const;
+
+    /**
+     * @brief Projects a 3D ray in Godot camera space onto the physical display surface and returns window-relative logical points.
+     *
+     * Returns coordinates in unscaled window points before Viewport canvas transformation.
+     *
+     * @param p_origin_cam Ray origin in camera space (millimeters).
+     * @param p_direction_cam Unit ray direction in camera space.
+     * @return Vector2 Intersection point in window logical points, or (INFINITY, INFINITY) if no intersection.
+     */
     Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 
     // --- Event Factory ---
+    /**
+     * @brief Overrides the event factory used to instantiate InputEventGaze and InputEventGazeMissing events.
+     * @param p_factory Custom GazeEventFactory instance or null to restore default factory.
+     */
     void set_event_factory(const Ref<GazeEventFactory>& p_factory);
+
+    /**
+     * @brief Retrieves the active GazeEventFactory instance.
+     * @return Ref<GazeEventFactory> The current event factory.
+     */
     Ref<GazeEventFactory> get_event_factory();
+
     void initialize_scene_resources();
     void _ensure_event_factory_loaded();
+
+    /**
+     * @brief Instantiates a default InputEventGaze populated with the latest tracking frame data.
+     * @return Ref<InputEventGaze> Newly created gaze event.
+     */
     Ref<InputEventGaze> create_default_event();
+
+    /**
+     * @brief Instantiates an InputEventGazeMissing event indicating tracking loss.
+     * @param p_reason MissingReason enum indicating why tracking was lost.
+     * @return Ref<InputEventGazeMissing> Newly created missing gaze event.
+     */
     Ref<InputEventGazeMissing> create_default_missing_event(int p_reason);
 
     // --- Emulation Settings ---
+    /**
+     * @brief Enables or disables mouse-to-gaze input emulation.
+     *
+     * When enabled, mouse cursor movement and clicks synthesize InputEventGaze events
+     * during development or when camera tracking is absent/occluded.
+     *
+     * @param p_enable True to enable mouse emulation.
+     */
     void set_emulate_gaze_from_mouse(bool p_enable);
+
+    /**
+     * @brief Checks if mouse-to-gaze input emulation is currently enabled.
+     * @return bool True if enabled.
+     */
     bool get_emulate_gaze_from_mouse() const;
+
+    /**
+     * @brief Enables or disables gaze-to-mouse emulation (driving the OS/window mouse cursor from eye gaze).
+     * @param p_enable True to enable.
+     */
     void set_emulate_mouse_from_gaze(bool p_enable);
+
+    /**
+     * @brief Checks if gaze-to-mouse emulation is currently enabled.
+     * @return bool True if enabled.
+     */
     bool get_emulate_mouse_from_gaze() const;
+
+    /**
+     * @brief Sets the dwell time in seconds for mouse interaction override before smoothly returning to camera gaze.
+     * @param p_sec Dwell time in seconds.
+     */
     void set_mouse_emulation_dwell_sec(float p_sec);
+
+    /**
+     * @brief Retrieves the mouse emulation dwell time in seconds.
+     * @return float Dwell time in seconds.
+     */
     float get_mouse_emulation_dwell_sec() const;
+
+    /**
+     * @brief Sets the transition blend duration in seconds between mouse emulation and camera tracking.
+     * @param p_sec Transition duration in seconds.
+     */
     void set_mouse_emulation_transition_sec(float p_sec);
+
+    /**
+     * @brief Retrieves the transition blend duration in seconds.
+     * @return float Transition duration in seconds.
+     */
     float get_mouse_emulation_transition_sec() const;
 
 #ifdef WEB_ENABLED

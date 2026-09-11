@@ -132,62 +132,80 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__frame__d
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">constexpr</span> <span class="keywordtype">size_t</span> EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANNELS; <span class="comment">// 10800 bytes</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="foldopen" id="foldopen00013" data-start="{" data-end="};">
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_frame_data.html">   13</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_frame_data.html">GazeFrameData</a> {</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    std::vector&lt;uint8_t&gt; camera_raw_bgr;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    std::vector&lt;uint8_t&gt; internal_rotated_frame_bgr; <span class="comment">// Pre-allocated scratch space for working hint-rolled buffer</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">int</span> camera_width = 0;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">int</span> camera_height = 0;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">double</span> timestamp = 0.0;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">double</span> camera_focal_length_px = -1.0;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">double</span> camera_fov_degrees = DEFAULT_CAMERA_FOV_DEGREES;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">float</span> roll_hint_rad = 0.0f;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">bool</span> auto_roll_enabled = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_rect.html">GazeRect</a> face_bbox;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">float</span> face_score = 0.0f;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">float</span> eye_box_sz = 0.0f;</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    std::vector&lt;SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;&gt; internal_landmarks_working_px;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a> eye_crops;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">bool</span> face_detected = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">bool</span> gaze_success = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">float</span> left_eye_openness = 1.0f;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">float</span> right_eye_openness = 1.0f;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    GodotFaceTransform3D head_transform;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> head_translation = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 0.0);</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_struct" href="struct_gaze_1_1_spaced_vector3.html">SpacedVector3&lt;Space::GodotCameraEuler&gt;</a> head_rotation = <a class="code hl_struct" href="struct_gaze_1_1_spaced_vector3.html">SpacedVector3&lt;Space::GodotCameraEuler&gt;</a>(0.0, 0.0, 0.0);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> gaze_origin = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 0.0);</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> gaze_direction = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 1.0);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">bool</span> has_landmarks_2d = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">float</span> landmarks_2d_px[35 * 2] = {0.0f};</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="comment">// Pointers to output crop image buffers</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    uint8_t* left_eye_buffer = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    uint8_t* right_eye_buffer = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    uint8_t* full_crop_buffer = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">size_t</span> full_crop_bytes = 0;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    uint64_t face_context_id = 0;</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    uint64_t eye_context_id = 0;</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    uint64_t face_rid_val = 0; <span class="comment">// Compatibility alias</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    uint64_t eye_rid_val = 0;  <span class="comment">// Compatibility alias</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="comment">// Generic opaque user context pointer</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keywordtype">void</span>* userdata = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_stage_timings.html">   13</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_stage_timings.html">StageTimings</a> {</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordtype">double</span> capture_gpu_readback_ms = 0.0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">double</span> roll_prewarp_ms = 0.0;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">double</span> face_yunet_ms = 0.0;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="keywordtype">double</span> landmark_adas_ms = 0.0;</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordtype">double</span> pnp_solve_ms = 0.0;</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    <span class="keywordtype">double</span> eye_crop_warp_ms = 0.0;</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    <span class="keywordtype">double</span> eye_state_ms = 0.0;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="keywordtype">double</span> gaze_direction_ms = 0.0;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">double</span> unroll_ms = 0.0;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">double</span> total_pipeline_ms = 0.0;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>};</div>
 </div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
+<div class="foldopen" id="foldopen00026" data-start="{" data-end="};">
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_frame_data.html">   26</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_frame_data.html">GazeFrameData</a> {</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    std::vector&lt;uint8_t&gt; camera_raw_bgr;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    std::vector&lt;uint8_t&gt; internal_rotated_frame_bgr; <span class="comment">// Pre-allocated scratch space for working hint-rolled buffer</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">int</span> camera_width = 0;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keywordtype">int</span> camera_height = 0;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">double</span> timestamp = 0.0;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keywordtype">double</span> camera_focal_length_px = -1.0;</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">double</span> camera_fov_degrees = DEFAULT_CAMERA_FOV_DEGREES;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">float</span> roll_hint_rad = 0.0f;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">bool</span> auto_roll_enabled = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <a class="code hl_struct" href="struct_gaze_1_1_gaze_rect.html">GazeRect</a> face_bbox;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">float</span> face_score = 0.0f;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">float</span> eye_box_sz = 0.0f;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    std::vector&lt;SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;&gt; internal_landmarks_working_px;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <a class="code hl_struct" href="struct_gaze_1_1_eye_crops.html">EyeCrops</a> eye_crops;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">bool</span> face_detected = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> gaze_success = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">float</span> left_eye_openness = 1.0f;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">float</span> right_eye_openness = 1.0f;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    GodotFaceTransform3D head_transform;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> head_translation = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 0.0);</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <a class="code hl_struct" href="struct_gaze_1_1_spaced_vector3.html">SpacedVector3&lt;Space::GodotCameraEuler&gt;</a> head_rotation = <a class="code hl_struct" href="struct_gaze_1_1_spaced_vector3.html">SpacedVector3&lt;Space::GodotCameraEuler&gt;</a>(0.0, 0.0, 0.0);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> gaze_origin = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 0.0);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a> gaze_direction = <a class="code hl_typedef" href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">GodotCameraVector3</a>(0.0, 0.0, 1.0);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="keywordtype">bool</span> has_landmarks_2d = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">float</span> landmarks_2d_px[35 * 2] = {0.0f};</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    <span class="comment">// Pointers to output crop image buffers</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    uint8_t* left_eye_buffer = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    uint8_t* right_eye_buffer = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    uint8_t* full_crop_buffer = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keywordtype">size_t</span> full_crop_bytes = 0;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    uint64_t face_context_id = 0;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    uint64_t eye_context_id = 0;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    uint64_t face_rid_val = 0; <span class="comment">// Compatibility alias</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    uint64_t eye_rid_val = 0;  <span class="comment">// Compatibility alias</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="comment">// Generic opaque user context pointer</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">void</span>* userdata = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="comment">// Stage Telemetry Timings (wall-clock milliseconds)</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <a class="code hl_struct" href="struct_gaze_1_1_stage_timings.html">StageTimings</a> timings;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>};</div>
+</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>} <span class="comment">// namespace Gaze</span></div>
 <div class="ttc" id="aface__pipeline_8hpp_html"><div class="ttname"><a href="face__pipeline_8hpp.html">face_pipeline.hpp</a></div><div class="ttdoc">Face detection, landmarking, and normalizer interface (Layer 2).</div></div>
 <div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency Image and Geometric Math utilities.</div></div>
 <div class="ttc" id="aopencv__space__conversions_8hpp_html_a0491a44211152b05dd97f8d68ff790f7"><div class="ttname"><a href="opencv__space__conversions_8hpp.html#a0491a44211152b05dd97f8d68ff790f7">Gaze::GodotCameraVector3</a></div><div class="ttdeci">SpacedVector3&lt; Space::GodotCamera &gt; GodotCameraVector3</div><div class="ttdoc">Canonical Hub and Spoke Type Aliases.</div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:336</div></div>
 <div class="ttc" id="astruct_gaze_1_1_eye_crops_html"><div class="ttname"><a href="struct_gaze_1_1_eye_crops.html">Gaze::EyeCrops</a></div><div class="ttdef"><b>Definition</b> face_pipeline.hpp:43</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_frame_data_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_frame_data.html">Gaze::GazeFrameData</a></div><div class="ttdef"><b>Definition</b> gaze_frame_data.hpp:13</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_frame_data_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_frame_data.html">Gaze::GazeFrameData</a></div><div class="ttdef"><b>Definition</b> gaze_frame_data.hpp:26</div></div>
 <div class="ttc" id="astruct_gaze_1_1_gaze_rect_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_rect.html">Gaze::GazeRect</a></div><div class="ttdef"><b>Definition</b> math_defs.hpp:170</div></div>
 <div class="ttc" id="astruct_gaze_1_1_spaced_vector3_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_vector3.html">Gaze::SpacedVector3</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:44</div></div>
+<div class="ttc" id="astruct_gaze_1_1_stage_timings_html"><div class="ttname"><a href="struct_gaze_1_1_stage_timings.html">Gaze::StageTimings</a></div><div class="ttdef"><b>Definition</b> gaze_frame_data.hpp:13</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

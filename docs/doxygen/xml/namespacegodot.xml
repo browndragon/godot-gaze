@@ -34,7 +34,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="79" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="79" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="81" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="81" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1ab070609219a178075b631f7a0e54dfe9" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">GazeServerImpl::CameraInfo</ref></type>
@@ -48,7 +48,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="80" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="80" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="82" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="82" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aa24283970a9aaa3091d657d00c57ad5c" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">GazeServerImpl::FaceInfo</ref></type>
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="81" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="81" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="83" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="83" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aaa7ce825608ed8737c49e990b8d07885" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">GazeServerImpl::EyeInfo</ref></type>
@@ -76,7 +76,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="82" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="82" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="84" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="84" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="vision__server_8hpp_1afcd7be7020b34eea5e6a7f3f1fb53892" prot="public" static="no">
         <type><ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref></type>
@@ -90,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="201" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="201" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="203" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="203" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="vision__server_8hpp_1aa43b7184144b93b376af4769d3234caa" prot="public" static="no">
         <type><ref refid="classgodot_1_1_mock_vision_server" kindref="compound">MockVisionServer</ref></type>
@@ -104,7 +104,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="202" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="202" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="204" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="204" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="var">
@@ -155,6 +155,50 @@
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
+      <memberdef kind="function" id="gaze__server_8cpp_1ad236010cbcf08245b59d3f79c3fd4b16" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>static Vector2 godot::_calc_projected_window_px</definition>
+        <argsstring>(const GazeServerImpl *p_impl, const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam)</argsstring>
+        <name>_calc_projected_window_px</name>
+        <qualifiedname>godot::_calc_projected_window_px</qualifiedname>
+        <param>
+          <type>const <ref refid="structgodot_1_1_gaze_server_impl" kindref="compound">GazeServerImpl</ref> *</type>
+          <declname>p_impl</declname>
+        </param>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_origin_cam</declname>
+        </param>
+        <param>
+          <type>const Vector3 &amp;</type>
+          <declname>p_direction_cam</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="635" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="635" bodyend="669"/>
+      </memberdef>
+      <memberdef kind="function" id="gaze__server_8cpp_1abf70669217d09b5600fdf00b2bb81c69" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>static Vector2 godot::_xform_window_px_to_canvas</definition>
+        <argsstring>(const Vector2 &amp;p_win_pos)</argsstring>
+        <name>_xform_window_px_to_canvas</name>
+        <qualifiedname>godot::_xform_window_px_to_canvas</qualifiedname>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_win_pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="848" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="848" bodyend="865"/>
+      </memberdef>
       <memberdef kind="function" id="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>String</type>
         <definition>String godot::resolve_model_path</definition>

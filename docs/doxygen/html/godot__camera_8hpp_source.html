@@ -145,19 +145,21 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('godot__camera_
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">double</span> start_time;</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">int</span> target_width = 640;</div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordtype">int</span> target_height = 480;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    GodotCamera(<span class="keywordtype">int</span> device = 0);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="keyword">virtual</span> ~GodotCamera();</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> initialize() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_resolution(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> grab_frame(<a class="code hl_struct" href="struct_gaze_1_1_frame.html">Frame</a>&amp; out_frame) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> release() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>};</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keywordtype">double</span> latest_readback_ms = 0.0;</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    GodotCamera(<span class="keywordtype">int</span> device = 0);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">virtual</span> ~GodotCamera();</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> initialize() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> set_resolution(<span class="keywordtype">int</span> w, <span class="keywordtype">int</span> h) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> grab_frame(<a class="code hl_struct" href="struct_gaze_1_1_frame.html">Frame</a>&amp; out_frame) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> release() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">double</span> get_latest_readback_ms()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> latest_readback_ms; }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>};</div>
 </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>} <span class="comment">// namespace Gaze</span></div>
 <div class="ttc" id="acamera__interface_8hpp_html"><div class="ttname"><a href="camera__interface_8hpp.html">camera_interface.hpp</a></div><div class="ttdoc">Frame Ingestion Interface (Layer 1).</div></div>
 <div class="ttc" id="aclass_gaze_1_1_camera_interface_html"><div class="ttname"><a href="class_gaze_1_1_camera_interface.html">Gaze::CameraInterface</a></div><div class="ttdef"><b>Definition</b> camera_interface.hpp:30</div></div>
 <div class="ttc" id="astruct_gaze_1_1_frame_html"><div class="ttname"><a href="struct_gaze_1_1_frame.html">Gaze::Frame</a></div><div class="ttdef"><b>Definition</b> camera_interface.hpp:17</div></div>

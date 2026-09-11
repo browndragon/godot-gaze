@@ -20,7 +20,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="19" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="19" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="21" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_base_1ab2587e100540bf1254f64fed52c5e658" prot="protected" static="no" mutable="no">
         <type>uint64_t</type>
@@ -35,7 +35,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="20" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="20" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="22" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="22" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_base_1ab85f397df770a1a1afc7bdae80c86a35" prot="protected" static="no" mutable="no">
         <type>uint64_t</type>
@@ -50,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="21" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="21" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="23" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="23" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_base_1a8499db542b0f5194d722abf49761617c" prot="protected" static="no" mutable="no">
         <type>float</type>
@@ -65,7 +65,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="22" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="22" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="24" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_input_event_gaze_base_1a5b5280b9f7126795425428aae1a3cfb1" prot="protected" static="no" mutable="no">
         <type>float</type>
@@ -80,7 +80,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="23" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="23" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="25" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="25" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="16" column="5"/>
+        <location file="src/godot/input_event_gaze.hpp" line="18" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="25" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="16" bodyend="41"/>
+        <location file="src/godot/input_event_gaze.hpp" line="27" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="17" bodyend="42"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="28" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="9" bodyend="14"/>
+        <location file="src/godot/input_event_gaze.hpp" line="30" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="10" bodyend="15"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a00c3f06deb9f6dd63b691ab34f49020a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="29" column="13"/>
+        <location file="src/godot/input_event_gaze.hpp" line="31" column="13"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a2660431b4c118384a33406ff14aaecea" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -166,7 +166,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="31" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="31" bodyend="31"/>
+        <location file="src/godot/input_event_gaze.hpp" line="33" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="33" bodyend="33"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a91c11eaad5ea5d890be6d2f24258597c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>int64_t</type>
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="32" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="32" bodyend="32"/>
+        <location file="src/godot/input_event_gaze.hpp" line="34" column="13" bodyfile="src/godot/input_event_gaze.hpp" bodystart="34" bodyend="34"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a11f3a0812c0505f1f5d5730b61a02fb2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -193,12 +193,23 @@
           <declname>p_id</declname>
         </param>
         <briefdescription>
+<para>Sets the sequential video pipeline frame identifier. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Monotonically increasing frame counter. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="34" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="34" bodyend="34"/>
+        <location file="src/godot/input_event_gaze.hpp" line="40" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="40" bodyend="40"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint64_t</type>
@@ -207,12 +218,16 @@
         <name>get_frame_id</name>
         <qualifiedname>godot::InputEventGazeBase::get_frame_id</qualifiedname>
         <briefdescription>
+<para>Retrieves the sequential video pipeline frame identifier. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>uint64_t Frame counter. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="35" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="35" bodyend="35"/>
+        <location file="src/godot/input_event_gaze.hpp" line="46" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a816f584e0e7c29622e19584e51107aa4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -225,12 +240,23 @@
           <declname>p_time</declname>
         </param>
         <briefdescription>
+<para>Sets the event creation timestamp in microseconds (from Time::get_ticks_usec()). </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_time</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Timestamp in microseconds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="37" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="37" bodyend="37"/>
+        <location file="src/godot/input_event_gaze.hpp" line="52" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="52" bodyend="52"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1aec4fe5aa9648434bfbbffa74ad45a204" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>uint64_t</type>
@@ -239,12 +265,16 @@
         <name>get_timestamp_usec</name>
         <qualifiedname>godot::InputEventGazeBase::get_timestamp_usec</qualifiedname>
         <briefdescription>
+<para>Retrieves the event creation timestamp in microseconds. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>uint64_t Timestamp in microseconds. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="38" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="38" bodyend="38"/>
+        <location file="src/godot/input_event_gaze.hpp" line="58" column="14" bodyfile="src/godot/input_event_gaze.hpp" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a8c8526e2d2da7f512789ffd372cb6462" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -257,12 +287,23 @@
           <declname>p_val</declname>
         </param>
         <briefdescription>
+<para>Sets the left eye openness estimate [0.0 = fully closed, 1.0 = fully open]. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Openness value between 0.0 and 1.0. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="40" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="40" bodyend="40"/>
+        <location file="src/godot/input_event_gaze.hpp" line="64" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="64" bodyend="64"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a4ee9bf4e873112fb80342bcfe1e908ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -271,12 +312,16 @@
         <name>get_left_eye_openness</name>
         <qualifiedname>godot::InputEventGazeBase::get_left_eye_openness</qualifiedname>
         <briefdescription>
+<para>Retrieves the left eye openness estimate [0.0 = fully closed, 1.0 = fully open]. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>float Openness value between 0.0 and 1.0. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="41" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="41" bodyend="41"/>
+        <location file="src/godot/input_event_gaze.hpp" line="70" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="70" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1adc3848db74215ffe8d35c82e3f3f677f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -289,12 +334,23 @@
           <declname>p_val</declname>
         </param>
         <briefdescription>
+<para>Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open]. </para>
         </briefdescription>
         <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_val</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Openness value between 0.0 and 1.0. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="43" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="43" bodyend="43"/>
+        <location file="src/godot/input_event_gaze.hpp" line="76" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="76" bodyend="76"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a8f174a146075dcd7dd371f9618598257" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -303,12 +359,16 @@
         <name>get_right_eye_openness</name>
         <qualifiedname>godot::InputEventGazeBase::get_right_eye_openness</qualifiedname>
         <briefdescription>
+<para>Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open]. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>float Openness value between 0.0 and 1.0. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="44" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="44" bodyend="44"/>
+        <location file="src/godot/input_event_gaze.hpp" line="82" column="11" bodyfile="src/godot/input_event_gaze.hpp" bodystart="82" bodyend="82"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -319,12 +379,16 @@
         <reimplementedby refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866">is_face_tracked</reimplementedby>
         <reimplementedby refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1">is_face_tracked</reimplementedby>
         <briefdescription>
+<para>Indicates whether valid face tracking data is present in this event. </para>
         </briefdescription>
         <detaileddescription>
+<para><simplesect kind="return"><para>bool True if face is tracked; false for missing or lost tracking events. </para>
+</simplesect>
+</para>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="46" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="46" bodyend="46"/>
+        <location file="src/godot/input_event_gaze.hpp" line="88" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="88" bodyend="88"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -342,7 +406,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="48" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="43" bodyend="51"/>
+        <location file="src/godot/input_event_gaze.hpp" line="90" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="44" bodyend="52"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -384,7 +448,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/input_event_gaze.hpp" line="15" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="15" bodyend="49"/>
+    <location file="src/godot/input_event_gaze.hpp" line="17" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="17" bodyend="91"/>
     <listofallmembers>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8d87766d27085162f61f3a8528edca82" prot="protected" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>copy_from</name></member>

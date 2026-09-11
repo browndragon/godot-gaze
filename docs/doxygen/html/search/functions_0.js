@@ -12,5 +12,7 @@ var searchData=
   ['camera_5fset_5fresolution_9',['camera_set_resolution',['../classgodot_1_1_vision_server.html#a9a6091c39ad5f3a63f5a3dbc2cdfd7ce',1,'godot::VisionServer']]],
   ['camera_5fstart_10',['camera_start',['../classgodot_1_1_vision_server.html#a6a077be45fb502ef66adbd69a9b1baf0',1,'godot::VisionServer::camera_start()'],['../classgodot_1_1_mock_vision_server.html#a4a43ab97ac090d728fe6a2a946f4a43b',1,'godot::MockVisionServer::camera_start()']]],
   ['camera_5fstop_11',['camera_stop',['../classgodot_1_1_vision_server.html#acfd359215cca0d1bd9c86a2832b883bc',1,'godot::VisionServer::camera_stop()'],['../classgodot_1_1_mock_vision_server.html#aa043038fb3f8f4b57a8df1ed58643b8b',1,'godot::MockVisionServer::camera_stop()']]],
-  ['clear_12',['clear',['../class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#abbae97910f3f83690e897b7f0a464b10',1,'Gaze::Concurrency::AtomicMailbox']]]
+  ['clear_12',['clear',['../class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#abbae97910f3f83690e897b7f0a464b10',1,'Gaze::Concurrency::AtomicMailbox']]],
+  ['create_5fdefault_5fevent_13',['create_default_event',['../classgodot_1_1_gaze_server.html#aa9545b9113275a2dab894a858d0db570',1,'godot::GazeServer']]],
+  ['create_5fdefault_5fmissing_5fevent_14',['create_default_missing_event',['../classgodot_1_1_gaze_server.html#acd3a78080049bde148630357aedabc7c',1,'godot::GazeServer']]]
 ];

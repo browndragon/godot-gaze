@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <class name="InputEventGaze" inherits="godot::InputEventGazeBase">
 	<brief_description>Input event emitted when face and eye gaze tracking is actively locked.</brief_description>
-	<description></description>
+	<description>Input event representing a real-time gaze tracking update. Dispatched when the user's face and eyes are actively tracked. Provides 2D gaze points projected onto viewport canvas space or localized to specific [CanvasItem] nodes via [method get_eye_gaze] and [method get_nose_gaze], as well as 3D spatial pose and gaze vectors.</description>
 	<tutorials></tutorials>
 	<methods>
 		<method name="is_face_tracked">
 			<return type="bool"></return>
-			<description></description>
+			<description>Returns [code]true[/code] indicating active face tracking in this event.</description>
 		</method>
 		<method name="get_eye_gaze">
 			<return type="Vector2"></return>
 			<param index="0" name="local_to" type="const CanvasItem *" default="null"></param>
-			<description></description>
+			<description>Returns the estimated 2D eye gaze position. If [param local_to] is [code]null[/code], the position is in canonical root Viewport Canvas space (pixels). If a [CanvasItem] (e.g. [Control] or [Node2D]) is passed, the position is transformed into that item's local coordinate space.</description>
 		</method>
 		<method name="set_eye_gaze">
 			<return type="void"></return>
 			<param index="0" name="eye_gaze" type="const Vector2 &amp;"></param>
-			<description></description>
+			<description>Sets the 2D eye gaze position in canonical root Viewport Canvas coordinates.</description>
 		</method>
 		<method name="get_nose_gaze">
 			<return type="Vector2"></return>
 			<param index="0" name="local_to" type="const CanvasItem *" default="null"></param>
-			<description></description>
+			<description>Returns the estimated 2D nose gaze position (projection of the nose-forward vector onto the display surface). If [param local_to] is [code]null[/code], the position is in canonical root Viewport Canvas space (pixels). If a [CanvasItem] is passed, the position is transformed into that item's local coordinate space.</description>
 		</method>
 		<method name="set_nose_gaze">
 			<return type="void"></return>
 			<param index="0" name="nose_gaze" type="const Vector2 &amp;"></param>
-			<description></description>
+			<description>Sets the 2D nose gaze position in canonical root Viewport Canvas coordinates.</description>
 		</method>
 		<method name="get_head_pose">
 			<return type="Transform3D"></return>
-			<description></description>
+			<description>Returns the 3D head pose in Godot camera space. The origin represents the 3D nose tip in millimeters relative to the camera; the basis represents the head orientation.</description>
 		</method>
 		<method name="set_head_pose">
 			<return type="void"></return>
 			<param index="0" name="head_pose" type="const Transform3D &amp;"></param>
-			<description></description>
+			<description>Sets the 3D head pose in Godot camera space.</description>
 		</method>
 		<method name="get_eye_origin">
 			<return type="Vector3"></return>
-			<description></description>
+			<description>Returns the 3D eye gaze origin in Godot camera space (millimeters).</description>
 		</method>
 		<method name="get_eye_direction">
 			<return type="Vector3"></return>
-			<description></description>
+			<description>Returns the 3D normalized unit direction vector of the eye gaze in Godot camera space.</description>
 		</method>
 		<method name="set_head_transform">
 			<return type="void"></return>
 			<param index="0" name="head_transform" type="const Transform3D &amp;"></param>
-			<description></description>
+			<description>Sets the underlying 3D head transform in Godot camera space.</description>
 		</method>
 		<method name="get_head_transform">
 			<return type="Transform3D"></return>
-			<description></description>
+			<description>Returns the underlying 3D head transform in Godot camera space.</description>
 		</method>
 		<method name="set_gaze_transform">
 			<return type="void"></return>
 			<param index="0" name="gaze_transform" type="const Transform3D &amp;"></param>
-			<description></description>
+			<description>Sets the underlying 3D gaze transform in Godot camera space.</description>
 		</method>
 		<method name="get_gaze_transform">
 			<return type="Transform3D"></return>
-			<description></description>
+			<description>Returns the underlying 3D gaze transform in Godot camera space.</description>
 		</method>
 		<method name="copy_from">
 			<return type="void"></return>
 			<param index="0" name="other" type="const Ref&lt; InputEventGaze &gt; &amp;"></param>
-			<description></description>
+			<description>Copies all event fields from another [InputEventGaze] instance.</description>
 		</method>
 		<method name="as_text">
 			<return type="String"></return>
-			<description></description>
+			<description>Returns a formatted string representation of this gaze event.</description>
 		</method>
 	</methods>
 	<members>
-		<member name="head_pose" type="Transform3D" setter="set_head_pose" getter="get_head_pose"></member>
-		<member name="eye_origin" type="Vector3" getter="get_eye_origin"></member>
-		<member name="eye_direction" type="Vector3" getter="get_eye_direction"></member>
-		<member name="head_transform" type="Transform3D" setter="set_head_transform" getter="get_head_transform"></member>
-		<member name="gaze_transform" type="Transform3D" setter="set_gaze_transform" getter="get_gaze_transform"></member>
+		<member name="head_pose" type="Transform3D" setter="set_head_pose" getter="get_head_pose">3D head pose in Godot camera space. Origin is nose tip in mm; basis is head orientation.</member>
+		<member name="eye_origin" type="Vector3" getter="get_eye_origin">3D eye origin in Godot camera space (millimeters).</member>
+		<member name="eye_direction" type="Vector3" getter="get_eye_direction">3D normalized unit gaze direction vector in Godot camera space.</member>
+		<member name="head_transform" type="Transform3D" setter="set_head_transform" getter="get_head_transform">Underlying 3D head transform in Godot camera space.</member>
+		<member name="gaze_transform" type="Transform3D" setter="set_gaze_transform" getter="get_gaze_transform">Underlying 3D gaze transform in Godot camera space.</member>
 	</members>
 	<signals></signals>
 </class>

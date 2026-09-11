@@ -200,12 +200,12 @@ B. Local Development Symlinking (For Contributors)</h3>
 <div class="line">func _unhandled_input(event: InputEvent) -&gt; void:</div>
 <div class="line">    if event is InputEventGaze:</div>
 <div class="line">        # 2D Screen / Viewport position</div>
-<div class="line">        cursor.global_position = event.position</div>
+<div class="line">        cursor.global_position = event.get_eye_gaze()</div>
 <div class="line">        status.text = &quot;Face Tracked (Openness L: %.2f, R: %.2f)&quot; % [event.left_eye_openness, event.right_eye_openness]</div>
 <div class="line"> </div>
-<div class="line">        # 3D Head &amp; Gaze transforms</div>
-<div class="line">        var head_pos_mm = event.head_transform.origin</div>
-<div class="line">        var gaze_ray_dir = event.gaze_transform.basis.z * -1.0</div>
+<div class="line">        # 3D Head &amp; Gaze properties</div>
+<div class="line">        var head_pos_mm = event.head_pose.origin</div>
+<div class="line">        var eye_ray_dir = event.eye_direction</div>
 <div class="line">    elif event is InputEventGazeMissing:</div>
 <div class="line">        status.text = &quot;Gaze Lost (Reason: %d)&quot; % event.reason</div>
 <div class="line"> </div>

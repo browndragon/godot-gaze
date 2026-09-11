@@ -33,6 +33,7 @@
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1ad71b081130a9025f641a5013ec93ec5d" kind="variable"><name>is_active</name></member>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a2de173a0c1f8c4379e9edd043b60a062" kind="variable"><name>preview_requested</name></member>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1af5b8e0531441ec31de3f903522c179df" kind="variable"><name>preview_refcount</name></member>
+    <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a4a3c3fd68f9ae844ea2f16cc982f3dcd" kind="variable"><name>last_readback_ms</name></member>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1adf7e101ef813739f83e0a13023a9db36" kind="variable"><name>last_frame</name></member>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1ad4a67b89b5769698709ef729c8864c84" kind="variable"><name>last_frame_data</name></member>
   </compound>
@@ -282,6 +283,7 @@
     <member refid="struct_gaze_1_1_gaze_frame_data_1a4d40c3bae02719faf99221c1a2fe601b" kind="variable"><name>face_rid_val</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1a86d9bc667ea9de42233134860ae730aa" kind="variable"><name>eye_rid_val</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1a1df8d4e333420fa133b88cc368d9b23f" kind="variable"><name>userdata</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a2ef0d9918f9d33ad207aa1fc3dfa3e59" kind="variable"><name>timings</name></member>
   </compound>
   <compound refid="class_gaze_1_1_gaze_model" kind="class"><name>Gaze::GazeModel</name>
     <member refid="class_gaze_1_1_gaze_model_1a419a9fc2a99ec595664b44a776f8a2ce" kind="function"><name>~GazeModel</name></member>
@@ -403,7 +405,9 @@
     <member refid="classgodot_1_1_gaze_server_1a3f05e8e7855a3c22ceee621cec8b0ba8" kind="function"><name>set_camera_preview_requested</name></member>
     <member refid="classgodot_1_1_gaze_server_1a56e26877b37e41f55f3d3917b15ca17a" kind="function"><name>is_camera_preview_requested</name></member>
     <member refid="classgodot_1_1_gaze_server_1a16b55bce0b64ed6f4cce27f65cfa1649" kind="function"><name>emit_camera_frame_ready</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ac769ef74fbb7aac01be60c5c1614ef86" kind="function"><name>get_pipeline_stage_timings</name></member>
     <member refid="classgodot_1_1_gaze_server_1a456c4cc19663f4186a12fcaa4ea9cc36" kind="function"><name>project_ray_to_camera_plane</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a40560cb70716da157931466cabb71026" kind="function"><name>project_ray_to_canvas</name></member>
     <member refid="classgodot_1_1_gaze_server_1a377fa1f5b94a4e157fc0e126d9688e31" kind="function"><name>project_ray_to_viewport</name></member>
     <member refid="classgodot_1_1_gaze_server_1a8df80b0cde997e9fb236f6d66ef8a828" kind="function"><name>set_event_factory</name></member>
     <member refid="classgodot_1_1_gaze_server_1a338a0aa6c726acedd3b84c5af25dad89" kind="function"><name>get_event_factory</name></member>
@@ -512,12 +516,14 @@
     <member refid="class_gaze_1_1_godot_camera_1a859683030696a452a766e1358cee8da8" kind="variable"><name>start_time</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a222c51343fd8e206f339ccbec0f691bf" kind="variable"><name>target_width</name></member>
     <member refid="class_gaze_1_1_godot_camera_1ad3cd6f89762f5734cc89fad5c032dc39" kind="variable"><name>target_height</name></member>
+    <member refid="class_gaze_1_1_godot_camera_1a6420a5333b53d3af442f6a6de5867ee5" kind="variable"><name>latest_readback_ms</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a36939af6f7faf6fd6eb772baaca1d7d0" kind="function"><name>GodotCamera</name></member>
     <member refid="class_gaze_1_1_godot_camera_1acd29c43588f15f5b18bcdc2021a8ce31" kind="function"><name>~GodotCamera</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a9790ab2213ea82bb77632fe6e765e150" kind="function"><name>initialize</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a898f32280666255531b0fbf184107013" kind="function"><name>set_resolution</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a1f5709064fc408789305988d04384325" kind="function"><name>grab_frame</name></member>
     <member refid="class_gaze_1_1_godot_camera_1a8c1634ff2034399afb54fb07001bb3cd" kind="function"><name>release</name></member>
+    <member refid="class_gaze_1_1_godot_camera_1a79070234132711db7c66e393722781ed" kind="function"><name>get_latest_readback_ms</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_head_pose" kind="struct"><name>Gaze::HeadPose</name>
     <member refid="struct_gaze_1_1_head_pose_1af70cbb49e7ad8ffc2a5d66447bf62bcc" kind="variable"><name>pitch_rad</name></member>
@@ -536,13 +542,8 @@
     <member refid="class_gaze_1_1_image_warper_1a2f2cee9ed586c287b35eb3dede5b9201" kind="function"><name>increment_frame_number</name></member>
   </compound>
   <compound refid="classgodot_1_1_input_event_gaze" kind="class"><name>godot::InputEventGaze</name>
-    <member refid="classgodot_1_1_input_event_gaze_1a402416be509a04314f9bf18c8df2c8b4" kind="variable"><name>position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a5ff5d2d0142887d11bc8ce732dfa6ee8" kind="variable"><name>global_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a0ee7f3552730789cd4eb90b7e60ce8ba" kind="variable"><name>screen_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a4625a5849bda3088a2eb2136ce2a3c2b" kind="variable"><name>relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1aa00d41bf71d6cd48abe1f0e692e46814" kind="variable"><name>screen_relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a2f55320de0ab6eebb15098e7af8efae1" kind="variable"><name>velocity</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a23f81363fea2dd12c0dc2648c84e56b4" kind="variable"><name>screen_velocity</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a00366a78591bf34f9fff1b44d54b3b2a" kind="variable"><name>eye_gaze_position</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1af2e058d12e7630c545985dab7a4d0005" kind="variable"><name>nose_gaze_position</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a5d48d7430a09d1fb62c6b175d74c987b" kind="variable"><name>head_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a1bc1e08450980659ffce502a8c39bafd" kind="variable"><name>gaze_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1abfdca591beb0b4518c7c26a4b3930ba4" kind="function"><name>GDCLASS</name></member>
@@ -550,20 +551,14 @@
     <member refid="classgodot_1_1_input_event_gaze_1a81f8f94e7db83ed5ec1d28ea6df60789" kind="function"><name>InputEventGaze</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1ae538cf85b2ca5fa4b95341c3f1a18401" kind="function"><name>~InputEventGaze</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" kind="function"><name>is_face_tracked</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a71221e842a7a1358ed8e8361a2575133" kind="function"><name>set_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1aefcfd0ff25917e74fe9cc23674cc6148" kind="function"><name>get_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a1f10bd98f7b9f5931c0976a9b049064f" kind="function"><name>set_global_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a840d0191313058ef886db2546a8a6a6a" kind="function"><name>get_global_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a03c81800c82a06e45bb5432d84efeb1e" kind="function"><name>set_screen_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a9324f97a750c246f3c72ef18642970c1" kind="function"><name>get_screen_position</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a907eb781e7469c7dde9b2b65cfe99f84" kind="function"><name>set_relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a6e3f7e64d1c639af0fbd3c645b5acb6f" kind="function"><name>get_relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1ac0b7988b29b50b2c80e691da434ae814" kind="function"><name>set_screen_relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a2c8822b8408b989e4271ec197c702f9b" kind="function"><name>get_screen_relative</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1abd2c3201367a7c70ed50e6edb217fa71" kind="function"><name>set_velocity</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a75633e74061e7b8a2c3f863a51a55d9f" kind="function"><name>get_velocity</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1ad8e5f9459ad6df3eca7615cdb983cf21" kind="function"><name>set_screen_velocity</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a1a2695e104cb9b7da5d51e8773b08d2a" kind="function"><name>get_screen_velocity</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kind="function"><name>get_eye_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kind="function"><name>set_eye_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kind="function"><name>get_nose_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kind="function"><name>set_nose_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" kind="function"><name>get_head_pose</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" kind="function"><name>set_head_pose</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" kind="function"><name>get_eye_origin</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" kind="function"><name>get_eye_direction</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kind="function"><name>set_head_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kind="function"><name>get_head_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kind="function"><name>set_gaze_transform</name></member>
@@ -951,6 +946,18 @@
     <member refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kind="function"><name>solve</name></member>
     <member refid="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" kind="function"><name>solve_rvec</name></member>
   </compound>
+  <compound refid="struct_gaze_1_1_stage_timings" kind="struct"><name>Gaze::StageTimings</name>
+    <member refid="struct_gaze_1_1_stage_timings_1a23eb410b7d1930dec3bf1b9d4a764e0f" kind="variable"><name>capture_gpu_readback_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1afb749272e21c086797143d942404e8ab" kind="variable"><name>roll_prewarp_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a2a8e0b78155c722117320a5da078e0d1" kind="variable"><name>face_yunet_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1af9bcdc2d40d11e0f2f4958f2dd81c330" kind="variable"><name>landmark_adas_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a87810c6aa25f63c6de61e3d220b356df" kind="variable"><name>pnp_solve_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a66c064f3e8429f6d98584105febd6c66" kind="variable"><name>eye_crop_warp_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1afdf78b0043821ea3c62afd4c9c8d0d42" kind="variable"><name>eye_state_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a45ba9b7b44546ff6775322f808698d90" kind="variable"><name>gaze_direction_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a389b8d68cae621b121a37aa11587bd6b" kind="variable"><name>unroll_ms</name></member>
+    <member refid="struct_gaze_1_1_stage_timings_1a0e9074955f4b58f3d5843cdfbcac483b" kind="variable"><name>total_pipeline_ms</name></member>
+  </compound>
   <compound refid="classgodot_1_1_vision_server" kind="class"><name>godot::VisionServer</name>
     <member refid="classgodot_1_1_vision_server_1a7a1389b92b31d84e11984e29e933e645" kind="variable"><name>singleton</name></member>
     <member refid="classgodot_1_1_vision_server_1ad825a376aba1970a9d3979671effdcd8" kind="variable"><name>camera_owner</name></member>
@@ -978,6 +985,7 @@
     <member refid="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" kind="function"><name>camera_get_current_image</name></member>
     <member refid="classgodot_1_1_vision_server_1a84b9f93d216f3e83c676636293f797e0" kind="function"><name>camera_set_preview_requested</name></member>
     <member refid="classgodot_1_1_vision_server_1a69edf2a62052127bad03b4dbc51ff953" kind="function"><name>camera_is_preview_requested</name></member>
+    <member refid="classgodot_1_1_vision_server_1a11e809cea839327af8c3614c52caca96" kind="function"><name>camera_get_last_readback_ms</name></member>
     <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" kind="function"><name>camera_free</name></member>
     <member refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" kind="function"><name>get_camera_current_frame</name></member>
     <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kind="function"><name>get_singleton</name></member>
@@ -1112,6 +1120,8 @@
     <member refid="register__types_8cpp_1afeeb9dfa64a26d3565a3b36580d7c043" kind="variable"><name>vision_server_singleton</name></member>
     <member refid="register__types_8cpp_1a742bb3c63b2210a23496673ecab3c7de" kind="variable"><name>gaze_server_singleton</name></member>
     <member refid="register__types_8cpp_1a46a088efd1400bfc9988018e115d8997" kind="variable"><name>gaze_display_server_singleton</name></member>
+    <member refid="gaze__server_8cpp_1ad236010cbcf08245b59d3f79c3fd4b16" kind="function"><name>_calc_projected_window_px</name></member>
+    <member refid="gaze__server_8cpp_1abf70669217d09b5600fdf00b2bb81c69" kind="function"><name>_xform_window_px_to_canvas</name></member>
     <member refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kind="function"><name>resolve_model_path</name></member>
     <member refid="godot__files_8hpp_1a438d87c72f03b6b817f49243709e71b3" kind="function"><name>load_file_buffer</name></member>
     <member refid="register__types_8cpp_1ab47c55fc6efbb2b016683f73c317a77a" kind="function"><name>register_gaze_project_settings</name></member>

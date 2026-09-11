@@ -270,7 +270,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="41" column="5" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="9" bodyend="12"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="41" column="5" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="11" bodyend="14"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a41bff64fda95b73686e69f9717749e15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -398,7 +398,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="53" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="22" bodyend="33"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="53" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="24" bodyend="35"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ad99c6c67b39f951d13c96bc39855c20a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -432,7 +432,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="55" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="41" bodyend="102"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="55" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="43" bodyend="104"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a3345192d5a062013b209db4e285bae74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -502,7 +502,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="73" column="11" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="35" bodyend="39"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="73" column="11" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="37" bodyend="41"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a474f5948d1b127f84103d44dd6223e4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
@@ -544,7 +544,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="75" column="9" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="104" bodyend="205"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="75" column="9" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="106" bodyend="198"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ae5683ebe731de153dd75ef8e32eba833" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -558,7 +558,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="85" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="14" bodyend="20"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="85" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="16" bodyend="22"/>
       </memberdef>
     </sectiondef>
     <briefdescription>

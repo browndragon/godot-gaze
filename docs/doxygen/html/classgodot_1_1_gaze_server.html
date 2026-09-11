@@ -258,38 +258,42 @@ void&#160;</td><td class="memItemRight"><b>set_camera_preview_requested</b> (boo
 bool&#160;</td><td class="memItemRight"><b>is_camera_preview_requested</b> () const</td></tr>
 <tr class="memitem:a16b55bce0b64ed6f4cce27f65cfa1649" id="r_a16b55bce0b64ed6f4cce27f65cfa1649"><td class="memItemLeft"><a id="a16b55bce0b64ed6f4cce27f65cfa1649" name="a16b55bce0b64ed6f4cce27f65cfa1649"></a>
 void&#160;</td><td class="memItemRight"><b>emit_camera_frame_ready</b> (RID p_vision_camera)</td></tr>
-<tr class="memitem:a456c4cc19663f4186a12fcaa4ea9cc36" id="r_a456c4cc19663f4186a12fcaa4ea9cc36"><td class="memItemLeft"><a id="a456c4cc19663f4186a12fcaa4ea9cc36" name="a456c4cc19663f4186a12fcaa4ea9cc36"></a>
-Vector3&#160;</td><td class="memItemRight"><b>project_ray_to_camera_plane</b> (const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</td></tr>
-<tr class="memitem:a377fa1f5b94a4e157fc0e126d9688e31" id="r_a377fa1f5b94a4e157fc0e126d9688e31"><td class="memItemLeft"><a id="a377fa1f5b94a4e157fc0e126d9688e31" name="a377fa1f5b94a4e157fc0e126d9688e31"></a>
-Vector2&#160;</td><td class="memItemRight"><b>project_ray_to_viewport</b> (const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</td></tr>
-<tr class="memitem:a8df80b0cde997e9fb236f6d66ef8a828" id="r_a8df80b0cde997e9fb236f6d66ef8a828"><td class="memItemLeft"><a id="a8df80b0cde997e9fb236f6d66ef8a828" name="a8df80b0cde997e9fb236f6d66ef8a828"></a>
-void&#160;</td><td class="memItemRight"><b>set_event_factory</b> (const Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; &amp;p_factory)</td></tr>
-<tr class="memitem:a338a0aa6c726acedd3b84c5af25dad89" id="r_a338a0aa6c726acedd3b84c5af25dad89"><td class="memItemLeft"><a id="a338a0aa6c726acedd3b84c5af25dad89" name="a338a0aa6c726acedd3b84c5af25dad89"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt;&#160;</td><td class="memItemRight"><b>get_event_factory</b> ()</td></tr>
+<tr class="memitem:ac769ef74fbb7aac01be60c5c1614ef86" id="r_ac769ef74fbb7aac01be60c5c1614ef86"><td class="memItemLeft"><a id="ac769ef74fbb7aac01be60c5c1614ef86" name="ac769ef74fbb7aac01be60c5c1614ef86"></a>
+Dictionary&#160;</td><td class="memItemRight"><b>get_pipeline_stage_timings</b> () const</td></tr>
+<tr class="memitem:a456c4cc19663f4186a12fcaa4ea9cc36" id="r_a456c4cc19663f4186a12fcaa4ea9cc36"><td class="memItemLeft">Vector3&#160;</td><td class="memItemRight"><a class="el" href="#a456c4cc19663f4186a12fcaa4ea9cc36">project_ray_to_camera_plane</a> (const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</td></tr>
+<tr class="memdesc:a456c4cc19663f4186a12fcaa4ea9cc36"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a 3D ray in Godot camera space onto the camera plane (Z = 0 plane in camera space).  <br /></td></tr>
+<tr class="memitem:a40560cb70716da157931466cabb71026" id="r_a40560cb70716da157931466cabb71026"><td class="memItemLeft">Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a40560cb70716da157931466cabb71026">project_ray_to_canvas</a> (const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam, const CanvasItem *p_local_to=nullptr) const</td></tr>
+<tr class="memdesc:a40560cb70716da157931466cabb71026"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a 3D ray in Godot camera space onto the physical display surface and transforms the hit position into canonical 2D Viewport Canvas space (or relative to a specified CanvasItem).  <br /></td></tr>
+<tr class="memitem:a377fa1f5b94a4e157fc0e126d9688e31" id="r_a377fa1f5b94a4e157fc0e126d9688e31"><td class="memItemLeft">Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a377fa1f5b94a4e157fc0e126d9688e31">project_ray_to_viewport</a> (const Vector3 &amp;p_origin_cam, const Vector3 &amp;p_direction_cam) const</td></tr>
+<tr class="memdesc:a377fa1f5b94a4e157fc0e126d9688e31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Projects a 3D ray in Godot camera space onto the physical display surface and returns window-relative logical points.  <br /></td></tr>
+<tr class="memitem:a8df80b0cde997e9fb236f6d66ef8a828" id="r_a8df80b0cde997e9fb236f6d66ef8a828"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8df80b0cde997e9fb236f6d66ef8a828">set_event_factory</a> (const Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; &amp;p_factory)</td></tr>
+<tr class="memdesc:a8df80b0cde997e9fb236f6d66ef8a828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overrides the event factory used to instantiate <a class="el" href="classgodot_1_1_input_event_gaze.html" title="Input event emitted when face and eye gaze tracking is actively locked.">InputEventGaze</a> and <a class="el" href="classgodot_1_1_input_event_gaze_missing.html" title="Input event emitted when face or eye tracking is lost or during full blink.">InputEventGazeMissing</a> events.  <br /></td></tr>
+<tr class="memitem:a338a0aa6c726acedd3b84c5af25dad89" id="r_a338a0aa6c726acedd3b84c5af25dad89"><td class="memItemLeft">Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a338a0aa6c726acedd3b84c5af25dad89">get_event_factory</a> ()</td></tr>
+<tr class="memdesc:a338a0aa6c726acedd3b84c5af25dad89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the active <a class="el" href="classgodot_1_1_gaze_event_factory.html" title="Base Resource for constructing, enriching, and minting gaze input events.">GazeEventFactory</a> instance.  <br /></td></tr>
 <tr class="memitem:a5a566a49e69687f0b5767c39c2c514d2" id="r_a5a566a49e69687f0b5767c39c2c514d2"><td class="memItemLeft"><a id="a5a566a49e69687f0b5767c39c2c514d2" name="a5a566a49e69687f0b5767c39c2c514d2"></a>
 void&#160;</td><td class="memItemRight"><b>initialize_scene_resources</b> ()</td></tr>
 <tr class="memitem:a49246a3dcee5da33ac885165812e0be1" id="r_a49246a3dcee5da33ac885165812e0be1"><td class="memItemLeft"><a id="a49246a3dcee5da33ac885165812e0be1" name="a49246a3dcee5da33ac885165812e0be1"></a>
 void&#160;</td><td class="memItemRight"><b>_ensure_event_factory_loaded</b> ()</td></tr>
-<tr class="memitem:aa9545b9113275a2dab894a858d0db570" id="r_aa9545b9113275a2dab894a858d0db570"><td class="memItemLeft"><a id="aa9545b9113275a2dab894a858d0db570" name="aa9545b9113275a2dab894a858d0db570"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze.html">InputEventGaze</a> &gt;&#160;</td><td class="memItemRight"><b>create_default_event</b> ()</td></tr>
-<tr class="memitem:acd3a78080049bde148630357aedabc7c" id="r_acd3a78080049bde148630357aedabc7c"><td class="memItemLeft"><a id="acd3a78080049bde148630357aedabc7c" name="acd3a78080049bde148630357aedabc7c"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_missing.html">InputEventGazeMissing</a> &gt;&#160;</td><td class="memItemRight"><b>create_default_missing_event</b> (int p_reason)</td></tr>
-<tr class="memitem:afba19bd41e7e4bb6bb5af21b4e1f872c" id="r_afba19bd41e7e4bb6bb5af21b4e1f872c"><td class="memItemLeft"><a id="afba19bd41e7e4bb6bb5af21b4e1f872c" name="afba19bd41e7e4bb6bb5af21b4e1f872c"></a>
-void&#160;</td><td class="memItemRight"><b>set_emulate_gaze_from_mouse</b> (bool p_enable)</td></tr>
-<tr class="memitem:af9941e2c6bfebf948eeacbac67648750" id="r_af9941e2c6bfebf948eeacbac67648750"><td class="memItemLeft"><a id="af9941e2c6bfebf948eeacbac67648750" name="af9941e2c6bfebf948eeacbac67648750"></a>
-bool&#160;</td><td class="memItemRight"><b>get_emulate_gaze_from_mouse</b> () const</td></tr>
-<tr class="memitem:a01d82ad0c25e44ee8534ef2bd97c96ae" id="r_a01d82ad0c25e44ee8534ef2bd97c96ae"><td class="memItemLeft"><a id="a01d82ad0c25e44ee8534ef2bd97c96ae" name="a01d82ad0c25e44ee8534ef2bd97c96ae"></a>
-void&#160;</td><td class="memItemRight"><b>set_emulate_mouse_from_gaze</b> (bool p_enable)</td></tr>
-<tr class="memitem:a1435b15bf7bf0ff0c874284fdcfe3eb5" id="r_a1435b15bf7bf0ff0c874284fdcfe3eb5"><td class="memItemLeft"><a id="a1435b15bf7bf0ff0c874284fdcfe3eb5" name="a1435b15bf7bf0ff0c874284fdcfe3eb5"></a>
-bool&#160;</td><td class="memItemRight"><b>get_emulate_mouse_from_gaze</b> () const</td></tr>
-<tr class="memitem:a69aea5a350ec6f94e19994b549cc6d19" id="r_a69aea5a350ec6f94e19994b549cc6d19"><td class="memItemLeft"><a id="a69aea5a350ec6f94e19994b549cc6d19" name="a69aea5a350ec6f94e19994b549cc6d19"></a>
-void&#160;</td><td class="memItemRight"><b>set_mouse_emulation_dwell_sec</b> (float p_sec)</td></tr>
-<tr class="memitem:ae0e1af81160134c07f3e6d8e8a9dde24" id="r_ae0e1af81160134c07f3e6d8e8a9dde24"><td class="memItemLeft"><a id="ae0e1af81160134c07f3e6d8e8a9dde24" name="ae0e1af81160134c07f3e6d8e8a9dde24"></a>
-float&#160;</td><td class="memItemRight"><b>get_mouse_emulation_dwell_sec</b> () const</td></tr>
-<tr class="memitem:a5a2a0eaa64ef70ccb6890350e1dd35fd" id="r_a5a2a0eaa64ef70ccb6890350e1dd35fd"><td class="memItemLeft"><a id="a5a2a0eaa64ef70ccb6890350e1dd35fd" name="a5a2a0eaa64ef70ccb6890350e1dd35fd"></a>
-void&#160;</td><td class="memItemRight"><b>set_mouse_emulation_transition_sec</b> (float p_sec)</td></tr>
-<tr class="memitem:a8fb306926594759c067502e92a386e71" id="r_a8fb306926594759c067502e92a386e71"><td class="memItemLeft"><a id="a8fb306926594759c067502e92a386e71" name="a8fb306926594759c067502e92a386e71"></a>
-float&#160;</td><td class="memItemRight"><b>get_mouse_emulation_transition_sec</b> () const</td></tr>
+<tr class="memitem:aa9545b9113275a2dab894a858d0db570" id="r_aa9545b9113275a2dab894a858d0db570"><td class="memItemLeft">Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze.html">InputEventGaze</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aa9545b9113275a2dab894a858d0db570">create_default_event</a> ()</td></tr>
+<tr class="memdesc:aa9545b9113275a2dab894a858d0db570"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates a default <a class="el" href="classgodot_1_1_input_event_gaze.html" title="Input event emitted when face and eye gaze tracking is actively locked.">InputEventGaze</a> populated with the latest tracking frame data.  <br /></td></tr>
+<tr class="memitem:acd3a78080049bde148630357aedabc7c" id="r_acd3a78080049bde148630357aedabc7c"><td class="memItemLeft">Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_missing.html">InputEventGazeMissing</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acd3a78080049bde148630357aedabc7c">create_default_missing_event</a> (int p_reason)</td></tr>
+<tr class="memdesc:acd3a78080049bde148630357aedabc7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instantiates an <a class="el" href="classgodot_1_1_input_event_gaze_missing.html" title="Input event emitted when face or eye tracking is lost or during full blink.">InputEventGazeMissing</a> event indicating tracking loss.  <br /></td></tr>
+<tr class="memitem:afba19bd41e7e4bb6bb5af21b4e1f872c" id="r_afba19bd41e7e4bb6bb5af21b4e1f872c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afba19bd41e7e4bb6bb5af21b4e1f872c">set_emulate_gaze_from_mouse</a> (bool p_enable)</td></tr>
+<tr class="memdesc:afba19bd41e7e4bb6bb5af21b4e1f872c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables mouse-to-gaze input emulation.  <br /></td></tr>
+<tr class="memitem:af9941e2c6bfebf948eeacbac67648750" id="r_af9941e2c6bfebf948eeacbac67648750"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af9941e2c6bfebf948eeacbac67648750">get_emulate_gaze_from_mouse</a> () const</td></tr>
+<tr class="memdesc:af9941e2c6bfebf948eeacbac67648750"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if mouse-to-gaze input emulation is currently enabled.  <br /></td></tr>
+<tr class="memitem:a01d82ad0c25e44ee8534ef2bd97c96ae" id="r_a01d82ad0c25e44ee8534ef2bd97c96ae"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a01d82ad0c25e44ee8534ef2bd97c96ae">set_emulate_mouse_from_gaze</a> (bool p_enable)</td></tr>
+<tr class="memdesc:a01d82ad0c25e44ee8534ef2bd97c96ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables gaze-to-mouse emulation (driving the OS/window mouse cursor from eye gaze).  <br /></td></tr>
+<tr class="memitem:a1435b15bf7bf0ff0c874284fdcfe3eb5" id="r_a1435b15bf7bf0ff0c874284fdcfe3eb5"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1435b15bf7bf0ff0c874284fdcfe3eb5">get_emulate_mouse_from_gaze</a> () const</td></tr>
+<tr class="memdesc:a1435b15bf7bf0ff0c874284fdcfe3eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if gaze-to-mouse emulation is currently enabled.  <br /></td></tr>
+<tr class="memitem:a69aea5a350ec6f94e19994b549cc6d19" id="r_a69aea5a350ec6f94e19994b549cc6d19"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a69aea5a350ec6f94e19994b549cc6d19">set_mouse_emulation_dwell_sec</a> (float p_sec)</td></tr>
+<tr class="memdesc:a69aea5a350ec6f94e19994b549cc6d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the dwell time in seconds for mouse interaction override before smoothly returning to camera gaze.  <br /></td></tr>
+<tr class="memitem:ae0e1af81160134c07f3e6d8e8a9dde24" id="r_ae0e1af81160134c07f3e6d8e8a9dde24"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#ae0e1af81160134c07f3e6d8e8a9dde24">get_mouse_emulation_dwell_sec</a> () const</td></tr>
+<tr class="memdesc:ae0e1af81160134c07f3e6d8e8a9dde24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the mouse emulation dwell time in seconds.  <br /></td></tr>
+<tr class="memitem:a5a2a0eaa64ef70ccb6890350e1dd35fd" id="r_a5a2a0eaa64ef70ccb6890350e1dd35fd"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5a2a0eaa64ef70ccb6890350e1dd35fd">set_mouse_emulation_transition_sec</a> (float p_sec)</td></tr>
+<tr class="memdesc:a5a2a0eaa64ef70ccb6890350e1dd35fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the transition blend duration in seconds between mouse emulation and camera tracking.  <br /></td></tr>
+<tr class="memitem:a8fb306926594759c067502e92a386e71" id="r_a8fb306926594759c067502e92a386e71"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a8fb306926594759c067502e92a386e71">get_mouse_emulation_transition_sec</a> () const</td></tr>
+<tr class="memdesc:a8fb306926594759c067502e92a386e71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the transition blend duration in seconds.  <br /></td></tr>
 <tr class="memitem:a410161fe022a9685b7ee2fb0df7c13b1" id="r_a410161fe022a9685b7ee2fb0df7c13b1"><td class="memItemLeft"><a id="a410161fe022a9685b7ee2fb0df7c13b1" name="a410161fe022a9685b7ee2fb0df7c13b1"></a>
 void&#160;</td><td class="memItemRight"><b>set_verbosity</b> (int level)</td></tr>
 <tr class="memitem:ac37737b8de2a00988eec04917be1aab3" id="r_ac37737b8de2a00988eec04917be1aab3"><td class="memItemLeft"><a id="ac37737b8de2a00988eec04917be1aab3" name="ac37737b8de2a00988eec04917be1aab3"></a>
@@ -309,6 +313,380 @@ Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:abdaec16f7e618f7f7dbf81d859bef70f" id="r_abdaec16f7e618f7f7dbf81d859bef70f"><td class="memItemLeft"><a id="abdaec16f7e618f7f7dbf81d859bef70f" name="abdaec16f7e618f7f7dbf81d859bef70f"></a>
 static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 </table>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aa9545b9113275a2dab894a858d0db570" name="aa9545b9113275a2dab894a858d0db570"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9545b9113275a2dab894a858d0db570">&#9670;&#160;</a></span>create_default_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze.html">InputEventGaze</a> &gt; godot::GazeServer::create_default_event </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Instantiates a default <a class="el" href="classgodot_1_1_input_event_gaze.html" title="Input event emitted when face and eye gaze tracking is actively locked.">InputEventGaze</a> populated with the latest tracking frame data. </p>
+<dl class="section return"><dt>Returns</dt><dd>Ref&lt;InputEventGaze&gt; Newly created gaze event. </dd></dl>
+
+</div>
+</div>
+<a id="acd3a78080049bde148630357aedabc7c" name="acd3a78080049bde148630357aedabc7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd3a78080049bde148630357aedabc7c">&#9670;&#160;</a></span>create_default_missing_event()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_missing.html">InputEventGazeMissing</a> &gt; godot::GazeServer::create_default_missing_event </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>p_reason</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Instantiates an <a class="el" href="classgodot_1_1_input_event_gaze_missing.html" title="Input event emitted when face or eye tracking is lost or during full blink.">InputEventGazeMissing</a> event indicating tracking loss. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_reason</td><td>MissingReason enum indicating why tracking was lost. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Ref&lt;InputEventGazeMissing&gt; Newly created missing gaze event. </dd></dl>
+
+</div>
+</div>
+<a id="af9941e2c6bfebf948eeacbac67648750" name="af9941e2c6bfebf948eeacbac67648750"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9941e2c6bfebf948eeacbac67648750">&#9670;&#160;</a></span>get_emulate_gaze_from_mouse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::get_emulate_gaze_from_mouse </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if mouse-to-gaze input emulation is currently enabled. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if enabled. </dd></dl>
+
+</div>
+</div>
+<a id="a1435b15bf7bf0ff0c874284fdcfe3eb5" name="a1435b15bf7bf0ff0c874284fdcfe3eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1435b15bf7bf0ff0c874284fdcfe3eb5">&#9670;&#160;</a></span>get_emulate_mouse_from_gaze()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::get_emulate_mouse_from_gaze </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if gaze-to-mouse emulation is currently enabled. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if enabled. </dd></dl>
+
+</div>
+</div>
+<a id="a338a0aa6c726acedd3b84c5af25dad89" name="a338a0aa6c726acedd3b84c5af25dad89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a338a0aa6c726acedd3b84c5af25dad89">&#9670;&#160;</a></span>get_event_factory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; godot::GazeServer::get_event_factory </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the active <a class="el" href="classgodot_1_1_gaze_event_factory.html" title="Base Resource for constructing, enriching, and minting gaze input events.">GazeEventFactory</a> instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>Ref&lt;GazeEventFactory&gt; The current event factory. </dd></dl>
+
+</div>
+</div>
+<a id="ae0e1af81160134c07f3e6d8e8a9dde24" name="ae0e1af81160134c07f3e6d8e8a9dde24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae0e1af81160134c07f3e6d8e8a9dde24">&#9670;&#160;</a></span>get_mouse_emulation_dwell_sec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float godot::GazeServer::get_mouse_emulation_dwell_sec </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the mouse emulation dwell time in seconds. </p>
+<dl class="section return"><dt>Returns</dt><dd>float Dwell time in seconds. </dd></dl>
+
+</div>
+</div>
+<a id="a8fb306926594759c067502e92a386e71" name="a8fb306926594759c067502e92a386e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fb306926594759c067502e92a386e71">&#9670;&#160;</a></span>get_mouse_emulation_transition_sec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float godot::GazeServer::get_mouse_emulation_transition_sec </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the transition blend duration in seconds. </p>
+<dl class="section return"><dt>Returns</dt><dd>float Transition duration in seconds. </dd></dl>
+
+</div>
+</div>
+<a id="a456c4cc19663f4186a12fcaa4ea9cc36" name="a456c4cc19663f4186a12fcaa4ea9cc36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a456c4cc19663f4186a12fcaa4ea9cc36">&#9670;&#160;</a></span>project_ray_to_camera_plane()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 godot::GazeServer::project_ray_to_camera_plane </td>
+          <td>(</td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_origin_cam</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_direction_cam</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Projects a 3D ray in Godot camera space onto the camera plane (Z = 0 plane in camera space). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_origin_cam</td><td>Ray origin in camera space (millimeters). </td></tr>
+    <tr><td class="paramname">p_direction_cam</td><td>Unit ray direction in camera space. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector3 Intersection point on camera plane, or (INFINITY, INFINITY, INFINITY) if parallel. </dd></dl>
+
+</div>
+</div>
+<a id="a40560cb70716da157931466cabb71026" name="a40560cb70716da157931466cabb71026"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40560cb70716da157931466cabb71026">&#9670;&#160;</a></span>project_ray_to_canvas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeServer::project_ray_to_canvas </td>
+          <td>(</td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_origin_cam</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_direction_cam</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CanvasItem *</td>          <td class="paramname"><span class="paramname"><em>p_local_to</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Projects a 3D ray in Godot camera space onto the physical display surface and transforms the hit position into canonical 2D Viewport Canvas space (or relative to a specified CanvasItem). </p>
+<p>Automatically accounts for physical camera offsets, screen size and pitch from the active <a class="el" href="classgodot_1_1_gaze_device_profile.html">GazeDeviceProfile</a>, the current window position on screen, and display DPI scaling.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_origin_cam</td><td>Ray origin in camera space (millimeters). </td></tr>
+    <tr><td class="paramname">p_direction_cam</td><td>Unit ray direction in camera space. </td></tr>
+    <tr><td class="paramname">p_local_to</td><td>Optional CanvasItem (Node2D or Control). If null (default), returns position in canonical root Viewport Canvas coordinates. If specified, transforms the point into the local space of that CanvasItem. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in canvas space or local coordinates, or (INFINITY, INFINITY) if no intersection. </dd></dl>
+
+</div>
+</div>
+<a id="a377fa1f5b94a4e157fc0e126d9688e31" name="a377fa1f5b94a4e157fc0e126d9688e31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a377fa1f5b94a4e157fc0e126d9688e31">&#9670;&#160;</a></span>project_ray_to_viewport()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeServer::project_ray_to_viewport </td>
+          <td>(</td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_origin_cam</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector3 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_direction_cam</em></span>&#160;) const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Projects a 3D ray in Godot camera space onto the physical display surface and returns window-relative logical points. </p>
+<p>Returns coordinates in unscaled window points before Viewport canvas transformation.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_origin_cam</td><td>Ray origin in camera space (millimeters). </td></tr>
+    <tr><td class="paramname">p_direction_cam</td><td>Unit ray direction in camera space. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in window logical points, or (INFINITY, INFINITY) if no intersection. </dd></dl>
+
+</div>
+</div>
+<a id="afba19bd41e7e4bb6bb5af21b4e1f872c" name="afba19bd41e7e4bb6bb5af21b4e1f872c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afba19bd41e7e4bb6bb5af21b4e1f872c">&#9670;&#160;</a></span>set_emulate_gaze_from_mouse()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_emulate_gaze_from_mouse </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>p_enable</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables or disables mouse-to-gaze input emulation. </p>
+<p>When enabled, mouse cursor movement and clicks synthesize <a class="el" href="classgodot_1_1_input_event_gaze.html" title="Input event emitted when face and eye gaze tracking is actively locked.">InputEventGaze</a> events during development or when camera tracking is absent/occluded.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_enable</td><td>True to enable mouse emulation. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a01d82ad0c25e44ee8534ef2bd97c96ae" name="a01d82ad0c25e44ee8534ef2bd97c96ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01d82ad0c25e44ee8534ef2bd97c96ae">&#9670;&#160;</a></span>set_emulate_mouse_from_gaze()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_emulate_mouse_from_gaze </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>p_enable</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enables or disables gaze-to-mouse emulation (driving the OS/window mouse cursor from eye gaze). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_enable</td><td>True to enable. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8df80b0cde997e9fb236f6d66ef8a828" name="a8df80b0cde997e9fb236f6d66ef8a828"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8df80b0cde997e9fb236f6d66ef8a828">&#9670;&#160;</a></span>set_event_factory()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_event_factory </td>
+          <td>(</td>
+          <td class="paramtype">const Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>p_factory</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Overrides the event factory used to instantiate <a class="el" href="classgodot_1_1_input_event_gaze.html" title="Input event emitted when face and eye gaze tracking is actively locked.">InputEventGaze</a> and <a class="el" href="classgodot_1_1_input_event_gaze_missing.html" title="Input event emitted when face or eye tracking is lost or during full blink.">InputEventGazeMissing</a> events. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_factory</td><td>Custom <a class="el" href="classgodot_1_1_gaze_event_factory.html" title="Base Resource for constructing, enriching, and minting gaze input events.">GazeEventFactory</a> instance or null to restore default factory. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a69aea5a350ec6f94e19994b549cc6d19" name="a69aea5a350ec6f94e19994b549cc6d19"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69aea5a350ec6f94e19994b549cc6d19">&#9670;&#160;</a></span>set_mouse_emulation_dwell_sec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_mouse_emulation_dwell_sec </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>p_sec</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the dwell time in seconds for mouse interaction override before smoothly returning to camera gaze. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_sec</td><td>Dwell time in seconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5a2a0eaa64ef70ccb6890350e1dd35fd" name="a5a2a0eaa64ef70ccb6890350e1dd35fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a2a0eaa64ef70ccb6890350e1dd35fd">&#9670;&#160;</a></span>set_mouse_emulation_transition_sec()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_mouse_emulation_transition_sec </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>p_sec</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the transition blend duration in seconds between mouse emulation and camera tracking. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_sec</td><td>Transition duration in seconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/godot/<a class="el" href="gaze__server_8hpp_source.html">gaze_server.hpp</a></li>
 <li>src/godot/<b>gaze_server.cpp</b></li>

@@ -282,78 +282,78 @@
 			<return type="Vector3"></return>
 			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
 			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
-			<description></description>
+			<description>Projects a 3D ray in Godot camera space onto the camera plane (Z = 0 plane in camera space). Returns (INFINITY, INFINITY, INFINITY) if parallel.</description>
 		</method>
 		<method name="project_ray_to_viewport">
 			<return type="Vector2"></return>
 			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
 			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
-			<description></description>
+			<description>Projects a 3D ray in Godot camera space onto the display surface and returns window-relative logical points before Viewport canvas transformation.</description>
 		</method>
 		<method name="project_ray_to_canvas">
 			<return type="Vector2"></return>
 			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
 			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
 			<param index="2" name="p_local_to" type="const CanvasItem *" default="null"></param>
-			<description></description>
+			<description>Projects a 3D ray in Godot camera space onto the physical display surface and transforms the hit position into canonical 2D Viewport Canvas space (or relative to a specified [CanvasItem]). Automatically accounts for physical camera offsets, screen size, pitch, window position, and HiDPI scaling.</description>
 		</method>
 		<method name="set_event_factory">
 			<return type="void"></return>
 			<param index="0" name="p_factory" type="const Ref&lt; GazeEventFactory &gt; &amp;"></param>
-			<description></description>
+			<description>Sets a custom [GazeEventFactory] to instantiate [InputEventGaze] and [InputEventGazeMissing] events.</description>
 		</method>
 		<method name="get_event_factory">
 			<return type="Ref&lt; GazeEventFactory &gt;"></return>
-			<description></description>
+			<description>Retrieves the active [GazeEventFactory] instance.</description>
 		</method>
 		<method name="initialize_scene_resources">
 			<return type="void"></return>
-			<description></description>
+			<description>Ensures the event factory resource is loaded from project settings if configured.</description>
 		</method>
 		<method name="create_default_event">
 			<return type="Ref&lt; InputEventGaze &gt;"></return>
-			<description></description>
+			<description>Instantiates a default [InputEventGaze] populated with the latest tracking frame data.</description>
 		</method>
 		<method name="create_default_missing_event">
 			<return type="Ref&lt; InputEventGazeMissing &gt;"></return>
 			<param index="0" name="p_reason" type="int"></param>
-			<description></description>
+			<description>Instantiates an [InputEventGazeMissing] event indicating tracking loss.</description>
 		</method>
 		<method name="set_emulate_gaze_from_mouse">
 			<return type="void"></return>
 			<param index="0" name="p_enable" type="bool"></param>
-			<description></description>
+			<description>Enables or disables mouse-to-gaze input emulation.</description>
 		</method>
 		<method name="get_emulate_gaze_from_mouse">
 			<return type="bool"></return>
-			<description></description>
+			<description>Checks if mouse-to-gaze emulation is currently enabled.</description>
 		</method>
 		<method name="set_emulate_mouse_from_gaze">
 			<return type="void"></return>
 			<param index="0" name="p_enable" type="bool"></param>
-			<description></description>
+			<description>Enables or disables gaze-to-mouse emulation (driving the mouse cursor from gaze).</description>
 		</method>
 		<method name="get_emulate_mouse_from_gaze">
 			<return type="bool"></return>
-			<description></description>
+			<description>Checks if gaze-to-mouse emulation is currently enabled.</description>
 		</method>
 		<method name="set_mouse_emulation_dwell_sec">
 			<return type="void"></return>
 			<param index="0" name="p_sec" type="float"></param>
-			<description></description>
+			<description>Sets the dwell duration in seconds before returning smoothly to camera tracking after mouse interaction.</description>
 		</method>
 		<method name="get_mouse_emulation_dwell_sec">
 			<return type="float"></return>
-			<description></description>
+			<description>Retrieves the mouse emulation dwell duration in seconds.</description>
 		</method>
 		<method name="set_mouse_emulation_transition_sec">
 			<return type="void"></return>
 			<param index="0" name="p_sec" type="float"></param>
-			<description></description>
+			<description>Sets the transition duration in seconds between mouse emulation and camera tracking.</description>
 		</method>
 		<method name="get_mouse_emulation_transition_sec">
 			<return type="float"></return>
-			<description></description>
+			<description>Retrieves the transition duration in seconds.</description>
 		</method>
 		<method name="set_verbosity">
 			<return type="void"></return>

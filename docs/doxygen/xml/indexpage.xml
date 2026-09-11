@@ -73,12 +73,12 @@
 <codeline><highlight class="normal">func<sp/>_unhandled_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>2D<sp/>Screen<sp/>/<sp/>Viewport<sp/>position</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cursor.global_position<sp/>=<sp/>event.position</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cursor.global_position<sp/>=<sp/>event.get_eye_gaze()</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Face<sp/>Tracked<sp/>(Openness<sp/>L:<sp/>%.2f,<sp/>R:<sp/>%.2f)&quot;<sp/>%<sp/>[event.left_eye_openness,<sp/>event.right_eye_openness]</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>Head<sp/>&amp;<sp/>Gaze<sp/>transforms</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>head_pos_mm<sp/>=<sp/>event.head_transform.origin</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>gaze_ray_dir<sp/>=<sp/>event.gaze_transform.basis.z<sp/>*<sp/>-1.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>Head<sp/>&amp;<sp/>Gaze<sp/>properties</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>head_pos_mm<sp/>=<sp/>event.head_pose.origin</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>eye_ray_dir<sp/>=<sp/>event.eye_direction</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/>elif<sp/>event<sp/>is<sp/>InputEventGazeMissing:</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Gaze<sp/>Lost<sp/>(Reason:<sp/>%d)&quot;<sp/>%<sp/>event.reason</highlight></codeline>
 <codeline></codeline>

@@ -22,5 +22,7 @@ var searchData=
   ['compiled_20release_20recommended_19',['A. From Pre-compiled Release (Recommended)',['../index.html#autotoc_md10',1,'']]],
   ['contributors_20',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]],
   ['core_20layer_21',['Core Layer',['../dir_aebb8dcc11953d78e620bbef0b9e2183.html#autotoc_md0',1,'']]],
-  ['cpuimagewarper_22',['CPUImageWarper',['../class_gaze_1_1_c_p_u_image_warper.html',1,'Gaze']]]
+  ['cpuimagewarper_22',['CPUImageWarper',['../class_gaze_1_1_c_p_u_image_warper.html',1,'Gaze']]],
+  ['create_5fdefault_5fevent_23',['create_default_event',['../classgodot_1_1_gaze_server.html#aa9545b9113275a2dab894a858d0db570',1,'godot::GazeServer']]],
+  ['create_5fdefault_5fmissing_5fevent_24',['create_default_missing_event',['../classgodot_1_1_gaze_server.html#acd3a78080049bde148630357aedabc7c',1,'godot::GazeServer']]]
 ];

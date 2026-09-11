@@ -128,139 +128,162 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('input__event__
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;godot_cpp/variant/string.hpp&gt;</span></div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="keyword">namespace </span>godot {</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span></div>
-<div class="foldopen" id="foldopen00015" data-start="{" data-end="};">
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html">   15</a></span><span class="keyword">class </span>InputEventGazeBase : <span class="keyword">public</span> InputEventAction {</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    GDCLASS(InputEventGazeBase, InputEventAction);</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    int64_t window_id = 0;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>    uint64_t frame_id = 0;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    uint64_t timestamp_usec = 0;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">float</span> left_eye_openness = 0.0f;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">float</span> right_eye_openness = 0.0f;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keyword">class </span>CanvasItem;</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span></div>
+<div class="foldopen" id="foldopen00017" data-start="{" data-end="};">
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html">   17</a></span><span class="keyword">class </span>InputEventGazeBase : <span class="keyword">public</span> InputEventAction {</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    GDCLASS(InputEventGazeBase, InputEventAction);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    int64_t window_id = 0;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    uint64_t frame_id = 0;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    uint64_t timestamp_usec = 0;</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">float</span> left_eye_openness = 0.0f;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">float</span> right_eye_openness = 0.0f;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    InputEventGazeBase();</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    <span class="keyword">virtual</span> ~InputEventGazeBase() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keywordtype">void</span> set_window_id(int64_t p_id) { window_id = p_id; }</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    int64_t get_window_id()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> window_id; }</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keywordtype">void</span> set_frame_id(uint64_t p_id) { frame_id = p_id; }</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    uint64_t get_frame_id()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> frame_id; }</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keywordtype">void</span> set_timestamp_usec(uint64_t p_time) { timestamp_usec = p_time; }</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    uint64_t get_timestamp_usec()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> timestamp_usec; }</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">void</span> set_left_eye_openness(<span class="keywordtype">float</span> p_val) { left_eye_openness = p_val; }</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordtype">float</span> get_left_eye_openness()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> left_eye_openness; }</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keywordtype">void</span> set_right_eye_openness(<span class="keywordtype">float</span> p_val) { right_eye_openness = p_val; }</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">float</span> get_right_eye_openness()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> right_eye_openness; }</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_face_tracked()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGazeBase&gt; &amp;p_other);</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>};</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    InputEventGazeBase();</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">virtual</span> ~InputEventGazeBase() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keywordtype">void</span> set_window_id(int64_t p_id) { window_id = p_id; }</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    int64_t get_window_id()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> window_id; }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2">   40</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2">set_frame_id</a>(uint64_t p_id) { frame_id = p_id; }</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a8cb9bdfda5fd1afa1cf8abe022727695">   46</a></span>    uint64_t <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a8cb9bdfda5fd1afa1cf8abe022727695">get_frame_id</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> frame_id; }</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4">   52</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4">set_timestamp_usec</a>(uint64_t p_time) { timestamp_usec = p_time; }</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#aec4fe5aa9648434bfbbffa74ad45a204">   58</a></span>    uint64_t <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#aec4fe5aa9648434bfbbffa74ad45a204">get_timestamp_usec</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> timestamp_usec; }</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462">   64</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462">set_left_eye_openness</a>(<span class="keywordtype">float</span> p_val) { left_eye_openness = p_val; }</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a4ee9bf4e873112fb80342bcfe1e908ee">   70</a></span>    <span class="keywordtype">float</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a4ee9bf4e873112fb80342bcfe1e908ee">get_left_eye_openness</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> left_eye_openness; }</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f">   76</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f">set_right_eye_openness</a>(<span class="keywordtype">float</span> p_val) { right_eye_openness = p_val; }</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">   82</a></span>    <span class="keywordtype">float</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">get_right_eye_openness</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> right_eye_openness; }</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138">   88</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138">is_face_tracked</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGazeBase&gt; &amp;p_other);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>};</div>
 </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span></div>
-<div class="foldopen" id="foldopen00055" data-start="{" data-end="};">
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html">   55</a></span><span class="keyword">class </span>InputEventGaze : <span class="keyword">public</span> InputEventGazeBase {</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    GDCLASS(InputEventGaze, InputEventGazeBase);</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    Vector2 position;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    Vector2 global_position;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    Vector2 screen_position;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    Vector2 relative;</div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    Vector2 screen_relative;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    Vector2 velocity;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    Vector2 screen_velocity;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    Transform3D head_transform;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    Transform3D gaze_transform;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    InputEventGaze();</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">virtual</span> ~InputEventGaze() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_face_tracked()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keywordtype">void</span> set_position(<span class="keyword">const</span> Vector2 &amp;p_pos) { position = p_pos; }</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    Vector2 get_position()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> position; }</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keywordtype">void</span> set_global_position(<span class="keyword">const</span> Vector2 &amp;p_pos) { global_position = p_pos; }</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    Vector2 get_global_position()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> global_position; }</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keywordtype">void</span> set_screen_position(<span class="keyword">const</span> Vector2 &amp;p_pos) { screen_position = p_pos; }</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    Vector2 get_screen_position()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> screen_position; }</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    <span class="keywordtype">void</span> set_relative(<span class="keyword">const</span> Vector2 &amp;p_rel) { relative = p_rel; }</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    Vector2 get_relative()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> relative; }</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keywordtype">void</span> set_screen_relative(<span class="keyword">const</span> Vector2 &amp;p_rel) { screen_relative = p_rel; }</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    Vector2 get_screen_relative()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> screen_relative; }</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keywordtype">void</span> set_velocity(<span class="keyword">const</span> Vector2 &amp;p_vel) { velocity = p_vel; }</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    Vector2 get_velocity()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> velocity; }</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordtype">void</span> set_screen_velocity(<span class="keyword">const</span> Vector2 &amp;p_vel) { screen_velocity = p_vel; }</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    Vector2 get_screen_velocity()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> screen_velocity; }</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordtype">void</span> set_head_transform(<span class="keyword">const</span> Transform3D &amp;p_xform) { head_transform = p_xform; }</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    Transform3D get_head_transform()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> head_transform; }</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span></div>
+<div class="foldopen" id="foldopen00100" data-start="{" data-end="};">
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html">  100</a></span><span class="keyword">class </span>InputEventGaze : <span class="keyword">public</span> InputEventGazeBase {</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    GDCLASS(InputEventGaze, InputEventGazeBase);</div>
 <div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    <span class="keywordtype">void</span> set_gaze_transform(<span class="keyword">const</span> Transform3D &amp;p_xform) { gaze_transform = p_xform; }</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    Transform3D get_gaze_transform()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gaze_transform; }</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    Vector2 eye_gaze_position;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    Vector2 nose_gaze_position;</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGaze&gt; &amp;p_other);</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    String as_text() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>};</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    Transform3D head_transform;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    Transform3D gaze_transform;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    InputEventGaze();</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keyword">virtual</span> ~InputEventGaze() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#aceb6dbffce3c03e48b8cdd3d6b7fb866">  116</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#aceb6dbffce3c03e48b8cdd3d6b7fb866">is_face_tracked</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    Vector2 <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a7529fdee3583d83f7882fc4df813ac87">get_eye_gaze</a>(<span class="keyword">const</span> CanvasItem *p_local_to = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a730a85ef2171143ea5d128a329a990ef">set_eye_gaze</a>(<span class="keyword">const</span> Vector2 &amp;p_pos);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    Vector2 <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a4dafd0841bc03e61d806e797aed7877d">get_nose_gaze</a>(<span class="keyword">const</span> CanvasItem *p_local_to = <span class="keyword">nullptr</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a5840113c98ceae1342ca3ef230e5d7a9">set_nose_gaze</a>(<span class="keyword">const</span> Vector2 &amp;p_pos);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a6bc5abcfe8fe642e806afb9a0640c75c">  160</a></span>    Transform3D <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a6bc5abcfe8fe642e806afb9a0640c75c">get_head_pose</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> head_transform; }</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a9c570885cf7e4d3f68a82b6c0622ce0a">  166</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a9c570885cf7e4d3f68a82b6c0622ce0a">set_head_pose</a>(<span class="keyword">const</span> Transform3D &amp;p_pose) { head_transform = p_pose; }</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a21f83331d96846f5ba4f4b61e0233c35">  172</a></span>    Vector3 <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a21f83331d96846f5ba4f4b61e0233c35">get_eye_origin</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gaze_transform.origin; }</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a6216270138fd520ede8f96f5d0004f01">  178</a></span>    Vector3 <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a6216270138fd520ede8f96f5d0004f01">get_eye_direction</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> -gaze_transform.basis.get_column(2); }</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a351bb6237af43f80ad5750dae61d6fef">  184</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a351bb6237af43f80ad5750dae61d6fef">set_head_transform</a>(<span class="keyword">const</span> Transform3D &amp;p_xform) { head_transform = p_xform; }</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a6388cb4d29cbc8d89278031a82c08b7d">  190</a></span>    Transform3D <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a6388cb4d29cbc8d89278031a82c08b7d">get_head_transform</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> head_transform; }</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#aa073d03ad8b1d31d6e4aa4b4869ef60d">  196</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#aa073d03ad8b1d31d6e4aa4b4869ef60d">set_gaze_transform</a>(<span class="keyword">const</span> Transform3D &amp;p_xform) { gaze_transform = p_xform; }</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze.html#a6fcad6564cee08c6bfe41a104795ca2f">  202</a></span>    Transform3D <a class="code hl_function" href="classgodot_1_1_input_event_gaze.html#a6fcad6564cee08c6bfe41a104795ca2f">get_gaze_transform</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> gaze_transform; }</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGaze&gt; &amp;p_other);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    String as_text() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>};</div>
 </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span></div>
-<div class="foldopen" id="foldopen00115" data-start="{" data-end="};">
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_missing.html">  115</a></span><span class="keyword">class </span>InputEventGazeMissing : <span class="keyword">public</span> InputEventGazeBase {</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    GDCLASS(InputEventGazeMissing, InputEventGazeBase);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="keyword">enum</span> MissingReason {</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        REASON_NO_FACE_DETECTED = 0,</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        REASON_OCCLUDED = 1,</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        REASON_OUT_OF_BOUNDS = 2,</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        REASON_SENSOR_INACTIVE = 3</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    };</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    MissingReason reason = REASON_NO_FACE_DETECTED;</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    InputEventGazeMissing();</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keyword">virtual</span> ~InputEventGazeMissing() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> is_face_tracked()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="keywordtype">void</span> set_reason(MissingReason p_reason) { reason = p_reason; }</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    MissingReason get_reason()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> reason; }</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGazeMissing&gt; &amp;p_other);</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    String as_text() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>};</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span></div>
+<div class="foldopen" id="foldopen00213" data-start="{" data-end="};">
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_missing.html">  213</a></span><span class="keyword">class </span>InputEventGazeMissing : <span class="keyword">public</span> InputEventGazeBase {</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    GDCLASS(InputEventGazeMissing, InputEventGazeBase);</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    <span class="keyword">enum</span> MissingReason {</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        REASON_NO_FACE_DETECTED = 0,</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        REASON_OCCLUDED = 1,</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        REASON_OUT_OF_BOUNDS = 2,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        REASON_SENSOR_INACTIVE = 3</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>    };</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    MissingReason reason = REASON_NO_FACE_DETECTED;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> _bind_methods();</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    InputEventGazeMissing();</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="keyword">virtual</span> ~InputEventGazeMissing() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_missing.html#a280adacd326f635970e784b5eb6c06c1">  234</a></span>    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_missing.html#a280adacd326f635970e784b5eb6c06c1">is_face_tracked</a>()<span class="keyword"> const override </span>{ <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_missing.html#acec2f233fd39338f85b9e69afb6ce2ab">  240</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgodot_1_1_input_event_gaze_missing.html#acec2f233fd39338f85b9e69afb6ce2ab">set_reason</a>(MissingReason p_reason) { reason = p_reason; }</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno"><a class="line" href="classgodot_1_1_input_event_gaze_missing.html#a92cabd4dee375c9ea5cd79f7ac577500">  246</a></span>    MissingReason <a class="code hl_function" href="classgodot_1_1_input_event_gaze_missing.html#a92cabd4dee375c9ea5cd79f7ac577500">get_reason</a>()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> reason; }</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <span class="keywordtype">void</span> copy_from(<span class="keyword">const</span> Ref&lt;InputEventGazeMissing&gt; &amp;p_other);</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    String as_text() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>};</div>
 </div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>} <span class="comment">// namespace godot</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>VARIANT_ENUM_CAST(godot::InputEventGazeMissing::MissingReason);</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>} <span class="comment">// namespace godot</span></div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>VARIANT_ENUM_CAST(godot::InputEventGazeMissing::MissingReason);</div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a11f3a0812c0505f1f5d5730b61a02fb2"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2">godot::InputEventGazeBase::set_frame_id</a></div><div class="ttdeci">void set_frame_id(uint64_t p_id)</div><div class="ttdoc">Sets the sequential video pipeline frame identifier.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:40</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a4ee9bf4e873112fb80342bcfe1e908ee"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a4ee9bf4e873112fb80342bcfe1e908ee">godot::InputEventGazeBase::get_left_eye_openness</a></div><div class="ttdeci">float get_left_eye_openness() const</div><div class="ttdoc">Retrieves the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:70</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a816f584e0e7c29622e19584e51107aa4"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4">godot::InputEventGazeBase::set_timestamp_usec</a></div><div class="ttdeci">void set_timestamp_usec(uint64_t p_time)</div><div class="ttdoc">Sets the event creation timestamp in microseconds (from Time::get_ticks_usec()).</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:52</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a8c8526e2d2da7f512789ffd372cb6462"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462">godot::InputEventGazeBase::set_left_eye_openness</a></div><div class="ttdeci">void set_left_eye_openness(float p_val)</div><div class="ttdoc">Sets the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:64</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a8cb9bdfda5fd1afa1cf8abe022727695"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a8cb9bdfda5fd1afa1cf8abe022727695">godot::InputEventGazeBase::get_frame_id</a></div><div class="ttdeci">uint64_t get_frame_id() const</div><div class="ttdoc">Retrieves the sequential video pipeline frame identifier.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:46</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_a8f174a146075dcd7dd371f9618598257"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">godot::InputEventGazeBase::get_right_eye_openness</a></div><div class="ttdeci">float get_right_eye_openness() const</div><div class="ttdoc">Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:82</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_abf8f978bea3b276b437a689180e76138"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138">godot::InputEventGazeBase::is_face_tracked</a></div><div class="ttdeci">virtual bool is_face_tracked() const</div><div class="ttdoc">Indicates whether valid face tracking data is present in this event.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:88</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_adc3848db74215ffe8d35c82e3f3f677f"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f">godot::InputEventGazeBase::set_right_eye_openness</a></div><div class="ttdeci">void set_right_eye_openness(float p_val)</div><div class="ttdoc">Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:76</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_base_html_aec4fe5aa9648434bfbbffa74ad45a204"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_base.html#aec4fe5aa9648434bfbbffa74ad45a204">godot::InputEventGazeBase::get_timestamp_usec</a></div><div class="ttdeci">uint64_t get_timestamp_usec() const</div><div class="ttdoc">Retrieves the event creation timestamp in microseconds.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:58</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a21f83331d96846f5ba4f4b61e0233c35"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a21f83331d96846f5ba4f4b61e0233c35">godot::InputEventGaze::get_eye_origin</a></div><div class="ttdeci">Vector3 get_eye_origin() const</div><div class="ttdoc">Retrieves the 3D eye origin in Godot camera space (millimeters).</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:172</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a351bb6237af43f80ad5750dae61d6fef"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a351bb6237af43f80ad5750dae61d6fef">godot::InputEventGaze::set_head_transform</a></div><div class="ttdeci">void set_head_transform(const Transform3D &amp;p_xform)</div><div class="ttdoc">Sets the underlying 3D head transform in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:184</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a4dafd0841bc03e61d806e797aed7877d"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a4dafd0841bc03e61d806e797aed7877d">godot::InputEventGaze::get_nose_gaze</a></div><div class="ttdeci">Vector2 get_nose_gaze(const CanvasItem *p_local_to=nullptr) const</div><div class="ttdoc">Retrieves the 2D nose gaze coordinates (nose-forward ray projected to the display) on the canvas or r...</div><div class="ttdef"><b>Definition</b> input_event_gaze.cpp:76</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a5840113c98ceae1342ca3ef230e5d7a9"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a5840113c98ceae1342ca3ef230e5d7a9">godot::InputEventGaze::set_nose_gaze</a></div><div class="ttdeci">void set_nose_gaze(const Vector2 &amp;p_pos)</div><div class="ttdoc">Sets the 2D nose gaze position in canonical root Viewport Canvas coordinates.</div><div class="ttdef"><b>Definition</b> input_event_gaze.cpp:83</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a6216270138fd520ede8f96f5d0004f01"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a6216270138fd520ede8f96f5d0004f01">godot::InputEventGaze::get_eye_direction</a></div><div class="ttdeci">Vector3 get_eye_direction() const</div><div class="ttdoc">Retrieves the 3D unit eye gaze direction vector in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:178</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a6388cb4d29cbc8d89278031a82c08b7d"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a6388cb4d29cbc8d89278031a82c08b7d">godot::InputEventGaze::get_head_transform</a></div><div class="ttdeci">Transform3D get_head_transform() const</div><div class="ttdoc">Retrieves the underlying 3D head transform in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:190</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a6bc5abcfe8fe642e806afb9a0640c75c"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a6bc5abcfe8fe642e806afb9a0640c75c">godot::InputEventGaze::get_head_pose</a></div><div class="ttdeci">Transform3D get_head_pose() const</div><div class="ttdoc">Retrieves the 3D head pose in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:160</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a6fcad6564cee08c6bfe41a104795ca2f"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a6fcad6564cee08c6bfe41a104795ca2f">godot::InputEventGaze::get_gaze_transform</a></div><div class="ttdeci">Transform3D get_gaze_transform() const</div><div class="ttdoc">Retrieves the underlying 3D gaze transform in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:202</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a730a85ef2171143ea5d128a329a990ef"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a730a85ef2171143ea5d128a329a990ef">godot::InputEventGaze::set_eye_gaze</a></div><div class="ttdeci">void set_eye_gaze(const Vector2 &amp;p_pos)</div><div class="ttdoc">Sets the 2D eye gaze position in canonical root Viewport Canvas coordinates.</div><div class="ttdef"><b>Definition</b> input_event_gaze.cpp:72</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a7529fdee3583d83f7882fc4df813ac87"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a7529fdee3583d83f7882fc4df813ac87">godot::InputEventGaze::get_eye_gaze</a></div><div class="ttdeci">Vector2 get_eye_gaze(const CanvasItem *p_local_to=nullptr) const</div><div class="ttdoc">Retrieves the 2D eye gaze coordinates on the viewport canvas or relative to a specified CanvasItem.</div><div class="ttdef"><b>Definition</b> input_event_gaze.cpp:65</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_a9c570885cf7e4d3f68a82b6c0622ce0a"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#a9c570885cf7e4d3f68a82b6c0622ce0a">godot::InputEventGaze::set_head_pose</a></div><div class="ttdeci">void set_head_pose(const Transform3D &amp;p_pose)</div><div class="ttdoc">Sets the 3D head pose transform in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:166</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_aa073d03ad8b1d31d6e4aa4b4869ef60d"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#aa073d03ad8b1d31d6e4aa4b4869ef60d">godot::InputEventGaze::set_gaze_transform</a></div><div class="ttdeci">void set_gaze_transform(const Transform3D &amp;p_xform)</div><div class="ttdoc">Sets the underlying 3D gaze transform in Godot camera space.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:196</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_html_aceb6dbffce3c03e48b8cdd3d6b7fb866"><div class="ttname"><a href="classgodot_1_1_input_event_gaze.html#aceb6dbffce3c03e48b8cdd3d6b7fb866">godot::InputEventGaze::is_face_tracked</a></div><div class="ttdeci">virtual bool is_face_tracked() const override</div><div class="ttdoc">Indicates whether valid face tracking data is present in this event.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:116</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_missing_html_a280adacd326f635970e784b5eb6c06c1"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_missing.html#a280adacd326f635970e784b5eb6c06c1">godot::InputEventGazeMissing::is_face_tracked</a></div><div class="ttdeci">virtual bool is_face_tracked() const override</div><div class="ttdoc">Indicates whether valid face tracking data is present in this event.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:234</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_missing_html_a92cabd4dee375c9ea5cd79f7ac577500"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_missing.html#a92cabd4dee375c9ea5cd79f7ac577500">godot::InputEventGazeMissing::get_reason</a></div><div class="ttdeci">MissingReason get_reason() const</div><div class="ttdoc">Retrieves the reason why gaze tracking was not achieved for this frame.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:246</div></div>
+<div class="ttc" id="aclassgodot_1_1_input_event_gaze_missing_html_acec2f233fd39338f85b9e69afb6ce2ab"><div class="ttname"><a href="classgodot_1_1_input_event_gaze_missing.html#acec2f233fd39338f85b9e69afb6ce2ab">godot::InputEventGazeMissing::set_reason</a></div><div class="ttdeci">void set_reason(MissingReason p_reason)</div><div class="ttdoc">Sets the reason why gaze tracking was not achieved for this frame.</div><div class="ttdef"><b>Definition</b> input_event_gaze.hpp:240</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

@@ -166,6 +166,21 @@
         </inbodydescription>
         <location file="src/godot/vision_server.hpp" line="47" column="13" bodyfile="src/godot/vision_server.hpp" bodystart="47" bodyend="-1"/>
       </memberdef>
+      <memberdef kind="variable" id="structgodot_1_1_vision_server_1_1_camera_data_1a4a3c3fd68f9ae844ea2f16cc982f3dcd" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::VisionServer::CameraData::last_readback_ms</definition>
+        <argsstring></argsstring>
+        <name>last_readback_ms</name>
+        <qualifiedname>godot::VisionServer::CameraData::last_readback_ms</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="48" column="16" bodyfile="src/godot/vision_server.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_vision_server_1_1_camera_data_1adf7e101ef813739f83e0a13023a9db36" prot="public" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref></type>
         <definition>Gaze::Frame godot::VisionServer::CameraData::last_frame</definition>
@@ -178,7 +193,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="49" column="21" bodyfile="src/godot/vision_server.hpp" bodystart="49" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="50" column="21" bodyfile="src/godot/vision_server.hpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_vision_server_1_1_camera_data_1ad4a67b89b5769698709ef729c8864c84" prot="public" static="no" mutable="no">
         <type>std::vector&lt; unsigned char &gt;</type>
@@ -192,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="50" column="21" bodyfile="src/godot/vision_server.hpp" bodystart="50" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="51" column="21" bodyfile="src/godot/vision_server.hpp" bodystart="51" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -219,7 +234,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/vision_server.hpp" line="36" column="5" bodyfile="src/godot/vision_server.hpp" bodystart="36" bodyend="51"/>
+    <location file="src/godot/vision_server.hpp" line="36" column="5" bodyfile="src/godot/vision_server.hpp" bodystart="36" bodyend="52"/>
     <listofallmembers>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a3b91e65bb7087c2fd7997cb69b3cf671" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>camera</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a681811381bfa26a237d060e35a455601" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>camera_fov</name></member>
@@ -231,6 +246,7 @@
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1ad71b081130a9025f641a5013ec93ec5d" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>is_active</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1adf7e101ef813739f83e0a13023a9db36" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>last_frame</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1ad4a67b89b5769698709ef729c8864c84" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>last_frame_data</name></member>
+      <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a4a3c3fd68f9ae844ea2f16cc982f3dcd" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>last_readback_ms</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1af5b8e0531441ec31de3f903522c179df" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>preview_refcount</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a2de173a0c1f8c4379e9edd043b60a062" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>preview_requested</name></member>
       <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a308f8b48cfa32560e22c29659cf53885" prot="public" virt="non-virtual"><scope>godot::VisionServer::CameraData</scope><name>width</name></member>

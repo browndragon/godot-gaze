@@ -151,6 +151,8 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func
 <li>camera_start()&#160;:&#160;<a class="el" href="classgodot_1_1_mock_vision_server.html#a4a43ab97ac090d728fe6a2a946f4a43b">godot::MockVisionServer</a>, <a class="el" href="classgodot_1_1_vision_server.html#a6a077be45fb502ef66adbd69a9b1baf0">godot::VisionServer</a></li>
 <li>camera_stop()&#160;:&#160;<a class="el" href="classgodot_1_1_mock_vision_server.html#aa043038fb3f8f4b57a8df1ed58643b8b">godot::MockVisionServer</a>, <a class="el" href="classgodot_1_1_vision_server.html#acfd359215cca0d1bd9c86a2832b883bc">godot::VisionServer</a></li>
 <li>clear()&#160;:&#160;<a class="el" href="class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#abbae97910f3f83690e897b7f0a464b10">Gaze::Concurrency::AtomicMailbox&lt; T &gt;</a></li>
+<li>create_default_event()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#aa9545b9113275a2dab894a858d0db570">godot::GazeServer</a></li>
+<li>create_default_missing_event()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#acd3a78080049bde148630357aedabc7c">godot::GazeServer</a></li>
 </ul>
 
 
@@ -170,14 +172,31 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func
 <li>get_canonical_35pt_model_points()&#160;:&#160;<a class="el" href="class_gaze_1_1_face_model_geometry.html#a654c8d6715600eec0575f81a00ccae57">Gaze::FaceModelGeometry</a></li>
 <li>get_canonical_godot_model_points()&#160;:&#160;<a class="el" href="class_gaze_1_1_face_model_geometry.html#a3ebd03884df5df60fb3e9526c46956cc">Gaze::FaceModelGeometry</a></li>
 <li>get_default_camera_offset_mm()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#a385facf0158530c6ae0fb7ddc0d4bf14">godot::GazeDisplayServer</a></li>
+<li>get_emulate_gaze_from_mouse()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#af9941e2c6bfebf948eeacbac67648750">godot::GazeServer</a></li>
+<li>get_emulate_mouse_from_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a1435b15bf7bf0ff0c874284fdcfe3eb5">godot::GazeServer</a></li>
+<li>get_event_factory()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a338a0aa6c726acedd3b84c5af25dad89">godot::GazeServer</a></li>
+<li>get_eye_direction()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a6216270138fd520ede8f96f5d0004f01">godot::InputEventGaze</a></li>
+<li>get_eye_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a7529fdee3583d83f7882fc4df813ac87">godot::InputEventGaze</a></li>
+<li>get_eye_origin()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a21f83331d96846f5ba4f4b61e0233c35">godot::InputEventGaze</a></li>
 <li>get_frame()&#160;:&#160;<a class="el" href="class_gaze_1_1_concurrency_1_1_pool.html#af3ee43a99d4ef0261c64ea9c45bc2317">Gaze::Concurrency::Pool&lt; T, SZ &gt;</a></li>
+<li>get_frame_id()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8cb9bdfda5fd1afa1cf8abe022727695">godot::InputEventGazeBase</a></li>
+<li>get_gaze_transform()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a6fcad6564cee08c6bfe41a104795ca2f">godot::InputEventGaze</a></li>
 <li>get_gravity_vector()&#160;:&#160;<a class="el" href="classgodot_1_1_vision_server.html#a067e714ed2f27d1cf4c4b581a3b65eb3">godot::VisionServer</a></li>
+<li>get_head_pose()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a6bc5abcfe8fe642e806afb9a0640c75c">godot::InputEventGaze</a></li>
+<li>get_head_transform()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a6388cb4d29cbc8d89278031a82c08b7d">godot::InputEventGaze</a></li>
+<li>get_left_eye_openness()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a4ee9bf4e873112fb80342bcfe1e908ee">godot::InputEventGazeBase</a></li>
+<li>get_mouse_emulation_dwell_sec()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#ae0e1af81160134c07f3e6d8e8a9dde24">godot::GazeServer</a></li>
+<li>get_mouse_emulation_transition_sec()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a8fb306926594759c067502e92a386e71">godot::GazeServer</a></li>
+<li>get_nose_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a4dafd0841bc03e61d806e797aed7877d">godot::InputEventGaze</a></li>
 <li>get_pixel_pitch_mm()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#a4ecf8b703f58b2acad09c8bc4b508a94">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#ae5e5f53314ead3fe8521c60656625769">godot::MockGazeDisplayServer</a></li>
 <li>get_raw_acceleration()&#160;:&#160;<a class="el" href="classgodot_1_1_vision_server.html#a09127e37d532ad94f80ffb08e5bccbba">godot::VisionServer</a></li>
+<li>get_reason()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_missing.html#a92cabd4dee375c9ea5cd79f7ac577500">godot::InputEventGazeMissing</a></li>
+<li>get_right_eye_openness()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">godot::InputEventGazeBase</a></li>
 <li>get_screen_scale()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#a3ee08268d01a6ad7c76a9e29c3b4632f">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a4e2f80ac63e79325e85a531e98f31549">godot::MockGazeDisplayServer</a></li>
 <li>get_screen_size_mm()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#aec81508eb77a870a1a2f61c908d90c3b">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#ab5a25d0e4dba60296abd18d7544345a2">godot::MockGazeDisplayServer</a></li>
 <li>get_screen_size_pixels()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#ad3f43e47d01af5e8120ff1a0116e9d48">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a5855a513786da0d611d1de43630ca20c">godot::MockGazeDisplayServer</a></li>
 <li>get_singleton()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#a4497e3c5df05fa0b65cfaab9227f2ecb">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_vision_server.html#a090d7a967b756eac3a0054e8132331b5">godot::VisionServer</a></li>
+<li>get_timestamp_usec()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#aec4fe5aa9648434bfbbffa74ad45a204">godot::InputEventGazeBase</a></li>
 <li>get_window_rect_pixels()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_display_server.html#aa560e9bc3bb60be8aa7220821ad0eb7a">godot::GazeDisplayServer</a>, <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#ac558a079342a017ee92b0db0c155a0ba">godot::MockGazeDisplayServer</a></li>
 <li>gravity_to_orientation()&#160;:&#160;<a class="el" href="class_gaze_1_1_projection_engine.html#a76a235b72ada715947e5e75ca7d83e0e">Gaze::ProjectionEngine</a></li>
 </ul>
@@ -185,6 +204,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func
 
 <h3 class="doxsection"><a id="index_i" name="index_i"></a>- i -</h3><ul>
 <li>inject_texture()&#160;:&#160;<a class="el" href="classgodot_1_1_mock_vision_server.html#a6b5b3db71732c984c4393f0c87de7a6d">godot::MockVisionServer</a>, <a class="el" href="classgodot_1_1_vision_server.html#a2f08934369e54b58cbed71c8427f4364">godot::VisionServer</a></li>
+<li>is_face_tracked()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#aceb6dbffce3c03e48b8cdd3d6b7fb866">godot::InputEventGaze</a>, <a class="el" href="classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138">godot::InputEventGazeBase</a>, <a class="el" href="classgodot_1_1_input_event_gaze_missing.html#a280adacd326f635970e784b5eb6c06c1">godot::InputEventGazeMissing</a></li>
 <li>is_pending()&#160;:&#160;<a class="el" href="class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#a5e07c054a87963e1f6a2dc1e706dca99">Gaze::Concurrency::AtomicMailbox&lt; T &gt;</a></li>
 <li>is_tracking_active()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_tracker.html#a56bf0348a0518adcb5908f557cef3afa">godot::GazeTracker</a></li>
 </ul>
@@ -193,6 +213,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func
 <h3 class="doxsection"><a id="index_p" name="index_p"></a>- p -</h3><ul>
 <li>pixel_to_millimeter()&#160;:&#160;<a class="el" href="class_gaze_1_1_projection_engine.html#a702af3b59a4e742ea25e43e4f4af1d48">Gaze::ProjectionEngine</a></li>
 <li>project_gaze()&#160;:&#160;<a class="el" href="class_gaze_1_1_projection_engine.html#a3fe06d84bd683196bceae659cbab844f">Gaze::ProjectionEngine</a></li>
+<li>project_ray_to_camera_plane()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a456c4cc19663f4186a12fcaa4ea9cc36">godot::GazeServer</a></li>
+<li>project_ray_to_canvas()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a40560cb70716da157931466cabb71026">godot::GazeServer</a></li>
+<li>project_ray_to_viewport()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a377fa1f5b94a4e157fc0e126d9688e31">godot::GazeServer</a></li>
 <li>put()&#160;:&#160;<a class="el" href="class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#a5d9f5dc5baaa30dc38dccf0cfb8ebaca">Gaze::Concurrency::AtomicMailbox&lt; T &gt;</a></li>
 </ul>
 
@@ -205,8 +228,23 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('functions_func
 
 <h3 class="doxsection"><a id="index_s" name="index_s"></a>- s -</h3><ul>
 <li>screen_mm_to_camera_space()&#160;:&#160;<a class="el" href="class_gaze_1_1_projection_engine.html#a283d1496569c8a418638f55d98b13f25">Gaze::ProjectionEngine</a></li>
+<li>set_emulate_gaze_from_mouse()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#afba19bd41e7e4bb6bb5af21b4e1f872c">godot::GazeServer</a></li>
+<li>set_emulate_mouse_from_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a01d82ad0c25e44ee8534ef2bd97c96ae">godot::GazeServer</a></li>
 <li>set_enabled()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_tracker.html#a45c1ade36bc0a7839a6a26348117c1c6">godot::GazeTracker</a></li>
+<li>set_event_factory()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a8df80b0cde997e9fb236f6d66ef8a828">godot::GazeServer</a></li>
+<li>set_eye_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a730a85ef2171143ea5d128a329a990ef">godot::InputEventGaze</a></li>
+<li>set_frame_id()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a11f3a0812c0505f1f5d5730b61a02fb2">godot::InputEventGazeBase</a></li>
+<li>set_gaze_transform()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#aa073d03ad8b1d31d6e4aa4b4869ef60d">godot::InputEventGaze</a></li>
+<li>set_head_pose()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a9c570885cf7e4d3f68a82b6c0622ce0a">godot::InputEventGaze</a></li>
+<li>set_head_transform()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a351bb6237af43f80ad5750dae61d6fef">godot::InputEventGaze</a></li>
+<li>set_left_eye_openness()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8c8526e2d2da7f512789ffd372cb6462">godot::InputEventGazeBase</a></li>
+<li>set_mouse_emulation_dwell_sec()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a69aea5a350ec6f94e19994b549cc6d19">godot::GazeServer</a></li>
+<li>set_mouse_emulation_transition_sec()&#160;:&#160;<a class="el" href="classgodot_1_1_gaze_server.html#a5a2a0eaa64ef70ccb6890350e1dd35fd">godot::GazeServer</a></li>
+<li>set_nose_gaze()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze.html#a5840113c98ceae1342ca3ef230e5d7a9">godot::InputEventGaze</a></li>
+<li>set_reason()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_missing.html#acec2f233fd39338f85b9e69afb6ce2ab">godot::InputEventGazeMissing</a></li>
+<li>set_right_eye_openness()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#adc3848db74215ffe8d35c82e3f3f677f">godot::InputEventGazeBase</a></li>
 <li>set_simulated_acceleration()&#160;:&#160;<a class="el" href="classgodot_1_1_mock_vision_server.html#ac9ecd69c6d4fa719955a2b662ae0dec9">godot::MockVisionServer</a></li>
+<li>set_timestamp_usec()&#160;:&#160;<a class="el" href="classgodot_1_1_input_event_gaze_base.html#a816f584e0e7c29622e19584e51107aa4">godot::InputEventGazeBase</a></li>
 <li>solve()&#160;:&#160;<a class="el" href="class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09">Gaze::SQPnPSolver</a></li>
 </ul>
 

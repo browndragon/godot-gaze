@@ -22,5 +22,6 @@ var searchData=
   ['spacedvector3_3c_20space_3a_3aopencvfacemodel_20_3e_19',['SpacedVector3&lt; Space::OpenCVFaceModel &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
   ['spacedvector3_3c_20space_3a_3aopenvinoadasgaze_20_3e_20',['SpacedVector3&lt; Space::OpenVINOADASGaze &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
   ['spacedvector3_3c_20to_20_3e_21',['SpacedVector3&lt; To &gt;',['../struct_gaze_1_1_spaced_vector3.html',1,'Gaze']]],
-  ['sqpnpsolver_22',['SQPnPSolver',['../class_gaze_1_1_s_q_pn_p_solver.html',1,'Gaze']]]
+  ['sqpnpsolver_22',['SQPnPSolver',['../class_gaze_1_1_s_q_pn_p_solver.html',1,'Gaze']]],
+  ['stagetimings_23',['StageTimings',['../struct_gaze_1_1_stage_timings.html',1,'Gaze']]]
 ];

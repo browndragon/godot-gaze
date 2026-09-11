@@ -15,14 +15,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="40" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="40" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="42" column="13" bodyfile="src/godot/gaze_server.cpp" bodystart="42" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/godot/gaze_server.cpp" line="39" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="39" bodyend="41"/>
+    <location file="src/godot/gaze_server.cpp" line="41" column="5" bodyfile="src/godot/gaze_server.cpp" bodystart="41" bodyend="43"/>
     <listofallmembers>
       <member refid="structgodot_1_1_gaze_server_impl_1_1_camera_info_1a86b6bb15ff6fe604b851ba02d2dd1772" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl::CameraInfo</scope><name>vision_camera_rid</name></member>
     </listofallmembers>

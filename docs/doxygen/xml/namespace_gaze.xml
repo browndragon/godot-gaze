@@ -32,6 +32,7 @@
     <innerclass refid="struct_gaze_1_1_spaced_vector2" prot="public">Gaze::SpacedVector2</innerclass>
     <innerclass refid="struct_gaze_1_1_spaced_vector3" prot="public">Gaze::SpacedVector3</innerclass>
     <innerclass refid="class_gaze_1_1_s_q_pn_p_solver" prot="public">Gaze::SQPnPSolver</innerclass>
+    <innerclass refid="struct_gaze_1_1_stage_timings" prot="public">Gaze::StageTimings</innerclass>
     <innerclass refid="struct_gaze_1_1_yu_net_result" prot="public">Gaze::YuNetResult</innerclass>
     <innernamespace refid="namespace_gaze_1_1_concurrency">Gaze::Concurrency</innernamespace>
     <innernamespace refid="namespace_gaze_1_1_coordinate_conversions">Gaze::CoordinateConversions</innernamespace>

@@ -427,7 +427,7 @@ void GazeServer::reset() {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
 #ifndef WEB_ENABLED
     if (pipeline) {
-        pipeline->reset_tracker();
+        pipeline->clear_work_queue();
     }
 #endif
     impl->face = FaceInfo();

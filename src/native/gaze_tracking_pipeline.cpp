@@ -25,7 +25,7 @@ namespace Gaze
         const std::vector<uint8_t> &landmark_model_data)
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
-        std::lock_guard<std::mutex> lock(state_mutex);
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
 
         face_detector = std::make_unique<ORTYuNetDetector>(yunet_model_data);
         eye_state_model = std::make_unique<ORTEyeStateModel>(eye_openness_model_data);
@@ -71,7 +71,7 @@ namespace Gaze
         const std::string &landmark_model_path)
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
-        std::lock_guard<std::mutex> lock(state_mutex);
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
 
         face_detector = std::make_unique<ORTYuNetDetector>(yunet_model_path);
         eye_state_model = std::make_unique<ORTEyeStateModel>(eye_openness_model_path);
@@ -110,7 +110,7 @@ namespace Gaze
     void GazeTrackingPipeline::start()
     {
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
-        std::lock_guard<std::mutex> lock(state_mutex);
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
         if (thread_running)
             return;
         if (!initialized)
@@ -129,7 +129,7 @@ namespace Gaze
         log_info(2, "GazeTrackingPipeline_Stop_Began");
         std::lock_guard<std::mutex> life_lock(lifecycle_mutex);
         {
-            std::lock_guard<std::mutex> lock(state_mutex);
+            std::lock_guard<std::recursive_mutex> lock(state_mutex);
             if (!thread_running) {
                 log_info(2, "GazeTrackingPipeline_Stop_ThreadNotRunning");
                 return;
@@ -155,7 +155,7 @@ namespace Gaze
 
     void GazeTrackingPipeline::set_config(const PipelineConfig &p_config)
     {
-        std::lock_guard<std::mutex> lock(state_mutex);
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
         active_config = p_config;
         config_dirty = true;
     }
@@ -181,8 +181,17 @@ namespace Gaze
 
     void GazeTrackingPipeline::clear_work_queue()
     {
-        request_mailbox.clear();
-        results_mailbox.clear();
+        GazeFrameData *req = nullptr;
+        if (request_mailbox.take(req) && req)
+        {
+            frame_pool.release(req);
+        }
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
+        GazeFrameData *res = nullptr;
+        if (results_mailbox.take(res) && res)
+        {
+            frame_pool.release(res);
+        }
         reset_tracker();
     }
 
@@ -222,7 +231,7 @@ namespace Gaze
     void GazeTrackingPipeline::process_frame_synchronous(GazeFrameData *data)
     {
         if (!data) return;
-        std::lock_guard<std::mutex> lock(state_mutex);
+        std::lock_guard<std::recursive_mutex> lock(state_mutex);
         if (!initialized)
         {
             data->face_detected = false;

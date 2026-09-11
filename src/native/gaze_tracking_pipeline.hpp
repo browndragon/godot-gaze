@@ -31,7 +31,7 @@ namespace Gaze
 
         std::thread worker_thread;
         std::atomic<bool> thread_running{false};
-        mutable std::mutex state_mutex;
+        mutable std::recursive_mutex state_mutex;
         std::condition_variable worker_cv;
         std::mutex worker_mutex;
         std::mutex lifecycle_mutex;
@@ -100,6 +100,7 @@ namespace Gaze
         }
         void reset_tracker()
         {
+            std::lock_guard<std::recursive_mutex> lock(state_mutex);
             roll_filter.reset(0.0f);
             reset_face_tracking();
         }

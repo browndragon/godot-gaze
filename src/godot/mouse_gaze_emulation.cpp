@@ -1,6 +1,8 @@
 #include "mouse_gaze_emulation.hpp"
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
 #include <godot_cpp/core/math.hpp>
 #include <algorithm>
 
@@ -185,12 +187,17 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 
     r_last_gaze_pos = blended_pos;
     r_last_screen_pos = screen_pos;
-    r_last_event_time_usec = now_usec;
+    Vector2 canvas_pos = blended_pos;
+    double scale = p_ds ? p_ds->screen_get_scale() : 1.0;
+    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->get_root()) {
+        canvas_pos = st->get_root()->get_final_transform().affine_inverse().xform(canvas_pos * scale);
+    }
 
     event->set_frame_id(++r_frame_id);
     event->set_timestamp_usec(now_usec);
-    event->set_position(blended_pos);
-    event->set_global_position(blended_pos);
+    event->set_position(canvas_pos);
+    event->set_global_position(canvas_pos);
     event->set_screen_position(screen_pos);
     event->set_relative(rel);
     event->set_screen_relative(screen_rel);

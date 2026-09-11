@@ -6,6 +6,7 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
 #include <godot_cpp/classes/main_loop.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
@@ -874,17 +875,25 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
 
     Vector2 local_pos = get_gaze_screen_px(true);
     Vector2 win_pos = Vector2(0, 0);
+    double scale = 1.0;
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
     if (gds) {
         win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
+        scale = gds->get_screen_scale();
     } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         DisplayServer *ds = DisplayServer::get_singleton();
         if (ds) {
             win_pos = ds->window_get_position();
+            scale = ds->screen_get_scale();
         }
     }
     Vector2 screen_pos = local_pos + win_pos;
 
+    // Transform window-local points to canonical root viewport canvas coordinates
+    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->get_root()) {
+        local_pos = st->get_root()->get_final_transform().affine_inverse().xform(local_pos * scale);
+    }
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1115,8 +1124,11 @@ void GazeServer::trigger_process() {
                             scale = ds->screen_get_scale();
                         }
                     }
-                    Vector2 physical_pos = local_pos * scale;
-                    Vector2 rel = (local_pos - last_gaze_pos) * scale;
+                    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+                    if (st && st->get_root()) {
+                        local_pos = st->get_root()->get_final_transform().affine_inverse().xform(local_pos * scale);
+                    }
+                    Vector2 rel = local_pos - last_gaze_pos;
                     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
                     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
                     if (dt < 0.0001f) dt = 0.0001f;
@@ -1124,8 +1136,8 @@ void GazeServer::trigger_process() {
 
                     Ref<InputEventMouseMotion> mm;
                     mm.instantiate();
-                    mm->set_position(physical_pos);
-                    mm->set_global_position(physical_pos);
+                    mm->set_position(local_pos);
+                    mm->set_global_position(local_pos);
                     mm->set_relative(rel);
                     mm->set_velocity(vel);
                     input->parse_input_event(mm);
@@ -1138,8 +1150,8 @@ void GazeServer::trigger_process() {
                             mb.instantiate();
                             mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
                             mb->set_pressed(true);
-                            mb->set_position(physical_pos);
-                            mb->set_global_position(physical_pos);
+                            mb->set_position(local_pos);
+                            mb->set_global_position(local_pos);
                             input->parse_input_event(mb);
                             was_both_closed = true;
                         }
@@ -1148,8 +1160,8 @@ void GazeServer::trigger_process() {
                         mb.instantiate();
                         mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
                         mb->set_pressed(false);
-                        mb->set_position(physical_pos);
-                        mb->set_global_position(physical_pos);
+                        mb->set_position(local_pos);
+                        mb->set_global_position(local_pos);
                         input->parse_input_event(mb);
                         was_both_closed = false;
                     }

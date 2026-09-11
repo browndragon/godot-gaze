@@ -418,8 +418,7 @@ func _perform_drawing():
 	# 2. Eye Gaze Screen Intersection (Green: Color(0.2, 1.0, 0.1))
 	var pt_eye_screen = ev.position
 	if pt_eye_screen != Vector2.ZERO:
-		pt_eye_screen = canvas_xform * (pt_eye_screen * scale)
-	_draw_screen_reticle(pt_eye_screen, Color(0.2, 1.0, 0.1, 0.95), 18.0)
+		_draw_screen_reticle(pt_eye_screen, Color(0.2, 1.0, 0.1, 0.95), 18.0)
 
 func calculate_clamped_reticle(pos: Vector2, vp_size: Vector2, inset: float = 18.0) -> Dictionary:
 	if is_nan(pos.x) or is_nan(pos.y) or pos == Vector2.INF or abs(pos.x) > 20000.0 or abs(pos.y) > 20000.0:

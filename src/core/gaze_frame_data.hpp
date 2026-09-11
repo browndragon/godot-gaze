@@ -10,6 +10,19 @@ constexpr size_t EYE_CROP_SIZE = 60;
 constexpr size_t EYE_CROP_CHANNELS = 3;
 constexpr size_t EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANNELS; // 10800 bytes
 
+struct StageTimings {
+    double capture_gpu_readback_ms = 0.0;
+    double roll_prewarp_ms = 0.0;
+    double face_yunet_ms = 0.0;
+    double landmark_adas_ms = 0.0;
+    double pnp_solve_ms = 0.0;
+    double eye_crop_warp_ms = 0.0;
+    double eye_state_ms = 0.0;
+    double gaze_direction_ms = 0.0;
+    double unroll_ms = 0.0;
+    double total_pipeline_ms = 0.0;
+};
+
 struct GazeFrameData {
     std::vector<uint8_t> camera_raw_bgr;
     std::vector<uint8_t> internal_rotated_frame_bgr; // Pre-allocated scratch space for working hint-rolled buffer
@@ -55,6 +68,8 @@ struct GazeFrameData {
     // Generic opaque user context pointer
     void* userdata = nullptr;
 
+    // Stage Telemetry Timings (wall-clock milliseconds)
+    StageTimings timings;
 };
 
 } // namespace Gaze

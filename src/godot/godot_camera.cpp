@@ -96,6 +96,7 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
     if (feed.is_null()) {
         return false;
     }
+    auto t_readback_start = std::chrono::steady_clock::now();
 
     if (is_ycbcr) {
         if (y_texture.is_null() || cbcr_texture.is_null()) {
@@ -201,6 +202,7 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
 
         auto now = std::chrono::steady_clock::now();
         double current_time = std::chrono::duration<double>(now.time_since_epoch()).count();
+        latest_readback_ms = std::chrono::duration<double, std::milli>(now - t_readback_start).count();
 
         out_frame.width = width;
         out_frame.height = height;
@@ -264,6 +266,7 @@ bool GodotCamera::grab_frame(Frame& out_frame) {
 
         auto now = std::chrono::steady_clock::now();
         double current_time = std::chrono::duration<double>(now.time_since_epoch()).count();
+        latest_readback_ms = std::chrono::duration<double, std::milli>(now - t_readback_start).count();
 
         out_frame.width = width;
         out_frame.height = height;

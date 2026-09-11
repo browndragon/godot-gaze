@@ -45,6 +45,7 @@ protected:
         bool is_active = false;
         bool preview_requested = false;
         int preview_refcount = 0;
+        double last_readback_ms = 0.0;
         
         Gaze::Frame last_frame;
         std::vector<unsigned char> last_frame_data; // Thread-safe back buffer copy
@@ -141,6 +142,7 @@ public:
 
     virtual void camera_set_preview_requested(RID p_camera, bool p_requested);
     virtual bool camera_is_preview_requested(RID p_camera);
+    virtual double camera_get_last_readback_ms(RID p_camera);
 
     /**
      * @brief Free the camera resource.

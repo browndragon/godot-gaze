@@ -91,6 +91,12 @@ bool VisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) 
     Gaze::Frame raw_frame;
     bool success = data->camera->grab_frame(raw_frame);
     if (success) {
+#if !defined(WINDOWS_ENABLED) && !defined(_WIN32)
+        Gaze::GodotCamera *gcam = dynamic_cast<Gaze::GodotCamera*>(data->camera);
+        if (gcam) {
+            data->last_readback_ms = gcam->get_latest_readback_ms();
+        }
+#endif
         if (data->preview_requested) {
             // Convert captured BGR frame to RGB Image for Godot preview
             int width = raw_frame.width;

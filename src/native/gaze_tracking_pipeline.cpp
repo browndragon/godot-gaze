@@ -240,32 +240,56 @@ namespace Gaze
 
         auto start_total = std::chrono::steady_clock::now();
 
+        auto start_roll = std::chrono::steady_clock::now();
         Frame working_frame;
         _stage_1_apply_roll_hint(data, working_frame);
+        auto end_roll = std::chrono::steady_clock::now();
+        data->timings.roll_prewarp_ms = std::chrono::duration<double, std::milli>(end_roll - start_roll).count();
 
         auto start_face = std::chrono::steady_clock::now();
         bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
         auto end_face = std::chrono::steady_clock::now();
-        double face_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
+        data->timings.face_yunet_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
-        double gaze_ms = 0.0;
+        data->timings.landmark_adas_ms = 0.0;
+        data->timings.pnp_solve_ms = 0.0;
+        data->timings.eye_crop_warp_ms = 0.0;
+        data->timings.eye_state_ms = 0.0;
+        data->timings.gaze_direction_ms = 0.0;
+        data->timings.unroll_ms = 0.0;
+
         if (face_ok)
         {
+            auto start_lm = std::chrono::steady_clock::now();
             bool lm_ok = _stage_3_extract_landmarks(data, working_frame);
+            auto end_lm = std::chrono::steady_clock::now();
+            data->timings.landmark_adas_ms = std::chrono::duration<double, std::milli>(end_lm - start_lm).count();
+
             if (lm_ok)
             {
                 OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
                 OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
+                auto start_pnp = std::chrono::steady_clock::now();
                 bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                auto end_pnp = std::chrono::steady_clock::now();
+                data->timings.pnp_solve_ms = std::chrono::duration<double, std::milli>(end_pnp - start_pnp).count();
+
                 if (pose_ok)
                 {
+                    auto start_crop = std::chrono::steady_clock::now();
                     _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
+                    auto end_crop = std::chrono::steady_clock::now();
+                    data->timings.eye_crop_warp_ms = std::chrono::duration<double, std::milli>(end_crop - start_crop).count();
+
+                    auto start_eye = std::chrono::steady_clock::now();
                     _stage_6_estimate_eye_state(data);
+                    auto end_eye = std::chrono::steady_clock::now();
+                    data->timings.eye_state_ms = std::chrono::duration<double, std::milli>(end_eye - start_eye).count();
 
                     auto start_gaze = std::chrono::steady_clock::now();
                     _stage_7_estimate_gaze_direction(data);
                     auto end_gaze = std::chrono::steady_clock::now();
-                    gaze_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+                    data->timings.gaze_direction_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
                 }
                 else
                 {
@@ -278,7 +302,10 @@ namespace Gaze
             }
             if (data->face_detected)
             {
+                auto start_unroll = std::chrono::steady_clock::now();
                 _stage_8_unroll_to_canonical_godot_camera(data);
+                auto end_unroll = std::chrono::steady_clock::now();
+                data->timings.unroll_ms = std::chrono::duration<double, std::milli>(end_unroll - start_unroll).count();
             }
         }
 
@@ -292,16 +319,16 @@ namespace Gaze
         roll_filter.update(data->face_detected, solved_roll, conf, data->timestamp);
 
         auto end_total = std::chrono::steady_clock::now();
-        double total_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
+        data->timings.total_pipeline_ms = std::chrono::duration<double, std::milli>(end_total - start_total).count();
 
         static int stats_count = 0;
         int verbosity = get_log_verbosity().load(std::memory_order_acquire);
         if (verbosity >= 3 || (verbosity >= 1 && stats_count++ % 30 == 0))
         {
             log_info(verbosity >= 3 ? 3 : 1, "Pipeline_PerformanceStats",
-                     "face_ms", face_ms,
-                     "gaze_ms", gaze_ms,
-                     "total_ms", total_ms,
+                     "face_ms", data->timings.face_yunet_ms,
+                     "gaze_ms", data->timings.gaze_direction_ms,
+                     "total_ms", data->timings.total_pipeline_ms,
                      "frame_w", data->camera_width,
                      "frame_h", data->camera_height);
         }

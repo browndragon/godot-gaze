@@ -26,6 +26,7 @@ private:
     double start_time;
     int target_width = 640;
     int target_height = 480;
+    double latest_readback_ms = 0.0;
 
 public:
     GodotCamera(int device = 0);
@@ -35,6 +36,7 @@ public:
     virtual void set_resolution(int w, int h) override;
     virtual bool grab_frame(Frame& out_frame) override;
     virtual void release() override;
+    double get_latest_readback_ms() const { return latest_readback_ms; }
 };
 
 } // namespace Gaze

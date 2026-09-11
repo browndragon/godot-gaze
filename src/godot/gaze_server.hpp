@@ -151,6 +151,9 @@ public:
     bool is_camera_preview_requested() const;
     void emit_camera_frame_ready(RID p_vision_camera);
 
+    // --- Telemetry & Diagnostics ---
+    Dictionary get_pipeline_stage_timings() const;
+
     // --- Ray Projection Math ---
     Vector3 project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
     Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;

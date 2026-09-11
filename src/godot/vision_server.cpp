@@ -190,6 +190,12 @@ bool VisionServer::camera_is_preview_requested(RID p_camera) {
     return data->preview_requested;
 }
 
+double VisionServer::camera_get_last_readback_ms(RID p_camera) {
+    CameraData *data = camera_owner.get_or_null(p_camera);
+    ERR_FAIL_NULL_V(data, 0.0);
+    return data->last_readback_ms;
+}
+
 void VisionServer::camera_free(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
     if (data) {

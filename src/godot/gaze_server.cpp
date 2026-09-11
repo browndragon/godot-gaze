@@ -156,6 +156,7 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_set_preview_requested", "requested"), &GazeServer::set_camera_preview_requested);
     ClassDB::bind_method(D_METHOD("is_camera_preview_requested"), &GazeServer::is_camera_preview_requested);
     ClassDB::bind_method(D_METHOD("emit_camera_frame_ready", "vision_camera_rid"), &GazeServer::emit_camera_frame_ready);
+    ClassDB::bind_method(D_METHOD("get_pipeline_stage_timings"), &GazeServer::get_pipeline_stage_timings);
 
     // Ray Projection Math
     ClassDB::bind_method(D_METHOD("project_ray_to_camera_plane", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_camera_plane);
@@ -754,6 +755,44 @@ bool GazeServer::is_camera_preview_requested() const {
 
 void GazeServer::emit_camera_frame_ready(RID p_vision_camera) {
     emit_signal("gaze_data_ready", p_vision_camera);
+}
+
+Dictionary GazeServer::get_pipeline_stage_timings() const {
+    Dictionary d;
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+
+    double readback_ms = 0.0;
+    VisionServer *vs = VisionServer::get_singleton();
+    if (vs && impl->camera.vision_camera_rid.is_valid()) {
+        readback_ms = vs->camera_get_last_readback_ms(impl->camera.vision_camera_rid);
+    }
+    d["capture_gpu_readback_ms"] = readback_ms;
+
+    if (active_read_data) {
+        d["roll_prewarp_ms"] = active_read_data->timings.roll_prewarp_ms;
+        d["face_yunet_ms"] = active_read_data->timings.face_yunet_ms;
+        d["landmark_adas_ms"] = active_read_data->timings.landmark_adas_ms;
+        d["pnp_solve_ms"] = active_read_data->timings.pnp_solve_ms;
+        d["eye_crop_warp_ms"] = active_read_data->timings.eye_crop_warp_ms;
+        d["eye_state_ms"] = active_read_data->timings.eye_state_ms;
+        d["gaze_direction_ms"] = active_read_data->timings.gaze_direction_ms;
+        d["unroll_ms"] = active_read_data->timings.unroll_ms;
+        d["total_pipeline_ms"] = active_read_data->timings.total_pipeline_ms;
+        double fps = active_read_data->timings.total_pipeline_ms > 0.001 ? (1000.0 / active_read_data->timings.total_pipeline_ms) : 0.0;
+        d["pipeline_fps"] = fps;
+    } else {
+        d["roll_prewarp_ms"] = 0.0;
+        d["face_yunet_ms"] = 0.0;
+        d["landmark_adas_ms"] = 0.0;
+        d["pnp_solve_ms"] = 0.0;
+        d["eye_crop_warp_ms"] = 0.0;
+        d["eye_state_ms"] = 0.0;
+        d["gaze_direction_ms"] = 0.0;
+        d["unroll_ms"] = 0.0;
+        d["total_pipeline_ms"] = 0.0;
+        d["pipeline_fps"] = 0.0;
+    }
+    return d;
 }
 
 // --- Ray Projection Math ---

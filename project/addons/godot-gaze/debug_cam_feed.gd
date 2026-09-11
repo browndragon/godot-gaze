@@ -227,6 +227,18 @@ func update_diagnostics_ui() -> void:
 
 		lines.append("\n[b]Camera Feed:[/b]")
 		lines.append("  Resolution: [color=yellow]%dx%d[/color]" % [actual_cam_width, actual_cam_height])
+
+		if gs.has_method("get_pipeline_stage_timings"):
+			var st = gs.get_pipeline_stage_timings()
+			lines.append("\n[b]Pipeline Stage Latency:[/b]")
+			lines.append("  Total Pipeline: [color=yellow]%.1f ms ( %.1f fps )[/color]" % [st.get("total_pipeline_ms", 0.0), st.get("pipeline_fps", 0.0)])
+			lines.append("  • GPU Readback: [color=aqua]%.1f ms[/color]" % st.get("capture_gpu_readback_ms", 0.0))
+			lines.append("  • YuNet Face: [color=aqua]%.1f ms[/color]" % st.get("face_yunet_ms", 0.0))
+			lines.append("  • ADAS Landmarks: [color=aqua]%.1f ms[/color]" % st.get("landmark_adas_ms", 0.0))
+			lines.append("  • SQPnP Pose: [color=aqua]%.1f ms[/color]" % st.get("pnp_solve_ms", 0.0))
+			lines.append("  • Eye Crops: [color=aqua]%.1f ms[/color]" % st.get("eye_crop_warp_ms", 0.0))
+			lines.append("  • Eye State: [color=aqua]%.1f ms[/color]" % st.get("eye_state_ms", 0.0))
+			lines.append("  • Gaze Vector: [color=aqua]%.1f ms[/color]" % st.get("gaze_direction_ms", 0.0))
 	else:
 		metrics_lbl.text = "[color=red]GazeServer not found.[/color]"
 		return
@@ -289,6 +301,8 @@ func _on_copy_button_pressed():
 			data["gaze_origin_mm"] = [eye_orig.x, eye_orig.y, eye_orig.z]
 			var gaze_dir = -ev.gaze_transform.basis.z.normalized()
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
+		if gs.has_method("get_pipeline_stage_timings"):
+			data["pipeline_stage_timings"] = gs.get_pipeline_stage_timings()
 
 	if Engine.has_singleton("DisplayServer"):
 		DisplayServer.clipboard_set(JSON.stringify(data, "  "))

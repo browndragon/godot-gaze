@@ -96,6 +96,88 @@ namespace Gaze
         }
     }
 
+    /**
+     * @brief Crops a rectangle from a hint-rolled working coordinate space directly from the raw camera frame,
+     * folding the roll unwarping into bilinear sampling.
+     * Guarantees identical pixel output to rotate_image(src, +roll_angle_rad) followed by crop_and_resize_bgr(),
+     * but touches ONLY dst_w * dst_h pixels and requires zero full-frame heap allocations or passes.
+     */
+    inline void crop_and_resize_bgr_with_unroll(
+        const unsigned char *src, int src_w, int src_h,
+        float crop_x, float crop_y, float crop_w, float crop_h,
+        double roll_angle_rad,
+        unsigned char *dst, int dst_w, int dst_h)
+    {
+        if (dst_w <= 0 || dst_h <= 0 || src_w <= 0 || src_h <= 0 || crop_w <= 0.0f || crop_h <= 0.0f) return;
+
+        if (std::abs(roll_angle_rad) < 1e-6)
+        {
+            crop_and_resize_bgr(src, src_w, src_h, crop_x, crop_y, crop_w, crop_h, dst, dst_w, dst_h);
+            return;
+        }
+
+        double cx = src_w * 0.5;
+        double cy = src_h * 0.5;
+        double cos_a = std::cos(roll_angle_rad);
+        double sin_a = std::sin(roll_angle_rad);
+
+        double scale_x = crop_w / static_cast<double>(dst_w);
+        double scale_y = crop_h / static_cast<double>(dst_h);
+
+        double step_x_u = scale_x * cos_a;
+        double step_y_u = -scale_x * sin_a;
+
+        double step_x_v = scale_y * sin_a;
+        double step_y_v = scale_y * cos_a;
+
+        double start_dx = (crop_x + 0.5 * scale_x - 0.5) - cx;
+        double start_dy = (crop_y + 0.5 * scale_y - 0.5) - cy;
+
+        double row_start_x = cx + start_dx * cos_a + start_dy * sin_a;
+        double row_start_y = cy - start_dx * sin_a + start_dy * cos_a;
+
+        for (int y = 0; y < dst_h; ++y)
+        {
+            double cur_src_x = row_start_x;
+            double cur_src_y = row_start_y;
+
+            for (int x = 0; x < dst_w; ++x)
+            {
+                float clamped_x = static_cast<float>(std::max(0.0, std::min(cur_src_x, static_cast<double>(src_w - 1))));
+                float clamped_y = static_cast<float>(std::max(0.0, std::min(cur_src_y, static_cast<double>(src_h - 1))));
+
+                int x0 = static_cast<int>(std::floor(clamped_x));
+                int y0 = static_cast<int>(std::floor(clamped_y));
+                int x1 = std::min(x0 + 1, src_w - 1);
+                int y1 = std::min(y0 + 1, src_h - 1);
+                float dx = clamped_x - static_cast<float>(x0);
+                float dy = clamped_y - static_cast<float>(y0);
+
+                int dst_idx = (y * dst_w + x) * 3;
+
+                for (int c = 0; c < 3; ++c)
+                {
+                    float p00 = static_cast<float>(src[(y0 * src_w + x0) * 3 + c]);
+                    float p10 = static_cast<float>(src[(y0 * src_w + x1) * 3 + c]);
+                    float p01 = static_cast<float>(src[(y1 * src_w + x0) * 3 + c]);
+                    float p11 = static_cast<float>(src[(y1 * src_w + x1) * 3 + c]);
+
+                    float val = (1.0f - dx) * (1.0f - dy) * p00 +
+                                dx * (1.0f - dy) * p10 +
+                                (1.0f - dx) * dy * p01 +
+                                dx * dy * p11;
+                    dst[dst_idx + c] = static_cast<unsigned char>(std::max(0.0f, std::min(255.0f, val)));
+                }
+
+                cur_src_x += step_x_u;
+                cur_src_y += step_y_u;
+            }
+
+            row_start_x += step_x_v;
+            row_start_y += step_y_v;
+        }
+    }
+
     inline void crop_and_resize_bgr_to_rgb(const uint8_t *src, int src_w, int src_h, float roi_x, float roi_y, float roi_w, float roi_h, uint8_t *dst, int dst_w, int dst_h)
     {
         if (roi_w <= 0.0f || roi_h <= 0.0f) {

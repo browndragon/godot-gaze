@@ -94,12 +94,15 @@ namespace Gaze
 
         try
         {
-            std::vector<float> input_tensor_data(3 * 60 * 60);
-            preprocess_face_crop(raw_crop_bgr, input_tensor_data.data());
+            if (cached_input_tensor.size() != 3 * 60 * 60)
+            {
+                cached_input_tensor.assign(3 * 60 * 60, 0.0f);
+            }
+            preprocess_face_crop(raw_crop_bgr, cached_input_tensor.data());
 
             std::vector<int64_t> input_shape = {1, 3, 60, 60};
             Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
-                memory_info, input_tensor_data.data(), input_tensor_data.size(),
+                memory_info, cached_input_tensor.data(), cached_input_tensor.size(),
                 input_shape.data(), input_shape.size());
 
             auto output_tensors = session->Run(
@@ -150,16 +153,10 @@ namespace Gaze
             return false;
         }
 
-        const unsigned char *working_data = src_data;
-        std::vector<unsigned char> working_buffer;
         GazeRect working_bbox = face_bbox;
 
         if (std::abs(roll_hint_rad) > 1e-4f)
         {
-            working_buffer.resize(img_w * img_h * 3);
-            rotate_image(src_data, img_w, img_h, working_buffer.data(), -roll_hint_rad);
-            working_data = working_buffer.data();
-
             float cx = face_bbox.x + face_bbox.width * 0.5f;
             float cy = face_bbox.y + face_bbox.height * 0.5f;
             GodotCameraImageVector2 rot_center = rotate_point_2d(GodotCameraImageVector2(cx, cy), -roll_hint_rad, img_w, img_h);
@@ -168,15 +165,20 @@ namespace Gaze
 
         GazeRect adj_box = adjust_bounding_box(working_bbox);
 
-        // Crop adjusted face bounding box to 60x60 BGR
-        std::vector<uint8_t> crop_60(60 * 60 * 3);
-        crop_and_resize_bgr(
-            working_data, img_w, img_h,
+        if (cached_crop_60.size() != 60 * 60 * 3)
+        {
+            cached_crop_60.assign(60 * 60 * 3, 0);
+        }
+
+        // Direct single-pass rotated sampling from src_data into 60x60 BGR (zero intermediate full-frame buffers)
+        crop_and_resize_bgr_with_unroll(
+            src_data, img_w, img_h,
             adj_box.x, adj_box.y, adj_box.width, adj_box.height,
-            crop_60.data(), 60, 60);
+            -roll_hint_rad,
+            cached_crop_60.data(), 60, 60);
 
         std::vector<GodotCameraImageVector2> landmarks_norm;
-        if (!extract_landmarks_norm(crop_60.data(), landmarks_norm))
+        if (!extract_landmarks_norm(cached_crop_60.data(), landmarks_norm))
         {
             return false;
         }
@@ -209,6 +211,55 @@ namespace Gaze
         {
             out_landmarks_px[i] = SpacedVector2<Space::GodotCameraWorkingImagePixels>(temp_lm[i].x, temp_lm[i].y);
         }
+        return true;
+    }
+
+    bool ORTLandmarkModel::extract_landmarks_working_space(
+        const uint8_t *src_data, int img_w, int img_h,
+        const GazeRect &working_face_bbox,
+        std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &out_landmarks_working_px,
+        float roll_hint_rad)
+    {
+        out_landmarks_working_px.clear();
+        if (!src_data || img_w <= 0 || img_h <= 0 || working_face_bbox.width < 20.0f || working_face_bbox.height < 20.0f)
+        {
+            return false;
+        }
+
+        float aspect_ratio = working_face_bbox.width / working_face_bbox.height;
+        if (aspect_ratio < 0.3f || aspect_ratio > 3.0f)
+        {
+            return false;
+        }
+
+        GazeRect adj_box = adjust_bounding_box(working_face_bbox);
+
+        if (cached_crop_60.size() != 60 * 60 * 3)
+        {
+            cached_crop_60.assign(60 * 60 * 3, 0);
+        }
+
+        // Direct single-pass rotated sampling from src_data into 60x60 BGR
+        crop_and_resize_bgr_with_unroll(
+            src_data, img_w, img_h,
+            adj_box.x, adj_box.y, adj_box.width, adj_box.height,
+            roll_hint_rad,
+            cached_crop_60.data(), 60, 60);
+
+        std::vector<GodotCameraImageVector2> landmarks_norm;
+        if (!extract_landmarks_norm(cached_crop_60.data(), landmarks_norm))
+        {
+            return false;
+        }
+
+        out_landmarks_working_px.resize(35);
+        for (size_t i = 0; i < 35; ++i)
+        {
+            float px_x = adj_box.x + landmarks_norm[i].x * adj_box.width;
+            float px_y = adj_box.y + landmarks_norm[i].y * adj_box.height;
+            out_landmarks_working_px[i] = SpacedVector2<Space::GodotCameraWorkingImagePixels>(px_x, px_y);
+        }
+
         return true;
     }
 

@@ -172,6 +172,11 @@ namespace Gaze
             log_error("ORTYuNetDetectorInitException", "what", e.what());
             return false;
         }
+
+        cached_anchors = generate_anchors(input_width, input_height);
+        cached_input_tensor_data.assign(1 * 3 * input_height * input_width, 0.0f);
+        cached_resized_bgr.assign(input_width * input_height * 3, 0);
+
         log_info("ORTYuNetDetectorInitSuccess");
         return true;
     }
@@ -234,51 +239,35 @@ namespace Gaze
 
         float roll_rad = roll_deg * (3.141592653589793f / 180.0f);
 
-        // 1. Counter-rotate full frame FIRST by -roll_deg
-        std::vector<unsigned char> frame_bgr;
-        const unsigned char *src_data = frame.data;
-
-        if (std::abs(roll_deg) > 1e-3f)
-        {
-            frame_bgr.resize(width * height * 3);
-            rotate_image(frame.data, width, height, frame_bgr.data(), -roll_rad);
-            src_data = frame_bgr.data();
-        }
-
-        // 2. Extract Central 1:1 Square Box Crop with replicate border clamping (supporting edge face clipping)
         int crop_size = std::min(width, height);
-        int crop_x0 = (width - crop_size) / 2;
-        int crop_y0 = (height - crop_size) / 2;
+        float crop_x0 = (width - crop_size) * 0.5f;
+        float crop_y0 = (height - crop_size) * 0.5f;
 
-        std::vector<unsigned char> square_crop(crop_size * crop_size * 3, 0);
-        for (int y = 0; y < crop_size; ++y)
-        {
-            int src_y = std::max(0, std::min(height - 1, crop_y0 + y));
-            for (int x = 0; x < crop_size; ++x)
-            {
-                int src_x = std::max(0, std::min(width - 1, crop_x0 + x));
-                int src_idx = (src_y * width + src_x) * 3;
-                int dst_idx = (y * crop_size + x) * 3;
-                square_crop[dst_idx + 0] = src_data[src_idx + 0];
-                square_crop[dst_idx + 1] = src_data[src_idx + 1];
-                square_crop[dst_idx + 2] = src_data[src_idx + 2];
-            }
+        if (cached_resized_bgr.size() != static_cast<size_t>(model_w * model_h * 3)) {
+            cached_resized_bgr.assign(model_w * model_h * 3, 0);
+        }
+        if (cached_input_tensor_data.size() != static_cast<size_t>(1 * 3 * model_h * model_w)) {
+            cached_input_tensor_data.assign(1 * 3 * model_h * model_w, 0.0f);
+        }
+        if (cached_anchors.empty()) {
+            cached_anchors = generate_anchors(model_w, model_h);
         }
 
-        // 3. Bilinear Resize 1:1 Square Crop -> 640x640 Model Input (100% face tensor!)
-        float scale = static_cast<float>(model_w) / static_cast<float>(crop_size);
+        // Direct single-pass rotated sampling from raw frame into 640x640 input (zero intermediate buffer allocations)
+        crop_and_resize_bgr_with_unroll(
+            frame.data, width, height,
+            crop_x0, crop_y0, static_cast<float>(crop_size), static_cast<float>(crop_size),
+            -roll_rad,
+            cached_resized_bgr.data(), model_w, model_h);
 
-        std::vector<Anchor> anchors = generate_anchors(model_w, model_h);
-        std::vector<float> input_tensor_data(1 * 3 * model_h * model_w, 0.0f);
-        std::vector<unsigned char> resized_bgr(model_w * model_h * 3, 0);
-        bilinear_resize_direct(square_crop.data(), crop_size, crop_size, resized_bgr.data(), model_w, model_h);
+        float scale = static_cast<float>(model_w) / static_cast<float>(crop_size);
 
         int channel_size = model_h * model_w;
         if (is_nhwc)
         {
             for (int i = 0; i < channel_size * 3; ++i)
             {
-                input_tensor_data[i] = static_cast<float>(resized_bgr[i]);
+                cached_input_tensor_data[i] = static_cast<float>(cached_resized_bgr[i]);
             }
         }
         else
@@ -290,13 +279,13 @@ namespace Gaze
                     int src_idx = (y * model_w + x) * 3;
                     int pixel_idx = y * model_w + x;
 
-                    float c0 = static_cast<float>(resized_bgr[src_idx + 0]);
-                    float c1 = static_cast<float>(resized_bgr[src_idx + 1]);
-                    float c2 = static_cast<float>(resized_bgr[src_idx + 2]);
+                    float c0 = static_cast<float>(cached_resized_bgr[src_idx + 0]);
+                    float c1 = static_cast<float>(cached_resized_bgr[src_idx + 1]);
+                    float c2 = static_cast<float>(cached_resized_bgr[src_idx + 2]);
 
-                    input_tensor_data[0 * channel_size + pixel_idx] = c0;
-                    input_tensor_data[1 * channel_size + pixel_idx] = c1;
-                    input_tensor_data[2 * channel_size + pixel_idx] = c2;
+                    cached_input_tensor_data[0 * channel_size + pixel_idx] = c0;
+                    cached_input_tensor_data[1 * channel_size + pixel_idx] = c1;
+                    cached_input_tensor_data[2 * channel_size + pixel_idx] = c2;
                 }
             }
         }
@@ -308,7 +297,7 @@ namespace Gaze
         }
 
         Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
-            memory_info, input_tensor_data.data(), input_tensor_data.size(),
+            memory_info, cached_input_tensor_data.data(), cached_input_tensor_data.size(),
             input_shape.data(), input_shape.size());
 
         try
@@ -348,9 +337,9 @@ namespace Gaze
                     if (score > score_threshold)
                     {
                         int global_idx = anchor_offset + idx;
-                        if (global_idx >= static_cast<int>(anchors.size())) continue;
+                        if (global_idx >= static_cast<int>(cached_anchors.size())) continue;
 
-                        const auto &anc = anchors[global_idx];
+                        const auto &anc = cached_anchors[global_idx];
 
                         float cx = bbox_data[idx * 4 + 0] * anc.stride_x + anc.cx;
                         float cy = bbox_data[idx * 4 + 1] * anc.stride_y + anc.cy;

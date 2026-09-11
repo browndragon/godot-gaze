@@ -183,8 +183,9 @@ namespace Gaze
     {
         request_mailbox.clear();
         results_mailbox.clear();
-        roll_filter.reset(0.0f);
+        reset_tracker();
     }
+
 
     void GazeTrackingPipeline::_worker_loop()
     {
@@ -238,18 +239,25 @@ namespace Gaze
             config_dirty = false;
         }
 
+        if (data->camera_width != last_frame_w || data->camera_height != last_frame_h)
+        {
+            reset_face_tracking();
+            last_frame_w = data->camera_width;
+            last_frame_h = data->camera_height;
+        }
+
         auto start_total = std::chrono::steady_clock::now();
 
         auto start_roll = std::chrono::steady_clock::now();
         Frame working_frame;
         _stage_1_apply_roll_hint(data, working_frame);
         auto end_roll = std::chrono::steady_clock::now();
-        data->timings.roll_prewarp_ms = std::chrono::duration<double, std::milli>(end_roll - start_roll).count();
+        data->timings.roll_prewarp_ms = face_found ? 0.0 : std::chrono::duration<double, std::milli>(end_roll - start_roll).count();
 
         auto start_face = std::chrono::steady_clock::now();
         bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
         auto end_face = std::chrono::steady_clock::now();
-        data->timings.face_yunet_ms = std::chrono::duration<double, std::milli>(end_face - start_face).count();
+        data->timings.face_yunet_ms = (face_found && face_ok) ? 0.0 : std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
         data->timings.landmark_adas_ms = 0.0;
         data->timings.pnp_solve_ms = 0.0;
@@ -258,6 +266,9 @@ namespace Gaze
         data->timings.gaze_direction_ms = 0.0;
         data->timings.unroll_ms = 0.0;
 
+        OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
+        OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
+
         if (face_ok)
         {
             auto start_lm = std::chrono::steady_clock::now();
@@ -265,48 +276,134 @@ namespace Gaze
             auto end_lm = std::chrono::steady_clock::now();
             data->timings.landmark_adas_ms = std::chrono::duration<double, std::milli>(end_lm - start_lm).count();
 
+            bool pose_ok = false;
             if (lm_ok)
             {
-                OpenCVCameraVector3 rvec(0.0, 0.0, 0.0);
-                OpenCVCameraVector3 tvec(0.0, 0.0, 600.0);
                 auto start_pnp = std::chrono::steady_clock::now();
-                bool pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
                 auto end_pnp = std::chrono::steady_clock::now();
                 data->timings.pnp_solve_ms = std::chrono::duration<double, std::milli>(end_pnp - start_pnp).count();
+            }
 
-                if (pose_ok)
+            // Tracking fallback: if tracking failed while face_found was true,
+            // reset face_found and re-run YuNet detector on working_frame!
+            if (face_found && (!lm_ok || !pose_ok))
+            {
+                reset_face_tracking();
+                if (std::abs(data->roll_hint_rad) > 1e-4f)
                 {
-                    auto start_crop = std::chrono::steady_clock::now();
-                    _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
-                    auto end_crop = std::chrono::steady_clock::now();
-                    data->timings.eye_crop_warp_ms = std::chrono::duration<double, std::milli>(end_crop - start_crop).count();
-
-                    auto start_eye = std::chrono::steady_clock::now();
-                    _stage_6_estimate_eye_state(data);
-                    auto end_eye = std::chrono::steady_clock::now();
-                    data->timings.eye_state_ms = std::chrono::duration<double, std::milli>(end_eye - start_eye).count();
-
-                    auto start_gaze = std::chrono::steady_clock::now();
-                    _stage_7_estimate_gaze_direction(data);
-                    auto end_gaze = std::chrono::steady_clock::now();
-                    data->timings.gaze_direction_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+                    Frame raw_f;
+                    raw_f.width = data->camera_width;
+                    raw_f.height = data->camera_height;
+                    raw_f.data = data->camera_raw_bgr.data();
+                    raw_f.timestamp = data->timestamp;
+                    data->internal_rotated_frame_bgr.resize(raw_f.width * raw_f.height * 3);
+                    rotate_image(raw_f.data, raw_f.width, raw_f.height, data->internal_rotated_frame_bgr.data(), +data->roll_hint_rad);
+                    working_frame = raw_f;
+                    working_frame.data = data->internal_rotated_frame_bgr.data();
                 }
-                else
+                auto start_face_fb = std::chrono::steady_clock::now();
+                face_ok = _stage_2_detect_face_bbox(data, working_frame);
+                auto end_face_fb = std::chrono::steady_clock::now();
+                data->timings.face_yunet_ms = std::chrono::duration<double, std::milli>(end_face_fb - start_face_fb).count();
+
+                if (face_ok)
                 {
-                    data->face_detected = false;
+                    lm_ok = _stage_3_extract_landmarks(data, working_frame);
+                    if (lm_ok)
+                    {
+                        pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+                    }
                 }
             }
-            else
+
+            if (face_ok && lm_ok && pose_ok)
             {
-                data->face_detected = false;
-            }
-            if (data->face_detected)
-            {
+                auto start_crop = std::chrono::steady_clock::now();
+                _stage_5_extract_eye_crops(data, working_frame, rvec, tvec);
+                auto end_crop = std::chrono::steady_clock::now();
+                data->timings.eye_crop_warp_ms = std::chrono::duration<double, std::milli>(end_crop - start_crop).count();
+
+                auto start_eye = std::chrono::steady_clock::now();
+                _stage_6_estimate_eye_state(data);
+                auto end_eye = std::chrono::steady_clock::now();
+                data->timings.eye_state_ms = std::chrono::duration<double, std::milli>(end_eye - start_eye).count();
+
+                auto start_gaze = std::chrono::steady_clock::now();
+                _stage_7_estimate_gaze_direction(data);
+                auto end_gaze = std::chrono::steady_clock::now();
+                data->timings.gaze_direction_ms = std::chrono::duration<double, std::milli>(end_gaze - start_gaze).count();
+
                 auto start_unroll = std::chrono::steady_clock::now();
                 _stage_8_unroll_to_canonical_godot_camera(data);
                 auto end_unroll = std::chrono::steady_clock::now();
                 data->timings.unroll_ms = std::chrono::duration<double, std::milli>(end_unroll - start_unroll).count();
             }
+            else
+            {
+                data->face_detected = false;
+                data->gaze_success = false;
+                data->face_score = 0.0f;
+            }
+        }
+
+        if (data->face_detected && data->has_landmarks_2d && data->internal_landmarks_working_px.size() == 35)
+        {
+            // Compute centroid of landmarks in working space from internal_landmarks_working_px
+            double sum_wx = 0.0, sum_wy = 0.0;
+            for (size_t i = 0; i < 35; ++i)
+            {
+                sum_wx += data->internal_landmarks_working_px[i].x;
+                sum_wy += data->internal_landmarks_working_px[i].y;
+            }
+            GodotCameraImageVector2 curr_centroid_work(sum_wx / 35.0, sum_wy / 35.0);
+            double min_x = data->internal_landmarks_working_px[0].x;
+            double max_x = min_x;
+            double min_y = data->internal_landmarks_working_px[0].y;
+            double max_y = min_y;
+            for (size_t i = 1; i < 35; ++i)
+            {
+                min_x = std::min(min_x, data->internal_landmarks_working_px[i].x);
+                max_x = std::max(max_x, data->internal_landmarks_working_px[i].x);
+                min_y = std::min(min_y, data->internal_landmarks_working_px[i].y);
+                max_y = std::max(max_y, data->internal_landmarks_working_px[i].y);
+            }
+            double lm_w = max_x - min_x;
+            double lm_h = max_y - min_y;
+            double fit_w = lm_w * 1.35;
+            double fit_h = lm_h * 1.35;
+
+            if (!face_found || tracking_face_w < 20.0f || tracking_face_h < 20.0f)
+            {
+                // First frame detection from YuNet: anchor in working space
+                GodotCameraImageVector2 center_work(data->face_bbox.x + data->face_bbox.width * 0.5f,
+                                                    data->face_bbox.y + data->face_bbox.height * 0.5f);
+                offset_work = GodotCameraImageVector2(center_work.x - curr_centroid_work.x,
+                                                      center_work.y - curr_centroid_work.y);
+                tracking_face_center_cam = rotate_point_2d(center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
+                tracking_face_w = static_cast<float>(fit_w > 20.0 ? fit_w : data->face_bbox.width);
+                tracking_face_h = static_cast<float>(fit_h > 20.0 ? fit_h : data->face_bbox.height);
+            }
+            else
+            {
+                // In working space, face is upright: target center is landmark centroid + constant upright offset
+                GodotCameraImageVector2 target_center_work(curr_centroid_work.x + offset_work.x,
+                                                           curr_centroid_work.y + offset_work.y);
+                GodotCameraImageVector2 target_center_cam = rotate_point_2d(target_center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
+                tracking_face_center_cam = target_center_cam;
+                if (fit_w > 20.0 && fit_h > 20.0)
+                {
+                    tracking_face_w = static_cast<float>(fit_w);
+                    tracking_face_h = static_cast<float>(fit_h);
+                }
+            }
+
+            face_found = true;
+            last_tvec = tvec;
+        }
+        else
+        {
+            reset_face_tracking();
         }
 
         // Update temporal roll filter
@@ -350,6 +447,12 @@ namespace Gaze
         frame.data = data->camera_raw_bgr.data();
         frame.timestamp = data->timestamp;
 
+        if (face_found)
+        {
+            working_frame = frame;
+            return;
+        }
+
         const unsigned char *working_data = frame.data;
         if (std::abs(data->roll_hint_rad) > 1e-4f)
         {
@@ -363,6 +466,17 @@ namespace Gaze
 
     bool GazeTrackingPipeline::_stage_2_detect_face_bbox(GazeFrameData *data, const Frame &working_frame)
     {
+        if (face_found && tracking_face_w >= 20.0f && tracking_face_h >= 20.0f)
+        {
+            GodotCameraImageVector2 center_work = rotate_point_2d(tracking_face_center_cam, data->roll_hint_rad, data->camera_width, data->camera_height);
+            data->face_bbox = GazeRect(center_work.x - tracking_face_w * 0.5f,
+                                       center_work.y - tracking_face_h * 0.5f,
+                                       tracking_face_w, tracking_face_h);
+            data->face_detected = true;
+            data->face_score = 1.0f;
+            return true;
+        }
+
         if (!face_detector) return false;
         YuNetResult yunet_res;
         bool success = face_detector->process_frame(working_frame, yunet_res, 0.0f);
@@ -386,7 +500,21 @@ namespace Gaze
             data->has_landmarks_2d = false;
             return false;
         }
-        bool lm_ok = landmark_model->extract_landmarks(working_frame.data, working_frame.width, working_frame.height, data->face_bbox, data->internal_landmarks_working_px, 0.0f);
+
+        bool lm_ok = false;
+        if (face_found)
+        {
+            lm_ok = landmark_model->extract_landmarks_working_space(
+                data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
+                data->face_bbox, data->internal_landmarks_working_px, data->roll_hint_rad);
+        }
+        else
+        {
+            lm_ok = landmark_model->extract_landmarks(
+                working_frame.data, working_frame.width, working_frame.height,
+                data->face_bbox, data->internal_landmarks_working_px, 0.0f);
+        }
+
         if (lm_ok && data->internal_landmarks_working_px.size() == 35)
         {
             data->has_landmarks_2d = true;
@@ -407,6 +535,22 @@ namespace Gaze
         static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
         bool pnp_ok = SQPnPSolver::solve_rvec(model_35pt, data->internal_landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec);
         if (!pnp_ok) return false;
+
+        // Validation bounds: head distance must be realistic webcam distance (100mm to 2500mm)
+        if (out_tvec.z < 100.0 || out_tvec.z > 2500.0)
+        {
+            return false;
+        }
+
+        // If temporal tracking is active, check for discontinuous teleportation (>350mm depth jump in 1 frame)
+        if (face_found && last_tvec.z > 1.0)
+        {
+            double dz = std::abs(out_tvec.z - last_tvec.z);
+            if (dz > 350.0)
+            {
+                return false;
+            }
+        }
 
         data->head_transform = CoordinateConversions::opencv_pose_to_godot_camera_transform(out_tvec, out_rvec);
         data->head_translation = data->head_transform.origin;
@@ -444,13 +588,30 @@ namespace Gaze
         data->eye_crops.right_eye_center_cam = CoordinateConversions::to_godot_camera(right_eye_cv);
         data->eye_crops.left_eye_center_cam = CoordinateConversions::to_godot_camera(left_eye_cv);
 
-        crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                            r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
-                            data->eye_crops.right_eye_data, 60, 60);
+        if (face_found)
+        {
+            crop_and_resize_bgr_with_unroll(
+                data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
+                r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                data->roll_hint_rad,
+                data->eye_crops.right_eye_data, 60, 60);
 
-        crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                            l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
-                            data->eye_crops.left_eye_data, 60, 60);
+            crop_and_resize_bgr_with_unroll(
+                data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
+                l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                data->roll_hint_rad,
+                data->eye_crops.left_eye_data, 60, 60);
+        }
+        else
+        {
+            crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
+                                r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                                data->eye_crops.right_eye_data, 60, 60);
+
+            crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
+                                l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                                data->eye_crops.left_eye_data, 60, 60);
+        }
 
         if (data->left_eye_buffer)
         {

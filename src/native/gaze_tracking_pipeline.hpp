@@ -45,6 +45,15 @@ namespace Gaze
         std::atomic<bool> worker_busy{false};
         SigmoidalFilter roll_filter;
 
+        bool face_found = false;
+        GodotCameraImageVector2 tracking_face_center_cam{0.0, 0.0};
+        GodotCameraImageVector2 offset_work{0.0, 0.0};
+        float tracking_face_w = 0.0f;
+        float tracking_face_h = 0.0f;
+        int last_frame_w = 0;
+        int last_frame_h = 0;
+        OpenCVCameraVector3 last_tvec{0.0, 0.0, 0.0};
+
         void _worker_loop();
         void _stage_1_apply_roll_hint(GazeFrameData *data, Frame &working_frame);
         bool _stage_2_detect_face_bbox(GazeFrameData *data, const Frame &working_frame);
@@ -80,7 +89,20 @@ namespace Gaze
         void push_frame_request(GazeFrameData *p_req);
         bool pop_result(GazeFrameData** out_res);
         void clear_work_queue();
-        void reset_tracker() { roll_filter.reset(0.0f); }
+        void reset_face_tracking()
+        {
+            face_found = false;
+            tracking_face_center_cam = GodotCameraImageVector2(0.0, 0.0);
+            offset_work = GodotCameraImageVector2(0.0, 0.0);
+            tracking_face_w = 0.0f;
+            tracking_face_h = 0.0f;
+            last_tvec = OpenCVCameraVector3(0.0, 0.0, 0.0);
+        }
+        void reset_tracker()
+        {
+            roll_filter.reset(0.0f);
+            reset_face_tracking();
+        }
         bool is_initialized() const { return initialized; }
         bool is_busy() const { return worker_busy.load() || request_mailbox.is_pending(); }
     };

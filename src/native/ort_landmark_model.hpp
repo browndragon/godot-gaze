@@ -30,6 +30,10 @@ namespace Gaze
 
         void preprocess_face_crop(const uint8_t *raw_crop_bgr, float *out_buffer);
 
+        // Preallocated zero-churn buffers
+        std::vector<uint8_t> cached_crop_60;
+        std::vector<float> cached_input_tensor;
+
     public:
         ORTLandmarkModel(const std::string &model_path);
         ORTLandmarkModel(const std::vector<uint8_t> &buffer);
@@ -57,6 +61,7 @@ namespace Gaze
          */
         bool extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<GodotCameraImageVector2> &out_landmarks_px, float roll_hint_rad = 0.0f);
         bool extract_landmarks(const uint8_t *src_data, int img_w, int img_h, const GazeRect &face_bbox, std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &out_landmarks_px, float roll_hint_rad = 0.0f);
+        bool extract_landmarks_working_space(const uint8_t *src_data, int img_w, int img_h, const GazeRect &working_face_bbox, std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &out_landmarks_working_px, float roll_hint_rad);
     };
 
 } // namespace Gaze

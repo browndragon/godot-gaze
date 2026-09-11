@@ -59,7 +59,7 @@ func _process(delta):
 	
 	if target_timer >= target_hold_time:
 		if latest_gaze_event != null and latest_gaze_event.is_face_tracked():
-			var gaze_pos = latest_gaze_event.position
+			var gaze_pos = latest_gaze_event.get_eye_gaze()
 			var err = gaze_pos.distance_to(target_window_pos)
 			target_errors.append(err)
 			

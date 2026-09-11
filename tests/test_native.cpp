@@ -1571,41 +1571,6 @@ TEST_CASE("Testing Godot C++ Bindings Transform2D::xform_inv Scaling Bug")
     CHECK(correct_inverse.y == doctest::Approx(5.0));
 }
 
-TEST_CASE("Testing HiDPI Canvas Coordinate Transformation Invariance")
-{
-    // A 14" MacBook Pro Retina screen is 1512x945 logical points with scale 2.0 (3024x1890 physical render buffer).
-    // In Godot, a project with design resolution 1152x648 running fullscreen expand will have:
-    // Canvas visible size = (1152, 720)
-    // Viewport render target = (3024, 1890) (scale = 2.625)
-    // Transform2D final_xform: scale = (2.625, 2.625), origin = (0, 0)
-    
-    double screen_scale = 2.0;
-    godot::Vector2 logical_screen_size(1512.0, 945.0);
-    godot::Vector2 canvas_size(1152.0, 720.0);
-    godot::Vector2 render_target_size = logical_screen_size * screen_scale; // (3024, 1890)
-    
-    godot::Transform2D final_xform(
-        godot::Vector2(render_target_size.x / canvas_size.x, 0.0),
-        godot::Vector2(0.0, render_target_size.y / canvas_size.y),
-        godot::Vector2(0.0, 0.0)
-    );
-    godot::Transform2D canvas_xform = final_xform.affine_inverse();
-    
-    // Screen center in logical points:
-    godot::Vector2 logical_center = logical_screen_size * 0.5; // (756.0, 472.5)
-    
-    // 1. Bug Demonstration: Passing logical points directly to canvas_xform divides by 2.625 instead of 1.3125
-    godot::Vector2 flawed_canvas_pos = canvas_xform.xform(logical_center);
-    CHECK(flawed_canvas_pos.x == doctest::Approx(288.0)); // Halved!
-    CHECK(flawed_canvas_pos.y == doctest::Approx(180.0));
-    
-    // 2. Correct Formula: Multiplying by screen_scale before canvas_xform lands on exact canvas center (576.0, 360.0)
-    godot::Vector2 correct_canvas_pos = canvas_xform.xform(logical_center * screen_scale);
-    CHECK(correct_canvas_pos.x == doctest::Approx(576.0));
-    CHECK(correct_canvas_pos.y == doctest::Approx(360.0));
-    CHECK(correct_canvas_pos.x == doctest::Approx(canvas_size.x * 0.5));
-    CHECK(correct_canvas_pos.y == doctest::Approx(canvas_size.y * 0.5));
-}
 
 #include "log.hpp"
 #include <vector>

@@ -25,7 +25,7 @@ void MouseGazeEmulation::notify_camera_event(const Ref<InputEventGazeBase>& p_ca
     if (p_cam_event.is_null()) return;
     InputEventGaze* gaze = Object::cast_to<InputEventGaze>(p_cam_event.ptr());
     if (gaze && gaze->is_face_tracked()) {
-        last_cam_gaze_pos = gaze->get_position();
+        last_cam_gaze_pos = gaze->get_eye_gaze();
         last_cam_head_xform = gaze->get_head_transform();
         last_cam_gaze_xform = gaze->get_gaze_transform();
         last_cam_left_open = gaze->get_left_eye_openness();
@@ -139,14 +139,20 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 
     float ease_factor = get_eased_blend_factor();
 
-    Vector2 blended_pos = mouse_pos;
+    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    Vector2 mouse_canvas = mouse_pos;
+    if (st && st->get_root()) {
+        mouse_canvas = st->get_root()->get_final_transform().affine_inverse().xform(mouse_pos);
+    }
+
+    Vector2 blended_canvas_pos = mouse_canvas;
     Transform3D blended_head = mouse_head_xform;
     Transform3D blended_gaze = mouse_gaze_xform;
     float blended_left_open = 1.0f;
     float blended_right_open = 1.0f;
 
     if (has_camera_data && last_cam_gaze_pos != Vector2(0, 0) && ease_factor < 0.999f) {
-        blended_pos = last_cam_gaze_pos.lerp(mouse_pos, ease_factor);
+        blended_canvas_pos = last_cam_gaze_pos.lerp(mouse_canvas, ease_factor);
         blended_head = last_cam_head_xform.interpolate_with(mouse_head_xform, ease_factor);
         blended_gaze = last_cam_gaze_xform.interpolate_with(mouse_gaze_xform, ease_factor);
         blended_left_open = Math::lerp(last_cam_left_open, 1.0f, ease_factor);
@@ -173,36 +179,16 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     float dt = (r_last_event_time_usec > 0 && now_usec > r_last_event_time_usec) ? (float)(now_usec - r_last_event_time_usec) / 1000000.0f : 0.016667f;
     if (dt < 0.0001f) dt = 0.0001f;
 
-    Vector2 screen_pos = blended_pos;
+    Vector2 screen_pos = mouse_pos;
     if (p_ds) screen_pos += Vector2(p_ds->window_get_position());
 
-    Vector2 rel = Vector2(0, 0);
-    Vector2 screen_rel = Vector2(0, 0);
-    if (r_last_gaze_pos != Vector2(0, 0)) {
-        rel = blended_pos - r_last_gaze_pos;
-        screen_rel = screen_pos - r_last_screen_pos;
-    }
-    Vector2 vel = rel / dt;
-    Vector2 screen_vel = screen_rel / dt;
-
-    r_last_gaze_pos = blended_pos;
+    r_last_gaze_pos = blended_canvas_pos;
     r_last_screen_pos = screen_pos;
-    Vector2 canvas_pos = blended_pos;
-    double scale = p_ds ? p_ds->screen_get_scale() : 1.0;
-    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && st->get_root()) {
-        canvas_pos = st->get_root()->get_final_transform().affine_inverse().xform(canvas_pos * scale);
-    }
 
     event->set_frame_id(++r_frame_id);
     event->set_timestamp_usec(now_usec);
-    event->set_position(canvas_pos);
-    event->set_global_position(canvas_pos);
-    event->set_screen_position(screen_pos);
-    event->set_relative(rel);
-    event->set_screen_relative(screen_rel);
-    event->set_velocity(vel);
-    event->set_screen_velocity(screen_vel);
+    event->set_eye_gaze(blended_canvas_pos);
+    event->set_nose_gaze(blended_canvas_pos);
     event->set_left_eye_openness(blended_left_open);
     event->set_right_eye_openness(blended_right_open);
     event->set_head_transform(blended_head);

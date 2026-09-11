@@ -63,12 +63,12 @@ extends Node2D
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventGaze:
         # 2D Screen / Viewport position
-        cursor.global_position = event.position
+        cursor.global_position = event.get_eye_gaze()
         status.text = "Face Tracked (Openness L: %.2f, R: %.2f)" % [event.left_eye_openness, event.right_eye_openness]
 
-        # 3D Head & Gaze transforms
-        var head_pos_mm = event.head_transform.origin
-        var gaze_ray_dir = event.gaze_transform.basis.z * -1.0
+        # 3D Head & Gaze properties
+        var head_pos_mm = event.head_pose.origin
+        var eye_ray_dir = event.eye_direction
     elif event is InputEventGazeMissing:
         status.text = "Gaze Lost (Reason: %d)" % event.reason
 

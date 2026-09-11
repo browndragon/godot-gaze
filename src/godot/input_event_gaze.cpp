@@ -1,4 +1,5 @@
 #include "input_event_gaze.hpp"
+#include <godot_cpp/classes/canvas_item.hpp>
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -55,38 +56,46 @@ void InputEventGazeBase::copy_from(const Ref<InputEventGazeBase> &p_other) {
 InputEventGaze::InputEventGaze() {
     left_eye_openness = 1.0f;
     right_eye_openness = 1.0f;
-    position = Vector2(0, 0);
-    global_position = Vector2(0, 0);
-    screen_position = Vector2(0, 0);
-    relative = Vector2(0, 0);
-    screen_relative = Vector2(0, 0);
-    velocity = Vector2(0, 0);
-    screen_velocity = Vector2(0, 0);
+    eye_gaze_position = Vector2(0, 0);
+    nose_gaze_position = Vector2(0, 0);
     head_transform = Transform3D();
     gaze_transform = Transform3D();
 }
 
+Vector2 InputEventGaze::get_eye_gaze(const CanvasItem *p_local_to) const {
+    if (!p_local_to) {
+        return eye_gaze_position;
+    }
+    return p_local_to->get_global_transform_with_canvas().affine_inverse().xform(eye_gaze_position);
+}
+
+void InputEventGaze::set_eye_gaze(const Vector2 &p_pos) {
+    eye_gaze_position = p_pos;
+}
+
+Vector2 InputEventGaze::get_nose_gaze(const CanvasItem *p_local_to) const {
+    if (!p_local_to) {
+        return nose_gaze_position;
+    }
+    return p_local_to->get_global_transform_with_canvas().affine_inverse().xform(nose_gaze_position);
+}
+
+void InputEventGaze::set_nose_gaze(const Vector2 &p_pos) {
+    nose_gaze_position = p_pos;
+}
+
 void InputEventGaze::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("set_position", "position"), &InputEventGaze::set_position);
-    ClassDB::bind_method(D_METHOD("get_position"), &InputEventGaze::get_position);
+    ClassDB::bind_method(D_METHOD("get_eye_gaze", "local_to"), &InputEventGaze::get_eye_gaze, DEFVAL(nullptr));
+    ClassDB::bind_method(D_METHOD("set_eye_gaze", "eye_gaze"), &InputEventGaze::set_eye_gaze);
 
-    ClassDB::bind_method(D_METHOD("set_global_position", "global_position"), &InputEventGaze::set_global_position);
-    ClassDB::bind_method(D_METHOD("get_global_position"), &InputEventGaze::get_global_position);
+    ClassDB::bind_method(D_METHOD("get_nose_gaze", "local_to"), &InputEventGaze::get_nose_gaze, DEFVAL(nullptr));
+    ClassDB::bind_method(D_METHOD("set_nose_gaze", "nose_gaze"), &InputEventGaze::set_nose_gaze);
 
-    ClassDB::bind_method(D_METHOD("set_screen_position", "screen_position"), &InputEventGaze::set_screen_position);
-    ClassDB::bind_method(D_METHOD("get_screen_position"), &InputEventGaze::get_screen_position);
+    ClassDB::bind_method(D_METHOD("get_head_pose"), &InputEventGaze::get_head_pose);
+    ClassDB::bind_method(D_METHOD("set_head_pose", "head_pose"), &InputEventGaze::set_head_pose);
 
-    ClassDB::bind_method(D_METHOD("set_relative", "relative"), &InputEventGaze::set_relative);
-    ClassDB::bind_method(D_METHOD("get_relative"), &InputEventGaze::get_relative);
-
-    ClassDB::bind_method(D_METHOD("set_screen_relative", "screen_relative"), &InputEventGaze::set_screen_relative);
-    ClassDB::bind_method(D_METHOD("get_screen_relative"), &InputEventGaze::get_screen_relative);
-
-    ClassDB::bind_method(D_METHOD("set_velocity", "velocity"), &InputEventGaze::set_velocity);
-    ClassDB::bind_method(D_METHOD("get_velocity"), &InputEventGaze::get_velocity);
-
-    ClassDB::bind_method(D_METHOD("set_screen_velocity", "screen_velocity"), &InputEventGaze::set_screen_velocity);
-    ClassDB::bind_method(D_METHOD("get_screen_velocity"), &InputEventGaze::get_screen_velocity);
+    ClassDB::bind_method(D_METHOD("get_eye_origin"), &InputEventGaze::get_eye_origin);
+    ClassDB::bind_method(D_METHOD("get_eye_direction"), &InputEventGaze::get_eye_direction);
 
     ClassDB::bind_method(D_METHOD("set_head_transform", "head_transform"), &InputEventGaze::set_head_transform);
     ClassDB::bind_method(D_METHOD("get_head_transform"), &InputEventGaze::get_head_transform);
@@ -96,13 +105,9 @@ void InputEventGaze::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGaze::copy_from);
 
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "position"), "set_position", "get_position");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "global_position"), "set_global_position", "get_global_position");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screen_position"), "set_screen_position", "get_screen_position");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "relative"), "set_relative", "get_relative");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screen_relative"), "set_screen_relative", "get_screen_relative");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "velocity"), "set_velocity", "get_velocity");
-    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "screen_velocity"), "set_screen_velocity", "get_screen_velocity");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_pose"), "set_head_pose", "get_head_pose");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "eye_origin"), "", "get_eye_origin");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "eye_direction"), "", "get_eye_direction");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "set_head_transform", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "gaze_transform"), "set_gaze_transform", "get_gaze_transform");
 }
@@ -110,20 +115,15 @@ void InputEventGaze::_bind_methods() {
 void InputEventGaze::copy_from(const Ref<InputEventGaze> &p_other) {
     if (p_other.is_valid()) {
         InputEventGazeBase::copy_from(p_other);
-        position = p_other->position;
-        global_position = p_other->global_position;
-        screen_position = p_other->screen_position;
-        relative = p_other->relative;
-        screen_relative = p_other->screen_relative;
-        velocity = p_other->velocity;
-        screen_velocity = p_other->screen_velocity;
+        eye_gaze_position = p_other->eye_gaze_position;
+        nose_gaze_position = p_other->nose_gaze_position;
         head_transform = p_other->head_transform;
         gaze_transform = p_other->gaze_transform;
     }
 }
 
 String InputEventGaze::as_text() const {
-    return String("InputEventGaze: pos=") + String(position) + ", vel=" + String(velocity) + ", open=(" + String::num(left_eye_openness, 2) + ", " + String::num(right_eye_openness, 2) + ")";
+    return String("InputEventGaze: eye=") + String(eye_gaze_position) + ", nose=" + String(nose_gaze_position) + ", open=(" + String::num(left_eye_openness, 2) + ", " + String::num(right_eye_openness, 2) + ")";
 }
 
 // --- InputEventGazeMissing ---

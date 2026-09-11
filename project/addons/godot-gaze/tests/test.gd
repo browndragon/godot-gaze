@@ -35,22 +35,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventGazeBase:
 		latest_gaze_event = event
 		if event is InputEventGaze:
-			eye_gaze_pos = event.position
-			
-			# Project head pose ray ("nose gaze") to window pixel coordinates using GazeServer projection
-			var xform = event.head_transform
-			var nose_orig = xform.origin
-			var nose_fwd = -xform.basis.z.normalized()
-			
-			var gs = Engine.get_singleton("GazeServer")
-			if gs:
-				var nose_proj = gs.project_ray_to_viewport(nose_orig, nose_fwd)
-				if nose_proj != Vector2.INF:
-					var scale = DisplayServer.screen_get_scale() if Engine.has_singleton("DisplayServer") else 1.0
-					var canvas_xform = get_viewport().get_final_transform().affine_inverse()
-					nose_gaze_pos = canvas_xform * (nose_proj * scale)
-				else:
-					nose_gaze_pos = Vector2.ZERO
+			eye_gaze_pos = event.get_eye_gaze()
+			nose_gaze_pos = event.get_nose_gaze()
 
 			if is_instance_valid(cursor):
 				cursor.visible = true

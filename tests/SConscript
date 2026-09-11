@@ -249,66 +249,12 @@ if env["platform"] != "javascript":
         test_objs.append(core_env.Object(source="#" + os.path.join(gaze_variant_dir, "thirdparty_objc/ort_enums.mm")))
         test_objs.append(core_env.Object(source="#" + os.path.join(gaze_variant_dir, "thirdparty_objc/error_utils.mm")))
         
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_native" + core_env["OBJSUFFIX"]),
-        source="#tests/test_native.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_eyes" + core_env["OBJSUFFIX"]),
-        source="#tests/test_eyes.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_transforms" + core_env["OBJSUFFIX"]),
-        source="#tests/test_transforms.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_gaze_model" + core_env["OBJSUFFIX"]),
-        source="#tests/test_gaze_model.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_projection_engine" + core_env["OBJSUFFIX"]),
-        source="#tests/test_projection_engine.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_eye_state_model" + core_env["OBJSUFFIX"]),
-        source="#tests/test_eye_state_model.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_yunet_detector" + core_env["OBJSUFFIX"]),
-        source="#tests/test_yunet_detector.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_landmark_model" + core_env["OBJSUFFIX"]),
-        source="#tests/test_landmark_model.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_head_pose_pnp" + core_env["OBJSUFFIX"]),
-        source="#tests/test_head_pose_pnp.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_input_event_gaze" + core_env["OBJSUFFIX"]),
-        source="#tests/test_input_event_gaze.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_concurrency" + core_env["OBJSUFFIX"]),
-        source="#tests/test_concurrency.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_pipeline_stages" + core_env["OBJSUFFIX"]),
-        source="#tests/test_pipeline_stages.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_coordinate_calculus" + core_env["OBJSUFFIX"]),
-        source="#tests/test_coordinate_calculus.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_sigmoidal_filter" + core_env["OBJSUFFIX"]),
-        source="#tests/test_sigmoidal_filter.cpp"
-    ))
-    test_objs.append(core_env.Object(
-        target="#" + os.path.join(gaze_variant_dir, "tests/test_mouse_gaze_emulation" + core_env["OBJSUFFIX"]),
-        source="#tests/test_mouse_gaze_emulation.cpp"
-    ))
+    for f in Glob("#tests/test_*.cpp"):
+        if os.path.basename(str(f)) == "test_main.cpp":
+            continue
+        rel_path = os.path.relpath(f.abspath, Dir("#tests").abspath)
+        obj_file = "#" + os.path.join(gaze_variant_dir, "tests", rel_path.replace(".cpp", core_env["OBJSUFFIX"]))
+        test_objs.append(core_env.Object(target=obj_file, source=f))
 
     exe_suffix = ".exe" if env["platform"] == "windows" else ""
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
@@ -406,7 +352,22 @@ godot_eval_landscape_run = env.Command(
 env.AlwaysBuild(godot_eval_landscape_run)
 env.Alias("tools/eval_landscape", godot_eval_landscape_run)
 
-# Godot windowed E2E test target
+# Godot windowed test targets
+windowed_test_nodes = []
+for f in Glob("#project/addons/godot-gaze/tests/windowed/*.gd"):
+    test_basename = os.path.splitext(os.path.basename(str(f)))[0]
+    rel_path = f"addons/godot-gaze/tests/windowed/{os.path.basename(str(f))}"
+    w_run = env.Command(
+        f"build/tests/logs/tests.godot.windowed.{test_basename}.log",
+        [library],
+        Action(run_command_and_log, varlist=["TEST_CMD"]),
+        TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", rel_path]
+    )
+    env.AlwaysBuild(w_run)
+    env.Alias(f"tests/godot/windowed/{test_basename}", w_run)
+    windowed_test_nodes.append(w_run)
+
+# Top-level windowed_test.gd
 godot_windowed_run = env.Command(
     "build/tests/logs/tests.godot.windowed.log",
     [library],
@@ -414,7 +375,8 @@ godot_windowed_run = env.Command(
     TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd"]
 )
 env.AlwaysBuild(godot_windowed_run)
-env.Alias("tests/godot/windowed", godot_windowed_run)
+windowed_test_nodes.append(godot_windowed_run)
+env.Alias("tests/godot/windowed", windowed_test_nodes)
 
 # Godot camera exit E2E test target
 godot_camera_exit_run = env.Command(

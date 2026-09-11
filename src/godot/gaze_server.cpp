@@ -7,6 +7,7 @@
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/classes/scene_tree.hpp>
 #include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/canvas_item.hpp>
 #include <godot_cpp/classes/main_loop.hpp>
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
@@ -160,6 +161,7 @@ void GazeServer::_bind_methods() {
 
     // Ray Projection Math
     ClassDB::bind_method(D_METHOD("project_ray_to_camera_plane", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_camera_plane);
+    ClassDB::bind_method(D_METHOD("project_ray_to_canvas", "origin_cam", "direction_cam", "local_to"), &GazeServer::project_ray_to_canvas, DEFVAL(nullptr));
     ClassDB::bind_method(D_METHOD("project_ray_to_viewport", "origin_cam", "direction_cam"), &GazeServer::project_ray_to_viewport);
 
     // Event Factory & Emulation
@@ -630,12 +632,48 @@ Vector3 GazeServer::get_gaze_direction() const {
     return impl->eye.gaze_direction_cam;
 }
 
+static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) {
+    Ref<GazeDeviceProfile> profile = p_impl->display.device_profile;
+    Vector2 pixel_pitch = profile.is_valid() ? profile->get_pixel_pitch_mm() : Vector2(0.25, 0.25);
+    if (pixel_pitch.x <= 0.0 || pixel_pitch.y <= 0.0) {
+        pixel_pitch = Vector2(0.25, 0.25);
+    }
+    Vector2i logical_size = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
+    Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
+
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size.x, logical_size.y));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(logical_size.x * pixel_pitch.x, logical_size.y * pixel_pitch.y));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(offset.x, offset.y, offset.z), 0.0));
+
+    Vector2 win_pos = Vector2(0.0, 0.0);
+    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+    if (gds) {
+        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
+    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds) {
+            win_pos = ds->window_get_position();
+        }
+    }
+    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(win_pos.x, win_pos.y));
+
+    Gaze::GodotCameraVector3 orig(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
+    Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    Gaze::GodotDisplayVector2 out_px;
+
+    if (!engine.project_gaze(orig, dir, out_px)) {
+        return Vector2(INFINITY, INFINITY);
+    }
+    return Vector2(out_px.x, out_px.y);
+}
+
 void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->eye.gaze_origin_cam = p_origin_cam;
     impl->eye.gaze_direction_cam = p_direction_cam;
 
-    Vector2 px = project_ray_to_viewport(p_origin_cam, p_direction_cam);
+    Vector2 px = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
     if (px.is_finite()) {
         impl->eye.latest_projected_gaze = px;
 
@@ -807,42 +845,41 @@ Vector3 GazeServer::project_ray_to_camera_plane(const Vector3 &p_origin_cam, con
     return Vector3(pt.x, pt.y, pt.z);
 }
 
-Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
-    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
-
-    Ref<GazeDeviceProfile> profile = impl->display.device_profile;
-    Vector2 pixel_pitch = profile.is_valid() ? profile->get_pixel_pitch_mm() : Vector2(0.25, 0.25);
-    if (pixel_pitch.x <= 0.0 || pixel_pitch.y <= 0.0) {
-        pixel_pitch = Vector2(0.25, 0.25);
-    }
-    Vector2i logical_size = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
-
-    Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size.x, logical_size.y));
-    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(logical_size.x * pixel_pitch.x, logical_size.y * pixel_pitch.y));
-    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(offset.x, offset.y, offset.z), 0.0));
-
-    Vector2 win_pos = Vector2(0.0, 0.0);
-    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
-    if (gds) {
-        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
-    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-        DisplayServer *ds = DisplayServer::get_singleton();
-        if (ds) {
-            win_pos = ds->window_get_position();
+static Vector2 _xform_window_px_to_canvas(const Vector2 &p_win_pos) {
+    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->get_root()) {
+        double scale = 1.0;
+        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+        if (gds) {
+            scale = gds->get_screen_scale();
+        } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+            DisplayServer *ds = DisplayServer::get_singleton();
+            if (ds) {
+                scale = ds->screen_get_scale();
+            }
         }
+        if (scale <= 0.0) scale = 1.0;
+        return st->get_root()->get_final_transform().affine_inverse().xform(p_win_pos * scale);
     }
-    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(win_pos.x, win_pos.y));
+    return p_win_pos;
+}
 
-    Gaze::GodotCameraVector3 orig(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-    Gaze::GodotDisplayVector2 out_px;
-
-    if (!engine.project_gaze(orig, dir, out_px)) {
+Vector2 GazeServer::project_ray_to_canvas(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, const CanvasItem *p_local_to) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    Vector2 win_pos = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
+    if (!win_pos.is_finite()) {
         return Vector2(INFINITY, INFINITY);
     }
-    return Vector2(out_px.x, out_px.y);
+    Vector2 canvas_pos = _xform_window_px_to_canvas(win_pos);
+    if (p_local_to) {
+        canvas_pos = p_local_to->get_global_transform_with_canvas().affine_inverse().xform(canvas_pos);
+    }
+    return canvas_pos;
+}
+
+Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
 }
 
 // --- Event Factory ---
@@ -914,46 +951,29 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
 
     Vector2 local_pos = get_gaze_screen_px(true);
     Vector2 win_pos = Vector2(0, 0);
-    double scale = 1.0;
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
     if (gds) {
         win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
-        scale = gds->get_screen_scale();
     } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         DisplayServer *ds = DisplayServer::get_singleton();
         if (ds) {
             win_pos = ds->window_get_position();
-            scale = ds->screen_get_scale();
         }
     }
     Vector2 screen_pos = local_pos + win_pos;
 
     // Transform window-local points to canonical root viewport canvas coordinates
-    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && st->get_root()) {
-        local_pos = st->get_root()->get_final_transform().affine_inverse().xform(local_pos * scale);
-    }
+    local_pos = _xform_window_px_to_canvas(local_pos);
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
     if (dt < 0.0001f) dt = 0.0001f;
 
-    Vector2 rel = local_pos - last_gaze_pos;
-    Vector2 screen_rel = screen_pos - last_screen_pos;
-    Vector2 vel = rel / dt;
-    Vector2 screen_vel = screen_rel / dt;
-
     last_gaze_pos = local_pos;
     last_screen_pos = screen_pos;
     last_event_time_usec = now_usec;
 
-    event->set_position(local_pos);
-    event->set_global_position(local_pos);
-    event->set_screen_position(screen_pos);
-    event->set_relative(rel);
-    event->set_screen_relative(screen_rel);
-    event->set_velocity(vel);
-    event->set_screen_velocity(screen_vel);
+    event->set_eye_gaze(local_pos);
 
     Transform3D head_xform = get_head_transform();
     if (!head_xform.basis.is_rotation()) {
@@ -976,6 +996,19 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         gaze_basis = Basis();
     }
     event->set_gaze_transform(Transform3D(gaze_basis, gaze_o));
+
+    Vector3 nose_orig = head_xform.origin;
+    Vector3 nose_fwd = -head_xform.basis.get_column(2);
+    if (nose_fwd.length_squared() < 1e-4) {
+        nose_fwd = Vector3(0, 0, 1);
+    } else {
+        nose_fwd = nose_fwd.normalized();
+    }
+    Vector2 nose_canvas = project_ray_to_canvas(nose_orig, nose_fwd);
+    if (!std::isfinite(nose_canvas.x) || !std::isfinite(nose_canvas.y)) {
+        nose_canvas = Vector2(0, 0);
+    }
+    event->set_nose_gaze(nose_canvas);
 
     return event;
 }
@@ -1152,21 +1185,7 @@ void GazeServer::trigger_process() {
                 }
 
                 if (emulate_mouse_from_gaze && input) {
-                    Vector2 local_pos = get_gaze_screen_px(true);
-                    double scale = 1.0;
-                    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
-                    if (gds) {
-                        scale = gds->get_screen_scale();
-                    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-                        DisplayServer *ds = DisplayServer::get_singleton();
-                        if (ds) {
-                            scale = ds->screen_get_scale();
-                        }
-                    }
-                    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-                    if (st && st->get_root()) {
-                        local_pos = st->get_root()->get_final_transform().affine_inverse().xform(local_pos * scale);
-                    }
+                    Vector2 local_pos = _xform_window_px_to_canvas(get_gaze_screen_px(true));
                     Vector2 rel = local_pos - last_gaze_pos;
                     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
                     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;

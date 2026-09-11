@@ -35,6 +35,8 @@ class GazeTrackingPipeline;
 
 namespace godot {
 
+class CanvasItem;
+
 class GazeServer : public Object {
     GDCLASS(GazeServer, Object);
 
@@ -156,6 +158,7 @@ public:
 
     // --- Ray Projection Math ---
     Vector3 project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
+    Vector2 project_ray_to_canvas(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, const CanvasItem *p_local_to = nullptr) const;
     Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 
     // --- Event Factory ---

@@ -290,6 +290,13 @@
 			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
 			<description></description>
 		</method>
+		<method name="project_ray_to_canvas">
+			<return type="Vector2"></return>
+			<param index="0" name="p_origin_cam" type="const Vector3 &amp;"></param>
+			<param index="1" name="p_direction_cam" type="const Vector3 &amp;"></param>
+			<param index="2" name="p_local_to" type="const CanvasItem *" default="null"></param>
+			<description></description>
+		</method>
 		<method name="set_event_factory">
 			<return type="void"></return>
 			<param index="0" name="p_factory" type="const Ref&lt; GazeEventFactory &gt; &amp;"></param>

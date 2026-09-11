@@ -35,7 +35,7 @@ func start_step(p_profile: GazeDeviceProfile) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventGaze:
-		latest_gaze_pos = event.position
+		latest_gaze_pos = event.get_eye_gaze(self)
 		face_tracked = event.is_face_tracked()
 
 func _process(delta: float) -> void:

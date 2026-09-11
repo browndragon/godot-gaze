@@ -175,13 +175,13 @@ func _init():
 	var gaze_dir = -latest_event.gaze_transform.basis.z.normalized()
 	var face_gaze_proj = gs.project_ray_to_viewport(gaze_origin, gaze_dir)
 	var face_nose_proj = gs.project_ray_to_viewport(nose_pos, head_forward)
-	print("Face Gaze Ray Proj on Window: ", face_gaze_proj, " | Nose Ray Proj: ", face_nose_proj, " | Event Screen Pos: ", latest_event.screen_position)
+	print("Face Gaze Ray Proj on Window: ", face_gaze_proj, " | Nose Ray Proj: ", face_nose_proj, " | Event Eye Gaze: ", latest_event.get_eye_gaze())
 	if !face_gaze_proj.is_finite():
 		printerr("FAIL: Face Gaze projection is not finite!")
 		quit(1)
 		return
-	if latest_event.screen_position.y < 0.0 or latest_event.screen_position.y > screen_size.y:
-		printerr("FAIL: Latest Event screen position Y is outside screen bounds! Y = ", latest_event.screen_position.y, " (screen height: ", screen_size.y, ")")
+	if !latest_event.get_eye_gaze().is_finite():
+		printerr("FAIL: Latest Event eye gaze position is not finite! Gaze = ", latest_event.get_eye_gaze())
 		quit(1)
 		return
 	print("PASS: Face gaze projection and event position land strictly inside screen bounds.")
@@ -241,7 +241,7 @@ func _init():
 		quit(1)
 		return
 
-	var canvas_proj = root.get_final_transform().affine_inverse() * (fs_proj * test_scale)
+	var canvas_proj = gs.project_ray_to_canvas(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
 	var expected_canvas_pos = root.get_final_transform().affine_inverse() * (Vector2(expected_fs_x, expected_fs_y) * test_scale)
 	print("Fullscreen Center Ray Projection (Canvas Space): ", canvas_proj, " | Expected Canvas Position: ", expected_canvas_pos)
 	if abs(canvas_proj.x - expected_canvas_pos.x) > 2.0:

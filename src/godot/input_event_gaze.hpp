@@ -8,6 +8,8 @@
 
 namespace godot {
 
+class CanvasItem;
+
 /**
  * @class InputEventGazeBase
  * @brief Base class for all gaze-related input events in Godot.
@@ -55,14 +57,8 @@ public:
 class InputEventGaze : public InputEventGazeBase {
     GDCLASS(InputEventGaze, InputEventGazeBase);
 
-private:
-    Vector2 position;
-    Vector2 global_position;
-    Vector2 screen_position;
-    Vector2 relative;
-    Vector2 screen_relative;
-    Vector2 velocity;
-    Vector2 screen_velocity;
+    Vector2 eye_gaze_position;
+    Vector2 nose_gaze_position;
 
     Transform3D head_transform;
     Transform3D gaze_transform;
@@ -76,26 +72,17 @@ public:
 
     virtual bool is_face_tracked() const override { return true; }
 
-    void set_position(const Vector2 &p_pos) { position = p_pos; }
-    Vector2 get_position() const { return position; }
+    Vector2 get_eye_gaze(const CanvasItem *p_local_to = nullptr) const;
+    void set_eye_gaze(const Vector2 &p_pos);
 
-    void set_global_position(const Vector2 &p_pos) { global_position = p_pos; }
-    Vector2 get_global_position() const { return global_position; }
+    Vector2 get_nose_gaze(const CanvasItem *p_local_to = nullptr) const;
+    void set_nose_gaze(const Vector2 &p_pos);
 
-    void set_screen_position(const Vector2 &p_pos) { screen_position = p_pos; }
-    Vector2 get_screen_position() const { return screen_position; }
+    Transform3D get_head_pose() const { return head_transform; }
+    void set_head_pose(const Transform3D &p_pose) { head_transform = p_pose; }
 
-    void set_relative(const Vector2 &p_rel) { relative = p_rel; }
-    Vector2 get_relative() const { return relative; }
-
-    void set_screen_relative(const Vector2 &p_rel) { screen_relative = p_rel; }
-    Vector2 get_screen_relative() const { return screen_relative; }
-
-    void set_velocity(const Vector2 &p_vel) { velocity = p_vel; }
-    Vector2 get_velocity() const { return velocity; }
-
-    void set_screen_velocity(const Vector2 &p_vel) { screen_velocity = p_vel; }
-    Vector2 get_screen_velocity() const { return screen_velocity; }
+    Vector3 get_eye_origin() const { return gaze_transform.origin; }
+    Vector3 get_eye_direction() const { return -gaze_transform.basis.get_column(2); }
 
     void set_head_transform(const Transform3D &p_xform) { head_transform = p_xform; }
     Transform3D get_head_transform() const { return head_transform; }

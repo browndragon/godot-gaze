@@ -8,72 +8,46 @@
 			<return type="bool"></return>
 			<description></description>
 		</method>
-		<method name="set_position">
-			<return type="void"></return>
-			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
-			<description></description>
-		</method>
-		<method name="get_position">
+		<method name="get_eye_gaze">
 			<return type="Vector2"></return>
+			<param index="0" name="local_to" type="const CanvasItem *" default="null"></param>
 			<description></description>
 		</method>
-		<method name="set_global_position">
+		<method name="set_eye_gaze">
 			<return type="void"></return>
-			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<param index="0" name="eye_gaze" type="const Vector2 &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_global_position">
+		<method name="get_nose_gaze">
 			<return type="Vector2"></return>
+			<param index="0" name="local_to" type="const CanvasItem *" default="null"></param>
 			<description></description>
 		</method>
-		<method name="set_screen_position">
+		<method name="set_nose_gaze">
 			<return type="void"></return>
-			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<param index="0" name="nose_gaze" type="const Vector2 &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_screen_position">
-			<return type="Vector2"></return>
+		<method name="get_head_pose">
+			<return type="Transform3D"></return>
 			<description></description>
 		</method>
-		<method name="set_relative">
+		<method name="set_head_pose">
 			<return type="void"></return>
-			<param index="0" name="p_rel" type="const Vector2 &amp;"></param>
+			<param index="0" name="head_pose" type="const Transform3D &amp;"></param>
 			<description></description>
 		</method>
-		<method name="get_relative">
-			<return type="Vector2"></return>
+		<method name="get_eye_origin">
+			<return type="Vector3"></return>
 			<description></description>
 		</method>
-		<method name="set_screen_relative">
-			<return type="void"></return>
-			<param index="0" name="p_rel" type="const Vector2 &amp;"></param>
-			<description></description>
-		</method>
-		<method name="get_screen_relative">
-			<return type="Vector2"></return>
-			<description></description>
-		</method>
-		<method name="set_velocity">
-			<return type="void"></return>
-			<param index="0" name="p_vel" type="const Vector2 &amp;"></param>
-			<description></description>
-		</method>
-		<method name="get_velocity">
-			<return type="Vector2"></return>
-			<description></description>
-		</method>
-		<method name="set_screen_velocity">
-			<return type="void"></return>
-			<param index="0" name="p_vel" type="const Vector2 &amp;"></param>
-			<description></description>
-		</method>
-		<method name="get_screen_velocity">
-			<return type="Vector2"></return>
+		<method name="get_eye_direction">
+			<return type="Vector3"></return>
 			<description></description>
 		</method>
 		<method name="set_head_transform">
 			<return type="void"></return>
-			<param index="0" name="p_xform" type="const Transform3D &amp;"></param>
+			<param index="0" name="head_transform" type="const Transform3D &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_head_transform">
@@ -82,7 +56,7 @@
 		</method>
 		<method name="set_gaze_transform">
 			<return type="void"></return>
-			<param index="0" name="p_xform" type="const Transform3D &amp;"></param>
+			<param index="0" name="gaze_transform" type="const Transform3D &amp;"></param>
 			<description></description>
 		</method>
 		<method name="get_gaze_transform">
@@ -91,7 +65,7 @@
 		</method>
 		<method name="copy_from">
 			<return type="void"></return>
-			<param index="0" name="p_other" type="const Ref&lt; InputEventGaze &gt; &amp;"></param>
+			<param index="0" name="other" type="const Ref&lt; InputEventGaze &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="as_text">
@@ -99,6 +73,12 @@
 			<description></description>
 		</method>
 	</methods>
-	<members></members>
+	<members>
+		<member name="head_pose" type="Transform3D" setter="set_head_pose" getter="get_head_pose"></member>
+		<member name="eye_origin" type="Vector3" getter="get_eye_origin"></member>
+		<member name="eye_direction" type="Vector3" getter="get_eye_direction"></member>
+		<member name="head_transform" type="Transform3D" setter="set_head_transform" getter="get_head_transform"></member>
+		<member name="gaze_transform" type="Transform3D" setter="set_gaze_transform" getter="get_gaze_transform"></member>
+	</members>
 	<signals></signals>
 </class>

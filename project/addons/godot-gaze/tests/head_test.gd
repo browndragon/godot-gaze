@@ -68,11 +68,12 @@ func collect_data():
 	var step_name = steps[current_step]["name"]
 	var data = {
 		"step": step_name,
-		"head_pos_mm": latest_gaze_event.head_transform.origin,
-		"head_basis": latest_gaze_event.head_transform.basis,
-		"gaze_origin_mm": latest_gaze_event.gaze_transform.origin,
-		"gaze_dir": latest_gaze_event.gaze_transform.basis.z * -1.0,
-		"position_2d": latest_gaze_event.position
+		"head_pos_mm": latest_gaze_event.head_pose.origin,
+		"head_basis": latest_gaze_event.head_pose.basis,
+		"gaze_origin_mm": latest_gaze_event.eye_origin,
+		"gaze_dir": latest_gaze_event.eye_direction,
+		"eye_gaze_2d": latest_gaze_event.get_eye_gaze(),
+		"nose_gaze_2d": latest_gaze_event.get_nose_gaze()
 	}
 	collected_data.append(data)
 	
@@ -81,7 +82,8 @@ func collect_data():
 	print("  Head Pos: ", data.head_pos_mm)
 	print("  Gaze Origin: ", data.gaze_origin_mm)
 	print("  Gaze Dir: ", data.gaze_dir)
-	print("  Position 2D: ", data.position_2d)
+	print("  Eye Gaze 2D: ", data.eye_gaze_2d)
+	print("  Nose Gaze 2D: ", data.nose_gaze_2d)
 
 func finish_test():
 	var gs = Engine.get_singleton("GazeServer")
@@ -95,7 +97,8 @@ func finish_test():
 		out_text += "  Head Pos: %s\n" % str(d.head_pos_mm)
 		out_text += "  Gaze Origin: %s\n" % str(d.gaze_origin_mm)
 		out_text += "  Gaze Dir: %s\n" % str(d.gaze_dir)
-		out_text += "  Position 2D: %s\n\n" % str(d.position_2d)
+		out_text += "  Eye Gaze 2D: %s\n" % str(d.eye_gaze_2d)
+		out_text += "  Nose Gaze 2D: %s\n\n" % str(d.nose_gaze_2d)
 	out_text += "========================="
 	
 	console_output.text = out_text

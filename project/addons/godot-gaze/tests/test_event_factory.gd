@@ -24,8 +24,8 @@ func test_copy_from_gaze_event():
 	base.right_eye_openness = 0.88
 	base.set_eye_gaze(Vector2(500, 300))
 	base.set_nose_gaze(Vector2(480, 310))
-	base.head_pose = Transform3D(Basis(), Vector3(10, 20, 550))
-	base.set_gaze_transform(Transform3D(Basis(), Vector3(5, 10, 0)))
+	base.set_head_transform(Transform3D(Basis(), Vector3(10, 20, 550)))
+	base.set_eye_transform(Transform3D(Basis(), Vector3(5, 10, 0)))
 
 	var custom = CustomTestEvent.new()
 	custom.copy_from(base)
@@ -38,8 +38,8 @@ func test_copy_from_gaze_event():
 	assert_almost_eq(custom.right_eye_openness, 0.88, 0.001, "Right eye openness should match")
 	assert_eq(custom.get_eye_gaze(), Vector2(500, 300), "Eye gaze should match")
 	assert_eq(custom.get_nose_gaze(), Vector2(480, 310), "Nose gaze should match")
-	assert_eq(custom.head_pose.origin, Vector3(10, 20, 550), "Head pose origin should match")
-	assert_eq(custom.eye_origin, Vector3(5, 10, 0), "Eye origin should match")
+	assert_eq(custom.get_head_transform().origin, Vector3(10, 20, 550), "Head transform origin should match")
+	assert_eq(custom.get_eye_transform().origin, Vector3(5, 10, 0), "Eye transform origin should match")
 	assert_eq(custom.custom_metric, 42.0, "Custom metric should be set")
 
 func test_gaze_server_event_factory_composition():

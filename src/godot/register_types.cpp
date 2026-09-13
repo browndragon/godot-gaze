@@ -62,22 +62,50 @@ static void register_gaze_project_settings() {
         ps->set_initial_value("gaze/pointing/emulate_gaze_from_mouse", true);
 
         if (!ps->has_setting("gaze/pointing/emulate_mouse_from_gaze")) {
-            ps->set_setting("gaze/pointing/emulate_mouse_from_gaze", false);
+            ps->set_setting("gaze/pointing/emulate_mouse_from_gaze", true);
         }
         Dictionary prop_emul_mouse;
         prop_emul_mouse["name"] = "gaze/pointing/emulate_mouse_from_gaze";
         prop_emul_mouse["type"] = Variant::BOOL;
         ps->add_property_info(prop_emul_mouse);
-        ps->set_initial_value("gaze/pointing/emulate_mouse_from_gaze", false);
+        ps->set_initial_value("gaze/pointing/emulate_mouse_from_gaze", true);
+
+        if (!ps->has_setting("gaze/pointing/default_clamping")) {
+            ps->set_setting("gaze/pointing/default_clamping", true);
+        }
+        Dictionary prop_def_clamp;
+        prop_def_clamp["name"] = "gaze/pointing/default_clamping";
+        prop_def_clamp["type"] = Variant::BOOL;
+        ps->add_property_info(prop_def_clamp);
+        ps->set_initial_value("gaze/pointing/default_clamping", true);
+
+        if (!ps->has_setting("gaze/pointing/mouse_stillness_duration_sec")) {
+            ps->set_setting("gaze/pointing/mouse_stillness_duration_sec", 1.5);
+        }
+        Dictionary prop_stillness;
+        prop_stillness["name"] = "gaze/pointing/mouse_stillness_duration_sec";
+        prop_stillness["type"] = Variant::FLOAT;
+        ps->add_property_info(prop_stillness);
+        ps->set_initial_value("gaze/pointing/mouse_stillness_duration_sec", 1.5);
+
+        if (!ps->has_setting("gaze/pointing/mouse_stillness_threshold_px")) {
+            ps->set_setting("gaze/pointing/mouse_stillness_threshold_px", 3.0);
+        }
+        Dictionary prop_still_thresh;
+        prop_still_thresh["name"] = "gaze/pointing/mouse_stillness_threshold_px";
+        prop_still_thresh["type"] = Variant::FLOAT;
+        ps->add_property_info(prop_still_thresh);
+        ps->set_initial_value("gaze/pointing/mouse_stillness_threshold_px", 3.0);
 
         if (!ps->has_setting("gaze/pointing/mouse_emulation_dwell_sec")) {
-            ps->set_setting("gaze/pointing/mouse_emulation_dwell_sec", 2.0);
+            ps->set_setting("gaze/pointing/mouse_emulation_dwell_sec", 1.5);
         }
         Dictionary prop_dwell;
         prop_dwell["name"] = "gaze/pointing/mouse_emulation_dwell_sec";
         prop_dwell["type"] = Variant::FLOAT;
         ps->add_property_info(prop_dwell);
-        ps->set_initial_value("gaze/pointing/mouse_emulation_dwell_sec", 2.0);
+        ps->set_initial_value("gaze/pointing/mouse_emulation_dwell_sec", 1.5);
+
 
         if (!ps->has_setting("gaze/pointing/mouse_emulation_transition_sec")) {
             ps->set_setting("gaze/pointing/mouse_emulation_transition_sec", 0.3);

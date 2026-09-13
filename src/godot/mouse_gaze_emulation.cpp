@@ -19,6 +19,44 @@ void MouseGazeEmulation::reset() {
     has_last_mouse_pos = false;
     has_last_window_state = false;
     has_camera_data = false;
+    has_anchor = false;
+    ring_head = 0;
+    ring_count = 0;
+    stillness_state = STATE_STILL;
+    stillness_timer = stillness_duration_sec;
+}
+
+void MouseGazeEmulation::record_sample(uint64_t timestamp_usec, const Vector2& pos) {
+    ring_buffer[ring_head] = { timestamp_usec, pos };
+    ring_head = (ring_head + 1) % RING_CAPACITY;
+    if (ring_count < RING_CAPACITY) {
+        ring_count++;
+    }
+}
+
+float MouseGazeEmulation::compute_window_velocity(uint64_t current_time_usec, const Vector2& current_pos) const {
+    if (ring_count < 2) return 0.0f;
+
+    const MouseRingSample* oldest = nullptr;
+    for (size_t i = 0; i < ring_count; ++i) {
+        size_t idx = (ring_head + RING_CAPACITY - 1 - i) % RING_CAPACITY;
+        const MouseRingSample& s = ring_buffer[idx];
+        if (current_time_usec >= s.timestamp_usec && (current_time_usec - s.timestamp_usec) <= window_duration_usec) {
+            oldest = &s;
+        } else if (oldest != nullptr) {
+            break;
+        }
+    }
+
+    if (!oldest || oldest->timestamp_usec == current_time_usec) {
+        return 0.0f;
+    }
+
+    float dt_sec = (float)(current_time_usec - oldest->timestamp_usec) / 1000000.0f;
+    if (dt_sec < 0.001f) return 0.0f;
+
+    float dist = (current_pos - oldest->pos).length();
+    return dist / dt_sec;
 }
 
 void MouseGazeEmulation::notify_camera_event(const Ref<InputEventGazeBase>& p_cam_event) {
@@ -27,7 +65,7 @@ void MouseGazeEmulation::notify_camera_event(const Ref<InputEventGazeBase>& p_ca
     if (gaze && gaze->is_face_tracked()) {
         last_cam_gaze_pos = gaze->get_eye_gaze();
         last_cam_head_xform = gaze->get_head_transform();
-        last_cam_gaze_xform = gaze->get_gaze_transform();
+        last_cam_gaze_xform = gaze->get_eye_transform();
         last_cam_left_open = gaze->get_left_eye_openness();
         last_cam_right_open = gaze->get_right_eye_openness();
         has_camera_data = true;
@@ -45,11 +83,14 @@ void MouseGazeEmulation::update(
     bool p_camera_tracking_active,
     bool p_face_detected,
     bool p_emulate_gaze_from_mouse,
+    bool p_emulate_mouse_from_gaze,
     DisplayServer* p_ds
 ) {
-    if (!p_emulate_gaze_from_mouse) {
+    if (!p_emulate_gaze_from_mouse && !p_emulate_mouse_from_gaze) {
         dwell_timer = 0.0f;
         blend_progress = 0.0f;
+        stillness_state = STATE_STILL;
+        stillness_timer = stillness_duration_sec;
         return;
     }
 
@@ -59,14 +100,51 @@ void MouseGazeEmulation::update(
     Vector2 mouse_pos = screen_mouse_pos - window_pos;
 
     Input* input = Input::get_singleton();
-    bool mouse_clicked = input && (input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) || input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_RIGHT));
+    bool mouse_clicked = input && (input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) ||
+                                   input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_RIGHT) ||
+                                   input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_MIDDLE));
 
     bool window_changed = has_last_window_state && (window_pos != last_window_pos || window_mode != last_window_mode);
 
-    if (has_last_mouse_pos && !window_changed) {
-        float move_dist = (screen_mouse_pos - last_screen_mouse_pos).length();
-        if (move_dist >= motion_threshold_px || mouse_clicked) {
-            dwell_timer = dwell_time_sec;
+    uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
+
+    if (!has_anchor || window_changed) {
+        anchor_pos = screen_mouse_pos;
+        has_anchor = true;
+        ring_head = 0;
+        ring_count = 0;
+        record_sample(now_usec, screen_mouse_pos);
+        stillness_state = STATE_STILL;
+        stillness_timer = stillness_duration_sec;
+    } else {
+        record_sample(now_usec, screen_mouse_pos);
+        float dist_from_anchor = (screen_mouse_pos - anchor_pos).length();
+        float v_window = compute_window_velocity(now_usec, screen_mouse_pos);
+
+        if (stillness_state == STATE_STILL || stillness_state == STATE_SETTLING) {
+            if (mouse_clicked || dist_from_anchor >= anchor_bubble_radius_px) {
+                stillness_state = STATE_ACTIVE;
+                stillness_timer = 0.0f;
+                anchor_pos = screen_mouse_pos;
+            } else {
+                stillness_timer += (float)p_delta_sec;
+                if (stillness_timer >= stillness_duration_sec) {
+                    stillness_state = STATE_STILL;
+                }
+            }
+        } else {
+            // In STATE_ACTIVE:
+            if (!mouse_clicked && v_window < window_velocity_threshold_px_s) {
+                stillness_state = STATE_SETTLING;
+                anchor_pos = screen_mouse_pos;
+                stillness_timer = (float)p_delta_sec;
+                if (stillness_timer >= stillness_duration_sec) {
+                    stillness_state = STATE_STILL;
+                }
+            } else {
+                anchor_pos = screen_mouse_pos;
+                stillness_timer = 0.0f;
+            }
         }
     }
 
@@ -77,20 +155,25 @@ void MouseGazeEmulation::update(
     has_last_mouse_pos = true;
     has_last_window_state = true;
 
-    if (dwell_timer > 0.0f) {
-        dwell_timer = std::max(0.0f, dwell_timer - (float)p_delta_sec);
+    // Maintain backwards-compatible dwell_timer
+    dwell_timer = (stillness_state != STATE_STILL) ? (stillness_duration_sec - stillness_timer) : 0.0f;
+
+    // G <- M blend progress update:
+    if (!p_emulate_gaze_from_mouse) {
+        blend_progress = 0.0f;
+        return;
     }
 
     // Determine target blend weight (1.0 = mouse, 0.0 = camera)
     float target_blend = 0.0f;
     if (!p_camera_tracking_active) {
         target_blend = 1.0f; // Pure mouse fallback when camera tracking is inactive
-    } else if (dwell_timer > 0.0f) {
+    } else if (stillness_state != STATE_STILL) {
         target_blend = 1.0f; // Active mouse interaction overrides camera gaze during dwell window
     } else if (p_face_detected) {
-        target_blend = 0.0f; // Active face tracked without mouse movement uses pure camera gaze
+        target_blend = 0.0f; // Active face tracked with still mouse uses pure camera gaze
     } else {
-        // Face lost & mouse idle: freeze blend weight in place (no phantom drift!)
+        // Face lost & mouse still: freeze blend weight in place (no phantom drift!)
         target_blend = blend_progress;
     }
 
@@ -102,6 +185,7 @@ void MouseGazeEmulation::update(
         blend_progress = std::max(target_blend, blend_progress - step);
     }
 }
+
 
 Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     DisplayServer* p_ds,
@@ -192,7 +276,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     event->set_left_eye_openness(blended_left_open);
     event->set_right_eye_openness(blended_right_open);
     event->set_head_transform(blended_head);
-    event->set_gaze_transform(blended_gaze);
+    event->set_eye_transform(blended_gaze);
 
     return event;
 }

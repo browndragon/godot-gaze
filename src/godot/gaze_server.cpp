@@ -174,8 +174,22 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_emulate_gaze_from_mouse"), &GazeServer::get_emulate_gaze_from_mouse);
     ClassDB::bind_method(D_METHOD("set_emulate_mouse_from_gaze", "enable"), &GazeServer::set_emulate_mouse_from_gaze);
     ClassDB::bind_method(D_METHOD("get_emulate_mouse_from_gaze"), &GazeServer::get_emulate_mouse_from_gaze);
+    ClassDB::bind_method(D_METHOD("set_default_clamping", "clamping"), &GazeServer::set_default_clamping);
+    ClassDB::bind_method(D_METHOD("is_clamping_by_default"), &GazeServer::is_clamping_by_default);
+
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "default_clamping"), "set_default_clamping", "is_clamping_by_default");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "emulate_mouse_from_gaze"), "set_emulate_mouse_from_gaze", "get_emulate_mouse_from_gaze");
+
+    ClassDB::bind_method(D_METHOD("is_physical_mouse_still"), &GazeServer::is_physical_mouse_still);
+    ClassDB::bind_method(D_METHOD("is_physical_mouse_active"), &GazeServer::is_physical_mouse_active);
+    ClassDB::bind_method(D_METHOD("set_mouse_stillness_duration", "sec"), &GazeServer::set_mouse_stillness_duration);
+    ClassDB::bind_method(D_METHOD("get_mouse_stillness_duration"), &GazeServer::get_mouse_stillness_duration);
+    ClassDB::bind_method(D_METHOD("set_mouse_stillness_threshold_px", "px"), &GazeServer::set_mouse_stillness_threshold_px);
+    ClassDB::bind_method(D_METHOD("get_mouse_stillness_threshold_px"), &GazeServer::get_mouse_stillness_threshold_px);
+
     ClassDB::bind_method(D_METHOD("set_mouse_emulation_dwell_sec", "sec"), &GazeServer::set_mouse_emulation_dwell_sec);
     ClassDB::bind_method(D_METHOD("get_mouse_emulation_dwell_sec"), &GazeServer::get_mouse_emulation_dwell_sec);
+
     ClassDB::bind_method(D_METHOD("set_mouse_emulation_transition_sec", "sec"), &GazeServer::set_mouse_emulation_transition_sec);
     ClassDB::bind_method(D_METHOD("get_mouse_emulation_transition_sec"), &GazeServer::get_mouse_emulation_transition_sec);
 
@@ -226,13 +240,25 @@ GazeServer::GazeServer() {
         if (ps->has_setting("gaze/pointing/emulate_mouse_from_gaze")) {
             emulate_mouse_from_gaze = ps->get_setting("gaze/pointing/emulate_mouse_from_gaze");
         }
-        if (ps->has_setting("gaze/pointing/mouse_emulation_dwell_sec")) {
-            mouse_emulation.set_dwell_time(ps->get_setting("gaze/pointing/mouse_emulation_dwell_sec"));
+        if (ps->has_setting("gaze/pointing/default_clamping")) {
+            default_clamping = ps->get_setting("gaze/pointing/default_clamping");
+        }
+        if (ps->has_setting("gaze/pointing/mouse_stillness_duration_sec")) {
+            mouse_emulation.set_stillness_duration(ps->get_setting("gaze/pointing/mouse_stillness_duration_sec"));
+        } else if (ps->has_setting("gaze/pointing/mouse_emulation_dwell_sec")) {
+            mouse_emulation.set_stillness_duration(ps->get_setting("gaze/pointing/mouse_emulation_dwell_sec"));
+        }
+        if (ps->has_setting("gaze/pointing/mouse_stillness_threshold_px")) {
+            mouse_emulation.set_stillness_threshold(ps->get_setting("gaze/pointing/mouse_stillness_threshold_px"));
         }
         if (ps->has_setting("gaze/pointing/mouse_emulation_transition_sec")) {
             mouse_emulation.set_transition_duration(ps->get_setting("gaze/pointing/mouse_emulation_transition_sec"));
         }
+
     }
+
+    mouse_filter_x = std::make_unique<OneEuroFilter>(60.0, 0.1, 0.005, 1.0);
+    mouse_filter_y = std::make_unique<OneEuroFilter>(60.0, 0.1, 0.005, 1.0);
 
     if (event_factory.is_null()) {
         Ref<GazeServerEventFactory> def_factory;
@@ -430,6 +456,9 @@ void GazeServer::reset() {
         pipeline->clear_work_queue();
     }
 #endif
+    if (mouse_filter_x) mouse_filter_x->reset();
+    if (mouse_filter_y) mouse_filter_y->reset();
+    was_both_closed = false;
     impl->face = FaceInfo();
     impl->eye.gaze_origin_cam = Vector3();
     impl->eye.gaze_direction_cam = Vector3();
@@ -949,7 +978,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         event->set_right_eye_openness(1.0f);
     }
 
-    Vector2 local_pos = get_gaze_screen_px(true);
+    Vector2 local_pos = get_gaze_screen_px(false);
     Vector2 win_pos = Vector2(0, 0);
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
     if (gds) {
@@ -995,7 +1024,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     if (!gaze_basis.is_rotation()) {
         gaze_basis = Basis();
     }
-    event->set_gaze_transform(Transform3D(gaze_basis, gaze_o));
+    event->set_eye_transform(Transform3D(gaze_basis, gaze_o));
 
     Vector3 nose_orig = head_xform.origin;
     Vector3 nose_fwd = -head_xform.basis.get_column(2);
@@ -1044,6 +1073,72 @@ bool GazeServer::get_emulate_mouse_from_gaze() const {
     return emulate_mouse_from_gaze;
 }
 
+void GazeServer::set_default_clamping(bool p_clamping) {
+    default_clamping = p_clamping;
+}
+
+bool GazeServer::is_clamping_by_default() const {
+    return default_clamping;
+}
+
+bool GazeServer::is_physical_mouse_still() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return mouse_emulation.is_physical_mouse_still();
+}
+
+bool GazeServer::is_physical_mouse_active() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return mouse_emulation.is_physical_mouse_active();
+}
+
+void GazeServer::set_mouse_stillness_duration(float p_sec) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    mouse_emulation.set_stillness_duration(p_sec);
+}
+
+float GazeServer::get_mouse_stillness_duration() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return mouse_emulation.get_stillness_duration();
+}
+
+void GazeServer::set_mouse_stillness_threshold_px(float p_px) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    mouse_emulation.set_stillness_threshold(p_px);
+}
+
+float GazeServer::get_mouse_stillness_threshold_px() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return mouse_emulation.get_stillness_threshold();
+}
+
+Vector2 GazeServer::get_canonical_viewport_size() const {
+
+    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->get_root()) {
+        Rect2 visible_rect = st->get_root()->get_visible_rect();
+        if (visible_rect.size.x > 0 && visible_rect.size.y > 0) {
+            return visible_rect.size;
+        }
+    }
+    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+    if (gds) {
+        Rect2i r = gds->get_window_rect_pixels();
+        if (r.size.x > 0 && r.size.y > 0) {
+            return Vector2(r.size.x, r.size.y);
+        }
+    }
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds) {
+            Vector2i wsz = ds->window_get_size();
+            if (wsz.x > 0 && wsz.y > 0) {
+                return Vector2(wsz.x, wsz.y);
+            }
+        }
+    }
+    return Vector2(1152.0f, 648.0f);
+}
+
 void GazeServer::set_mouse_emulation_dwell_sec(float p_sec) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     mouse_emulation.set_dwell_time(p_sec);
@@ -1084,7 +1179,8 @@ void GazeServer::trigger_process() {
     bool cam_tracking_active = (active_trackers > 0);
     bool face_is_detected = is_face_detected();
 
-    mouse_emulation.update(dt, cam_tracking_active, face_is_detected, emulate_gaze_from_mouse, ds);
+    mouse_emulation.update(dt, cam_tracking_active, face_is_detected, emulate_gaze_from_mouse, emulate_mouse_from_gaze, ds);
+
 
 #ifndef WEB_ENABLED
     Gaze::GazeFrameData* completed_data = nullptr;
@@ -1185,45 +1281,82 @@ void GazeServer::trigger_process() {
                 }
 
                 if (emulate_mouse_from_gaze && input) {
-                    Vector2 local_pos = _xform_window_px_to_canvas(get_gaze_screen_px(true));
-                    Vector2 rel = local_pos - last_gaze_pos;
-                    uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
-                    float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
-                    if (dt < 0.0001f) dt = 0.0001f;
-                    Vector2 vel = rel / dt;
+                    if (mouse_emulation.is_physical_mouse_still()) {
+                        uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
+                        double t_sec = (double)now_usec / 1000000.0;
 
-                    Ref<InputEventMouseMotion> mm;
-                    mm.instantiate();
-                    mm->set_position(local_pos);
-                    mm->set_global_position(local_pos);
-                    mm->set_relative(rel);
-                    mm->set_velocity(vel);
-                    input->parse_input_event(mm);
+                        Vector2 raw_canvas = _xform_window_px_to_canvas(get_gaze_screen_px(false));
 
-                    bool left_closed = (completed_data->left_eye_openness < 0.25f);
-                    bool right_closed = (completed_data->right_eye_openness < 0.25f);
-                    if (left_closed && right_closed) {
-                        if (!was_both_closed) {
+                        // If resuming from physical mouse activity, re-center 1€ filter and reset last_gaze_pos
+                        if (mouse_filter_recenter_needed) {
+                            if (mouse_filter_x) mouse_filter_x->reset();
+                            if (mouse_filter_y) mouse_filter_y->reset();
+                            mouse_filter_recenter_needed = false;
+                            last_gaze_pos = raw_canvas;
+                        }
+
+                        // Dedicated 1€ filter exclusively for mouse coordinates:
+                        Vector2 smoothed_pos = raw_canvas;
+                        if (mouse_filter_x && mouse_filter_y) {
+                            smoothed_pos = Vector2(
+                                (float)mouse_filter_x->filter(raw_canvas.x, t_sec),
+                                (float)mouse_filter_y->filter(raw_canvas.y, t_sec)
+                            );
+                        }
+
+                        // Configurable Viewport Clamping:
+                        Vector2 final_mouse_pos = smoothed_pos;
+                        if (default_clamping) {
+                            Vector2 vp_size = get_canonical_viewport_size();
+                            if (vp_size.x > 0.0f && vp_size.y > 0.0f) {
+                                final_mouse_pos.x = std::clamp(final_mouse_pos.x, 0.0f, vp_size.x - 1e-4f);
+                                final_mouse_pos.y = std::clamp(final_mouse_pos.y, 0.0f, vp_size.y - 1e-4f);
+                            }
+                        }
+
+                        Vector2 rel = final_mouse_pos - last_gaze_pos;
+                        float dt_event = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
+                        if (dt_event < 0.0001f) dt_event = 0.0001f;
+                        Vector2 vel = rel / dt_event;
+
+                        Ref<InputEventMouseMotion> mm;
+                        mm.instantiate();
+                        mm->set_position(final_mouse_pos);
+                        mm->set_global_position(final_mouse_pos);
+                        mm->set_relative(rel);
+                        mm->set_velocity(vel);
+                        input->parse_input_event(mm);
+
+                        bool left_closed = (completed_data->left_eye_openness < 0.25f);
+                        bool right_closed = (completed_data->right_eye_openness < 0.25f);
+                        if (left_closed && right_closed) {
+                            if (!was_both_closed) {
+                                Ref<InputEventMouseButton> mb;
+                                mb.instantiate();
+                                mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
+                                mb->set_pressed(true);
+                                mb->set_position(final_mouse_pos);
+                                mb->set_global_position(final_mouse_pos);
+                                input->parse_input_event(mb);
+                                was_both_closed = true;
+                            }
+                        } else if (was_both_closed) {
                             Ref<InputEventMouseButton> mb;
                             mb.instantiate();
                             mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
-                            mb->set_pressed(true);
-                            mb->set_position(local_pos);
-                            mb->set_global_position(local_pos);
+                            mb->set_pressed(false);
+                            mb->set_position(final_mouse_pos);
+                            mb->set_global_position(final_mouse_pos);
                             input->parse_input_event(mb);
-                            was_both_closed = true;
+                            was_both_closed = false;
                         }
-                    } else if (was_both_closed) {
-                        Ref<InputEventMouseButton> mb;
-                        mb.instantiate();
-                        mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
-                        mb->set_pressed(false);
-                        mb->set_position(local_pos);
-                        mb->set_global_position(local_pos);
-                        input->parse_input_event(mb);
+                    } else {
+                        // Physical mouse active: suppress synthetic mouse motion and reset blink state
                         was_both_closed = false;
+                        mouse_filter_recenter_needed = true;
                     }
                 }
+
             } else {
                 Ref<InputEventGazeBase> missing;
                 if (event_factory.is_valid()) {

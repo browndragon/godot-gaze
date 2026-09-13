@@ -31,7 +31,9 @@ enabled=PackedStringArray("res://addons/godot-gaze/plugin.cfg", "res://addons/gu
 
 [gaze]
 
+pointing/emulate_mouse_from_gaze=true
 events/event_factory_path="res://addons/godot-gaze/tests/fixtures/custom_event_factory.tres"
+
 
 [rendering]
 

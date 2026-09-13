@@ -100,11 +100,19 @@ public:
 class InputEventGaze : public InputEventGazeBase {
     GDCLASS(InputEventGaze, InputEventGazeBase);
 
+public:
+    enum ClampingMode {
+        CLAMPING_FREE = 0,
+        CLAMPING_CLAMPED = 1,
+        CLAMPING_DEFAULT = 2,
+    };
+
+private:
     Vector2 eye_gaze_position;
     Vector2 nose_gaze_position;
 
     Transform3D head_transform;
-    Transform3D gaze_transform;
+    Transform3D eye_transform;
 
 protected:
     static void _bind_methods();
@@ -121,9 +129,10 @@ public:
      * @param p_local_to Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in
      *                   canonical root Viewport Canvas space (pixels). If provided, transforms the position into
      *                   the local coordinate space of that CanvasItem.
+     * @param p_clamping Viewport boundary clamping behavior (CLAMPING_FREE, CLAMPING_CLAMPED, or CLAMPING_DEFAULT).
      * @return Vector2 Gaze position in canvas space or local coordinates.
      */
-    Vector2 get_eye_gaze(const CanvasItem *p_local_to = nullptr) const;
+    Vector2 get_eye_gaze(const CanvasItem *p_local_to = nullptr, ClampingMode p_clamping = CLAMPING_DEFAULT) const;
 
     /**
      * @brief Sets the 2D eye gaze position in canonical root Viewport Canvas coordinates.
@@ -139,43 +148,16 @@ public:
      * @param p_local_to Optional CanvasItem (e.g. Node2D or Control). If null (default), returns the position in
      *                   canonical root Viewport Canvas space (pixels). If provided, transforms the position into
      *                   the local coordinate space of that CanvasItem.
+     * @param p_clamping Viewport boundary clamping behavior (CLAMPING_FREE, CLAMPING_CLAMPED, or CLAMPING_DEFAULT).
      * @return Vector2 Nose gaze projection in canvas space or local coordinates.
      */
-    Vector2 get_nose_gaze(const CanvasItem *p_local_to = nullptr) const;
+    Vector2 get_nose_gaze(const CanvasItem *p_local_to = nullptr, ClampingMode p_clamping = CLAMPING_DEFAULT) const;
 
     /**
      * @brief Sets the 2D nose gaze position in canonical root Viewport Canvas coordinates.
      * @param p_pos Position in root Viewport Canvas coordinates.
      */
     void set_nose_gaze(const Vector2 &p_pos);
-
-    /**
-     * @brief Retrieves the 3D head pose in Godot camera space.
-     *
-     * The transform origin is the 3D position of the nose tip in millimeters relative to the camera.
-     * The transform basis represents the 3D head orientation.
-     *
-     * @return Transform3D Head pose transform in camera space.
-     */
-    Transform3D get_head_pose() const { return head_transform; }
-
-    /**
-     * @brief Sets the 3D head pose transform in Godot camera space.
-     * @param p_pose Head pose transform.
-     */
-    void set_head_pose(const Transform3D &p_pose) { head_transform = p_pose; }
-
-    /**
-     * @brief Retrieves the 3D eye origin in Godot camera space (millimeters).
-     * @return Vector3 Origin point of the eye gaze ray in camera space.
-     */
-    Vector3 get_eye_origin() const { return gaze_transform.origin; }
-
-    /**
-     * @brief Retrieves the 3D unit eye gaze direction vector in Godot camera space.
-     * @return Vector3 Normalized direction vector pointing in the gaze direction.
-     */
-    Vector3 get_eye_direction() const { return -gaze_transform.basis.get_column(2); }
 
     /**
      * @brief Sets the underlying 3D head transform in Godot camera space.
@@ -190,16 +172,16 @@ public:
     Transform3D get_head_transform() const { return head_transform; }
 
     /**
-     * @brief Sets the underlying 3D gaze transform in Godot camera space.
+     * @brief Sets the underlying 3D eye gaze transform in Godot camera space.
      * @param p_xform 3D transform of the eye gaze.
      */
-    void set_gaze_transform(const Transform3D &p_xform) { gaze_transform = p_xform; }
+    void set_eye_transform(const Transform3D &p_xform) { eye_transform = p_xform; }
 
     /**
-     * @brief Retrieves the underlying 3D gaze transform in Godot camera space.
-     * @return Transform3D Gaze transform.
+     * @brief Retrieves the underlying 3D eye gaze transform in Godot camera space.
+     * @return Transform3D Eye gaze transform.
      */
-    Transform3D get_gaze_transform() const { return gaze_transform; }
+    Transform3D get_eye_transform() const { return eye_transform; }
 
     void copy_from(const Ref<InputEventGaze> &p_other);
 
@@ -252,4 +234,5 @@ public:
 
 } // namespace godot
 
+VARIANT_ENUM_CAST(godot::InputEventGaze::ClampingMode);
 VARIANT_ENUM_CAST(godot::InputEventGazeMissing::MissingReason);

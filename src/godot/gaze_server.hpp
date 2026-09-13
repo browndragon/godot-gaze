@@ -22,6 +22,7 @@
 #include "input_event_gaze.hpp"
 #include "gaze_event_factory.hpp"
 #include "../core/gaze_frame_data.hpp"
+#include "one_euro_filter.hpp"
 
 #include <vector>
 #include <memory>
@@ -60,7 +61,11 @@ private:
 
     int active_trackers = 0;
     bool emulate_gaze_from_mouse = true;
-    bool emulate_mouse_from_gaze = false;
+    bool emulate_mouse_from_gaze = true;
+    bool default_clamping = true;
+    bool mouse_filter_recenter_needed = true;
+    std::unique_ptr<OneEuroFilter> mouse_filter_x;
+    std::unique_ptr<OneEuroFilter> mouse_filter_y;
     uint64_t last_camera_face_detected_usec = 0;
     bool was_both_closed = false;
 
@@ -249,6 +254,60 @@ public:
      * @return bool True if enabled.
      */
     bool get_emulate_mouse_from_gaze() const;
+
+    /**
+     * @brief Sets whether viewport boundary clamping is enabled by default for gaze projection and mouse emulation.
+     * @param p_clamping True to clamp coordinates to the viewport bounds.
+     */
+    void set_default_clamping(bool p_clamping);
+
+    /**
+     * @brief Checks whether viewport boundary clamping is enabled by default.
+     * @return bool True if clamping by default.
+     */
+    bool is_clamping_by_default() const;
+
+    /**
+     * @brief Checks whether the physical hardware mouse is currently still (allowing gaze-to-mouse emulation).
+     * @return bool True if physical mouse is still.
+     */
+    bool is_physical_mouse_still() const;
+
+    /**
+     * @brief Checks whether the physical hardware mouse is currently active (suppressing gaze-to-mouse emulation).
+     * @return bool True if physical mouse is actively moving or clicked.
+     */
+    bool is_physical_mouse_active() const;
+
+    /**
+     * @brief Sets the stillness duration required before control transitions back to gaze.
+     * @param p_sec Duration in seconds.
+     */
+    void set_mouse_stillness_duration(float p_sec);
+
+    /**
+     * @brief Gets the stillness duration required before control transitions back to gaze.
+     * @return float Duration in seconds.
+     */
+    float get_mouse_stillness_duration() const;
+
+    /**
+     * @brief Sets the physical mouse stillness motion threshold in pixels.
+     * @param p_px Threshold radius in pixels.
+     */
+    void set_mouse_stillness_threshold_px(float p_px);
+
+    /**
+     * @brief Gets the physical mouse stillness motion threshold in pixels.
+     * @return float Threshold radius in pixels.
+     */
+    float get_mouse_stillness_threshold_px() const;
+
+    /**
+     * @brief Retrieves the canonical active viewport size in pixels (accounting for window/display server).
+     * @return Vector2 Viewport size in pixels.
+     */
+    Vector2 get_canonical_viewport_size() const;
 
     /**
      * @brief Sets the dwell time in seconds for mouse interaction override before smoothly returning to camera gaze.

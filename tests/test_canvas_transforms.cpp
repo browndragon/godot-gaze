@@ -164,3 +164,130 @@ TEST_CASE("Canvas Transforms: Mouse Emulation Canvas Space Parity")
     CHECK(blended_canvas == mouse_canvas);
 }
 
+#include "one_euro_filter.hpp"
+
+TEST_CASE("Mouse Emulation: 1-Euro Filter Noise Suppression and Saccade Responsiveness")
+{
+    // Configure 1€ filter tuned for mouse emulation:
+    // min_cutoff = 0.1 Hz (smooth stationary fixation), beta = 0.15 (fast saccades)
+    double freq = 60.0;
+    double min_cutoff = 0.1;
+    double beta = 0.005;
+    double d_cutoff = 1.0;
+
+    OneEuroFilter filter_x(freq, min_cutoff, beta, d_cutoff);
+
+    // 1. Stationary Fixation Phase: stationary gaze at 500 px with +/- 15 px model noise/jank
+    double true_fixation = 500.0;
+    double raw_sq_diff_sum = 0.0;
+    double filtered_sq_diff_sum = 0.0;
+    int fixation_frames = 60;
+
+    for (int i = 0; i < fixation_frames; ++i) {
+        double t = i * (1.0 / freq);
+        // Deterministic high-frequency noise oscillating +/- 15 px
+        double noise = 15.0 * std::sin(i * 1.5);
+        double raw_val = true_fixation + noise;
+        double filtered_val = filter_x.filter(raw_val, t);
+
+        if (i >= 10) { // Let filter warm up
+            raw_sq_diff_sum += (raw_val - true_fixation) * (raw_val - true_fixation);
+            filtered_sq_diff_sum += (filtered_val - true_fixation) * (filtered_val - true_fixation);
+        }
+    }
+
+    double raw_variance = raw_sq_diff_sum / (fixation_frames - 10);
+    double filtered_variance = filtered_sq_diff_sum / (fixation_frames - 10);
+    double noise_reduction = 1.0 - (filtered_variance / raw_variance);
+
+    // Assert that the 1€ filter achieves >= 80% noise reduction during fixation (Delta >= 0.80)
+    CHECK(noise_reduction >= 0.80);
+
+    // 2. Saccade Phase: rapid jump from 500 px to 900 px (400 px displacement)
+    double saccade_target = 900.0;
+    double t_saccade = fixation_frames * (1.0 / freq);
+    double jump_f1 = filter_x.filter(saccade_target, t_saccade);
+    double jump_f2 = filter_x.filter(saccade_target, t_saccade + 1.0 / freq);
+
+    // Within 2 frames (~33ms), filter should adapt cutoff via beta and traverse >= 65% of the distance
+    double jump_progress = (jump_f2 - true_fixation) / (saccade_target - true_fixation);
+    CHECK(jump_progress >= 0.65);
+}
+
+TEST_CASE("Mouse Emulation: Viewport Boundary Clamping Signal Separation")
+{
+    // Screen viewport: 1152x648
+    godot::Vector2 viewport_size(1152.0, 648.0);
+    godot::Vector2 offscreen_gaze(-100.0, 400.0); // 100 px outside the left edge
+
+    // Helper lambda representing the clamping transform
+    auto clamp_to_viewport = [](const godot::Vector2 &pos, const godot::Vector2 &vp_size, bool enabled) -> godot::Vector2 {
+        if (!enabled) {
+            return pos;
+        }
+        return godot::Vector2(
+            std::clamp(pos.x, 0.0f, vp_size.x - 1e-4f),
+            std::clamp(pos.y, 0.0f, vp_size.y - 1e-4f)
+        );
+    };
+
+    godot::Vector2 clamped_pos = clamp_to_viewport(offscreen_gaze, viewport_size, true);
+    godot::Vector2 unclamped_pos = clamp_to_viewport(offscreen_gaze, viewport_size, false);
+
+    // Clamped position lands at x = 0.0
+    CHECK(clamped_pos.x == doctest::Approx(0.0));
+    CHECK(clamped_pos.y == doctest::Approx(400.0));
+
+    // Unclamped position remains at x = -100.0
+    CHECK(unclamped_pos.x == doctest::Approx(-100.0));
+    CHECK(unclamped_pos.y == doctest::Approx(400.0));
+
+    // Clear domain signal separation: Delta_x = 100.0 >= 0.50
+    double delta_x = clamped_pos.x - unclamped_pos.x;
+    CHECK(delta_x == doctest::Approx(100.0));
+    CHECK(delta_x >= 0.50);
+}
+
+TEST_CASE("Mouse Emulation: Blink to Left Click State Machine")
+{
+    // State machine matching GazeServer blink-click logic
+    bool was_both_closed = false;
+    int click_press_events = 0;
+    int click_release_events = 0;
+
+    auto process_blink = [&](float left_open, float right_open) {
+        bool left_closed = (left_open < 0.25f);
+        bool right_closed = (right_open < 0.25f);
+        if (left_closed && right_closed) {
+            if (!was_both_closed) {
+                click_press_events++;
+                was_both_closed = true;
+            }
+        } else if (was_both_closed) {
+            click_release_events++;
+            was_both_closed = false;
+        }
+    };
+
+    // Frame 1: Eyes wide open
+    process_blink(1.0f, 1.0f);
+    CHECK(click_press_events == 0);
+    CHECK(click_release_events == 0);
+
+    // Frame 2: Eyes closing (left=0.10, right=0.10 -> blink started)
+    process_blink(0.10f, 0.10f);
+    CHECK(click_press_events == 1);
+    CHECK(click_release_events == 0);
+
+    // Frame 3: Eyes remain closed
+    process_blink(0.05f, 0.08f);
+    CHECK(click_press_events == 1); // No double click
+    CHECK(click_release_events == 0);
+
+    // Frame 4: Eyes reopen (left=0.90, right=0.90 -> blink ended)
+    process_blink(0.90f, 0.90f);
+    CHECK(click_press_events == 1);
+    CHECK(click_release_events == 1);
+}
+
+

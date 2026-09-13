@@ -59,6 +59,55 @@ func run_tests():
 		return
 	print("PASS: InputEventGaze event hierarchy verified.")
 
+	# 2b. Test InputEventGaze 3D Transform API & ClampingMode Enums
+	if not ("CLAMPING_FREE" in InputEventGaze and "CLAMPING_CLAMPED" in InputEventGaze and "CLAMPING_DEFAULT" in InputEventGaze):
+		printerr("FAIL: InputEventGaze ClampingMode enums not exposed in ClassDB")
+		quit(1)
+		return
+	if InputEventGaze.CLAMPING_FREE != 0 or InputEventGaze.CLAMPING_CLAMPED != 1 or InputEventGaze.CLAMPING_DEFAULT != 2:
+		printerr("FAIL: InputEventGaze ClampingMode enum integer values incorrect")
+		quit(1)
+		return
+
+	var test_eye_xform = Transform3D(Basis(), Vector3(12.0, -5.0, -450.0))
+	var test_head_xform = Transform3D(Basis(), Vector3(10.0, 20.0, -500.0))
+	event.set_eye_transform(test_eye_xform)
+	event.set_head_transform(test_head_xform)
+
+	if event.get_eye_transform().origin != Vector3(12.0, -5.0, -450.0):
+		printerr("FAIL: InputEventGaze get_eye_transform origin mismatch")
+		quit(1)
+		return
+	if event.get_head_transform().origin != Vector3(10.0, 20.0, -500.0):
+		printerr("FAIL: InputEventGaze get_head_transform origin mismatch")
+		quit(1)
+		return
+
+	# Assert removal of redundant convenience methods
+	if event.has_method("get_eye_origin") or event.has_method("get_eye_direction") or event.has_method("get_head_pose"):
+		printerr("FAIL: InputEventGaze still exposes deprecated convenience methods (get_eye_origin / get_eye_direction / get_head_pose)")
+		quit(1)
+		return
+
+	# 2c. Test Viewport Clamping on get_eye_gaze / get_nose_gaze
+	event.set_eye_gaze(Vector2(-100.0, 300.0))
+	var free_pos = event.get_eye_gaze(null, InputEventGaze.CLAMPING_FREE)
+	var clamped_pos = event.get_eye_gaze(null, InputEventGaze.CLAMPING_CLAMPED)
+	if abs(free_pos.x - (-100.0)) > 0.01 or abs(free_pos.y - 300.0) > 0.01:
+		printerr("FAIL: get_eye_gaze(null, CLAMPING_FREE) did not return unconstrained point: ", free_pos)
+		quit(1)
+		return
+	if abs(clamped_pos.x - 0.0) > 0.01 or abs(clamped_pos.y - 300.0) > 0.01:
+		printerr("FAIL: get_eye_gaze(null, CLAMPING_CLAMPED) did not clamp point to viewport: ", clamped_pos)
+		quit(1)
+		return
+	var delta_clamped = clamped_pos.x - free_pos.x
+	if delta_clamped < 0.50:
+		printerr("FAIL: Clamping signal separation failed, delta: ", delta_clamped)
+		quit(1)
+		return
+	print("PASS: InputEventGaze 3D transform & ClampingMode API verified.")
+
 	# 3. Test GazeServer Singleton & Lifecycle
 	var gs = Engine.get_singleton("GazeServer")
 	var vs = Engine.get_singleton("VisionServer")
@@ -91,6 +140,55 @@ func run_tests():
 		quit(1)
 		return
 	print("PASS: GazeServer refcounted lifecycle verified.")
+
+	# 3b. Test GazeServer Mouse Emulation and Default Clamping Configuration
+	if not gs.has_method("set_default_clamping") or not gs.has_method("is_clamping_by_default"):
+		printerr("FAIL: GazeServer missing default clamping methods")
+		quit(1)
+		return
+	if not gs.is_clamping_by_default():
+		printerr("FAIL: GazeServer default_clamping should default to true")
+		quit(1)
+		return
+	gs.set_default_clamping(false)
+	if gs.is_clamping_by_default():
+		printerr("FAIL: GazeServer set_default_clamping(false) did not update")
+		quit(1)
+		return
+	gs.set_default_clamping(true)
+
+	if not gs.has_method("set_emulate_mouse_from_gaze") or not gs.has_method("get_emulate_mouse_from_gaze"):
+		printerr("FAIL: GazeServer missing mouse emulation methods")
+		quit(1)
+		return
+	var initial_emulate = gs.get_emulate_mouse_from_gaze()
+	gs.set_emulate_mouse_from_gaze(not initial_emulate)
+	if gs.get_emulate_mouse_from_gaze() == initial_emulate:
+		printerr("FAIL: GazeServer set_emulate_mouse_from_gaze did not toggle value")
+		quit(1)
+		return
+	gs.set_emulate_mouse_from_gaze(initial_emulate)
+
+	# Verify mouse stillness API:
+	if not gs.has_method("is_physical_mouse_still") or not gs.has_method("is_physical_mouse_active"):
+		printerr("FAIL: GazeServer missing physical mouse stillness methods")
+		quit(1)
+		return
+	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
+		printerr("FAIL: GazeServer is_physical_mouse_still should be true at rest")
+		quit(1)
+		return
+	if not gs.has_method("get_mouse_stillness_duration") or not gs.has_method("set_mouse_stillness_duration"):
+		printerr("FAIL: GazeServer missing mouse stillness duration methods")
+		quit(1)
+		return
+	var dur = gs.get_mouse_stillness_duration()
+	if abs(dur - 1.5) > 0.01:
+		printerr("FAIL: GazeServer default stillness duration should be 1.5s, got: ", dur)
+		quit(1)
+		return
+
+	print("PASS: GazeServer mouse emulation and clamping configuration verified.")
 
 	# =================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================
 	print("=================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================")
@@ -125,10 +223,14 @@ func run_tests():
 		"gaze/general/autostart",
 		"gaze/pointing/emulate_gaze_from_mouse",
 		"gaze/pointing/emulate_mouse_from_gaze",
+		"gaze/pointing/default_clamping",
+		"gaze/pointing/mouse_stillness_duration_sec",
+		"gaze/pointing/mouse_stillness_threshold_px",
 		"gaze/models/search_paths",
 		"gaze/models/yunet_prefix",
 		"gaze/models/gaze_prefix",
 		"gaze/calibration/device_profile_path",
+
 		"gaze/debug/overlay_scene_path"
 	]
 	

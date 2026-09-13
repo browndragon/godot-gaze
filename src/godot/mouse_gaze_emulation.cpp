@@ -24,6 +24,7 @@ void MouseGazeEmulation::reset() {
     ring_count = 0;
     stillness_state = STATE_STILL;
     stillness_timer = stillness_duration_sec;
+    has_user_interacted = false;
 }
 
 void MouseGazeEmulation::record_sample(uint64_t timestamp_usec, const Vector2& pos) {
@@ -123,6 +124,7 @@ void MouseGazeEmulation::update(
 
         if (stillness_state == STATE_STILL || stillness_state == STATE_SETTLING) {
             if (mouse_clicked || dist_from_anchor >= anchor_bubble_radius_px) {
+                has_user_interacted = true;
                 stillness_state = STATE_ACTIVE;
                 stillness_timer = 0.0f;
                 anchor_pos = screen_mouse_pos;
@@ -142,6 +144,7 @@ void MouseGazeEmulation::update(
                     stillness_state = STATE_STILL;
                 }
             } else {
+                has_user_interacted = true;
                 anchor_pos = screen_mouse_pos;
                 stillness_timer = 0.0f;
             }
@@ -166,15 +169,18 @@ void MouseGazeEmulation::update(
 
     // Determine target blend weight (1.0 = mouse, 0.0 = camera)
     float target_blend = 0.0f;
-    if (!p_camera_tracking_active) {
-        target_blend = 1.0f; // Pure mouse fallback when camera tracking is inactive
+    if (!has_user_interacted) {
+        // Cold boot / no prior interaction: never synthesize gaze from mouse
+        target_blend = 0.0f;
     } else if (stillness_state != STATE_STILL) {
-        target_blend = 1.0f; // Active mouse interaction overrides camera gaze during dwell window
-    } else if (p_face_detected) {
-        target_blend = 0.0f; // Active face tracked with still mouse uses pure camera gaze
+        // ACTIVE or SETTLING (tailing off period): mouse holds gaze
+        target_blend = 1.0f;
+    } else if (p_camera_tracking_active) {
+        // STILL with active camera: yield 100% to camera gaze
+        target_blend = 0.0f;
     } else {
-        // Face lost & mouse still: freeze blend weight in place (no phantom drift!)
-        target_blend = blend_progress;
+        // STILL without camera (offline dev): hold position
+        target_blend = 1.0f;
     }
 
     // Step blend_progress towards target_blend

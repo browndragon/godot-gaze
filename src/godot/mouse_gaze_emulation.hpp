@@ -45,6 +45,7 @@ private:
     StillnessState stillness_state = STATE_STILL;
     float stillness_timer = 0.0f;
     float stillness_duration_sec = 1.5f;
+    bool has_user_interacted = false;
 
     float dwell_timer = 0.0f;
     float blend_progress = 0.0f; // 0.0 = pure camera gaze, 1.0 = pure mouse gaze
@@ -93,6 +94,7 @@ public:
 
     bool is_physical_mouse_still() const { return stillness_state == STATE_STILL; }
     bool is_physical_mouse_active() const { return stillness_state != STATE_STILL; }
+    bool has_interacted() const { return has_user_interacted; }
     float get_stillness_timer() const { return stillness_timer; }
 
     void notify_camera_event(const Ref<InputEventGazeBase>& p_cam_event);

@@ -343,7 +343,7 @@ func _perform_drawing():
 	if not (ev is InputEventGaze) or not ev.is_face_tracked(): return
 	var xform = ev.head_transform
 	var landmarks_2d = gs.get_face_landmarks()
-	var raw_gaze = -ev.gaze_transform.basis.z
+	var raw_gaze = -ev.eye_transform.basis.z
 
 	if abs(xform.origin.z) <= 0.01:
 		return
@@ -405,7 +405,7 @@ func _perform_drawing():
 			gd_draw_line(pt_nose_org, pt_nose_fwd, Color(0.0, 0.95, 1.0, 1.0), 3.5)
 
 	# Eye Gaze indicator
-	var eye_origin_3d = ev.gaze_transform.origin
+	var eye_origin_3d = ev.eye_transform.origin
 	if raw_gaze.length_squared() < 0.001:
 		raw_gaze = Vector3(0.0, 0.0, 1.0)
 	var eye_fwd = raw_gaze.normalized()

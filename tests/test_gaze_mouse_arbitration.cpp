@@ -94,6 +94,22 @@ public:
         return dist / dt_sec;
     }
 
+    bool has_user_interacted = false;
+
+    float get_target_blend(bool camera_tracking_active, bool emulate_gaze_from_mouse) const {
+        if (!emulate_gaze_from_mouse) return 0.0f;
+        if (!has_user_interacted) {
+            return 0.0f;
+        }
+        if (state != STATE_STILL) {
+            return 1.0f;
+        }
+        if (camera_tracking_active) {
+            return 0.0f;
+        }
+        return 1.0f;
+    }
+
     void update(
         double delta_sec,
         uint64_t timestamp_usec,
@@ -117,6 +133,7 @@ public:
             // In STILL or SETTLING:
             // Check if user broke out of the anchor bubble or clicked a button:
             if (mouse_clicked || dist_from_anchor >= anchor_bubble_radius_px) {
+                has_user_interacted = true;
                 state = STATE_ACTIVE;
                 stillness_timer = 0.0f;
                 anchor_pos = screen_mouse_pos;
@@ -140,6 +157,7 @@ public:
                 }
             } else {
                 // Still actively moving
+                has_user_interacted = true;
                 anchor_pos = screen_mouse_pos;
                 stillness_timer = 0.0f;
             }
@@ -294,4 +312,56 @@ TEST_CASE("MouseStillnessArbitration: Dual Emulation Mutual Exclusion") {
     auto res_c = evaluate_dispatch(arb.is_mouse_still(), false);
     CHECK(res_c.first == false);
     CHECK(res_c.second == false); // M <- G stays dormant without camera face
+}
+
+TEST_CASE("MouseStillnessArbitration: Cold Boot and Tailing Off Settling") {
+    TestMouseStillnessArbitrator arb;
+    uint64_t t = 1000000;
+
+    // 1. Cold boot at resting position (e.g. upper right corner 1400, 50)
+    arb.update(0.016, t, Vec2(1400, 50), false);
+    CHECK(arb.is_mouse_still() == true);
+    CHECK(arb.has_user_interacted == false);
+
+    // On cold boot, physical mouse MUST NOT steal gaze control under ANY circumstance:
+    CHECK(arb.get_target_blend(true, true) == doctest::Approx(0.0f));  // Camera active
+    CHECK(arb.get_target_blend(false, true) == doctest::Approx(0.0f)); // Camera inactive (offline dev)
+    CHECK(arb.get_target_blend(true, false) == doctest::Approx(0.0f)); // Emulation off
+
+    // 2. User moves physical mouse by 20px (nontrivial event breakout)
+    t += 16667;
+    arb.update(0.016667, t, Vec2(1420, 50), false);
+    CHECK(arb.is_mouse_active() == true);
+    CHECK(arb.has_user_interacted == true);
+    CHECK(arb.get_target_blend(true, true) == doctest::Approx(1.0f));  // G <- M takes over
+
+    // 3. User stops moving physical mouse (sliding window flushes moving sample over 200ms)
+    for (int i = 0; i < 15; ++i) {
+        t += 16667;
+        arb.update(0.016667, t, Vec2(1420, 50), false);
+    }
+    CHECK(arb.state == TestMouseStillnessArbitrator::STATE_SETTLING);
+
+    // During tailing off period (e.g. at 0.5s elapsed < 1.5s):
+    for (int i = 0; i < 30; ++i) {
+        t += 16667;
+        arb.update(0.016667, t, Vec2(1420, 50), false);
+    }
+    CHECK(arb.state == TestMouseStillnessArbitrator::STATE_SETTLING);
+    CHECK(arb.is_mouse_active() == true); // Active or settling suppresses gaze
+    CHECK(arb.get_target_blend(true, true) == doctest::Approx(1.0f)); // Mouse continues holding gaze
+
+    // 4. Tailing off period expires (stillness duration >= 1.5s)
+    for (int i = 0; i < 70; ++i) {
+        t += 16667;
+        arb.update(0.016667, t, Vec2(1420, 50), false);
+    }
+    CHECK(arb.state == TestMouseStillnessArbitrator::STATE_STILL);
+    CHECK(arb.is_mouse_still() == true);
+
+    // When still:
+    // With camera active: yields 100% back to camera gaze!
+    CHECK(arb.get_target_blend(true, true) == doctest::Approx(0.0f));
+    // Without camera (dev mode after interaction): holds last mouse position
+    CHECK(arb.get_target_blend(false, true) == doctest::Approx(1.0f));
 }

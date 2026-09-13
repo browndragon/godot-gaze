@@ -147,10 +147,14 @@ void InputEventGaze::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_eye_transform", "eye_transform"), &InputEventGaze::set_eye_transform);
     ClassDB::bind_method(D_METHOD("get_eye_transform"), &InputEventGaze::get_eye_transform);
 
+    ClassDB::bind_method(D_METHOD("set_gaze_transform", "gaze_transform"), &InputEventGaze::set_gaze_transform);
+    ClassDB::bind_method(D_METHOD("get_gaze_transform"), &InputEventGaze::get_gaze_transform);
+
     ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGaze::copy_from);
 
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "set_head_transform", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_transform"), "set_eye_transform", "get_eye_transform");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "gaze_transform"), "set_gaze_transform", "get_gaze_transform");
 }
 
 void InputEventGaze::copy_from(const Ref<InputEventGaze> &p_other) {

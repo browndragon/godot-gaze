@@ -183,6 +183,16 @@ public:
      */
     Transform3D get_eye_transform() const { return eye_transform; }
 
+    /**
+     * @brief Backward-compatibility alias for get_eye_transform().
+     */
+    Transform3D get_gaze_transform() const { return eye_transform; }
+
+    /**
+     * @brief Backward-compatibility alias for set_eye_transform().
+     */
+    void set_gaze_transform(const Transform3D &p_xform) { eye_transform = p_xform; }
+
     void copy_from(const Ref<InputEventGaze> &p_other);
 
     String as_text() const;

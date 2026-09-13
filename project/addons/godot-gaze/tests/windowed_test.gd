@@ -171,8 +171,8 @@ func _init():
 	print("PASS: Screen bottom ray hits window bottom.")
 
 	# 3. Real face gaze projection lands inside screen bounds
-	var gaze_origin = latest_event.gaze_transform.origin
-	var gaze_dir = -latest_event.gaze_transform.basis.z.normalized()
+	var gaze_origin = latest_event.eye_transform.origin
+	var gaze_dir = -latest_event.eye_transform.basis.z.normalized()
 	var face_gaze_proj = gs.project_ray_to_viewport(gaze_origin, gaze_dir)
 	var face_nose_proj = gs.project_ray_to_viewport(nose_pos, head_forward)
 	print("Face Gaze Ray Proj on Window: ", face_gaze_proj, " | Nose Ray Proj: ", face_nose_proj, " | Event Eye Gaze: ", latest_event.get_eye_gaze())

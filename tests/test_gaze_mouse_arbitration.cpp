@@ -98,16 +98,10 @@ public:
 
     float get_target_blend(bool camera_tracking_active, bool emulate_gaze_from_mouse) const {
         if (!emulate_gaze_from_mouse) return 0.0f;
-        if (!has_user_interacted) {
-            return 0.0f;
-        }
-        if (state != STATE_STILL) {
+        if (state == STATE_ACTIVE) {
             return 1.0f;
         }
-        if (camera_tracking_active) {
-            return 0.0f;
-        }
-        return 1.0f;
+        return 0.0f;
     }
 
     void update(
@@ -348,8 +342,9 @@ TEST_CASE("MouseStillnessArbitration: Cold Boot and Tailing Off Settling") {
         arb.update(0.016667, t, Vec2(1420, 50), false);
     }
     CHECK(arb.state == TestMouseStillnessArbitrator::STATE_SETTLING);
-    CHECK(arb.is_mouse_active() == true); // Active or settling suppresses gaze
-    CHECK(arb.get_target_blend(true, true) == doctest::Approx(1.0f)); // Mouse continues holding gaze
+    CHECK(arb.is_mouse_active() == true); // Active or settling suppresses gaze-to-mouse
+    // Mouse has stopped moving: target_blend MUST be 0.0f (still mouse does not override gaze)
+    CHECK(arb.get_target_blend(true, true) == doctest::Approx(0.0f));
 
     // 4. Tailing off period expires (stillness duration >= 1.5s)
     for (int i = 0; i < 70; ++i) {
@@ -359,9 +354,7 @@ TEST_CASE("MouseStillnessArbitration: Cold Boot and Tailing Off Settling") {
     CHECK(arb.state == TestMouseStillnessArbitrator::STATE_STILL);
     CHECK(arb.is_mouse_still() == true);
 
-    // When still:
-    // With camera active: yields 100% back to camera gaze!
+    // When still: mouse does not override gaze
     CHECK(arb.get_target_blend(true, true) == doctest::Approx(0.0f));
-    // Without camera (dev mode after interaction): holds last mouse position
-    CHECK(arb.get_target_blend(false, true) == doctest::Approx(1.0f));
+    CHECK(arb.get_target_blend(false, true) == doctest::Approx(0.0f));
 }

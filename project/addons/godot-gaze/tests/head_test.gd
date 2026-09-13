@@ -68,10 +68,10 @@ func collect_data():
 	var step_name = steps[current_step]["name"]
 	var data = {
 		"step": step_name,
-		"head_pos_mm": latest_gaze_event.head_pose.origin,
-		"head_basis": latest_gaze_event.head_pose.basis,
-		"gaze_origin_mm": latest_gaze_event.eye_origin,
-		"gaze_dir": latest_gaze_event.eye_direction,
+		"head_pos_mm": latest_gaze_event.head_transform.origin,
+		"head_basis": latest_gaze_event.head_transform.basis,
+		"gaze_origin_mm": latest_gaze_event.eye_transform.origin,
+		"gaze_dir": -latest_gaze_event.eye_transform.basis.z.normalized(),
 		"eye_gaze_2d": latest_gaze_event.get_eye_gaze(),
 		"nose_gaze_2d": latest_gaze_event.get_nose_gaze()
 	}

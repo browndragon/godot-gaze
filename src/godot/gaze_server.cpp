@@ -179,6 +179,7 @@ void GazeServer::_bind_methods() {
 
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "default_clamping"), "set_default_clamping", "is_clamping_by_default");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "emulate_mouse_from_gaze"), "set_emulate_mouse_from_gaze", "get_emulate_mouse_from_gaze");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "emulate_gaze_from_mouse"), "set_emulate_gaze_from_mouse", "get_emulate_gaze_from_mouse");
 
     ClassDB::bind_method(D_METHOD("is_physical_mouse_still"), &GazeServer::is_physical_mouse_still);
     ClassDB::bind_method(D_METHOD("is_physical_mouse_active"), &GazeServer::is_physical_mouse_active);

@@ -168,20 +168,9 @@ void MouseGazeEmulation::update(
     }
 
     // Determine target blend weight (1.0 = mouse, 0.0 = camera)
-    float target_blend = 0.0f;
-    if (!has_user_interacted) {
-        // Cold boot / no prior interaction: never synthesize gaze from mouse
-        target_blend = 0.0f;
-    } else if (stillness_state != STATE_STILL) {
-        // ACTIVE or SETTLING (tailing off period): mouse holds gaze
-        target_blend = 1.0f;
-    } else if (p_camera_tracking_active) {
-        // STILL with active camera: yield 100% to camera gaze
-        target_blend = 0.0f;
-    } else {
-        // STILL without camera (offline dev): hold position
-        target_blend = 1.0f;
-    }
+    // Only actively moving or clicked physical mouse overrides gaze.
+    // When still or settling, mouse NEVER overrides camera gaze.
+    float target_blend = (stillness_state == STATE_ACTIVE) ? 1.0f : 0.0f;
 
     // Step blend_progress towards target_blend
     float step = (transition_duration_sec > 0.001f) ? ((float)p_delta_sec / transition_duration_sec) : 1.0f;

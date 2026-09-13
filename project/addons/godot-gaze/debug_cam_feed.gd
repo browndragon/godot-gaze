@@ -185,11 +185,11 @@ func update_diagnostics_ui() -> void:
 		lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
 
 		if is_face_detected:
-			var head_pos = ev.head_pose.origin
-			var head_rot = ev.head_pose.basis.get_euler() * (180.0 / PI)
-			var head_fwd = -ev.head_pose.basis.z.normalized()
-			var eye_orig = ev.eye_origin
-			var gaze_dir = ev.eye_direction.normalized()
+			var head_pos = ev.head_transform.origin
+			var head_rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
+			var head_fwd = -ev.head_transform.basis.z.normalized()
+			var eye_orig = ev.eye_transform.origin
+			var gaze_dir = -ev.eye_transform.basis.z.normalized()
 			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
 			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
 			lines.append("Head Forward: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [head_fwd.x, head_fwd.y, head_fwd.z])
@@ -292,14 +292,14 @@ func _on_copy_button_pressed():
 		var ev = gs.get_most_recent_event()
 		if ev is InputEventGaze and ev.is_face_tracked():
 			data["face_detected"] = true
-			data["head_translation_mm"] = [ev.head_pose.origin.x, ev.head_pose.origin.y, ev.head_pose.origin.z]
-			var rot = ev.head_pose.basis.get_euler() * (180.0 / PI)
+			data["head_translation_mm"] = [ev.head_transform.origin.x, ev.head_transform.origin.y, ev.head_transform.origin.z]
+			var rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
 			data["head_rotation_deg"] = [rot.x, rot.y, rot.z]
-			var head_fwd = -ev.head_pose.basis.z.normalized()
+			var head_fwd = -ev.head_transform.basis.z.normalized()
 			data["head_forward"] = [head_fwd.x, head_fwd.y, head_fwd.z]
-			var eye_orig = ev.eye_origin
+			var eye_orig = ev.eye_transform.origin
 			data["gaze_origin_mm"] = [eye_orig.x, eye_orig.y, eye_orig.z]
-			var gaze_dir = ev.eye_direction.normalized()
+			var gaze_dir = -ev.eye_transform.basis.z.normalized()
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
 		if gs.has_method("get_pipeline_stage_timings"):
 			data["pipeline_stage_timings"] = gs.get_pipeline_stage_timings()

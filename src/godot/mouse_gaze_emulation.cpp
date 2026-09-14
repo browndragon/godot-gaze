@@ -19,45 +19,7 @@ void MouseGazeEmulation::reset() {
     has_last_mouse_pos = false;
     has_last_window_state = false;
     has_camera_data = false;
-    has_anchor = false;
-    ring_head = 0;
-    ring_count = 0;
-    stillness_state = STATE_STILL;
-    stillness_timer = stillness_duration_sec;
-    has_user_interacted = false;
-}
-
-void MouseGazeEmulation::record_sample(uint64_t timestamp_usec, const Vector2& pos) {
-    ring_buffer[ring_head] = { timestamp_usec, pos };
-    ring_head = (ring_head + 1) % RING_CAPACITY;
-    if (ring_count < RING_CAPACITY) {
-        ring_count++;
-    }
-}
-
-float MouseGazeEmulation::compute_window_velocity(uint64_t current_time_usec, const Vector2& current_pos) const {
-    if (ring_count < 2) return 0.0f;
-
-    const MouseRingSample* oldest = nullptr;
-    for (size_t i = 0; i < ring_count; ++i) {
-        size_t idx = (ring_head + RING_CAPACITY - 1 - i) % RING_CAPACITY;
-        const MouseRingSample& s = ring_buffer[idx];
-        if (current_time_usec >= s.timestamp_usec && (current_time_usec - s.timestamp_usec) <= window_duration_usec) {
-            oldest = &s;
-        } else if (oldest != nullptr) {
-            break;
-        }
-    }
-
-    if (!oldest || oldest->timestamp_usec == current_time_usec) {
-        return 0.0f;
-    }
-
-    float dt_sec = (float)(current_time_usec - oldest->timestamp_usec) / 1000000.0f;
-    if (dt_sec < 0.001f) return 0.0f;
-
-    float dist = (current_pos - oldest->pos).length();
-    return dist / dt_sec;
+    arbitrator.reset();
 }
 
 void MouseGazeEmulation::notify_camera_event(const Ref<InputEventGazeBase>& p_cam_event) {
@@ -85,81 +47,38 @@ void MouseGazeEmulation::update(
     bool p_face_detected,
     bool p_emulate_gaze_from_mouse,
     bool p_emulate_mouse_from_gaze,
-    DisplayServer* p_ds
+    GazeDisplayServer* p_gds
 ) {
     if (!p_emulate_gaze_from_mouse && !p_emulate_mouse_from_gaze) {
         dwell_timer = 0.0f;
         blend_progress = 0.0f;
-        stillness_state = STATE_STILL;
-        stillness_timer = stillness_duration_sec;
+        arbitrator.reset();
         return;
     }
 
-    Vector2 screen_mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position()) : Vector2(0, 0);
-    Vector2 window_pos = p_ds ? Vector2(p_ds->window_get_position()) : Vector2(0, 0);
-    DisplayServer::WindowMode window_mode = p_ds ? p_ds->window_get_mode() : DisplayServer::WINDOW_MODE_WINDOWED;
+    Vector2 screen_mouse_pos = p_gds ? p_gds->get_input_mouse_position() : Vector2(0, 0);
+    Vector2 window_pos = p_gds ? Vector2(p_gds->get_window_rect_pixels().position) : Vector2(0, 0);
     Vector2 mouse_pos = screen_mouse_pos - window_pos;
 
-    Input* input = Input::get_singleton();
-    bool mouse_clicked = input && (input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_LEFT) ||
-                                   input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_RIGHT) ||
-                                   input->is_mouse_button_pressed(MouseButton::MOUSE_BUTTON_MIDDLE));
-
-    bool window_changed = has_last_window_state && (window_pos != last_window_pos || window_mode != last_window_mode);
+    bool mouse_clicked = p_gds ? (p_gds->get_input_mouse_button_mask() != 0) : false;
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
 
-    if (!has_anchor || window_changed) {
-        anchor_pos = screen_mouse_pos;
-        has_anchor = true;
-        ring_head = 0;
-        ring_count = 0;
-        record_sample(now_usec, screen_mouse_pos);
-        stillness_state = STATE_STILL;
-        stillness_timer = stillness_duration_sec;
-    } else {
-        record_sample(now_usec, screen_mouse_pos);
-        float dist_from_anchor = (screen_mouse_pos - anchor_pos).length();
-        float v_window = compute_window_velocity(now_usec, screen_mouse_pos);
-
-        if (stillness_state == STATE_STILL || stillness_state == STATE_SETTLING) {
-            if (mouse_clicked || dist_from_anchor >= anchor_bubble_radius_px) {
-                has_user_interacted = true;
-                stillness_state = STATE_ACTIVE;
-                stillness_timer = 0.0f;
-                anchor_pos = screen_mouse_pos;
-            } else {
-                stillness_timer += (float)p_delta_sec;
-                if (stillness_timer >= stillness_duration_sec) {
-                    stillness_state = STATE_STILL;
-                }
-            }
-        } else {
-            // In STATE_ACTIVE:
-            if (!mouse_clicked && v_window < window_velocity_threshold_px_s) {
-                stillness_state = STATE_SETTLING;
-                anchor_pos = screen_mouse_pos;
-                stillness_timer = (float)p_delta_sec;
-                if (stillness_timer >= stillness_duration_sec) {
-                    stillness_state = STATE_STILL;
-                }
-            } else {
-                has_user_interacted = true;
-                anchor_pos = screen_mouse_pos;
-                stillness_timer = 0.0f;
-            }
-        }
-    }
+    arbitrator.update(
+        p_delta_sec,
+        now_usec,
+        Gaze::MouseStillnessArbitrator::Point2D(screen_mouse_pos.x, screen_mouse_pos.y),
+        mouse_clicked
+    );
 
     last_mouse_pos = mouse_pos;
     last_screen_mouse_pos = screen_mouse_pos;
     last_window_pos = window_pos;
-    last_window_mode = window_mode;
     has_last_mouse_pos = true;
     has_last_window_state = true;
 
     // Maintain backwards-compatible dwell_timer
-    dwell_timer = (stillness_state != STATE_STILL) ? (stillness_duration_sec - stillness_timer) : 0.0f;
+    dwell_timer = (arbitrator.is_mouse_active()) ? (arbitrator.get_stillness_duration() - arbitrator.get_stillness_timer()) : 0.0f;
 
     // G <- M blend progress update:
     if (!p_emulate_gaze_from_mouse) {
@@ -168,9 +87,7 @@ void MouseGazeEmulation::update(
     }
 
     // Determine target blend weight (1.0 = mouse, 0.0 = camera)
-    // Only actively moving or clicked physical mouse overrides gaze.
-    // When still or settling, mouse NEVER overrides camera gaze.
-    float target_blend = (stillness_state == STATE_ACTIVE) ? 1.0f : 0.0f;
+    float target_blend = arbitrator.get_target_blend(p_camera_tracking_active, p_emulate_gaze_from_mouse);
 
     // Step blend_progress towards target_blend
     float step = (transition_duration_sec > 0.001f) ? ((float)p_delta_sec / transition_duration_sec) : 1.0f;
@@ -183,7 +100,7 @@ void MouseGazeEmulation::update(
 
 
 Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
-    DisplayServer* p_ds,
+    GazeDisplayServer* p_gds,
     const Ref<GazeDeviceProfile>& p_profile,
     const Ref<GazeEventFactory>& p_event_factory,
     uint64_t &r_frame_id,
@@ -191,7 +108,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     Vector2 &r_last_gaze_pos,
     Vector2 &r_last_screen_pos
 ) {
-    Vector2 mouse_pos = p_ds ? Vector2(p_ds->mouse_get_position() - p_ds->window_get_position()) : Vector2(0, 0);
+    Vector2 mouse_pos = p_gds ? (p_gds->get_input_mouse_position() - Vector2(p_gds->get_window_rect_pixels().position)) : Vector2(0, 0);
 
     Ref<GazeDeviceProfile> profile = p_profile;
     if (!profile.is_valid()) {
@@ -259,7 +176,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     if (dt < 0.0001f) dt = 0.0001f;
 
     Vector2 screen_pos = mouse_pos;
-    if (p_ds) screen_pos += Vector2(p_ds->window_get_position());
+    if (p_gds) screen_pos += Vector2(p_gds->get_window_rect_pixels().position);
 
     r_last_gaze_pos = blended_canvas_pos;
     r_last_screen_pos = screen_pos;

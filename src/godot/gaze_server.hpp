@@ -37,6 +37,7 @@ class GazeTrackingPipeline;
 namespace godot {
 
 class CanvasItem;
+class GazeDisplayServer;
 
 class GazeServer : public Object {
     GDCLASS(GazeServer, Object);

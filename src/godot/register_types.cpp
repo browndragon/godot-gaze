@@ -20,6 +20,7 @@
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/editor_interface.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
 #ifdef WEB_ENABLED
@@ -314,7 +315,23 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         ClassDB::register_class<GazeFrame>();
         ClassDB::register_class<GazeServer>();
 
-        gaze_display_server_singleton = memnew(GazeDisplayServer);
+        bool use_mock_display = false;
+        OS *os = OS::get_singleton();
+        if (os) {
+            PackedStringArray args = os->get_cmdline_args();
+            for (int i = 0; i < args.size(); ++i) {
+                if (args[i] == "--mock-gaze-display") {
+                    use_mock_display = true;
+                    break;
+                }
+            }
+        }
+
+        if (use_mock_display) {
+            gaze_display_server_singleton = memnew(MockGazeDisplayServer);
+        } else {
+            gaze_display_server_singleton = memnew(GazeDisplayServer);
+        }
         Engine::get_singleton()->register_singleton("GazeDisplayServer", gaze_display_server_singleton);
 
         vision_server_singleton = memnew(VisionServer);

@@ -1,6 +1,7 @@
 #include "gaze_display_server.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
+#include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include "../core/gaze_display_types.hpp"
@@ -45,6 +46,16 @@ void GazeDisplayServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_screen_scale", "screen"), &GazeDisplayServer::get_screen_scale, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_window_rect_pixels", "window"), &GazeDisplayServer::get_window_rect_pixels, DEFVAL(0));
     ClassDB::bind_method(D_METHOD("get_default_camera_offset_mm", "screen"), &GazeDisplayServer::get_default_camera_offset_mm, DEFVAL(-1));
+    ClassDB::bind_method(D_METHOD("get_input_mouse_position"), &GazeDisplayServer::get_input_mouse_position);
+    ClassDB::bind_method(D_METHOD("get_input_mouse_button_mask"), &GazeDisplayServer::get_input_mouse_button_mask);
+}
+
+GazeDisplayServer *GazeDisplayServer::get_singleton() {
+    Engine *engine = Engine::get_singleton();
+    if (engine && engine->has_singleton("GazeDisplayServer")) {
+        return Object::cast_to<GazeDisplayServer>(engine->get_singleton("GazeDisplayServer"));
+    }
+    return singleton;
 }
 
 GazeDisplayServer::GazeDisplayServer() {
@@ -162,6 +173,32 @@ Rect2i GazeDisplayServer::get_window_rect_pixels(int p_window) const {
 
 Vector3 GazeDisplayServer::get_default_camera_offset_mm(int p_screen) const {
     return Vector3(0.0, 0.0, 0.0);
+}
+
+Vector2 GazeDisplayServer::get_input_mouse_position() const {
+    DisplayServer *ds = nullptr;
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        ds = DisplayServer::get_singleton();
+    }
+    if (ds) {
+        return Vector2(ds->mouse_get_position());
+    }
+    return Vector2(0, 0);
+}
+
+int64_t GazeDisplayServer::get_input_mouse_button_mask() const {
+    Input *input = Input::get_singleton();
+    if (input) {
+        return (int64_t)input->get_mouse_button_mask();
+    }
+    DisplayServer *ds = nullptr;
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        ds = DisplayServer::get_singleton();
+    }
+    if (ds) {
+        return (int64_t)ds->mouse_get_button_state();
+    }
+    return 0;
 }
 
 } // namespace godot

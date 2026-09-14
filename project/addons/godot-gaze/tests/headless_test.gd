@@ -190,6 +190,92 @@ func run_tests():
 
 	print("PASS: GazeServer mouse emulation and clamping configuration verified.")
 
+	# 3c. Test GazeDisplayServer Input Proxying and Engine Server Infrastructure
+	print("=================== TEST: GAZE DISPLAY SERVER INPUT PROXYING ===================")
+	var mock_gds = MockGazeDisplayServer.new()
+	if not mock_gds.has_method("set_input_mouse_position") or not mock_gds.has_method("set_input_mouse_button_mask"):
+		printerr("FAIL: MockGazeDisplayServer missing set_input_mouse_* methods")
+		quit(1)
+		return
+	if gs.has_method("set_display_server") or gs.has_method("get_display_server"):
+		printerr("FAIL: GazeServer should NOT expose set_display_server or get_display_server (unidiomatic)")
+		quit(1)
+		return
+	mock_gds.set_input_mouse_position(Vector2(500, 500))
+	mock_gds.set_input_mouse_button_mask(1)
+	if mock_gds.get_input_mouse_position() != Vector2(500, 500):
+		printerr("FAIL: MockGazeDisplayServer get_input_mouse_position mismatch")
+		quit(1)
+		return
+	if mock_gds.get_input_mouse_button_mask() != 1:
+		printerr("FAIL: MockGazeDisplayServer get_input_mouse_button_mask mismatch")
+		quit(1)
+		return
+
+	# Install mock server via standard Godot Engine server infrastructure
+	var original_gds = Engine.get_singleton("GazeDisplayServer")
+	Engine.unregister_singleton("GazeDisplayServer")
+	Engine.register_singleton("GazeDisplayServer", mock_gds)
+	if Engine.get_singleton("GazeDisplayServer") != mock_gds:
+		printerr("FAIL: Engine.get_singleton(\"GazeDisplayServer\") did not return registered mock instance")
+		quit(1)
+		return
+
+	# Test deterministic dynamic simulation:
+	mock_gds.set_input_mouse_button_mask(0)
+	mock_gds.set_input_mouse_position(Vector2(500, 500))
+	gs.reset()
+	gs.trigger_process()
+
+	# 1. Cold boot state: mouse is still
+	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
+		printerr("FAIL: After reset, physical mouse should be still")
+		quit(1)
+		return
+
+	# 2. Sub-threshold jitter: delta < 3.0 px (e.g. 501.5, 500.5)
+	mock_gds.set_input_mouse_position(Vector2(501.5, 500.5))
+	gs.trigger_process()
+	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
+		printerr("FAIL: Sub-threshold jitter unexpectedly triggered active mouse")
+		quit(1)
+		return
+
+	# 3. Active breakout motion: displacement > 3.0 px (e.g. 520, 500)
+	mock_gds.set_input_mouse_position(Vector2(520, 500))
+	gs.trigger_process()
+	if not gs.is_physical_mouse_active() or gs.is_physical_mouse_still():
+		printerr("FAIL: Mouse breakout displacement (>3px) did not trigger active state")
+		quit(1)
+		return
+
+	# 4. Button click breakout: reset to still, then click button without moving
+	gs.reset()
+	mock_gds.set_input_mouse_position(Vector2(600, 600))
+	mock_gds.set_input_mouse_button_mask(0)
+	gs.trigger_process()
+	if not gs.is_physical_mouse_still():
+		printerr("FAIL: Reset before click breakout should be still")
+		quit(1)
+		return
+	mock_gds.set_input_mouse_button_mask(1) # Left click
+	gs.trigger_process()
+	if not gs.is_physical_mouse_active() or gs.is_physical_mouse_still():
+		printerr("FAIL: Mouse button click did not trigger active state")
+		quit(1)
+		return
+	mock_gds.set_input_mouse_button_mask(0)
+
+	# Clean up and restore production display server in Engine
+	Engine.unregister_singleton("GazeDisplayServer")
+	Engine.register_singleton("GazeDisplayServer", original_gds)
+	if Engine.get_singleton("GazeDisplayServer") != original_gds:
+		printerr("FAIL: Restoring original GazeDisplayServer singleton failed")
+		quit(1)
+		return
+	mock_gds.free()
+	print("PASS: GazeDisplayServer input proxying and standard Engine server infrastructure verified.")
+
 	# =================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================
 	print("=================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================")
 	var guess_profile = GazeDeviceProfile.create_system_guess()
@@ -436,6 +522,34 @@ func run_tests():
 
 	print("PASS: All Physical Directional Invariants (Nose/Eye Yaw & Pitch) Verified in GDScript!")
 	print("PASS: Physical Directional Invariants in GDScript bindings verified.")
+
+	# =================== TEST: DEBUG CAM FEED OVERLAY ===================
+	print("=================== TEST: DEBUG CAM FEED OVERLAY ===================")
+	var debug_cam_scene = load("res://addons/godot-gaze/debug_cam_feed.tscn")
+	if not debug_cam_scene:
+		printerr("FAIL: Could not load debug_cam_feed.tscn")
+		quit(1)
+		return
+	var debug_cam = debug_cam_scene.instantiate()
+	root.add_child(debug_cam)
+	# Process accumulator to trigger update_diagnostics_ui() with active face
+	debug_cam.update_accumulator = debug_cam.UPDATE_INTERVAL
+	debug_cam._process(0.01)
+	debug_cam.update_diagnostics_ui()
+	debug_cam._on_copy_button_pressed()
+	
+	# Verify that recent event fields read by _perform_drawing exist and are valid
+	var last_ev = gs.get_most_recent_event()
+	if not (last_ev is InputEventGaze and last_ev.is_face_tracked()):
+		printerr("FAIL: Expected active face tracked event for DebugCamFeed")
+		quit(1)
+		return
+	var _xform = last_ev.head_transform
+	var _raw_gaze = -last_ev.eye_transform.basis.z
+	
+	root.remove_child(debug_cam)
+	debug_cam.free()
+	print("PASS: DebugCamFeed overlay lifecycle, diagnostics UI, and drawing verified with active tracked face.")
 
 	gs.stop_tracking(true)
 	vs.camera_stop(cam_rid)

@@ -459,6 +459,7 @@ void GazeServer::reset() {
 #endif
     if (mouse_filter_x) mouse_filter_x->reset();
     if (mouse_filter_y) mouse_filter_y->reset();
+    mouse_emulation.reset();
     was_both_closed = false;
     impl->face = FaceInfo();
     impl->eye.gaze_origin_cam = Vector3();
@@ -1113,19 +1114,18 @@ float GazeServer::get_mouse_stillness_threshold_px() const {
 }
 
 Vector2 GazeServer::get_canonical_viewport_size() const {
-
-    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && st->get_root()) {
-        Rect2 visible_rect = st->get_root()->get_visible_rect();
-        if (visible_rect.size.x > 0 && visible_rect.size.y > 0) {
-            return visible_rect.size;
-        }
-    }
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
     if (gds) {
         Rect2i r = gds->get_window_rect_pixels();
         if (r.size.x > 0 && r.size.y > 0) {
             return Vector2(r.size.x, r.size.y);
+        }
+    }
+    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    if (st && st->get_root()) {
+        Rect2 visible_rect = st->get_root()->get_visible_rect();
+        if (visible_rect.size.x > 0 && visible_rect.size.y > 0) {
+            return visible_rect.size;
         }
     }
     if (Engine::get_singleton()->has_singleton("DisplayServer")) {
@@ -1168,10 +1168,7 @@ void GazeServer::trigger_process() {
     bool face_detected_this_frame = false;
 
     // Mouse-to-Gaze Emulation & IN_OUT Transition Strategy update
-    DisplayServer* ds = nullptr;
-    if (Engine::get_singleton()->get_singleton_list().has("DisplayServer")) {
-        ds = DisplayServer::get_singleton();
-    }
+    GazeDisplayServer* gds = GazeDisplayServer::get_singleton();
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1180,7 +1177,7 @@ void GazeServer::trigger_process() {
     bool cam_tracking_active = (active_trackers > 0);
     bool face_is_detected = is_face_detected();
 
-    mouse_emulation.update(dt, cam_tracking_active, face_is_detected, emulate_gaze_from_mouse, emulate_mouse_from_gaze, ds);
+    mouse_emulation.update(dt, cam_tracking_active, face_is_detected, emulate_gaze_from_mouse, emulate_mouse_from_gaze, gds);
 
 
 #ifndef WEB_ENABLED
@@ -1421,7 +1418,7 @@ void GazeServer::trigger_process() {
     if (mouse_emulation.is_emulation_active() && input) {
         Ref<GazeDeviceProfile> profile = get_device_profile();
         Ref<InputEventGazeBase> syn_event = mouse_emulation.synthesize_event(
-            ds, profile, event_factory,
+            gds, profile, event_factory,
             current_frame_id, last_event_time_usec, last_gaze_pos, last_screen_pos
         );
         if (syn_event.is_valid()) {

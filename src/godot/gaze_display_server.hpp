@@ -28,7 +28,7 @@ public:
      * @brief Get the GazeDisplayServer global singleton instance.
      * @return Pointer to the singleton instance.
      */
-    static GazeDisplayServer *get_singleton() { return singleton; }
+    static GazeDisplayServer *get_singleton();
 
     /**
      * @brief Retrieve physical screen dimensions in millimeters.
@@ -71,6 +71,18 @@ public:
      * @return Camera offset Vector3 in millimeters.
      */
     virtual Vector3 get_default_camera_offset_mm(int p_screen = -1) const;
+
+    /**
+     * @brief Retrieve the current mouse cursor position in logical screen coordinates.
+     * @return Screen mouse position Vector2(x, y).
+     */
+    virtual Vector2 get_input_mouse_position() const;
+
+    /**
+     * @brief Retrieve the bitmask of currently pressed mouse buttons.
+     * @return Bitmask of pressed mouse buttons.
+     */
+    virtual int64_t get_input_mouse_button_mask() const;
 };
 
 } // namespace godot

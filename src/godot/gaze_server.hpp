@@ -23,6 +23,7 @@
 #include "gaze_event_factory.hpp"
 #include "../core/gaze_frame_data.hpp"
 #include "one_euro_filter.hpp"
+#include "../core/blink_state_machine.hpp"
 
 #include <vector>
 #include <memory>
@@ -68,7 +69,7 @@ private:
     std::unique_ptr<OneEuroFilter> mouse_filter_x;
     std::unique_ptr<OneEuroFilter> mouse_filter_y;
     uint64_t last_camera_face_detected_usec = 0;
-    bool was_both_closed = false;
+    Gaze::BlinkStateMachine blink_state_machine;
 
 protected:
     static void _bind_methods();
@@ -340,6 +341,9 @@ public:
 
     void set_verbosity(int level);
     int get_verbosity() const;
+
+    static constexpr int DEVICE_ID_GAZE_SYNTHETIC = -1;
+    static bool is_synthetic_mouse_event(const Ref<InputEvent> &p_event);
 
     static String get_build_info();
     static String get_build_timestamp();

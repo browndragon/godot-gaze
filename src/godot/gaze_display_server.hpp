@@ -76,13 +76,29 @@ public:
      * @brief Retrieve the current mouse cursor position in logical screen coordinates.
      * @return Screen mouse position Vector2(x, y).
      */
-    virtual Vector2 get_input_mouse_position() const;
+    virtual Vector2 mouse_get_position() const;
 
     /**
-     * @brief Retrieve the bitmask of currently pressed mouse buttons.
+     * @brief Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.
      * @return Bitmask of pressed mouse buttons.
      */
-    virtual int64_t get_input_mouse_button_mask() const;
+    virtual int64_t mouse_get_button_state() const;
+
+    /**
+     * @brief Dispatch emulated synthetic mouse motion to the engine input queue.
+     * @param p_position Canonical canvas position.
+     * @param p_relative Relative motion vector.
+     * @param p_velocity Velocity vector.
+     */
+    virtual void parse_mouse_motion(const Vector2 &p_position, const Vector2 &p_relative, const Vector2 &p_velocity);
+
+    /**
+     * @brief Dispatch emulated synthetic mouse button event to the engine input queue.
+     * @param p_button Mouse button index.
+     * @param p_pressed True for press, false for release.
+     * @param p_position Canvas position where the click occurred.
+     */
+    virtual void parse_mouse_button(int64_t p_button, bool p_pressed, const Vector2 &p_position);
 };
 
 } // namespace godot

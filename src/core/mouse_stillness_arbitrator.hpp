@@ -111,6 +111,7 @@ public:
 
     float get_target_blend(bool camera_tracking_active, bool emulate_gaze_from_mouse) const {
         if (!emulate_gaze_from_mouse) return 0.0f;
+        if (!has_user_interacted) return 0.0f;
         if (state == STATE_ACTIVE) {
             return 1.0f;
         }

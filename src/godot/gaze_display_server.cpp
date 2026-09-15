@@ -2,6 +2,8 @@
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/input.hpp>
+#include <godot_cpp/classes/input_event_mouse_motion.hpp>
+#include <godot_cpp/classes/input_event_mouse_button.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include "../core/gaze_display_types.hpp"
@@ -46,8 +48,10 @@ void GazeDisplayServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_screen_scale", "screen"), &GazeDisplayServer::get_screen_scale, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("get_window_rect_pixels", "window"), &GazeDisplayServer::get_window_rect_pixels, DEFVAL(0));
     ClassDB::bind_method(D_METHOD("get_default_camera_offset_mm", "screen"), &GazeDisplayServer::get_default_camera_offset_mm, DEFVAL(-1));
-    ClassDB::bind_method(D_METHOD("get_input_mouse_position"), &GazeDisplayServer::get_input_mouse_position);
-    ClassDB::bind_method(D_METHOD("get_input_mouse_button_mask"), &GazeDisplayServer::get_input_mouse_button_mask);
+    ClassDB::bind_method(D_METHOD("mouse_get_position"), &GazeDisplayServer::mouse_get_position);
+    ClassDB::bind_method(D_METHOD("mouse_get_button_state"), &GazeDisplayServer::mouse_get_button_state);
+    ClassDB::bind_method(D_METHOD("parse_mouse_motion", "position", "relative", "velocity"), &GazeDisplayServer::parse_mouse_motion);
+    ClassDB::bind_method(D_METHOD("parse_mouse_button", "button", "pressed", "position"), &GazeDisplayServer::parse_mouse_button);
 }
 
 GazeDisplayServer *GazeDisplayServer::get_singleton() {
@@ -175,30 +179,54 @@ Vector3 GazeDisplayServer::get_default_camera_offset_mm(int p_screen) const {
     return Vector3(0.0, 0.0, 0.0);
 }
 
-Vector2 GazeDisplayServer::get_input_mouse_position() const {
+Vector2 GazeDisplayServer::mouse_get_position() const {
     DisplayServer *ds = nullptr;
     if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         ds = DisplayServer::get_singleton();
     }
-    if (ds) {
+    if (ds && ds->get_name() != "headless") {
         return Vector2(ds->mouse_get_position());
     }
     return Vector2(0, 0);
 }
 
-int64_t GazeDisplayServer::get_input_mouse_button_mask() const {
-    Input *input = Input::get_singleton();
-    if (input) {
-        return (int64_t)input->get_mouse_button_mask();
-    }
+int64_t GazeDisplayServer::mouse_get_button_state() const {
     DisplayServer *ds = nullptr;
     if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         ds = DisplayServer::get_singleton();
     }
-    if (ds) {
+    if (ds && ds->get_name() != "headless") {
         return (int64_t)ds->mouse_get_button_state();
     }
     return 0;
+}
+
+void GazeDisplayServer::parse_mouse_motion(const Vector2 &p_position, const Vector2 &p_relative, const Vector2 &p_velocity) {
+    Input *input = Input::get_singleton();
+    if (!input) return;
+    Ref<InputEventMouseMotion> mm;
+    mm.instantiate();
+    mm->set_device(-1);
+    mm->set_meta("synthetic_gaze", true);
+    mm->set_position(p_position);
+    mm->set_global_position(p_position);
+    mm->set_relative(p_relative);
+    mm->set_velocity(p_velocity);
+    input->parse_input_event(mm);
+}
+
+void GazeDisplayServer::parse_mouse_button(int64_t p_button, bool p_pressed, const Vector2 &p_position) {
+    Input *input = Input::get_singleton();
+    if (!input) return;
+    Ref<InputEventMouseButton> mb;
+    mb.instantiate();
+    mb->set_device(-1);
+    mb->set_meta("synthetic_gaze", true);
+    mb->set_button_index((MouseButton)p_button);
+    mb->set_pressed(p_pressed);
+    mb->set_position(p_position);
+    mb->set_global_position(p_position);
+    input->parse_input_event(mb);
 }
 
 } // namespace godot

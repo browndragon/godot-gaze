@@ -56,11 +56,11 @@ void MouseGazeEmulation::update(
         return;
     }
 
-    Vector2 screen_mouse_pos = p_gds ? p_gds->get_input_mouse_position() : Vector2(0, 0);
+    Vector2 screen_mouse_pos = p_gds ? p_gds->mouse_get_position() : Vector2(0, 0);
     Vector2 window_pos = p_gds ? Vector2(p_gds->get_window_rect_pixels().position) : Vector2(0, 0);
     Vector2 mouse_pos = screen_mouse_pos - window_pos;
 
-    bool mouse_clicked = p_gds ? (p_gds->get_input_mouse_button_mask() != 0) : false;
+    bool mouse_clicked = p_gds ? (p_gds->mouse_get_button_state() != 0) : false;
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
 
@@ -108,7 +108,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     Vector2 &r_last_gaze_pos,
     Vector2 &r_last_screen_pos
 ) {
-    Vector2 mouse_pos = p_gds ? (p_gds->get_input_mouse_position() - Vector2(p_gds->get_window_rect_pixels().position)) : Vector2(0, 0);
+    Vector2 mouse_pos = p_gds ? (p_gds->mouse_get_position() - Vector2(p_gds->get_window_rect_pixels().position)) : Vector2(0, 0);
 
     Ref<GazeDeviceProfile> profile = p_profile;
     if (!profile.is_valid()) {

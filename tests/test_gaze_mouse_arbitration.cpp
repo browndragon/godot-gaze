@@ -5,6 +5,7 @@
 
 #include "doctest.h"
 #include "mouse_stillness_arbitrator.hpp"
+#include "blink_state_machine.hpp"
 #include <cmath>
 #include <algorithm>
 #include <vector>
@@ -12,6 +13,7 @@
 
 using Point2D = Gaze::MouseStillnessArbitrator::Point2D;
 using MouseStillnessArbitrator = Gaze::MouseStillnessArbitrator;
+using BlinkStateMachine = Gaze::BlinkStateMachine;
 
 
 TEST_CASE("MouseStillnessArbitration: Instant Breakout via Anchor Bubble") {
@@ -210,4 +212,112 @@ TEST_CASE("MouseStillnessArbitration: Cold Boot and Tailing Off Settling") {
     // When still: mouse does not override gaze
     CHECK(arb.get_target_blend(true, true) == doctest::Approx(0.0f));
     CHECK(arb.get_target_blend(false, true) == doctest::Approx(0.0f));
+}
+
+TEST_CASE("BlinkStateMachine: Cold Boot and Tracking Loss Never Click") {
+    BlinkStateMachine bsm;
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+    CHECK(bsm.is_button_down() == false);
+
+    // Frame 0/1: Tracking begins, but face is not detected yet
+    auto act0 = bsm.update(false, 0.0f, 0.0f, false);
+    CHECK(act0 == BlinkStateMachine::ACTION_NONE);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+
+    // Frame 2: Face is detected, but eye openness is low (warmup / closed eye at boot)
+    auto act1 = bsm.update(true, 0.10f, 0.15f, false);
+    CHECK_MESSAGE(act1 == BlinkStateMachine::ACTION_NONE, "Cold boot closed eyes MUST NOT fire a click");
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+    CHECK(bsm.is_button_down() == false);
+
+    // Frame 3: Indeterminate openness
+    auto act2 = bsm.update(true, 0.28f, 0.30f, false);
+    CHECK(act2 == BlinkStateMachine::ACTION_NONE);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+}
+
+TEST_CASE("BlinkStateMachine: Intentional Blink Sequence") {
+    BlinkStateMachine bsm;
+
+    // 1. Confirm eyes are open
+    auto act0 = bsm.update(true, 0.85f, 0.80f, false);
+    CHECK(act0 == BlinkStateMachine::ACTION_NONE);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_EYES_OPEN);
+    CHECK(bsm.is_button_down() == false);
+
+    // 2. Eyes close (blink down)
+    auto act1 = bsm.update(true, 0.15f, 0.10f, false);
+    CHECK(act1 == BlinkStateMachine::ACTION_BUTTON_DOWN);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_CLICK_PRESSED);
+    CHECK(bsm.is_button_down() == true);
+
+    // 3. Eyes held closed
+    auto act2 = bsm.update(true, 0.12f, 0.14f, false);
+    CHECK(act2 == BlinkStateMachine::ACTION_NONE);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_CLICK_PRESSED);
+
+    // 4. Eyes reopen (blink up)
+    auto act3 = bsm.update(true, 0.75f, 0.80f, false);
+    CHECK(act3 == BlinkStateMachine::ACTION_BUTTON_UP);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_EYES_OPEN);
+    CHECK(bsm.is_button_down() == false);
+}
+
+TEST_CASE("BlinkStateMachine: Tracking Loss Release Invariant") {
+    BlinkStateMachine bsm;
+
+    // Establish open eyes
+    bsm.update(true, 0.85f, 0.85f, false);
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_EYES_OPEN);
+
+    // Close eyes -> button down
+    auto act_down = bsm.update(true, 0.10f, 0.10f, false);
+    CHECK(act_down == BlinkStateMachine::ACTION_BUTTON_DOWN);
+    CHECK(bsm.is_button_down() == true);
+
+    // Face tracking is lost while eyes were closed
+    auto act_lost = bsm.update(false, 0.0f, 0.0f, false);
+    CHECK_MESSAGE(act_lost == BlinkStateMachine::ACTION_BUTTON_UP, "Tracking loss while button down MUST release button");
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+    CHECK(bsm.is_button_down() == false);
+
+    // Further untracked frames do nothing
+    auto act_idle = bsm.update(false, 0.0f, 0.0f, false);
+    CHECK(act_idle == BlinkStateMachine::ACTION_NONE);
+}
+
+TEST_CASE("BlinkStateMachine: Physical Mouse Takeover Release Invariant") {
+    BlinkStateMachine bsm;
+
+    // Establish open eyes
+    bsm.update(true, 0.85f, 0.85f, false);
+
+    // Close eyes -> button down
+    auto act_down = bsm.update(true, 0.10f, 0.10f, false);
+    CHECK(act_down == BlinkStateMachine::ACTION_BUTTON_DOWN);
+
+    // Physical mouse becomes active while eyes are closed
+    auto act_mouse = bsm.update(true, 0.10f, 0.10f, true); // physical_mouse_active = true
+    CHECK_MESSAGE(act_mouse == BlinkStateMachine::ACTION_BUTTON_UP, "Physical mouse takeover MUST release synthetic button");
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+    CHECK(bsm.is_button_down() == false);
+}
+
+TEST_CASE("BlinkStateMachine: Reset Release Invariant") {
+    BlinkStateMachine bsm;
+
+    // Establish open eyes and close
+    bsm.update(true, 0.85f, 0.85f, false);
+    bsm.update(true, 0.10f, 0.10f, false);
+    CHECK(bsm.is_button_down() == true);
+
+    BlinkStateMachine::Action reset_act = BlinkStateMachine::ACTION_NONE;
+    bsm.reset(reset_act);
+    CHECK_MESSAGE(reset_act == BlinkStateMachine::ACTION_BUTTON_UP, "reset() while button down MUST emit release action");
+    CHECK(bsm.get_state() == BlinkStateMachine::STATE_UNTRACKED);
+    CHECK(bsm.is_button_down() == false);
+
+    // Reset while not down
+    bsm.reset(reset_act);
+    CHECK(reset_act == BlinkStateMachine::ACTION_NONE);
 }

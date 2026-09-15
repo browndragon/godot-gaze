@@ -199,6 +199,8 @@ void GazeServer::_bind_methods() {
 
     ClassDB::bind_static_method("GazeServer", D_METHOD("get_build_info"), &GazeServer::get_build_info);
     ClassDB::bind_static_method("GazeServer", D_METHOD("get_build_timestamp"), &GazeServer::get_build_timestamp);
+    ClassDB::bind_static_method("GazeServer", D_METHOD("is_synthetic_mouse_event", "event"), &GazeServer::is_synthetic_mouse_event);
+    BIND_CONSTANT(DEVICE_ID_GAZE_SYNTHETIC);
 
     ADD_SIGNAL(MethodInfo("gaze_data_ready", PropertyInfo(Variant::RID, "vision_camera_rid")));
     ADD_SIGNAL(MethodInfo("gaze_frame_began", PropertyInfo(Variant::OBJECT, "gaze_frame", PROPERTY_HINT_RESOURCE_TYPE, "GazeFrame")));
@@ -397,6 +399,14 @@ void GazeServer::stop_processing() {
     }
 
     last_camera_face_detected_usec = 0;
+    Gaze::BlinkStateMachine::Action stop_act = Gaze::BlinkStateMachine::ACTION_NONE;
+    blink_state_machine.reset(stop_act);
+    if (stop_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
+        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+        if (gds) {
+            gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
+        }
+    }
     Gaze::log_info(2, "GazeServer_StopProcessing_Finished");
 }
 
@@ -460,7 +470,14 @@ void GazeServer::reset() {
     if (mouse_filter_x) mouse_filter_x->reset();
     if (mouse_filter_y) mouse_filter_y->reset();
     mouse_emulation.reset();
-    was_both_closed = false;
+    Gaze::BlinkStateMachine::Action reset_act = Gaze::BlinkStateMachine::ACTION_NONE;
+    blink_state_machine.reset(reset_act);
+    if (reset_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
+        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+        if (gds) {
+            gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
+        }
+    }
     impl->face = FaceInfo();
     impl->eye.gaze_origin_cam = Vector3();
     impl->eye.gaze_direction_cam = Vector3();
@@ -1317,45 +1334,53 @@ void GazeServer::trigger_process() {
                         if (dt_event < 0.0001f) dt_event = 0.0001f;
                         Vector2 vel = rel / dt_event;
 
-                        Ref<InputEventMouseMotion> mm;
-                        mm.instantiate();
-                        mm->set_position(final_mouse_pos);
-                        mm->set_global_position(final_mouse_pos);
-                        mm->set_relative(rel);
-                        mm->set_velocity(vel);
-                        input->parse_input_event(mm);
+                        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+                        if (gds) {
+                            gds->parse_mouse_motion(final_mouse_pos, rel, vel);
 
-                        bool left_closed = (completed_data->left_eye_openness < 0.25f);
-                        bool right_closed = (completed_data->right_eye_openness < 0.25f);
-                        if (left_closed && right_closed) {
-                            if (!was_both_closed) {
-                                Ref<InputEventMouseButton> mb;
-                                mb.instantiate();
-                                mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
-                                mb->set_pressed(true);
-                                mb->set_position(final_mouse_pos);
-                                mb->set_global_position(final_mouse_pos);
-                                input->parse_input_event(mb);
-                                was_both_closed = true;
+                            Gaze::BlinkStateMachine::Action blink_act = blink_state_machine.update(
+                                true,
+                                completed_data->left_eye_openness,
+                                completed_data->right_eye_openness,
+                                false
+                            );
+                            if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_DOWN) {
+                                gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, true, final_mouse_pos);
+                            } else if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
+                                gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, final_mouse_pos);
                             }
-                        } else if (was_both_closed) {
-                            Ref<InputEventMouseButton> mb;
-                            mb.instantiate();
-                            mb->set_button_index(MouseButton::MOUSE_BUTTON_LEFT);
-                            mb->set_pressed(false);
-                            mb->set_position(final_mouse_pos);
-                            mb->set_global_position(final_mouse_pos);
-                            input->parse_input_event(mb);
-                            was_both_closed = false;
                         }
                     } else {
-                        // Physical mouse active: suppress synthetic mouse motion and reset blink state
-                        was_both_closed = false;
+                        // Physical mouse active: suppress synthetic mouse motion and release synthetic click
+                        Gaze::BlinkStateMachine::Action blink_act = blink_state_machine.update(
+                            true,
+                            completed_data->left_eye_openness,
+                            completed_data->right_eye_openness,
+                            true
+                        );
+                        if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
+                            GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+                            if (gds) {
+                                gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
+                            }
+                        }
                         mouse_filter_recenter_needed = true;
                     }
                 }
 
             } else {
+                Gaze::BlinkStateMachine::Action blink_act = blink_state_machine.update(
+                    false,
+                    0.0f,
+                    0.0f,
+                    mouse_emulation.is_physical_mouse_active()
+                );
+                if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
+                    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+                    if (gds) {
+                        gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
+                    }
+                }
                 Ref<InputEventGazeBase> missing;
                 if (event_factory.is_valid()) {
                     if (event_factory->get_script().get_type() != Variant::NIL) {
@@ -1440,6 +1465,13 @@ void GazeServer::set_verbosity(int level) {
 
 int GazeServer::get_verbosity() const {
     return Gaze::get_log_verbosity();
+}
+
+bool GazeServer::is_synthetic_mouse_event(const Ref<InputEvent> &p_event) {
+    if (!p_event.is_valid()) return false;
+    if (p_event->get_device() == DEVICE_ID_GAZE_SYNTHETIC) return true;
+    if (p_event->has_meta("synthetic_gaze") && (bool)p_event->get_meta("synthetic_gaze")) return true;
+    return false;
 }
 
 String GazeServer::get_build_info() {

@@ -193,22 +193,22 @@ func run_tests():
 	# 3c. Test GazeDisplayServer Input Proxying and Engine Server Infrastructure
 	print("=================== TEST: GAZE DISPLAY SERVER INPUT PROXYING ===================")
 	var mock_gds = MockGazeDisplayServer.new()
-	if not mock_gds.has_method("set_input_mouse_position") or not mock_gds.has_method("set_input_mouse_button_mask"):
-		printerr("FAIL: MockGazeDisplayServer missing set_input_mouse_* methods")
+	if not mock_gds.has_method("set_mouse_position") or not mock_gds.has_method("set_mouse_button_state"):
+		printerr("FAIL: MockGazeDisplayServer missing set_mouse_* methods")
 		quit(1)
 		return
 	if gs.has_method("set_display_server") or gs.has_method("get_display_server"):
 		printerr("FAIL: GazeServer should NOT expose set_display_server or get_display_server (unidiomatic)")
 		quit(1)
 		return
-	mock_gds.set_input_mouse_position(Vector2(500, 500))
-	mock_gds.set_input_mouse_button_mask(1)
-	if mock_gds.get_input_mouse_position() != Vector2(500, 500):
-		printerr("FAIL: MockGazeDisplayServer get_input_mouse_position mismatch")
+	mock_gds.set_mouse_position(Vector2(500, 500))
+	mock_gds.set_mouse_button_state(1)
+	if mock_gds.mouse_get_position() != Vector2(500, 500):
+		printerr("FAIL: MockGazeDisplayServer mouse_get_position mismatch")
 		quit(1)
 		return
-	if mock_gds.get_input_mouse_button_mask() != 1:
-		printerr("FAIL: MockGazeDisplayServer get_input_mouse_button_mask mismatch")
+	if mock_gds.mouse_get_button_state() != 1:
+		printerr("FAIL: MockGazeDisplayServer mouse_get_button_state mismatch")
 		quit(1)
 		return
 
@@ -222,8 +222,8 @@ func run_tests():
 		return
 
 	# Test deterministic dynamic simulation:
-	mock_gds.set_input_mouse_button_mask(0)
-	mock_gds.set_input_mouse_position(Vector2(500, 500))
+	mock_gds.set_mouse_button_state(0)
+	mock_gds.set_mouse_position(Vector2(500, 500))
 	gs.reset()
 	gs.trigger_process()
 
@@ -234,7 +234,7 @@ func run_tests():
 		return
 
 	# 2. Sub-threshold jitter: delta < 3.0 px (e.g. 501.5, 500.5)
-	mock_gds.set_input_mouse_position(Vector2(501.5, 500.5))
+	mock_gds.set_mouse_position(Vector2(501.5, 500.5))
 	gs.trigger_process()
 	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
 		printerr("FAIL: Sub-threshold jitter unexpectedly triggered active mouse")
@@ -242,7 +242,7 @@ func run_tests():
 		return
 
 	# 3. Active breakout motion: displacement > 3.0 px (e.g. 520, 500)
-	mock_gds.set_input_mouse_position(Vector2(520, 500))
+	mock_gds.set_mouse_position(Vector2(520, 500))
 	gs.trigger_process()
 	if not gs.is_physical_mouse_active() or gs.is_physical_mouse_still():
 		printerr("FAIL: Mouse breakout displacement (>3px) did not trigger active state")
@@ -251,20 +251,41 @@ func run_tests():
 
 	# 4. Button click breakout: reset to still, then click button without moving
 	gs.reset()
-	mock_gds.set_input_mouse_position(Vector2(600, 600))
-	mock_gds.set_input_mouse_button_mask(0)
+	mock_gds.set_mouse_position(Vector2(600, 600))
+	mock_gds.set_mouse_button_state(0)
 	gs.trigger_process()
 	if not gs.is_physical_mouse_still():
 		printerr("FAIL: Reset before click breakout should be still")
 		quit(1)
 		return
-	mock_gds.set_input_mouse_button_mask(1) # Left click
+	mock_gds.set_mouse_button_state(1) # Left click
 	gs.trigger_process()
 	if not gs.is_physical_mouse_active() or gs.is_physical_mouse_still():
 		printerr("FAIL: Mouse button click did not trigger active state")
 		quit(1)
 		return
-	mock_gds.set_input_mouse_button_mask(0)
+	mock_gds.set_mouse_button_state(0)
+
+	# 5. Synthetic event dispatch and tagging verification:
+	mock_gds.clear_emitted_mouse_events()
+	mock_gds.parse_mouse_motion(Vector2(400, 300), Vector2(1, 0), Vector2(60, 0))
+	mock_gds.parse_mouse_button(MOUSE_BUTTON_LEFT, true, Vector2(400, 300))
+	var emitted = mock_gds.get_emitted_mouse_events()
+	if emitted.size() != 2:
+		printerr("FAIL: Expected 2 emitted mouse events from mock_gds, got ", emitted.size())
+		quit(1)
+		return
+	var motion_ev = emitted[0] as InputEventMouseMotion
+	var button_ev = emitted[1] as InputEventMouseButton
+	if not motion_ev or not GazeServer.is_synthetic_mouse_event(motion_ev):
+		printerr("FAIL: parse_mouse_motion did not tag event with synthetic_gaze or device -1")
+		quit(1)
+		return
+	if not button_ev or not GazeServer.is_synthetic_mouse_event(button_ev):
+		printerr("FAIL: parse_mouse_button did not tag event with synthetic_gaze or device -1")
+		quit(1)
+		return
+	mock_gds.clear_emitted_mouse_events()
 
 	# Clean up and restore production display server in Engine
 	Engine.unregister_singleton("GazeDisplayServer")
@@ -274,7 +295,7 @@ func run_tests():
 		quit(1)
 		return
 	mock_gds.free()
-	print("PASS: GazeDisplayServer input proxying and standard Engine server infrastructure verified.")
+	print("PASS: GazeDisplayServer input proxying, event tagging, and standard Engine server infrastructure verified.")
 
 	# =================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================
 	print("=================== E2E TEST: FEATURE F1 (GazeDeviceProfile Resource) ===================")

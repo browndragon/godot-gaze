@@ -257,3 +257,83 @@ TEST_CASE("MouseGazeEmulation: Smoothstep C1 Continuity") {
         CHECK(smoothstep(1.0f - t) == doctest::Approx(1.0f - smoothstep(t)));
     }
 }
+
+TEST_CASE("MouseGazeEmulation: Preservation of Camera Head Pose and Eye Openness") {
+    // Verifies the invariant that mouse emulation steers only the 2D gaze point
+    // and preserves the 3D head transform and eye openness from camera tracking.
+
+    struct Vec3 { float x, y, z; };
+    struct Transform3 {
+        Vec3 origin;
+        Vec3 forward;
+    };
+
+    struct EmulatedGazeEvent {
+        TestMouseGazeStateMachine::Vec2 canvas_pos;
+        Transform3 head_xform;
+        float left_open;
+        float right_open;
+    };
+
+    auto synthesize_event = [](
+        bool has_camera_data,
+        float ease_factor,
+        const TestMouseGazeStateMachine::Vec2& cam_canvas,
+        const Transform3& cam_head,
+        float cam_left_open,
+        float cam_right_open,
+        const TestMouseGazeStateMachine::Vec2& mouse_canvas
+    ) -> EmulatedGazeEvent {
+        EmulatedGazeEvent ev;
+        Transform3 dummy_head{Vec3{0.0f, 0.0f, -500.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+
+        if (has_camera_data) {
+            ev.canvas_pos = cam_canvas.lerp(mouse_canvas, ease_factor);
+            ev.head_xform = cam_head; // Camera head pose is preserved!
+            ev.left_open = cam_left_open; // Camera eye openness is preserved!
+            ev.right_open = cam_right_open;
+        } else {
+            ev.canvas_pos = mouse_canvas;
+            ev.head_xform = dummy_head;
+            ev.left_open = 1.0f;
+            ev.right_open = 1.0f;
+        }
+        return ev;
+    };
+
+    Transform3 real_cam_head{Vec3{45.0f, -20.0f, -420.0f}, Vec3{-0.1f, 0.05f, 0.99f}};
+    TestMouseGazeStateMachine::Vec2 cam_canvas(300.0f, 400.0f);
+    TestMouseGazeStateMachine::Vec2 mouse_canvas(800.0f, 600.0f);
+    float real_left_open = 0.85f;
+    float real_right_open = 0.15f; // User is winking!
+
+    // 1. While camera is active and mouse moves (blend factor = 1.0 pure mouse)
+    EmulatedGazeEvent ev_pure_mouse = synthesize_event(true, 1.0f, cam_canvas, real_cam_head, real_left_open, real_right_open, mouse_canvas);
+    CHECK(ev_pure_mouse.canvas_pos.x == doctest::Approx(800.0f));
+    CHECK(ev_pure_mouse.canvas_pos.y == doctest::Approx(600.0f));
+    // Head pose MUST remain the real camera head pose:
+    CHECK(ev_pure_mouse.head_xform.origin.x == doctest::Approx(45.0f));
+    CHECK(ev_pure_mouse.head_xform.origin.y == doctest::Approx(-20.0f));
+    CHECK(ev_pure_mouse.head_xform.origin.z == doctest::Approx(-420.0f));
+    // Eye openness MUST reflect real wink state:
+    CHECK(ev_pure_mouse.left_open == doctest::Approx(0.85f));
+    CHECK(ev_pure_mouse.right_open == doctest::Approx(0.15f));
+
+    // 2. During transition (blend factor = 0.5)
+    EmulatedGazeEvent ev_blend = synthesize_event(true, 0.5f, cam_canvas, real_cam_head, real_left_open, real_right_open, mouse_canvas);
+    CHECK(ev_blend.canvas_pos.x == doctest::Approx(550.0f));
+    CHECK(ev_blend.canvas_pos.y == doctest::Approx(500.0f));
+    CHECK(ev_blend.head_xform.origin.x == doctest::Approx(45.0f));
+    CHECK(ev_blend.head_xform.origin.z == doctest::Approx(-420.0f));
+    CHECK(ev_blend.left_open == doctest::Approx(0.85f));
+    CHECK(ev_blend.right_open == doctest::Approx(0.15f));
+
+    // 3. When NO camera data is available (e.g. webcam disabled)
+    EmulatedGazeEvent ev_no_cam = synthesize_event(false, 1.0f, cam_canvas, real_cam_head, real_left_open, real_right_open, mouse_canvas);
+    CHECK(ev_no_cam.canvas_pos.x == doctest::Approx(800.0f));
+    CHECK(ev_no_cam.head_xform.origin.x == doctest::Approx(0.0f));
+    CHECK(ev_no_cam.head_xform.origin.y == doctest::Approx(0.0f));
+    CHECK(ev_no_cam.head_xform.origin.z == doctest::Approx(-500.0f));
+    CHECK(ev_no_cam.left_open == doctest::Approx(1.0f));
+    CHECK(ev_no_cam.right_open == doctest::Approx(1.0f));
+}

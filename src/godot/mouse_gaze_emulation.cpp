@@ -147,12 +147,21 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     float blended_left_open = 1.0f;
     float blended_right_open = 1.0f;
 
-    if (has_camera_data && last_cam_gaze_pos != Vector2(0, 0) && ease_factor < 0.999f) {
-        blended_canvas_pos = last_cam_gaze_pos.lerp(mouse_canvas, ease_factor);
-        blended_head = last_cam_head_xform.interpolate_with(mouse_head_xform, ease_factor);
-        blended_gaze = last_cam_gaze_xform.interpolate_with(mouse_gaze_xform, ease_factor);
-        blended_left_open = Math::lerp(last_cam_left_open, 1.0f, ease_factor);
-        blended_right_open = Math::lerp(last_cam_right_open, 1.0f, ease_factor);
+    if (has_camera_data) {
+        if (last_cam_gaze_pos != Vector2(0, 0)) {
+            blended_canvas_pos = last_cam_gaze_pos.lerp(mouse_canvas, ease_factor);
+        }
+        // Preserve user's real 3D head position and rotation from camera
+        blended_head = last_cam_head_xform;
+        // Preserve user's real eye openness (blinks and winks)
+        blended_left_open = last_cam_left_open;
+        blended_right_open = last_cam_right_open;
+
+        // Compute gaze ray directed from user's real camera eye origin towards screen target
+        Vector3 eye_origin_cam = last_cam_head_xform.origin;
+        Vector3 gaze_dir_cam = (target_cam - eye_origin_cam).normalized();
+        Transform3D target_mouse_gaze(Basis::looking_at(gaze_dir_cam, Vector3(0, 1, 0)), eye_origin_cam);
+        blended_gaze = last_cam_gaze_xform.interpolate_with(target_mouse_gaze, ease_factor);
     }
 
     Ref<InputEventGaze> event;

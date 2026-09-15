@@ -172,6 +172,7 @@ void GazeServer::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("set_emulate_gaze_from_mouse", "enable"), &GazeServer::set_emulate_gaze_from_mouse);
     ClassDB::bind_method(D_METHOD("get_emulate_gaze_from_mouse"), &GazeServer::get_emulate_gaze_from_mouse);
+    ClassDB::bind_method(D_METHOD("is_mouse_emulated"), &GazeServer::is_mouse_emulated);
     ClassDB::bind_method(D_METHOD("set_emulate_mouse_from_gaze", "enable"), &GazeServer::set_emulate_mouse_from_gaze);
     ClassDB::bind_method(D_METHOD("get_emulate_mouse_from_gaze"), &GazeServer::get_emulate_mouse_from_gaze);
     ClassDB::bind_method(D_METHOD("set_default_clamping", "clamping"), &GazeServer::set_default_clamping);
@@ -1082,6 +1083,10 @@ void GazeServer::set_emulate_gaze_from_mouse(bool p_enable) {
 
 bool GazeServer::get_emulate_gaze_from_mouse() const {
     return emulate_gaze_from_mouse;
+}
+
+bool GazeServer::is_mouse_emulated() const {
+    return mouse_emulation.is_emulation_active();
 }
 
 void GazeServer::set_emulate_mouse_from_gaze(bool p_enable) {

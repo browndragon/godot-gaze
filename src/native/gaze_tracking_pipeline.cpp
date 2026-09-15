@@ -379,33 +379,17 @@ namespace Gaze
             }
             double lm_w = max_x - min_x;
             double lm_h = max_y - min_y;
-            double fit_w = lm_w * 1.35;
-            double fit_h = lm_h * 1.35;
+            double lm_box_cx = (min_x + max_x) * 0.5;
+            double lm_box_cy = (min_y + max_y) * 0.5;
 
-            if (!face_found || tracking_face_w < 20.0f || tracking_face_h < 20.0f)
-            {
-                // First frame detection from YuNet: anchor in working space
-                GodotCameraImageVector2 center_work(data->face_bbox.x + data->face_bbox.width * 0.5f,
-                                                    data->face_bbox.y + data->face_bbox.height * 0.5f);
-                offset_work = GodotCameraImageVector2(center_work.x - curr_centroid_work.x,
-                                                      center_work.y - curr_centroid_work.y);
-                tracking_face_center_cam = rotate_point_2d(center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
-                tracking_face_w = static_cast<float>(fit_w > 20.0 ? fit_w : data->face_bbox.width);
-                tracking_face_h = static_cast<float>(fit_h > 20.0 ? fit_h : data->face_bbox.height);
-            }
-            else
-            {
-                // In working space, face is upright: target center is landmark centroid + constant upright offset
-                GodotCameraImageVector2 target_center_work(curr_centroid_work.x + offset_work.x,
-                                                           curr_centroid_work.y + offset_work.y);
-                GodotCameraImageVector2 target_center_cam = rotate_point_2d(target_center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
-                tracking_face_center_cam = target_center_cam;
-                if (fit_w > 20.0 && fit_h > 20.0)
-                {
-                    tracking_face_w = static_cast<float>(fit_w);
-                    tracking_face_h = static_cast<float>(fit_h);
-                }
-            }
+            // In working space, face is upright:
+            // 1. Horizontal center of landmark bounding box (outer jaw/ears) aligns with facial midline.
+            // 2. Landmarks span eyebrows to chin; head center (including forehead) is ~0.15*lm_h above box center.
+            GodotCameraImageVector2 target_center_work(lm_box_cx, lm_box_cy - 0.15 * lm_h);
+            GodotCameraImageVector2 target_center_cam = rotate_point_2d(target_center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
+            tracking_face_center_cam = target_center_cam;
+            tracking_face_w = static_cast<float>(lm_w);
+            tracking_face_h = static_cast<float>(lm_h * 1.40f);
 
             face_found = true;
             last_tvec = tvec;

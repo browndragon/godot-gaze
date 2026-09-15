@@ -246,6 +246,12 @@ public:
     bool get_emulate_gaze_from_mouse() const;
 
     /**
+     * @brief Checks if mouse emulation is currently driving gaze input.
+     * @return bool True if mouse emulation is active.
+     */
+    bool is_mouse_emulated() const;
+
+    /**
      * @brief Enables or disables gaze-to-mouse emulation (driving the OS/window mouse cursor from eye gaze).
      * @param p_enable True to enable.
      */

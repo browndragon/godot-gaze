@@ -182,7 +182,16 @@ func update_diagnostics_ui() -> void:
 		if build_info != "":
 			lines.append("Build: [color=aqua]%s[/color]" % build_info)
 		lines.append("Tracker State: [color=%s]%s[/color]" % ["green" if is_running else "gray", "Running" if is_running else "Idle"])
-		lines.append("Face Tracked: %s" % ("[color=green]YES[/color]" if is_face_detected else "[color=red]NO[/color]"))
+		var is_mouse_emulated = gs.is_mouse_emulated() if ClassDB.class_has_method("GazeServer", "is_mouse_emulated") else false
+		var face_tracked_text = ""
+		if is_face_detected:
+			if is_mouse_emulated:
+				face_tracked_text = "[color=green]YES[/color] [color=yellow](Mouse Emulated)[/color]"
+			else:
+				face_tracked_text = "[color=green]YES[/color] [color=aqua](Camera Gaze)[/color]"
+		else:
+			face_tracked_text = "[color=red]NO[/color]"
+		lines.append("Face Tracked: %s" % face_tracked_text)
 
 		if is_face_detected:
 			var head_pos = ev.head_transform.origin

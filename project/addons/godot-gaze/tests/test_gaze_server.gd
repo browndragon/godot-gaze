@@ -111,4 +111,26 @@ func test_mouse_emulation_settings_and_api():
 	gs.set_mouse_emulation_dwell_sec(2.0)
 	gs.set_mouse_emulation_transition_sec(0.3)
 
+func test_mouse_emulation_state_and_head_pose_preservation():
+	var gs = Engine.get_singleton("GazeServer")
+	assert_not_null(gs, "GazeServer singleton must exist")
+
+	assert_true(ClassDB.class_has_method("GazeServer", "is_mouse_emulated"), "is_mouse_emulated method must be registered")
+	var is_emulated = gs.is_mouse_emulated()
+	assert_true(is_emulated is bool, "is_mouse_emulated must return a bool")
+
+	# Simulate camera face detection with custom head pose and eye openness
+	var custom_head_pos = Vector3(50.0, -30.0, -450.0)
+	var custom_head_rot = Vector3(5.0, 10.0, -2.0)
+	gs.set_face_pose(custom_head_pos, custom_head_rot, true)
+	gs.set_eye_openness(0.85, 0.15) # Wink state
+
+	var ev = gs.create_default_event()
+	assert_not_null(ev, "Created default event should not be null")
+	assert_true(ev is InputEventGaze, "Event must be InputEventGaze")
+	assert_almost_eq(ev.head_transform.origin.x, 50.0, 0.1, "Head X matches camera pose")
+	assert_almost_eq(ev.head_transform.origin.z, -450.0, 0.1, "Head Z matches camera pose")
+	assert_almost_eq(ev.left_eye_openness, 0.85, 0.01, "Left eye openness matches camera")
+	assert_almost_eq(ev.right_eye_openness, 0.15, 0.01, "Right eye openness matches camera")
+
 

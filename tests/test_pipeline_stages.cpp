@@ -311,3 +311,73 @@ TEST_CASE("Pipeline Auto-Roll Tracking with Sigmoidal Dropout Hold") {
     pipeline.process_frame_synchronous(&d3);
     CHECK(d3.roll_hint_rad == doctest::Approx(0.0f));
 }
+
+TEST_CASE("Pipeline Multi-Frame Landmark Tracking Stability") {
+    std::string yunet_path = get_model_path("project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort");
+    std::string gaze_path = get_model_path("project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort");
+    std::string eye_state_path = get_model_path("project/addons/godot-gaze/models/open_closed_eye.ort");
+    std::string lm_path = get_model_path("project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort");
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_center.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+    GazeFrameData d;
+    d.camera_raw_bgr = img.data;
+    d.camera_width = img.width;
+    d.camera_height = img.height;
+    d.timestamp = 1.0;
+
+    // Frame 0: YuNet detection baseline
+    pipeline.process_frame_synchronous(&d);
+    REQUIRE(d.face_detected == true);
+    REQUIRE(d.has_landmarks_2d == true);
+    REQUIRE(d.internal_landmarks_working_px.size() == 35);
+    float base_w = d.face_bbox.width;
+    float base_h = d.face_bbox.height;
+    double base_z = d.head_translation.z;
+
+    std::vector<GodotCameraImageVector2> prev_lms(35);
+    for (size_t i = 0; i < 35; ++i) {
+        prev_lms[i] = GodotCameraImageVector2(d.internal_landmarks_working_px[i].x, d.internal_landmarks_working_px[i].y);
+    }
+
+    double final_frame_to_frame_delta = 0.0;
+
+    // Run 30 consecutive hinted tracking frames
+    for (int frame = 1; frame <= 30; ++frame) {
+        d.timestamp = 1.0 + frame * (1.0 / 60.0);
+        pipeline.process_frame_synchronous(&d);
+
+        CHECK_MESSAGE(d.face_detected == true, "Face tracking dropped on frame " << frame);
+        CHECK_MESSAGE(d.has_landmarks_2d == true, "Landmarks lost on frame " << frame);
+        CHECK_MESSAGE(d.internal_landmarks_working_px.size() == 35, "Incomplete landmarks on frame " << frame);
+
+        // Bounding box size stability: must not shrink or explode
+        CHECK(d.face_bbox.width >= base_w * 0.80f);
+        CHECK(d.face_bbox.width <= base_w * 1.60f);
+        CHECK(d.face_bbox.height >= base_h * 0.80f);
+        CHECK(d.face_bbox.height <= base_h * 1.60f);
+
+        // Head translation Z stability: webcam distance must remain stable (~400mm)
+        CHECK(d.head_translation.z == doctest::Approx(base_z).epsilon(0.15));
+
+        // Compute frame-to-frame delta
+        double max_delta = 0.0;
+        for (size_t i = 0; i < 35; ++i) {
+            double dx = d.internal_landmarks_working_px[i].x - prev_lms[i].x;
+            double dy = d.internal_landmarks_working_px[i].y - prev_lms[i].y;
+            max_delta = std::max(max_delta, std::sqrt(dx * dx + dy * dy));
+            prev_lms[i] = GodotCameraImageVector2(d.internal_landmarks_working_px[i].x, d.internal_landmarks_working_px[i].y);
+        }
+        if (frame >= 25) {
+            final_frame_to_frame_delta = std::max(final_frame_to_frame_delta, max_delta);
+        }
+    }
+
+    // Convergence check: frame-to-frame delta must settle under 2.0px
+    CHECK(final_frame_to_frame_delta < 2.0);
+}

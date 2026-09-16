@@ -23,6 +23,7 @@
 #include <godot_cpp/classes/os.hpp>
 #include <godot_cpp/classes/editor_interface.hpp>
 #include <godot_cpp/classes/project_settings.hpp>
+#include <godot_cpp/classes/display_server.hpp>
 #ifdef WEB_ENABLED
 #include <emscripten.h>
 #include "../web/web_binding_state.hpp"
@@ -276,6 +277,15 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_factory_path);
         ps->set_initial_value("gaze/events/event_factory_path", "");
 
+        if (!ps->has_setting("gaze/vision/driver")) {
+            ps->set_setting("gaze/vision/driver", "native");
+        }
+        Dictionary prop_driver;
+        prop_driver["name"] = "gaze/vision/driver";
+        prop_driver["type"] = Variant::STRING;
+        ps->add_property_info(prop_driver);
+        ps->set_initial_value("gaze/vision/driver", "native");
+
         int verbosity = ps->get_setting("gaze/debug/verbosity");
         Gaze::set_log_verbosity(verbosity);
     }
@@ -315,32 +325,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         ClassDB::register_class<GazeFrame>();
         ClassDB::register_class<GazeServer>();
 
-        bool use_mock_display = false;
-        OS *os = OS::get_singleton();
-        if (os) {
-            PackedStringArray args = os->get_cmdline_args();
-            for (int i = 0; i < args.size(); ++i) {
-                if (args[i] == "--mock-gaze-display") {
-                    use_mock_display = true;
-                    break;
-                }
-            }
-        }
-
-        if (use_mock_display) {
-            gaze_display_server_singleton = memnew(MockGazeDisplayServer);
-        } else {
-            gaze_display_server_singleton = memnew(GazeDisplayServer);
-        }
-        Engine::get_singleton()->register_singleton("GazeDisplayServer", gaze_display_server_singleton);
-
-        vision_server_singleton = memnew(VisionServer);
-        Engine::get_singleton()->register_singleton("VisionServer", vision_server_singleton);
-        Engine::get_singleton()->register_singleton("GazeVisionServer", vision_server_singleton);
-
-        gaze_server_singleton = memnew(GazeServer);
-        Engine::get_singleton()->register_singleton("GazeServer", gaze_server_singleton);
-
         register_gaze_project_settings();
         return;
     }
@@ -365,6 +349,78 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
         return;
     }
 
+    bool use_mock_display = false;
+    bool use_mock_vision = false;
+    bool explicit_native = false;
+    bool explicit_mock = false;
+
+    OS *os = OS::get_singleton();
+    if (os) {
+        PackedStringArray args = os->get_cmdline_args();
+        for (int i = 0; i < args.size(); ++i) {
+            if (args[i] == "--mock-gaze-display") {
+                use_mock_display = true;
+            } else if (args[i] == "--mock-camera" || args[i] == "--mock-vision" || args[i] == "--mock-vision-server") {
+                explicit_mock = true;
+            } else if (args[i] == "--native-camera" || args[i] == "--real-camera") {
+                explicit_native = true;
+            } else if (args[i] == "--headless") {
+                use_mock_vision = true;
+            }
+        }
+    }
+
+    bool is_headless = false;
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds && ds->get_name() == "headless") {
+            is_headless = true;
+        }
+    } else {
+        is_headless = true;
+    }
+
+    if (is_headless) {
+        use_mock_vision = true;
+    }
+
+    ProjectSettings *ps = ProjectSettings::get_singleton();
+    if (ps && ps->has_setting("gaze/vision/driver")) {
+        String driver = ps->get_setting("gaze/vision/driver");
+        if (driver == "mock") {
+            use_mock_vision = true;
+        } else if (driver == "native" && !is_headless) {
+            use_mock_vision = false;
+        }
+    }
+
+    if (explicit_mock) {
+        use_mock_vision = true;
+    }
+    if (explicit_native) {
+        use_mock_vision = false;
+    }
+
+    if (use_mock_display) {
+        gaze_display_server_singleton = memnew(MockGazeDisplayServer);
+    } else {
+        gaze_display_server_singleton = memnew(GazeDisplayServer);
+    }
+    Engine::get_singleton()->register_singleton("GazeDisplayServer", gaze_display_server_singleton);
+
+    if (use_mock_vision) {
+        vision_server_singleton = memnew(MockVisionServer);
+        Gaze::log_info("VisionServer_Init_Strategy", "type", "MockVisionServer");
+    } else {
+        vision_server_singleton = memnew(VisionServer);
+        Gaze::log_info("VisionServer_Init_Strategy", "type", "VisionServer");
+    }
+    Engine::get_singleton()->register_singleton("VisionServer", vision_server_singleton);
+    Engine::get_singleton()->register_singleton("GazeVisionServer", vision_server_singleton);
+
+    gaze_server_singleton = memnew(GazeServer);
+    Engine::get_singleton()->register_singleton("GazeServer", gaze_server_singleton);
+
     // Register Scene / Node classes
     ClassDB::register_class<GazeTracker>();
 #ifdef WEB_ENABLED
@@ -372,7 +428,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 #endif
 
     // On Web, if run-tests=true is passed via URL search parameters, override the boot scene dynamically
-    ProjectSettings* ps = ProjectSettings::get_singleton();
     if (ps) {
         bool should_run_tests = false;
 #ifdef WEB_ENABLED
@@ -386,8 +441,8 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 }
 
 void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
-    if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
-        Gaze::log_info("uninitialize_gaze_module_level_servers_began");
+    if (p_level == MODULE_INITIALIZATION_LEVEL_SCENE) {
+        Gaze::log_info("uninitialize_gaze_module_level_scene_began");
         Gaze::g_is_exiting = true;
 
         Input *input = Input::get_singleton();
@@ -413,14 +468,15 @@ void uninitialize_gaze_module(ModuleInitializationLevel p_level) {
             memdelete(GazeDisplayServer::get_singleton());
             gaze_display_server_singleton = nullptr;
         }
-
-        // Clean up registry
-        Gaze::register_log_handler(nullptr);
-        Gaze::log_info("uninitialize_gaze_module_level_servers_finished");
+        Gaze::log_info("uninitialize_gaze_module_level_scene_finished");
         return;
     }
 
-    if (p_level != MODULE_INITIALIZATION_LEVEL_SCENE) {
+    if (p_level == MODULE_INITIALIZATION_LEVEL_SERVERS) {
+        Gaze::log_info("uninitialize_gaze_module_level_servers_began");
+        // Clean up registry
+        Gaze::register_log_handler(nullptr);
+        Gaze::log_info("uninitialize_gaze_module_level_servers_finished");
         return;
     }
 }

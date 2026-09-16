@@ -85,6 +85,7 @@ public:
      * @brief Set the hardware device ID index to capture from.
      */
     virtual void camera_set_device_id(RID p_camera, int p_device_id);
+    virtual int camera_get_device_id(RID p_camera);
 
     /**
      * @brief Set target camera capture resolution.
@@ -179,6 +180,7 @@ public:
     virtual void camera_stop(RID p_camera) override;
     virtual Ref<Texture2D> get_camera_current_texture(RID p_camera) override;
     virtual Ref<Image> camera_get_current_image(RID p_camera) override;
+    virtual bool get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) override;
 
     /**
      * @brief Set simulated acceleration in test scenarios, deriving unit gravity vector.

@@ -77,15 +77,6 @@ bool VisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) 
 
     if (!data->is_active) return false;
 
-    // Handle mock frame injection
-    if (data->device_id == -1) {
-        if (data->last_frame.data == nullptr) {
-            return false;
-        }
-        r_frame = data->last_frame;
-        return true;
-    }
-
     if (!data->camera) return false;
 
     Gaze::Frame raw_frame;

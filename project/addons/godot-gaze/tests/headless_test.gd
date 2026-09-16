@@ -116,6 +116,17 @@ func run_tests():
 		quit(1)
 		return
 
+	if vs.get_class() != "MockVisionServer":
+		printerr("FAIL: VisionServer should be MockVisionServer in headless mode, got: ", vs.get_class())
+		quit(1)
+		return
+
+	var default_cam_rid = gs.get_camera_vision_rid()
+	if not default_cam_rid.is_valid() or vs.camera_get_device_id(default_cam_rid) != -1:
+		printerr("FAIL: GazeServer default camera in headless mode should have device_id -1 (mock), got: ", vs.camera_get_device_id(default_cam_rid))
+		quit(1)
+		return
+
 	gs.set_device_profile(profile)
 	# Ensure stopped before testing 0->1 transition
 	gs.stop_tracking(true)
@@ -125,6 +136,13 @@ func run_tests():
 		printerr("FAIL: is_tracking_active() returned false or start_tracking returned false on 0->1")
 		quit(1)
 		return
+
+	if Engine.has_singleton("CameraServer"):
+		var cs = Engine.get_singleton("CameraServer")
+		if cs and cs.is_monitoring_feeds():
+			printerr("FAIL: CameraServer is monitoring feeds in headless mode!")
+			quit(1)
+			return
 
 	# Test refcounting (1->2 should return false)
 	var second_start = gs.start_tracking()

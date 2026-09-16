@@ -133,4 +133,10 @@ func test_mouse_emulation_state_and_head_pose_preservation():
 	assert_almost_eq(ev.left_eye_openness, 0.85, 0.01, "Left eye openness matches camera")
 	assert_almost_eq(ev.right_eye_openness, 0.15, 0.01, "Right eye openness matches camera")
 
+func test_mock_vision_server_headless_injection():
+	var vs = Engine.get_singleton("VisionServer")
+	assert_not_null(vs, "VisionServer singleton must exist")
+	assert_eq(vs.get_class(), "MockVisionServer", "VisionServer singleton must be MockVisionServer in headless mode")
+
+
 

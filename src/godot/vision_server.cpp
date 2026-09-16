@@ -19,6 +19,7 @@ VisionServer *VisionServer::singleton = nullptr;
 void VisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_create"), &VisionServer::camera_create);
     ClassDB::bind_method(D_METHOD("camera_set_device_id", "camera_rid", "device_id"), &VisionServer::camera_set_device_id);
+    ClassDB::bind_method(D_METHOD("camera_get_device_id", "camera_rid"), &VisionServer::camera_get_device_id);
     ClassDB::bind_method(D_METHOD("camera_set_resolution", "camera_rid", "width", "height"), &VisionServer::camera_set_resolution);
     ClassDB::bind_method(D_METHOD("camera_set_focal_length", "camera_rid", "focal_length"), &VisionServer::camera_set_focal_length);
     ClassDB::bind_method(D_METHOD("camera_get_focal_length", "camera_rid"), &VisionServer::camera_get_focal_length);
@@ -125,6 +126,12 @@ void VisionServer::camera_set_device_id(RID p_camera, int p_device_id) {
     CameraData *data = camera_owner.get_or_null(p_camera);
     ERR_FAIL_NULL(data);
     data->device_id = p_device_id;
+}
+
+int VisionServer::camera_get_device_id(RID p_camera) {
+    CameraData *data = camera_owner.get_or_null(p_camera);
+    ERR_FAIL_NULL_V(data, -1);
+    return data->device_id;
 }
 
 void VisionServer::camera_set_resolution(RID p_camera, int p_width, int p_height) {
@@ -246,27 +253,41 @@ RID MockVisionServer::camera_create() {
 
 bool MockVisionServer::camera_start(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, false);
+    if (!data) return false;
     data->is_active = true;
     return true;
 }
 
 void MockVisionServer::camera_stop(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL(data);
+    if (!data) return;
     data->is_active = false;
 }
 
 Ref<Texture2D> MockVisionServer::get_camera_current_texture(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, Ref<Texture2D>());
+    if (!data) return Ref<Texture2D>();
     return data->current_texture;
 }
 
 Ref<Image> MockVisionServer::camera_get_current_image(RID p_camera) {
     CameraData *data = camera_owner.get_or_null(p_camera);
-    ERR_FAIL_NULL_V(data, Ref<Image>());
+    if (!data) return Ref<Image>();
     return data->current_image;
+}
+
+bool MockVisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) {
+    if (!p_camera.is_valid()) return false;
+    CameraData *data = camera_owner.get_or_null(p_camera);
+    if (!data) return false;
+
+    if (!data->is_active) return false;
+
+    if (data->last_frame.data == nullptr) {
+        return false;
+    }
+    r_frame = data->last_frame;
+    return true;
 }
 
 void MockVisionServer::inject_texture(RID p_camera, const Ref<Texture2D> &p_texture) {

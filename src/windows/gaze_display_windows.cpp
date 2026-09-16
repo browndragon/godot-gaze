@@ -21,6 +21,10 @@ GazeDisplayMetrics gaze_windows_get_display_metrics(int screen_index) {
         } else {
             metrics.scale_factor = 1.0;
         }
+        int raw_w = GetDeviceCaps(hdc, HORZRES);
+        int raw_h = GetDeviceCaps(hdc, VERTRES);
+        metrics.pixel_width = (metrics.scale_factor > 0.0) ? (int)std::round(raw_w / metrics.scale_factor) : raw_w;
+        metrics.pixel_height = (metrics.scale_factor > 0.0) ? (int)std::round(raw_h / metrics.scale_factor) : raw_h;
         ReleaseDC(NULL, hdc);
     }
 
@@ -45,10 +49,12 @@ GazeWindowRect gaze_windows_get_window_rect(int window_index) {
         if (GetClientRect(hwnd, &rc)) {
             POINT pt = { rc.left, rc.top };
             ClientToScreen(hwnd, &pt);
-            rect.x = pt.x;
-            rect.y = pt.y;
-            rect.width = rc.right - rc.left;
-            rect.height = rc.bottom - rc.top;
+            GazeDisplayMetrics metrics = gaze_windows_get_display_metrics(0);
+            double s = (metrics.scale_factor > 0.0) ? metrics.scale_factor : 1.0;
+            rect.x = (int)std::round(pt.x / s);
+            rect.y = (int)std::round(pt.y / s);
+            rect.width = (int)std::round((rc.right - rc.left) / s);
+            rect.height = (int)std::round((rc.bottom - rc.top) / s);
         }
     }
 
@@ -63,6 +69,34 @@ GazeWindowRect gaze_windows_get_window_rect(int window_index) {
     return rect;
 }
 
+GazeMousePoint gaze_windows_get_mouse_position() {
+    GazeMousePoint pt;
+    POINT p;
+    if (GetCursorPos(&p)) {
+        GazeDisplayMetrics metrics = gaze_windows_get_display_metrics(0);
+        double s = (metrics.scale_factor > 0.0) ? metrics.scale_factor : 1.0;
+        pt.x = p.x / s;
+        pt.y = p.y / s;
+    }
+    return pt;
+}
+
+int64_t gaze_windows_get_mouse_button_state() {
+    int64_t mask = 0;
+    if (GetAsyncKeyState(VK_LBUTTON) & 0x8000) mask |= 1;
+    if (GetAsyncKeyState(VK_RBUTTON) & 0x8000) mask |= 2;
+    if (GetAsyncKeyState(VK_MBUTTON) & 0x8000) mask |= 4;
+    return mask;
+}
+
+} // namespace Gaze
+#else
+namespace Gaze {
+GazeDisplayMetrics gaze_windows_get_display_metrics(int) { return {}; }
+GazeWindowRect gaze_windows_get_window_rect(int) { return {}; }
+GazeMousePoint gaze_windows_get_mouse_position() { return {}; }
+int64_t gaze_windows_get_mouse_button_state() { return 0; }
 } // namespace Gaze
 #endif
+
 

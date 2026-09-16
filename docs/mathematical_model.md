@@ -64,14 +64,19 @@ This centered millimeter coordinate system defines symmetric screen planes:
 * The flat display plane is defined by the equation $z_{\text{screen}} = 0$.
 
 ### 1.7. OS Window Space (Logical Pixels / `lpix`)
-* **Origin**: Top-left corner of the application's OS window.
-* **Units**: Logical screen pixels (`lpix`), matching Godot's `DisplayServer.window_get_position()` and `DisplayServer.window_get_size()`.
-* On macOS Retina / HiDPI displays, `DisplayServer` APIs operate in logical points ($1\text{ lpix} = 2\text{ physical device pixels}$ on 2x scale). Spatial projection math maintains 1:1 scale invariance by working exclusively in `lpix`.
+* **Origin**: Top-left corner of the application's OS window client area.
+* **Units**: Logical screen pixels (`lpix` / points / CSS pixels), governed authoritatively by `GazeDisplayServer` (see [architecture.md Section 7](architecture.md#7-gazedisplayserver--platform-windowing-abstraction)).
+* **Platform Invariance**: On Retina, HiDPI, and multi-monitor setups, `GazeDisplayServer` guarantees that `get_screen_size_pixels()`, `get_window_rect_pixels()`, and `mouse_get_position()` operate in identical logical units. Spatial projection math maintains 1:1 scale invariance by working exclusively in `lpix`.
 
 ### 1.8. Godot Viewport Canvas 2D Space
 * **Origin**: Top-left corner of the Godot Viewport 2D drawing canvas.
 * **Units**: Virtual canvas coordinates used by `Control` nodes, 2D nodes, and `_draw()` methods.
-* Relates to OS Window Space via the viewport's affine transformation matrix $M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$.
+* **Transformation Pipeline**: To convert an OS Window coordinate $\mathbf{p}_{\text{win}} \in \text{lpix}$ to Canvas space $\mathbf{p}_{\text{canvas}}$:
+  1. Convert window logical pixels to window physical framebuffer pixels using screen scale factor $S = \text{GazeDisplayServer.get\_screen\_scale()}$:
+     $$\mathbf{p}_{\text{phys}} = \mathbf{p}_{\text{win}} \cdot S$$
+  2. Invert the Viewport's affine transformation matrix $M_{\text{canvas}} = \text{Viewport.get\_final\_transform()}$:
+     $$\mathbf{p}_{\text{canvas}} = M_{\text{canvas}}^{-1} \cdot \mathbf{p}_{\text{phys}}$$
+* **Closed-Loop Pointer Consistency**: For mouse-gaze emulation, the synthetic camera-space gaze target $(X_s, Y_s)$ projects through `ProjectionEngine` directly to $\mathbf{p}_{\text{win}}$, guaranteeing that $\mathbf{p}_{\text{canvas}}$ matches the native Godot mouse cursor with zero mathematical divergence.
 
 ---
 

@@ -110,5 +110,28 @@ GazeWindowRect gaze_macos_get_window_rect(int window_index) {
     return rect;
 }
 
+GazeMousePoint gaze_macos_get_mouse_position() {
+    GazeMousePoint pt;
+    @autoreleasepool {
+        NSPoint mouse_loc = [NSEvent mouseLocation];
+        NSScreen *primary = [[NSScreen screens] firstObject];
+        NSRect screen_frame = primary ? [primary frame] : NSMakeRect(0, 0, 1512, 982);
+        pt.x = mouse_loc.x - screen_frame.origin.x;
+        pt.y = screen_frame.origin.y + screen_frame.size.height - mouse_loc.y;
+    }
+    return pt;
+}
+
+int64_t gaze_macos_get_mouse_button_state() {
+    @autoreleasepool {
+        NSUInteger buttons = [NSEvent pressedMouseButtons];
+        int64_t state = 0;
+        if (buttons & (1 << 0)) state |= 1; // Left button
+        if (buttons & (1 << 1)) state |= 2; // Right button
+        if (buttons & (1 << 2)) state |= 4; // Middle button
+        return state;
+    }
+}
+
 } // namespace Gaze
 

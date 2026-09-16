@@ -68,6 +68,23 @@ GazeWindowRect gaze_web_get_window_rect(int window_index) {
     return rect;
 }
 
+GazeMousePoint gaze_web_get_mouse_position() {
+    GazeMousePoint pt;
+    pt.x = EM_ASM_DOUBLE({
+        return (window.__gaze_last_mouse_x !== undefined) ? window.__gaze_last_mouse_x : 0.0;
+    });
+    pt.y = EM_ASM_DOUBLE({
+        return (window.__gaze_last_mouse_y !== undefined) ? window.__gaze_last_mouse_y : 0.0;
+    });
+    return pt;
+}
+
+int64_t gaze_web_get_mouse_button_state() {
+    return EM_ASM_INT({
+        return (window.__gaze_last_mouse_buttons !== undefined) ? window.__gaze_last_mouse_buttons : 0;
+    });
+}
+
 } // namespace Gaze
 #else
 namespace Gaze {
@@ -90,6 +107,15 @@ GazeWindowRect gaze_web_get_window_rect(int window_index) {
     return rect;
 }
 
+GazeMousePoint gaze_web_get_mouse_position() {
+    return {0.0, 0.0};
+}
+
+int64_t gaze_web_get_mouse_button_state() {
+    return 0;
+}
+
 } // namespace Gaze
 #endif
+
 

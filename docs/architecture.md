@@ -184,3 +184,41 @@ flowchart TD
 - **`PowerAccumulator`**: A 2nd-order dynamical integrator ($\frac{dv}{dt} = A(P_{\text{target}} - P) - D v, \frac{dq}{dt} = v$) that handles dwell charging and decay with physical momentum. Absorbs natural $100\text{–}150\text{ms}$ micro-saccades and dropouts without discrete pause timers.
 - **Unified Infinite Margins**: Hitbox expansion (`margin_left`, `margin_right`, `margin_top`, `margin_bottom`) allows expanding target regions; setting margins to $\infty$ on $X$ or $Y$ creates full-width row or full-height column bands.
 - **Focus-Driven UI**: UI targets react to gaze via standard Godot `grab_focus()` rather than hijacking physical mouse hover coordinates.
+
+---
+
+## 7. GazeDisplayServer & Platform Windowing Abstraction
+
+To ensure mathematically consistent projection geometry and seamless mouse-gaze emulation, `godot-gaze` introduces `GazeDisplayServer` as an authoritative platform windowing and pointer abstraction.
+
+### 7.1. Architectural Rationale: Why Not Rely on Godot's `DisplayServer`?
+Godot's built-in `DisplayServer` contains platform-dependent inconsistencies regarding HiDPI scaling, coordinate spaces, and window decorations:
+- On macOS Retina, Godot's `DisplayServer.mouse_get_position()` scales cursor coordinates to physical device pixels (e.g. $2\times$), whereas window client dimensions and Cocoa view coordinates natively operate in logical points.
+- On Windows, `DisplayServer.window_get_position()` includes non-client window borders and drop shadows, offsetting the client drawing area.
+- On Web (HTML5), Godot reports internal WebGL canvas buffer dimensions rather than CSS layout geometry.
+
+Downstream tracking math (e.g., `ProjectionEngine`, `GazeServer`, and `MouseGazeEmulation`) requires a single, self-consistent coordinate model. Rather than scattering ad-hoc platform workarounds throughout consumers, `GazeDisplayServer` guarantees a strict contract backed by dedicated per-platform native implementations (`src/macos`, `src/windows`, `src/ios`, `src/android`, `src/web`, `src/native`).
+
+### 7.2. The Unified Coordinate Contract: Logical Display Pixels (`lpix`)
+All spatial and pointer queries on `GazeDisplayServer` operate strictly in **Logical Display Coordinates** (`lpix` / points / CSS pixels):
+* **`get_screen_size_pixels()`**: Display dimensions $(W_{\text{disp}}, H_{\text{disp}})_{\text{lpix}}$ in logical units.
+* **`get_window_rect_pixels()`**: Application window client rect $[x, y, w, h]_{\text{lpix}}$ relative to display top-left origin.
+* **`mouse_get_position()`**: OS cursor screen position $(x, y)_{\text{lpix}}$ relative to display top-left origin.
+* **`mouse_get_button_state()`**: Bitmask of pressed mouse buttons directly from the OS.
+* **`get_screen_scale()`**: Backing-store HiDPI scale factor $S = \text{ppix} / \text{lpix}$ ($2.0$ on Retina, $\text{DPI}/96$ on Windows, `devicePixelRatio` on Web).
+* **`get_pixel_pitch_mm()`**: Physical millimeters per logical pixel: $(W_{\text{mm}} / W_{\text{lpix}}, H_{\text{mm}} / H_{\text{lpix}})$.
+
+### 7.3. Platform Variance Matrix (`GazeDisplayServer` vs. Godot `DisplayServer`)
+
+| Platform | Query / Metric | Godot `DisplayServer` | `GazeDisplayServer` (Authoritative) | Variance & Design Rationale |
+| :--- | :--- | :--- | :--- | :--- |
+| **macOS** | `mouse_get_position()` | **Physical Pixels** (multiplies Cocoa `[NSEvent mouseLocation]` by `screen_scale`, e.g. $\times 2.0$) | **Logical Pixels (Points)** (Native `CGEventGetLocation` / `[NSEvent mouseLocation]` top-left) | **Major Divergence**: Godot scales mouse coordinates to physical device pixels, creating a $2\times$ offset against Cocoa window rects. `GazeDisplayServer` stays in points. |
+| **macOS** | `get_window_rect_pixels()` | **Physical Pixels** when HiDPI is enabled (`window_get_position()`, `window_get_size()`) | **Logical Pixels (Points)** (`contentRectForFrameRect` client area in points) | **Major Divergence**: Godot's position/size scale inconsistently and can include window frame decoration. `GazeDisplayServer` returns the exact client rect in points. |
+| **macOS** | `get_screen_size_pixels()` | **Physical Pixels** (`screen_get_size()`) | **Logical Pixels (Points)** (`CGDisplayModeGetWidth/Height`) | Matches the coordinate space of window rect and mouse position. |
+| **Windows** | `mouse_get_position()` | Physical or unscaled coords depending on DPI awareness mode | **Logical Pixels** (`GetCursorPos` normalized by $\text{DPI}/96.0$) | **DPI Divergence**: Guarantees scale-independent logical coordinates across multi-monitor setups with mixed DPI. |
+| **Windows** | `get_window_rect_pixels()` | Frame rect (includes non-client decorations / drop shadows) | **Logical Client Rect** (`GetClientRect` + `ClientToScreen` normalized by $\text{DPI}/96.0$) | **Divergence**: Godot includes window drop-shadows and borders; `GazeDisplayServer` measures the true client viewport. |
+| **Web** | `mouse_get_position()` | Canvas-relative or client coordinates depending on canvas CSS | **CSS Pixels** relative to screen origin | Consistent with browser `window.screen` geometry. |
+| **Web** | `get_window_rect_pixels()` | Internal WebGL canvas buffer pixels (`width`, `height`) | **CSS Pixels** (`canvas.getBoundingClientRect()`) | **Major Divergence**: Godot returns the WebGL backing store size; `GazeDisplayServer` returns layout position and size in CSS pixels. |
+| **iOS** | `get_screen_size_pixels()` / `window_rect` | Physical pixels or mixed points | **UIKit Points** (`UIScreen.bounds`, `UIWindow.bounds`) | Preserves 1:1 scale invariance with touch coordinates. |
+| **Android** | `get_screen_size_pixels()` / `window_rect` | Device physical pixels | **DIPs** (Density-Independent Pixels) | Consistent logical units across display densities. |
+

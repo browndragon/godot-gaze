@@ -108,7 +108,9 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     Vector2 &r_last_gaze_pos,
     Vector2 &r_last_screen_pos
 ) {
-    Vector2 mouse_pos = p_gds ? (p_gds->mouse_get_position() - Vector2(p_gds->get_window_rect_pixels().position)) : Vector2(0, 0);
+    Vector2 screen_mouse_pos = p_gds ? p_gds->mouse_get_position() : Vector2(0, 0);
+    Vector2 window_pos = p_gds ? Vector2(p_gds->get_window_rect_pixels().position) : Vector2(0, 0);
+    Vector2 mouse_pos = screen_mouse_pos - window_pos;
 
     Ref<GazeDeviceProfile> profile = p_profile;
     if (!profile.is_valid()) {
@@ -123,8 +125,9 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 
     Vector3 cam_offset = profile->get_camera_offset_mm();
 
-    float x_s = (mouse_pos.x / log_sz.x - 0.5f) * phys_sz.x;
-    float y_s = (mouse_pos.y / log_sz.y - 0.5f) * phys_sz.y;
+    // 3D camera target computed from SCREEN cursor position in mm relative to screen center:
+    float x_s = (screen_mouse_pos.x / log_sz.x - 0.5f) * phys_sz.x;
+    float y_s = (screen_mouse_pos.y / log_sz.y - 0.5f) * phys_sz.y;
 
     Vector3 target_cam(-(x_s - cam_offset.x), -(y_s + cam_offset.y), 0.0f);
     Vector3 eye_origin_cam(0.0f, 0.0f, -500.0f);
@@ -138,8 +141,11 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
     Vector2 mouse_canvas = mouse_pos;
     if (st && st->get_root()) {
-        mouse_canvas = st->get_root()->get_final_transform().affine_inverse().xform(mouse_pos);
+        double scale = p_gds ? p_gds->get_screen_scale() : 1.0;
+        if (scale <= 0.0) scale = 1.0;
+        mouse_canvas = st->get_root()->get_final_transform().affine_inverse().xform(mouse_pos * scale);
     }
+
 
     Vector2 blended_canvas_pos = mouse_canvas;
     Transform3D blended_head = mouse_head_xform;
@@ -184,8 +190,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     float dt = (r_last_event_time_usec > 0 && now_usec > r_last_event_time_usec) ? (float)(now_usec - r_last_event_time_usec) / 1000000.0f : 0.016667f;
     if (dt < 0.0001f) dt = 0.0001f;
 
-    Vector2 screen_pos = mouse_pos;
-    if (p_gds) screen_pos += Vector2(p_gds->get_window_rect_pixels().position);
+    Vector2 screen_pos = screen_mouse_pos;
 
     r_last_gaze_pos = blended_canvas_pos;
     r_last_screen_pos = screen_pos;

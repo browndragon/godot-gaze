@@ -22,5 +22,14 @@ GazeWindowRect gaze_fallback_get_window_rect(int window_index) {
     return rect;
 }
 
+GazeMousePoint gaze_fallback_get_mouse_position() {
+    return {0.0, 0.0};
+}
+
+int64_t gaze_fallback_get_mouse_button_state() {
+    return 0;
+}
+
 } // namespace Gaze
+
 

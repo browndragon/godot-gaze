@@ -14,27 +14,39 @@
 #include "../ios/gaze_display_ios.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_ios_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_ios_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_ios_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_ios_get_mouse_button_state
 #else
 #include "../macos/gaze_display_macos.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_macos_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_macos_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_macos_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_macos_get_mouse_button_state
 #endif
 #elif defined(_WIN32) || defined(WINDOWS_ENABLED)
 #include "../windows/gaze_display_windows.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_windows_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_windows_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_windows_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_windows_get_mouse_button_state
 #elif defined(__ANDROID__) || defined(ANDROID_ENABLED)
 #include "../android/gaze_display_android.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_android_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_android_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_android_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_android_get_mouse_button_state
 #elif defined(WEB_ENABLED)
 #include "../web/gaze_display_server_web.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_web_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_web_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_web_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_web_get_mouse_button_state
 #else
 #include "../native/gaze_display_fallback.hpp"
 #define NATIVE_GET_METRICS Gaze::gaze_fallback_get_display_metrics
 #define NATIVE_GET_WINDOW_RECT Gaze::gaze_fallback_get_window_rect
+#define NATIVE_GET_MOUSE_POSITION Gaze::gaze_fallback_get_mouse_position
+#define NATIVE_GET_MOUSE_BUTTONS Gaze::gaze_fallback_get_mouse_button_state
 #endif
 
 namespace godot {
@@ -49,6 +61,7 @@ void GazeDisplayServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_window_rect_pixels", "window"), &GazeDisplayServer::get_window_rect_pixels, DEFVAL(0));
     ClassDB::bind_method(D_METHOD("get_default_camera_offset_mm", "screen"), &GazeDisplayServer::get_default_camera_offset_mm, DEFVAL(-1));
     ClassDB::bind_method(D_METHOD("mouse_get_position"), &GazeDisplayServer::mouse_get_position);
+    ClassDB::bind_method(D_METHOD("get_window_mouse_position", "window"), &GazeDisplayServer::get_window_mouse_position, DEFVAL(0));
     ClassDB::bind_method(D_METHOD("mouse_get_button_state"), &GazeDisplayServer::mouse_get_button_state);
     ClassDB::bind_method(D_METHOD("parse_mouse_motion", "position", "relative", "velocity"), &GazeDisplayServer::parse_mouse_motion);
     ClassDB::bind_method(D_METHOD("parse_mouse_button", "button", "pressed", "position"), &GazeDisplayServer::parse_mouse_button);
@@ -180,17 +193,42 @@ Vector3 GazeDisplayServer::get_default_camera_offset_mm(int p_screen) const {
 }
 
 Vector2 GazeDisplayServer::mouse_get_position() const {
+    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
+        DisplayServer *ds = DisplayServer::get_singleton();
+        if (ds && ds->get_name() == "headless") {
+            return Vector2(0, 0);
+        }
+    }
+    Gaze::GazeMousePoint pt = NATIVE_GET_MOUSE_POSITION();
+    if (pt.x != 0.0 || pt.y != 0.0) {
+        return Vector2(pt.x, pt.y);
+    }
+    // Fallback if native returns (0,0) (e.g. headless or before cursor moves)
     DisplayServer *ds = nullptr;
     if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         ds = DisplayServer::get_singleton();
     }
     if (ds && ds->get_name() != "headless") {
-        return Vector2(ds->mouse_get_position());
+        Vector2i p = ds->mouse_get_position();
+        double scale = get_screen_scale();
+        if (scale > 0.0 && ds->get_name() == "macOS") {
+            return Vector2(p.x / scale, p.y / scale);
+        }
+        return Vector2(p.x, p.y);
     }
-    return Vector2(0, 0);
+    return Vector2(pt.x, pt.y);
+}
+
+Vector2 GazeDisplayServer::get_window_mouse_position(int p_window) const {
+    Rect2i win_rect = get_window_rect_pixels(p_window);
+    return mouse_get_position() - Vector2(win_rect.position.x, win_rect.position.y);
 }
 
 int64_t GazeDisplayServer::mouse_get_button_state() const {
+    int64_t native_buttons = NATIVE_GET_MOUSE_BUTTONS();
+    if (native_buttons != 0) {
+        return native_buttons;
+    }
     DisplayServer *ds = nullptr;
     if (Engine::get_singleton()->has_singleton("DisplayServer")) {
         ds = DisplayServer::get_singleton();
@@ -200,6 +238,7 @@ int64_t GazeDisplayServer::mouse_get_button_state() const {
     }
     return 0;
 }
+
 
 void GazeDisplayServer::parse_mouse_motion(const Vector2 &p_position, const Vector2 &p_relative, const Vector2 &p_velocity) {
     Input *input = Input::get_singleton();

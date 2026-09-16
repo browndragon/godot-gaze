@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace Gaze {
 
 /**
@@ -23,6 +25,15 @@ struct GazeWindowRect {
     int y = 0;
     int width = 0;
     int height = 0;
+};
+
+/**
+ * @struct GazeMousePoint
+ * @brief Represents position of mouse cursor on screen in logical pixels.
+ */
+struct GazeMousePoint {
+    double x = 0.0;
+    double y = 0.0;
 };
 
 } // namespace Gaze

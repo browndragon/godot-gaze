@@ -290,4 +290,84 @@ TEST_CASE("Mouse Emulation: Blink to Left Click State Machine")
     CHECK(click_release_events == 1);
 }
 
+TEST_CASE("Canvas Transforms: GazeDisplayServer Logical Coordinate Contract and Closed-Loop Emulation")
+{
+    // Screen: 14" MacBook Pro Retina (1512x982 logical points, scale 2.0, 301.214 x 195.63 mm)
+    double screen_scale = 2.0;
+    godot::Vector2 screen_size_lpix(1512.0, 982.0);
+    godot::Vector2 screen_size_mm(301.2141, 195.6298);
+    godot::Vector2 pixel_pitch_mm(screen_size_mm.x / screen_size_lpix.x, screen_size_mm.y / screen_size_lpix.y);
+
+    // Window: Centered window 576x324 points at (468, 319) logical offset
+    godot::Vector2 window_offset_lpix(468.0, 319.0);
+    godot::Vector2 window_size_lpix(576.0, 324.0);
+    godot::Vector2 render_target_size(1152.0, 648.0);
+    godot::Vector2 canvas_size(1152.0, 648.0);
+
+    godot::Transform2D final_xform(
+        godot::Vector2(render_target_size.x / canvas_size.x, 0.0),
+        godot::Vector2(0.0, render_target_size.y / canvas_size.y),
+        godot::Vector2(0.0, 0.0)
+    );
+    godot::Transform2D canvas_inv = final_xform.affine_inverse();
+
+    // 1. Mouse cursor at (905, 564) in display logical coordinates
+    godot::Vector2 mouse_screen_lpix(905.0, 564.0);
+
+    // In GazeDisplayServer's unified contract, window mouse position is strictly logical:
+    godot::Vector2 mouse_win_lpix = mouse_screen_lpix - window_offset_lpix; // (437.0, 245.0)
+    CHECK(mouse_win_lpix.x == doctest::Approx(437.0));
+    CHECK(mouse_win_lpix.y == doctest::Approx(245.0));
+
+    // Canvas position: (mouse_win_lpix * screen_scale) inverted through final_xform
+    godot::Vector2 mouse_canvas = canvas_inv.xform(mouse_win_lpix * screen_scale);
+    CHECK(mouse_canvas.x == doctest::Approx(874.0));
+    CHECK(mouse_canvas.y == doctest::Approx(490.0));
+    CHECK(mouse_canvas.x == doctest::Approx(mouse_win_lpix.x * screen_scale));
+    CHECK(mouse_canvas.y == doctest::Approx(mouse_win_lpix.y * screen_scale));
+
+    // 2. Closed-Loop 3D Gaze Ray synthesis from screen mouse position
+    double dx_mm = (mouse_screen_lpix.x / screen_size_lpix.x - 0.5) * screen_size_mm.x; // +29.6946 mm
+    double dy_mm = (mouse_screen_lpix.y / screen_size_lpix.y - 0.5) * screen_size_mm.y; // +14.5367 mm
+    Gaze::GodotCameraVector3 target_cam(-dx_mm, -dy_mm, 0.0);
+    Gaze::GodotCameraVector3 eye_origin(0.0, 0.0, -500.0);
+    Gaze::GodotCameraVector3 gaze_dir = (target_cam - eye_origin).normalized();
+
+    // 3. Project ray back to window coordinates using ProjectionEngine
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(screen_size_lpix.x, screen_size_lpix.y));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(screen_size_mm.x, screen_size_mm.y));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
+    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(window_offset_lpix.x, window_offset_lpix.y));
+
+    Gaze::GodotDisplayVector2 projected_win_px;
+    bool projected = engine.project_gaze(eye_origin, gaze_dir, projected_win_px);
+    CHECK(projected == true);
+    CHECK(projected_win_px.x == doctest::Approx(mouse_win_lpix.x).epsilon(0.001));
+    CHECK(projected_win_px.y == doctest::Approx(mouse_win_lpix.y).epsilon(0.001));
+
+    // Convert projected window pixels to canvas
+    godot::Vector2 projected_canvas = canvas_inv.xform(godot::Vector2(projected_win_px.x, projected_win_px.y) * screen_scale);
+    CHECK(projected_canvas.x == doctest::Approx(mouse_canvas.x).epsilon(0.001));
+    CHECK(projected_canvas.y == doctest::Approx(mouse_canvas.y).epsilon(0.001));
+
+    // Round-trip error must be virtually zero
+    double round_trip_error = (projected_canvas - mouse_canvas).length();
+    CHECK(round_trip_error < 1e-4);
+
+    // 4. Red Phase / Flaw Verification & Signal Separation:
+    // Flaw A: Mixing Godot DisplayServer physical mouse (1810, 1128) with Cocoa logical window offset (468, 319)
+    godot::Vector2 flawed_physical_mouse(1810.0, 1128.0);
+    godot::Vector2 flawed_win_pos = flawed_physical_mouse - window_offset_lpix; // (1342.0, 809.0)
+    double unit_mismatch_error = (flawed_win_pos - mouse_win_lpix).length();
+    CHECK(unit_mismatch_error == doctest::Approx(1062.29).epsilon(0.01));
+    CHECK(unit_mismatch_error >= 0.50); // Clear signal separation
+
+    // Flaw B: Treating window-relative mouse (437, 245) as screen-relative coordinates without window offset
+    double dx_flawed_mm = (mouse_win_lpix.x / screen_size_lpix.x - 0.5) * screen_size_mm.x; // -63.55 mm
+    double coordinate_space_flaw_delta = std::abs(dx_mm - dx_flawed_mm);
+    CHECK(coordinate_space_flaw_delta == doctest::Approx(93.24).epsilon(0.01));
+    CHECK(coordinate_space_flaw_delta >= 0.50); // Clear signal separation
+}
+
 

@@ -79,6 +79,13 @@ public:
     virtual Vector2 mouse_get_position() const;
 
     /**
+     * @brief Retrieve the current mouse cursor position relative to the application window in logical pixels.
+     * @param p_window Window index.
+     * @return Window mouse position Vector2(x, y).
+     */
+    virtual Vector2 get_window_mouse_position(int p_window = 0) const;
+
+    /**
      * @brief Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.
      * @return Bitmask of pressed mouse buttons.
      */

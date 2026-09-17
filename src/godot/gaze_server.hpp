@@ -7,6 +7,7 @@
 #include <godot_cpp/variant/transform3d.hpp>
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/variant/vector3.hpp>
+#include <godot_cpp/variant/rect2.hpp>
 #include <godot_cpp/classes/image.hpp>
 #include <godot_cpp/classes/image_texture.hpp>
 #include <godot_cpp/templates/safe_refcount.hpp>
@@ -123,6 +124,11 @@ public:
     PackedVector2Array get_face_landmarks() const;
     PackedVector2Array get_debug_landmarks() const;
     void set_face_landmarks_2d(const PackedVector2Array &p_landmarks);
+
+    Rect2 get_face_bbox() const;
+    void set_face_bbox(const Rect2 &p_bbox);
+    bool is_temporal_tracking() const;
+    void set_is_temporal_tracking(bool p_temporal);
 
     PackedVector3Array get_face_model_points() const;
 

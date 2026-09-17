@@ -278,6 +278,7 @@ func _init():
 		print("PASS: Physical camera device 0 active.")
 		var cs = Engine.get_singleton("CameraServer")
 		if cs:
+			cs.set_monitoring_feeds(true)
 			var feeds = cs.feeds()
 			print("CameraServer Feed Count: ", feeds.size())
 			for f in feeds:

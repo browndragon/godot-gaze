@@ -64,7 +64,7 @@ public:
     /**
      * @brief Get the VisionServer global singleton instance.
      */
-    static VisionServer *get_singleton() { return singleton; }
+    static VisionServer *get_singleton();
 
     /**
      * @brief Retrieve the raw acceleration vector measured by hardware sensors (in m/s^2).

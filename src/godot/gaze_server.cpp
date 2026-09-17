@@ -1,6 +1,7 @@
 #include "gaze_server.hpp"
 #include "gaze_display_server.hpp"
 #include "vision_server.hpp"
+#include "register_types.hpp"
 #include "log.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -49,6 +50,8 @@ struct GazeServerImpl {
         Gaze::GodotCameraVector3 head_pose_translation;
         Gaze::GodotCameraVector3 head_pose_rotation;
         PackedVector2Array landmarks_2d;
+        Rect2 face_bbox;
+        bool is_temporal_tracking = false;
         float roll_hint_rad = 0.0f;
         bool auto_roll_enabled = true;
     } face;
@@ -86,6 +89,9 @@ using EyeInfo = GazeServerImpl::EyeInfo;
 GazeServer *GazeServer::singleton = nullptr;
 
 GazeServer *GazeServer::get_singleton() {
+    if (!singleton) {
+        setup_gaze_singletons();
+    }
     return singleton;
 }
 
@@ -127,6 +133,10 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_face_landmarks"), &GazeServer::get_face_landmarks);
     ClassDB::bind_method(D_METHOD("get_debug_landmarks"), &GazeServer::get_debug_landmarks);
     ClassDB::bind_method(D_METHOD("set_face_landmarks_2d", "landmarks"), &GazeServer::set_face_landmarks_2d);
+    ClassDB::bind_method(D_METHOD("get_face_bbox"), &GazeServer::get_face_bbox);
+    ClassDB::bind_method(D_METHOD("set_face_bbox", "bbox"), &GazeServer::set_face_bbox);
+    ClassDB::bind_method(D_METHOD("is_temporal_tracking"), &GazeServer::is_temporal_tracking);
+    ClassDB::bind_method(D_METHOD("set_is_temporal_tracking", "temporal"), &GazeServer::set_is_temporal_tracking);
     ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
     ClassDB::bind_method(D_METHOD("set_roll_hint", "roll_hint_rad"), &GazeServer::set_roll_hint);
     ClassDB::bind_method(D_METHOD("get_roll_hint"), &GazeServer::get_roll_hint);
@@ -604,6 +614,8 @@ void GazeServer::set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p
         impl->face.relative_transform = Transform3D(b, p_translation);
     } else {
         impl->face.relative_transform = Transform3D();
+        impl->face.face_bbox = Rect2();
+        impl->face.is_temporal_tracking = false;
     }
 }
 
@@ -613,6 +625,10 @@ void GazeServer::set_face_transform(const Transform3D &p_transform, const Vector
     impl->face.head_pose_translation = Gaze::GodotCameraVector3(p_transform.origin.x, p_transform.origin.y, p_transform.origin.z);
     impl->face.head_pose_rotation = Gaze::GodotCameraVector3(p_rotation.x, p_rotation.y, p_rotation.z);
     impl->face.relative_transform = p_detected ? p_transform : Transform3D();
+    if (!p_detected) {
+        impl->face.face_bbox = Rect2();
+        impl->face.is_temporal_tracking = false;
+    }
 }
 
 PackedVector2Array GazeServer::get_face_landmarks_2d() const {
@@ -631,6 +647,26 @@ PackedVector2Array GazeServer::get_debug_landmarks() const {
 void GazeServer::set_face_landmarks_2d(const PackedVector2Array &p_landmarks) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->face.landmarks_2d = p_landmarks;
+}
+
+Rect2 GazeServer::get_face_bbox() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return impl->face.face_bbox;
+}
+
+void GazeServer::set_face_bbox(const Rect2 &p_bbox) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.face_bbox = p_bbox;
+}
+
+bool GazeServer::is_temporal_tracking() const {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    return impl->face.is_temporal_tracking;
+}
+
+void GazeServer::set_is_temporal_tracking(bool p_temporal) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.is_temporal_tracking = p_temporal;
 }
 
 PackedVector3Array GazeServer::get_face_model_points() const {
@@ -1211,6 +1247,14 @@ void GazeServer::trigger_process() {
 
             gaze_frame->set_face_detected(completed_data->face_detected);
             gaze_frame->set_gaze_success(completed_data->gaze_success);
+            Rect2 face_bbox(
+                completed_data->face_bbox_cam.x,
+                completed_data->face_bbox_cam.y,
+                completed_data->face_bbox_cam.width,
+                completed_data->face_bbox_cam.height
+            );
+            gaze_frame->set_face_bbox(face_bbox);
+            gaze_frame->set_is_temporal_tracking(completed_data->is_temporal_tracking);
             gaze_frame->set_left_eye_openness(completed_data->left_eye_openness);
             gaze_frame->set_right_eye_openness(completed_data->right_eye_openness);
             gaze_frame->set_timestamp(completed_data->timestamp);
@@ -1251,6 +1295,8 @@ void GazeServer::trigger_process() {
                 Transform3D godot_xform(godot_basis, head_t);
                 set_face_transform(godot_xform, head_r, true);
                 set_face_landmarks_2d(lm_array);
+                set_face_bbox(face_bbox);
+                set_is_temporal_tracking(completed_data->is_temporal_tracking);
                 set_eye_openness(completed_data->left_eye_openness, completed_data->right_eye_openness);
                 set_eye_crops(gaze_frame->get_left_eye_crop(), gaze_frame->get_right_eye_crop());
 
@@ -1260,6 +1306,8 @@ void GazeServer::trigger_process() {
             } else {
                 set_face_transform(Transform3D(), Vector3(), false);
                 set_face_landmarks_2d(PackedVector2Array());
+                set_face_bbox(Rect2());
+                set_is_temporal_tracking(false);
                 set_eye_openness(0.0f, 0.0f);
                 set_eye_crops(Ref<Image>(), Ref<Image>());
                 impl->eye.gaze_origin_cam = Vector3();

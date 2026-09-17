@@ -4,6 +4,7 @@
 #include <godot_cpp/variant/packed_byte_array.hpp>
 #include <godot_cpp/variant/vector3.hpp>
 #include <godot_cpp/variant/vector2i.hpp>
+#include <godot_cpp/variant/rect2.hpp>
 
 namespace godot {
 
@@ -23,6 +24,8 @@ private:
     double timestamp = 0.0;
     bool face_detected = false;
     bool gaze_success = false;
+    bool temporal_tracking = false;
+    Rect2 face_bbox;
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
 
@@ -65,6 +68,12 @@ public:
 
     void set_face_detected(bool d) { face_detected = d; }
     bool get_face_detected() const { return face_detected; }
+
+    void set_face_bbox(const Rect2 &b) { face_bbox = b; }
+    Rect2 get_face_bbox() const { return face_bbox; }
+
+    void set_is_temporal_tracking(bool t) { temporal_tracking = t; }
+    bool is_temporal_tracking() const { return temporal_tracking; }
 
     void set_gaze_success(bool s) { gaze_success = s; }
     bool get_gaze_success() const { return gaze_success; }

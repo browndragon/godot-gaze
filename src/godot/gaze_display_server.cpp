@@ -1,4 +1,5 @@
 #include "gaze_display_server.hpp"
+#include "register_types.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/input.hpp>
@@ -68,6 +69,9 @@ void GazeDisplayServer::_bind_methods() {
 }
 
 GazeDisplayServer *GazeDisplayServer::get_singleton() {
+    if (!singleton) {
+        setup_gaze_singletons();
+    }
     Engine *engine = Engine::get_singleton();
     if (engine && engine->has_singleton("GazeDisplayServer")) {
         return Object::cast_to<GazeDisplayServer>(engine->get_singleton("GazeDisplayServer"));

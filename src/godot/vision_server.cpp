@@ -11,10 +11,18 @@
 #endif
 
 #include "../core/log.hpp"
+#include "register_types.hpp"
 
 namespace godot {
 
 VisionServer *VisionServer::singleton = nullptr;
+
+VisionServer *VisionServer::get_singleton() {
+    if (!singleton) {
+        setup_gaze_singletons();
+    }
+    return singleton;
+}
 
 void VisionServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("camera_create"), &VisionServer::camera_create);

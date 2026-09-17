@@ -387,9 +387,13 @@ namespace Gaze
             // 2. Landmarks span eyebrows to chin; head center (including forehead) is ~0.15*lm_h above box center.
             GodotCameraImageVector2 target_center_work(lm_box_cx, lm_box_cy - 0.15 * lm_h);
             GodotCameraImageVector2 target_center_cam = rotate_point_2d(target_center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
+            
+            float target_w = static_cast<float>(lm_w * 1.35f);
+            float target_h = static_cast<float>(lm_h * 1.35f);
+
             tracking_face_center_cam = target_center_cam;
-            tracking_face_w = static_cast<float>(lm_w);
-            tracking_face_h = static_cast<float>(lm_h * 1.40f);
+            tracking_face_w = target_w;
+            tracking_face_h = target_h;
 
             face_found = true;
             last_tvec = tvec;
@@ -467,9 +471,11 @@ namespace Gaze
                                        tracking_face_w, tracking_face_h);
             data->face_detected = true;
             data->face_score = 1.0f;
+            data->is_temporal_tracking = true;
             return true;
         }
 
+        data->is_temporal_tracking = false;
         if (!face_detector) return false;
         YuNetResult yunet_res;
         bool success = face_detector->process_frame(working_frame, yunet_res, 0.0f);
@@ -699,6 +705,19 @@ namespace Gaze
             data->eye_crops.left_eye_center_cam = R_roll.transform(data->eye_crops.left_eye_center_cam);
             data->eye_crops.right_eye_center_cam = R_roll.transform(data->eye_crops.right_eye_center_cam);
         }
+
+        // 4. Unroll Face Bounding Box to original camera pixel coordinates
+        GodotCameraImageVector2 center_work(data->face_bbox.x + data->face_bbox.width * 0.5f,
+                                            data->face_bbox.y + data->face_bbox.height * 0.5f);
+        GodotCameraImageVector2 center_cam = center_work;
+        if (std::abs(data->roll_hint_rad) > 1e-4f)
+        {
+            center_cam = rotate_point_2d(center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
+        }
+        data->face_bbox_cam = GazeRect(center_cam.x - data->face_bbox.width * 0.5f,
+                                       center_cam.y - data->face_bbox.height * 0.5f,
+                                       data->face_bbox.width,
+                                       data->face_bbox.height);
     }
 
 } // namespace Gaze

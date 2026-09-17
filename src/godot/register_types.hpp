@@ -14,5 +14,6 @@ namespace godot {
 
 void initialize_gaze_module(ModuleInitializationLevel p_level);
 void uninitialize_gaze_module(ModuleInitializationLevel p_level);
+void setup_gaze_singletons();
 
 } // namespace godot

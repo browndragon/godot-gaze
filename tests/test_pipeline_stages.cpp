@@ -381,3 +381,48 @@ TEST_CASE("Pipeline Multi-Frame Landmark Tracking Stability") {
     // Convergence check: frame-to-frame delta must settle under 2.0px
     CHECK(final_frame_to_frame_delta < 2.0);
 }
+
+TEST_CASE("Pipeline Multi-Frame Landmark Tracking With Dynamic Roll") {
+    std::string yunet_path = get_model_path("project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort");
+    std::string gaze_path = get_model_path("project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort");
+    std::string eye_state_path = get_model_path("project/addons/godot-gaze/models/open_closed_eye.ort");
+    std::string lm_path = get_model_path("project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort");
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_roll_right.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+    GazeFrameData d;
+    d.camera_raw_bgr = img.data;
+    d.camera_width = img.width;
+    d.camera_height = img.height;
+    d.timestamp = 1.0;
+    d.auto_roll_enabled = true;
+    d.roll_hint_rad = 0.0f;
+
+    // Frame 0: Baseline YuNet discovery
+    pipeline.process_frame_synchronous(&d);
+    REQUIRE(d.face_detected == true);
+    REQUIRE(d.has_landmarks_2d == true);
+    float base_w = d.face_bbox.width;
+    float base_h = d.face_bbox.height;
+
+    // Track 15 successive frames with auto-roll enabled
+    for (int frame = 1; frame <= 15; ++frame) {
+        d.timestamp = 1.0 + frame * (1.0 / 60.0);
+        pipeline.process_frame_synchronous(&d);
+
+        CHECK_MESSAGE(d.face_detected == true, "Face tracking dropped on frame " << frame);
+        CHECK_MESSAGE(d.has_landmarks_2d == true, "Landmarks lost on frame " << frame);
+
+        // Aspect and scale stability invariant: bounding box width and height must not collapse
+        CHECK_MESSAGE(d.face_bbox.width >= base_w * 0.90f,
+                      "Bbox width collapsed on frame " << frame << ": " << d.face_bbox.width << " < " << (base_w * 0.90f));
+        CHECK_MESSAGE(d.face_bbox.height >= base_h * 0.90f,
+                      "Bbox height collapsed on frame " << frame << ": " << d.face_bbox.height << " < " << (base_h * 0.90f));
+    }
+}
+

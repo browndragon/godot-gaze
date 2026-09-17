@@ -372,7 +372,7 @@ godot_windowed_run = env.Command(
     "build/tests/logs/tests.godot.windowed.log",
     [library],
     Action(run_command_and_log, varlist=["TEST_CMD"]),
-    TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd"]
+    TEST_CMD=["./scripts/godot.sh", "--no-headless", "--rendering-method", "mobile", "-s", "addons/godot-gaze/tests/windowed_test.gd", "--mock-camera"]
 )
 env.AlwaysBuild(godot_windowed_run)
 windowed_test_nodes.append(godot_windowed_run)

@@ -139,6 +139,9 @@ FINAL_ARGS+=("--path" "$PROJECT_PATH")
 # 2. Headless mode
 if [[ "$HEADLESS" == "true" ]]; then
     FINAL_ARGS+=("--headless")
+    if [[ ! " ${GODOT_ARGS[*]:-} " =~ " --native-camera " && ! " ${GODOT_ARGS[*]:-} " =~ " --real-camera " ]]; then
+        export GAZE_VISION_DRIVER=mock
+    fi
 fi
 
 # 3. Script flag precedence (-s arg, --notest, or default to GUT)

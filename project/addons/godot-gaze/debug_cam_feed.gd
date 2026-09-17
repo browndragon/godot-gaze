@@ -194,6 +194,15 @@ func update_diagnostics_ui() -> void:
 		lines.append("Face Tracked: %s" % face_tracked_text)
 
 		if is_face_detected:
+			var is_temporal = gs.is_temporal_tracking() if gs.has_method("is_temporal_tracking") else false
+			var face_bbox = gs.get_face_bbox() if gs.has_method("get_face_bbox") else Rect2()
+			var roll_hint_rad = gs.get_roll_hint() if gs.has_method("get_roll_hint") else 0.0
+
+			var tracker_mode_text = "[color=green]Temporal ROI[/color]" if is_temporal else "[color=yellow]YuNet Discovery[/color]"
+			lines.append("Tracker Mode: %s" % tracker_mode_text)
+			if face_bbox.size.x > 0 and face_bbox.size.y > 0:
+				lines.append("Face ROI (px): [color=yellow](%.0f, %.0f) - %.0fx%.0f[/color]" % [face_bbox.position.x, face_bbox.position.y, face_bbox.size.x, face_bbox.size.y])
+
 			var head_pos = ev.head_transform.origin
 			var head_rot = ev.head_transform.basis.get_euler() * (180.0 / PI)
 			var head_fwd = -ev.head_transform.basis.z.normalized()
@@ -201,6 +210,7 @@ func update_diagnostics_ui() -> void:
 			var gaze_dir = -ev.eye_transform.basis.z.normalized()
 			lines.append("Head Trans (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [head_pos.x, head_pos.y, head_pos.z])
 			lines.append("Head Rot (deg): [color=yellow](P:%.1f, Y:%.1f, R:%.1f)[/color]" % [head_rot.x, head_rot.y, -head_rot.z])
+			lines.append("Roll (Hint / Solved): [color=yellow]%.1f° / %.1f°[/color]" % [rad_to_deg(roll_hint_rad), -head_rot.z])
 			lines.append("Head Forward: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [head_fwd.x, head_fwd.y, head_fwd.z])
 			lines.append("Eye Origin (mm): [color=yellow](%.1f, %.1f, %.1f)[/color]" % [eye_orig.x, eye_orig.y, eye_orig.z])
 			lines.append("Gaze Direction: [color=yellow](%.3f, %.3f, %.3f)[/color]" % [gaze_dir.x, gaze_dir.y, gaze_dir.z])
@@ -310,6 +320,13 @@ func _on_copy_button_pressed():
 			data["gaze_origin_mm"] = [eye_orig.x, eye_orig.y, eye_orig.z]
 			var gaze_dir = -ev.eye_transform.basis.z.normalized()
 			data["gaze_direction"] = [gaze_dir.x, gaze_dir.y, gaze_dir.z]
+		if gs.has_method("get_face_bbox"):
+			var fb = gs.get_face_bbox()
+			data["face_bbox_px"] = [fb.position.x, fb.position.y, fb.size.x, fb.size.y]
+		if gs.has_method("is_temporal_tracking"):
+			data["is_temporal_tracking"] = gs.is_temporal_tracking()
+		if gs.has_method("get_roll_hint"):
+			data["roll_hint_rad"] = gs.get_roll_hint()
 		if gs.has_method("get_pipeline_stage_timings"):
 			data["pipeline_stage_timings"] = gs.get_pipeline_stage_timings()
 
@@ -349,13 +366,27 @@ func _perform_drawing():
 	var gs = Engine.get_singleton("GazeServer")
 	if not gs: return
 	var ev = gs.get_most_recent_event()
-	if not (ev is InputEventGaze) or not ev.is_face_tracked(): return
+	if not (ev is InputEventGaze) or not ev.is_face_tracked():
+		if gs.is_tracking_active():
+			var screen_cam_rect = Rect2(rect.global_position + drawn_rect.position - active_canvas.global_position, drawn_rect.size)
+			gd_draw_rect(screen_cam_rect, Color(1.0, 0.2, 0.2, 0.4), false, 2.0)
+		return
 	var xform = ev.head_transform
 	var landmarks_2d = gs.get_face_landmarks()
 	var raw_gaze = -ev.eye_transform.basis.z
 
 	if abs(xform.origin.z) <= 0.01:
 		return
+
+	# Draw face ROI bounding box (Green for temporal ROI, Amber for YuNet full-frame)
+	var face_bbox = gs.get_face_bbox() if gs.has_method("get_face_bbox") else Rect2()
+	var is_temporal = gs.is_temporal_tracking() if gs.has_method("is_temporal_tracking") else false
+	if face_bbox.size.x > 0.0 and face_bbox.size.y > 0.0:
+		var tl = Vector2(face_bbox.position.x * drawn_rect.size.x / img_w, face_bbox.position.y * drawn_rect.size.y / img_h) + drawn_rect.position
+		var sz = Vector2(face_bbox.size.x * drawn_rect.size.x / img_w, face_bbox.size.y * drawn_rect.size.y / img_h)
+		var screen_bbox = Rect2(rect.global_position + tl - active_canvas.global_position, sz)
+		var bbox_col = Color(0.2, 1.0, 0.2, 0.9) if is_temporal else Color(1.0, 0.75, 0.1, 0.9)
+		gd_draw_rect(screen_bbox, bbox_col, false, 2.0)
 
 	var drawn_pts = []
 	if not landmarks_2d.is_empty() and landmarks_2d.size() == 35:
@@ -499,3 +530,7 @@ func gd_draw_circle(pos: Vector2, radius: float, color: Color):
 func gd_draw_line(from: Vector2, to: Vector2, color: Color, width: float):
 	if active_canvas:
 		active_canvas.draw_line(from, to, color, width)
+
+func gd_draw_rect(rect: Rect2, color: Color, filled: bool = false, width: float = -1.0):
+	if active_canvas:
+		active_canvas.draw_rect(rect, color, filled, width)

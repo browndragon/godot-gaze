@@ -328,7 +328,7 @@ TEST_CASE("Physical End-to-End Screen Gaze Directional Invariants")
         crops.face_detected = true;
         crops.head_pose_translation = tvec;
         crops.head_pose_rotation = rvec;
-        extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks_35, crops.right_eye_data, crops.left_eye_data, 1.5f);
+        extract_dense_eye_crops_60x60(frame.data, frame.width, frame.height, landmarks_35, crops.right_eye_data, crops.left_eye_data, 1.8f);
 
         Gaze::OpenVINOGazeVector3 raw_gaze_dir_cam;
         if (!gaze_model.estimate_raw_gaze(crops, raw_gaze_dir_cam)) {

@@ -39,6 +39,8 @@ struct GazeFrameData {
     bool is_temporal_tracking = false;
     float face_score = 0.0f;
     float eye_box_sz = 0.0f;
+    float right_eye_box_sz = 0.0f;
+    float left_eye_box_sz = 0.0f;
     std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> internal_landmarks_working_px;
     EyeCrops eye_crops;
 

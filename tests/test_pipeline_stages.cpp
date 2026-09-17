@@ -426,3 +426,38 @@ TEST_CASE("Pipeline Multi-Frame Landmark Tracking With Dynamic Roll") {
     }
 }
 
+TEST_CASE("Pipeline Stage 5: Independent Eye Bounding Box Sizing on Yawed Fixture") {
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_yaw_left_roll_left.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+    GazeFrameData d;
+    d.camera_raw_bgr = img.data;
+    d.camera_width = img.width;
+    d.camera_height = img.height;
+    d.timestamp = 1.0;
+    d.auto_roll_enabled = true;
+    d.roll_hint_rad = 0.0f;
+
+    pipeline.process_frame_synchronous(&d);
+    REQUIRE(d.face_detected == true);
+    REQUIRE(d.has_landmarks_2d == true);
+
+    // Verify independent per-eye bounding box sizes
+    CHECK(d.right_eye_box_sz >= 24.0f);
+    CHECK(d.left_eye_box_sz >= 24.0f);
+    // On yawed face, the two eyes undergo perspective foreshortening and have distinct widths (>= 5px difference)
+    CHECK(std::abs(d.right_eye_box_sz - d.left_eye_box_sz) >= 5.0f);
+    // eye_box_sz preserves the max for backward compatibility
+    CHECK(d.eye_box_sz == std::max(d.right_eye_box_sz, d.left_eye_box_sz));
+}
+
+

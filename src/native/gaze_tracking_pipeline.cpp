@@ -574,8 +574,12 @@ namespace Gaze
         float l_dy = static_cast<float>(data->internal_landmarks_working_px[2].y - data->internal_landmarks_working_px[3].y);
         float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
 
-        float eye_box_sz = std::max({24.0f, r_w * 1.8f, l_w * 1.8f});
-        data->eye_box_sz = eye_box_sz;
+        // Sizing per OpenVINO ADAS specification: scale factor 1.8x based on individual canthi distance
+        float r_box_sz = std::max(24.0f, r_w * 1.8f);
+        float l_box_sz = std::max(24.0f, l_w * 1.8f);
+        data->right_eye_box_sz = r_box_sz;
+        data->left_eye_box_sz = l_box_sz;
+        data->eye_box_sz = std::max(r_box_sz, l_box_sz);
 
         data->eye_crops.face_detected = true;
         data->eye_crops.head_pose_translation = tvec;
@@ -591,24 +595,24 @@ namespace Gaze
         {
             crop_and_resize_bgr_with_unroll(
                 data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
-                r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                r_cx - r_box_sz * 0.5f, r_cy - r_box_sz * 0.5f, r_box_sz, r_box_sz,
                 data->roll_hint_rad,
                 data->eye_crops.right_eye_data, 60, 60);
 
             crop_and_resize_bgr_with_unroll(
                 data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
-                l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                l_cx - l_box_sz * 0.5f, l_cy - l_box_sz * 0.5f, l_box_sz, l_box_sz,
                 data->roll_hint_rad,
                 data->eye_crops.left_eye_data, 60, 60);
         }
         else
         {
             crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                                r_cx - eye_box_sz * 0.5f, r_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                                r_cx - r_box_sz * 0.5f, r_cy - r_box_sz * 0.5f, r_box_sz, r_box_sz,
                                 data->eye_crops.right_eye_data, 60, 60);
 
             crop_and_resize_bgr(working_frame.data, working_frame.width, working_frame.height,
-                                l_cx - eye_box_sz * 0.5f, l_cy - eye_box_sz * 0.5f, eye_box_sz, eye_box_sz,
+                                l_cx - l_box_sz * 0.5f, l_cy - l_box_sz * 0.5f, l_box_sz, l_box_sz,
                                 data->eye_crops.left_eye_data, 60, 60);
         }
 

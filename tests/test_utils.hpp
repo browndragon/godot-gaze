@@ -61,7 +61,7 @@ namespace GazeTest
         const uint8_t *frame_bgr, int width, int height,
         const std::vector<Gaze::GodotCameraImageVector2> &landmarks_35,
         uint8_t *out_right_crop_bgr, uint8_t *out_left_crop_bgr,
-        float scale_factor = 1.5f)
+        float scale_factor = 1.8f)
     {
         // In OpenVINO ADAS 35-point landmarks:
         // pts 0..1 = Image Left Eye (Anatomical Right Eye)
@@ -78,8 +78,8 @@ namespace GazeTest
         float l_dy = landmarks_35[2].y - landmarks_35[3].y;
         float l_w = std::sqrt(l_dx * l_dx + l_dy * l_dy);
 
-        float r_box_s = std::max(20.0f, r_w * scale_factor);
-        float l_box_s = std::max(20.0f, l_w * scale_factor);
+        float r_box_s = std::max(24.0f, r_w * scale_factor);
+        float l_box_s = std::max(24.0f, l_w * scale_factor);
 
         Gaze::crop_and_resize_bgr(
             frame_bgr, width, height,

@@ -137,9 +137,20 @@ TEST_CASE("Phase 5: OpenVINO Gaze Estimation on Benchmark Suite")
     REQUIRE(ok_nl_er);
     std::cout << "[Gaze Suite] self_noseleft_eyesright.jpg -> Gaze Vector: (" << gaze_noseleft_eyesright.x << ", " << gaze_noseleft_eyesright.y << ", " << gaze_noseleft_eyesright.z << ")\n";
 
+    Gaze::GodotCameraVector3 gaze_noseright_eyesleft;
+    bool ok_nr_el = process_image("self_noseright_eyesleft.jpg", gaze_noseright_eyesleft);
+    REQUIRE(ok_nr_el);
+    std::cout << "[Gaze Suite] self_noseright_eyesleft.jpg -> Gaze Vector: (" << gaze_noseright_eyesleft.x << ", " << gaze_noseright_eyesleft.y << ", " << gaze_noseright_eyesleft.z << ")\n";
+
     // Godot Camera Space: +x = viewer left (camera right / display left), -x = viewer right (camera left / display right)
-    // Decoupled: Eyes looking display right must produce negative X component in Godot Camera Space
+    // 1. Right gaze dynamic range: looking right must produce strong negative X (v_x < -0.30)
+    CHECK(gaze_right.x < -0.30);
+
+    // 2. Decoupled: Eyes looking display right must produce negative X component in Godot Camera Space
     CHECK(gaze_noseleft_eyesright.x < 0.0);
+
+    // 3. Decoupled: Eyes looking display left (even when head turned right) must NOT produce negative X
+    CHECK(gaze_noseright_eyesleft.x > -0.10);
 }
 
 TEST_CASE("Eye Crop Routing Empirical Experiment: Standard vs Swapped")

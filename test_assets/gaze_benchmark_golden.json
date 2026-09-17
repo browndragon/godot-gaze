@@ -6,171 +6,171 @@
     "nose_mm": "NO_FACE"
   },
   "eyes_anatomical_left_wink.jpg": {
-    "gaze_mm": "(-56.8,83.5)",
+    "gaze_mm": "(-162.0,142.2)",
     "head_pos_mm": "(10.0,-17.0,-448.7)",
     "head_rot_deg": "(9.6,171.5,5.0)",
     "nose_mm": "(63.8,-53.5)"
   },
   "eyes_anatomical_right_wink.jpg": {
-    "gaze_mm": "(-14.4,137.8)",
+    "gaze_mm": "(-134.0,129.0)",
     "head_pos_mm": "(16.6,-14.4,-448.7)",
     "head_rot_deg": "(10.5,178.1,1.2)",
     "nose_mm": "(-0.0,-68.5)"
   },
   "eyes_both_open.jpg": {
-    "gaze_mm": "(-20.2,-18.6)",
+    "gaze_mm": "(-51.1,-12.2)",
     "head_pos_mm": "(16.8,-20.4,-453.0)",
     "head_rot_deg": "(9.5,178.6,1.2)",
     "nose_mm": "(-3.8,-55.5)"
   },
   "eyes_both_wink.jpg": {
-    "gaze_mm": "(-295.5,283.0)",
+    "gaze_mm": "(135.7,198.6)",
     "head_pos_mm": "(18.2,-18.8,-454.3)",
     "head_rot_deg": "(11.9,178.7,0.5)",
     "nose_mm": "(-7.2,-77.3)"
   },
   "eyes_tilted_anatomical_right_wink.jpg": {
-    "gaze_mm": "(268.7,79.4)",
+    "gaze_mm": "(16.4,123.3)",
     "head_pos_mm": "(-17.6,-21.2,-457.1)",
     "head_rot_deg": "(7.6,152.8,5.8)",
     "nose_mm": "(258.0,-23.0)"
   },
   "landscape_center.jpg": {
-    "gaze_mm": "(-211.9,-152.1)",
+    "gaze_mm": "(-218.9,-146.9)",
     "head_pos_mm": "(57.3,97.1,-252.9)",
     "head_rot_deg": "(-0.6,179.5,-0.6)",
     "nose_mm": "(-149.5,-94.4)"
   },
   "landscape_down_down.jpg": {
-    "gaze_mm": "(-225.5,-116.5)",
+    "gaze_mm": "(-221.4,-85.9)",
     "head_pos_mm": "(60.7,84.5,-251.2)",
     "head_rot_deg": "(-6.8,-179.3,-0.3)",
     "nose_mm": "(-157.9,-54.4)"
   },
   "landscape_left_left.jpg": {
-    "gaze_mm": "(-266.7,-126.2)",
+    "gaze_mm": "(-292.4,-127.4)",
     "head_pos_mm": "(82.7,94.8,-254.2)",
     "head_rot_deg": "(-6.3,-170.0,2.0)",
     "nose_mm": "(-222.8,-68.1)"
   },
   "landscape_nosedown_eyesup.jpg": {
-    "gaze_mm": "(-215.5,-175.2)",
+    "gaze_mm": "(-200.6,-189.0)",
     "head_pos_mm": "(58.0,87.8,-249.5)",
     "head_rot_deg": "(-8.9,177.4,-0.1)",
     "nose_mm": "(-140.7,-48.7)"
   },
   "landscape_noseleft_eyesright.jpg": {
-    "gaze_mm": "(-149.8,-139.5)",
+    "gaze_mm": "(-185.6,-151.0)",
     "head_pos_mm": "(80.7,102.8,-246.8)",
     "head_rot_deg": "(-3.1,-170.0,2.1)",
     "nose_mm": "(-218.9,-90.9)"
   },
   "landscape_noseright_eyesleft.jpg": {
-    "gaze_mm": "(-203.5,-150.1)",
+    "gaze_mm": "(-176.2,-164.4)",
     "head_pos_mm": "(27.6,104.4,-256.7)",
     "head_rot_deg": "(-2.1,164.8,0.8)",
     "nose_mm": "(-52.1,-93.9)"
   },
   "landscape_nosetop_eyesdown.jpg": {
-    "gaze_mm": "(-164.8,-133.6)",
+    "gaze_mm": "(-165.9,-166.5)",
     "head_pos_mm": "(57.5,144.9,-275.3)",
     "head_rot_deg": "(9.0,174.2,-1.1)",
     "nose_mm": "(-124.6,-189.5)"
   },
   "landscape_right_right.jpg": {
-    "gaze_mm": "(-131.6,-162.4)",
+    "gaze_mm": "(-143.2,-159.9)",
     "head_pos_mm": "(36.2,97.0,-258.4)",
     "head_rot_deg": "(-4.0,167.7,-0.4)",
     "nose_mm": "(-73.8,-79.0)"
   },
   "landscape_top_top.jpg": {
-    "gaze_mm": "(-175.6,-205.4)",
+    "gaze_mm": "(-186.1,-242.1)",
     "head_pos_mm": "(59.1,140.9,-271.2)",
     "head_rot_deg": "(9.6,176.0,-1.2)",
     "nose_mm": "(-135.5,-187.0)"
   },
   "self_center.jpg": {
-    "gaze_mm": "(-92.0,5.1)",
+    "gaze_mm": "(-88.2,33.7)",
     "head_pos_mm": "(7.1,-7.0,-369.9)",
     "head_rot_deg": "(-5.4,175.5,0.5)",
     "nose_mm": "(21.8,42.2)"
   },
   "self_center2.jpg": {
-    "gaze_mm": "(-49.9,-5.3)",
+    "gaze_mm": "(-70.0,19.4)",
     "head_pos_mm": "(10.1,-36.5,-349.1)",
     "head_rot_deg": "(-1.9,177.7,0.4)",
     "nose_mm": "(4.1,47.9)"
   },
   "self_down_down.jpg": {
-    "gaze_mm": "(-74.1,-19.2)",
+    "gaze_mm": "(-120.0,64.9)",
     "head_pos_mm": "(19.0,-20.9,-374.0)",
     "head_rot_deg": "(-8.8,176.0,0.4)",
     "nose_mm": "(7.1,79.2)"
   },
   "self_left_left.jpg": {
-    "gaze_mm": "(-268.3,8.1)",
+    "gaze_mm": "(-252.9,68.3)",
     "head_pos_mm": "(57.2,-5.9,-342.6)",
     "head_rot_deg": "(-11.5,-157.9,3.9)",
     "nose_mm": "(-201.2,71.8)"
   },
   "self_nosedown_eyesup.jpg": {
-    "gaze_mm": "(7.8,-16.0)",
+    "gaze_mm": "(-12.2,-1.8)",
     "head_pos_mm": "(18.9,-51.4,-351.9)",
     "head_rot_deg": "(-13.6,174.4,0.7)",
     "nose_mm": "(14.6,137.2)"
   },
   "self_noseleft_eyesright.jpg": {
-    "gaze_mm": "(124.1,14.2)",
+    "gaze_mm": "(108.6,37.4)",
     "head_pos_mm": "(43.0,-29.3,-350.2)",
     "head_rot_deg": "(-9.3,-176.9,3.0)",
     "nose_mm": "(-64.9,85.4)"
   },
   "self_noseright_eyesleft.jpg": {
-    "gaze_mm": "(3.7,13.0)",
+    "gaze_mm": "(-113.0,38.1)",
     "head_pos_mm": "(-24.2,-21.8,-327.4)",
     "head_rot_deg": "(-10.8,155.4,-5.0)",
     "nose_mm": "(179.6,77.1)"
   },
   "self_nosetop_eyesdown.jpg": {
-    "gaze_mm": "(-172.7,-63.5)",
+    "gaze_mm": "(-105.3,-16.9)",
     "head_pos_mm": "(21.5,32.2,-365.5)",
     "head_rot_deg": "(12.2,179.6,1.5)",
     "nose_mm": "(-17.0,-110.9)"
   },
   "self_right_right.jpg": {
-    "gaze_mm": "(108.3,83.4)",
+    "gaze_mm": "(187.0,9.6)",
     "head_pos_mm": "(-27.0,-14.2,-348.7)",
     "head_rot_deg": "(-16.4,155.9,-0.5)",
     "nose_mm": "(183.8,125.4)"
   },
   "self_roll_left.jpg": {
-    "gaze_mm": "(106.8,-46.8)",
-    "head_pos_mm": "(-4.0,-7.7,-386.3)",
+    "gaze_mm": "(56.4,19.0)",
+    "head_pos_mm": "(-4.0,-7.7,-386.2)",
     "head_rot_deg": "(-0.6,-177.3,47.2)",
-    "nose_mm": "(-11.4,-2.9)"
+    "nose_mm": "(-11.5,-2.6)"
   },
   "self_roll_right.jpg": {
-    "gaze_mm": "(-99.5,-35.1)",
-    "head_pos_mm": "(53.6,-15.0,-362.6)",
+    "gaze_mm": "(-73.9,-86.0)",
+    "head_pos_mm": "(53.6,-14.9,-362.6)",
     "head_rot_deg": "(-8.1,164.9,-49.8)",
-    "nose_mm": "(50.1,-25.1)"
+    "nose_mm": "(50.1,-25.3)"
   },
   "self_top_top.jpg": {
-    "gaze_mm": "(-44.3,-69.3)",
+    "gaze_mm": "(-78.1,-29.4)",
     "head_pos_mm": "(16.7,7.8,-365.1)",
     "head_rot_deg": "(0.3,178.4,2.0)",
     "nose_mm": "(-6.2,-9.2)"
   },
   "self_yaw_left_roll_left.jpg": {
-    "gaze_mm": "(-146.1,138.0)",
+    "gaze_mm": "(-130.6,143.8)",
     "head_pos_mm": "(96.4,-30.0,-416.7)",
     "head_rot_deg": "(-9.0,-153.5,-26.8)",
     "nose_mm": "(-248.8,189.6)"
   },
   "self_yaw_right_roll_left.jpg": {
-    "gaze_mm": "(-86.3,11.3)",
-    "head_pos_mm": "(9.4,25.7,-411.3)",
-    "head_rot_deg": "(-6.7,151.2,-38.2)",
-    "nose_mm": "(202.0,-122.3)"
+    "gaze_mm": "(-85.1,35.0)",
+    "head_pos_mm": "(9.3,25.7,-411.3)",
+    "head_rot_deg": "(-6.8,151.2,-38.2)",
+    "nose_mm": "(202.7,-121.6)"
   }
 }

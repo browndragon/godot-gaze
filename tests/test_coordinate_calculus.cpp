@@ -9,6 +9,7 @@
 #include "face_model_geometry.hpp"
 #include "math_defs.hpp"
 #include <cmath>
+#include <iostream>
 
 using namespace Gaze;
 using namespace Gaze::CoordinateConversions;
@@ -144,3 +145,80 @@ TEST_CASE("Coordinate Calculus: Strongly-Typed Ray-to-Display Pixel Projection")
     CHECK(pixel_out.y > 0.0);
     CHECK(pixel_out.y < 900.0);
 }
+
+TEST_CASE("Coordinate Calculus: OpenVINO Head Pose Euler Angles from Rodrigues") {
+    // 1. Identity
+    OpenCVCameraVector3 rvec_ident(0.0, 0.0, 0.0);
+    auto angles_ident = opencv_head_pose_to_openvino_angles_deg(rvec_ident);
+    CHECK(angles_ident.x == doctest::Approx(0.0));
+    CHECK(angles_ident.y == doctest::Approx(0.0));
+    CHECK(angles_ident.z == doctest::Approx(0.0));
+
+    // 2. Pure Pitch (Rotation around X in OpenCV)
+    // Pitch Down (+X rotation in OpenCV -> positive Pitch in OpenVINO)
+    OpenCVCameraVector3 rvec_pitch_down(0.2, 0.0, 0.0);
+    auto angles_pitch_down = opencv_head_pose_to_openvino_angles_deg(rvec_pitch_down);
+    CHECK(angles_pitch_down.y == doctest::Approx(0.2 * RAD_TO_DEG).epsilon(1e-2));
+    CHECK(angles_pitch_down.x == doctest::Approx(0.0).epsilon(1e-2));
+    CHECK(angles_pitch_down.z == doctest::Approx(0.0).epsilon(1e-2));
+
+    // 3. Pure Roll (Rotation around Z in OpenCV)
+    // Clockwise roll (+Z rotation in OpenCV -> positive Roll in OpenVINO)
+    OpenCVCameraVector3 rvec_roll_cw(0.0, 0.0, 0.2);
+    auto angles_roll_cw = opencv_head_pose_to_openvino_angles_deg(rvec_roll_cw);
+    // Check roll angle: should be +0.2 rad in degrees
+    CHECK(angles_roll_cw.z == doctest::Approx(0.2 * RAD_TO_DEG).epsilon(1e-2));
+    CHECK(angles_roll_cw.x == doctest::Approx(0.0).epsilon(1e-2));
+    CHECK(angles_roll_cw.y == doctest::Approx(0.0).epsilon(1e-2));
+
+    // 4. Compound Rotation (Yaw = 15 deg, Pitch = 10 deg, Roll = 20 deg)
+    double y_rad = 15.0 * DEG_TO_RAD;
+    double p_rad = 10.0 * DEG_TO_RAD;
+    double r_rad = 20.0 * DEG_TO_RAD;
+    double cy = std::cos(y_rad), sy = std::sin(y_rad);
+    double cp = std::cos(p_rad), sp = std::sin(p_rad);
+    double cr = std::cos(r_rad), sr = std::sin(r_rad);
+    // Construct R_ov = Rz(Y) * Ry(P) * Rx(R) via explicit matrix multiplication
+    SpacedBasis<Space::OpenCVCamera, Space::OpenCVCamera> Rz(
+        OpenCVCameraVector3( cy,  sy, 0.0),
+        OpenCVCameraVector3(-sy,  cy, 0.0),
+        OpenCVCameraVector3(0.0, 0.0, 1.0)
+    );
+    SpacedBasis<Space::OpenCVCamera, Space::OpenCVCamera> Ry(
+        OpenCVCameraVector3( cp, 0.0, -sp),
+        OpenCVCameraVector3(0.0, 1.0, 0.0),
+        OpenCVCameraVector3( sp, 0.0,  cp)
+    );
+    SpacedBasis<Space::OpenCVCamera, Space::OpenCVCamera> Rx(
+        OpenCVCameraVector3(1.0, 0.0, 0.0),
+        OpenCVCameraVector3(0.0,  cr, -sr),
+        OpenCVCameraVector3(0.0,  sr,  cr)
+    );
+
+    auto R_ov = Rz * Ry * Rx;
+
+    // R_cv = M^T * R_ov * M, where:
+    // M = [0 0 -1; 1 0 0; 0 -1 0]
+    // M^T = [0 1 0; 0 0 -1; -1 0 0]
+    SpacedBasis<Space::OpenCVCamera, Space::OpenCVCamera> M(
+        OpenCVCameraVector3( 0.0, 1.0,  0.0),
+        OpenCVCameraVector3( 0.0, 0.0, -1.0),
+        OpenCVCameraVector3(-1.0, 0.0,  0.0)
+    );
+    SpacedBasis<Space::OpenCVCamera, Space::OpenCVCamera> Mt = M.transposed();
+    auto R_cv_untyped = Mt * R_ov * M;
+
+    SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R_cv(
+        OpenCVCameraVector3(R_cv_untyped.x.x, R_cv_untyped.x.y, R_cv_untyped.x.z),
+        OpenCVCameraVector3(R_cv_untyped.y.x, R_cv_untyped.y.y, R_cv_untyped.y.z),
+        OpenCVCameraVector3(R_cv_untyped.z.x, R_cv_untyped.z.y, R_cv_untyped.z.z)
+    );
+
+    OpenCVCameraVector3 rvec_compound = basis_to_rodrigues(R_cv);
+    auto angles_compound = opencv_head_pose_to_openvino_angles_deg(rvec_compound);
+
+    CHECK(angles_compound.x == doctest::Approx(15.0).epsilon(0.05));
+    CHECK(angles_compound.y == doctest::Approx(10.0).epsilon(0.05));
+    CHECK(angles_compound.z == doctest::Approx(20.0).epsilon(0.05));
+}
+

@@ -453,10 +453,29 @@ namespace CoordinateConversions
 
     inline SpacedVector3<Space::OpenCVCamera> opencv_head_pose_to_openvino_angles_deg(const OpenCVCameraVector3 &cv_rvec)
     {
+        SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R_cv = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(cv_rvec);
+
+        // OpenVINO ADAS head pose convention (head-pose-estimation-adas-0001):
+        // R_ov = M * R_cv * M^T, where M maps OpenCVCamera (+X right, +Y down, +Z away) to:
+        //   OX = to camera = -Z_cv
+        //   OY = to right  = +X_cv
+        //   OZ = to up     = -Y_cv
+        //
+        // Expanding R_ov = M * R_cv * M^T in terms of R_cv basis columns:
+        //   R_ov[0][0] =  R_cv.z.z =  cos(Yaw) * cos(Pitch)
+        //   R_ov[1][0] = -R_cv.z.x =  sin(Yaw) * cos(Pitch)
+        //   R_ov[2][0] =  R_cv.z.y = -sin(Pitch)
+        //   R_ov[2][1] = -R_cv.x.y = -cos(Pitch) * sin(Roll)
+        //   R_ov[2][2] =  R_cv.y.y =  cos(Pitch) * cos(Roll)
+        double cos_pitch = std::sqrt(R_cv.x.y * R_cv.x.y + R_cv.y.y * R_cv.y.y);
+        double pitch_rad = std::atan2(-R_cv.z.y, cos_pitch);
+        double yaw_rad   = std::atan2(-R_cv.z.x, R_cv.z.z);
+        double roll_rad  = std::atan2( R_cv.x.y, R_cv.y.y);
+
         return SpacedVector3<Space::OpenCVCamera>(
-            -cv_rvec.y * RAD_TO_DEG,
-             cv_rvec.x * RAD_TO_DEG,
-            -cv_rvec.z * RAD_TO_DEG
+            yaw_rad * RAD_TO_DEG,
+            pitch_rad * RAD_TO_DEG,
+            roll_rad * RAD_TO_DEG
         );
     }
 

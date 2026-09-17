@@ -102,10 +102,12 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, OpenVINOGazeVector3&
     std::vector<float> head_pose_tensor_data(3, 0.0f);
 
     // 1. Preprocess eye crops
-    // In OpenVINO ADAS convention: "left_eye_image" is the subject's anatomical left eye (appears on image-right),
-    // and "right_eye_image" is the subject's anatomical right eye (appears on image-left).
-    preprocess_eye_crop(crops.left_eye_data, left_eye_tensor_data.data());
-    preprocess_eye_crop(crops.right_eye_data, right_eye_tensor_data.data());
+    // OpenVINO ADAS gaze-estimation-adas-0002 model specification:
+    // "left_eye_image" is the crop of the eye appearing on IMAGE-LEFT (landmarks [0, 1], subject's anatomical right eye).
+    // "right_eye_image" is the crop of the eye appearing on IMAGE-RIGHT (landmarks [2, 3], subject's anatomical left eye).
+    // In EyeCrops, right_eye_data contains image-left (landmarks [0, 1]) and left_eye_data contains image-right (landmarks [2, 3]).
+    preprocess_eye_crop(crops.right_eye_data, left_eye_tensor_data.data());
+    preprocess_eye_crop(crops.left_eye_data, right_eye_tensor_data.data());
 
     // 2. Prepare head pose angles
     if (std::isnan(crops.head_pose_rotation.x) || std::isnan(crops.head_pose_rotation.y) || std::isnan(crops.head_pose_rotation.z) ||

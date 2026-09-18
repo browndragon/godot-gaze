@@ -197,20 +197,43 @@ User-specific biological offsets (such as the angle kappa between the eye's visu
 
 During calibration trigger (staring at a target screen pixel $P_{\text{target}}$):
 1. Transform $P_{\text{target}}$ back to Camera Space ($P_{\text{cam\_target}}$) by reversing the rotation and translation:
-   $$P_{\text{cam\_target}, x} = -x_{\text{s\_target}} + x_{\text{off}}$$
-   $$P_{\text{cam\_target}, y} = A \cos\theta - z_{\text{off}} \sin\theta$$
-   $$P_{\text{cam\_target}, z} = A \sin\theta + z_{\text{off}} \cos\theta$$
-   where $A = -y_{\text{s\_target}} - y_{\text{off}}$.
-2. The required gaze vector is:
-   $$V_{\text{req}} = (P_{\text{cam\_target}} - P_{0\_\text{cam}}).\text{normalized}()$$
-3. Compute the angular differences to store as $\text{bias\_pitch}$ and $\text{bias\_yaw}$:
-   $$\text{bias\_yaw} = \phi_{\text{req}} - \phi_{\text{yaw}}$$
-   $$\text{bias\_pitch} = \psi_{\text{req}} - \psi_{\text{pitch}}$$
+### 4.1. Head-Space 3D Angular Calibration (Angle Kappa $\kappa$)
+Human visual axes do not coincide with the anatomical optical axes of the eyes (the fovea is offset by an angle known as **Angle Kappa** $\kappa$, typically $3^\circ \text{–} 8^\circ$). Furthermore, biological asymmetry or systematic model bias manifests as constant angular offsets.
 
-### 4.2. 2D Pixel-Space Calibration
-A simple translational delta applied after the pixel mapping:
-$$x_{\text{px\_final}} = x_{\text{px\_projected}} + \text{bias\_pixel\_x}$$
-$$y_{\text{px\_final}} = y_{\text{px\_projected}} + \text{bias\_pixel\_y}$$
+Crucially, **Angle Kappa is fixed relative to the skull**. If calibration were applied in Camera Space, rolling the head by $90^\circ$ would rotate horizontal yaw error into vertical pitch error. Therefore, `godot-gaze` applies 3D angular calibration strictly in **Head Space**:
+
+1. **Transform Raw Gaze Ray to Head Space**:
+   $$R_{\text{head}} = \text{head\_transform.basis}$$
+   $$\mathbf{v}_{\text{head}} = R_{\text{head}}^T \cdot \mathbf{v}_{\text{cam}}$$
+
+2. **Decompose to Head-Space Spherical Angles**:
+   $$\psi_{\text{pitch}} = \arcsin\left(\text{clamp}(v_{y, \text{head}}, -1.0, 1.0)\right)$$
+   $$\phi_{\text{yaw}} = \text{atan2}(v_{x, \text{head}}, v_{z, \text{head}})$$
+
+3. **Apply Biological Scaling & Bias (`GazeBioProfile`)**:
+   $$\psi'_{\text{pitch}} = s_{\text{pitch}} \cdot \psi_{\text{pitch}} + \text{bias}_{\text{pitch}}$$
+   $$\phi'_{\text{yaw}} = s_{\text{yaw}} \cdot \phi_{\text{yaw}} + \text{bias}_{\text{yaw}}$$
+
+4. **Reconstruct Calibrated Direction in Head Space**:
+   $$\mathbf{v}'_{\text{head}} = \begin{pmatrix} \sin\phi'_{\text{yaw}} \cos\psi'_{\text{pitch}} \\ \sin\psi'_{\text{pitch}} \\ \cos\phi'_{\text{yaw}} \cos\psi'_{\text{pitch}} \end{pmatrix}$$
+
+5. **Rotate Back to Camera Space**:
+   $$\mathbf{v}'_{\text{cam}} = R_{\text{head}} \cdot \mathbf{v}'_{\text{head}}$$
+
+This transformation is biologically invariant under arbitrary head rolls, yaws, and pitches.
+
+### 4.2. Closed-Form 1D Ordinary Least Squares (OLS) Solver
+For calibration datasets with target screen points $\mathbf{T}_i \in \mathbb{R}^2$ and measured head-space angles $\theta_i$, the required head-space angles $\theta_{i, \text{targ}}$ are computed by unprojecting $\mathbf{T}_i$ via `GazeDeviceProfile::unproject_px_to_cam_mm` to 3D point $\mathbf{P}_i$, forming $\mathbf{v}_{i, \text{targ}} = (\mathbf{P}_i - \mathbf{O}_i)/\lVert \mathbf{P}_i - \mathbf{O}_i \rVert$, and rotating into head space via $R_{\text{head}, i}^T$.
+
+The linear relationship $\theta_{\text{targ}} = s \cdot \theta_{\text{meas}} + b$ is solved analytically in $O(N)$ time:
+$$s = \frac{\sum_{i=1}^N (\theta_{i, \text{meas}} - \bar{\theta}_{\text{meas}})(\theta_{i, \text{targ}} - \bar{\theta}_{\text{targ}})}{\sum_{i=1}^N (\theta_{i, \text{meas}} - \bar{\theta}_{\text{meas}})^2}$$
+$$b = \bar{\theta}_{\text{targ}} - s \cdot \bar{\theta}_{\text{meas}}$$
+
+For 1-point centering ($N=1$ or zero variance), scale defaults to $1.0$ and bias simplifies to:
+$$b = \theta_{\text{targ}} - \theta_{\text{meas}}$$
+
+Both pitch and yaw are decoupled and solved independently in closed form, avoiding numerical gradient descent or local minima.
+
 
 ---
 

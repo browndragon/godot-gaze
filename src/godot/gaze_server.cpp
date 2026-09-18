@@ -39,6 +39,10 @@ struct GazeServerImpl {
         Ref<GazeDeviceProfile> device_profile;
     } display;
 
+    struct BioInfo {
+        Ref<GazeBioProfile> bio_profile;
+    } bio;
+
     struct CameraInfo {
         RID vision_camera_rid;
     } camera;
@@ -61,11 +65,14 @@ struct GazeServerImpl {
         
         Vector3 gaze_origin_cam;
         Vector3 gaze_direction_cam;
+        Vector3 raw_gaze_direction_cam;
+        Transform3D raw_eye_transform;
         
         Ref<Smoother> screen_smoother;
         Array smoother_state;
         
         Vector2 latest_projected_gaze;
+        Vector2 latest_raw_projected_gaze;
         Vector2 latest_filtered_gaze;
         Vector2 latest_projected_gaze_mm;
         Vector2 latest_filtered_gaze_mm;
@@ -112,6 +119,8 @@ void GazeServer::_bind_methods() {
     // Hardware Profile & Configuration
     ClassDB::bind_method(D_METHOD("set_device_profile", "profile"), &GazeServer::set_device_profile);
     ClassDB::bind_method(D_METHOD("get_device_profile"), &GazeServer::get_device_profile);
+    ClassDB::bind_method(D_METHOD("set_bio_profile", "profile"), &GazeServer::set_bio_profile);
+    ClassDB::bind_method(D_METHOD("get_bio_profile"), &GazeServer::get_bio_profile);
     ClassDB::bind_method(D_METHOD("set_camera_offsets", "offset", "tilt_deg"), &GazeServer::set_camera_offsets);
     ClassDB::bind_method(D_METHOD("get_camera_offset"), &GazeServer::get_camera_offset);
     ClassDB::bind_method(D_METHOD("get_camera_tilt"), &GazeServer::get_camera_tilt);
@@ -147,12 +156,16 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("is_gaze_detected"), &GazeServer::is_gaze_detected);
     ClassDB::bind_method(D_METHOD("get_gaze_origin"), &GazeServer::get_gaze_origin);
     ClassDB::bind_method(D_METHOD("get_gaze_direction"), &GazeServer::get_gaze_direction);
+    ClassDB::bind_method(D_METHOD("get_raw_gaze_direction"), &GazeServer::get_raw_gaze_direction);
+    ClassDB::bind_method(D_METHOD("get_raw_eye_transform"), &GazeServer::get_raw_eye_transform);
     ClassDB::bind_method(D_METHOD("set_gaze", "origin_cam", "direction_cam"), &GazeServer::set_gaze);
     ClassDB::bind_method(D_METHOD("get_gaze_screen_px", "smoothed"), &GazeServer::get_gaze_screen_px, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("get_gaze_screen_mm", "smoothed"), &GazeServer::get_gaze_screen_mm, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("get_gaze_screen", "smoothed"), &GazeServer::get_gaze_screen, DEFVAL(true));
     ClassDB::bind_method(D_METHOD("get_projected_gaze", "smoothed"), &GazeServer::get_projected_gaze, DEFVAL(false));
     ClassDB::bind_method(D_METHOD("get_projected_gaze_mm", "smoothed"), &GazeServer::get_projected_gaze_mm, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("get_raw_projected_gaze", "smoothed"), &GazeServer::get_raw_projected_gaze, DEFVAL(false));
+    ClassDB::bind_method(D_METHOD("get_raw_gaze_screen_px", "smoothed"), &GazeServer::get_raw_gaze_screen_px, DEFVAL(false));
     ClassDB::bind_method(D_METHOD("get_left_eye_openness"), &GazeServer::get_left_eye_openness);
     ClassDB::bind_method(D_METHOD("get_right_eye_openness"), &GazeServer::get_right_eye_openness);
     ClassDB::bind_method(D_METHOD("set_eye_openness", "left", "right"), &GazeServer::set_eye_openness);
@@ -230,6 +243,16 @@ GazeServer::GazeServer() {
     impl->eye.screen_smoother = sm;
 
     impl->display.device_profile = GazeDeviceProfile::create_system_guess();
+    if (FileAccess::file_exists("user://calibrations/device_profile.cfg")) {
+        impl->display.device_profile->load_from_file("user://calibrations/device_profile.cfg");
+    }
+    if (FileAccess::file_exists("user://calibrations/bio_profile.cfg")) {
+        Ref<GazeBioProfile> bio;
+        bio.instantiate();
+        if (bio->load_from_file("user://calibrations/bio_profile.cfg") == OK) {
+            impl->bio.bio_profile = bio;
+        }
+    }
 
     VisionServer *vs = VisionServer::get_singleton();
     if (vs) {
@@ -520,6 +543,16 @@ Ref<GazeDeviceProfile> GazeServer::get_device_profile() const {
     return impl->display.device_profile;
 }
 
+void GazeServer::set_bio_profile(const Ref<GazeBioProfile>& p_profile) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->bio.bio_profile = p_profile;
+}
+
+Ref<GazeBioProfile> GazeServer::get_bio_profile() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->bio.bio_profile;
+}
+
 void GazeServer::set_camera_offsets(Vector3 p_offset, double p_tilt) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     if (impl->display.device_profile.is_null()) {
@@ -717,19 +750,25 @@ Vector3 GazeServer::get_gaze_direction() const {
     return impl->eye.gaze_direction_cam;
 }
 
+Vector3 GazeServer::get_raw_gaze_direction() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.raw_gaze_direction_cam;
+}
+
+Transform3D GazeServer::get_raw_eye_transform() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.raw_eye_transform;
+}
+
 static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) {
     Ref<GazeDeviceProfile> profile = p_impl->display.device_profile;
-    Vector2 pixel_pitch = profile.is_valid() ? profile->get_pixel_pitch_mm() : Vector2(0.25, 0.25);
-    if (pixel_pitch.x <= 0.0 || pixel_pitch.y <= 0.0) {
-        pixel_pitch = Vector2(0.25, 0.25);
+    if (profile.is_null()) {
+        return Vector2(INFINITY, INFINITY);
     }
-    Vector2i logical_size = profile.is_valid() ? profile->get_logical_size_px() : Vector2i(1920, 1080);
-    Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
-
-    Gaze::ProjectionEngine engine;
-    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size.x, logical_size.y));
-    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(logical_size.x * pixel_pitch.x, logical_size.y * pixel_pitch.y));
-    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(offset.x, offset.y, offset.z), 0.0));
+    Vector2 screen_px = profile->project_gaze_px(p_origin_cam, p_direction_cam);
+    if (!screen_px.is_finite()) {
+        return Vector2(INFINITY, INFINITY);
+    }
 
     Vector2 win_pos = Vector2(0.0, 0.0);
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
@@ -741,28 +780,50 @@ static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vec
             win_pos = ds->window_get_position();
         }
     }
-    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(win_pos.x, win_pos.y));
-
-    Gaze::GodotCameraVector3 orig(p_origin_cam.x, p_origin_cam.y, p_origin_cam.z);
-    Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
-    Gaze::GodotDisplayVector2 out_px;
-
-    if (!engine.project_gaze(orig, dir, out_px)) {
-        return Vector2(INFINITY, INFINITY);
-    }
-    return Vector2(out_px.x, out_px.y);
+    return screen_px - win_pos;
 }
 
 void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->eye.gaze_origin_cam = p_origin_cam;
-    impl->eye.gaze_direction_cam = p_direction_cam;
+    impl->eye.raw_gaze_direction_cam = p_direction_cam;
 
-    Vector2 px = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
+    Vector3 norm_raw_dir = p_direction_cam.is_normalized() ? p_direction_cam : p_direction_cam.normalized();
+    Basis raw_basis = Basis::looking_at(norm_raw_dir, Vector3(0, 1, 0));
+    if (!raw_basis.is_rotation()) {
+        raw_basis = Basis();
+    }
+    impl->eye.raw_eye_transform = Transform3D(raw_basis, p_origin_cam);
+
+    Vector2 raw_px = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
+    impl->eye.latest_raw_projected_gaze = raw_px;
+
+    Vector3 eff_dir = p_direction_cam;
+    if (impl->bio.bio_profile.is_valid()) {
+        Transform3D head_xf = impl->face.relative_transform;
+        Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera> head_b(
+            Gaze::GodotCameraVector3(head_xf.basis.get_column(0).x, head_xf.basis.get_column(0).y, head_xf.basis.get_column(0).z),
+            Gaze::GodotCameraVector3(head_xf.basis.get_column(1).x, head_xf.basis.get_column(1).y, head_xf.basis.get_column(1).z),
+            Gaze::GodotCameraVector3(head_xf.basis.get_column(2).x, head_xf.basis.get_column(2).y, head_xf.basis.get_column(2).z)
+        );
+        Gaze::GazeBioCalibrationParams params;
+        params.bias_pitch_deg = impl->bio.bio_profile->get_bias_pitch_deg();
+        params.bias_yaw_deg = impl->bio.bio_profile->get_bias_yaw_deg();
+
+        Gaze::GodotCameraVector3 cal_cam = Gaze::apply_head_space_calibration(
+            Gaze::GodotCameraVector3(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z),
+            head_b,
+            params
+        );
+        eff_dir = Vector3(cal_cam.x, cal_cam.y, cal_cam.z);
+    }
+    impl->eye.gaze_direction_cam = eff_dir;
+
+    Vector2 px = _calc_projected_window_px(impl.get(), p_origin_cam, eff_dir);
     if (px.is_finite()) {
         impl->eye.latest_projected_gaze = px;
 
-        Vector3 pt_cam = project_ray_to_camera_plane(p_origin_cam, p_direction_cam);
+        Vector3 pt_cam = project_ray_to_camera_plane(p_origin_cam, eff_dir);
         Ref<GazeDeviceProfile> profile = impl->display.device_profile;
         Vector2 phys_sz = profile.is_valid() ? profile->get_physical_size_mm() : Vector2(1920 * 0.25, 1080 * 0.25);
         Vector3 offset = profile.is_valid() ? profile->get_camera_offset_mm() : Vector3(0.0, 0.0, 0.0);
@@ -803,6 +864,15 @@ Vector2 GazeServer::get_projected_gaze(bool p_smoothed) const {
 
 Vector2 GazeServer::get_projected_gaze_mm(bool p_smoothed) const {
     return get_gaze_screen_mm(p_smoothed);
+}
+
+Vector2 GazeServer::get_raw_projected_gaze(bool p_smoothed) const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->eye.latest_raw_projected_gaze;
+}
+
+Vector2 GazeServer::get_raw_gaze_screen_px(bool p_smoothed) const {
+    return get_raw_projected_gaze(p_smoothed);
 }
 
 float GazeServer::get_left_eye_openness() const {
@@ -1035,6 +1105,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     }
 
     Vector2 local_pos = get_gaze_screen_px(false);
+    Vector2 raw_local_pos = get_raw_projected_gaze(false);
     Vector2 win_pos = Vector2(0, 0);
     GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
     if (gds) {
@@ -1049,6 +1120,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
 
     // Transform window-local points to canonical root viewport canvas coordinates
     local_pos = _xform_window_px_to_canvas(local_pos);
+    raw_local_pos = _xform_window_px_to_canvas(raw_local_pos);
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1059,6 +1131,7 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     last_event_time_usec = now_usec;
 
     event->set_eye_gaze(local_pos);
+    event->set_raw_eye_gaze(raw_local_pos);
 
     Transform3D head_xform = get_head_transform();
     if (!head_xform.basis.is_rotation()) {
@@ -1072,15 +1145,44 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         gaze_d = Vector3(active_read_data->gaze_direction.x, active_read_data->gaze_direction.y, active_read_data->gaze_direction.z);
         gaze_o = Vector3(active_read_data->gaze_origin.x, active_read_data->gaze_origin.y, active_read_data->gaze_origin.z);
     }
-    Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
-    if (norm_gaze_dir.length_squared() < 1e-4) {
-        norm_gaze_dir = Vector3(0, 0, -1);
+    Vector3 norm_raw_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
+    if (norm_raw_gaze_dir.length_squared() < 1e-4) {
+        norm_raw_gaze_dir = Vector3(0, 0, -1);
     }
-    Basis gaze_basis = Basis::looking_at(norm_gaze_dir, Vector3(0, 1, 0));
-    if (!gaze_basis.is_rotation()) {
-        gaze_basis = Basis();
+    Basis raw_gaze_basis = Basis::looking_at(norm_raw_gaze_dir, Vector3(0, 1, 0));
+    if (!raw_gaze_basis.is_rotation()) {
+        raw_gaze_basis = Basis();
     }
-    event->set_eye_transform(Transform3D(gaze_basis, gaze_o));
+    event->set_raw_eye_transform(Transform3D(raw_gaze_basis, gaze_o));
+
+    Vector3 norm_cal_gaze_dir = norm_raw_gaze_dir;
+    if (impl->bio.bio_profile.is_valid()) {
+        Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera> head_b(
+            Gaze::GodotCameraVector3(head_xform.basis.get_column(0).x, head_xform.basis.get_column(0).y, head_xform.basis.get_column(0).z),
+            Gaze::GodotCameraVector3(head_xform.basis.get_column(1).x, head_xform.basis.get_column(1).y, head_xform.basis.get_column(1).z),
+            Gaze::GodotCameraVector3(head_xform.basis.get_column(2).x, head_xform.basis.get_column(2).y, head_xform.basis.get_column(2).z)
+        );
+        Gaze::GazeBioCalibrationParams params;
+        params.bias_pitch_deg = impl->bio.bio_profile->get_bias_pitch_deg();
+        params.bias_yaw_deg = impl->bio.bio_profile->get_bias_yaw_deg();
+
+        Gaze::GodotCameraVector3 cal_cam = Gaze::apply_head_space_calibration(
+            Gaze::GodotCameraVector3(norm_raw_gaze_dir.x, norm_raw_gaze_dir.y, norm_raw_gaze_dir.z),
+            head_b,
+            params
+        );
+        norm_cal_gaze_dir = Vector3(cal_cam.x, cal_cam.y, cal_cam.z);
+        if (norm_cal_gaze_dir.length_squared() < 1e-4) {
+            norm_cal_gaze_dir = Vector3(0, 0, -1);
+        } else {
+            norm_cal_gaze_dir = norm_cal_gaze_dir.normalized();
+        }
+    }
+    Basis cal_gaze_basis = Basis::looking_at(norm_cal_gaze_dir, Vector3(0, 1, 0));
+    if (!cal_gaze_basis.is_rotation()) {
+        cal_gaze_basis = Basis();
+    }
+    event->set_eye_transform(Transform3D(cal_gaze_basis, gaze_o));
 
     Vector3 nose_orig = head_xform.origin;
     Vector3 nose_fwd = -head_xform.basis.get_column(2);

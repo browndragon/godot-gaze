@@ -5,6 +5,7 @@
 #include "gaze_device_profile.hpp"
 #include "gaze_display_server.hpp"
 #include "../core/math_defs.hpp"
+#include "../core/projection_engine.hpp"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/engine.hpp>
@@ -29,6 +30,10 @@ void GazeDeviceProfile::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_camera_roll_deg"), &GazeDeviceProfile::get_camera_roll_deg);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_roll_deg"), "set_camera_roll_deg", "get_camera_roll_deg");
 
+    ClassDB::bind_method(D_METHOD("set_camera_tilt_deg", "tilt"), &GazeDeviceProfile::set_camera_tilt_deg);
+    ClassDB::bind_method(D_METHOD("get_camera_tilt_deg"), &GazeDeviceProfile::get_camera_tilt_deg);
+    ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_tilt_deg"), "set_camera_tilt_deg", "get_camera_tilt_deg");
+
     ClassDB::bind_method(D_METHOD("set_camera_hfov_deg", "hfov"), &GazeDeviceProfile::set_camera_hfov_deg);
     ClassDB::bind_method(D_METHOD("get_camera_hfov_deg"), &GazeDeviceProfile::get_camera_hfov_deg);
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "camera_hfov_deg"), "set_camera_hfov_deg", "get_camera_hfov_deg");
@@ -40,6 +45,9 @@ void GazeDeviceProfile::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_dpi"), &GazeDeviceProfile::get_dpi);
     ClassDB::bind_method(D_METHOD("get_focal_length_px", "frame_width_px"), &GazeDeviceProfile::get_focal_length_px);
     ClassDB::bind_method(D_METHOD("calibrate_from_card_width", "card_width_lpix", "card_width_mm"), &GazeDeviceProfile::calibrate_from_card_width, DEFVAL(85.603));
+
+    ClassDB::bind_method(D_METHOD("project_gaze_px", "origin_cam_mm", "direction_cam"), &GazeDeviceProfile::project_gaze_px);
+    ClassDB::bind_method(D_METHOD("unproject_px_to_cam_mm", "screen_px"), &GazeDeviceProfile::unproject_px_to_cam_mm);
 
     ClassDB::bind_static_method("GazeDeviceProfile", D_METHOD("create_system_guess"), &GazeDeviceProfile::create_system_guess);
     ClassDB::bind_static_method("GazeDeviceProfile", D_METHOD("get_focal_length_under_scaling", "f_original", "original_dim", "new_dim"), &GazeDeviceProfile::get_focal_length_under_scaling_static);
@@ -125,9 +133,73 @@ Ref<GazeDeviceProfile> GazeDeviceProfile::create_system_guess() {
     }
 
     profile->set_camera_roll_deg(0.0);
+    profile->set_camera_tilt_deg(0.0);
     profile->set_camera_hfov_deg(65.0);
 
     return profile;
+}
+
+void GazeDeviceProfile::set_camera_tilt_deg(double p_tilt) {
+    camera_tilt_deg = p_tilt;
+    emit_changed();
+}
+
+Vector2 GazeDeviceProfile::project_gaze_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const {
+    Gaze::ProjectionEngine engine;
+    Vector2 phys_sz = get_physical_size_mm();
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(phys_sz.x, phys_sz.y));
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size_px.x, logical_size_px.y));
+    engine.set_camera_placement(Gaze::CameraPlacement(
+        Gaze::GodotCameraVector3(camera_offset_mm.x, camera_offset_mm.y, camera_offset_mm.z),
+        camera_tilt_deg
+    ));
+
+    Gaze::GodotCameraVector3 orig(p_origin_cam_mm.x, p_origin_cam_mm.y, p_origin_cam_mm.z);
+    Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
+    Gaze::GodotDisplayVector2 out_px;
+    if (!engine.project_gaze(orig, dir, out_px)) {
+        return Vector2(INFINITY, INFINITY);
+    }
+    return Vector2(out_px.x, out_px.y);
+}
+
+Vector3 GazeDeviceProfile::unproject_px_to_cam_mm(const Vector2 &p_screen_px) const {
+    Gaze::ProjectionEngine engine;
+    Vector2 phys_sz = get_physical_size_mm();
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(phys_sz.x, phys_sz.y));
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(logical_size_px.x, logical_size_px.y));
+    engine.set_camera_placement(Gaze::CameraPlacement(
+        Gaze::GodotCameraVector3(camera_offset_mm.x, camera_offset_mm.y, camera_offset_mm.z),
+        camera_tilt_deg
+    ));
+
+    Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm> mm = engine.pixel_to_millimeter(
+        Gaze::GodotDisplayVector2(p_screen_px.x, p_screen_px.y)
+    );
+    Gaze::GodotCameraVector3 pt_cam = engine.screen_mm_to_camera_space(mm);
+    return Vector3(pt_cam.x, pt_cam.y, pt_cam.z);
+}
+
+void GazeDeviceProfile::_write_to_config(Ref<ConfigFile> &p_cfg) const {
+    p_cfg->set_value("device_profile", "pixel_pitch_mm", pixel_pitch_mm);
+    p_cfg->set_value("device_profile", "logical_size_px", logical_size_px);
+    p_cfg->set_value("device_profile", "camera_offset_mm", camera_offset_mm);
+    p_cfg->set_value("device_profile", "camera_roll_deg", camera_roll_deg);
+    p_cfg->set_value("device_profile", "camera_tilt_deg", camera_tilt_deg);
+    p_cfg->set_value("device_profile", "camera_hfov_deg", camera_hfov_deg);
+}
+
+Error GazeDeviceProfile::_read_from_config(const Ref<ConfigFile> &p_cfg) {
+    if (!p_cfg->has_section("device_profile")) {
+        return ERR_FILE_CORRUPT;
+    }
+    set_pixel_pitch_mm(p_cfg->get_value("device_profile", "pixel_pitch_mm", pixel_pitch_mm));
+    set_logical_size_px(p_cfg->get_value("device_profile", "logical_size_px", logical_size_px));
+    set_camera_offset_mm(p_cfg->get_value("device_profile", "camera_offset_mm", camera_offset_mm));
+    set_camera_roll_deg(p_cfg->get_value("device_profile", "camera_roll_deg", camera_roll_deg));
+    set_camera_tilt_deg(p_cfg->get_value("device_profile", "camera_tilt_deg", camera_tilt_deg));
+    set_camera_hfov_deg(p_cfg->get_value("device_profile", "camera_hfov_deg", camera_hfov_deg));
+    return OK;
 }
 
 double GazeDeviceProfile::get_focal_length_under_scaling_static(double f_original, double original_dim, double new_dim) {

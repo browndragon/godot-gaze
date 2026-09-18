@@ -99,4 +99,28 @@ namespace Gaze
         static DisplayOrientation gravity_to_orientation(const GodotCameraVector3 &gravity);
     };
 
+    struct GazeBioCalibrationParams
+    {
+        double bias_pitch_deg = 0.0;
+        double bias_yaw_deg = 0.0;
+    };
+
+    /**
+     * @brief Applies 3D head-space calibration to gaze direction.
+     * Transforms raw gaze direction to head-local coordinates, applies spherical pitch/yaw
+     * bias (Angle Kappa), and rotates back to camera space.
+     */
+    GodotCameraVector3 apply_head_space_calibration(
+        const GodotCameraVector3 &raw_gaze_dir_cam,
+        const SpacedBasis<Space::GodotFaceLocal, Space::GodotCamera> &head_basis_cam,
+        const GazeBioCalibrationParams &bio_params);
+
+    /**
+     * @brief Solves Angle Kappa angular bias using circular-mean estimation across calibration points.
+     */
+    bool solve_head_space_bias(
+        const std::vector<double> &measured_angles_rad,
+        const std::vector<double> &target_angles_rad,
+        double &out_bias_deg);
+
 } // namespace Gaze

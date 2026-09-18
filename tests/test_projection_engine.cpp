@@ -404,4 +404,182 @@ TEST_CASE("Projection Engine Gravity Adaptation Invariants")
     CHECK(engine.get_gravity_vector().z == doctest::Approx(0.0).epsilon(0.01));
 }
 
+TEST_CASE("Head-Space Circular-Mean Bias Estimator Invariants")
+{
+    // Test 1: N = 1 (single-point centering)
+    std::vector<double> meas_1 = { 5.0 * Gaze::DEG_TO_RAD };
+    std::vector<double> target_1 = { 0.0 };
+    double bias_deg = 0.0;
+    bool ok = Gaze::solve_head_space_bias(meas_1, target_1, bias_deg);
+    REQUIRE(ok == true);
+    CHECK(bias_deg == doctest::Approx(-5.0).epsilon(1e-4));
+
+    // Test 2: N = 3 (multi-point circular mean with noise)
+    // Target is offset from measured by ~+4.0 deg
+    std::vector<double> meas_3 = { -3.9 * Gaze::DEG_TO_RAD, 5.9 * Gaze::DEG_TO_RAD, -14.0 * Gaze::DEG_TO_RAD };
+    std::vector<double> target_3 = { 0.0, 10.0 * Gaze::DEG_TO_RAD, -10.0 * Gaze::DEG_TO_RAD };
+    ok = Gaze::solve_head_space_bias(meas_3, target_3, bias_deg);
+    REQUIRE(ok == true);
+    CHECK(bias_deg == doctest::Approx(4.0).epsilon(0.05));
+
+    // Test 3: Angles spanning across the +/- pi boundary
+    std::vector<double> meas_bc = { 175.0 * Gaze::DEG_TO_RAD, -175.0 * Gaze::DEG_TO_RAD };
+    std::vector<double> targ_bc = { 180.0 * Gaze::DEG_TO_RAD, -170.0 * Gaze::DEG_TO_RAD };
+    ok = Gaze::solve_head_space_bias(meas_bc, targ_bc, bias_deg);
+    REQUIRE(ok == true);
+    CHECK(bias_deg == doctest::Approx(5.0).epsilon(1e-3));
+}
+
+TEST_CASE("Head-Space 3D Angular Calibration Invariant Under Head Roll")
+{
+    // User staring straight forward along -Z in GodotFaceLocal space: (0, 0, -1)
+    // In camera space, gaze ray towards screen/camera points along +Z: (0, 0, 1)
+    // Calibration parameters: yaw bias = +10 degrees (to user right +X_head), pitch bias = 0 degrees.
+    Gaze::GazeBioCalibrationParams bio;
+    bio.bias_yaw_deg = 10.0;
+    bio.bias_pitch_deg = 0.0;
+
+    // Case 1: Head upright facing camera
+    // Face +X (user right) -> camera -X (image left)
+    // Face +Y (up) -> camera +Y (up)
+    // Face -Z (forward) -> camera +Z (forward towards camera) => Face +Z -> camera -Z
+    Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera> head_upright(
+        Gaze::GodotCameraVector3(-1.0, 0.0,  0.0),
+        Gaze::GodotCameraVector3( 0.0, 1.0,  0.0),
+        Gaze::GodotCameraVector3( 0.0, 0.0, -1.0)
+    );
+    Gaze::GodotCameraVector3 raw_cam(0.0, 0.0, 1.0);
+    Gaze::GodotCameraVector3 cal_cam = Gaze::apply_head_space_calibration(raw_cam, head_upright, bio);
+
+    // With +10 deg yaw bias (user's right), camera X should be -sin(10 deg), Y = 0, Z = cos(10 deg)
+    CHECK(cal_cam.x == doctest::Approx(-std::sin(10.0 * Gaze::DEG_TO_RAD)).epsilon(1e-3));
+    CHECK(cal_cam.y == doctest::Approx(0.0).epsilon(1e-3));
+    CHECK(cal_cam.z == doctest::Approx(std::cos(10.0 * Gaze::DEG_TO_RAD)).epsilon(1e-3));
+
+    // Case 2: Head rolled 90 deg clockwise around optical axis
+    // Top of head (+Y_head) points to camera +X (right).
+    // User's right ear (+X_head) points to camera -Y (down).
+    // Nose (-Z_head) points to camera +Z (forward) => +Z_head points to camera -Z.
+    Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera> head_rolled_90(
+        Gaze::GodotCameraVector3(0.0, -1.0,  0.0),
+        Gaze::GodotCameraVector3(1.0,  0.0,  0.0),
+        Gaze::GodotCameraVector3(0.0,  0.0, -1.0)
+    );
+
+    Gaze::GodotCameraVector3 cal_rolled = Gaze::apply_head_space_calibration(raw_cam, head_rolled_90, bio);
+
+    // In head space, yaw bias +10 deg moves along user's right (+X_head).
+    // Because head is rolled 90 deg, +X_head is camera -Y!
+    // Therefore, cal_rolled.y MUST be negative (-sin(10 deg)), NOT cal_rolled.x!
+    CHECK(cal_rolled.x == doctest::Approx(0.0).epsilon(1e-3));
+    CHECK(cal_rolled.y == doctest::Approx(-std::sin(10.0 * Gaze::DEG_TO_RAD)).epsilon(1e-3));
+    CHECK(cal_rolled.z == doctest::Approx(std::cos(10.0 * Gaze::DEG_TO_RAD)).epsilon(1e-3));
+}
+
+TEST_CASE("VOR Fixation Invariance Under Head Yaw, Pitch, and Roll Kinematics")
+{
+    // Screen geometry: 500mm x 300mm, 1920 x 1080 px, camera at center (0, 0, 0)
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1920.0, 1080.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(500.0, 300.0));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
+
+    // User eye is at (0, 0, -500mm) fixating on screen center (0, 0, 0mm)
+    Gaze::GodotCameraVector3 eye_origin_cam(0.0, 0.0, -500.0);
+    Gaze::GodotCameraVector3 target_cam_pt(0.0, 0.0, 0.0);
+    Gaze::GodotCameraVector3 dir_target_cam = (target_cam_pt - eye_origin_cam).normalized(); // (0, 0, 1)
+
+    // User has a biological Angle Kappa: yaw = +4.0 deg (right), pitch = -2.5 deg (down)
+    const double kappa_yaw_deg = 4.0;
+    const double kappa_pitch_deg = -2.5;
+    Gaze::GazeBioCalibrationParams bio;
+    bio.bias_yaw_deg = kappa_yaw_deg;
+    bio.bias_pitch_deg = kappa_pitch_deg;
+
+    // Upright head basis in GodotCamera space:
+    // Face +X -> Camera -X (-1, 0, 0)
+    // Face +Y -> Camera +Y (0, 1, 0)
+    // Face +Z -> Camera -Z (0, 0, -1) [Face -Z forward -> Camera +Z (0, 0, 1)]
+    auto make_head_basis = [](double yaw_deg, double pitch_deg, double roll_deg) {
+        double y_rad = yaw_deg * Gaze::DEG_TO_RAD;
+        double p_rad = pitch_deg * Gaze::DEG_TO_RAD;
+        double r_rad = roll_deg * Gaze::DEG_TO_RAD;
+
+        // Base upright matrix M_upright
+        // Face -Z -> Cam +Z, Face +X -> Cam -X, Face +Y -> Cam +Y
+        // Apply Euler rotations: R = R_yaw * R_pitch * R_roll in camera space
+        double cy = std::cos(y_rad), sy = std::sin(y_rad);
+        double cp = std::cos(p_rad), sp = std::sin(p_rad);
+        double cr = std::cos(r_rad), sr = std::sin(r_rad);
+
+        // Standard 3x3 rotation matrix for head in camera space
+        // Then multiply by upright basis
+        // Upright columns in camera space:
+        Gaze::GodotCameraVector3 col0(-cy * cr + sy * sp * sr,  cp * sr,  sy * cr + cy * sp * sr);
+        Gaze::GodotCameraVector3 col1( cy * sr + sy * sp * cr,  cp * cr, -sy * sr + cy * sp * cr);
+        Gaze::GodotCameraVector3 col2(-sy * cp,                 sp,      -cy * cp);
+
+        return Gaze::SpacedBasis<Gaze::Space::GodotFaceLocal, Gaze::Space::GodotCamera>(
+            Gaze::GodotCameraVector3(-col0.x, -col0.y, -col0.z), // user right (+X_face)
+            col1,                                                // up (+Y_face)
+            col2                                                 // back (+Z_face)
+        );
+    };
+
+    struct PoseTest {
+        const char* name;
+        double yaw_deg;
+        double pitch_deg;
+        double roll_deg;
+    };
+
+    std::vector<PoseTest> poses = {
+        {"Upright Facing Center",  0.0,   0.0,  0.0},
+        {"Head Yawed Right +20",  20.0,   0.0,  0.0},
+        {"Head Yawed Left -20",  -20.0,   0.0,  0.0},
+        {"Head Pitched Up +15",    0.0,  15.0,  0.0},
+        {"Head Pitched Down -15",  0.0, -15.0,  0.0},
+        {"Head Rolled +25",        0.0,   0.0, 25.0},
+        {"Head Rolled -25",        0.0,   0.0,-25.0},
+        {"Compound Yaw+Pitch+Roll", 15.0, -10.0, 12.0}
+    };
+
+    for (const auto &pt : poses) {
+        CAPTURE(pt.name);
+        auto head_basis = make_head_basis(pt.yaw_deg, pt.pitch_deg, pt.roll_deg);
+        auto cam_to_head = head_basis.transposed();
+
+        // 1. Physical target ray in head space:
+        Gaze::GodotFaceVector3 d_target_head = cam_to_head.transform(dir_target_cam).normalized();
+        double true_pitch = std::asin(std::clamp(d_target_head.y, -1.0, 1.0));
+        double true_yaw = std::atan2(d_target_head.x, -d_target_head.z);
+
+        // 2. Uncalibrated eye measurement has Angle Kappa deviation (true minus kappa offset):
+        double meas_pitch = true_pitch - (kappa_pitch_deg * Gaze::DEG_TO_RAD);
+        double meas_yaw = true_yaw - (kappa_yaw_deg * Gaze::DEG_TO_RAD);
+
+        double cos_m_pitch = std::cos(meas_pitch);
+        Gaze::GodotFaceVector3 v_meas_head(
+            std::sin(meas_yaw) * cos_m_pitch,
+            std::sin(meas_pitch),
+            -std::cos(meas_yaw) * cos_m_pitch
+        );
+
+        // 3. Transform uncalibrated ray to camera space:
+        Gaze::GodotCameraVector3 v_meas_cam = head_basis.transform(v_meas_head).normalized();
+
+        // 4. Apply calibration:
+        Gaze::GodotCameraVector3 v_cal_cam = Gaze::apply_head_space_calibration(v_meas_cam, head_basis, bio);
+
+        // 5. Project to screen:
+        Gaze::GodotDisplayVector2 px_out;
+        bool hit = engine.project_gaze(eye_origin_cam, v_cal_cam, px_out);
+        REQUIRE(hit == true);
+
+        // Invariant: Calibrated gaze MUST hit screen center (960, 540) within < 0.1 mm (< 0.5 px) across all head poses!
+        CHECK(px_out.x == doctest::Approx(960.0).epsilon(1.0));
+        CHECK(px_out.y == doctest::Approx(540.0).epsilon(1.0));
+    }
+}
+
 

@@ -4,7 +4,7 @@
  */
 #pragma once
 
-#include <godot_cpp/classes/resource.hpp>
+#include "gaze_profile.hpp"
 #include <godot_cpp/variant/vector2.hpp>
 #include <godot_cpp/variant/vector2i.hpp>
 #include <godot_cpp/variant/vector3.hpp>
@@ -12,18 +12,22 @@
 
 namespace godot {
 
-class GazeDeviceProfile : public Resource {
-    GDCLASS(GazeDeviceProfile, Resource);
+class GazeDeviceProfile : public GazeProfile {
+    GDCLASS(GazeDeviceProfile, GazeProfile);
 
 private:
     Vector2 pixel_pitch_mm = Vector2(0.25, 0.25);
     Vector2i logical_size_px = Vector2i(1920, 1080);
     Vector3 camera_offset_mm = Vector3(0.0, 0.0, 0.0);
     double camera_roll_deg = 0.0;
+    double camera_tilt_deg = 0.0;
     double camera_hfov_deg = 65.0;
 
 protected:
     static void _bind_methods();
+
+    virtual void _write_to_config(Ref<ConfigFile> &p_cfg) const override;
+    virtual Error _read_from_config(const Ref<ConfigFile> &p_cfg) override;
 
 public:
     GazeDeviceProfile() = default;
@@ -41,6 +45,9 @@ public:
     double get_camera_roll_deg() const { return camera_roll_deg; }
     void set_camera_roll_deg(double p_roll);
 
+    double get_camera_tilt_deg() const { return camera_tilt_deg; }
+    void set_camera_tilt_deg(double p_tilt);
+
     double get_camera_hfov_deg() const { return camera_hfov_deg; }
     void set_camera_hfov_deg(double p_hfov);
 
@@ -49,6 +56,9 @@ public:
 
     Vector2 get_dpi() const;
     double get_focal_length_px(double frame_width_px) const;
+
+    Vector2 project_gaze_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const;
+    Vector3 unproject_px_to_cam_mm(const Vector2 &p_screen_px) const;
 
     void calibrate_from_card_width(double card_width_lpix, double card_width_mm = 85.603);
 

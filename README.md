@@ -46,7 +46,7 @@ If you are developing this plugin locally and want to test changes in your own G
    - `gaze/general/autostart` (default `true`): Starts camera tracking automatically on startup.
    - `gaze/pointing/emulate_gaze_from_mouse` (default `true`): Emulates `InputEventGaze` from mouse cursor movements using 3D inverse kinematics when camera tracking is inactive.
    - `gaze/pointing/emulate_mouse_from_gaze` (default `false`): Dispatches synthetic mouse move events based on gaze coordinates.
-   - `gaze/calibration/device_profile_path` (defaults to `user://calibrations/device_profile.tres`).
+    - `gaze/calibration/device_profile_path` (defaults to `user://calibrations/device_profile.cfg`).
 2. **Model Weights**:
    Model weights (`.ort` format) are pre-bundled inside `addons/godot-gaze/models/`.
 
@@ -62,23 +62,37 @@ extends Node2D
 
 func _unhandled_input(event: InputEvent) -> void:
     if event is InputEventGaze:
-        # 2D Screen / Viewport position
+        # 2D Screen / Viewport position (calibrated)
         cursor.global_position = event.get_eye_gaze()
         status.text = "Face Tracked (Openness L: %.2f, R: %.2f)" % [event.left_eye_openness, event.right_eye_openness]
 
-        # 3D Head & Gaze properties
-        var head_pos_mm = event.head_pose.origin
-        var eye_ray_dir = event.eye_direction
+        # 3D Head & Gaze transforms
+        var head_pos_mm = event.head_transform.origin
+        var eye_ray_dir = -event.eye_transform.basis.z
+
+        # Uncalibrated raw eye gaze
+        var raw_screen_px = event.get_raw_eye_gaze()
     elif event is InputEventGazeMissing:
         status.text = "Gaze Lost (Reason: %d)" % event.reason
 
 func _ready() -> void:
-    # Tracking starts automatically when autostart is true.
-    # You can also manually control tracking refcounts:
     var gs = Engine.get_singleton("GazeServer")
     if gs:
         gs.start_tracking()
 ```
+
+### 4. Calibration & Profiles (Angle Kappa)
+
+Biological eye alignment differs from optical axes (Angle Kappa $\kappa$). `godot-gaze` separates device geometry from biological parameters:
+* **`GazeDeviceProfile`**: Display dimensions (`physical_size_mm`, `logical_size_px`), camera offsets, and tilt. Saved to `user://calibrations/device_profile.cfg`.
+* **`GazeBioProfile`**: Head-space spherical pitch/yaw bias and scale. Saved to `user://calibrations/bio_profile.cfg`.
+* **`GazeCalibration`**: Closed-form 1D OLS solver. Centering can be performed in a single call:
+  ```gdscript
+  var bio = GazeBioProfile.new()
+  GazeCalibration.centering(latest_gaze_event, bio)
+  GazeServer.set_bio_profile(bio)
+  bio.save_to_file("user://calibrations/bio_profile.cfg")
+  ```
 
 ---
 

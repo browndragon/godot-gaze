@@ -15,6 +15,7 @@
 #include "../core/projection_engine.hpp"
 #include "../core/face_model_geometry.hpp"
 #include "gaze_device_profile.hpp"
+#include "gaze_bio_profile.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
 #include "mouse_gaze_emulation.hpp"
@@ -95,9 +96,12 @@ public:
     void reset();
     int get_active_tracker_count() const;
 
-    // --- Hardware Profile & Configuration ---
+    // --- Hardware & Biological Profile Configuration ---
     void set_device_profile(const Ref<GazeDeviceProfile>& p_profile);
     Ref<GazeDeviceProfile> get_device_profile() const;
+
+    void set_bio_profile(const Ref<GazeBioProfile>& p_profile);
+    Ref<GazeBioProfile> get_bio_profile() const;
 
     void set_camera_offsets(Vector3 p_offset, double p_tilt);
     Vector3 get_camera_offset() const;
@@ -141,6 +145,8 @@ public:
     bool is_gaze_detected() const;
     Vector3 get_gaze_origin() const;
     Vector3 get_gaze_direction() const;
+    Vector3 get_raw_gaze_direction() const;
+    Transform3D get_raw_eye_transform() const;
     void set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam);
 
     Vector2 get_gaze_screen_px(bool p_smoothed = true) const;
@@ -148,6 +154,8 @@ public:
     Vector2 get_gaze_screen(bool p_smoothed = true) const;
     Vector2 get_projected_gaze(bool p_smoothed = false) const;
     Vector2 get_projected_gaze_mm(bool p_smoothed = false) const;
+    Vector2 get_raw_projected_gaze(bool p_smoothed = false) const;
+    Vector2 get_raw_gaze_screen_px(bool p_smoothed = false) const;
 
     float get_left_eye_openness() const;
     float get_right_eye_openness() const;

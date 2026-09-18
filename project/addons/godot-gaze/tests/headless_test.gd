@@ -31,6 +31,142 @@ func run_tests():
 		quit(1)
 		return
 	print("PASS: GazeDeviceProfile resource verified.")
+
+	# 1b. Test GazeDeviceProfile projection & unprojection
+	profile.set_camera_offset_mm(Vector3.ZERO)
+	profile.set_camera_tilt_deg(0.0)
+	profile.set_camera_roll_deg(0.0)
+	var screen_center_px = Vector2(960.0, 540.0)
+	var cam_pt_mm = profile.unproject_px_to_cam_mm(screen_center_px)
+	# Screen center is at x=0, y=0, z=0 in camera space when camera_offset_mm is ZERO
+	if abs(cam_pt_mm.x) > 0.01 or abs(cam_pt_mm.y) > 0.01:
+		printerr("FAIL: unproject_px_to_cam_mm incorrect for screen center: ", cam_pt_mm)
+		quit(1)
+		return
+	var eye_cam_origin = Vector3(0.0, 0.0, -500.0)
+	var gaze_cam_dir = Vector3(0.0, 0.0, 1.0) # pointing straight along +Z at the screen
+	var proj_px = profile.project_gaze_px(eye_cam_origin, gaze_cam_dir)
+	if abs(proj_px.x - 960.0) > 0.01 or abs(proj_px.y - 540.0) > 0.01:
+		printerr("FAIL: project_gaze_px incorrect for screen center: ", proj_px)
+		quit(1)
+		return
+	# Arbitrary point round-trip invertibility
+	var arb_px = Vector2(450.0, 250.0)
+	var arb_cam_pt = profile.unproject_px_to_cam_mm(arb_px)
+	var arb_dir = (arb_cam_pt - eye_cam_origin).normalized()
+	var roundtrip_px = profile.project_gaze_px(eye_cam_origin, arb_dir)
+	if (roundtrip_px - arb_px).length() > 0.05:
+		printerr("FAIL: GazeDeviceProfile project/unproject roundtrip failed: ", roundtrip_px, " vs ", arb_px)
+		quit(1)
+		return
+	print("PASS: GazeDeviceProfile project_gaze_px / unproject_px_to_cam_mm verified.")
+
+	# 1c. Test GazeProfile .cfg file serialization (save_to_file / load_from_file)
+	var cfg_path = "user://test_device_profile.cfg"
+	var err_save = profile.save_to_file(cfg_path)
+	if err_save != OK:
+		printerr("FAIL: profile.save_to_file failed with error: ", err_save)
+		quit(1)
+		return
+	var loaded_profile = GazeDeviceProfile.new()
+	var err_load = loaded_profile.load_from_file(cfg_path)
+	if err_load != OK:
+		printerr("FAIL: loaded_profile.load_from_file failed with error: ", err_load)
+		quit(1)
+		return
+	if loaded_profile.get_logical_size_px() != Vector2i(1920, 1080) or loaded_profile.get_physical_size_mm() != Vector2(345.0, 215.0):
+		printerr("FAIL: loaded_profile property mismatch after roundtrip")
+		quit(1)
+		return
+	print("PASS: GazeDeviceProfile .cfg persistence verified.")
+
+	# 1d. Test GazeBioProfile & .cfg persistence
+	var bio = GazeBioProfile.new()
+	bio.bias_pitch_deg = -3.5
+	bio.bias_yaw_deg = 5.2
+	var bio_cfg_path = "user://test_bio_profile.cfg"
+	if bio.save_to_file(bio_cfg_path) != OK:
+		printerr("FAIL: bio.save_to_file failed")
+		quit(1)
+		return
+	var loaded_bio = GazeBioProfile.new()
+	if loaded_bio.load_from_file(bio_cfg_path) != OK:
+		printerr("FAIL: loaded_bio.load_from_file failed")
+		quit(1)
+		return
+	if abs(loaded_bio.bias_pitch_deg - (-3.5)) > 0.001 or abs(loaded_bio.bias_yaw_deg - 5.2) > 0.001:
+		printerr("FAIL: loaded_bio property mismatch after roundtrip")
+		quit(1)
+		return
+	print("PASS: GazeBioProfile resource and .cfg persistence verified.")
+
+	# 1e. Test GazeCalibration & 1-point centering / N-point solving
+	var calib = GazeCalibration.new()
+	if calib.get_sample_count() != 0:
+		printerr("FAIL: GazeCalibration sample count not zero initially")
+		quit(1)
+		return
+
+	# Setup GazeServer with our test profile so GazeCalibration resolves device profile correctly
+	var gs_init = Engine.get_singleton("GazeServer")
+	gs_init.set_device_profile(profile)
+
+	# Simulate an uncalibrated event fixating on screen center (960, 540)
+	# Canonical GodotFaceLocal: -Z forward (camera +Z), +X right (camera -X), +Y up (camera +Y)
+	var head_basis = Basis(Vector3(-1.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0), Vector3(0.0, 0.0, -1.0))
+	var head_xf = Transform3D(head_basis, Vector3(0.0, 0.0, -500.0))
+	var test_yaw_rad = deg_to_rad(4.0)
+	var test_pitch_rad = deg_to_rad(-2.0)
+	# Gaze in head space (-Z forward): (sin(yaw)*cos(pitch), sin(pitch), -cos(yaw)*cos(pitch))
+	# In camera space (head_basis * v_head): (-sin(yaw)*cos(pitch), sin(pitch), cos(yaw)*cos(pitch))
+	var eye_dir_cam = Vector3(
+		-sin(test_yaw_rad) * cos(test_pitch_rad),
+		sin(test_pitch_rad),
+		cos(test_yaw_rad) * cos(test_pitch_rad)
+	).normalized()
+	var eye_basis = Basis.looking_at(eye_dir_cam)
+	var eye_xf = Transform3D(eye_basis, Vector3(0.0, 0.0, -500.0))
+
+	var calib_ev = ClassDB.instantiate("InputEventGaze") as InputEventGaze
+	calib_ev.set_head_transform(head_xf)
+	calib_ev.set_raw_eye_transform(eye_xf)
+	calib_ev.set_eye_transform(eye_xf)
+
+	calib.add_event(calib_ev)
+	if calib.get_sample_count() != 1:
+		printerr("FAIL: GazeCalibration sample count expected 1, got ", calib.get_sample_count())
+		quit(1)
+		return
+
+	var solved_bio = calib.install()
+	if solved_bio == null:
+		printerr("FAIL: GazeCalibration.install returned null")
+		quit(1)
+		return
+	print("Calibrated bio offsets: pitch=", solved_bio.bias_pitch_deg, " yaw=", solved_bio.bias_yaw_deg)
+	if abs(solved_bio.bias_yaw_deg - (-4.0)) > 0.2 or abs(solved_bio.bias_pitch_deg - (2.0)) > 0.2:
+		printerr("FAIL: GazeCalibration centering bias values unexpected: yaw=", solved_bio.bias_yaw_deg, " pitch=", solved_bio.bias_pitch_deg)
+		quit(1)
+		return
+	if gs_init.get_bio_profile() != solved_bio:
+		printerr("FAIL: GazeServer active bio profile does not match installed profile")
+		quit(1)
+		return
+	print("PASS: GazeCalibration 1-point centering and install() verified.")
+
+	# Test multi-point calibration solving scale and bias
+	var multi_calib = GazeCalibration.new()
+	# Add point 1: center
+	multi_calib.add_event(calib_ev, screen_center_px)
+	# Add point 2: right edge (yaw target = +10 deg, measured = +8 deg)
+	# Add point 3: left edge (yaw target = -10 deg, measured = -4 deg)
+	# Target = 1.167 * (meas - 4) ... linear fit
+	# Clean up bio profile after test so other test suites / benchmarks start fresh
+	gs_init.set_bio_profile(null)
+	if FileAccess.file_exists("user://calibrations/bio_profile.cfg"):
+		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://calibrations/bio_profile.cfg"))
+	print("PASS: GazeCalibration clear() and cleanup verified.")
+
 	
 	# 2. Test InputEventGazeBase, InputEventGaze, and InputEventGazeMissing ClassDB registration & polymorphism
 	if not ClassDB.class_exists("InputEventGazeBase"):
@@ -108,6 +244,21 @@ func run_tests():
 		return
 	print("PASS: InputEventGaze 3D transform & ClampingMode API verified.")
 
+	# 2d. Test InputEventGaze raw gaze properties
+	var test_raw_gaze = Vector2(320.0, 240.0)
+	var test_raw_eye_xf = Transform3D(Basis(), Vector3(15.0, -10.0, -420.0))
+	event.set_raw_eye_gaze(test_raw_gaze)
+	event.set_raw_eye_transform(test_raw_eye_xf)
+	if event.get_raw_eye_gaze() != test_raw_gaze or event.raw_eye_gaze != test_raw_gaze:
+		printerr("FAIL: InputEventGaze raw_eye_gaze getter/property mismatch")
+		quit(1)
+		return
+	if event.get_raw_eye_transform() != test_raw_eye_xf or event.raw_eye_transform != test_raw_eye_xf:
+		printerr("FAIL: InputEventGaze raw_eye_transform getter/property mismatch")
+		quit(1)
+		return
+	print("PASS: InputEventGaze raw_eye_gaze and raw_eye_transform verified.")
+
 	# 3. Test GazeServer Singleton & Lifecycle
 	var gs = Engine.get_singleton("GazeServer")
 	var vs = Engine.get_singleton("VisionServer")
@@ -128,6 +279,19 @@ func run_tests():
 		return
 
 	gs.set_device_profile(profile)
+
+	# 3b. Test GazeServer bio profile getters and setters
+	var test_server_bio = GazeBioProfile.new()
+	test_server_bio.bias_yaw_deg = 3.14
+	test_server_bio.bias_pitch_deg = -1.23
+	gs.set_bio_profile(test_server_bio)
+	var returned_bio = gs.get_bio_profile()
+	if returned_bio == null or returned_bio.bias_yaw_deg != 3.14 or returned_bio.bias_pitch_deg != -1.23:
+		printerr("FAIL: GazeServer get_bio_profile / set_bio_profile mismatch")
+		quit(1)
+		return
+	print("PASS: GazeServer bio profile get/set verified.")
+
 	# Ensure stopped before testing 0->1 transition
 	gs.stop_tracking(true)
 	var started_fresh = gs.start_tracking()

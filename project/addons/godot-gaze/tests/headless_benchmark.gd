@@ -227,6 +227,7 @@ func run_benchmark():
 	gs.set_camera_offsets(Vector3(0.0, 0.0, 0.0), 0.0)
 	gs.set_camera_vision_rid(cam_rid)
 	gs.set_smoother(null)
+	gs.set_bio_profile(null)
 	gs.set_crop_requested(true)
 	gs.set_camera_preview_requested(true)
 

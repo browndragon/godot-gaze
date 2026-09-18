@@ -62,9 +62,11 @@ InputEventGaze::InputEventGaze() {
     left_eye_openness = 1.0f;
     right_eye_openness = 1.0f;
     eye_gaze_position = Vector2(0, 0);
+    raw_eye_gaze_position = Vector2(0, 0);
     nose_gaze_position = Vector2(0, 0);
     head_transform = Transform3D();
     eye_transform = Transform3D();
+    raw_eye_transform = Transform3D();
 }
 
 static Vector2 _clamp_to_viewport(const Vector2 &p_pos, const CanvasItem *p_local_to) {
@@ -109,6 +111,27 @@ void InputEventGaze::set_eye_gaze(const Vector2 &p_pos) {
     eye_gaze_position = p_pos;
 }
 
+Vector2 InputEventGaze::get_raw_eye_gaze(const CanvasItem *p_local_to, ClampingMode p_clamping) const {
+    bool should_clamp = false;
+    if (p_clamping == CLAMPING_CLAMPED) {
+        should_clamp = true;
+    } else if (p_clamping == CLAMPING_DEFAULT) {
+        GazeServer *gs = GazeServer::get_singleton();
+        should_clamp = gs ? gs->is_clamping_by_default() : true;
+    }
+
+    Vector2 pos = should_clamp ? _clamp_to_viewport(raw_eye_gaze_position, p_local_to) : raw_eye_gaze_position;
+
+    if (!p_local_to) {
+        return pos;
+    }
+    return p_local_to->get_global_transform_with_canvas().affine_inverse().xform(pos);
+}
+
+void InputEventGaze::set_raw_eye_gaze(const Vector2 &p_pos) {
+    raw_eye_gaze_position = p_pos;
+}
+
 Vector2 InputEventGaze::get_nose_gaze(const CanvasItem *p_local_to, ClampingMode p_clamping) const {
     bool should_clamp = false;
     if (p_clamping == CLAMPING_CLAMPED) {
@@ -137,6 +160,11 @@ void InputEventGaze::_bind_methods() {
 
     ClassDB::bind_method(D_METHOD("get_eye_gaze", "local_to", "clamping"), &InputEventGaze::get_eye_gaze, DEFVAL(nullptr), DEFVAL(CLAMPING_DEFAULT));
     ClassDB::bind_method(D_METHOD("set_eye_gaze", "eye_gaze"), &InputEventGaze::set_eye_gaze);
+    ClassDB::bind_method(D_METHOD("_get_eye_gaze_property"), &InputEventGaze::_get_eye_gaze_property);
+
+    ClassDB::bind_method(D_METHOD("get_raw_eye_gaze", "local_to", "clamping"), &InputEventGaze::get_raw_eye_gaze, DEFVAL(nullptr), DEFVAL(CLAMPING_DEFAULT));
+    ClassDB::bind_method(D_METHOD("set_raw_eye_gaze", "raw_eye_gaze"), &InputEventGaze::set_raw_eye_gaze);
+    ClassDB::bind_method(D_METHOD("_get_raw_eye_gaze_property"), &InputEventGaze::_get_raw_eye_gaze_property);
 
     ClassDB::bind_method(D_METHOD("get_nose_gaze", "local_to", "clamping"), &InputEventGaze::get_nose_gaze, DEFVAL(nullptr), DEFVAL(CLAMPING_DEFAULT));
     ClassDB::bind_method(D_METHOD("set_nose_gaze", "nose_gaze"), &InputEventGaze::set_nose_gaze);
@@ -147,13 +175,19 @@ void InputEventGaze::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_eye_transform", "eye_transform"), &InputEventGaze::set_eye_transform);
     ClassDB::bind_method(D_METHOD("get_eye_transform"), &InputEventGaze::get_eye_transform);
 
+    ClassDB::bind_method(D_METHOD("set_raw_eye_transform", "raw_eye_transform"), &InputEventGaze::set_raw_eye_transform);
+    ClassDB::bind_method(D_METHOD("get_raw_eye_transform"), &InputEventGaze::get_raw_eye_transform);
+
     ClassDB::bind_method(D_METHOD("set_gaze_transform", "gaze_transform"), &InputEventGaze::set_gaze_transform);
     ClassDB::bind_method(D_METHOD("get_gaze_transform"), &InputEventGaze::get_gaze_transform);
 
     ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGaze::copy_from);
 
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_gaze"), "set_eye_gaze", "_get_eye_gaze_property");
+    ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "raw_eye_gaze"), "set_raw_eye_gaze", "_get_raw_eye_gaze_property");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "set_head_transform", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_transform"), "set_eye_transform", "get_eye_transform");
+    ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "raw_eye_transform"), "set_raw_eye_transform", "get_raw_eye_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "gaze_transform"), "set_gaze_transform", "get_gaze_transform");
 }
 
@@ -161,9 +195,11 @@ void InputEventGaze::copy_from(const Ref<InputEventGaze> &p_other) {
     if (p_other.is_valid()) {
         InputEventGazeBase::copy_from(p_other);
         eye_gaze_position = p_other->eye_gaze_position;
+        raw_eye_gaze_position = p_other->raw_eye_gaze_position;
         nose_gaze_position = p_other->nose_gaze_position;
         head_transform = p_other->head_transform;
         eye_transform = p_other->eye_transform;
+        raw_eye_transform = p_other->raw_eye_transform;
     }
 }
 

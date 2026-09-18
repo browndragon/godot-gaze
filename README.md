@@ -85,13 +85,12 @@ func _ready() -> void:
 
 Biological eye alignment differs from optical axes (Angle Kappa $\kappa$). `godot-gaze` separates device geometry from biological parameters:
 * **`GazeDeviceProfile`**: Display dimensions (`physical_size_mm`, `logical_size_px`), camera offsets, and tilt. Saved to `user://calibrations/device_profile.cfg`.
-* **`GazeBioProfile`**: Head-space spherical pitch/yaw bias and scale. Saved to `user://calibrations/bio_profile.cfg`.
-* **`GazeCalibration`**: Closed-form 1D OLS solver. Centering can be performed in a single call:
+* **`GazeBioProfile`**: Head-space spherical pitch/yaw angular bias (Angle Kappa $\kappa$). Saved to `user://calibrations/bio_profile.cfg`.
+* **`GazeCalibration`**: Circular-mean Angle Kappa angular solver. Centering or multi-point calibration can be performed and installed cleanly:
   ```gdscript
-  var bio = GazeBioProfile.new()
-  GazeCalibration.centering(latest_gaze_event, bio)
-  GazeServer.set_bio_profile(bio)
-  bio.save_to_file("user://calibrations/bio_profile.cfg")
+  var cal = GazeCalibration.new()
+  cal.add_event(latest_gaze_event) # Defaults to screen center, or pass custom screen Vector2
+  var bio = cal.install() # Solves, sets on GazeServer, and saves to user://calibrations/bio_profile.cfg
   ```
 
 ---

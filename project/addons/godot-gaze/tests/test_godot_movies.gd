@@ -77,7 +77,8 @@ func _run_movie_tests() -> void:
 		"seq_02_horizontal_saccade",
 		"seq_03_diagonal_saccade",
 		"seq_04_dynamic_head_roll",
-		"seq_05_eye_blink_wink"
+		"seq_05_eye_blink_wink",
+		"seq_06_center_dwell"
 	]
 
 	for seq_id in seq_keys:
@@ -94,6 +95,7 @@ func _run_movie_tests() -> void:
 		print("    Description: %s" % [seq_desc])
 
 		var gaze_points: Array[Vector2] = []
+		var gaze_events: Array[InputEventGaze] = []
 		var head_zs: Array[float] = []
 		var head_rolls: Array[float] = []
 		var left_opens: Array[float] = []
@@ -136,6 +138,10 @@ func _run_movie_tests() -> void:
 				gaze_points.append(gaze_mm)
 				left_opens.append(gs.get_left_eye_openness())
 				right_opens.append(gs.get_right_eye_openness())
+
+				var ev = gs.get_most_recent_event()
+				if ev is InputEventGaze:
+					gaze_events.append(ev)
 
 			f_idx += 1
 
@@ -238,6 +244,30 @@ func _run_movie_tests() -> void:
 					seq_passed = false
 				else:
 					print("    PASS: Eye state dynamics achieved clear signal separation (Δ >= 0.50).")
+
+		elif seq_id == "seq_06_center_dwell":
+			var calib = GazeCalibration.new()
+			var screen_center = Vector2(logical_sz.x * 0.5, logical_sz.y * 0.5)
+			calib.set_target(screen_center, 60.0)
+
+			var smoothed_positions: Array[Vector2] = []
+			for ev in gaze_events:
+				calib.add_sample(ev, 0.033)
+				smoothed_positions.append(calib.get_smoothed_gaze())
+
+			var max_smoothed_vel: float = 0.0
+			for i in range(1, smoothed_positions.size()):
+				var vel = (smoothed_positions[i] - smoothed_positions[i - 1]).length() / 0.033
+				if vel > max_smoothed_vel:
+					max_smoothed_vel = vel
+
+			print("    Smoothed gaze peak velocity: %.2f px/s" % [max_smoothed_vel])
+			var max_expected_vel = meta.get("max_smoothed_vel_px_s", 150.0)
+			if max_smoothed_vel > max_expected_vel:
+				printerr("    FAIL: Smoothed velocity %.2f px/s exceeded %.2f px/s bound" % [max_smoothed_vel, max_expected_vel])
+				seq_passed = false
+			else:
+				print("    PASS: Damped spring absorbed neural ML jitter into smooth trajectory (< %.1f px/s)." % [max_expected_vel])
 
 		if not seq_passed:
 			all_passed = false

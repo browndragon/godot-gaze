@@ -1,8 +1,8 @@
 {
   "version": "1.0",
   "description": "Golden reference metrics for tests/godot_movies regression suite",
-  "total_frames": 60,
-  "total_bytes": 516394,
+  "total_frames": 75,
+  "total_bytes": 683368,
   "sequences": {
     "seq_01_center_fixation": {
       "description": "Steady gaze fixation on center screen marker",
@@ -45,6 +45,14 @@
       "type": "eye_state",
       "expected_lock_rate": 1.0,
       "min_openness_delta": 0.5
+    },
+    "seq_06_center_dwell": {
+      "description": "Empirical center dwell fixation from real user camera feed testing damped spring stability",
+      "frames": 15,
+      "bytes": 166974,
+      "type": "dwell_center",
+      "expected_lock_rate": 1.0,
+      "max_smoothed_vel_px_s": 150.0
     }
   }
 }

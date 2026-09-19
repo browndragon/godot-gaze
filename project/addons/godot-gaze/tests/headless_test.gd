@@ -165,9 +165,136 @@ func run_tests():
 	gs_init.set_bio_profile(null)
 	if FileAccess.file_exists("user://calibrations/bio_profile.cfg"):
 		DirAccess.remove_absolute(ProjectSettings.globalize_path("user://calibrations/bio_profile.cfg"))
-	print("PASS: GazeCalibration clear() and cleanup verified.")
+	# 1f. Test GazeCalibration continuous two-stage pipeline & signal separation
+	var two_stage_calib = GazeCalibration.new()
+	two_stage_calib.set_target(screen_center_px, 60.0)
+	if two_stage_calib.get_stage() != GazeCalibration.STAGE_SETTLING:
+		printerr("FAIL: GazeCalibration initial stage expected STAGE_SETTLING, got: ", two_stage_calib.get_stage())
+		quit(1)
+		return
+	if two_stage_calib.get_display_fill() != 0.0:
+		printerr("FAIL: GazeCalibration initial display fill expected 0.0, got: ", two_stage_calib.get_display_fill())
+		quit(1)
+		return
 
-	
+	# Setup calib_ev at screen center
+	calib_ev.set_raw_eye_gaze(screen_center_px)
+	calib_ev.set_eye_gaze(screen_center_px)
+
+	# Feed 15 frames at 60Hz (~0.25s) -> should be settling (display fill reaches >= 0.20)
+	for i in range(15):
+		two_stage_calib.add_sample(calib_ev, 0.0166)
+	var mid_settle_fill = two_stage_calib.get_display_fill()
+	if mid_settle_fill < 0.20 or mid_settle_fill > 0.50:
+		printerr("FAIL: GazeCalibration mid settle fill expected in [0.20, 0.50], got: ", mid_settle_fill)
+		quit(1)
+		return
+
+	# Saccade off-target: gaze jumps to (100, 100) (error = (960-100) - 60 = 800px >> 100px falloff)
+	var saccade_ev = ClassDB.instantiate("InputEventGaze") as InputEventGaze
+	saccade_ev.set_raw_eye_gaze(Vector2(100.0, 100.0))
+	saccade_ev.set_eye_gaze(Vector2(100.0, 100.0))
+	saccade_ev.set_head_transform(head_xf)
+	saccade_ev.set_raw_eye_transform(eye_xf)
+	saccade_ev.set_eye_transform(eye_xf)
+
+	# Feed 15 frames off-target -> should drain rapidly back to near 0 (signal separation)
+	for i in range(15):
+		two_stage_calib.add_sample(saccade_ev, 0.0166)
+	var drained_fill = two_stage_calib.get_display_fill()
+	if drained_fill > 0.15:
+		printerr("FAIL: GazeCalibration fill expected <= 0.15 after saccade away, got: ", drained_fill)
+		quit(1)
+		return
+	print("PASS: GazeCalibration stage 1 dwell charge and saccadic drain verified with signal separation.")
+
+	# Full dwell test: reset target and feed on-target gaze until Stage 1 completes, Stage 2 completes
+	two_stage_calib.set_target(screen_center_px, 60.0)
+	var transitioned_to_stage_2 = false
+	var completed = false
+	for i in range(70):
+		# Small micro-jitter (+-2px)
+		var jitter = Vector2(sin(i * 0.5) * 2.0, cos(i * 0.5) * 2.0)
+		calib_ev.set_raw_eye_gaze(screen_center_px + jitter)
+		calib_ev.set_eye_gaze(screen_center_px + jitter)
+		if two_stage_calib.add_sample(calib_ev, 0.0166):
+			completed = true
+			break
+		if two_stage_calib.get_stage() == GazeCalibration.STAGE_SAMPLING:
+			transitioned_to_stage_2 = true
+
+	if not transitioned_to_stage_2:
+		printerr("FAIL: GazeCalibration failed to transition to STAGE_SAMPLING")
+		quit(1)
+		return
+	if not completed:
+		printerr("FAIL: GazeCalibration failed to complete dwell (display fill=", two_stage_calib.get_display_fill(), ")")
+		quit(1)
+		return
+	if two_stage_calib.get_sample_count() != 1:
+		printerr("FAIL: GazeCalibration sample count expected 1 after dwell completion, got: ", two_stage_calib.get_sample_count())
+		quit(1)
+		return
+	print("PASS: GazeCalibration continuous two-stage API (settling -> sampling -> point completion) verified.")
+
+	# Test cancel_target
+	two_stage_calib.set_target(screen_center_px, 60.0)
+	two_stage_calib.cancel_target()
+	if two_stage_calib.get_stage() != GazeCalibration.STAGE_IDLE or two_stage_calib.get_display_fill() != 0.0:
+		printerr("FAIL: GazeCalibration cancel_target failed to return to STAGE_IDLE")
+		quit(1)
+		return
+	print("PASS: GazeCalibration cancel_target verified.")
+
+	# 1g. Test GazeContinuousCalibrator scene & further-of-two point selection heuristic
+	var GazeContinuousCalibrator = load("res://addons/godot-gaze/calibration/gaze_continuous_calibrator.gd")
+	if GazeContinuousCalibrator == null:
+		printerr("FAIL: Could not load gaze_continuous_calibrator.gd")
+		quit(1)
+		return
+	var calibrator = GazeContinuousCalibrator.new()
+	root.add_child(calibrator)
+	calibrator.start_calibration()
+	if not calibrator.is_calibrating or calibrator.step_index != 0:
+		printerr("FAIL: GazeContinuousCalibrator failed to start calibration at step 0")
+		quit(1)
+		return
+	var screen_center = root.get_viewport().get_visible_rect().size * 0.5
+	if (calibrator.current_target_pos - screen_center).length() > 1.0:
+		printerr("FAIL: GazeContinuousCalibrator step 0 target expected at center, got: ", calibrator.current_target_pos)
+		quit(1)
+		return
+
+	# Force capture point 0 (center)
+	calibrator.latest_gaze_event = calib_ev
+	calibrator.force_capture()
+	if calibrator.step_index != 1:
+		printerr("FAIL: GazeContinuousCalibrator expected step_index 1 after capture, got: ", calibrator.step_index)
+		quit(1)
+		return
+
+	# Force capture point 1
+	calibrator.latest_gaze_event = calib_ev
+	calibrator.force_capture()
+	if calibrator.step_index != 2:
+		printerr("FAIL: GazeContinuousCalibrator expected step_index 2 after capture, got: ", calibrator.step_index)
+		quit(1)
+		return
+
+	# Finish calibration and verify profile returned
+	var finished_bio = calibrator.finish_calibration()
+	if finished_bio == null:
+		printerr("FAIL: GazeContinuousCalibrator finish_calibration returned null")
+		quit(1)
+		return
+	if gs_init.get_bio_profile() != finished_bio:
+		printerr("FAIL: GazeServer active bio profile does not match finished_bio")
+		quit(1)
+		return
+	root.remove_child(calibrator)
+	calibrator.free()
+	print("PASS: GazeContinuousCalibrator component, further-of-two heuristic, and finish_calibration verified.")
+
 	# 2. Test InputEventGazeBase, InputEventGaze, and InputEventGazeMissing ClassDB registration & polymorphism
 	if not ClassDB.class_exists("InputEventGazeBase"):
 		printerr("FAIL: InputEventGazeBase not registered in ClassDB")

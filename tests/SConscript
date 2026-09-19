@@ -287,7 +287,7 @@ if env["platform"] != "javascript":
         "build/tests/logs/tests.benchmark.log",
         [library],
         Action(run_command_and_log, varlist=["TEST_CMD"]),
-        TEST_CMD=["./scripts/godot.sh", "--headless", "-s", "addons/godot-gaze/tests/headless_benchmark.gd"]
+        TEST_CMD=["./scripts/godot.sh", "--headless", "--timeout", "90", "-s", "addons/godot-gaze/tests/headless_benchmark.gd"]
     )
     env.AlwaysBuild(benchmark_run)
     env.Alias("tests/benchmark", benchmark_run)

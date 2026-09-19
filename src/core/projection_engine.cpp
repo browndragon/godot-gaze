@@ -174,13 +174,6 @@ namespace Gaze
         return head_basis_cam.transform(v_head_cal).normalized();
     }
 
-    static inline double wrap_angle_rad(double a)
-    {
-        while (a > M_PI) a -= 2.0 * M_PI;
-        while (a < -M_PI) a += 2.0 * M_PI;
-        return a;
-    }
-
     bool solve_head_space_bias(
         const std::vector<double> &measured_angles_rad,
         const std::vector<double> &target_angles_rad,

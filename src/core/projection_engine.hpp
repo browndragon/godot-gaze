@@ -123,4 +123,13 @@ namespace Gaze
         const std::vector<double> &target_angles_rad,
         double &out_bias_deg);
 
+    /**
+     * @brief Wraps an angle in radians to [-pi, pi].
+     */
+    static inline double wrap_angle_rad(double a) {
+        while (a > M_PI) a -= 2.0 * M_PI;
+        while (a < -M_PI) a += 2.0 * M_PI;
+        return a;
+    }
+
 } // namespace Gaze

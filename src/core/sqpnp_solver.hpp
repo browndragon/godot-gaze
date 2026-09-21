@@ -44,7 +44,8 @@ public:
         const std::vector<SpacedVector2<S>> &image_points,
         double fx, double fy, double cx, double cy,
         SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &out_rotation,
-        OpenCVCameraVector3 &out_translation);
+        OpenCVCameraVector3 &out_translation,
+        double *out_squared_reproj_error = nullptr);
 
     template<Space S = Space::GodotCameraWorkingImagePixels>
     static bool solve_rvec(
@@ -52,7 +53,8 @@ public:
         const std::vector<SpacedVector2<S>> &image_points,
         double fx, double fy, double cx, double cy,
         OpenCVCameraVector3 &out_rvec,
-        OpenCVCameraVector3 &out_translation);
+        OpenCVCameraVector3 &out_translation,
+        double *out_squared_reproj_error = nullptr);
 };
 
 } // namespace Gaze

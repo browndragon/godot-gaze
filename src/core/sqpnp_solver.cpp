@@ -710,7 +710,8 @@ bool SQPnPSolver::solve(
     const std::vector<SpacedVector2<S>> &image_points,
     double fx, double fy, double cx, double cy,
     SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &out_rotation,
-    OpenCVCameraVector3 &out_translation)
+    OpenCVCameraVector3 &out_translation,
+    double *out_squared_reproj_error)
 {
     size_t n = object_points.size();
     if (n < 4 || image_points.size() != n) return false;
@@ -879,6 +880,10 @@ bool SQPnPSolver::solve(
 
     out_rotation = best_R;
     out_translation = best_t;
+    if (out_squared_reproj_error)
+    {
+        *out_squared_reproj_error = min_reproj_err;
+    }
     return true;
 }
 
@@ -888,10 +893,11 @@ bool SQPnPSolver::solve_rvec(
     const std::vector<SpacedVector2<S>> &image_points,
     double fx, double fy, double cx, double cy,
     OpenCVCameraVector3 &out_rvec,
-    OpenCVCameraVector3 &out_translation)
+    OpenCVCameraVector3 &out_translation,
+    double *out_squared_reproj_error)
 {
     SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> R;
-    if (!solve<S>(object_points, image_points, fx, fy, cx, cy, R, out_translation))
+    if (!solve<S>(object_points, image_points, fx, fy, cx, cy, R, out_translation, out_squared_reproj_error))
     {
         return false;
     }
@@ -905,27 +911,31 @@ template bool SQPnPSolver::solve<Space::GodotCameraWorkingImagePixels>(
     const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &,
     double, double, double, double,
     SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &,
-    OpenCVCameraVector3 &);
+    OpenCVCameraVector3 &,
+    double *);
 
 template bool SQPnPSolver::solve<Space::GodotCameraImagePixels>(
     const std::vector<OpenCVFaceVector3> &,
     const std::vector<SpacedVector2<Space::GodotCameraImagePixels>> &,
     double, double, double, double,
     SpacedBasis<Space::OpenCVFaceModel, Space::OpenCVCamera> &,
-    OpenCVCameraVector3 &);
+    OpenCVCameraVector3 &,
+    double *);
 
 template bool SQPnPSolver::solve_rvec<Space::GodotCameraWorkingImagePixels>(
     const std::vector<OpenCVFaceVector3> &,
     const std::vector<SpacedVector2<Space::GodotCameraWorkingImagePixels>> &,
     double, double, double, double,
     OpenCVCameraVector3 &,
-    OpenCVCameraVector3 &);
+    OpenCVCameraVector3 &,
+    double *);
 
 template bool SQPnPSolver::solve_rvec<Space::GodotCameraImagePixels>(
     const std::vector<OpenCVFaceVector3> &,
     const std::vector<SpacedVector2<Space::GodotCameraImagePixels>> &,
     double, double, double, double,
     OpenCVCameraVector3 &,
-    OpenCVCameraVector3 &);
+    OpenCVCameraVector3 &,
+    double *);
 
 } // namespace Gaze

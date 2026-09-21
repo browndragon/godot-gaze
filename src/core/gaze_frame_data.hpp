@@ -10,6 +10,11 @@ constexpr size_t EYE_CROP_SIZE = 60;
 constexpr size_t EYE_CROP_CHANNELS = 3;
 constexpr size_t EYE_CROP_BYTES = EYE_CROP_SIZE * EYE_CROP_SIZE * EYE_CROP_CHANNELS; // 10800 bytes
 
+enum class PipelineTrackingMode {
+    SEEKING,  ///< Full-frame YuNet face detection
+    TRACKING  ///< 3D Face Space ROI anchor tracking
+};
+
 struct StageTimings {
     double capture_gpu_readback_ms = 0.0;
     double roll_prewarp_ms = 0.0;
@@ -36,7 +41,10 @@ struct GazeFrameData {
     bool auto_roll_enabled = true;
     GazeRect face_bbox;
     GazeRect face_bbox_cam;
-    bool is_temporal_tracking = false;
+    PipelineTrackingMode tracking_mode = PipelineTrackingMode::SEEKING;
+    bool is_temporal_tracking = false; // Backward compatibility alias
+    float landmark_rmse_px = 0.0f;
+    float landmark_quality = 0.0f;
     float face_score = 0.0f;
     float eye_box_sz = 0.0f;
     float right_eye_box_sz = 0.0f;

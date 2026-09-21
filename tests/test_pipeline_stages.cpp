@@ -460,4 +460,102 @@ TEST_CASE("Pipeline Stage 5: Independent Eye Bounding Box Sizing on Yawed Fixtur
     CHECK(d.eye_box_sz == std::max(d.right_eye_box_sz, d.left_eye_box_sz));
 }
 
+TEST_CASE("Pipeline YuNet-to-Landmark Handoff Continuity") {
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_center.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+
+    // Frame 0: Cold start / SEEKING mode using YuNet
+    GazeFrameData d0;
+    d0.camera_raw_bgr = img.data;
+    d0.camera_width = img.width;
+    d0.camera_height = img.height;
+    d0.timestamp = 1.0;
+    d0.auto_roll_enabled = true;
+    d0.roll_hint_rad = 0.0f;
+    pipeline.process_frame_synchronous(&d0);
+
+    REQUIRE(d0.face_detected == true);
+    REQUIRE(d0.has_landmarks_2d == true);
+
+    float pitch0 = static_cast<float>(d0.head_rotation.x);
+    float yaw0   = static_cast<float>(d0.head_rotation.y);
+    float roll0  = static_cast<float>(d0.head_rotation.z);
+    GodotCameraVector3 t0 = d0.head_translation;
+    float w0 = d0.face_bbox.width;
+    float h0 = d0.face_bbox.height;
+    float cx0 = d0.face_bbox.x + w0 * 0.5f;
+    float cy0 = d0.face_bbox.y + h0 * 0.5f;
+
+    // Frame 1: TRACKING mode using previous frame's face state
+    GazeFrameData d1;
+    d1.camera_raw_bgr = img.data;
+    d1.camera_width = img.width;
+    d1.camera_height = img.height;
+    d1.timestamp = 1.016; // 60 fps step
+    d1.auto_roll_enabled = true;
+    d1.roll_hint_rad = 0.0f;
+    pipeline.process_frame_synchronous(&d1);
+
+    REQUIRE(d1.face_detected == true);
+    REQUIRE(d1.has_landmarks_2d == true);
+
+    float pitch1 = static_cast<float>(d1.head_rotation.x);
+    float yaw1   = static_cast<float>(d1.head_rotation.y);
+    float roll1  = static_cast<float>(d1.head_rotation.z);
+    GodotCameraVector3 t1 = d1.head_translation;
+    float w1 = d1.face_bbox.width;
+    float h1 = d1.face_bbox.height;
+    float cx1 = d1.face_bbox.x + w1 * 0.5f;
+    float cy1 = d1.face_bbox.y + h1 * 0.5f;
+
+    float d_pitch_deg = std::abs(pitch1 - pitch0) * (180.0f / 3.14159265f);
+    float d_yaw_deg   = std::abs(yaw1 - yaw0) * (180.0f / 3.14159265f);
+    float d_roll_deg  = std::abs(roll1 - roll0) * (180.0f / 3.14159265f);
+    float dz_mm       = std::abs(static_cast<float>(t1.z - t0.z));
+    float dw_ratio    = std::abs(w1 - w0) / w0;
+    float dh_ratio    = std::abs(h1 - h0) / h0;
+    float dc_px       = std::sqrt((cx1 - cx0) * (cx1 - cx0) + (cy1 - cy0) * (cy1 - cy0));
+
+    std::cout << "\n=== EMPIRICAL HANDOFF CONTINUITY METRICS ===" << std::endl;
+    std::cout << "Pitch Jump (deg) : " << d_pitch_deg << " (bound: <= 1.5 deg)" << std::endl;
+    std::cout << "Yaw Jump (deg)   : " << d_yaw_deg << " (bound: <= 1.0 deg)" << std::endl;
+    std::cout << "Roll Jump (deg)  : " << d_roll_deg << " (bound: <= 1.0 deg)" << std::endl;
+    std::cout << "Depth Z Jump (mm): " << dz_mm << " (bound: <= 5.0 mm)" << std::endl;
+    std::cout << "Width 0 vs 1     : " << w0 << " -> " << w1 << " (" << (dw_ratio * 100.0f) << "%)" << std::endl;
+    std::cout << "Height 0 vs 1    : " << h0 << " -> " << h1 << " (" << (dh_ratio * 100.0f) << "%)" << std::endl;
+    std::cout << "Center Shift (px): " << dc_px << " (bound: <= 5.0 px)" << std::endl;
+    std::cout << "RMSE Frame 0 (px): " << d0.landmark_rmse_px << std::endl;
+    std::cout << "RMSE Frame 1 (px): " << d1.landmark_rmse_px << std::endl;
+    std::cout << "===========================================\n" << std::endl;
+
+    // Strict signal continuity invariants:
+    CHECK_MESSAGE(d_pitch_deg <= 1.5f, "Pitch jumped discontinuously across handoff: ", d_pitch_deg, " deg");
+    CHECK_MESSAGE(dz_mm <= 5.0f, "Depth Z jumped discontinuously across handoff: ", dz_mm, " mm");
+    CHECK_MESSAGE(dw_ratio <= 0.05f, "Crop width changed by >5% across handoff: ", (dw_ratio * 100.0f), "%");
+    CHECK_MESSAGE(dh_ratio <= 0.05f, "Crop height changed by >5% across handoff: ", (dh_ratio * 100.0f), "%");
+    CHECK_MESSAGE(dc_px <= 5.0f, "Crop center shifted by >5px across handoff: ", dc_px, " px");
+
+    // Mode and quality verification:
+    CHECK(d0.tracking_mode == PipelineTrackingMode::SEEKING);
+    CHECK(d1.tracking_mode == PipelineTrackingMode::TRACKING);
+    CHECK(d0.landmark_rmse_px > 0.0f);
+    CHECK((d0.landmark_rmse_px / d0.face_bbox.height) <= 0.10f);
+    CHECK(d0.landmark_quality >= 0.70f);
+    CHECK(d1.landmark_rmse_px > 0.0f);
+    CHECK((d1.landmark_rmse_px / d1.face_bbox.height) <= 0.10f);
+    CHECK(d1.landmark_quality >= 0.70f);
+    CHECK(d1.face_score == doctest::Approx(d1.landmark_quality));
+}
+
+
 

@@ -46,13 +46,19 @@ namespace Gaze
         SigmoidalFilter roll_filter;
 
         bool face_found = false;
+        PipelineTrackingMode tracking_mode = PipelineTrackingMode::SEEKING;
+        OpenCVFaceVector3 roi_anchor_face{0.0, -12.0, 30.0};
+        float roi_phys_w_mm = 320.0f;
+        float roi_phys_h_mm = 480.0f;
+        OpenCVCameraVector3 last_rvec{0.0, 0.0, 0.0};
+        OpenCVCameraVector3 last_tvec{0.0, 0.0, 0.0};
+        float last_roll_hint_rad = 0.0f;
         GodotCameraImageVector2 tracking_face_center_cam{0.0, 0.0};
         GodotCameraImageVector2 offset_work{0.0, 0.0};
         float tracking_face_w = 0.0f;
         float tracking_face_h = 0.0f;
         int last_frame_w = 0;
         int last_frame_h = 0;
-        OpenCVCameraVector3 last_tvec{0.0, 0.0, 0.0};
 
         void _worker_loop();
         void _stage_1_apply_roll_hint(GazeFrameData *data, Frame &working_frame);
@@ -91,12 +97,18 @@ namespace Gaze
         void clear_work_queue();
         void reset_face_tracking()
         {
+            tracking_mode = PipelineTrackingMode::SEEKING;
             face_found = false;
             tracking_face_center_cam = GodotCameraImageVector2(0.0, 0.0);
             offset_work = GodotCameraImageVector2(0.0, 0.0);
             tracking_face_w = 0.0f;
             tracking_face_h = 0.0f;
+            last_rvec = OpenCVCameraVector3(0.0, 0.0, 0.0);
             last_tvec = OpenCVCameraVector3(0.0, 0.0, 0.0);
+            last_roll_hint_rad = 0.0f;
+            roi_anchor_face = OpenCVFaceVector3(0.0, -12.0, 30.0);
+            roi_phys_w_mm = 320.0f;
+            roi_phys_h_mm = 480.0f;
         }
         void reset_tracker()
         {

@@ -261,12 +261,12 @@ namespace Gaze
         Frame working_frame;
         _stage_1_apply_roll_hint(data, working_frame);
         auto end_roll = std::chrono::steady_clock::now();
-        data->timings.roll_prewarp_ms = face_found ? 0.0 : std::chrono::duration<double, std::milli>(end_roll - start_roll).count();
+        data->timings.roll_prewarp_ms = (tracking_mode == PipelineTrackingMode::TRACKING) ? 0.0 : std::chrono::duration<double, std::milli>(end_roll - start_roll).count();
 
         auto start_face = std::chrono::steady_clock::now();
         bool face_ok = _stage_2_detect_face_bbox(data, working_frame);
         auto end_face = std::chrono::steady_clock::now();
-        data->timings.face_yunet_ms = (face_found && face_ok) ? 0.0 : std::chrono::duration<double, std::milli>(end_face - start_face).count();
+        data->timings.face_yunet_ms = (data->tracking_mode == PipelineTrackingMode::TRACKING && face_ok) ? 0.0 : std::chrono::duration<double, std::milli>(end_face - start_face).count();
 
         data->timings.landmark_adas_ms = 0.0;
         data->timings.pnp_solve_ms = 0.0;
@@ -294,9 +294,9 @@ namespace Gaze
                 data->timings.pnp_solve_ms = std::chrono::duration<double, std::milli>(end_pnp - start_pnp).count();
             }
 
-            // Tracking fallback: if tracking failed while face_found was true,
-            // reset face_found and re-run YuNet detector on working_frame!
-            if (face_found && (!lm_ok || !pose_ok))
+            // Tracking fallback: if tracking failed while in TRACKING mode,
+            // reset tracking and re-run YuNet detector on working_frame!
+            if (data->tracking_mode == PipelineTrackingMode::TRACKING && (!lm_ok || !pose_ok))
             {
                 reset_face_tracking();
                 if (std::abs(data->roll_hint_rad) > 1e-4f)
@@ -358,45 +358,36 @@ namespace Gaze
 
         if (data->face_detected && data->has_landmarks_2d && data->internal_landmarks_working_px.size() == 35)
         {
-            // Compute centroid of landmarks in working space from internal_landmarks_working_px
-            double sum_wx = 0.0, sum_wy = 0.0;
-            for (size_t i = 0; i < 35; ++i)
+            double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : calculate_default_focal_length(static_cast<double>(working_frame.width));
+            double cx = working_frame.width * 0.5;
+            double cy = working_frame.height * 0.5;
+
+            // When acquiring face in SEEKING mode, anchor 3D ROI in Face Space to YuNet's detected face box
+            if (data->tracking_mode == PipelineTrackingMode::SEEKING && tvec.z > 50.0)
             {
-                sum_wx += data->internal_landmarks_working_px[i].x;
-                sum_wy += data->internal_landmarks_working_px[i].y;
+                float cx_work = data->face_bbox.x + data->face_bbox.width * 0.5f;
+                float cy_work = data->face_bbox.y + data->face_bbox.height * 0.5f;
+                float w_work = data->face_bbox.width;
+                float h_work = data->face_bbox.height;
+
+                auto R = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(rvec);
+                OpenCVCameraVector3 p_centroid_cam = R.transform(OpenCVFaceVector3(0.0, 2.0, 40.0)) + tvec;
+                double z_face = p_centroid_cam.z;
+
+                OpenCVCameraVector3 p_target_cam((cx_work - cx) * z_face / focal,
+                                                (cy_work - cy) * z_face / focal,
+                                                z_face);
+                roi_anchor_face = R.transposed().transform(p_target_cam - tvec);
+                roi_phys_w_mm = static_cast<float>(w_work * z_face / focal);
+                roi_phys_h_mm = static_cast<float>(h_work * z_face / focal);
             }
-            GodotCameraImageVector2 curr_centroid_work(sum_wx / 35.0, sum_wy / 35.0);
-            double min_x = data->internal_landmarks_working_px[0].x;
-            double max_x = min_x;
-            double min_y = data->internal_landmarks_working_px[0].y;
-            double max_y = min_y;
-            for (size_t i = 1; i < 35; ++i)
-            {
-                min_x = std::min(min_x, data->internal_landmarks_working_px[i].x);
-                max_x = std::max(max_x, data->internal_landmarks_working_px[i].x);
-                min_y = std::min(min_y, data->internal_landmarks_working_px[i].y);
-                max_y = std::max(max_y, data->internal_landmarks_working_px[i].y);
-            }
-            double lm_w = max_x - min_x;
-            double lm_h = max_y - min_y;
-            double lm_box_cx = (min_x + max_x) * 0.5;
-            double lm_box_cy = (min_y + max_y) * 0.5;
 
-            // In working space, face is upright:
-            // 1. Horizontal center of landmark bounding box (outer jaw/ears) aligns with facial midline.
-            // 2. Landmarks span eyebrows to chin; head center (including forehead) is ~0.15*lm_h above box center.
-            GodotCameraImageVector2 target_center_work(lm_box_cx, lm_box_cy - 0.15 * lm_h);
-            GodotCameraImageVector2 target_center_cam = rotate_point_2d(target_center_work, -data->roll_hint_rad, data->camera_width, data->camera_height);
-            
-            float target_w = static_cast<float>(lm_w * 1.35f);
-            float target_h = static_cast<float>(lm_h * 1.35f);
-
-            tracking_face_center_cam = target_center_cam;
-            tracking_face_w = target_w;
-            tracking_face_h = target_h;
-
-            face_found = true;
+            last_rvec = rvec;
             last_tvec = tvec;
+            last_roll_hint_rad = data->roll_hint_rad;
+            tracking_mode = PipelineTrackingMode::TRACKING;
+            face_found = true;
+            data->is_temporal_tracking = (data->tracking_mode == PipelineTrackingMode::TRACKING);
         }
         else
         {
@@ -444,7 +435,7 @@ namespace Gaze
         frame.data = data->camera_raw_bgr.data();
         frame.timestamp = data->timestamp;
 
-        if (face_found)
+        if (tracking_mode == PipelineTrackingMode::TRACKING)
         {
             working_frame = frame;
             return;
@@ -463,18 +454,50 @@ namespace Gaze
 
     bool GazeTrackingPipeline::_stage_2_detect_face_bbox(GazeFrameData *data, const Frame &working_frame)
     {
-        if (face_found && tracking_face_w >= 20.0f && tracking_face_h >= 20.0f)
+        if (tracking_mode == PipelineTrackingMode::TRACKING && last_tvec.z > 50.0)
         {
-            GodotCameraImageVector2 center_work = rotate_point_2d(tracking_face_center_cam, data->roll_hint_rad, data->camera_width, data->camera_height);
-            data->face_bbox = GazeRect(center_work.x - tracking_face_w * 0.5f,
-                                       center_work.y - tracking_face_h * 0.5f,
-                                       tracking_face_w, tracking_face_h);
-            data->face_detected = true;
-            data->face_score = 1.0f;
-            data->is_temporal_tracking = true;
-            return true;
+            double focal = (data->camera_focal_length_px > 0.0) ? data->camera_focal_length_px : calculate_default_focal_length(static_cast<double>(working_frame.width));
+            double cx = working_frame.width * 0.5;
+            double cy = working_frame.height * 0.5;
+
+            // Project Face Space ROI anchor into working camera frame using last solved head pose
+            auto R = rodrigues_to_basis<Space::OpenCVFaceModel, Space::OpenCVCamera>(last_rvec);
+            OpenCVCameraVector3 p_cam = R.transform(roi_anchor_face) + last_tvec;
+
+            // If the roll hint changed between frames, adjust the projected point
+            float d_roll = data->roll_hint_rad - last_roll_hint_rad;
+            if (std::abs(d_roll) > 1e-4f)
+            {
+                float cos_r = std::cos(d_roll);
+                float sin_r = std::sin(d_roll);
+                double rx = cos_r * p_cam.x - sin_r * p_cam.y;
+                double ry = sin_r * p_cam.x + cos_r * p_cam.y;
+                p_cam.x = rx;
+                p_cam.y = ry;
+            }
+
+            if (p_cam.z > 50.0)
+            {
+                double u_c = (focal * p_cam.x / p_cam.z) + cx;
+                double v_c = (focal * p_cam.y / p_cam.z) + cy;
+                float box_w = static_cast<float>(roi_phys_w_mm * focal / p_cam.z);
+                float box_h = static_cast<float>(roi_phys_h_mm * focal / p_cam.z);
+
+                data->face_bbox = GazeRect(static_cast<float>(u_c - box_w * 0.5),
+                                           static_cast<float>(v_c - box_h * 0.5),
+                                           box_w, box_h);
+                data->face_detected = true;
+                data->tracking_mode = PipelineTrackingMode::TRACKING;
+                data->is_temporal_tracking = true;
+                return true;
+            }
+            else
+            {
+                reset_face_tracking();
+            }
         }
 
+        data->tracking_mode = PipelineTrackingMode::SEEKING;
         data->is_temporal_tracking = false;
         if (!face_detector) return false;
         YuNetResult yunet_res;
@@ -488,6 +511,7 @@ namespace Gaze
         else
         {
             data->face_score = 0.0f;
+            reset_face_tracking();
         }
         return data->face_detected;
     }
@@ -501,7 +525,7 @@ namespace Gaze
         }
 
         bool lm_ok = false;
-        if (face_found)
+        if (data->tracking_mode == PipelineTrackingMode::TRACKING)
         {
             lm_ok = landmark_model->extract_landmarks_working_space(
                 data->camera_raw_bgr.data(), data->camera_width, data->camera_height,
@@ -532,7 +556,9 @@ namespace Gaze
         double cx = working_frame.width * 0.5;
         double cy = working_frame.height * 0.5;
         static const auto model_35pt = FaceModelGeometry::get_canonical_35pt_model_points();
-        bool pnp_ok = SQPnPSolver::solve_rvec(model_35pt, data->internal_landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec);
+
+        double squared_reproj_err = 0.0;
+        bool pnp_ok = SQPnPSolver::solve_rvec(model_35pt, data->internal_landmarks_working_px, focal, focal, cx, cy, out_rvec, out_tvec, &squared_reproj_err);
         if (!pnp_ok) return false;
 
         // Validation bounds: head distance must be realistic webcam distance (100mm to 2500mm)
@@ -541,12 +567,20 @@ namespace Gaze
             return false;
         }
 
-        // If temporal tracking is active, check for discontinuous teleportation (>350mm depth jump in 1 frame)
-        if (face_found && last_tvec.z > 1.0)
+        // Compute landmark reprojection error and scale-invariant quality
+        data->landmark_rmse_px = static_cast<float>(std::sqrt(std::max(0.0, squared_reproj_err)));
+        float face_dim = std::max(data->face_bbox.width, data->face_bbox.height);
+        float normalized_rmse = (face_dim > 10.0f) ? (data->landmark_rmse_px / face_dim) : 0.06f;
+        data->landmark_quality = std::clamp(1.0f - (normalized_rmse - 0.05f) / 0.15f, 0.0f, 1.0f);
+
+        // In tracking mode, update face_score and check for tracking degradation
+        if (data->tracking_mode == PipelineTrackingMode::TRACKING)
         {
-            double dz = std::abs(out_tvec.z - last_tvec.z);
-            if (dz > 350.0)
+            data->face_score = data->landmark_quality;
+            if (data->landmark_quality <= 0.0f)
             {
+                // normalized_rmse > 0.20 indicates landmarks have lost facial geometry
+                reset_face_tracking();
                 return false;
             }
         }

@@ -81,17 +81,11 @@ func _ready() -> void:
         gs.start_tracking()
 ```
 
-### 4. Calibration & Profiles (Angle Kappa)
+### 4. Hardware & Device Geometry Profile
 
-Biological eye alignment differs from optical axes (Angle Kappa $\kappa$). `godot-gaze` separates device geometry from biological parameters:
+`godot-gaze` separates screen projection geometry from tracking logic:
 * **`GazeDeviceProfile`**: Display dimensions (`physical_size_mm`, `logical_size_px`), camera offsets, and tilt. Saved to `user://calibrations/device_profile.cfg`.
-* **`GazeBioProfile`**: Head-space spherical pitch/yaw angular bias (Angle Kappa $\kappa$). Saved to `user://calibrations/bio_profile.cfg`.
-* **`GazeCalibration`**: Circular-mean Angle Kappa angular solver. Centering or multi-point calibration can be performed and installed cleanly:
-  ```gdscript
-  var cal = GazeCalibration.new()
-  cal.add_event(latest_gaze_event) # Defaults to screen center, or pass custom screen Vector2
-  var bio = cal.install() # Solves, sets on GazeServer, and saves to user://calibrations/bio_profile.cfg
-  ```
+* **Hardware Calibration Wizard**: An interactive wizard (`GazeCalibrationWizard`) steps users through camera placement, display measurement, and screen orientation. Note: biological Angle Kappa calibration was investigated and rejected due to camera appearance noise and model nonlinearity (see `docs/rejected_designs.md`).
 
 ---
 

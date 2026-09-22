@@ -246,14 +246,15 @@ func _run_movie_tests() -> void:
 					print("    PASS: Eye state dynamics achieved clear signal separation (Δ >= 0.50).")
 
 		elif seq_id == "seq_06_center_dwell":
-			var calib = GazeCalibration.new()
-			var screen_center = Vector2(logical_sz.x * 0.5, logical_sz.y * 0.5)
-			calib.set_target(screen_center, 60.0)
-
+			var smoother = OneEuroSmoother.new()
+			var sm_state = smoother._smoother_init()
 			var smoothed_positions: Array[Vector2] = []
+			var t: float = 0.0
 			for ev in gaze_events:
-				calib.add_sample(ev, 0.033)
-				smoothed_positions.append(calib.get_smoothed_gaze())
+				var pos = ev.get_eye_gaze()
+				var smoothed_pos = smoother._smoother_next(sm_state, t, pos)
+				smoothed_positions.append(smoothed_pos)
+				t += 0.033
 
 			var max_smoothed_vel: float = 0.0
 			for i in range(1, smoothed_positions.size()):
@@ -267,7 +268,7 @@ func _run_movie_tests() -> void:
 				printerr("    FAIL: Smoothed velocity %.2f px/s exceeded %.2f px/s bound" % [max_smoothed_vel, max_expected_vel])
 				seq_passed = false
 			else:
-				print("    PASS: Damped spring absorbed neural ML jitter into smooth trajectory (< %.1f px/s)." % [max_expected_vel])
+				print("    PASS: OneEuroSmoother absorbed neural ML jitter into smooth trajectory (< %.1f px/s)." % [max_expected_vel])
 
 		if not seq_passed:
 			all_passed = false

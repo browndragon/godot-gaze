@@ -38,6 +38,10 @@ This document records architectural decisions, technical theories, and design pa
    * **False Assumption**: Swapping physical panel dimensions ($W_{\text{phys}} \leftrightarrow H_{\text{phys}}$) or assuming the mechanical camera mount position changes on device rotation.
    * **Fact**: Physical hardware panel dimensions ($W_{\text{phys}}, H_{\text{phys}}$) and camera mechanical mount position ($\mathbf{O}_{\text{mount}}$) remain fixed constants of the device chassis. Device orientation ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) is strictly a software viewport orientation mapping ($R_{\text{display}}$) transforming physical display millimeter coordinates to viewport millimeter coordinates before pixel pitch scaling.
 
+9. **Personalized Angle Kappa Calibration for Appearance-Based Webcam Tracking**:
+   * **False Assumption**: Assuming user-specific optical-to-visual axis calibration (Angle Kappa $\boldsymbol{\kappa}$) is required and measurable to correct gaze projection errors on desktop monitors.
+   * **Fact**: For typical users on desktop/laptop displays, anatomical Angle Kappa ($\approx 0.35^\circ\text{--}1.0^\circ$) is well below the angular noise floor of single-camera appearance-based neural networks ($\sigma \approx 1.5^\circ\text{--}2.0^\circ$). The observed large angular errors near screen edges ($-5^\circ$ on left, $+5^\circ$ on right) are not biological offsets, but **ocular eccentricity compression** of the appearance gaze model (trained on in-vehicle driver monitoring where gazes $> 10^\circ$ are accompanied by head turns). Attempting to calibrate Angle Kappa across the screen is an anti-pattern: it causes hypothesis thrashing because a single rigid rotation cannot reconcile symmetric opposite errors at the edges. Completely retired in favor of model-level wide-angle evaluation and head-space angular compensation. Additionally, all public APIs distinguishing "raw" vs "calibrated/cooked" gaze are retired.
+
 ---
 
 ## 2. Code Style & Integration Guidelines

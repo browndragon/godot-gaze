@@ -2,8 +2,6 @@
 #include "input_event_gaze.hpp"
 #include "gaze_profile.hpp"
 #include "gaze_device_profile.hpp"
-#include "gaze_bio_profile.hpp"
-#include "gaze_calibration.hpp"
 #include "gaze_pipeline_config.hpp"
 #include "smoother.hpp"
 #include "one_euro_smoother.hpp"
@@ -244,15 +242,6 @@ static void register_gaze_project_settings() {
         ps->add_property_info(prop_device);
         ps->set_initial_value("gaze/calibration/device_profile_path", "user://calibrations/device_profile.cfg");
 
-        if (!ps->has_setting("gaze/calibration/bio_profile_path")) {
-            ps->set_setting("gaze/calibration/bio_profile_path", "user://calibrations/bio_profile.cfg");
-        }
-        Dictionary prop_bio;
-        prop_bio["name"] = "gaze/calibration/bio_profile_path";
-        prop_bio["type"] = Variant::STRING;
-        ps->add_property_info(prop_bio);
-        ps->set_initial_value("gaze/calibration/bio_profile_path", "user://calibrations/bio_profile.cfg");
-
         if (!ps->has_setting("gaze/debug/overlay_scene_path")) {
             ps->set_setting("gaze/debug/overlay_scene_path", "res://addons/godot-gaze/debug_cam_feed.tscn");
         }
@@ -457,8 +446,6 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
         ClassDB::register_class<GazeProfile>();
         ClassDB::register_class<GazeDeviceProfile>();
-        ClassDB::register_class<GazeBioProfile>();
-        ClassDB::register_class<GazeCalibration>();
         ClassDB::register_class<GazePipelineConfig>();
 
         ClassDB::register_class<VisionServer>();

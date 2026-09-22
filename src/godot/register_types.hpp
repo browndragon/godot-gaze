@@ -3,7 +3,7 @@
  * @brief GDExtension module registration hooks
  *
  * Declares the initialization and teardown entry points for registering the
- * GazeServer, InputEventGaze, and GazeCalibration classes into the Godot
+ * GazeServer and InputEventGaze classes into the Godot
  * engine ClassDB.
  */
 #pragma once

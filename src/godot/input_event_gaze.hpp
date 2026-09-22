@@ -109,12 +109,10 @@ public:
 
 private:
     Vector2 eye_gaze_position;
-    Vector2 raw_eye_gaze_position;
     Vector2 nose_gaze_position;
 
     Transform3D head_transform;
     Transform3D eye_transform;
-    Transform3D raw_eye_transform;
 
 protected:
     static void _bind_methods();
@@ -142,17 +140,6 @@ public:
      * @param p_pos Position in root Viewport Canvas coordinates.
      */
     void set_eye_gaze(const Vector2 &p_pos);
-
-    /**
-     * @brief Retrieves the raw (uncalibrated) 2D eye gaze coordinates on the viewport canvas or relative to a specified CanvasItem.
-     */
-    Vector2 get_raw_eye_gaze(const CanvasItem *p_local_to = nullptr, ClampingMode p_clamping = CLAMPING_DEFAULT) const;
-    Vector2 _get_raw_eye_gaze_property() const { return get_raw_eye_gaze(); }
-
-    /**
-     * @brief Sets the raw 2D eye gaze position in canonical root Viewport Canvas coordinates.
-     */
-    void set_raw_eye_gaze(const Vector2 &p_pos);
 
     /**
      * @brief Retrieves the 2D nose gaze coordinates (nose-forward ray projected to the display) on the canvas or relative to a CanvasItem.
@@ -196,16 +183,6 @@ public:
      * @return Transform3D Eye gaze transform.
      */
     Transform3D get_eye_transform() const { return eye_transform; }
-
-    /**
-     * @brief Sets the raw 3D eye gaze transform in Godot camera space.
-     */
-    void set_raw_eye_transform(const Transform3D &p_xform) { raw_eye_transform = p_xform; }
-
-    /**
-     * @brief Retrieves the raw 3D eye gaze transform in Godot camera space.
-     */
-    Transform3D get_raw_eye_transform() const { return raw_eye_transform; }
 
     /**
      * @brief Backward-compatibility alias for get_eye_transform().

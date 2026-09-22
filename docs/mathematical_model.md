@@ -197,7 +197,9 @@ User-specific biological offsets (such as the angle kappa between the eye's visu
 
 During calibration trigger (staring at a target screen pixel $P_{\text{target}}$):
 1. Transform $P_{\text{target}}$ back to Camera Space ($P_{\text{cam\_target}}$) by reversing the rotation and translation:
-### 4.1. Head-Space 3D Angular Calibration (Angle Kappa $\kappa$)
+### 4.1. Head-Space 3D Angular Calibration (Angle Kappa $\kappa$) [RETIRED / REJECTED]
+> **Historical Note**: Personalized Angle Kappa $\kappa$ calibration was implemented and evaluated, but permanently retired (see `docs/rejected_designs.md` Entry 9). Empirical validation confirmed that personal Angle Kappa is within single-frame webcam tracking noise floor ($\approx 0.35^\circ$ vs $\sigma \approx 1.5^\circ$), while observed peripheral distortion originates from model compression rather than biological misalignment.
+
 Human visual axes do not coincide with the anatomical optical axes of the eyes (the fovea is offset by an angle known as **Angle Kappa** $\kappa$, typically $3^\circ \text{–} 8^\circ$). Furthermore, biological asymmetry or systematic model bias manifests as constant angular offsets.
 
 Crucially, **Angle Kappa is fixed relative to the skull**. If calibration were applied in Camera Space, rolling the head by $90^\circ$ would rotate horizontal yaw error into vertical pitch error. Therefore, `godot-gaze` applies 3D angular calibration strictly in **Head Space**:

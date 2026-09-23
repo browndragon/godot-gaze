@@ -28,62 +28,85 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 ARTIFACTS_DIR = os.path.join(PROJECT_ROOT, "build", "tests", "artifacts")
 os.makedirs(ARTIFACTS_DIR, exist_ok=True)
 
-MODEL_CONFIGS = [
-    {
-        "name": "OpenVINO ADAS-0002 (Baseline)",
-        "id": "adas_0002",
-        "type": "openvino_adas",
-        "path": os.path.join(PROJECT_ROOT, "project", "addons", "godot-gaze", "models", "gaze-estimation-adas-0002.onnx"),
-        "input_shape": "left_eye: (1,3,60,60), right_eye: (1,3,60,60), head_pose: (1,3)",
-        "output_type": "3D Cartesian unit vector [dx, dy, dz]",
-        "backbone": "Custom Light CNN"
-    },
-    {
-        "name": "MobileOne-S0 Gaze (L2CS)",
-        "id": "mobileone_s0",
-        "type": "l2cs",
-        "path": "/Users/acunningham/src/gaze-estimation/weights/mobileone_s0_gaze.onnx",
-        "input_shape": "(1, 3, 448, 448)",
-        "output_type": "90-bin Softmax expectation (yaw, pitch)",
-        "backbone": "MobileOne-S0 (Reparameterized)"
-    },
-    {
-        "name": "MobileNetV2 Gaze (L2CS)",
-        "id": "mobilenetv2",
-        "type": "l2cs",
-        "path": "/Users/acunningham/src/gaze-estimation/weights/mobilenetv2_gaze.onnx",
-        "input_shape": "(1, 3, 448, 448)",
-        "output_type": "90-bin Softmax expectation (yaw, pitch)",
-        "backbone": "MobileNetV2"
-    },
-    {
-        "name": "ResNet-18 Gaze (L2CS)",
-        "id": "resnet18",
-        "type": "l2cs",
-        "path": "/Users/acunningham/src/gaze-estimation/weights/resnet18_gaze.onnx",
-        "input_shape": "(1, 3, 448, 448)",
-        "output_type": "90-bin Softmax expectation (yaw, pitch)",
-        "backbone": "ResNet-18"
-    },
-    {
-        "name": "ResNet-50 Gaze (L2CS)",
-        "id": "resnet50_l2cs",
-        "type": "l2cs",
-        "path": "/Users/acunningham/src/gaze-estimation/weights/resnet50_gaze.onnx",
-        "input_shape": "(1, 3, 448, 448)",
-        "output_type": "90-bin Softmax expectation (yaw, pitch)",
-        "backbone": "ResNet-50"
-    },
-    {
-        "name": "ETH-XGaze (ResNet-50 Regression)",
-        "id": "eth_xgaze",
-        "type": "eth_xgaze",
-        "path": "/Users/acunningham/src/ETH-XGaze/ckpt/eth_xgaze.onnx",
-        "input_shape": "(1, 3, 224, 224)",
-        "output_type": "Direct 2D regression [pitch, yaw] (radians)",
-        "backbone": "ResNet-50"
-    }
-]
+import argparse
+
+def find_model_file(filename, custom_dir=None, extra_candidates=None):
+    candidates = []
+    if custom_dir:
+        candidates.append(os.path.join(custom_dir, filename))
+    if extra_candidates:
+        candidates.extend(extra_candidates)
+    candidates.extend([
+        os.path.join(PROJECT_ROOT, "test_assets", "models", "candidate_models", filename),
+        os.path.expanduser(f"~/src/gaze-estimation/weights/{filename}"),
+        f"/Users/acunningham/src/gaze-estimation/weights/{filename}",
+        os.path.expanduser(f"~/src/ETH-XGaze/ckpt/{filename}"),
+        f"/Users/acunningham/src/ETH-XGaze/ckpt/{filename}",
+    ])
+    for p in candidates:
+        if p and os.path.exists(p):
+            return p
+    return None
+
+def build_model_configs(weights_dir=None, eth_weights=None):
+    configs = [
+        {
+            "name": "OpenVINO ADAS-0002 (Baseline)",
+            "id": "adas_0002",
+            "type": "openvino_adas",
+            "path": os.path.join(PROJECT_ROOT, "project", "addons", "godot-gaze", "models", "gaze-estimation-adas-0002.onnx"),
+            "input_shape": "left_eye: (1,3,60,60), right_eye: (1,3,60,60), head_pose: (1,3)",
+            "output_type": "3D Cartesian unit vector [dx, dy, dz]",
+            "backbone": "Custom Light CNN"
+        },
+        {
+            "name": "MobileOne-S0 Gaze (L2CS)",
+            "id": "mobileone_s0",
+            "type": "l2cs",
+            "path": find_model_file("mobileone_s0_gaze.onnx", weights_dir),
+            "input_shape": "(1, 3, 448, 448)",
+            "output_type": "90-bin Softmax expectation (yaw, pitch)",
+            "backbone": "MobileOne-S0 (Reparameterized)"
+        },
+        {
+            "name": "MobileNetV2 Gaze (L2CS)",
+            "id": "mobilenetv2",
+            "type": "l2cs",
+            "path": find_model_file("mobilenetv2_gaze.onnx", weights_dir),
+            "input_shape": "(1, 3, 448, 448)",
+            "output_type": "90-bin Softmax expectation (yaw, pitch)",
+            "backbone": "MobileNetV2"
+        },
+        {
+            "name": "ResNet-18 Gaze (L2CS)",
+            "id": "resnet18",
+            "type": "l2cs",
+            "path": find_model_file("resnet18_gaze.onnx", weights_dir),
+            "input_shape": "(1, 3, 448, 448)",
+            "output_type": "90-bin Softmax expectation (yaw, pitch)",
+            "backbone": "ResNet-18"
+        },
+        {
+            "name": "ResNet-50 Gaze (L2CS)",
+            "id": "resnet50_l2cs",
+            "type": "l2cs",
+            "path": find_model_file("resnet50_gaze.onnx", weights_dir),
+            "input_shape": "(1, 3, 448, 448)",
+            "output_type": "90-bin Softmax expectation (yaw, pitch)",
+            "backbone": "ResNet-50"
+        },
+        {
+            "name": "ETH-XGaze (ResNet-50 Regression)",
+            "id": "eth_xgaze",
+            "type": "eth_xgaze",
+            "path": find_model_file("eth_xgaze.onnx", weights_dir, extra_candidates=[eth_weights]),
+            "input_shape": "(1, 3, 224, 224)",
+            "output_type": "Direct 2D regression [pitch, yaw] (radians)",
+            "backbone": "ResNet-50"
+        }
+    ]
+    return configs
+
 
 def count_onnx_params(onnx_path):
     try:
@@ -342,6 +365,13 @@ def main():
     print("Evaluating OpenVINO ADAS, ETH-XGaze, and L2CS Model Family")
     print("=" * 80)
 
+    parser = argparse.ArgumentParser(description="Gaze Model Benchmark")
+    parser.add_argument("--weights-dir", type=str, default=None, help="Directory containing candidate ONNX models")
+    parser.add_argument("--eth-weights", type=str, default=None, help="Explicit path to eth_xgaze.onnx")
+    args = parser.parse_args()
+
+    model_configs = build_model_configs(args.weights_dir, args.eth_weights)
+
     # 1. Initialize YuNet face detector
     yunet_path = os.path.join(PROJECT_ROOT, "project", "addons", "godot-gaze", "models", "face_detection_yunet_2023mar.ort")
     detector = YuNetDetector(yunet_path)
@@ -372,14 +402,15 @@ def main():
 
     results = []
 
-    for cfg in MODEL_CONFIGS:
+    for cfg in model_configs:
         model_name = cfg["name"]
         model_path = cfg["path"]
         print(f"\nEvaluating: {model_name}...")
 
-        if not os.path.exists(model_path):
-            print(f"  [ERROR] Model file not found at: {model_path}")
+        if not model_path or not os.path.exists(model_path):
+            print(f"  [SKIPPED] Model file not found (see test_assets/models/README.md)")
             continue
+
 
         file_size_mb = os.path.getsize(model_path) / (1024 * 1024)
         params_count = count_onnx_params(model_path)

@@ -72,28 +72,45 @@ Candidate models use adaptive global average pooling (`AdaptiveAvgPool2d((1, 1))
 
 To provide flexibility across platforms (mobile, web, desktop) and use cases (low-power vs. high-accuracy desktop), `godot-gaze` will adopt a pluggable model strategy:
 
+## 5. Architectural Decision & Future Swappable Strategy
+
+### A. Production Decision: OpenVINO ADAS-0002 Remains Default
+* **Rationale**: Over the vast majority of common interactive display regions and typical head/eye angles ($\le 20^\circ$), OpenVINO ADAS-0002 performs roughly on par with larger candidate models.
+* **Throughput & Multiplatform Reach**: Its lightweight footprint and 600–800 FPS execution speed provide unmatched power efficiency and low latency across all targeted deployment targets (desktop, mobile, and web).
+* **Conclusion**: We will not perform an immediate architectural replacement. OpenVINO ADAS-0002 is maintained as the primary production estimator.
+
+### B. Future Readiness: Blueprint for `DirectFaceGazeEstimator`
+When requirements expand to require extreme peripheral display coverage or when GPU/NPU acceleration is prioritized, a `DirectFaceGazeEstimator` strategy can drop in cleanly:
+
 ```mermaid
 flowchart TD
     FRAME["Incoming Camera Frame (BGR8)"] --> DET["ORTYuNetDetector (640x640)"]
-    DET --> STRAT{"Gaze Model Strategy<br/>(gaze/models/estimator_type)"}
+    DET --> STRAT{"Gaze Estimator Strategy<br/>(gaze/models/estimator_type)"}
 
-    subgraph ADAS["Strategy A: OpenVINO ADAS (Legacy / Low-Power)"]
-        STRAT -->|ADAS-0002| LM["ORTLandmarkModel (60x60)<br/>35-point counter-rotated"]
+    subgraph ADAS["Strategy A: OpenVINO ADAS (Production Default)"]
+        STRAT -->|"adas_0002" (default)| LM["ORTLandmarkModel (60x60)<br/>35-point counter-rotated"]
         LM --> PNP["PnP Solver (Head Pose angles)"]
         PNP --> EYE["Dual Eye Cropper (60x60 x2)"]
-        EYE --> ADAS_NET["ORTGazeModel (1.2 ms)<br/>High speed, narrow angular range"]
+        EYE --> ADAS_NET["ORTGazeModel (1.2 ms)<br/>Ultra-high throughput, standard range"]
     end
 
-    subgraph END2END["Strategy B: Full-Face Estimator (Modern Desktop)"]
-        STRAT -->|MobileOne-S0 / ETH-XGaze| FCROP["Face Cropper (224x224 / 448x448)"]
-        FCROP --> E2E_NET["Direct Gaze Estimator<br/>(3 - 12 ms, wide angular range)"]
+    subgraph END2END["Strategy B: Direct Face Estimator (Future Extension)"]
+        STRAT -->|"mobileone_s0" / "eth_xgaze"| FCROP["Face Cropper (224x224 / 448x448)"]
+        FCROP --> E2E_NET["DirectFaceGazeEstimator<br/>(3 - 12 ms, wide angular range)"]
     end
 
     ADAS_NET --> PROJ["ProjectionEngine (Ray-Plane Intersection)"]
     E2E_NET --> PROJ
 ```
 
-### Action Items
-1. **Model Persistence**: Store candidate ONNX models in `test_assets/models/benchmark/`.
-2. **Abstract Estimator Interface**: Define `IGazeEstimator` in `src/native/` with `estimate_gaze(...)` taking face ROI or eye crops.
-3. **Project Settings Registration**: Expose `gaze/models/estimator_type` (`adas_0002`, `mobileone_s0`, `eth_xgaze`) in `register_types.cpp`.
+#### Blueprint for Future Implementation:
+1. **Interface Contract**: Define an abstract `IGazeDirectionEstimator` with:
+   ```cpp
+   virtual bool estimate_gaze(const GazeFrameData& frame, Vector3& out_gaze_dir) = 0;
+   ```
+2. **Implementation Strategy**:
+   - `ADASGazeEstimator`: Wraps existing `ORTLandmarkModel` + `PnPSolver` + `ORTGazeModel`.
+   - `DirectFaceGazeEstimator`: Takes the face bounding box directly from `ORTYuNetDetector`, crops and normalizes the face patch, and invokes `mobileone_s0_gaze.onnx` or `eth_xgaze.onnx`.
+3. **Reproducibility & Weight Provenance**:
+   - Refer to [`test_assets/models/README.md`](../test_assets/models/README.md) for automated download scripts, PyTorch-to-ONNX conversion instructions, and the repeatable benchmark harness (`scons tools/benchmark_models`).
+

@@ -97,24 +97,24 @@ def run_command_and_log(target, source, env):
     import shutil
     resolved_cmd = list(cmd)
     if resolved_cmd and not os.path.isabs(resolved_cmd[0]):
-        path_dirs = run_env.get("PATH", "").split(os.pathsep)
+        home = os.path.expanduser("~")
+        known_dirs = [
+            os.path.join(home, ".pyenv/versions/3.14.4/bin"),
+            os.path.join(home, ".asdf/installs/nodejs/18.12.1/bin"),
+            "/opt/homebrew/bin",
+            "/usr/local/bin"
+        ]
         found_bin = None
-        for p in path_dirs:
-            if "shims" in p:
-                continue
+        for p in known_dirs:
             cand = os.path.join(p, resolved_cmd[0])
             if os.path.isfile(cand) and os.access(cand, os.X_OK):
                 found_bin = cand
                 break
         if not found_bin:
-            home = os.path.expanduser("~")
-            known_dirs = [
-                os.path.join(home, ".pyenv/versions/3.14.4/bin"),
-                os.path.join(home, ".asdf/installs/nodejs/18.12.1/bin"),
-                "/opt/homebrew/bin",
-                "/usr/local/bin"
-            ]
-            for p in known_dirs:
+            path_dirs = run_env.get("PATH", "").split(os.pathsep)
+            for p in path_dirs:
+                if "shims" in p:
+                    continue
                 cand = os.path.join(p, resolved_cmd[0])
                 if os.path.isfile(cand) and os.access(cand, os.X_OK):
                     found_bin = cand
@@ -123,6 +123,7 @@ def run_command_and_log(target, source, env):
             found_bin = shutil.which(resolved_cmd[0], path=run_env.get("PATH"))
         if found_bin:
             resolved_cmd[0] = found_bin
+
 
     try:
         process = subprocess.Popen(
@@ -351,6 +352,17 @@ godot_eval_landscape_run = env.Command(
 )
 env.AlwaysBuild(godot_eval_landscape_run)
 env.Alias("tools/eval_landscape", godot_eval_landscape_run)
+
+# Gaze model comparison & benchmark tool target
+benchmark_models_run = env.Command(
+    "build/tests/logs/tools.benchmark_models.log",
+    [],
+    Action(run_command_and_log, varlist=["TEST_CMD"]),
+    TEST_CMD=["python3", "tools/benchmark_gaze_models.py"]
+)
+env.AlwaysBuild(benchmark_models_run)
+env.Alias("tools/benchmark_models", benchmark_models_run)
+
 
 # Godot windowed test targets
 windowed_test_nodes = []

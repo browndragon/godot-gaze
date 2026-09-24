@@ -10,6 +10,7 @@
 #include "gaze_frame.hpp"
 #include "gaze_event_factory.hpp"
 #include "gaze_tracker.hpp"
+#include "fill_accumulator_node.hpp"
 #include "gaze_display_server.hpp"
 #include "mock_gaze_display_server.hpp"
 
@@ -481,6 +482,7 @@ void initialize_gaze_module(ModuleInitializationLevel p_level) {
 
     // Register Scene / Node classes
     ClassDB::register_class<GazeTracker>();
+    ClassDB::register_class<FillAccumulator>();
 #ifdef WEB_ENABLED
     ClassDB::register_class<WebBindingState>();
 #endif

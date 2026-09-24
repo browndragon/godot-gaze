@@ -56,6 +56,7 @@ namespace Gaze
             auto out_name_alloc = session->GetOutputNameAllocated(0, allocator);
             output_name = out_name_alloc.get();
 
+            input_tensor_data.assign(3 * 32 * 32, 0.0f);
             log_info("ORTEyeStateModelInitSuccess", "input", input_name.c_str(), "output", output_name.c_str());
             return true;
         }
@@ -128,10 +129,8 @@ namespace Gaze
             return false;
         }
 
-        std::vector<float> input_tensor_data(3 * 32 * 32);
         preprocess_eye_crop_32(raw_crop_60_bgr, input_tensor_data.data());
 
-        std::vector<int64_t> input_shape = {1, 3, 32, 32};
         Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
             memory_info, input_tensor_data.data(), input_tensor_data.size(),
             input_shape.data(), input_shape.size());

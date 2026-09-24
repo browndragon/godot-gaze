@@ -180,90 +180,18 @@ $$\mathbf{p}_{\text{canvas}} = M_{\text{canvas}}^{-1} \cdot (\mathbf{p}_{\text{w
 
 ---
 
-## 4. Biological & Error Calibration Correction
+## 4. Biological Angle Kappa & Calibration [RETIRED]
 
-Individual eye shape, eyeball depth, and camera mount errors cause systematic estimation deviations (typically $2^\circ - 5^\circ$). We correct this using two models:
+Personalized biological Angle Kappa ($\boldsymbol{\kappa}$) calibration and non-linear multi-point simplex optimization (Nelder-Mead) were previously implemented and evaluated, but have been permanently retired:
+- **Noise Floor vs. Anatomical Offset**: Anatomical Angle Kappa ($\approx 0.35^\circ\text{–}1.0^\circ$) is well below the single-camera appearance-based neural network noise floor ($\sigma \approx 1.5^\circ\text{–}2.0^\circ$).
+- **Model Ocular Eccentricity Compression**: Peripheral gaze distortions ($\pm 5^\circ$ near screen borders) stem from appearance model training distributions (in-vehicle driver monitoring where gazes $> 10^\circ$ accompany head turns) rather than rigid anatomical ocular misalignments. Attempting to fit a rigid head-space rotation produces hypothesis thrashing.
+- **Unified Public Contract**: All public distinction between "raw" and "calibrated" gaze has been retired. Public APIs provide unified, localized gaze via `InputEventGaze.get_eye_gaze()` and `InputEventGaze.get_nose_gaze()`.
 
-### 4.1. 3D Spherical Angular Calibration (Angle Kappa)
-User-specific biological offsets (such as the angle kappa between the eye's visual and optical axes) are corrected by applying angular pitch ($\alpha$) and yaw ($\beta$) biases and scale factors to the raw gaze vector $V = (v_x, v_y, v_z)$ before intersection:
-1. Extract spherical angles:
-   $$\phi_{\text{yaw}} = \operatorname{atan2}(v_x, v_z)$$
-   $$\psi_{\text{pitch}} = \operatorname{asin}(v_y)$$
-2. Apply calibration scale and biases:
-   $$\phi_{\text{calib}} = \phi_{\text{yaw}} \cdot \text{scale\_yaw} + \text{bias\_yaw}$$
-   $$\psi_{\text{calib}} = \psi_{\text{pitch}} \cdot \text{scale\_pitch} + \text{bias\_pitch}$$
-3. Re-project to the calibrated unit vector:
-   $$V_{\text{calib}} = \begin{pmatrix} -\sin\phi_{\text{calib}} \cos\psi_{\text{calib}} \\ \sin\psi_{\text{calib}} \\ -\cos\phi_{\text{calib}} \cos\psi_{\text{calib}} \end{pmatrix}$$
-
-During calibration trigger (staring at a target screen pixel $P_{\text{target}}$):
-1. Transform $P_{\text{target}}$ back to Camera Space ($P_{\text{cam\_target}}$) by reversing the rotation and translation:
-### 4.1. Head-Space 3D Angular Calibration (Angle Kappa $\kappa$) [RETIRED / REJECTED]
-> **Historical Note**: Personalized Angle Kappa $\kappa$ calibration was implemented and evaluated, but permanently retired (see `docs/rejected_designs.md` Entry 9). Empirical validation confirmed that personal Angle Kappa is within single-frame webcam tracking noise floor ($\approx 0.35^\circ$ vs $\sigma \approx 1.5^\circ$), while observed peripheral distortion originates from model compression rather than biological misalignment.
-
-Human visual axes do not coincide with the anatomical optical axes of the eyes (the fovea is offset by an angle known as **Angle Kappa** $\kappa$, typically $3^\circ \text{–} 8^\circ$). Furthermore, biological asymmetry or systematic model bias manifests as constant angular offsets.
-
-Crucially, **Angle Kappa is fixed relative to the skull**. If calibration were applied in Camera Space, rolling the head by $90^\circ$ would rotate horizontal yaw error into vertical pitch error. Therefore, `godot-gaze` applies 3D angular calibration strictly in **Head Space**:
-
-1. **Transform Raw Gaze Ray to Head Space**:
-   $$R_{\text{head}} = \text{head\_transform.basis}$$
-   $$\mathbf{v}_{\text{head}} = R_{\text{head}}^T \cdot \mathbf{v}_{\text{cam}}$$
-
-2. **Decompose to Head-Space Spherical Angles**:
-   $$\psi_{\text{pitch}} = \arcsin\left(\text{clamp}(v_{y, \text{head}}, -1.0, 1.0)\right)$$
-   $$\phi_{\text{yaw}} = \text{atan2}(v_{x, \text{head}}, v_{z, \text{head}})$$
-
-3. **Apply Biological Scaling & Bias (`GazeBioProfile`)**:
-   $$\psi'_{\text{pitch}} = s_{\text{pitch}} \cdot \psi_{\text{pitch}} + \text{bias}_{\text{pitch}}$$
-   $$\phi'_{\text{yaw}} = s_{\text{yaw}} \cdot \phi_{\text{yaw}} + \text{bias}_{\text{yaw}}$$
-
-4. **Reconstruct Calibrated Direction in Head Space**:
-   $$\mathbf{v}'_{\text{head}} = \begin{pmatrix} \sin\phi'_{\text{yaw}} \cos\psi'_{\text{pitch}} \\ \sin\psi'_{\text{pitch}} \\ \cos\phi'_{\text{yaw}} \cos\psi'_{\text{pitch}} \end{pmatrix}$$
-
-5. **Rotate Back to Camera Space**:
-   $$\mathbf{v}'_{\text{cam}} = R_{\text{head}} \cdot \mathbf{v}'_{\text{head}}$$
-
-This transformation is biologically invariant under arbitrary head rolls, yaws, and pitches.
-
-### 4.2. Closed-Form 1D Ordinary Least Squares (OLS) Solver
-For calibration datasets with target screen points $\mathbf{T}_i \in \mathbb{R}^2$ and measured head-space angles $\theta_i$, the required head-space angles $\theta_{i, \text{targ}}$ are computed by unprojecting $\mathbf{T}_i$ via `GazeDeviceProfile::unproject_px_to_cam_mm` to 3D point $\mathbf{P}_i$, forming $\mathbf{v}_{i, \text{targ}} = (\mathbf{P}_i - \mathbf{O}_i)/\lVert \mathbf{P}_i - \mathbf{O}_i \rVert$, and rotating into head space via $R_{\text{head}, i}^T$.
-
-The linear relationship $\theta_{\text{targ}} = s \cdot \theta_{\text{meas}} + b$ is solved analytically in $O(N)$ time:
-$$s = \frac{\sum_{i=1}^N (\theta_{i, \text{meas}} - \bar{\theta}_{\text{meas}})(\theta_{i, \text{targ}} - \bar{\theta}_{\text{targ}})}{\sum_{i=1}^N (\theta_{i, \text{meas}} - \bar{\theta}_{\text{meas}})^2}$$
-$$b = \bar{\theta}_{\text{targ}} - s \cdot \bar{\theta}_{\text{meas}}$$
-
-For 1-point centering ($N=1$ or zero variance), scale defaults to $1.0$ and bias simplifies to:
-$$b = \theta_{\text{targ}} - \theta_{\text{meas}}$$
-
-Both pitch and yaw are decoupled and solved independently in closed form, avoiding numerical gradient descent or local minima.
-
+For full historical rationale and empirical findings, see [Rejected Designs & Anti-Patterns: Item 9](file:///Users/acunningham/src/godot-gaze/docs/rejected_designs.md#L41-L44).
 
 ---
 
-## 5. Calibration Optimizer (Inverse Solver)
-
-During calibration, the user looks at $N = 5$ screen targets. The system collects samples containing:
-* $\mathbf{o}_i$: measured eye origin in camera space.
-* $\mathbf{v}_i$: measured raw eye direction in camera space.
-* $\mathbf{T}_i$: physical target pixel coordinate on the screen.
-
-We optimize the parameter vector $\mathbf{x} = (s_x, s_y, O_y, O_z, \theta_{\text{tilt}}, \alpha, \beta)$ to minimize the sum of squared screen-space projection errors.
-
-### 5.1. Bayesian Regularization (Soft Priors)
-To prevent parameter correlation and overfitting from a sparse 5-point dataset, we add quadratic penalties to constrain the parameters to physically realistic values:
-$$\text{Loss}(\mathbf{x}) = \sum_{i=1}^{N} \|\text{ProjectedPixel}(\mathbf{o}_i, \mathbf{v}_i; \mathbf{x}) - \mathbf{T}_i\|^2 + \sum_{j} \lambda_j (x_j - x_{j,\text{initial}})^2$$
-
-Where:
-* $\lambda_{\text{aspect}}$ enforces that the physical pixel size keeps a standard square aspect ratio ($s_x \approx s_y$).
-* $\lambda_{\text{size}}$ keeps the pixel size near the platform-estimated DPI/DPR default.
-* $\lambda_{\text{camera}}$ keeps camera offsets and tilt near their physical mounting defaults.
-* $\lambda_{\text{bias}}$ penalizes large angular biases.
-
-### 5.2. Nelder-Mead Optimization
-The solver uses the derivative-free Nelder-Mead (downhill simplex) algorithm, which maintains an $M+1$ dimensional simplex (where $M=7$ parameters) and updates it via reflection, expansion, contraction, and shrinkage until convergence.
-
----
-
-## 6. Real-Time Depth Triangulation (Z Engine)
+## 5. Real-Time Depth Triangulation (Z Engine)
 
 Using a pinhole camera model, the distance $Z$ from the camera sensor is calculated from:
 * **Interpupillary Distance (IPD)**: $63.0$ mm (constant average adult).
@@ -275,11 +203,11 @@ $$Z_{\text{cm}} = \frac{Z_{\text{mm}}}{10.0}$$
 
 ---
 
-## 7. Model Sign Conventions (OpenVINO ADAS-0002)
+## 6. Model Sign Conventions (OpenVINO ADAS-0002)
 
 The OpenModelZoo gaze estimation network (`gaze-estimation-adas-0002`) operates with distinct input/output coordinate space and sign conventions:
 
-### 7.1. Input Feature Preprocessing
+### 6.1. Input Feature Preprocessing
 * **Eye Crop Inputs**: The model defines its inputs from the camera/viewer's perspective.
   * `"left_eye_image"` receives the crop of the eye appearing on the **left side of the image frame** (which is the subject's anatomical **right eye**).
   * `"right_eye_image"` receives the crop of the eye appearing on the **right side of the image frame** (the subject's anatomical **left eye**).
@@ -289,7 +217,7 @@ The OpenModelZoo gaze estimation network (`gaze-estimation-adas-0002`) operates 
   * **Pitch**: Direct (`crops.head_pose_rotation.x`).
   * **Roll**: Negated (`-crops.head_pose_rotation.z`), aligning the roll coordinate signs.
 
-### 7.2. Output Vector Mapping
+### 6.2. Output Vector Mapping
 The 3D direction vector output by the model (`raw_gaze_dir`) is mapped to GodotGaze Camera Space:
 * **X Component**: Direct (`raw_gaze_dir.x`), as $+X$ points right (camera's left / user's right) in both spaces.
 * **Y Component**: Direct (`raw_gaze_dir.y`), as $+Y$ points UP in both spaces.

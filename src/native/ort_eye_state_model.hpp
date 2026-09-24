@@ -27,6 +27,10 @@ namespace Gaze
         std::string input_name;
         std::string output_name;
 
+        // Preallocated inference buffers to eliminate per-frame heap allocations
+        std::vector<float> input_tensor_data;
+        const std::vector<int64_t> input_shape = {1, 3, 32, 32};
+
         void preprocess_eye_crop_32(const uint8_t *raw_crop_60_bgr, float *out_buffer);
 
     public:

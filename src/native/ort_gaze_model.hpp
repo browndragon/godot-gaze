@@ -31,6 +31,13 @@ namespace Gaze
         const std::vector<const char *> input_names = {"left_eye_image", "right_eye_image", "head_pose_angles"};
         const std::vector<const char *> output_names = {"gaze_vector/sink_port_0"};
 
+        // Preallocated inference buffers to eliminate per-frame heap allocations
+        std::vector<float> left_eye_tensor_data;
+        std::vector<float> right_eye_tensor_data;
+        std::vector<float> head_pose_tensor_data;
+        const std::vector<int64_t> eye_shape = {1, 3, EyeCrops::EYE_CROP_WIDTH, EyeCrops::EYE_CROP_HEIGHT};
+        const std::vector<int64_t> head_shape = {1, 3};
+
     public:
         static void preprocess_eye_crop(const uint8_t *raw_crop, float *out_buffer);
 

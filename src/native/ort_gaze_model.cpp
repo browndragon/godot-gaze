@@ -79,6 +79,9 @@ bool ORTGazeModel::initialize() {
             log_info("ORTGazeModelOutputNode", "index", (int)i, "name", name.get());
         }
     } catch (...) {}
+    left_eye_tensor_data.assign(EyeCrops::EYE_CROP_SIZE, 0.0f);
+    right_eye_tensor_data.assign(EyeCrops::EYE_CROP_SIZE, 0.0f);
+    head_pose_tensor_data.assign(3, 0.0f);
     log_info("ORTGazeModelInitSuccess");
     return true;
 }
@@ -97,11 +100,7 @@ void ORTGazeModel::preprocess_eye_crop(const uint8_t* raw_crop_bgr, float* out_b
 bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, OpenVINOGazeVector3& out_gaze_dir_openvino) {
     if (!session) return false;
 
-    std::vector<float> left_eye_tensor_data(EyeCrops::EYE_CROP_SIZE, 0.0f);
-    std::vector<float> right_eye_tensor_data(EyeCrops::EYE_CROP_SIZE, 0.0f);
-    std::vector<float> head_pose_tensor_data(3, 0.0f);
-
-    // 1. Preprocess eye crops
+    // 1. Preprocess eye crops into preallocated buffers
     // OpenVINO ADAS gaze-estimation-adas-0002 model specification:
     // "left_eye_image" is the crop of the eye appearing on IMAGE-LEFT (landmarks [0, 1], subject's anatomical right eye).
     // "right_eye_image" is the crop of the eye appearing on IMAGE-RIGHT (landmarks [2, 3], subject's anatomical left eye).
@@ -120,10 +119,7 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, OpenVINOGazeVector3&
     head_pose_tensor_data[1] = static_cast<float>(openvino_angles.y); // Pitch
     head_pose_tensor_data[2] = static_cast<float>(openvino_angles.z); // Roll
 
-    // 3. Create input tensors referencing staging buffers
-    std::vector<int64_t> eye_shape = {1, 3, EyeCrops::EYE_CROP_WIDTH, EyeCrops::EYE_CROP_HEIGHT};
-    std::vector<int64_t> head_shape = {1, 3};
-
+    // 3. Create input tensors referencing preallocated staging buffers
     Ort::Value left_tensor = Ort::Value::CreateTensor<float>(
         memory_info, left_eye_tensor_data.data(), left_eye_tensor_data.size(),
         eye_shape.data(), eye_shape.size()
@@ -138,6 +134,7 @@ bool ORTGazeModel::estimate_raw_gaze(const EyeCrops& crops, OpenVINOGazeVector3&
     );
 
     std::vector<Ort::Value> inputs;
+    inputs.reserve(3);
     inputs.push_back(std::move(left_tensor));
     inputs.push_back(std::move(right_tensor));
     inputs.push_back(std::move(head_tensor));

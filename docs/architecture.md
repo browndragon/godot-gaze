@@ -14,13 +14,15 @@ flowchart TD
     subgraph L4["Layer 4: Godot High-Level Frontends (InputEvent & UI)"]
         IE["InputEventGaze / InputEventGazeMissing<br/>(Native Input Dispatch)"]
         HUD["Debug HUD / Overlay<br/>(debug_cam_feed.tscn)"]
-        DP["DisplayProfile<br/>(Screen Geometry & Physical Millimeters)"]
-        Cal["BioCalibration / DeviceCalibration<br/>(User-Specific Offset Tuning)"]
+        DP["GazeDeviceProfile<br/>(Screen Geometry & Mount Offsets)"]
+        FA["FillAccumulator<br/>(Inertial 2nd-Order Dwell Engine)"]
     end
 
     subgraph L3["Layer 3: Godot GDExtension Servers & Platform Backends"]
         GS["GazeServer Singleton<br/>(RID State Ownership & Concurrency)"]
         VS["VisionServer Singleton<br/>(Frame Ingestion & Textures)"]
+        GDS["GazeDisplayServer<br/>(Logical Pixel Platform Abstraction)"]
+        MGE["MouseGazeEmulation<br/>(Pointer Stillness Arbitration)"]
         JS["Web JavaScriptBridge Sidecar<br/>(Emscripten / ONNX Web)"]
         WIN["Windows WMF Backend<br/>(MultiByte UTF-8 Path Safety)"]
     end
@@ -39,10 +41,12 @@ flowchart TD
         MD["MathDefs, GazeBasis3D, Rodrigues, Warper<br/>(POD Math & Image Geometry)"]
         PL["Pool & AtomicMailbox<br/>(Lock-Free Inter-Thread Queues)"]
         GFD["GazeFrameData POD<br/>(Double-Buffered Frame Payloads)"]
+        MSA["MouseStillnessArbitrator<br/>(Anchor Bubble Motion Thresholding)"]
     end
 
     IE --> GS & VS
-    GS --> GTP
+    GS --> GTP & GDS & MGE
+    MGE --> MSA
     GTP --> YN & LM & PNP & EM & GM
     GTP --> GFD & PL
     GS --> PE & MD
@@ -148,42 +152,57 @@ flowchart LR
 
 ## 6. Input Subsystem & Event Architecture
 
-> [!NOTE]
-> **Status: Phase 1 Implemented / Phase 2 (Interaction & Dwell) In Active Development**
-> The input event hierarchy (`InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`) and centralized `GazeServer` lifecycle are **implemented** as of Phase 1. The high-level interaction widgets (`PowerAccumulator`, `GazeAreaControl`) are being implemented in Phase 2.
-
-To integrate idiomatic Godot input handling, `godot-gaze` models eye-gaze as first-class engine input events rather than relying strictly on out-of-band polling.
+`godot-gaze` models eye-gaze as first-class engine input events routed through Godot's standard input tree (`Input.parse_input_event()`), while providing seamless OS mouse emulation and 2nd-order inertial dwell mechanics.
 
 ```mermaid
 flowchart TD
     GS["GazeServer Singleton"] -->|Constructs 60 FPS Frame Event| IEG["InputEventGaze / InputEventGazeMissing<br/>(inherits InputEventAction)"]
     IEG -->|Input.parse_input_event| INP["Godot Input Pipeline"]
     INP -->|Standard Dispatch| UN["Node._unhandled_input / _input"]
-    INP -->|Interaction Layer (Phase 2)| GAC["GazeAreaControl / GazeDetector"]
-    GAC -->|Target Power 1.0 / 0.0| PA["PowerAccumulator (2nd-Order Dynamics)"]
-    PA -->|charge_changed / full| UI["UI Focus & Button Activation"]
+    INP -->|Dwell Control| FA["FillAccumulator (2nd-Order Inertial Dynamics)"]
+    FA -->|fill_changed / filled| UI["UI Focus & Button Activation"]
+    GS -->|emulate_mouse_from_gaze| MGE["MouseGazeEmulation & DisplayServer"]
 ```
 
-### 1. First-Class Events: `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing` (Implemented)
+### 6.1. First-Class Events: `InputEventGazeBase`, `InputEventGaze`, `InputEventGazeMissing`
 - **Inheritance**: Subclasses `InputEventAction` (concrete in Godot's `ClassDB`), enabling registration and routing through `Input::get_singleton()->parse_input_event()`.
 - **`InputEventGazeBase`**:
   - `window_id: int`, `frame_id: int`, `timestamp_usec: int`.
   - Continuous eye openness: `left_eye_openness: float`, `right_eye_openness: float` ($0.0$ closed to $1.0$ open).
   - Blink queries: `is_blink(threshold = 0.5)`, `is_left_blink()`, `is_right_blink()`.
-  - `is_face_tracked() -> bool` (virtual, defaults to false on base / missing).
+  - `is_face_tracked() -> bool`: Virtual method, returning false on base/missing and true on `InputEventGaze`.
 - **`InputEventGaze`**:
   - Dispatched when face detection and gaze estimation succeed.
-  - **2D Coordinates**: `position: Vector2` (viewport pixels) and `global_position: Vector2` (window pixels).
-  - **Kinematics**: `relative: Vector2`, `velocity: Vector2` ($\Delta\text{pos}/\Delta t$ in px/sec), `screen_velocity: Vector2`.
-  - **3D Spatial Transforms**: `head_transform: Transform3D` (origin in mm, orientation basis) and `gaze_transform: Transform3D` (combined optical ray origin and direction basis).
+  - **Localized 2D Coordinates**:
+    - `get_eye_gaze(node = null) -> Vector2`: Combined eye-gaze screen/viewport coordinate in logical pixels (`lpix`). When `node` is passed, returns coordinates mapped directly into the local 2D coordinate space of `node`.
+    - `get_nose_gaze(node = null) -> Vector2`: Nose bridge / head forward projection coordinate in logical pixels (`lpix`).
+  - **3D Spatial Transforms**:
+    - `get_eye_transform() -> Transform3D`: Full 3D gaze ray origin and orientation in camera millimeters.
+    - `get_nose_transform() -> Transform3D`: Full 3D head pose origin and orientation in camera millimeters.
+  - **Kinematics & Clamping**:
+    - `relative: Vector2`, `velocity: Vector2` ($\Delta\text{pos}/\Delta t$ in px/sec).
+    - `clamping_mode`: `CLAMP_MODE_NONE` (0), `CLAMP_MODE_CLAMP` (1), `CLAMP_MODE_DISCARD` (2).
 - **`InputEventGazeMissing`**:
   - Dispatched when face or eye tracking drops.
   - Carries `reason: MissingReason` (`REASON_NO_FACE_DETECTED`, `REASON_OCCLUSION_BLINK`, `REASON_OUT_OF_BOUNDS`, `REASON_LOW_CONFIDENCE`).
 
-### 2. Decoupled Interaction & Dwell Layer (Phase 2 - In Progress)
-- **`PowerAccumulator`**: A 2nd-order dynamical integrator ($\frac{dv}{dt} = A(P_{\text{target}} - P) - D v, \frac{dq}{dt} = v$) that handles dwell charging and decay with physical momentum. Absorbs natural $100\text{–}150\text{ms}$ micro-saccades and dropouts without discrete pause timers.
-- **Unified Infinite Margins**: Hitbox expansion (`margin_left`, `margin_right`, `margin_top`, `margin_bottom`) allows expanding target regions; setting margins to $\infty$ on $X$ or $Y$ creates full-width row or full-height column bands.
-- **Focus-Driven UI**: UI targets react to gaze via standard Godot `grab_focus()` rather than hijacking physical mouse hover coordinates.
+### 6.2. Pointer Arbitration & Mouse Emulation (`MouseGazeEmulation`)
+`godot-gaze` integrates a native C++ mouse stillness arbitrator ([`MouseStillnessArbitrator`](file:///Users/acunningham/src/godot-gaze/src/core/mouse_stillness_arbitrator.hpp)) and pointer emulator ([`MouseGazeEmulation`](file:///Users/acunningham/src/godot-gaze/src/godot/mouse_gaze_emulation.hpp)):
+- **Stillness Arbitration**: When physical mouse motion exceeds the anchor bubble threshold (`mouse_stillness_threshold_px`, default $3.0\text{ px}$), the physical mouse claims instant authority. When the mouse remains motionless within the anchor bubble for `mouse_stillness_duration_sec` (default $1.5\text{ s}$), gaze smoothly resumes control via an eased blend transition.
+- **Bi-Directional Emulation**:
+  - `gaze/pointing/emulate_mouse_from_gaze = true`: Synthesizes OS mouse motion and click events into Godot's `DisplayServer`, driving standard engine UI controls directly.
+  - `gaze/pointing/emulate_gaze_from_mouse = true`: In developer environments without webcams, synthesizes `InputEventGaze` from mouse movements to exercise downstream gaze pipelines.
+
+### 6.3. Inertial Dwell Mechanics (`FillAccumulator`)
+For hands-free eye-gaze selection without physical clicks, `FillAccumulator` provides a 2nd-order dynamical dwell state machine:
+- **Kinematic Formulation**:
+  $$\frac{dv}{dt} = \begin{cases} a_{\text{fill}} & \text{if gazing on target (charging, } \text{error} \le 0) \\ -a_{\text{drain}} \cdot \text{penalty} & \text{if off target (releasing, } \text{error} > 0) \end{cases}$$
+  $$\text{penalty} = 1.0 + \frac{\text{error}}{\text{error\_doubling\_distance}}$$
+  $$\frac{d(\text{fill})}{dt} = v, \quad v \in [-v_{\text{drain}} \cdot \text{penalty}, +v_{\text{fill}}], \quad \text{fill} \in [0.0, 1.0]$$
+- **Micro-Saccade & Blink Momentum Tolerance**: Because velocity ramps with finite acceleration ($a \approx 32\text{ units/s}^2$), a brief $100\text{–}150\text{ ms}$ physiological blink or micro-saccade only begins decelerating positive velocity. The accumulator coasts forward or holds, preventing jarring resets or progress dumps during natural gaze flutter.
+- **Fuzzy Boundary Matching (`error_doubling_distance`)**: For UI buttons ([`DwellButton`](file:///Users/acunningham/src/eyecandy/project/gaze/ui/DwellButton.gd)), near-miss boundary tremors ($10\text{ px}$) incur negligible drain penalty ($\approx 1.1\times$), providing forgiving foveal tolerance. In contrast, an intentional saccade across the display ($300\text{ px}$) scales the drain penalty to $4\times$, purging momentum and draining in $<150\text{ ms}$ so the next target can be acquired immediately.
+- **Signal Separation Invariant**: Enforces a strict domain separation bound ($\Delta \ge 0.50$ between empty and full states) preventing accidental activations.
+- **Signals**: `fill_started`, `fill_changed(fill: float)`, `filled`, `emptied`.
 
 ---
 

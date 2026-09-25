@@ -13,7 +13,6 @@
 #include <godot_cpp/classes/input.hpp>
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
 #include <godot_cpp/classes/input_event_mouse_button.hpp>
-#include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/time.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <godot_cpp/classes/resource_loader.hpp>
@@ -37,6 +36,7 @@ namespace godot {
 struct GazeServerImpl {
     struct DisplayInfo {
         Ref<GazeDeviceProfile> device_profile;
+        GazeDisplayServer *gds = nullptr;
     } display;
 
     struct CameraInfo {
@@ -85,6 +85,10 @@ using DisplayInfo = GazeServerImpl::DisplayInfo;
 using CameraInfo = GazeServerImpl::CameraInfo;
 using FaceInfo = GazeServerImpl::FaceInfo;
 using EyeInfo = GazeServerImpl::EyeInfo;
+
+static GazeDisplayServer *_get_gds(const GazeServerImpl *p_impl) {
+    return GazeDisplayServer::get_singleton();
+}
 
 GazeServer *GazeServer::singleton = nullptr;
 
@@ -416,7 +420,7 @@ void GazeServer::stop_processing() {
     Gaze::BlinkStateMachine::Action stop_act = Gaze::BlinkStateMachine::ACTION_NONE;
     blink_state_machine.reset(stop_act);
     if (stop_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
-        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+        GazeDisplayServer *gds = _get_gds(impl.get());
         if (gds) {
             gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
         }
@@ -487,7 +491,7 @@ void GazeServer::reset() {
     Gaze::BlinkStateMachine::Action reset_act = Gaze::BlinkStateMachine::ACTION_NONE;
     blink_state_machine.reset(reset_act);
     if (reset_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
-        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+        GazeDisplayServer *gds = _get_gds(impl.get());
         if (gds) {
             gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
         }
@@ -731,16 +735,8 @@ static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vec
         return Vector2(INFINITY, INFINITY);
     }
 
-    Vector2 win_pos = Vector2(0.0, 0.0);
-    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
-    if (gds) {
-        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
-    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-        DisplayServer *ds = DisplayServer::get_singleton();
-        if (ds) {
-            win_pos = ds->window_get_position();
-        }
-    }
+    GazeDisplayServer *gds = _get_gds(p_impl);
+    Vector2 win_pos = gds ? Vector2(gds->get_window_rect_pixels().position) : Vector2(0.0, 0.0);
     return screen_px - win_pos;
 }
 
@@ -922,36 +918,17 @@ Vector3 GazeServer::project_ray_to_camera_plane(const Vector3 &p_origin_cam, con
     return Vector3(pt.x, pt.y, pt.z);
 }
 
-static Vector2 _xform_window_px_to_canvas(const Vector2 &p_win_pos) {
-    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    if (st && st->get_root()) {
-        double scale = 1.0;
-        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
-        if (gds) {
-            scale = gds->get_screen_scale();
-        } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-            DisplayServer *ds = DisplayServer::get_singleton();
-            if (ds) {
-                scale = ds->screen_get_scale();
-            }
-        }
-        if (scale <= 0.0) scale = 1.0;
-        return st->get_root()->get_final_transform().affine_inverse().xform(p_win_pos * scale);
-    }
-    return p_win_pos;
-}
-
 Vector2 GazeServer::project_ray_to_canvas(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, const CanvasItem *p_local_to) const {
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
     Vector2 win_pos = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
     if (!win_pos.is_finite()) {
         return Vector2(INFINITY, INFINITY);
     }
-    Vector2 canvas_pos = _xform_window_px_to_canvas(win_pos);
-    if (p_local_to) {
-        canvas_pos = p_local_to->get_global_transform_with_canvas().affine_inverse().xform(canvas_pos);
+    GazeDisplayServer *gds = _get_gds(impl.get());
+    if (gds) {
+        return gds->window_px_to_canvas(win_pos, p_local_to);
     }
-    return canvas_pos;
+    return win_pos;
 }
 
 Vector2 GazeServer::project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const {
@@ -1027,20 +1004,14 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     }
 
     Vector2 local_pos = get_gaze_screen_px(false);
-    Vector2 win_pos = Vector2(0, 0);
-    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
-    if (gds) {
-        win_pos = Vector2(gds->get_window_rect_pixels().position.x, gds->get_window_rect_pixels().position.y);
-    } else if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-        DisplayServer *ds = DisplayServer::get_singleton();
-        if (ds) {
-            win_pos = ds->window_get_position();
-        }
-    }
+    GazeDisplayServer *gds = _get_gds(impl.get());
+    Vector2 win_pos = gds ? Vector2(gds->get_window_rect_pixels().position) : Vector2(0, 0);
     Vector2 screen_pos = local_pos + win_pos;
 
     // Transform window-local points to canonical root viewport canvas coordinates
-    local_pos = _xform_window_px_to_canvas(local_pos);
+    if (gds) {
+        local_pos = gds->window_px_to_canvas(local_pos);
+    }
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1164,7 +1135,7 @@ float GazeServer::get_mouse_stillness_threshold_px() const {
 }
 
 Vector2 GazeServer::get_canonical_viewport_size() const {
-    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
+    GazeDisplayServer *gds = _get_gds(impl.get());
     if (gds) {
         Rect2i r = gds->get_window_rect_pixels();
         if (r.size.x > 0 && r.size.y > 0) {
@@ -1176,15 +1147,6 @@ Vector2 GazeServer::get_canonical_viewport_size() const {
         Rect2 visible_rect = st->get_root()->get_visible_rect();
         if (visible_rect.size.x > 0 && visible_rect.size.y > 0) {
             return visible_rect.size;
-        }
-    }
-    if (Engine::get_singleton()->has_singleton("DisplayServer")) {
-        DisplayServer *ds = DisplayServer::get_singleton();
-        if (ds) {
-            Vector2i wsz = ds->window_get_size();
-            if (wsz.x > 0 && wsz.y > 0) {
-                return Vector2(wsz.x, wsz.y);
-            }
         }
     }
     return Vector2(1152.0f, 648.0f);
@@ -1218,7 +1180,7 @@ void GazeServer::trigger_process() {
     bool face_detected_this_frame = false;
 
     // Mouse-to-Gaze Emulation & IN_OUT Transition Strategy update
-    GazeDisplayServer* gds = GazeDisplayServer::get_singleton();
+    GazeDisplayServer* gds = _get_gds(impl.get());
 
     uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
@@ -1345,7 +1307,8 @@ void GazeServer::trigger_process() {
                         uint64_t now_usec = Time::get_singleton()->get_ticks_usec();
                         double t_sec = (double)now_usec / 1000000.0;
 
-                        Vector2 raw_canvas = _xform_window_px_to_canvas(get_gaze_screen_px(false));
+                        Vector2 raw_win = get_gaze_screen_px(false);
+                        Vector2 raw_canvas = gds ? gds->window_px_to_canvas(raw_win) : raw_win;
 
                         // If resuming from physical mouse activity, re-center 1€ filter and reset last_gaze_pos
                         if (mouse_filter_recenter_needed) {
@@ -1379,7 +1342,6 @@ void GazeServer::trigger_process() {
                         if (dt_event < 0.0001f) dt_event = 0.0001f;
                         Vector2 vel = rel / dt_event;
 
-                        GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
                         if (gds) {
                             gds->parse_mouse_motion(final_mouse_pos, rel, vel);
 
@@ -1404,7 +1366,6 @@ void GazeServer::trigger_process() {
                             true
                         );
                         if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
-                            GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
                             if (gds) {
                                 gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
                             }
@@ -1421,7 +1382,6 @@ void GazeServer::trigger_process() {
                     mouse_emulation.is_physical_mouse_active()
                 );
                 if (blink_act == Gaze::BlinkStateMachine::ACTION_BUTTON_UP) {
-                    GazeDisplayServer *gds = GazeDisplayServer::get_singleton();
                     if (gds) {
                         gds->parse_mouse_button(MouseButton::MOUSE_BUTTON_LEFT, false, last_gaze_pos);
                     }

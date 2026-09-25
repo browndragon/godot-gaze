@@ -333,6 +333,13 @@ func run_benchmark():
 		profile.set_camera_roll_deg(0.0)
 		gs.set_device_profile(profile)
 
+		var gds = Engine.get_singleton("GazeDisplayServer")
+		if gds and gds.has_method("set_screen_size_pixels"):
+			gds.set_screen_size_pixels(cur_screen_pt)
+			gds.set_screen_size_mm(cur_screen_mm)
+			gds.set_window_rect_pixels(Rect2i(Vector2i(int(WIN_POS_X_PT), int(WIN_POS_Y_PT)), Vector2i(int(WIN_WIDTH_PT), int(WIN_HEIGHT_PT))))
+			gds.set_screen_scale(2.0)
+
 		gs.reset()
 		if meta.has("roll_hint_deg"):
 			gs.set_roll_hint(deg_to_rad(meta.roll_hint_deg))
@@ -375,6 +382,21 @@ func run_benchmark():
 		var nose_proj_mm = px_to_screen_mm(nose_proj_px, cur_screen_pt, cur_screen_mm) if face_detected else Vector2(-9999.0, -9999.0)
 		var gaze_proj_mm = gs.get_projected_gaze_mm(false) if face_detected else Vector2(-9999.0, -9999.0)
 
+		# Canvas coordinates under simulated window placement
+		var nose_canvas_px = gs.project_ray_to_canvas(head_trans, head_fwd) if face_detected else Vector2(-9999.0, -9999.0)
+		var gaze_canvas_px = gs.project_ray_to_canvas(eye_orig, gaze_dir) if face_detected else Vector2(-9999.0, -9999.0)
+
+		var target_nose_screen_pt = mm_to_screen_pt(nose_target, cur_screen_pt, cur_screen_mm)
+		var target_gaze_screen_pt = mm_to_screen_pt(gaze_target, cur_screen_pt, cur_screen_mm)
+		var target_nose_canvas = target_nose_screen_pt - Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
+		var target_gaze_canvas = target_gaze_screen_pt - Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
+
+		var nose_canvas_diff = nose_canvas_px - target_nose_canvas
+		var nose_canvas_err = nose_canvas_diff.length() if is_valid_pt(nose_canvas_px) else 9999.0
+
+		var gaze_canvas_diff = gaze_canvas_px - target_gaze_canvas
+		var gaze_canvas_err = gaze_canvas_diff.length() if is_valid_pt(gaze_canvas_px) else 9999.0
+
 		var nose_diff = nose_proj_mm - nose_target
 		var nose_err_mag = sqrt(nose_diff.x * nose_diff.x + nose_diff.y * nose_diff.y) if is_valid_pt(nose_proj_mm) else 9999.0
 
@@ -410,7 +432,9 @@ func run_benchmark():
 			{"prop": "head_pos_mm", "val": format_vec3(head_trans) if face_detected else "NO_FACE", "err_str": "N/A", "err_mag": 0.0},
 			{"prop": "head_rot_deg", "val": format_vec3(head_rot) if face_detected else "NO_FACE", "err_str": rot_err_str, "err_mag": rot_err_mag},
 			{"prop": "nose_mm", "val": format_vec2(nose_proj_mm) if face_detected else "NO_FACE", "err_str": ("%.1f mm" % nose_err_mag) if is_valid_pt(nose_proj_mm) else "N/A", "err_mag": nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0},
-			{"prop": "gaze_mm", "val": format_vec2(gaze_proj_mm) if face_detected else "NO_FACE", "err_str": ("%.1f mm" % gaze_err_mag) if is_valid_pt(gaze_proj_mm) else "N/A", "err_mag": gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0}
+			{"prop": "gaze_mm", "val": format_vec2(gaze_proj_mm) if face_detected else "NO_FACE", "err_str": ("%.1f mm" % gaze_err_mag) if is_valid_pt(gaze_proj_mm) else "N/A", "err_mag": gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0},
+			{"prop": "nose_canvas_px", "val": format_vec2(nose_canvas_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % nose_canvas_err) if is_valid_pt(nose_canvas_px) else "N/A", "err_mag": nose_canvas_err if is_valid_pt(nose_canvas_px) else 0.0},
+			{"prop": "gaze_canvas_px", "val": format_vec2(gaze_canvas_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % gaze_canvas_err) if is_valid_pt(gaze_canvas_px) else "N/A", "err_mag": gaze_canvas_err if is_valid_pt(gaze_canvas_px) else 0.0}
 		]
 
 		var golden_fixture = golden_data.get(img_file, {})
@@ -454,6 +478,22 @@ func run_benchmark():
 							prev_mag = diff.length()
 							prev_err_str = "%.1f mm" % prev_mag
 							has_prev_err = true
+					elif prop_key == "nose_canvas_px":
+						var v = parse_vector(prev_val_str)
+						var pt = Vector2(v.x, v.y)
+						if is_valid_pt(pt):
+							var diff = pt - target_nose_canvas
+							prev_mag = diff.length()
+							prev_err_str = "%.1f px" % prev_mag
+							has_prev_err = true
+					elif prop_key == "gaze_canvas_px":
+						var v = parse_vector(prev_val_str)
+						var pt = Vector2(v.x, v.y)
+						if is_valid_pt(pt):
+							var diff = pt - target_gaze_canvas
+							prev_mag = diff.length()
+							prev_err_str = "%.1f px" % prev_mag
+							has_prev_err = true
 					elif prop_key == "head_rot_deg":
 						var prev_rot = parse_vector(prev_val_str)
 						if rot_target_deg != null:
@@ -485,14 +525,15 @@ func run_benchmark():
 
 				if has_prev_err and p["err_mag"] > 0.0 and not meta.get("is_eye_test", false):
 					var delta = p["err_mag"] - prev_mag
-					var unit = "deg" if prop_key == "head_rot_deg" else "mm"
-					if delta > 15.0:
+					var unit = "deg" if prop_key == "head_rot_deg" else ("px" if "px" in prop_key else "mm")
+					var threshold = 75.0 if "px" in prop_key else 15.0
+					if delta > threshold:
 						delta_str = "+%.1f %s" % [delta, unit]
 						status_str = "CHANGE_WORSE"
 						any_metric_regressed = true
 						fixture_regressed = true
 						printerr("CHANGE_WORSE (REGRESSION): %s %s error regressed from %s to %s (delta: %s)" % [img_file, prop_key, prev_err_str, p["err_str"], delta_str])
-					elif delta < -15.0:
+					elif delta < -threshold:
 						delta_str = "%.1f %s" % [delta, unit]
 						status_str = "CHANGE_BETTER"
 						any_metric_improved = true

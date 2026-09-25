@@ -32,7 +32,7 @@ func run_tests():
 	var win_rect = gds.get_window_rect_pixels() if gds else Rect2i(DisplayServer.window_get_position(), DisplayServer.window_get_size())
 	var window_size = win_rect.size
 	var center_pos = Vector2i((int(screen_size_lpix.x) - window_size.x) / 2, (int(screen_size_lpix.y) - window_size.y) / 2)
-	DisplayServer.window_set_position(center_pos * screen_scale)
+	DisplayServer.window_set_position(center_pos)
 	await create_timer(0.4).timeout
 
 	var actual_win_pos = gds.get_window_rect_pixels().position if gds else DisplayServer.window_get_position()
@@ -82,7 +82,7 @@ func run_tests():
 	# Allow for minor window position offset (e.g. macOS menu bar 37pt offset in non-exclusive fullscreen)
 	var expected_fs_x = (screen_size_lpix.x / 2.0) - fs_win_pos.x
 	var expected_fs_y = (screen_size_lpix.y / 2.0) - fs_win_pos.y
-	var expected_fs_canvas = root.get_final_transform().affine_inverse() * (Vector2(expected_fs_x, expected_fs_y) * screen_scale)
+	var expected_fs_canvas = gds.window_px_to_canvas(Vector2(expected_fs_x, expected_fs_y)) if gds else root.get_final_transform().affine_inverse() * Vector2(expected_fs_x, expected_fs_y)
 	print("Fullscreen - Expected Canvas Pos taking menu bar into account: ", expected_fs_canvas)
 	if abs(cam_axis_fs.x - expected_fs_canvas.x) > 3.0 or abs(cam_axis_fs.y - expected_fs_canvas.y) > 3.0:
 		printerr("FAIL: Fullscreen screen center ray mismatch! Got: ", cam_axis_fs, " Expected: ", expected_fs_canvas)

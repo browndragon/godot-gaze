@@ -138,14 +138,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
 
     float ease_factor = get_eased_blend_factor();
 
-    godot::SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
-    Vector2 mouse_canvas = mouse_pos;
-    if (st && st->get_root()) {
-        double scale = p_gds ? p_gds->get_screen_scale() : 1.0;
-        if (scale <= 0.0) scale = 1.0;
-        mouse_canvas = st->get_root()->get_final_transform().affine_inverse().xform(mouse_pos * scale);
-    }
-
+    Vector2 mouse_canvas = p_gds ? p_gds->window_px_to_canvas(mouse_pos) : mouse_pos;
 
     Vector2 blended_canvas_pos = mouse_canvas;
     Transform3D blended_head = mouse_head_xform;

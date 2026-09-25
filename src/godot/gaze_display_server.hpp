@@ -7,6 +7,8 @@
 
 namespace godot {
 
+class CanvasItem;
+
 /**
  * @class GazeDisplayServer
  * @brief Singleton query server providing physical display geometry, scale factors, and hardware camera offsets.
@@ -106,6 +108,14 @@ public:
      * @param p_position Canvas position where the click occurred.
      */
     virtual void parse_mouse_button(int64_t p_button, bool p_pressed, const Vector2 &p_position);
+
+    /**
+     * @brief Transform a window-local coordinate in logical pixels to canonical viewport canvas space.
+     * @param p_win_pos Window position in logical pixels.
+     * @param p_local_to Optional target CanvasItem (null for root viewport canvas space).
+     * @return Canonical canvas coordinate.
+     */
+    virtual Vector2 window_px_to_canvas(const Vector2 &p_win_pos, const CanvasItem *p_local_to = nullptr) const;
 };
 
 } // namespace godot

@@ -7,7 +7,6 @@
 #include "../core/math_defs.hpp"
 #include "../core/projection_engine.hpp"
 #include <godot_cpp/core/class_db.hpp>
-#include <godot_cpp/classes/display_server.hpp>
 #include <godot_cpp/classes/engine.hpp>
 #include <cmath>
 

@@ -6,6 +6,9 @@
 #include <godot_cpp/classes/input_event_mouse_motion.hpp>
 #include <godot_cpp/classes/input_event_mouse_button.hpp>
 #include <godot_cpp/classes/engine.hpp>
+#include <godot_cpp/classes/scene_tree.hpp>
+#include <godot_cpp/classes/window.hpp>
+#include <godot_cpp/classes/canvas_item.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include "../core/gaze_display_types.hpp"
 
@@ -66,6 +69,7 @@ void GazeDisplayServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("mouse_get_button_state"), &GazeDisplayServer::mouse_get_button_state);
     ClassDB::bind_method(D_METHOD("parse_mouse_motion", "position", "relative", "velocity"), &GazeDisplayServer::parse_mouse_motion);
     ClassDB::bind_method(D_METHOD("parse_mouse_button", "button", "pressed", "position"), &GazeDisplayServer::parse_mouse_button);
+    ClassDB::bind_method(D_METHOD("window_px_to_canvas", "win_pos", "local_to"), &GazeDisplayServer::window_px_to_canvas, DEFVAL(nullptr));
 }
 
 GazeDisplayServer *GazeDisplayServer::get_singleton() {
@@ -125,10 +129,6 @@ Vector2 GazeDisplayServer::get_screen_size_pixels(int p_screen) const {
         DisplayServer *ds = DisplayServer::get_singleton();
         if (ds) {
             Vector2i sz = ds->screen_get_size(screen_idx);
-            double scale = ds->screen_get_scale(screen_idx);
-            if (scale > 0.0) {
-                return Vector2(sz.x / scale, sz.y / scale);
-            }
             return Vector2(sz.x, sz.y);
         }
     }
@@ -270,6 +270,18 @@ void GazeDisplayServer::parse_mouse_button(int64_t p_button, bool p_pressed, con
     mb->set_position(p_position);
     mb->set_global_position(p_position);
     input->parse_input_event(mb);
+}
+
+Vector2 GazeDisplayServer::window_px_to_canvas(const Vector2 &p_win_pos, const CanvasItem *p_local_to) const {
+    SceneTree *st = Object::cast_to<SceneTree>(Engine::get_singleton()->get_main_loop());
+    Vector2 canvas_pos = p_win_pos;
+    if (st && st->get_root()) {
+        canvas_pos = st->get_root()->get_final_transform().affine_inverse().xform(p_win_pos);
+    }
+    if (p_local_to) {
+        canvas_pos = p_local_to->get_global_transform_with_canvas().affine_inverse().xform(canvas_pos);
+    }
+    return canvas_pos;
 }
 
 } // namespace godot

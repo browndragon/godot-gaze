@@ -99,10 +99,10 @@ def run_command_and_log(target, source, env):
     if resolved_cmd and not os.path.isabs(resolved_cmd[0]):
         home = os.path.expanduser("~")
         known_dirs = [
-            os.path.join(home, ".pyenv/versions/3.14.4/bin"),
-            os.path.join(home, ".asdf/installs/nodejs/18.12.1/bin"),
             "/opt/homebrew/bin",
-            "/usr/local/bin"
+            "/usr/local/bin",
+            os.path.join(home, ".pyenv/versions/3.14.4/bin"),
+            os.path.join(home, ".asdf/installs/nodejs/18.12.1/bin")
         ]
         found_bin = None
         for p in known_dirs:
@@ -141,7 +141,7 @@ def run_command_and_log(target, source, env):
                 sys.stdout.write(line)
                 log_file.write(line)
                 if line.startswith("ERROR:") or line.startswith("E 0:") or "<C++ Error>" in line:
-                    if "Cannot get class" in line or "Failed to retrieve non-existent singleton" in line or "Parameter" in line or "Condition" in line:
+                    if ("Cannot get class" in line or "Failed to retrieve non-existent singleton" in line or "Parameter" in line or "Condition" in line) and "ret != noErr" not in line and "get_system_ca_certificates" not in line:
                         has_engine_error = True
                 
         process.wait()

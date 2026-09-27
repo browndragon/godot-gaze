@@ -45,21 +45,21 @@ func run_tests():
 		return
 	var eye_cam_origin = Vector3(0.0, 0.0, -500.0)
 	var gaze_cam_dir = Vector3(0.0, 0.0, 1.0) # pointing straight along +Z at the screen
-	var proj_px = profile.project_gaze_px(eye_cam_origin, gaze_cam_dir)
+	var proj_px = profile.project_gaze_screen_px(eye_cam_origin, gaze_cam_dir)
 	if abs(proj_px.x - 960.0) > 0.01 or abs(proj_px.y - 540.0) > 0.01:
-		printerr("FAIL: project_gaze_px incorrect for screen center: ", proj_px)
+		printerr("FAIL: project_gaze_screen_px incorrect for screen center: ", proj_px)
 		quit(1)
 		return
 	# Arbitrary point round-trip invertibility
 	var arb_px = Vector2(450.0, 250.0)
 	var arb_cam_pt = profile.unproject_px_to_cam_mm(arb_px)
 	var arb_dir = (arb_cam_pt - eye_cam_origin).normalized()
-	var roundtrip_px = profile.project_gaze_px(eye_cam_origin, arb_dir)
+	var roundtrip_px = profile.project_gaze_screen_px(eye_cam_origin, arb_dir)
 	if (roundtrip_px - arb_px).length() > 0.05:
 		printerr("FAIL: GazeDeviceProfile project/unproject roundtrip failed: ", roundtrip_px, " vs ", arb_px)
 		quit(1)
 		return
-	print("PASS: GazeDeviceProfile project_gaze_px / unproject_px_to_cam_mm verified.")
+	print("PASS: GazeDeviceProfile project_gaze_screen_px / unproject_px_to_cam_mm verified.")
 
 	# 1c. Test GazeProfile .cfg file serialization (save_to_file / load_from_file)
 	var cfg_path = "user://test_device_profile.cfg"

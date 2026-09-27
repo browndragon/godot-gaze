@@ -57,7 +57,7 @@ public:
     Vector2 get_dpi() const;
     double get_focal_length_px(double frame_width_px) const;
 
-    Vector2 project_gaze_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const;
+    Vector2 project_gaze_screen_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const;
     Vector3 unproject_px_to_cam_mm(const Vector2 &p_screen_px) const;
 
     void calibrate_from_card_width(double card_width_lpix, double card_width_mm = 85.603);

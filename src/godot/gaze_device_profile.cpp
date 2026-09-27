@@ -45,7 +45,7 @@ void GazeDeviceProfile::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_focal_length_px", "frame_width_px"), &GazeDeviceProfile::get_focal_length_px);
     ClassDB::bind_method(D_METHOD("calibrate_from_card_width", "card_width_lpix", "card_width_mm"), &GazeDeviceProfile::calibrate_from_card_width, DEFVAL(85.603));
 
-    ClassDB::bind_method(D_METHOD("project_gaze_px", "origin_cam_mm", "direction_cam"), &GazeDeviceProfile::project_gaze_px);
+    ClassDB::bind_method(D_METHOD("project_gaze_screen_px", "origin_cam_mm", "direction_cam"), &GazeDeviceProfile::project_gaze_screen_px);
     ClassDB::bind_method(D_METHOD("unproject_px_to_cam_mm", "screen_px"), &GazeDeviceProfile::unproject_px_to_cam_mm);
 
     ClassDB::bind_static_method("GazeDeviceProfile", D_METHOD("create_system_guess"), &GazeDeviceProfile::create_system_guess);
@@ -143,7 +143,7 @@ void GazeDeviceProfile::set_camera_tilt_deg(double p_tilt) {
     emit_changed();
 }
 
-Vector2 GazeDeviceProfile::project_gaze_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const {
+Vector2 GazeDeviceProfile::project_gaze_screen_px(const Vector3 &p_origin_cam_mm, const Vector3 &p_direction_cam) const {
     Gaze::ProjectionEngine engine;
     Vector2 phys_sz = get_physical_size_mm();
     engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(phys_sz.x, phys_sz.y));

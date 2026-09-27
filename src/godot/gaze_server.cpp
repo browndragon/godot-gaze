@@ -730,7 +730,7 @@ static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vec
     if (profile.is_null()) {
         return Vector2(INFINITY, INFINITY);
     }
-    Vector2 screen_px = profile->project_gaze_px(p_origin_cam, p_direction_cam);
+    Vector2 screen_px = profile->project_gaze_screen_px(p_origin_cam, p_direction_cam);
     if (!screen_px.is_finite()) {
         return Vector2(INFINITY, INFINITY);
     }

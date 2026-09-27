@@ -202,6 +202,11 @@ func is_valid_pt(p: Vector2) -> bool:
 func run_benchmark():
 	print("=================== GODOT HEADLESS GAZE BENCHMARK ===================")
 
+	if root:
+		root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+		root.content_scale_size = Vector2i(0, 0)
+		root.size = Vector2i(1512, 982)
+
 	var vs = Engine.get_singleton("VisionServer")
 	var gs = Engine.get_singleton("GazeServer")
 
@@ -229,9 +234,14 @@ func run_benchmark():
 	gs.set_smoother(null)
 	gs.set_crop_requested(true)
 	gs.set_camera_preview_requested(true)
+	gs.set_default_clamping(false)
 
 	gs.start_processing()
 	print("GazeServer initialized successfully for headless benchmark.")
+
+	var center_node = Node2D.new()
+	if root:
+		root.add_child(center_node)
 
 	# Load Tracked Goldenfile (Read-Only)
 	var golden_file = "test_assets/gaze_benchmark_golden.json"
@@ -377,31 +387,28 @@ func run_benchmark():
 		var gaze_target = rel_offset + target_spec.get("eye", Vector2(0.0, 0.0))
 		var rot_target_deg = target_spec.get("head_rot_deg", null)
 
-		var nose_proj_px = gs.project_ray_to_viewport(head_trans, head_fwd) if face_detected else Vector2(-9999.0, -9999.0)
-		var gaze_proj_px = gs.get_projected_gaze(false) if face_detected else Vector2(-9999.0, -9999.0)
-		var nose_proj_mm = px_to_screen_mm(nose_proj_px, cur_screen_pt, cur_screen_mm) if face_detected else Vector2(-9999.0, -9999.0)
-		var gaze_proj_mm = gs.get_projected_gaze_mm(false) if face_detected else Vector2(-9999.0, -9999.0)
+		# Position center_node at display center in canvas space
+		var disp_center_pt = cur_screen_pt * 0.5
+		var disp_center_win = disp_center_pt - Vector2(gds.get_window_rect_pixels().position)
+		center_node.position = gds.window_px_to_canvas(disp_center_win)
 
-		# Canvas coordinates under simulated window placement
-		var nose_canvas_px = gs.project_ray_to_canvas(head_trans, head_fwd) if face_detected else Vector2(-9999.0, -9999.0)
-		var gaze_canvas_px = gs.project_ray_to_canvas(eye_orig, gaze_dir) if face_detected else Vector2(-9999.0, -9999.0)
+		# Canvas pixel projections relative to display center node
+		var nose_proj_px = gs.project_ray_to_canvas(head_trans, head_fwd, center_node) if face_detected else Vector2(-9999.0, -9999.0)
+		var eye_proj_px = gs.project_ray_to_canvas(eye_orig, gaze_dir, center_node) if face_detected else Vector2(-9999.0, -9999.0)
+		if not is_valid_pt(nose_proj_px):
+			nose_proj_px = Vector2(-9999.0, -9999.0)
+		if not is_valid_pt(eye_proj_px):
+			eye_proj_px = Vector2(-9999.0, -9999.0)
 
-		var target_nose_screen_pt = mm_to_screen_pt(nose_target, cur_screen_pt, cur_screen_mm)
-		var target_gaze_screen_pt = mm_to_screen_pt(gaze_target, cur_screen_pt, cur_screen_mm)
-		var target_nose_canvas = target_nose_screen_pt - Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
-		var target_gaze_canvas = target_gaze_screen_pt - Vector2(WIN_POS_X_PT, WIN_POS_Y_PT)
+		# Target positions relative to display center in canvas pixels
+		var target_nose_px = Vector2(nose_target.x * (cur_screen_pt.x / cur_screen_mm.x), nose_target.y * (cur_screen_pt.y / cur_screen_mm.y))
+		var target_eye_px = Vector2(gaze_target.x * (cur_screen_pt.x / cur_screen_mm.x), gaze_target.y * (cur_screen_pt.y / cur_screen_mm.y))
 
-		var nose_canvas_diff = nose_canvas_px - target_nose_canvas
-		var nose_canvas_err = nose_canvas_diff.length() if is_valid_pt(nose_canvas_px) else 9999.0
+		var nose_diff = nose_proj_px - target_nose_px
+		var nose_err_mag = nose_diff.length() if is_valid_pt(nose_proj_px) else 9999.0
 
-		var gaze_canvas_diff = gaze_canvas_px - target_gaze_canvas
-		var gaze_canvas_err = gaze_canvas_diff.length() if is_valid_pt(gaze_canvas_px) else 9999.0
-
-		var nose_diff = nose_proj_mm - nose_target
-		var nose_err_mag = sqrt(nose_diff.x * nose_diff.x + nose_diff.y * nose_diff.y) if is_valid_pt(nose_proj_mm) else 9999.0
-
-		var gaze_diff = gaze_proj_mm - gaze_target
-		var gaze_err_mag = sqrt(gaze_diff.x * gaze_diff.x + gaze_diff.y * gaze_diff.y) if is_valid_pt(gaze_proj_mm) else 9999.0
+		var eye_diff = eye_proj_px - target_eye_px
+		var eye_err_mag = eye_diff.length() if is_valid_pt(eye_proj_px) else 9999.0
 
 		var head_err_deg = Vector3.ZERO
 		var rot_err_mag = 0.0
@@ -431,10 +438,8 @@ func run_benchmark():
 		var props = [
 			{"prop": "head_pos_mm", "val": format_vec3(head_trans) if face_detected else "NO_FACE", "err_str": "N/A", "err_mag": 0.0},
 			{"prop": "head_rot_deg", "val": format_vec3(head_rot) if face_detected else "NO_FACE", "err_str": rot_err_str, "err_mag": rot_err_mag},
-			{"prop": "nose_mm", "val": format_vec2(nose_proj_mm) if face_detected else "NO_FACE", "err_str": ("%.1f mm" % nose_err_mag) if is_valid_pt(nose_proj_mm) else "N/A", "err_mag": nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0},
-			{"prop": "gaze_mm", "val": format_vec2(gaze_proj_mm) if face_detected else "NO_FACE", "err_str": ("%.1f mm" % gaze_err_mag) if is_valid_pt(gaze_proj_mm) else "N/A", "err_mag": gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0},
-			{"prop": "nose_canvas_px", "val": format_vec2(nose_canvas_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % nose_canvas_err) if is_valid_pt(nose_canvas_px) else "N/A", "err_mag": nose_canvas_err if is_valid_pt(nose_canvas_px) else 0.0},
-			{"prop": "gaze_canvas_px", "val": format_vec2(gaze_canvas_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % gaze_canvas_err) if is_valid_pt(gaze_canvas_px) else "N/A", "err_mag": gaze_canvas_err if is_valid_pt(gaze_canvas_px) else 0.0}
+			{"prop": "nose_px", "val": format_vec2(nose_proj_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % nose_err_mag) if is_valid_pt(nose_proj_px) else "N/A", "err_mag": nose_err_mag if is_valid_pt(nose_proj_px) else 0.0},
+			{"prop": "eye_px", "val": format_vec2(eye_proj_px) if face_detected else "NO_FACE", "err_str": ("%.1f px" % eye_err_mag) if is_valid_pt(eye_proj_px) else "N/A", "err_mag": eye_err_mag if is_valid_pt(eye_proj_px) else 0.0}
 		]
 
 		var golden_fixture = golden_data.get(img_file, {})
@@ -458,70 +463,54 @@ func run_benchmark():
 				else:
 					prev_val_str = str(prev_entry)
 
-				var prev_mag = 0.0
-				var has_prev_err = false
+			var prev_mag = 0.0
+			var has_prev_err = false
 
-				if prev_val_str != "N/A" and prev_val_str != "NO_FACE":
-					if prop_key == "nose_mm":
-						var v = parse_vector(prev_val_str)
-						var pt = Vector2(v.x, v.y)
-						if is_valid_pt(pt):
-							var diff = pt - nose_target
-							prev_mag = diff.length()
-							prev_err_str = "%.1f mm" % prev_mag
-							has_prev_err = true
-					elif prop_key == "gaze_mm":
-						var v = parse_vector(prev_val_str)
-						var pt = Vector2(v.x, v.y)
-						if is_valid_pt(pt):
-							var diff = pt - gaze_target
-							prev_mag = diff.length()
-							prev_err_str = "%.1f mm" % prev_mag
-							has_prev_err = true
-					elif prop_key == "nose_canvas_px":
-						var v = parse_vector(prev_val_str)
-						var pt = Vector2(v.x, v.y)
-						if is_valid_pt(pt):
-							var diff = pt - target_nose_canvas
-							prev_mag = diff.length()
-							prev_err_str = "%.1f px" % prev_mag
-							has_prev_err = true
-					elif prop_key == "gaze_canvas_px":
-						var v = parse_vector(prev_val_str)
-						var pt = Vector2(v.x, v.y)
-						if is_valid_pt(pt):
-							var diff = pt - target_gaze_canvas
-							prev_mag = diff.length()
-							prev_err_str = "%.1f px" % prev_mag
-							has_prev_err = true
-					elif prop_key == "head_rot_deg":
-						var prev_rot = parse_vector(prev_val_str)
-						if rot_target_deg != null:
-							var diff = prev_rot - rot_target_deg
-							prev_mag = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z)
-							prev_err_str = "%.1f deg" % prev_mag
-							has_prev_err = true
-						else:
-							var prev_pos_entry = golden_fixture.get("head_pos_mm", null)
-							var prev_pos_str = ""
-							if prev_pos_entry is Dictionary:
-								prev_pos_str = prev_pos_entry.get("val", "")
-							elif prev_pos_entry is String:
-								prev_pos_str = prev_pos_entry
-							if prev_pos_str != "" and prev_pos_str != "NO_FACE":
-								var prev_pos = parse_vector(prev_pos_str)
-								var P_cam = Vector3(nose_target.x, -(nose_target.y + (cur_screen_mm.y * 0.5)), 0.0)
-								var diff_vec = P_cam - prev_pos
-								if diff_vec.length() > 0.0:
-									var pitch_exp = rad_to_deg(atan2(-diff_vec.y, sqrt(diff_vec.x * diff_vec.x + diff_vec.z * diff_vec.z)))
-									var yaw_exp = rad_to_deg(atan2(diff_vec.x, -diff_vec.z))
-									var yaw_diff = prev_rot.y - yaw_exp
-									while yaw_diff > 180.0: yaw_diff -= 360.0
-									while yaw_diff < -180.0: yaw_diff += 360.0
-									var pitch_diff = prev_rot.x - pitch_exp
-									prev_mag = sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff)
-									prev_err_str = "%.1f deg" % prev_mag
-									has_prev_err = true
+			if prev_val_str != "N/A" and prev_val_str != "NO_FACE":
+				if prop_key == "nose_px":
+					var v = parse_vector(prev_val_str)
+					var pt = Vector2(v.x, v.y)
+					if is_valid_pt(pt):
+						var diff = pt - target_nose_px
+						prev_mag = diff.length()
+						prev_err_str = "%.1f px" % prev_mag
+						has_prev_err = true
+				elif prop_key == "eye_px":
+					var v = parse_vector(prev_val_str)
+					var pt = Vector2(v.x, v.y)
+					if is_valid_pt(pt):
+						var diff = pt - target_eye_px
+						prev_mag = diff.length()
+						prev_err_str = "%.1f px" % prev_mag
+						has_prev_err = true
+				elif prop_key == "head_rot_deg":
+					var prev_rot = parse_vector(prev_val_str)
+					if rot_target_deg != null:
+						var diff = prev_rot - rot_target_deg
+						prev_mag = sqrt(diff.x * diff.x + diff.y * diff.y + diff.z * diff.z)
+						prev_err_str = "%.1f deg" % prev_mag
+						has_prev_err = true
+					else:
+						var prev_pos_entry = golden_fixture.get("head_pos_mm", null)
+						var prev_pos_str = ""
+						if prev_pos_entry is Dictionary:
+							prev_pos_str = prev_pos_entry.get("val", "")
+						elif prev_pos_entry is String:
+							prev_pos_str = prev_pos_entry
+						if prev_pos_str != "" and prev_pos_str != "NO_FACE":
+							var prev_pos = parse_vector(prev_pos_str)
+							var P_cam = Vector3(nose_target.x, -(nose_target.y + (cur_screen_mm.y * 0.5)), 0.0)
+							var diff_vec = P_cam - prev_pos
+							if diff_vec.length() > 0.0:
+								var pitch_exp = rad_to_deg(atan2(-diff_vec.y, sqrt(diff_vec.x * diff_vec.x + diff_vec.z * diff_vec.z)))
+								var yaw_exp = rad_to_deg(atan2(diff_vec.x, -diff_vec.z))
+								var yaw_diff = prev_rot.y - yaw_exp
+								while yaw_diff > 180.0: yaw_diff -= 360.0
+								while yaw_diff < -180.0: yaw_diff += 360.0
+								var pitch_diff = prev_rot.x - pitch_exp
+								prev_mag = sqrt(yaw_diff * yaw_diff + pitch_diff * pitch_diff)
+								prev_err_str = "%.1f deg" % prev_mag
+								has_prev_err = true
 
 				if has_prev_err and p["err_mag"] > 0.0 and not meta.get("is_eye_test", false):
 					var delta = p["err_mag"] - prev_mag
@@ -613,18 +602,23 @@ func run_benchmark():
 			right_crop.save_png(rc_png)
 			right_eye_rel_path = "benchmark_overlays/" + base_fn + "_right_eye.png"
 
-		# Extract Previous Golden Gaze & Nose points
-		var prev_nose_entry = golden_fixture.get("nose_mm", "")
-		var prev_gaze_entry = golden_fixture.get("gaze_mm", "")
-		var prev_nose_mm_str = prev_nose_entry.get("val", "") if prev_nose_entry is Dictionary else str(prev_nose_entry)
-		var prev_gaze_mm_str = prev_gaze_entry.get("val", "") if prev_gaze_entry is Dictionary else str(prev_gaze_entry)
-		var prev_nose_vec = parse_vector(prev_nose_mm_str)
-		var prev_gaze_vec = parse_vector(prev_gaze_mm_str)
-		var prev_nose_pt = mm_to_screen_pt(Vector2(prev_nose_vec.x, prev_nose_vec.y), cur_screen_pt, cur_screen_mm) if prev_nose_mm_str != "" and prev_nose_mm_str != "NO_FACE" else Vector2(-9999.0, -9999.0)
-		var prev_gaze_pt = mm_to_screen_pt(Vector2(prev_gaze_vec.x, prev_gaze_vec.y), cur_screen_pt, cur_screen_mm) if prev_gaze_mm_str != "" and prev_gaze_mm_str != "NO_FACE" else Vector2(-9999.0, -9999.0)
+		# Extract Previous Golden Eye & Nose points (relative to display center)
+		var prev_nose_entry = golden_fixture.get("nose_px", "")
+		var prev_eye_entry = golden_fixture.get("eye_px", "")
+		var prev_nose_str = prev_nose_entry.get("val", "") if prev_nose_entry is Dictionary else str(prev_nose_entry)
+		var prev_eye_str = prev_eye_entry.get("val", "") if prev_eye_entry is Dictionary else str(prev_eye_entry)
+		var prev_nose_vec = parse_vector(prev_nose_str)
+		var prev_eye_vec = parse_vector(prev_eye_str)
+		var prev_nose_pt = Vector2(prev_nose_vec.x, prev_nose_vec.y) if (prev_nose_str != "" and prev_nose_str != "NO_FACE") else Vector2(-9999.0, -9999.0)
+		var prev_eye_pt = Vector2(prev_eye_vec.x, prev_eye_vec.y) if (prev_eye_str != "" and prev_eye_str != "NO_FACE") else Vector2(-9999.0, -9999.0)
 
-		var target_nose_pt = mm_to_screen_pt(nose_target, cur_screen_pt, cur_screen_mm)
-		var target_eye_pt = mm_to_screen_pt(gaze_target, cur_screen_pt, cur_screen_mm)
+		# Map center-relative coordinates to absolute screen points for display panel visualization
+		var target_nose_screen_pt = disp_center_pt + target_nose_px
+		var target_eye_screen_pt = disp_center_pt + target_eye_px
+		var nose_screen_pt = (disp_center_pt + nose_proj_px) if is_valid_pt(nose_proj_px) else Vector2(-9999.0, -9999.0)
+		var eye_screen_pt = (disp_center_pt + eye_proj_px) if is_valid_pt(eye_proj_px) else Vector2(-9999.0, -9999.0)
+		var prev_nose_screen_pt = (disp_center_pt + prev_nose_pt) if is_valid_pt(prev_nose_pt) else Vector2(-9999.0, -9999.0)
+		var prev_eye_screen_pt = (disp_center_pt + prev_eye_pt) if is_valid_pt(prev_eye_pt) else Vector2(-9999.0, -9999.0)
 
 		# Render Diagnostic Overlays
 		var diag_overlay_rel_path = "benchmark_overlays/" + base_fn + "_diagnostic.png"
@@ -632,11 +626,11 @@ func run_benchmark():
 		var right_panel = render_display_panel(
 			img, img_file, cur_screen_pt, cur_screen_mm, cur_cam_offset_mm,
 			nose_target, gaze_target,
-			target_nose_pt, target_eye_pt,
-			nose_proj_px, gaze_proj_px,
-			prev_nose_pt, prev_gaze_pt,
-			nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0,
-			gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0
+			target_nose_screen_pt, target_eye_screen_pt,
+			nose_screen_pt, eye_screen_pt,
+			prev_nose_screen_pt, prev_eye_screen_pt,
+			nose_err_mag if is_valid_pt(nose_proj_px) else 0.0,
+			eye_err_mag if is_valid_pt(eye_proj_px) else 0.0
 		)
 		var composite = create_side_by_side_composite(left_panel, right_panel, img_file)
 		composite.save_png(overlays_dir + "/" + base_fn + "_diagnostic.png")
@@ -652,8 +646,8 @@ func run_benchmark():
 			"left_open": left_open,
 			"right_open": right_open,
 			"metrics": card_metrics,
-			"nose_err": nose_err_mag if is_valid_pt(nose_proj_mm) else 0.0,
-			"gaze_err": gaze_err_mag if is_valid_pt(gaze_proj_mm) else 0.0,
+			"nose_err": nose_err_mag if is_valid_pt(nose_proj_px) else 0.0,
+			"eye_err": eye_err_mag if is_valid_pt(eye_proj_px) else 0.0,
 			"overlay_rel": diag_overlay_rel_path,
 			"left_eye_rel": left_eye_rel_path,
 			"right_eye_rel": right_eye_rel_path
@@ -866,7 +860,7 @@ func render_display_panel(
 	target_nose_pt: Vector2, target_eye_pt: Vector2,
 	nose_rep: Vector2, eye_rep: Vector2,
 	prev_nose_pt: Vector2, prev_gaze_pt: Vector2,
-	nose_err_mm: float, gaze_err_mm: float
+	nose_err_px: float, gaze_err_px: float
 ) -> Image:
 	var disp_w = screen_pt_size.x
 	var disp_h = screen_pt_size.y
@@ -1042,7 +1036,7 @@ func render_display_panel(
 			draw_thick_line(canvas, ge_c.x, ge_c.y, te_c.x, te_c.y, cyan_col, 2)
 		draw_circle(canvas, ge_c.x, ge_c.y, 8, cyan_col)
 		draw_crosshair(canvas, ge_c.x, ge_c.y, 14, Color.WHITE)
-		draw_bitmap_text(canvas, ge_c.x + 12, ge_c.y - 14, "EYE GAZE (%.1fmm)" % gaze_err_mm, cyan_col, 1)
+		draw_bitmap_text(canvas, ge_c.x + 12, ge_c.y - 14, "EYE GAZE (%.1fpx)" % gaze_err_px, cyan_col, 1)
 
 	# 8. Current Nose Gaze: Center -> Current Nose Pt -> Target Nose Pt (Green)
 	if is_valid_pt(nose_rep):
@@ -1053,7 +1047,7 @@ func render_display_panel(
 			draw_thick_line(canvas, nr_c.x, nr_c.y, tn_c.x, tn_c.y, green_col, 2)
 		draw_circle(canvas, nr_c.x, nr_c.y, 7, green_col)
 		draw_crosshair(canvas, nr_c.x, nr_c.y, 12, Color.WHITE)
-		draw_bitmap_text(canvas, nr_c.x + 10, nr_c.y + 6, "NOSE GAZE (%.1fmm)" % nose_err_mm, green_col, 1)
+		draw_bitmap_text(canvas, nr_c.x + 10, nr_c.y + 6, "NOSE GAZE (%.1fpx)" % nose_err_px, green_col, 1)
 
 	# 9. Header Bar & Legend Card
 	draw_filled_rect(canvas, 0, 0, canvas_w, 36, Color(0.05, 0.05, 0.08, 0.90))

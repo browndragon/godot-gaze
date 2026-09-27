@@ -363,4 +363,115 @@ TEST_CASE("Canvas Transforms: GazeDisplayServer Logical Coordinate Contract and 
     CHECK(coordinate_space_flaw_delta >= 0.50); // Clear signal separation
 }
 
+TEST_CASE("ProjectionEngine: Unclamped Screen Pixel Projection Contract")
+{
+    Gaze::ProjectionEngine engine;
+    engine.set_screen_size_pixels(Gaze::GodotDisplayVector2(1512.0, 982.0));
+    engine.set_screen_size_mm(Gaze::SpacedVector2<Gaze::Space::GodotDisplayMm>(301.5, 188.5));
+    engine.set_camera_placement(Gaze::CameraPlacement(Gaze::GodotCameraVector3(0.0, 0.0, 0.0), 0.0));
+    engine.set_window_offset_pixels(Gaze::GodotDisplayVector2(0.0, 0.0));
+
+    Gaze::GodotCameraVector3 eye_origin(0.0, 0.0, -500.0);
+
+    // 1. Center ray: Origin at (0, 0, -500), direction forward along +Z to screen plane (0, 0, 0)
+    Gaze::GodotCameraVector3 center_dir(0.0, 0.0, 1.0);
+    Gaze::GodotDisplayVector2 center_px;
+    bool center_ok = engine.project_gaze(eye_origin, center_dir, center_px);
+    CHECK(center_ok == true);
+    CHECK(center_px.x == doctest::Approx(756.0));
+    CHECK(center_px.y == doctest::Approx(491.0));
+
+    // 2. Offscreen left ray: Targeting point X = +250mm in camera space (which corresponds to -X on display, well beyond left bezel of -150.75mm)
+    Gaze::GodotCameraVector3 offscreen_target_cam(250.0, 0.0, 0.0);
+    Gaze::GodotCameraVector3 offscreen_dir = (offscreen_target_cam - eye_origin).normalized();
+    Gaze::GodotDisplayVector2 offscreen_px;
+    bool offscreen_ok = engine.project_gaze(eye_origin, offscreen_dir, offscreen_px);
+    CHECK(offscreen_ok == true);
+
+    // Unclamped invariant: Coordinates must be negative (outside display bounds [0, 1512])
+    CHECK(offscreen_px.x < 0.0);
+    CHECK(offscreen_px.x == doctest::Approx(-497.66).epsilon(0.02));
+
+    // Signal Separation Invariant: Erroneous clamping would force X to >= 0.0
+    double clamped_x = 0.0;
+    double clamping_delta = std::abs(clamped_x - offscreen_px.x);
+    CHECK(clamping_delta >= 50.0); // Delta >> 50px proving unclamped signal separation
+}
+
+TEST_CASE("Canvas Transforms: Center-Node Relative Projection Invariance")
+{
+    // A display in logical pixels: 1512x982 (center is at 756.0, 491.0)
+    godot::Vector2 screen_size_lpix(1512.0, 982.0);
+    godot::Vector2 screen_center = screen_size_lpix * 0.5;
+
+    // Test across different window placements and sizes:
+    // 1. Fullscreen: win_pos = (0, 0), win_size = (1512, 982)
+    // 2. Centered window: win_pos = (378, 245.5), win_size = (756, 491)
+    // 3. Offset window: win_pos = (180, 167), win_size = (1152, 648)
+    struct WindowConfig {
+        godot::Vector2 pos;
+        godot::Vector2 size;
+    };
+    WindowConfig configs[] = {
+        {godot::Vector2(0.0, 0.0), godot::Vector2(1512.0, 982.0)},
+        {godot::Vector2(378.0, 245.5), godot::Vector2(756.0, 491.0)},
+        {godot::Vector2(180.0, 167.0), godot::Vector2(1152.0, 648.0)}
+    };
+
+    // Test gaze target points on screen:
+    // Center gaze, Left gaze (-300 px from center), Right/Down gaze (+400, +200 px from center)
+    godot::Vector2 test_screen_pts[] = {
+        screen_center,
+        screen_center + godot::Vector2(-300.0, 0.0),
+        screen_center + godot::Vector2(400.0, 200.0)
+    };
+
+    for (const auto &cfg : configs) {
+        // Node2D positioned at display center in canvas coordinates:
+        // win_pos_of_center = screen_center - cfg.pos
+        // In root viewport with identity canvas transform: canvas_pos = win_pos_of_center
+        godot::Vector2 center_node_pos = screen_center - cfg.pos;
+
+        // Node transform matrix (translation by center_node_pos)
+        godot::Transform2D node_xform(
+            godot::Vector2(1.0, 0.0),
+            godot::Vector2(0.0, 1.0),
+            center_node_pos
+        );
+        godot::Transform2D node_inv = node_xform.affine_inverse();
+
+        for (const auto &p_screen : test_screen_pts) {
+            // Pipeline stage 1: Screen -> Window
+            godot::Vector2 win_pos = p_screen - cfg.pos;
+
+            // Pipeline stage 2: Window -> Canvas (identity viewport)
+            godot::Vector2 canvas_pos = win_pos;
+
+            // Pipeline stage 3: Canvas -> Node Local
+            godot::Vector2 local_pos = node_inv.xform(canvas_pos);
+
+            // Invariant: local_pos MUST equal (p_screen - screen_center)
+            godot::Vector2 expected_local = p_screen - screen_center;
+            CHECK(local_pos.x == doctest::Approx(expected_local.x));
+            CHECK(local_pos.y == doctest::Approx(expected_local.y));
+
+            // Signal Separation Invariant:
+            // Bug A: Forgetting window offset subtraction (using p_screen directly as win_pos)
+            if (cfg.pos.length() > 0.0) {
+                godot::Vector2 buggy_local = node_inv.xform(p_screen);
+                double bug_a_delta = (buggy_local - local_pos).length();
+                CHECK(bug_a_delta >= 50.0);
+            }
+
+            // Bug B: Erroneously applying display scale (e.g. 2.0x Retina multiplier)
+            godot::Vector2 buggy_scaled_local = node_inv.xform(canvas_pos * 2.0);
+            if (canvas_pos.length() > 0.0) {
+                double bug_b_delta = (buggy_scaled_local - local_pos).length();
+                CHECK(bug_b_delta >= 50.0);
+            }
+        }
+    }
+}
+
+
 

@@ -149,12 +149,42 @@ func run_tests():
 		printerr("FAIL: get_eye_gaze(null, CLAMPING_CLAMPED) did not clamp point to viewport: ", clamped_pos)
 		quit(1)
 		return
-	var delta_clamped = clamped_pos.x - free_pos.x
-	if delta_clamped < 0.50:
-		printerr("FAIL: Clamping signal separation failed, delta: ", delta_clamped)
+	# 2d. Test NaN Sentinel Values on InputEventGaze (Missing vs Clamped (0,0))
+	var fresh_event = ClassDB.instantiate("InputEventGaze") as InputEventGaze
+	var fresh_eye = fresh_event.get_eye_gaze()
+	var fresh_nose = fresh_event.get_nose_gaze()
+	if fresh_eye.is_finite() or not is_nan(fresh_eye.x) or not is_nan(fresh_eye.y):
+		printerr("FAIL: Fresh InputEventGaze eye gaze must be NaN sentinel, got: ", fresh_eye)
 		quit(1)
 		return
-	print("PASS: InputEventGaze 3D transform & ClampingMode API verified.")
+	if fresh_nose.is_finite() or not is_nan(fresh_nose.x) or not is_nan(fresh_nose.y):
+		printerr("FAIL: Fresh InputEventGaze nose gaze must be NaN sentinel, got: ", fresh_nose)
+		quit(1)
+		return
+
+	# NaN must remain NaN under clamping (never clamped to (0, 0))
+	var nan_clamped = fresh_event.get_eye_gaze(null, InputEventGaze.CLAMPING_CLAMPED)
+	if nan_clamped.is_finite() or not is_nan(nan_clamped.x) or not is_nan(nan_clamped.y):
+		printerr("FAIL: NaN eye gaze clamped must remain NaN, got: ", nan_clamped)
+		quit(1)
+		return
+
+	# Legitimate off-screen point in top-left region MUST clamp to (0, 0) and be finite
+	event.set_eye_gaze(Vector2(-50.0, -20.0))
+	var top_left_clamped = event.get_eye_gaze(null, InputEventGaze.CLAMPING_CLAMPED)
+	if not top_left_clamped.is_finite() or abs(top_left_clamped.x - 0.0) > 0.001 or abs(top_left_clamped.y - 0.0) > 0.001:
+		printerr("FAIL: Top-left off-screen point must clamp to finite (0, 0), got: ", top_left_clamped)
+		quit(1)
+		return
+
+	# Signal separation: Clamped (0,0) is finite (1.0), Missing/NaN is not finite (0.0)
+	var signal_separation = (1.0 if top_left_clamped.is_finite() else 0.0) - (1.0 if nan_clamped.is_finite() else 0.0)
+	if signal_separation < 0.50:
+		printerr("FAIL: Signal separation between clamped (0,0) and NaN missing failed, delta: ", signal_separation)
+		quit(1)
+		return
+
+	print("PASS: InputEventGaze 3D transform, NaN sentinel & ClampingMode API verified.")
 
 	# 3. Test GazeServer Singleton & Lifecycle
 	var gs = Engine.get_singleton("GazeServer")

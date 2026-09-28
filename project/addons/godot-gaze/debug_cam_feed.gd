@@ -472,12 +472,12 @@ func _perform_drawing():
 	# Full Viewport Screen Intersection Reticles
 	# 1. Nose Gaze Screen Intersection (Cyan: Color(0.0, 0.95, 1.0))
 	var pt_nose_screen = ev.get_nose_gaze()
-	if pt_nose_screen != Vector2.ZERO:
+	if pt_nose_screen.is_finite():
 		_draw_screen_reticle(pt_nose_screen, Color(0.0, 0.95, 1.0, 0.95), 14.0)
 
 	# 2. Eye Gaze Screen Intersection (Green: Color(0.2, 1.0, 0.1))
 	var pt_eye_screen = ev.get_eye_gaze()
-	if pt_eye_screen != Vector2.ZERO:
+	if pt_eye_screen.is_finite():
 		_draw_screen_reticle(pt_eye_screen, Color(0.2, 1.0, 0.1, 0.95), 18.0)
 
 func calculate_clamped_reticle(pos: Vector2, vp_size: Vector2, inset: float = 18.0) -> Dictionary:

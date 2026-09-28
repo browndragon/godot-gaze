@@ -32,7 +32,7 @@ private:
     bool has_last_mouse_pos = false;
     bool has_last_window_state = false;
 
-    Vector2 last_cam_gaze_pos = Vector2(0, 0);
+    Vector2 last_cam_gaze_pos = Vector2(NAN, NAN);
     Transform3D last_cam_head_xform;
     Transform3D last_cam_gaze_xform;
     float last_cam_left_open = 1.0f;

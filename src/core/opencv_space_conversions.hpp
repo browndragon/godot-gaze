@@ -102,6 +102,14 @@ struct SpacedVector3
             std::numeric_limits<double>::infinity()
         );
     }
+
+    static constexpr SpacedVector3<S> nan() {
+        return SpacedVector3<S>(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN()
+        );
+    }
 };
 
 template <Space S>
@@ -160,6 +168,23 @@ struct SpacedVector2
     SpacedVector2<S> normalized() const {
         double len = length();
         return len > 1e-6 ? (*this / len) : SpacedVector2<S>(0.0, 0.0);
+    }
+    constexpr bool is_finite() const {
+        return std::isfinite(x) && std::isfinite(y);
+    }
+
+    static constexpr SpacedVector2<S> infinite() {
+        return SpacedVector2<S>(
+            std::numeric_limits<double>::infinity(),
+            std::numeric_limits<double>::infinity()
+        );
+    }
+
+    static constexpr SpacedVector2<S> nan() {
+        return SpacedVector2<S>(
+            std::numeric_limits<double>::quiet_NaN(),
+            std::numeric_limits<double>::quiet_NaN()
+        );
     }
 };
 

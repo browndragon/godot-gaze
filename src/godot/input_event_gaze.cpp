@@ -61,13 +61,16 @@ void InputEventGazeBase::copy_from(const Ref<InputEventGazeBase> &p_other) {
 InputEventGaze::InputEventGaze() {
     left_eye_openness = 1.0f;
     right_eye_openness = 1.0f;
-    eye_gaze_position = Vector2(0, 0);
-    nose_gaze_position = Vector2(0, 0);
+    eye_gaze_position = Vector2(NAN, NAN);
+    nose_gaze_position = Vector2(NAN, NAN);
     head_transform = Transform3D();
     eye_transform = Transform3D();
 }
 
 static Vector2 _clamp_to_viewport(const Vector2 &p_pos, const CanvasItem *p_local_to) {
+    if (!std::isfinite(p_pos.x) || !std::isfinite(p_pos.y)) {
+        return Vector2(NAN, NAN);
+    }
     Vector2 vp_size(1152.0f, 648.0f);
     if (p_local_to && p_local_to->get_viewport()) {
         vp_size = p_local_to->get_viewport()->get_visible_rect().size;
@@ -99,7 +102,7 @@ Vector2 InputEventGaze::get_eye_gaze(const CanvasItem *p_local_to, ClampingMode 
 
     Vector2 pos = should_clamp ? _clamp_to_viewport(eye_gaze_position, p_local_to) : eye_gaze_position;
 
-    if (!p_local_to) {
+    if (!p_local_to || !pos.is_finite()) {
         return pos;
     }
     return p_local_to->get_global_transform_with_canvas().affine_inverse().xform(pos);
@@ -120,7 +123,7 @@ Vector2 InputEventGaze::get_nose_gaze(const CanvasItem *p_local_to, ClampingMode
 
     Vector2 pos = should_clamp ? _clamp_to_viewport(nose_gaze_position, p_local_to) : nose_gaze_position;
 
-    if (!p_local_to) {
+    if (!p_local_to || !pos.is_finite()) {
         return pos;
     }
     return p_local_to->get_global_transform_with_canvas().affine_inverse().xform(pos);

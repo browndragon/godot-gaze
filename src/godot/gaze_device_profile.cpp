@@ -157,7 +157,7 @@ Vector2 GazeDeviceProfile::project_gaze_screen_px(const Vector3 &p_origin_cam_mm
     Gaze::GodotCameraVector3 dir(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
     Gaze::GodotDisplayVector2 out_px;
     if (!engine.project_gaze(orig, dir, out_px)) {
-        return Vector2(INFINITY, INFINITY);
+        return Vector2(NAN, NAN);
     }
     return Vector2(out_px.x, out_px.y);
 }

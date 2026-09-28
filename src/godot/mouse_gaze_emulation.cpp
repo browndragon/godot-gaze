@@ -19,6 +19,7 @@ void MouseGazeEmulation::reset() {
     has_last_mouse_pos = false;
     has_last_window_state = false;
     has_camera_data = false;
+    last_cam_gaze_pos = Vector2(NAN, NAN);
     arbitrator.reset();
 }
 
@@ -147,7 +148,7 @@ Ref<InputEventGazeBase> MouseGazeEmulation::synthesize_event(
     float blended_right_open = 1.0f;
 
     if (has_camera_data) {
-        if (last_cam_gaze_pos != Vector2(0, 0)) {
+        if (last_cam_gaze_pos.is_finite()) {
             blended_canvas_pos = last_cam_gaze_pos.lerp(mouse_canvas, ease_factor);
         }
         // Preserve user's real 3D head position and rotation from camera

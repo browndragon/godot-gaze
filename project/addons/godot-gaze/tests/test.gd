@@ -5,8 +5,8 @@ extends Control
 @onready var status_label = $StatusLabel
 
 var latest_gaze_event: InputEventGazeBase = null
-var eye_gaze_pos: Vector2 = Vector2.ZERO
-var nose_gaze_pos: Vector2 = Vector2.ZERO
+var eye_gaze_pos: Vector2 = Vector2(NAN, NAN)
+var nose_gaze_pos: Vector2 = Vector2(NAN, NAN)
 var center_pos: Vector2 = Vector2.ZERO
 var coords_label: Label
 var is_maximized: bool = false: set=_set_maximized
@@ -51,17 +51,20 @@ func _input(event: InputEvent) -> void:
 			nose_gaze_pos = event.get_nose_gaze()
 
 			if is_instance_valid(cursor):
-				cursor.visible = true
-				cursor.color = Color.GREEN
-				cursor.global_position = eye_gaze_pos - cursor.size / 2.0
+				if eye_gaze_pos.is_finite():
+					cursor.visible = true
+					cursor.color = Color.GREEN
+					cursor.global_position = eye_gaze_pos - cursor.size / 2.0
+				else:
+					cursor.visible = false
 			if is_instance_valid(status_label):
 				var gs = Engine.get_singleton("GazeServer")
 				var is_mouse = gs.is_mouse_emulated() if gs and gs.has_method("is_mouse_emulated") else false
 				var emu_text = " (Mouse Emulated)" if is_mouse else " (Camera Gaze)"
 				status_label.text = "Status: Face Tracked%s (Openness L: %.2f, R: %.2f) [M: toggle mouse]" % [emu_text, event.left_eye_openness, event.right_eye_openness]
 		elif event is InputEventGazeMissing:
-			eye_gaze_pos = Vector2.ZERO
-			nose_gaze_pos = Vector2.ZERO
+			eye_gaze_pos = Vector2(NAN, NAN)
+			nose_gaze_pos = Vector2(NAN, NAN)
 			if is_instance_valid(cursor):
 				cursor.visible = false
 				cursor.color = Color.RED
@@ -71,9 +74,9 @@ func _input(event: InputEvent) -> void:
 func _process(_delta):
 	center_pos = get_viewport().get_visible_rect().size / 2.0
 
-	if latest_gaze_event is InputEventGaze and eye_gaze_pos != Vector2.ZERO:
-		var gaze_str = "(%d, %d)" % [int(eye_gaze_pos.x), int(eye_gaze_pos.y)]
-		var nose_str = "(%d, %d)" % [int(nose_gaze_pos.x), int(nose_gaze_pos.y)]
+	if latest_gaze_event is InputEventGaze and (eye_gaze_pos.is_finite() or nose_gaze_pos.is_finite()):
+		var gaze_str = "(%d, %d)" % [int(eye_gaze_pos.x), int(eye_gaze_pos.y)] if eye_gaze_pos.is_finite() else "NaN"
+		var nose_str = "(%d, %d)" % [int(nose_gaze_pos.x), int(nose_gaze_pos.y)] if nose_gaze_pos.is_finite() else "NaN"
 		coords_label.text = "Eye Gaze: %s\nNose Gaze: %s" % [gaze_str, nose_str]
 		coords_label.global_position = center_pos + Vector2(-150, 40)
 	else:
@@ -86,12 +89,12 @@ func _draw():
 	draw_circle(center_pos, 6, Color.WHITE)
 
 	# Draw line from center to nose gaze (cyan)
-	if nose_gaze_pos != Vector2.ZERO:
+	if nose_gaze_pos.is_finite():
 		draw_line(center_pos, nose_gaze_pos, Color.CYAN, 2.0)
 		draw_circle(nose_gaze_pos, 6, Color.CYAN)
 
 	# Draw eye gaze (solid green)
-	if eye_gaze_pos != Vector2.ZERO:
+	if eye_gaze_pos.is_finite():
 		draw_line(center_pos, eye_gaze_pos, Color.GREEN, 2.0)
 		draw_circle(eye_gaze_pos, 8.0, Color.GREEN)
 

@@ -19,6 +19,7 @@ namespace Gaze
         if (screen_size_mm.x <= 0.0 || screen_size_mm.y <= 0.0 ||
             screen_size_pixels.x <= 0.0 || screen_size_pixels.y <= 0.0)
         {
+            out_pixel = GodotDisplayVector2::nan();
             return false;
         }
 
@@ -30,6 +31,7 @@ namespace Gaze
             GodotCameraVector3 pt_cam = project_ray_to_camera_plane(gaze_origin_cam, raw_gaze_dir_cam);
             if (!pt_cam.is_finite())
             {
+                out_pixel = GodotDisplayVector2::nan();
                 return false;
             }
             double W_half = screen_size_mm.x * 0.5;
@@ -48,12 +50,14 @@ namespace Gaze
 
             if (std::abs(v_disp_z) < 1e-6)
             {
+                out_pixel = GodotDisplayVector2::nan();
                 return false;
             }
 
             double t = -O_disp_z / v_disp_z;
             if (t <= 0.0)
             {
+                out_pixel = GodotDisplayVector2::nan();
                 return false;
             }
 

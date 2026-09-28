@@ -503,10 +503,10 @@ void GazeServer::reset() {
     impl->eye.gaze_origin_cam = Vector3();
     impl->eye.gaze_direction_cam = Vector3();
     impl->eye.smoother_state.clear();
-    impl->eye.latest_projected_gaze = Vector2();
-    impl->eye.latest_filtered_gaze = Vector2();
-    impl->eye.latest_projected_gaze_mm = Vector2();
-    impl->eye.latest_filtered_gaze_mm = Vector2();
+    impl->eye.latest_projected_gaze = Vector2(NAN, NAN);
+    impl->eye.latest_filtered_gaze = Vector2(NAN, NAN);
+    impl->eye.latest_projected_gaze_mm = Vector2(NAN, NAN);
+    impl->eye.latest_filtered_gaze_mm = Vector2(NAN, NAN);
     impl->eye.left_eye_openness = 1.0f;
     impl->eye.right_eye_openness = 1.0f;
     impl->eye.left_eye_crop.unref();
@@ -743,11 +743,11 @@ Vector3 GazeServer::get_gaze_direction() const {
 static Vector2 _calc_projected_window_px(const GazeServerImpl *p_impl, const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) {
     Ref<GazeDeviceProfile> profile = p_impl->display.device_profile;
     if (profile.is_null()) {
-        return Vector2(INFINITY, INFINITY);
+        return Vector2(NAN, NAN);
     }
     Vector2 screen_px = profile->project_gaze_screen_px(p_origin_cam, p_direction_cam);
     if (!screen_px.is_finite()) {
-        return Vector2(INFINITY, INFINITY);
+        return Vector2(NAN, NAN);
     }
 
     GazeDisplayServer *gds = _get_gds(p_impl);
@@ -782,6 +782,11 @@ void GazeServer::set_gaze(Vector3 p_origin_cam, Vector3 p_direction_cam) {
             impl->eye.latest_filtered_gaze = px;
             impl->eye.latest_filtered_gaze_mm = pos_mm_center;
         }
+    } else {
+        impl->eye.latest_projected_gaze = Vector2(NAN, NAN);
+        impl->eye.latest_filtered_gaze = Vector2(NAN, NAN);
+        impl->eye.latest_projected_gaze_mm = Vector2(NAN, NAN);
+        impl->eye.latest_filtered_gaze_mm = Vector2(NAN, NAN);
     }
 }
 
@@ -928,7 +933,7 @@ Vector3 GazeServer::project_ray_to_camera_plane(const Vector3 &p_origin_cam, con
     Gaze::GodotCameraVector3 direction(p_direction_cam.x, p_direction_cam.y, p_direction_cam.z);
     Gaze::GodotCameraVector3 pt = Gaze::project_ray_to_camera_plane(origin, direction);
     if (!pt.is_finite()) {
-        return Vector3(INFINITY, INFINITY, INFINITY);
+        return Vector3(NAN, NAN, NAN);
     }
     return Vector3(pt.x, pt.y, pt.z);
 }
@@ -937,7 +942,7 @@ Vector2 GazeServer::project_ray_to_canvas(const Vector3 &p_origin_cam, const Vec
     std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
     Vector2 win_pos = _calc_projected_window_px(impl.get(), p_origin_cam, p_direction_cam);
     if (!win_pos.is_finite()) {
-        return Vector2(INFINITY, INFINITY);
+        return Vector2(NAN, NAN);
     }
     GazeDisplayServer *gds = _get_gds(impl.get());
     if (gds) {
@@ -1021,10 +1026,10 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     Vector2 local_pos = get_gaze_screen_px(false);
     GazeDisplayServer *gds = _get_gds(impl.get());
     Vector2 win_pos = gds ? Vector2(gds->get_window_rect_pixels().position) : Vector2(0, 0);
-    Vector2 screen_pos = local_pos + win_pos;
+    Vector2 screen_pos = local_pos.is_finite() ? (local_pos + win_pos) : Vector2(NAN, NAN);
 
     // Transform window-local points to canonical root viewport canvas coordinates
-    if (gds) {
+    if (gds && local_pos.is_finite()) {
         local_pos = gds->window_px_to_canvas(local_pos);
     }
 
@@ -1032,8 +1037,10 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     float dt = (last_event_time_usec > 0 && now_usec > last_event_time_usec) ? (float)(now_usec - last_event_time_usec) / 1000000.0f : 0.016667f;
     if (dt < 0.0001f) dt = 0.0001f;
 
-    last_gaze_pos = local_pos;
-    last_screen_pos = screen_pos;
+    if (local_pos.is_finite()) {
+        last_gaze_pos = local_pos;
+        last_screen_pos = screen_pos;
+    }
     last_event_time_usec = now_usec;
 
     event->set_eye_gaze(local_pos);
@@ -1068,8 +1075,8 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         nose_fwd = nose_fwd.normalized();
     }
     Vector2 nose_canvas = project_ray_to_canvas(nose_orig, nose_fwd);
-    if (!std::isfinite(nose_canvas.x) || !std::isfinite(nose_canvas.y)) {
-        nose_canvas = Vector2(0, 0);
+    if (!nose_canvas.is_finite()) {
+        nose_canvas = Vector2(NAN, NAN);
     }
     event->set_nose_gaze(nose_canvas);
 
@@ -1285,6 +1292,11 @@ void GazeServer::trigger_process() {
 
                 if (completed_data->gaze_success) {
                     set_gaze(gaze_o, gaze_d);
+                } else {
+                    impl->eye.latest_projected_gaze = Vector2(NAN, NAN);
+                    impl->eye.latest_filtered_gaze = Vector2(NAN, NAN);
+                    impl->eye.latest_projected_gaze_mm = Vector2(NAN, NAN);
+                    impl->eye.latest_filtered_gaze_mm = Vector2(NAN, NAN);
                 }
             } else {
                 set_face_transform(Transform3D(), Vector3(), false);
@@ -1296,10 +1308,10 @@ void GazeServer::trigger_process() {
                 set_eye_crops(Ref<Image>(), Ref<Image>());
                 impl->eye.gaze_origin_cam = Vector3();
                 impl->eye.gaze_direction_cam = Vector3();
-                impl->eye.latest_projected_gaze = Vector2();
-                impl->eye.latest_filtered_gaze = Vector2();
-                impl->eye.latest_projected_gaze_mm = Vector2();
-                impl->eye.latest_filtered_gaze_mm = Vector2();
+                impl->eye.latest_projected_gaze = Vector2(NAN, NAN);
+                impl->eye.latest_filtered_gaze = Vector2(NAN, NAN);
+                impl->eye.latest_projected_gaze_mm = Vector2(NAN, NAN);
+                impl->eye.latest_filtered_gaze_mm = Vector2(NAN, NAN);
             }
 
             emit_signal("gaze_frame_began", gaze_frame);

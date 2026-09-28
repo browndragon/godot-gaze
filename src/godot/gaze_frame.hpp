@@ -26,6 +26,7 @@ private:
     bool gaze_success = false;
     bool temporal_tracking = false;
     Rect2 face_bbox;
+    PackedVector2Array face_obb;
     float left_eye_openness = 1.0f;
     float right_eye_openness = 1.0f;
 
@@ -71,6 +72,9 @@ public:
 
     void set_face_bbox(const Rect2 &b) { face_bbox = b; }
     Rect2 get_face_bbox() const { return face_bbox; }
+
+    void set_face_obb(const PackedVector2Array &o) { face_obb = o; }
+    PackedVector2Array get_face_obb() const { return face_obb; }
 
     void set_is_temporal_tracking(bool t) { temporal_tracking = t; }
     bool is_temporal_tracking() const { return temporal_tracking; }

@@ -379,14 +379,25 @@ func _perform_drawing():
 		return
 
 	# Draw face ROI bounding box (Green for temporal ROI, Amber for YuNet full-frame)
-	var face_bbox = gs.get_face_bbox() if gs.has_method("get_face_bbox") else Rect2()
 	var is_temporal = gs.is_temporal_tracking() if gs.has_method("is_temporal_tracking") else false
-	if face_bbox.size.x > 0.0 and face_bbox.size.y > 0.0:
-		var tl = Vector2(face_bbox.position.x * drawn_rect.size.x / img_w, face_bbox.position.y * drawn_rect.size.y / img_h) + drawn_rect.position
-		var sz = Vector2(face_bbox.size.x * drawn_rect.size.x / img_w, face_bbox.size.y * drawn_rect.size.y / img_h)
-		var screen_bbox = Rect2(rect.global_position + tl - active_canvas.global_position, sz)
-		var bbox_col = Color(0.2, 1.0, 0.2, 0.9) if is_temporal else Color(1.0, 0.75, 0.1, 0.9)
-		gd_draw_rect(screen_bbox, bbox_col, false, 2.0)
+	var bbox_col = Color(0.2, 1.0, 0.2, 0.9) if is_temporal else Color(1.0, 0.75, 0.1, 0.9)
+	var face_obb = gs.get_face_obb_2d() if gs.has_method("get_face_obb_2d") else PackedVector2Array()
+	if face_obb.size() == 4:
+		var obb_pts = []
+		for k in range(4):
+			var pt_cam = face_obb[k]
+			var local_pt = Vector2(pt_cam.x * drawn_rect.size.x / img_w, pt_cam.y * drawn_rect.size.y / img_h) + drawn_rect.position
+			var screen_pt = rect.global_position + local_pt - active_canvas.global_position
+			obb_pts.append(screen_pt)
+		for k in range(4):
+			gd_draw_line(obb_pts[k], obb_pts[(k + 1) % 4], bbox_col, 2.0)
+	else:
+		var face_bbox = gs.get_face_bbox() if gs.has_method("get_face_bbox") else Rect2()
+		if face_bbox.size.x > 0.0 and face_bbox.size.y > 0.0:
+			var tl = Vector2(face_bbox.position.x * drawn_rect.size.x / img_w, face_bbox.position.y * drawn_rect.size.y / img_h) + drawn_rect.position
+			var sz = Vector2(face_bbox.size.x * drawn_rect.size.x / img_w, face_bbox.size.y * drawn_rect.size.y / img_h)
+			var screen_bbox = Rect2(rect.global_position + tl - active_canvas.global_position, sz)
+			gd_draw_rect(screen_bbox, bbox_col, false, 2.0)
 
 	var drawn_pts = []
 	if not landmarks_2d.is_empty() and landmarks_2d.size() == 35:

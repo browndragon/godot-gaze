@@ -557,5 +557,224 @@ TEST_CASE("Pipeline YuNet-to-Landmark Handoff Continuity") {
     CHECK(d1.face_score == doctest::Approx(d1.landmark_quality));
 }
 
+TEST_CASE("Pipeline Multi-Frame Temporal Tracking Stability Under Combined Yaw and Roll") {
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
 
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_yaw_left_roll_left.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+
+    // Frame 0: Baseline YuNet discovery (SEEKING mode)
+    GazeFrameData d0;
+    d0.camera_raw_bgr = img.data;
+    d0.camera_width = img.width;
+    d0.camera_height = img.height;
+    d0.timestamp = 1.0;
+    d0.auto_roll_enabled = true;
+    d0.roll_hint_rad = 0.0f;
+    pipeline.process_frame_synchronous(&d0);
+
+    REQUIRE(d0.face_detected == true);
+    REQUIRE(d0.has_landmarks_2d == true);
+    REQUIRE(d0.tracking_mode == PipelineTrackingMode::SEEKING);
+
+    float roll0_deg = static_cast<float>(d0.head_rotation.z * (180.0 / 3.141592653589793));
+    CHECK(d0.landmark_quality >= 0.70f);
+    CHECK(std::abs(roll0_deg - (-25.2f)) <= 2.0f);
+
+    // Run 5 frames of temporal tracking
+    GazeFrameData d1;
+    d1.camera_raw_bgr = img.data;
+    d1.camera_width = img.width;
+    d1.camera_height = img.height;
+    d1.auto_roll_enabled = true;
+    d1.roll_hint_rad = 0.0f;
+
+    std::vector<float> prev_lm;
+
+    for (int frame = 1; frame <= 5; ++frame) {
+        d1.timestamp = 1.0 + frame * 0.033;
+        pipeline.process_frame_synchronous(&d1);
+
+        REQUIRE(d1.face_detected == true);
+        REQUIRE(d1.has_landmarks_2d == true);
+        CHECK(d1.tracking_mode == PipelineTrackingMode::TRACKING);
+
+        float roll_deg = static_cast<float>(d1.head_rotation.z * (180.0 / 3.141592653589793));
+
+        if (frame > 1) {
+            double frame_to_frame_shift = 0.0;
+            size_t max_i = 0;
+            for (size_t i = 0; i < 35; ++i) {
+                float dx = d1.landmarks_2d_px[i * 2 + 0] - prev_lm[i * 2 + 0];
+                float dy = d1.landmarks_2d_px[i * 2 + 1] - prev_lm[i * 2 + 1];
+                double dist = std::sqrt(dx * dx + dy * dy);
+                if (dist > frame_to_frame_shift) {
+                    frame_to_frame_shift = dist;
+                    max_i = i;
+                }
+            }
+            CHECK_MESSAGE(frame_to_frame_shift <= 12.0, "Frame-to-frame landmark shift on frame ", frame, ": ", frame_to_frame_shift, " px");
+        }
+
+        prev_lm.assign(d1.landmarks_2d_px, d1.landmarks_2d_px + 70);
+
+        // Solved roll remains stable around -28 deg (within 2 deg)
+        CHECK_MESSAGE(std::abs(roll_deg - (-28.0f)) <= 2.0f, "Solved roll deviated on frame ", frame, ": ", roll_deg, " deg");
+
+        // Quality and reprojection bounds
+        CHECK(d1.landmark_quality >= 0.70f);
+        CHECK((d1.landmark_rmse_px / d1.face_bbox.height) <= 0.10f);
+    }
+}
+
+TEST_CASE("Pipeline Adaptive Landmark-Driven ROI Tracking on Rolled Face") {
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_roll_left.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+
+    // Frame 0: Baseline YuNet discovery (SEEKING mode)
+    GazeFrameData d0;
+    d0.camera_raw_bgr = img.data;
+    d0.camera_width = img.width;
+    d0.camera_height = img.height;
+    d0.timestamp = 1.0;
+    d0.auto_roll_enabled = true;
+    d0.roll_hint_rad = 0.0f;
+    pipeline.process_frame_synchronous(&d0);
+
+    REQUIRE(d0.face_detected == true);
+    REQUIRE(d0.has_landmarks_2d == true);
+    REQUIRE(d0.tracking_mode == PipelineTrackingMode::SEEKING);
+
+    float roll0_rad = static_cast<float>(d0.head_rotation.z);
+    CHECK(std::abs(roll0_rad - 0.825f) <= 0.15f); // ~ +47.2 deg (+/- 8.5 deg)
+
+    // Run temporal tracking frame
+    GazeFrameData d1;
+    d1.camera_raw_bgr = img.data;
+    d1.camera_width = img.width;
+    d1.camera_height = img.height;
+    d1.auto_roll_enabled = true;
+    d1.roll_hint_rad = d0.roll_hint_rad;
+    d1.timestamp = 1.033;
+    pipeline.process_frame_synchronous(&d1);
+
+    REQUIRE(d1.face_detected == true);
+    REQUIRE(d1.has_landmarks_2d == true);
+    CHECK(d1.tracking_mode == PipelineTrackingMode::TRACKING);
+
+    // Run second temporal tracking frame (Frame 2) to verify multi-frame temporal stability
+    GazeFrameData d2;
+    d2.camera_raw_bgr = img.data;
+    d2.camera_width = img.width;
+    d2.camera_height = img.height;
+    d2.auto_roll_enabled = true;
+    d2.roll_hint_rad = d1.roll_hint_rad;
+    d2.timestamp = 1.066;
+    pipeline.process_frame_synchronous(&d2);
+
+    REQUIRE(d2.face_detected == true);
+    REQUIRE(d2.has_landmarks_2d == true);
+    CHECK(d2.tracking_mode == PipelineTrackingMode::TRACKING);
+
+    // 1. Assert temporal ROI stability across frames in TRACKING mode (zero drift on static image)
+    float d_cx = std::abs((d2.face_bbox.x + d2.face_bbox.width * 0.5f) - (d1.face_bbox.x + d1.face_bbox.width * 0.5f));
+    float d_cy = std::abs((d2.face_bbox.y + d2.face_bbox.height * 0.5f) - (d1.face_bbox.y + d1.face_bbox.height * 0.5f));
+    CHECK_MESSAGE(d_cx <= 2.0f, "ROI center X drifted between tracking frames: ", d_cx, " px");
+    CHECK_MESSAGE(d_cy <= 2.0f, "ROI center Y drifted between tracking frames: ", d_cy, " px");
+
+    // 2. Assert frame-to-frame landmark stability in TRACKING mode
+    double max_lm_shift = 0.0;
+    for (size_t i = 0; i < 35; ++i) {
+        float dx_lm = d2.internal_landmarks_working_px[i].x - d1.internal_landmarks_working_px[i].x;
+        float dy_lm = d2.internal_landmarks_working_px[i].y - d1.internal_landmarks_working_px[i].y;
+        double dist = std::sqrt(dx_lm * dx_lm + dy_lm * dy_lm);
+        max_lm_shift = std::max(max_lm_shift, dist);
+    }
+    CHECK_MESSAGE(max_lm_shift <= 12.0, "Landmarks drifted between tracking frames: ", max_lm_shift, " px");
+
+    // 3. Assert landmark quality and normalized RMSE on rolled face
+    CHECK(d1.landmark_quality >= 0.70f);
+    CHECK(d2.landmark_quality >= 0.70f);
+    CHECK((d1.landmark_rmse_px / d1.face_bbox.height) <= 0.10f);
+    CHECK((d2.landmark_rmse_px / d2.face_bbox.height) <= 0.10f);
+
+    // 4. Assert Oriented Bounding Box (OBB) top edge has non-zero rotation matching head roll
+    // Top edge vector: C1 - C0 = (face_obb_cam_px[2] - face_obb_cam_px[0], face_obb_cam_px[3] - face_obb_cam_px[1])
+    float dx = d1.face_obb_cam_px[2] - d1.face_obb_cam_px[0];
+    float dy = d1.face_obb_cam_px[3] - d1.face_obb_cam_px[1];
+    float obb_roll = std::atan2(dy, dx);
+    CHECK_MESSAGE(std::abs(obb_roll - (-roll0_rad)) <= 0.15f, "OBB angle ", obb_roll, " does not match roll ", -roll0_rad);
+}
+
+TEST_CASE("Pipeline Long-Horizon Temporal Tracking Stability (No Scale Drift Across 60 Frames)") {
+    std::string yunet_path = "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort";
+    std::string lm_path = "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort";
+    std::string gaze_path = "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort";
+    std::string eye_state_path = "project/addons/godot-gaze/models/open_closed_eye.ort";
+
+    GazeTrackingPipeline pipeline;
+    REQUIRE(pipeline.initialize(yunet_path, gaze_path, eye_state_path, lm_path));
+
+    TestImage img = load_test_image("tests/resources/self_roll_left.jpg");
+    REQUIRE(img.valid());
+
+    pipeline.reset_tracker();
+
+    // Frame 0: Baseline YuNet discovery (SEEKING mode)
+    GazeFrameData d0;
+    d0.camera_raw_bgr = img.data;
+    d0.camera_width = img.width;
+    d0.camera_height = img.height;
+    d0.timestamp = 1.0;
+    d0.auto_roll_enabled = true;
+    d0.roll_hint_rad = 0.0f;
+    pipeline.process_frame_synchronous(&d0);
+
+    REQUIRE(d0.face_detected == true);
+    REQUIRE(d0.has_landmarks_2d == true);
+    REQUIRE(d0.tracking_mode == PipelineTrackingMode::SEEKING);
+
+    float base_w = d0.face_bbox.width;
+    float base_h = d0.face_bbox.height;
+    double base_z = d0.head_translation.z;
+
+    // Run 60 consecutive temporal tracking frames
+    GazeFrameData d_curr = d0;
+    for (int f = 1; f <= 60; ++f) {
+        d_curr.timestamp = 1.0 + f * 0.033;
+        pipeline.process_frame_synchronous(&d_curr);
+
+        REQUIRE(d_curr.face_detected == true);
+        REQUIRE(d_curr.has_landmarks_2d == true);
+        CHECK(d_curr.tracking_mode == PipelineTrackingMode::TRACKING);
+
+        // Bounding box scale must remain within 5% of Frame 0 baseline
+        float w_ratio = std::abs(d_curr.face_bbox.width - base_w) / base_w;
+        float h_ratio = std::abs(d_curr.face_bbox.height - base_h) / base_h;
+        CHECK_MESSAGE(w_ratio <= 0.05f, "Frame ", f, ": Bounding box width drifted by ", w_ratio * 100.0f, "% (cur: ", d_curr.face_bbox.width, " vs base: ", base_w, ")");
+        CHECK_MESSAGE(h_ratio <= 0.05f, "Frame ", f, ": Bounding box height drifted by ", h_ratio * 100.0f, "% (cur: ", d_curr.face_bbox.height, " vs base: ", base_h, ")");
+
+        // Head translation Z must not collapse or drift by more than 5%
+        double z_ratio = std::abs(d_curr.head_translation.z - base_z) / std::abs(base_z);
+        CHECK_MESSAGE(z_ratio <= 0.05, "Frame ", f, ": Head distance Z drifted by ", z_ratio * 100.0, "% (cur: ", d_curr.head_translation.z, " vs base: ", base_z, ")");
+    }
+}
 

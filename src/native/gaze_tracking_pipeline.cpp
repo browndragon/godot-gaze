@@ -292,6 +292,7 @@ namespace Gaze
                 pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
                 auto end_pnp = std::chrono::steady_clock::now();
                 data->timings.pnp_solve_ms = std::chrono::duration<double, std::milli>(end_pnp - start_pnp).count();
+
             }
 
             // Tracking fallback: if tracking failed while in TRACKING mode,
@@ -322,6 +323,7 @@ namespace Gaze
                     if (lm_ok)
                     {
                         pose_ok = _stage_4_solve_head_pose(data, working_frame, rvec, tvec);
+
                     }
                 }
             }
@@ -362,7 +364,7 @@ namespace Gaze
             double cx = working_frame.width * 0.5;
             double cy = working_frame.height * 0.5;
 
-            // When acquiring face in SEEKING mode, anchor 3D ROI in Face Space to YuNet's detected face box
+            // When acquiring face in SEEKING mode, anchor 3D ROI and physical face dimensions in Face Space
             if (data->tracking_mode == PipelineTrackingMode::SEEKING && tvec.z > 50.0)
             {
                 float cx_work = data->face_bbox.x + data->face_bbox.width * 0.5f;
@@ -756,6 +758,24 @@ namespace Gaze
                                        center_cam.y - data->face_bbox.height * 0.5f,
                                        data->face_bbox.width,
                                        data->face_bbox.height);
+
+        // 5. Compute Oriented Bounding Box (OBB) corners in camera pixel coordinates
+        GodotCameraImageVector2 c_work[4] = {
+            GodotCameraImageVector2(data->face_bbox.x, data->face_bbox.y),
+            GodotCameraImageVector2(data->face_bbox.x + data->face_bbox.width, data->face_bbox.y),
+            GodotCameraImageVector2(data->face_bbox.x + data->face_bbox.width, data->face_bbox.y + data->face_bbox.height),
+            GodotCameraImageVector2(data->face_bbox.x, data->face_bbox.y + data->face_bbox.height)
+        };
+        for (int k = 0; k < 4; ++k)
+        {
+            GodotCameraImageVector2 pt_cam = c_work[k];
+            if (std::abs(data->roll_hint_rad) > 1e-4f)
+            {
+                pt_cam = rotate_point_2d(pt_cam, -data->roll_hint_rad, data->camera_width, data->camera_height);
+            }
+            data->face_obb_cam_px[k * 2 + 0] = static_cast<float>(pt_cam.x);
+            data->face_obb_cam_px[k * 2 + 1] = static_cast<float>(pt_cam.y);
+        }
     }
 
 } // namespace Gaze

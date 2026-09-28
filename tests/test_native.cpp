@@ -2197,7 +2197,44 @@ TEST_CASE("GazeServer and ProjectionEngine Uniform Screen Projection Geometry")
     CHECK(y_down_px - y_up_px >= 240.0);
 }
 
+TEST_CASE("Oriented Bounding Box (OBB) Corner Geometry Under Head Roll")
+{
+    // A working-space face box of 200x200 centered at (640, 480) in a 1280x960 image
+    GazeRect work_box(540.0f, 380.0f, 200.0f, 200.0f);
+    int img_w = 1280;
+    int img_h = 960;
+    float roll_hint_rad = -0.785398f; // -45 deg roll
 
+    // 4 corners of the working box:
+    // C0: top-left (540, 380)
+    // C1: top-right (740, 380)
+    // C2: bottom-right (740, 580)
+    // C3: bottom-left (540, 580)
+    GodotCameraImageVector2 c0(work_box.x, work_box.y);
+    GodotCameraImageVector2 c1(work_box.x + work_box.width, work_box.y);
+    GodotCameraImageVector2 c2(work_box.x + work_box.width, work_box.y + work_box.height);
+    GodotCameraImageVector2 c3(work_box.x, work_box.y + work_box.height);
 
+    // Unroll back to camera space around image center using -roll_hint_rad (+45 deg)
+    GodotCameraImageVector2 c0_cam = rotate_point_2d(c0, -roll_hint_rad, img_w, img_h);
+    GodotCameraImageVector2 c1_cam = rotate_point_2d(c1, -roll_hint_rad, img_w, img_h);
+    GodotCameraImageVector2 c2_cam = rotate_point_2d(c2, -roll_hint_rad, img_w, img_h);
+    GodotCameraImageVector2 c3_cam = rotate_point_2d(c3, -roll_hint_rad, img_w, img_h);
+
+    // The top edge vector C1 - C0 must be rotated by +45 deg in camera space
+    double dx = c1_cam.x - c0_cam.x;
+    double dy = c1_cam.y - c0_cam.y;
+    double edge_len = std::sqrt(dx * dx + dy * dy);
+    CHECK(edge_len == doctest::Approx(200.0).epsilon(1e-3));
+
+    double edge_angle = std::atan2(dy, dx);
+    CHECK(edge_angle == doctest::Approx(0.785398).epsilon(1e-2));
+
+    // The right edge vector C2 - C1 must be perpendicular (+135 deg)
+    double r_dx = c2_cam.x - c1_cam.x;
+    double r_dy = c2_cam.y - c1_cam.y;
+    double dot_prod = dx * r_dx + dy * r_dy;
+    CHECK(std::abs(dot_prod) <= 1e-4);
+}
 
 

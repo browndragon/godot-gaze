@@ -41,6 +41,7 @@ struct GazeFrameData {
     bool auto_roll_enabled = true;
     GazeRect face_bbox;
     GazeRect face_bbox_cam;
+    float face_obb_cam_px[8] = {0.0f}; // 4 oriented corners in camera image space (x0, y0, x1, y1, x2, y2, x3, y3)
     PipelineTrackingMode tracking_mode = PipelineTrackingMode::SEEKING;
     bool is_temporal_tracking = false; // Backward compatibility alias
     float landmark_rmse_px = 0.0f;

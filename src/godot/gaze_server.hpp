@@ -127,6 +127,8 @@ public:
 
     Rect2 get_face_bbox() const;
     void set_face_bbox(const Rect2 &p_bbox);
+    PackedVector2Array get_face_obb_2d() const;
+    void set_face_obb_2d(const PackedVector2Array &p_obb);
     bool is_temporal_tracking() const;
     void set_is_temporal_tracking(bool p_temporal);
 

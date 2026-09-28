@@ -51,6 +51,7 @@ struct GazeServerImpl {
         Gaze::GodotCameraVector3 head_pose_rotation;
         PackedVector2Array landmarks_2d;
         Rect2 face_bbox;
+        PackedVector2Array face_obb_2d;
         bool is_temporal_tracking = false;
         float roll_hint_rad = 0.0f;
         bool auto_roll_enabled = true;
@@ -139,6 +140,8 @@ void GazeServer::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_face_landmarks_2d", "landmarks"), &GazeServer::set_face_landmarks_2d);
     ClassDB::bind_method(D_METHOD("get_face_bbox"), &GazeServer::get_face_bbox);
     ClassDB::bind_method(D_METHOD("set_face_bbox", "bbox"), &GazeServer::set_face_bbox);
+    ClassDB::bind_method(D_METHOD("get_face_obb_2d"), &GazeServer::get_face_obb_2d);
+    ClassDB::bind_method(D_METHOD("set_face_obb_2d", "obb"), &GazeServer::set_face_obb_2d);
     ClassDB::bind_method(D_METHOD("is_temporal_tracking"), &GazeServer::is_temporal_tracking);
     ClassDB::bind_method(D_METHOD("set_is_temporal_tracking", "temporal"), &GazeServer::set_is_temporal_tracking);
     ClassDB::bind_method(D_METHOD("get_face_model_points"), &GazeServer::get_face_model_points);
@@ -623,6 +626,7 @@ void GazeServer::set_face_pose(Vector3 p_translation, Vector3 p_rotation, bool p
     } else {
         impl->face.relative_transform = Transform3D();
         impl->face.face_bbox = Rect2();
+        impl->face.face_obb_2d = PackedVector2Array();
         impl->face.is_temporal_tracking = false;
     }
 }
@@ -635,6 +639,7 @@ void GazeServer::set_face_transform(const Transform3D &p_transform, const Vector
     impl->face.relative_transform = p_detected ? p_transform : Transform3D();
     if (!p_detected) {
         impl->face.face_bbox = Rect2();
+        impl->face.face_obb_2d = PackedVector2Array();
         impl->face.is_temporal_tracking = false;
     }
 }
@@ -665,6 +670,16 @@ Rect2 GazeServer::get_face_bbox() const {
 void GazeServer::set_face_bbox(const Rect2 &p_bbox) {
     std::lock_guard<std::recursive_mutex> lock(state_mutex);
     impl->face.face_bbox = p_bbox;
+}
+
+PackedVector2Array GazeServer::get_face_obb_2d() const {
+    std::lock_guard<std::recursive_mutex> lock(const_cast<std::recursive_mutex&>(state_mutex));
+    return impl->face.face_obb_2d;
+}
+
+void GazeServer::set_face_obb_2d(const PackedVector2Array &p_obb) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
+    impl->face.face_obb_2d = p_obb;
 }
 
 bool GazeServer::is_temporal_tracking() const {
@@ -1077,7 +1092,11 @@ Ref<InputEventGazeMissing> GazeServer::create_default_missing_event(int p_reason
 // --- Emulation Settings ---
 
 void GazeServer::set_emulate_gaze_from_mouse(bool p_enable) {
+    std::lock_guard<std::recursive_mutex> lock(state_mutex);
     emulate_gaze_from_mouse = p_enable;
+    if (!p_enable) {
+        mouse_emulation.reset();
+    }
 }
 
 bool GazeServer::get_emulate_gaze_from_mouse() const {
@@ -1208,6 +1227,12 @@ void GazeServer::trigger_process() {
                 completed_data->face_bbox_cam.height
             );
             gaze_frame->set_face_bbox(face_bbox);
+            PackedVector2Array face_obb;
+            face_obb.resize(4);
+            for (int k = 0; k < 4; ++k) {
+                face_obb[k] = Vector2(completed_data->face_obb_cam_px[k * 2 + 0], completed_data->face_obb_cam_px[k * 2 + 1]);
+            }
+            gaze_frame->set_face_obb(face_obb);
             gaze_frame->set_is_temporal_tracking(completed_data->is_temporal_tracking);
             gaze_frame->set_left_eye_openness(completed_data->left_eye_openness);
             gaze_frame->set_right_eye_openness(completed_data->right_eye_openness);
@@ -1250,6 +1275,10 @@ void GazeServer::trigger_process() {
                 set_face_transform(godot_xform, head_r, true);
                 set_face_landmarks_2d(lm_array);
                 set_face_bbox(face_bbox);
+                set_face_obb_2d(face_obb);
+                if (impl->face.auto_roll_enabled) {
+                    impl->face.roll_hint_rad = completed_data->roll_hint_rad;
+                }
                 set_is_temporal_tracking(completed_data->is_temporal_tracking);
                 set_eye_openness(completed_data->left_eye_openness, completed_data->right_eye_openness);
                 set_eye_crops(gaze_frame->get_left_eye_crop(), gaze_frame->get_right_eye_crop());
@@ -1261,6 +1290,7 @@ void GazeServer::trigger_process() {
                 set_face_transform(Transform3D(), Vector3(), false);
                 set_face_landmarks_2d(PackedVector2Array());
                 set_face_bbox(Rect2());
+                set_face_obb_2d(PackedVector2Array());
                 set_is_temporal_tracking(false);
                 set_eye_openness(0.0f, 0.0f);
                 set_eye_crops(Ref<Image>(), Ref<Image>());

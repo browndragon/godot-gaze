@@ -31,7 +31,19 @@ func _ready():
 	if "--run-automated-toggles" in OS.get_cmdline_args() or "--run-automated-toggles" in OS.get_cmdline_user_args():
 		_run_automated_toggles()
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.is_pressed() and not event.is_echo():
+		if event.keycode == KEY_M or event.physical_keycode == KEY_M or event.key_label == KEY_M:
+			var gs = Engine.get_singleton("GazeServer")
+			if gs and gs.has_method("set_emulate_gaze_from_mouse"):
+				var cur = gs.get_emulate_gaze_from_mouse()
+				gs.set_emulate_gaze_from_mouse(!cur)
+				print("Emulate Gaze From Mouse toggled to: ", !cur)
+				if is_instance_valid(status_label):
+					var is_mouse = gs.is_mouse_emulated() if gs.has_method("is_mouse_emulated") else false
+					var emu_text = " (Mouse Emulated)" if is_mouse else " (Camera Gaze)"
+					status_label.text = "Status: Face Tracked%s [M: toggle mouse]" % [emu_text]
+
 	if event is InputEventGazeBase:
 		latest_gaze_event = event
 		if event is InputEventGaze:
@@ -43,7 +55,10 @@ func _unhandled_input(event: InputEvent) -> void:
 				cursor.color = Color.GREEN
 				cursor.global_position = eye_gaze_pos - cursor.size / 2.0
 			if is_instance_valid(status_label):
-				status_label.text = "Status: Face Tracked (Openness L: %.2f, R: %.2f)" % [event.left_eye_openness, event.right_eye_openness]
+				var gs = Engine.get_singleton("GazeServer")
+				var is_mouse = gs.is_mouse_emulated() if gs and gs.has_method("is_mouse_emulated") else false
+				var emu_text = " (Mouse Emulated)" if is_mouse else " (Camera Gaze)"
+				status_label.text = "Status: Face Tracked%s (Openness L: %.2f, R: %.2f) [M: toggle mouse]" % [emu_text, event.left_eye_openness, event.right_eye_openness]
 		elif event is InputEventGazeMissing:
 			eye_gaze_pos = Vector2.ZERO
 			nose_gaze_pos = Vector2.ZERO
@@ -51,7 +66,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				cursor.visible = false
 				cursor.color = Color.RED
 			if is_instance_valid(status_label):
-				status_label.text = "Status: Face Lost (Reason: %d)" % event.reason
+				status_label.text = "Status: Face Lost (Reason: %d) [M: toggle mouse]" % event.reason
 
 func _process(_delta):
 	center_pos = get_viewport().get_visible_rect().size / 2.0

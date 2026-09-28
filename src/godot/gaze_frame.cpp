@@ -22,6 +22,8 @@ void GazeFrame::_bind_methods() {
     ClassDB::bind_method(D_METHOD("get_face_landmarks_2d"), &GazeFrame::get_face_landmarks_2d);
     ClassDB::bind_method(D_METHOD("get_face_bbox"), &GazeFrame::get_face_bbox);
     ClassDB::bind_method(D_METHOD("set_face_bbox", "bbox"), &GazeFrame::set_face_bbox);
+    ClassDB::bind_method(D_METHOD("get_face_obb"), &GazeFrame::get_face_obb);
+    ClassDB::bind_method(D_METHOD("set_face_obb", "obb"), &GazeFrame::set_face_obb);
     ClassDB::bind_method(D_METHOD("is_temporal_tracking"), &GazeFrame::is_temporal_tracking);
     ClassDB::bind_method(D_METHOD("set_is_temporal_tracking", "temporal"), &GazeFrame::set_is_temporal_tracking);
 
@@ -32,6 +34,7 @@ void GazeFrame::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "gaze_success"), "", "get_gaze_success");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_temporal_tracking"), "set_is_temporal_tracking", "is_temporal_tracking");
     ADD_PROPERTY(PropertyInfo(Variant::RECT2, "face_bbox"), "set_face_bbox", "get_face_bbox");
+    ADD_PROPERTY(PropertyInfo(Variant::PACKED_VECTOR2_ARRAY, "face_obb"), "set_face_obb", "get_face_obb");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "left_eye_openness"), "", "get_left_eye_openness");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "right_eye_openness"), "", "get_right_eye_openness");
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR3, "head_translation"), "", "get_head_translation");

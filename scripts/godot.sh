@@ -142,10 +142,11 @@ if [[ "$HEADLESS" == "true" ]]; then
     if [[ ! " ${GODOT_ARGS[*]:-} " =~ " --native-camera " && ! " ${GODOT_ARGS[*]:-} " =~ " --real-camera " ]]; then
         export GAZE_VISION_DRIVER=mock
     fi
-    if [[ "$OSTYPE" == "darwin"* && ! -w "$HOME/Library/Application Support" ]]; then
-        export HOME="${TMPDIR:-/tmp}/godot_test_home"
-        mkdir -p "$HOME"
-    fi
+fi
+
+if [[ "$OSTYPE" == "darwin"* && ! -w "$HOME/Library/Application Support" ]]; then
+    export HOME="${TMPDIR:-/tmp}/godot_test_home"
+    mkdir -p "$HOME"
 fi
 
 # 3. Script flag precedence (-s arg, --notest, or default to GUT)

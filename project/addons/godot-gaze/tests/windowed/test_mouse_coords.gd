@@ -29,15 +29,15 @@ func run_diag():
 	print("root.get_final_transform: ", root.get_final_transform())
 	print("root.get_mouse_position: ", root.get_mouse_position())
 
-	# Strict Red Phase Assertion: GazeDisplayServer must return logical display coordinates
-	if gds and DisplayServer.screen_get_scale() > 1.0:
+	# Verify GazeDisplayServer matches DisplayServer on desktop
+	if gds:
 		var gds_m = gds.mouse_get_position()
 		var ds_m = DisplayServer.mouse_get_position()
-		var expected_gds_x = ds_m.x / DisplayServer.screen_get_scale()
-		var err_x = abs(gds_m.x - expected_gds_x)
-		print("GDS mouse logical alignment check: gds_x=", gds_m.x, " expected_x=", expected_gds_x, " err=", err_x)
-		if err_x > 2.0:
-			printerr("RED PHASE ASSERTION FAILED: GazeDisplayServer.mouse_get_position() returned physical pixels instead of logical pixels! err=", err_x)
+		var err_x = abs(gds_m.x - ds_m.x)
+		var err_y = abs(gds_m.y - ds_m.y)
+		print("GDS mouse alignment check: gds_m=", gds_m, " ds_m=", ds_m, " err=(", err_x, ", ", err_y, ")")
+		if err_x > 2.0 or err_y > 2.0:
+			printerr("ASSERTION FAILED: GazeDisplayServer.mouse_get_position() diverged from DisplayServer! err=(", err_x, ", ", err_y, ")")
 			quit(1)
 			return
 
@@ -53,12 +53,10 @@ func run_diag():
 	
 	# Verify inverse transform round-trip to camera space and back
 	var profile = gs.get_device_profile()
-	var scr_scale = gds.get_screen_scale() if gds else 1.0
 	var win_offset = gds.get_window_rect_pixels().position if gds else Vector2i(0, 0)
-	var win_phys = root.get_final_transform() * m_canvas
-	var win_logical = win_phys / scr_scale
-	var disp_logical = win_logical + Vector2(win_offset)
-	print("disp_logical: ", disp_logical)
+	var win_pos = root.get_final_transform() * m_canvas
+	var disp_pos = win_pos + Vector2(win_offset)
+	print("disp_pos: ", disp_pos)
 
 	var phys_sz = profile.get_physical_size_mm() if profile else Vector2(301.214, 195.63)
 	var log_sz = profile.get_logical_size_px() if profile else Vector2i(1512, 982)
@@ -70,8 +68,8 @@ func run_diag():
 
 
 
-	var dx_mm = (disp_logical.x - log_sz.x * 0.5) * (phys_sz.x / float(log_sz.x))
-	var dy_mm = (disp_logical.y - log_sz.y * 0.5) * (phys_sz.y / float(log_sz.y))
+	var dx_mm = (disp_pos.x - log_sz.x * 0.5) * (phys_sz.x / float(log_sz.x))
+	var dy_mm = (disp_pos.y - log_sz.y * 0.5) * (phys_sz.y / float(log_sz.y))
 	var target_cam = Vector3(-dx_mm + cam_off.x, -dy_mm - cam_off.y, 0.0)
 	var eye_origin = Vector3(0, 0, -500.0)
 	var gaze_dir = (target_cam - eye_origin).normalized()
@@ -88,11 +86,12 @@ func run_diag():
 	if gds:
 		var win_mouse = gds.get_window_mouse_position()
 		print("gds.get_window_mouse_position(): ", win_mouse)
-		var expected_win_mouse = m_canvas / scr_scale
-		var win_mouse_err = (win_mouse - expected_win_mouse).length()
-		print("Window mouse error: ", win_mouse_err)
-		if win_mouse_err > 1.5:
-			printerr("ASSERTION FAILED: Window mouse position does not match canvas/scale! err=", win_mouse_err)
+		var expected_win_mouse = win_pos
+		var win_err_x = abs(win_mouse.x - expected_win_mouse.x)
+		var win_err_y = abs(win_mouse.y - expected_win_mouse.y)
+		print("Window mouse error: err_x=", win_err_x, " err_y=", win_err_y)
+		if win_err_x > 2.0 or win_err_y > 2.0:
+			printerr("ASSERTION FAILED: Window mouse position does not match canvas! err=(", win_err_x, ", ", win_err_y, ")")
 			quit(1)
 			return
 

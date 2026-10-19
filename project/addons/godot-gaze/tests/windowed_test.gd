@@ -242,7 +242,7 @@ func _init():
 		return
 
 	var canvas_proj = gs.project_ray_to_canvas(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
-	var expected_canvas_pos = root.get_final_transform().affine_inverse() * (Vector2(expected_fs_x, expected_fs_y) * test_scale)
+	var expected_canvas_pos = root.get_final_transform().affine_inverse() * Vector2(expected_fs_x, expected_fs_y)
 	print("Fullscreen Center Ray Projection (Canvas Space): ", canvas_proj, " | Expected Canvas Position: ", expected_canvas_pos)
 	if abs(canvas_proj.x - expected_canvas_pos.x) > 2.0:
 		printerr("FAIL: Fullscreen canvas space center ray X mismatch! Expected ", expected_canvas_pos.x, ", got ", canvas_proj.x)

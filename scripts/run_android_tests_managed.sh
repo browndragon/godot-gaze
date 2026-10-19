@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+if [[ -d "${ANDROID_HOME:-$HOME/Library/Android/sdk}/platform-tools" ]]; then
+    export PATH="${ANDROID_HOME:-$HOME/Library/Android/sdk}/emulator:${ANDROID_HOME:-$HOME/Library/Android/sdk}/platform-tools:$PATH"
+fi
+
 AVD_NAME="${AVD_NAME:-Medium_Phone_API_36}"
 
 # Find active device

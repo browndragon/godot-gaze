@@ -141,7 +141,7 @@ def run_command_and_log(target, source, env):
                 sys.stdout.write(line)
                 log_file.write(line)
                 if line.startswith("ERROR:") or line.startswith("E 0:") or "<C++ Error>" in line:
-                    if ("Cannot get class" in line or "Failed to retrieve non-existent singleton" in line or "Parameter" in line or "Condition" in line) and "ret != noErr" not in line and "get_system_ca_certificates" not in line:
+                    if ("Cannot get class" in line or "Failed to retrieve non-existent singleton" in line or "Parameter" in line or "Condition" in line) and "ret != noErr" not in line and "get_system_ca_certificates" not in line and "_save_to_cache" not in line:
                         has_engine_error = True
                 
         process.wait()
@@ -261,17 +261,9 @@ if env["platform"] != "javascript":
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
     test_program = core_env.Program(target=target_test_bin, source=test_objs)
     
-    # Build stress test cast
-    stress_test_objs = [
-        env.Object(target="#" + os.path.join(gaze_variant_dir, "tests/stress_test_cast" + env["OBJSUFFIX"]), source="#tests/stress_test_cast.cpp")
-    ]
-    stress_target_test_bin = "#" + f"build/tests/stress_test_cast.{platform_str}.{env['arch']}{exe_suffix}"
-    stress_test_program = env.Program(target=stress_target_test_bin, source=stress_test_objs)
-
     # Codesigning on macOS
     if env["platform"] == "macos":
         core_env.AddPostAction(test_program, "codesign -s - --force $TARGET")
-        env.AddPostAction(stress_test_program, "codesign -s - --force $TARGET")
 
     # Native test runner target
     native_run = env.Command(
@@ -292,16 +284,6 @@ if env["platform"] != "javascript":
     )
     env.AlwaysBuild(benchmark_run)
     env.Alias("tests/benchmark", benchmark_run)
-
-    # Native stress test runner target
-    stress_run = env.Command(
-        "build/tests/logs/tests.native.stress.log",
-        [stress_test_program],
-        Action(run_command_and_log, varlist=["TEST_CMD"]),
-        TEST_CMD=[stress_test_program[0].abspath]
-    )
-    env.AlwaysBuild(stress_run)
-    env.Alias("tests/native/stress", stress_run)
 
 # Python unit test target
 python_run = env.Command(

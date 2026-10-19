@@ -4,6 +4,10 @@
 
 set -euo pipefail
 
+if [[ -d "${ANDROID_HOME:-$HOME/Library/Android/sdk}/platform-tools" ]]; then
+    export PATH="${ANDROID_HOME:-$HOME/Library/Android/sdk}/platform-tools:$PATH"
+fi
+
 find_active_device() {
     adb devices | grep -v "List" | grep "device" | head -n 1 | awk '{print $1}' || true
 }

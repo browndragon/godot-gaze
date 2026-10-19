@@ -27,8 +27,8 @@ const CAM_FOCAL_PX: float = 1440.0 / (2.0 * 0.6370702608) # 65 deg HFOV default
 const CAM_CX_PX: float = 720.0
 const CAM_CY_PX: float = 480.0
 
-var vs: VisionServer
-var gs: GazeServer
+var vs := VisionServer
+var gs := GazeServer
 var cam_rid: RID
 var profile: GazeDeviceProfile
 
@@ -136,8 +136,6 @@ func run_tool() -> void:
 	print("       GODOT-GAZE VISUAL DIAGNOSTIC OVERLAY TOOL (HEADLESS)")
 	print("================================================================================")
 
-	vs = Engine.get_singleton("VisionServer")
-	gs = Engine.get_singleton("GazeServer")
 	if not vs or not gs:
 		printerr("FATAL: VisionServer or GazeServer singleton not found!")
 		quit(1)

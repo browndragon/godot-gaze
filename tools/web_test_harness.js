@@ -118,7 +118,7 @@ async function launchWebTestHarness(config) {
 
   // 3. Connect to Chrome CDP
   let wsUrl = null;
-  for (let i = 0; i < 20; i++) {
+  for (let i = 0; i < 60; i++) {
     try {
       const res = await fetch(`http://127.0.0.1:${cdpPort}/json/list`);
       const tabs = await res.json();

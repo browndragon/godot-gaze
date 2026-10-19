@@ -1,6 +1,11 @@
 # Godot windowed GPU unit tests for Godot Gaze.
 extends SceneTree
 
+const DisruptionSentinel = preload("res://addons/godot-gaze/tests/utils/disruption_sentinel.gd")
+
+func fail_test(msg: String) -> void:
+	DisruptionSentinel.fail(self, msg)
+
 func _init():
 	print("=================== WINDOWED GPU INTEGRATION TESTS ===================")
 	
@@ -204,12 +209,10 @@ func _init():
 		var expected_y = (screen_size.y / 2.0) - actual_pos.y
 		print("Corner [", corner_name, "] at ", actual_pos, " -> Proj: ", proj_corner, " (Expected: ", expected_x, ", ", expected_y, ")")
 		if abs(proj_corner.x - expected_x) > 2.0:
-			printerr("FAIL: Corner [", corner_name, "] X projection mismatch! Expected ", expected_x, ", got ", proj_corner.x)
-			quit(1)
+			fail_test("Corner [" + corner_name + "] X projection mismatch! Expected " + str(expected_x) + ", got " + str(proj_corner.x))
 			return
 		if abs(proj_corner.y - expected_y) > 2.0:
-			printerr("FAIL: Corner [", corner_name, "] Y projection mismatch! Expected ", expected_y, ", got ", proj_corner.y)
-			quit(1)
+			fail_test("Corner [" + corner_name + "] Y projection mismatch! Expected " + str(expected_y) + ", got " + str(proj_corner.y))
 			return
 		print("PASS: Corner [", corner_name, "] verified.")
 
@@ -233,24 +236,20 @@ func _init():
 	var expected_fs_y = (screen_size.y / 2.0) - fs_win_pos.y
 	print("Expected Fullscreen Center: (", expected_fs_x, ", ", expected_fs_y, ") | Actual: ", fs_proj)
 	if abs(fs_proj.x - expected_fs_x) > 2.0:
-		printerr("FAIL: Fullscreen window space center ray X mismatch! Expected ", expected_fs_x, ", got ", fs_proj.x)
-		quit(1)
+		fail_test("Fullscreen window space center ray X mismatch! Expected " + str(expected_fs_x) + ", got " + str(fs_proj.x))
 		return
 	if abs(fs_proj.y - expected_fs_y) > 2.0:
-		printerr("FAIL: Fullscreen window space center ray Y mismatch! Expected ", expected_fs_y, ", got ", fs_proj.y)
-		quit(1)
+		fail_test("Fullscreen window space center ray Y mismatch! Expected " + str(expected_fs_y) + ", got " + str(fs_proj.y))
 		return
 
 	var canvas_proj = gs.project_ray_to_canvas(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
 	var expected_canvas_pos = root.get_final_transform().affine_inverse() * Vector2(expected_fs_x, expected_fs_y)
 	print("Fullscreen Center Ray Projection (Canvas Space): ", canvas_proj, " | Expected Canvas Position: ", expected_canvas_pos)
 	if abs(canvas_proj.x - expected_canvas_pos.x) > 2.0:
-		printerr("FAIL: Fullscreen canvas space center ray X mismatch! Expected ", expected_canvas_pos.x, ", got ", canvas_proj.x)
-		quit(1)
+		fail_test("Fullscreen canvas space center ray X mismatch! Expected " + str(expected_canvas_pos.x) + ", got " + str(canvas_proj.x))
 		return
 	if abs(canvas_proj.y - expected_canvas_pos.y) > 2.0:
-		printerr("FAIL: Fullscreen canvas space center ray Y mismatch! Expected ", expected_canvas_pos.y, ", got ", canvas_proj.y)
-		quit(1)
+		fail_test("Fullscreen canvas space center ray Y mismatch! Expected " + str(expected_canvas_pos.y) + ", got " + str(canvas_proj.y))
 		return
 	print("PASS: Fullscreen window and canvas projection verified.")
 

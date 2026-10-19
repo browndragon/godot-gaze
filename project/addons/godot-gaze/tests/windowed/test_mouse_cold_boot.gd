@@ -1,5 +1,7 @@
 extends SceneTree
 
+const DisruptionSentinel = preload("res://addons/godot-gaze/tests/utils/disruption_sentinel.gd")
+
 func _init():
 	var gds = Engine.get_singleton("GazeDisplayServer")
 	var gs = Engine.get_singleton("GazeServer")
@@ -44,14 +46,12 @@ func _init():
 
 	# Assert that synthetic press did NOT pollute GazeDisplayServer hardware button query
 	if gds.mouse_get_button_state() != DisplayServer.mouse_get_button_state():
-		printerr("FAIL: GazeDisplayServer.mouse_get_button_state() diverged from DisplayServer")
-		quit(1)
+		DisruptionSentinel.fail(self, "GazeDisplayServer.mouse_get_button_state() diverged from DisplayServer")
 		return
 
 	# Assert that synthetic mouse button did NOT activate physical mouse stillness state machine
 	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
-		printerr("FAIL: Synthetic mouse press erroneously triggered physical mouse active state")
-		quit(1)
+		DisruptionSentinel.fail(self, "Synthetic mouse press erroneously triggered physical mouse active state")
 		return
 
 	# Test 3: Release button
@@ -72,8 +72,7 @@ func _init():
 		  " active=", gs.is_physical_mouse_active())
 
 	if not gs.is_physical_mouse_still() or gs.is_physical_mouse_active():
-		printerr("FAIL: Physical mouse is not still after synthetic release")
-		quit(1)
+		DisruptionSentinel.fail(self, "Physical mouse is not still after synthetic release")
 		return
 
 	print("PASS: test_mouse_cold_boot passed with zero physical mouse feedback loops.")

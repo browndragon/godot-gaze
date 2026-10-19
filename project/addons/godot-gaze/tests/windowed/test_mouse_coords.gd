@@ -1,5 +1,7 @@
 extends SceneTree
 
+const DisruptionSentinel = preload("res://addons/godot-gaze/tests/utils/disruption_sentinel.gd")
+
 func _init():
 	call_deferred("run_diag")
 
@@ -37,8 +39,7 @@ func run_diag():
 		var err_y = abs(gds_m.y - ds_m.y)
 		print("GDS mouse alignment check: gds_m=", gds_m, " ds_m=", ds_m, " err=(", err_x, ", ", err_y, ")")
 		if err_x > 2.0 or err_y > 2.0:
-			printerr("ASSERTION FAILED: GazeDisplayServer.mouse_get_position() diverged from DisplayServer! err=(", err_x, ", ", err_y, ")")
-			quit(1)
+			DisruptionSentinel.fail(self, "GazeDisplayServer.mouse_get_position() diverged from DisplayServer! err=(" + str(err_x) + ", " + str(err_y) + ")")
 			return
 
 	# Enable mouse emulation
@@ -79,8 +80,7 @@ func run_diag():
 	var round_trip_err = (projected_back - m_canvas).length()
 	print("Round-trip error: ", round_trip_err)
 	if round_trip_err > 1.0:
-		printerr("ASSERTION FAILED: Round-trip projection error > 1.0! err=", round_trip_err)
-		quit(1)
+		DisruptionSentinel.fail(self, "Round-trip projection error > 1.0! err=" + str(round_trip_err))
 		return
 
 	if gds:
@@ -91,8 +91,7 @@ func run_diag():
 		var win_err_y = abs(win_mouse.y - expected_win_mouse.y)
 		print("Window mouse error: err_x=", win_err_x, " err_y=", win_err_y)
 		if win_err_x > 2.0 or win_err_y > 2.0:
-			printerr("ASSERTION FAILED: Window mouse position does not match canvas! err=(", win_err_x, ", ", win_err_y, ")")
-			quit(1)
+			DisruptionSentinel.fail(self, "Window mouse position does not match canvas! err=(" + str(win_err_x) + ", " + str(win_err_y) + ")")
 			return
 
 	print("ALL MOUSE COORD ASSERTIONS PASSED PERFECTLY!")

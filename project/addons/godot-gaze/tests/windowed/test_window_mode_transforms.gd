@@ -1,5 +1,7 @@
 extends SceneTree
 
+const DisruptionSentinel = preload("res://addons/godot-gaze/tests/utils/disruption_sentinel.gd")
+
 func _init():
 	call_deferred("run_tests")
 
@@ -46,8 +48,7 @@ func run_tests():
 	var cam_axis_win = gs.project_ray_to_canvas(Vector3(0, 0, -500.0), Vector3(0, 0, 1.0))
 	print("Windowed - Screen Center Ray -> Canvas Pos: ", cam_axis_win, " (Expected: ", canvas_center_expected, ")")
 	if abs(cam_axis_win.x - canvas_center_expected.x) > 3.0 or abs(cam_axis_win.y - canvas_center_expected.y) > 3.0:
-		printerr("FAIL: Windowed screen center ray does not land on canvas center! Got: ", cam_axis_win, " Expected: ", canvas_center_expected)
-		quit(1)
+		DisruptionSentinel.fail(self, "Windowed screen center ray does not land on canvas center! Got: " + str(cam_axis_win) + " Expected: " + str(canvas_center_expected))
 		return
 	print("PASS: Windowed screen center ray lands on canvas center.")
 
@@ -59,8 +60,7 @@ func run_tests():
 	var win_dx = right_edge_win.x - cam_axis_win.x
 	print("Windowed - Right Edge Ray -> Canvas Pos: ", right_edge_win, " (Delta X from center: ", win_dx, ")")
 	if win_dx <= 10.0:
-		printerr("FAIL: Windowed right-edge gaze shifted left or did not move right! Delta X: ", win_dx)
-		quit(1)
+		DisruptionSentinel.fail(self, "Windowed right-edge gaze shifted left or did not move right! Delta X: " + str(win_dx))
 		return
 	print("PASS: Windowed right-edge gaze produces positive X offset from center.")
 
@@ -85,8 +85,7 @@ func run_tests():
 	var expected_fs_canvas = gds.window_px_to_canvas(Vector2(expected_fs_x, expected_fs_y)) if gds else root.get_final_transform().affine_inverse() * Vector2(expected_fs_x, expected_fs_y)
 	print("Fullscreen - Expected Canvas Pos taking menu bar into account: ", expected_fs_canvas)
 	if abs(cam_axis_fs.x - expected_fs_canvas.x) > 3.0 or abs(cam_axis_fs.y - expected_fs_canvas.y) > 3.0:
-		printerr("FAIL: Fullscreen screen center ray mismatch! Got: ", cam_axis_fs, " Expected: ", expected_fs_canvas)
-		quit(1)
+		DisruptionSentinel.fail(self, "Fullscreen screen center ray mismatch! Got: " + str(cam_axis_fs) + " Expected: " + str(expected_fs_canvas))
 		return
 	print("PASS: Fullscreen screen center ray lands on expected canvas position.")
 
@@ -95,8 +94,7 @@ func run_tests():
 	var fs_dx = right_edge_fs.x - cam_axis_fs.x
 	print("Fullscreen - Right Edge Ray -> Canvas Pos: ", right_edge_fs, " (Delta X from center: ", fs_dx, ")")
 	if fs_dx <= 10.0:
-		printerr("FAIL: Fullscreen right-edge gaze shifted left or did not move right! Delta X: ", fs_dx)
-		quit(1)
+		DisruptionSentinel.fail(self, "Fullscreen right-edge gaze shifted left or did not move right! Delta X: " + str(fs_dx))
 		return
 	print("PASS: Fullscreen right-edge gaze produces positive X offset from center.")
 
@@ -105,8 +103,7 @@ func run_tests():
 	# -------------------------------------------------------------
 	print("--- 3. Testing Direction Parity & Sign Invariance ---")
 	if (win_dx > 0) != (fs_dx > 0):
-		printerr("FAIL: Vector sign flipped between windowed and fullscreen! win_dx: ", win_dx, " fs_dx: ", fs_dx)
-		quit(1)
+		DisruptionSentinel.fail(self, "Vector sign flipped between windowed and fullscreen! win_dx: " + str(win_dx) + " fs_dx: " + str(fs_dx))
 		return
 	print("PASS: Right-edge gaze maintains positive direction (+X) in BOTH windowed and fullscreen modes.")
 

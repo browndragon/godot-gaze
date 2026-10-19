@@ -87,7 +87,7 @@ public:
      */
     virtual bool is_face_tracked() const { return false; }
 
-    void copy_from(const Ref<InputEventGazeBase> &p_other);
+    virtual void copy_from(const Ref<InputEventGazeBase> &p_other);
 };
 
 /**
@@ -194,7 +194,7 @@ public:
      */
     void set_gaze_transform(const Transform3D &p_xform) { eye_transform = p_xform; }
 
-    void copy_from(const Ref<InputEventGaze> &p_other);
+    virtual void copy_from(const Ref<InputEventGazeBase> &p_other) override;
 
     String as_text() const;
 };
@@ -238,7 +238,7 @@ public:
      */
     MissingReason get_reason() const { return reason; }
 
-    void copy_from(const Ref<InputEventGazeMissing> &p_other);
+    virtual void copy_from(const Ref<InputEventGazeBase> &p_other) override;
 
     String as_text() const;
 };

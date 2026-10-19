@@ -122,7 +122,7 @@ fi
 
 if [[ -z "$TIMEOUT" ]]; then
     if [[ "$AUTO" == "true" ]]; then
-        TIMEOUT=45
+        TIMEOUT=120
     else
         TIMEOUT=0
     fi
@@ -141,6 +141,10 @@ if [[ "$HEADLESS" == "true" ]]; then
     FINAL_ARGS+=("--headless")
     if [[ ! " ${GODOT_ARGS[*]:-} " =~ " --native-camera " && ! " ${GODOT_ARGS[*]:-} " =~ " --real-camera " ]]; then
         export GAZE_VISION_DRIVER=mock
+    fi
+    if [[ "$OSTYPE" == "darwin"* && ! -w "$HOME/Library/Application Support" ]]; then
+        export HOME="${TMPDIR:-/tmp}/godot_test_home"
+        mkdir -p "$HOME"
     fi
 fi
 

@@ -62,7 +62,7 @@ func run_tests():
 	print("PASS: GazeDeviceProfile project_gaze_screen_px / unproject_px_to_cam_mm verified.")
 
 	# 1c. Test GazeProfile .cfg file serialization (save_to_file / load_from_file)
-	var cfg_path = "user://test_device_profile.cfg"
+	var cfg_path = "user://calibrations/test_device_profile.cfg"
 	var err_save = profile.save_to_file(cfg_path)
 	if err_save != OK:
 		printerr("FAIL: profile.save_to_file failed with error: ", err_save)

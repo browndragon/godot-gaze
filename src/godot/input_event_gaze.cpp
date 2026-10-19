@@ -47,13 +47,12 @@ void InputEventGazeBase::_bind_methods() {
 }
 
 void InputEventGazeBase::copy_from(const Ref<InputEventGazeBase> &p_other) {
-    if (p_other.is_valid()) {
-        window_id = p_other->window_id;
-        frame_id = p_other->frame_id;
-        timestamp_usec = p_other->timestamp_usec;
-        left_eye_openness = p_other->left_eye_openness;
-        right_eye_openness = p_other->right_eye_openness;
-    }
+    ERR_FAIL_COND_MSG(p_other.is_null(), "Cannot copy from null event.");
+    window_id = p_other->window_id;
+    frame_id = p_other->frame_id;
+    timestamp_usec = p_other->timestamp_usec;
+    left_eye_openness = p_other->left_eye_openness;
+    right_eye_openness = p_other->right_eye_openness;
 }
 
 // --- InputEventGaze ---
@@ -154,22 +153,21 @@ void InputEventGaze::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_gaze_transform", "gaze_transform"), &InputEventGaze::set_gaze_transform);
     ClassDB::bind_method(D_METHOD("get_gaze_transform"), &InputEventGaze::get_gaze_transform);
 
-    ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGaze::copy_from);
-
     ADD_PROPERTY(PropertyInfo(Variant::VECTOR2, "eye_gaze"), "set_eye_gaze", "_get_eye_gaze_property");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "head_transform"), "set_head_transform", "get_head_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "eye_transform"), "set_eye_transform", "get_eye_transform");
     ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D, "gaze_transform"), "set_gaze_transform", "get_gaze_transform");
 }
 
-void InputEventGaze::copy_from(const Ref<InputEventGaze> &p_other) {
-    if (p_other.is_valid()) {
-        InputEventGazeBase::copy_from(p_other);
-        eye_gaze_position = p_other->eye_gaze_position;
-        nose_gaze_position = p_other->nose_gaze_position;
-        head_transform = p_other->head_transform;
-        eye_transform = p_other->eye_transform;
-    }
+void InputEventGaze::copy_from(const Ref<InputEventGazeBase> &p_other) {
+    ERR_FAIL_COND_MSG(p_other.is_null(), "Cannot copy from null event.");
+    Ref<InputEventGaze> other_gaze = p_other;
+    ERR_FAIL_COND_MSG(other_gaze.is_null(), "Cannot copy InputEventGaze from incompatible event type.");
+    InputEventGazeBase::copy_from(p_other);
+    eye_gaze_position = other_gaze->eye_gaze_position;
+    nose_gaze_position = other_gaze->nose_gaze_position;
+    head_transform = other_gaze->head_transform;
+    eye_transform = other_gaze->eye_transform;
 }
 
 String InputEventGaze::as_text() const {
@@ -187,7 +185,6 @@ InputEventGazeMissing::InputEventGazeMissing() {
 void InputEventGazeMissing::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_reason", "reason"), &InputEventGazeMissing::set_reason);
     ClassDB::bind_method(D_METHOD("get_reason"), &InputEventGazeMissing::get_reason);
-    ClassDB::bind_method(D_METHOD("copy_from", "other"), &InputEventGazeMissing::copy_from);
 
     ADD_PROPERTY(PropertyInfo(Variant::INT, "reason", PROPERTY_HINT_ENUM, "NoFaceDetected,Occluded,OutOfBounds,SensorInactive"), "set_reason", "get_reason");
 
@@ -197,11 +194,12 @@ void InputEventGazeMissing::_bind_methods() {
     BIND_ENUM_CONSTANT(REASON_SENSOR_INACTIVE);
 }
 
-void InputEventGazeMissing::copy_from(const Ref<InputEventGazeMissing> &p_other) {
-    if (p_other.is_valid()) {
-        InputEventGazeBase::copy_from(p_other);
-        reason = p_other->reason;
-    }
+void InputEventGazeMissing::copy_from(const Ref<InputEventGazeBase> &p_other) {
+    ERR_FAIL_COND_MSG(p_other.is_null(), "Cannot copy from null event.");
+    Ref<InputEventGazeMissing> other_missing = p_other;
+    ERR_FAIL_COND_MSG(other_missing.is_null(), "Cannot copy InputEventGazeMissing from incompatible event type.");
+    InputEventGazeBase::copy_from(p_other);
+    reason = other_missing->reason;
 }
 
 String InputEventGazeMissing::as_text() const {

@@ -32,7 +32,7 @@ void GazeFrame::_bind_methods() {
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "timestamp"), "", "get_timestamp");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "face_detected"), "", "get_face_detected");
     ADD_PROPERTY(PropertyInfo(Variant::BOOL, "gaze_success"), "", "get_gaze_success");
-    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "is_temporal_tracking"), "set_is_temporal_tracking", "is_temporal_tracking");
+    ADD_PROPERTY(PropertyInfo(Variant::BOOL, "temporal_tracking"), "set_is_temporal_tracking", "is_temporal_tracking");
     ADD_PROPERTY(PropertyInfo(Variant::RECT2, "face_bbox"), "set_face_bbox", "get_face_bbox");
     ADD_PROPERTY(PropertyInfo(Variant::PACKED_VECTOR2_ARRAY, "face_obb"), "set_face_obb", "get_face_obb");
     ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "left_eye_openness"), "", "get_left_eye_openness");

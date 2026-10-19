@@ -246,7 +246,6 @@ Ref<Image> VisionServer::camera_get_current_image(RID p_camera) {
 // --- MockVisionServer Implementation ---
 
 void MockVisionServer::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("inject_texture", "camera_rid", "texture"), &MockVisionServer::inject_texture);
     ClassDB::bind_method(D_METHOD("set_simulated_acceleration", "accel"), &MockVisionServer::set_simulated_acceleration);
 }
 

@@ -594,7 +594,7 @@ if env["platform"] != "web":
     setup_onnxruntime(core_env)
     setup_onnxruntime(env)
     if env["platform"] == "windows":
-        win_libs = ["mf", "mfplat", "mfreadwrite", "mfuuid", "ole32"]
+        win_libs = ["mf", "mfplat", "mfreadwrite", "mfuuid", "ole32", "user32", "gdi32"]
         env.Append(LIBS=win_libs)
         core_env.Append(LIBS=win_libs)
     elif env["platform"] == "macos":

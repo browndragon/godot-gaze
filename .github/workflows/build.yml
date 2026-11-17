@@ -11,7 +11,7 @@ jobs:
     name: Build ${{ matrix.platform }} (${{ matrix.target }}, ${{ matrix.variant }})
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         include:
           - platform: macos

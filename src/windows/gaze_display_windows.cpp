@@ -7,6 +7,11 @@
 #include <windows.h>
 #include <cmath>
 
+#ifdef _MSC_VER
+#pragma comment(lib, "user32.lib")
+#pragma comment(lib, "gdi32.lib")
+#endif
+
 namespace Gaze {
 
 GazeDisplayMetrics gaze_windows_get_display_metrics(int screen_index) {

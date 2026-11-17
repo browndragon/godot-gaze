@@ -1,7 +1,11 @@
 #include "gaze_display_windows.hpp"
 
 #ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
 #include <windows.h>
+#include <cmath>
 
 namespace Gaze {
 

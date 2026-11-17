@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_gaze_profile" kind="class" language="C++" prot="public">
+    <compoundname>godot::GazeProfile</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Resource</basecompoundref>
+    <derivedcompoundref refid="classgodot_1_1_gaze_device_profile" prot="public" virt="non-virtual">godot::GazeDeviceProfile</derivedcompoundref>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1a72da57809da10886f2ad18b62a0291e3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeProfile::GDCLASS</definition>
+        <argsstring>(GazeProfile, Resource)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::GazeProfile::GDCLASS</qualifiedname>
+        <param>
+          <type>GazeProfile</type>
+        </param>
+        <param>
+          <type>Resource</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="14" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1aad9f7a5ea62145110e745b30bc97b479" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::GazeProfile::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::GazeProfile::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="17" column="17" bodyfile="src/godot/gaze_profile.cpp" bodystart="12" bodyend="15"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1a7af0d3d12ddc67300dfca8108ed5c242" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void godot::GazeProfile::_write_to_config</definition>
+        <argsstring>(Ref&lt; ConfigFile &gt; &amp;p_cfg) const</argsstring>
+        <name>_write_to_config</name>
+        <qualifiedname>godot::GazeProfile::_write_to_config</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_gaze_device_profile_1ac05fa55b03c09dcc6a837a31a0004787">_write_to_config</reimplementedby>
+        <param>
+          <type>Ref&lt; ConfigFile &gt; &amp;</type>
+          <declname>p_cfg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="19" column="18" bodyfile="src/godot/gaze_profile.hpp" bodystart="19" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1aa9fb7efd4536482af7e93e6f30e5d8fe" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>Error</type>
+        <definition>virtual Error godot::GazeProfile::_read_from_config</definition>
+        <argsstring>(const Ref&lt; ConfigFile &gt; &amp;p_cfg)</argsstring>
+        <name>_read_from_config</name>
+        <qualifiedname>godot::GazeProfile::_read_from_config</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_gaze_device_profile_1aec1f714eec061d62836e4a28cbd33da5">_read_from_config</reimplementedby>
+        <param>
+          <type>const Ref&lt; ConfigFile &gt; &amp;</type>
+          <declname>p_cfg</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="20" column="19" bodyfile="src/godot/gaze_profile.hpp" bodystart="20" bodyend="20"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1a0a2e19ab32ed8b535d1c25683c37dc16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::GazeProfile::GazeProfile</definition>
+        <argsstring>()=default</argsstring>
+        <name>GazeProfile</name>
+        <qualifiedname>godot::GazeProfile::GazeProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1ac1fcd21b71d65af31406c93227e0a282" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::GazeProfile::~GazeProfile</definition>
+        <argsstring>()=default</argsstring>
+        <name>~GazeProfile</name>
+        <qualifiedname>godot::GazeProfile::~GazeProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="24" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1a751766762f982193e4a8143a5bfc6228" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Error</type>
+        <definition>Error godot::GazeProfile::save_to_file</definition>
+        <argsstring>(const String &amp;p_path)</argsstring>
+        <name>save_to_file</name>
+        <qualifiedname>godot::GazeProfile::save_to_file</qualifiedname>
+        <param>
+          <type>const String &amp;</type>
+          <declname>p_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="26" column="11" bodyfile="src/godot/gaze_profile.cpp" bodystart="17" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_profile_1a38b47669054da826a662fa40e24d358b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Error</type>
+        <definition>Error godot::GazeProfile::load_from_file</definition>
+        <argsstring>(const String &amp;p_path)</argsstring>
+        <name>load_from_file</name>
+        <qualifiedname>godot::GazeProfile::load_from_file</qualifiedname>
+        <param>
+          <type>const String &amp;</type>
+          <declname>p_path</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_profile.hpp" line="27" column="11" bodyfile="src/godot/gaze_profile.cpp" bodystart="37" bodyend="48"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="3">
+        <label>godot::GazeDeviceProfile</label>
+        <link refid="classgodot_1_1_gaze_device_profile"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>godot::GazeProfile</label>
+        <link refid="classgodot_1_1_gaze_profile"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Resource</label>
+      </node>
+      <node id="1">
+        <label>godot::GazeProfile</label>
+        <link refid="classgodot_1_1_gaze_profile"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/gaze_profile.hpp" line="13" column="1" bodyfile="src/godot/gaze_profile.hpp" bodystart="13" bodyend="28"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_gaze_profile_1aad9f7a5ea62145110e745b30bc97b479" prot="protected" virt="non-virtual"><scope>godot::GazeProfile</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1aa9fb7efd4536482af7e93e6f30e5d8fe" prot="protected" virt="virtual"><scope>godot::GazeProfile</scope><name>_read_from_config</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1a7af0d3d12ddc67300dfca8108ed5c242" prot="protected" virt="virtual"><scope>godot::GazeProfile</scope><name>_write_to_config</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1a0a2e19ab32ed8b535d1c25683c37dc16" prot="public" virt="non-virtual"><scope>godot::GazeProfile</scope><name>GazeProfile</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1a72da57809da10886f2ad18b62a0291e3" prot="private" virt="non-virtual"><scope>godot::GazeProfile</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1a38b47669054da826a662fa40e24d358b" prot="public" virt="non-virtual"><scope>godot::GazeProfile</scope><name>load_from_file</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1a751766762f982193e4a8143a5bfc6228" prot="public" virt="non-virtual"><scope>godot::GazeProfile</scope><name>save_to_file</name></member>
+      <member refid="classgodot_1_1_gaze_profile_1ac1fcd21b71d65af31406c93227e0a282" prot="public" virt="virtual"><scope>godot::GazeProfile</scope><name>~GazeProfile</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

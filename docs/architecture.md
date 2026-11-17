@@ -65,12 +65,12 @@ flowchart TD
    - Wraps ONNX Runtime (`onnxruntime_cxx_api.h`).
    - Implements multi-threaded inference pipelining (`GazeTrackingPipeline`).
    - Does not depend on Godot engine types or GDScript bindings.
-   - For detailed neural model specifications, tensor formats, and provenances, see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md).
+   - For detailed neural model specifications, tensor formats, and provenances, see [Vision Models & Camera Ingestion Specification](vision_models.md).
 
 3. **Layer 3 (Platforms & Servers - `src/godot/`, `src/windows/`, `src/web/`):**
    - Implements Godot's RID (Resource Identifier) server architecture (`GazeServer`, `VisionServer`).
    - Manages platform camera feeds (Windows Media Foundation, Godot CameraFeed, Web `getUserMedia`).
-   - Normalizes hardware capture frames to packed BGR8 working buffers (see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md#1-camera-ingestion-architecture--color-formats)).
+   - Normalizes hardware capture frames to packed BGR8 working buffers (see [Vision Models & Camera Ingestion Specification](vision_models.md#1-camera-ingestion-architecture--color-formats)).
    - Enforces Pimpl (`GazeServerImpl`) encapsulation to insulate Godot bindings from native allocations.
 
 4. **Layer 4 (High-Level Nodes & Events - `src/godot/` & downstream scenes):**
@@ -169,26 +169,27 @@ flowchart TD
 - **`InputEventGazeBase`**:
   - `window_id: int`, `frame_id: int`, `timestamp_usec: int`.
   - Continuous eye openness: `left_eye_openness: float`, `right_eye_openness: float` ($0.0$ closed to $1.0$ open).
-  - Blink queries: `is_blink(threshold = 0.5)`, `is_left_blink()`, `is_right_blink()`.
-  - `is_face_tracked() -> bool`: Virtual method, returning false on base/missing and true on `InputEventGaze`.
+  - `is_face_tracked() -> bool`: Virtual method returning `false` on `InputEventGazeBase` / `InputEventGazeMissing` and `true` on `InputEventGaze`.
+  - `copy_from(other)`: Copies event base/derived fields into another `InputEventGazeBase` instance (used by custom `GazeEventFactory` subclasses).
 - **`InputEventGaze`**:
   - Dispatched when face detection and gaze estimation succeed.
   - **Localized 2D Coordinates**:
-    - `get_eye_gaze(node = null) -> Vector2`: Combined eye-gaze screen/viewport coordinate in logical pixels (`lpix`). When `node` is passed, returns coordinates mapped directly into the local 2D coordinate space of `node`.
-    - `get_nose_gaze(node = null) -> Vector2`: Nose bridge / head forward projection coordinate in logical pixels (`lpix`).
+    - `get_eye_gaze(local_to = null, clamping = CLAMPING_DEFAULT) -> Vector2`: Combined eye-gaze viewport/canvas coordinate in logical pixels (`lpix`). When `local_to` (`CanvasItem`) is passed, returns coordinates mapped directly into the local 2D coordinate space of `local_to`. Defaults to `Vector2(NAN, NAN)` when unavailable/invalid; callers should check `pos.is_finite()`.
+    - `get_nose_gaze(local_to = null, clamping = CLAMPING_DEFAULT) -> Vector2`: Head pose projection coordinate in logical pixels (`lpix`). Defaults to `Vector2(NAN, NAN)` when unavailable/invalid.
+    - Property `eye_gaze: Vector2`: Reads/writes raw canvas eye-gaze position using default clamping.
   - **3D Spatial Transforms**:
-    - `get_eye_transform() -> Transform3D`: Full 3D gaze ray origin and orientation in camera millimeters.
-    - `get_nose_transform() -> Transform3D`: Full 3D head pose origin and orientation in camera millimeters.
-  - **Kinematics & Clamping**:
-    - `relative: Vector2`, `velocity: Vector2` ($\Delta\text{pos}/\Delta t$ in px/sec).
-    - `clamping_mode`: `CLAMP_MODE_NONE` (0), `CLAMP_MODE_CLAMP` (1), `CLAMP_MODE_DISCARD` (2).
+    - `head_transform: Transform3D`: 3D head pose origin and orientation in camera millimeters.
+    - `eye_transform: Transform3D`: 3D inter-eye midpoint transform in camera millimeters.
+    - `gaze_transform: Transform3D`: 3D gaze ray origin and orientation in camera millimeters.
+  - **Clamping (`ClampingMode`)**:
+    - `CLAMPING_FREE` (`0`), `CLAMPING_CLAMPED` (`1`), `CLAMPING_DEFAULT` (`2`, inherits `gaze/pointing/default_clamping`). Non-finite (`NAN`) coordinates remain non-finite regardless of clamping mode.
 - **`InputEventGazeMissing`**:
-  - Dispatched when face or eye tracking drops.
-  - Carries `reason: MissingReason` (`REASON_NO_FACE_DETECTED`, `REASON_OCCLUSION_BLINK`, `REASON_OUT_OF_BOUNDS`, `REASON_LOW_CONFIDENCE`).
+  - Dispatched when face or eye tracking drops or the sensor is inactive.
+  - Carries `reason: MissingReason` (`REASON_NO_FACE_DETECTED = 0`, `REASON_OCCLUDED = 1`, `REASON_OUT_OF_BOUNDS = 2`, `REASON_SENSOR_INACTIVE = 3`).
 
 ### 6.2. Pointer Arbitration & Mouse Emulation (`MouseGazeEmulation`)
-`godot-gaze` integrates a native C++ mouse stillness arbitrator ([`MouseStillnessArbitrator`](file:///Users/acunningham/src/godot-gaze/src/core/mouse_stillness_arbitrator.hpp)) and pointer emulator ([`MouseGazeEmulation`](file:///Users/acunningham/src/godot-gaze/src/godot/mouse_gaze_emulation.hpp)):
-- **Stillness Arbitration**: When physical mouse motion exceeds the anchor bubble threshold (`mouse_stillness_threshold_px`, default $3.0\text{ px}$), the physical mouse claims instant authority. When the mouse remains motionless within the anchor bubble for `mouse_stillness_duration_sec` (default $1.5\text{ s}$), gaze smoothly resumes control via an eased blend transition.
+`godot-gaze` integrates a native C++ mouse stillness arbitrator ([`MouseStillnessArbitrator`](../src/core/mouse_stillness_arbitrator.hpp)) and pointer emulator ([`MouseGazeEmulation`](../src/godot/mouse_gaze_emulation.hpp)):
+- **Stillness Arbitration**: When physical mouse motion exceeds the anchor bubble threshold (`mouse_stillness_threshold_px`, default $3.0\text{ px}$), the physical mouse claims instant authority. When the mouse remains motionless within the anchor bubble for `mouse_stillness_duration_sec` (default $1.5\text{ s}$), gaze smoothly resumes control via an eased blend transition (`mouse_emulation_transition_sec`, default $0.3\text{ s}$).
 - **Bi-Directional Emulation**:
   - `gaze/pointing/emulate_mouse_from_gaze = true`: Synthesizes OS mouse motion and click events into Godot's `DisplayServer`, driving standard engine UI controls directly.
   - `gaze/pointing/emulate_gaze_from_mouse = true`: In developer environments without webcams, synthesizes `InputEventGaze` from mouse movements to exercise downstream gaze pipelines.
@@ -200,7 +201,7 @@ For hands-free eye-gaze selection without physical clicks, `FillAccumulator` pro
   $$\text{penalty} = 1.0 + \frac{\text{error}}{\text{error\_doubling\_distance}}$$
   $$\frac{d(\text{fill})}{dt} = v, \quad v \in [-v_{\text{drain}} \cdot \text{penalty}, +v_{\text{fill}}], \quad \text{fill} \in [0.0, 1.0]$$
 - **Micro-Saccade & Blink Momentum Tolerance**: Because velocity ramps with finite acceleration ($a \approx 32\text{ units/s}^2$), a brief $100\text{–}150\text{ ms}$ physiological blink or micro-saccade only begins decelerating positive velocity. The accumulator coasts forward or holds, preventing jarring resets or progress dumps during natural gaze flutter.
-- **Fuzzy Boundary Matching (`error_doubling_distance`)**: For UI buttons ([`DwellButton`](file:///Users/acunningham/src/eyecandy/project/gaze/ui/DwellButton.gd)), near-miss boundary tremors ($10\text{ px}$) incur negligible drain penalty ($\approx 1.1\times$), providing forgiving foveal tolerance. In contrast, an intentional saccade across the display ($300\text{ px}$) scales the drain penalty to $4\times$, purging momentum and draining in $<150\text{ ms}$ so the next target can be acquired immediately.
+- **Fuzzy Boundary Matching (`error_doubling_distance`)**: For dwell UI controls, near-miss boundary tremors ($10\text{ px}$) incur negligible drain penalty ($\approx 1.1\times$), providing forgiving foveal tolerance. In contrast, an intentional saccade across the display ($300\text{ px}$) scales the drain penalty to $4\times$, purging momentum and draining in $<150\text{ ms}$ so the next target can be acquired immediately.
 - **Signal Separation Invariant**: Enforces a strict domain separation bound ($\Delta \ge 0.50$ between empty and full states) preventing accidental activations.
 - **Signals**: `fill_started`, `fill_changed(fill: float)`, `filled`, `emptied`.
 

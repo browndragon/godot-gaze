@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="39" column="13"/>
+        <location file="src/godot/gaze_server.cpp" line="40" column="13"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a140593a52373394f82c4685bc766568e" prot="public" static="no" mutable="no">
         <type>struct <ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">godot::GazeServerImpl::CameraInfo</ref></type>
@@ -33,7 +33,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="43" column="12"/>
+        <location file="src/godot/gaze_server.cpp" line="44" column="12"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1ab6f4f38e6fc62c8c5fa3ba777f47d2ff" prot="public" static="no" mutable="no">
         <type>struct <ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">godot::GazeServerImpl::FaceInfo</ref></type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="54" column="10"/>
+        <location file="src/godot/gaze_server.cpp" line="58" column="10"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a1f6d9c8865a107840770ca888630d6ba" prot="public" static="no" mutable="no">
         <type>struct <ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">godot::GazeServerImpl::EyeInfo</ref></type>
@@ -61,7 +61,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="76" column="9"/>
+        <location file="src/godot/gaze_server.cpp" line="80" column="9"/>
       </memberdef>
       <memberdef kind="variable" id="structgodot_1_1_gaze_server_impl_1a92f1c9184aaa959459c84cce876abf30" prot="public" static="no" mutable="no">
         <type>Ref&lt; <ref refid="classgodot_1_1_gaze_pipeline_config" kindref="compound">GazePipelineConfig</ref> &gt;</type>
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="78" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="78" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="82" column="9" bodyfile="src/godot/gaze_server.cpp" bodystart="82" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -83,40 +83,52 @@
     <detaileddescription>
     </detaileddescription>
     <collaborationgraph>
+      <node id="4">
+        <label>Object</label>
+      </node>
+      <node id="3">
+        <label>godot::GazeDisplayServer</label>
+        <link refid="classgodot_1_1_gaze_display_server"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
       <node id="1">
         <label>godot::GazeServerImpl</label>
         <link refid="structgodot_1_1_gaze_server_impl"/>
         <childnode refid="2" relation="usage">
           <edgelabel>display</edgelabel>
         </childnode>
-        <childnode refid="3" relation="usage">
+        <childnode refid="5" relation="usage">
           <edgelabel>camera</edgelabel>
         </childnode>
-        <childnode refid="4" relation="usage">
+        <childnode refid="6" relation="usage">
           <edgelabel>face</edgelabel>
         </childnode>
-        <childnode refid="5" relation="usage">
+        <childnode refid="7" relation="usage">
           <edgelabel>eye</edgelabel>
         </childnode>
       </node>
-      <node id="3">
+      <node id="5">
         <label>godot::GazeServerImpl::CameraInfo</label>
         <link refid="structgodot_1_1_gaze_server_impl_1_1_camera_info"/>
       </node>
       <node id="2">
         <label>godot::GazeServerImpl::DisplayInfo</label>
         <link refid="structgodot_1_1_gaze_server_impl_1_1_display_info"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>gds</edgelabel>
+        </childnode>
       </node>
-      <node id="5">
+      <node id="7">
         <label>godot::GazeServerImpl::EyeInfo</label>
         <link refid="structgodot_1_1_gaze_server_impl_1_1_eye_info"/>
       </node>
-      <node id="4">
+      <node id="6">
         <label>godot::GazeServerImpl::FaceInfo</label>
         <link refid="structgodot_1_1_gaze_server_impl_1_1_face_info"/>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_server.cpp" line="36" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="36" bodyend="79"/>
+    <location file="src/godot/gaze_server.cpp" line="36" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="36" bodyend="83"/>
     <listofallmembers>
       <member refid="structgodot_1_1_gaze_server_impl_1a140593a52373394f82c4685bc766568e" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>camera</name></member>
       <member refid="structgodot_1_1_gaze_server_impl_1a6429e3701c26355d705624edbd5a1186" prot="public" virt="non-virtual"><scope>godot::GazeServerImpl</scope><name>display</name></member>

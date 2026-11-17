@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_damped_spring_1_1_point2_d" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::DampedSpring::Point2D</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1c7b1c16b7b0455f10417adb6284f66e" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::DampedSpring::Point2D::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::x</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="16" column="15" bodyfile="src/core/damped_spring.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1aa0c67ea2382099b11d8b5123c3ea59" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::DampedSpring::Point2D::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::y</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="17" column="15" bodyfile="src/core/damped_spring.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a5824f51846cf3314ead627f280c1e619" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::DampedSpring::Point2D::Point2D</definition>
+        <argsstring>()=default</argsstring>
+        <name>Point2D</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::Point2D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a526d19ef9f0c77fb9fa4ebe4812d6170" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::DampedSpring::Point2D::Point2D</definition>
+        <argsstring>(float p_x, float p_y)</argsstring>
+        <name>Point2D</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::Point2D</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_x</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>p_y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="19" column="9" bodyfile="src/core/damped_spring.hpp" bodystart="19" bodyend="19"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a82acbe18e1d0b82482ee1ec6ceaa95a1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::DampedSpring::Point2D::operator+</definition>
+        <argsstring>(const Point2D &amp;o) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::operator+</qualifiedname>
+        <param>
+          <type>const Point2D &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="20" column="17" bodyfile="src/core/damped_spring.hpp" bodystart="20" bodyend="20"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a09f02a3f9d3de2bf859a137982aa4878" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::DampedSpring::Point2D::operator-</definition>
+        <argsstring>(const Point2D &amp;o) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::operator-</qualifiedname>
+        <param>
+          <type>const Point2D &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="21" column="17" bodyfile="src/core/damped_spring.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1abb4925abc40393b2c6fbd14b319a32bf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::DampedSpring::Point2D::operator*</definition>
+        <argsstring>(float s) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::operator*</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="22" column="17" bodyfile="src/core/damped_spring.hpp" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_damped_spring_1_1_point2_d_1a80ea62355df05383cb73b08ea2795518" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::DampedSpring::Point2D::length</definition>
+        <argsstring>() const</argsstring>
+        <name>length</name>
+        <qualifiedname>Gaze::DampedSpring::Point2D::length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="23" column="15" bodyfile="src/core/damped_spring.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/damped_spring.hpp" line="15" column="5" bodyfile="src/core/damped_spring.hpp" bodystart="15" bodyend="24"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a80ea62355df05383cb73b08ea2795518" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>length</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1abb4925abc40393b2c6fbd14b319a32bf" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>operator*</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a82acbe18e1d0b82482ee1ec6ceaa95a1" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>operator+</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a09f02a3f9d3de2bf859a137982aa4878" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>operator-</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a5824f51846cf3314ead627f280c1e619" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>Point2D</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a526d19ef9f0c77fb9fa4ebe4812d6170" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>Point2D</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1c7b1c16b7b0455f10417adb6284f66e" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1aa0c67ea2382099b11d8b5123c3ea59" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring::Point2D</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

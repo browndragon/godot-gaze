@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -157,11 +157,23 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa560e9bc3bb60be8aa7220821ad0eb7a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve application window bounding rectangle in logical pixels.  <br /></td></tr>
 <tr class="memitem:a385facf0158530c6ae0fb7ddc0d4bf14" id="r_a385facf0158530c6ae0fb7ddc0d4bf14"><td class="memItemLeft">virtual Vector3&#160;</td><td class="memItemRight"><a class="el" href="#a385facf0158530c6ae0fb7ddc0d4bf14">get_default_camera_offset_mm</a> (int p_screen=-1) const</td></tr>
 <tr class="memdesc:a385facf0158530c6ae0fb7ddc0d4bf14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the default hardware camera placement offset for the display.  <br /></td></tr>
+<tr class="memitem:a2db9b3ee7d0299b77e7279b609567824" id="r_a2db9b3ee7d0299b77e7279b609567824"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a2db9b3ee7d0299b77e7279b609567824">mouse_get_position</a> () const</td></tr>
+<tr class="memdesc:a2db9b3ee7d0299b77e7279b609567824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the current mouse cursor position in logical screen coordinates.  <br /></td></tr>
+<tr class="memitem:a2c065195e453e3fdc4e6b4c08a1563a5" id="r_a2c065195e453e3fdc4e6b4c08a1563a5"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a2c065195e453e3fdc4e6b4c08a1563a5">get_window_mouse_position</a> (int p_window=0) const</td></tr>
+<tr class="memdesc:a2c065195e453e3fdc4e6b4c08a1563a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the current mouse cursor position relative to the application window in logical pixels.  <br /></td></tr>
+<tr class="memitem:af46c5c44cae47f6d06f276fe592c2a46" id="r_af46c5c44cae47f6d06f276fe592c2a46"><td class="memItemLeft">virtual int64_t&#160;</td><td class="memItemRight"><a class="el" href="#af46c5c44cae47f6d06f276fe592c2a46">mouse_get_button_state</a> () const</td></tr>
+<tr class="memdesc:af46c5c44cae47f6d06f276fe592c2a46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.  <br /></td></tr>
+<tr class="memitem:a4b616296f9164d9f815eb5408f163f12" id="r_a4b616296f9164d9f815eb5408f163f12"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a4b616296f9164d9f815eb5408f163f12">parse_mouse_motion</a> (const Vector2 &amp;p_position, const Vector2 &amp;p_relative, const Vector2 &amp;p_velocity)</td></tr>
+<tr class="memdesc:a4b616296f9164d9f815eb5408f163f12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch emulated synthetic mouse motion to the engine input queue.  <br /></td></tr>
+<tr class="memitem:a49a158a4bcfa6d5b549b871e12960ce7" id="r_a49a158a4bcfa6d5b549b871e12960ce7"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a49a158a4bcfa6d5b549b871e12960ce7">parse_mouse_button</a> (int64_t p_button, bool p_pressed, const Vector2 &amp;p_position)</td></tr>
+<tr class="memdesc:a49a158a4bcfa6d5b549b871e12960ce7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch emulated synthetic mouse button event to the engine input queue.  <br /></td></tr>
+<tr class="memitem:ae6d36dd5c45e4a3cf05a9658d8c029ad" id="r_ae6d36dd5c45e4a3cf05a9658d8c029ad"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="#ae6d36dd5c45e4a3cf05a9658d8c029ad">window_px_to_canvas</a> (const Vector2 &amp;p_win_pos, const CanvasItem *p_local_to=nullptr) const</td></tr>
+<tr class="memdesc:ae6d36dd5c45e4a3cf05a9658d8c029ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform a window-local coordinate in logical pixels to canonical viewport canvas space.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4497e3c5df05fa0b65cfaab9227f2ecb" id="r_a4497e3c5df05fa0b65cfaab9227f2ecb"><td class="memItemLeft">static GazeDisplayServer *&#160;</td><td class="memItemRight"><a class="el" href="#a4497e3c5df05fa0b65cfaab9227f2ecb">get_singleton</a> ()</td></tr>
-<tr class="memdesc:a4497e3c5df05fa0b65cfaab9227f2ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_gaze_display_server.html" title="Singleton query server providing physical display geometry, scale factors, and hardware camera offset...">GazeDisplayServer</a> global singleton instance.  <br /></td></tr>
+<tr class="memitem:a0003a6a08e0d79e2f56a09550717f9eb" id="r_a0003a6a08e0d79e2f56a09550717f9eb"><td class="memItemLeft">static GazeDisplayServer *&#160;</td><td class="memItemRight"><a class="el" href="#a0003a6a08e0d79e2f56a09550717f9eb">get_singleton</a> ()</td></tr>
+<tr class="memdesc:a0003a6a08e0d79e2f56a09550717f9eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_gaze_display_server.html" title="Singleton query server providing physical display geometry, scale factors, and hardware camera offset...">GazeDisplayServer</a> global singleton instance.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -349,8 +361,8 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 
 </div>
 </div>
-<a id="a4497e3c5df05fa0b65cfaab9227f2ecb" name="a4497e3c5df05fa0b65cfaab9227f2ecb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4497e3c5df05fa0b65cfaab9227f2ecb">&#9670;&#160;</a></span>get_singleton()</h2>
+<a id="a0003a6a08e0d79e2f56a09550717f9eb" name="a0003a6a08e0d79e2f56a09550717f9eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0003a6a08e0d79e2f56a09550717f9eb">&#9670;&#160;</a></span>get_singleton()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -367,13 +379,47 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel static">static</span></span>  </td>
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
 <p>Get the <a class="el" href="classgodot_1_1_gaze_display_server.html" title="Singleton query server providing physical display geometry, scale factors, and hardware camera offset...">GazeDisplayServer</a> global singleton instance. </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to the singleton instance. </dd></dl>
+
+</div>
+</div>
+<a id="a2c065195e453e3fdc4e6b4c08a1563a5" name="a2c065195e453e3fdc4e6b4c08a1563a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c065195e453e3fdc4e6b4c08a1563a5">&#9670;&#160;</a></span>get_window_mouse_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeDisplayServer::get_window_mouse_position </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>p_window</em></span><span class="paramdefsep"> = </span><span class="paramdefval">0</span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the current mouse cursor position relative to the application window in logical pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_window</td><td>Window index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Window mouse position Vector2(x, y). </dd></dl>
 
 </div>
 </div>
@@ -410,6 +456,197 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Window Rect2i(x, y, width, height). </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#ac558a079342a017ee92b0db0c155a0ba">godot::MockGazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="af46c5c44cae47f6d06f276fe592c2a46" name="af46c5c44cae47f6d06f276fe592c2a46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af46c5c44cae47f6d06f276fe592c2a46">&#9670;&#160;</a></span>mouse_get_button_state()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t godot::GazeDisplayServer::mouse_get_button_state </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer. </p>
+<dl class="section return"><dt>Returns</dt><dd>Bitmask of pressed mouse buttons. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a647dcd08160452abf872d27fd364d9b2">godot::MockGazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a2db9b3ee7d0299b77e7279b609567824" name="a2db9b3ee7d0299b77e7279b609567824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2db9b3ee7d0299b77e7279b609567824">&#9670;&#160;</a></span>mouse_get_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeDisplayServer::mouse_get_position </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the current mouse cursor position in logical screen coordinates. </p>
+<dl class="section return"><dt>Returns</dt><dd>Screen mouse position Vector2(x, y). </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a9ef33ea07836903cd2d89632344907d7">godot::MockGazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a49a158a4bcfa6d5b549b871e12960ce7" name="a49a158a4bcfa6d5b549b871e12960ce7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a158a4bcfa6d5b549b871e12960ce7">&#9670;&#160;</a></span>parse_mouse_button()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeDisplayServer::parse_mouse_button </td>
+          <td>(</td>
+          <td class="paramtype">int64_t</td>          <td class="paramname"><span class="paramname"><em>p_button</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>p_pressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_position</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dispatch emulated synthetic mouse button event to the engine input queue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_button</td><td>Mouse button index. </td></tr>
+    <tr><td class="paramname">p_pressed</td><td>True for press, false for release. </td></tr>
+    <tr><td class="paramname">p_position</td><td>Canvas position where the click occurred. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a0523728bd4967d0edcbebb7e4832bed1">godot::MockGazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a4b616296f9164d9f815eb5408f163f12" name="a4b616296f9164d9f815eb5408f163f12"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b616296f9164d9f815eb5408f163f12">&#9670;&#160;</a></span>parse_mouse_motion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeDisplayServer::parse_mouse_motion </td>
+          <td>(</td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_relative</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_velocity</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dispatch emulated synthetic mouse motion to the engine input queue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_position</td><td>Canonical canvas position. </td></tr>
+    <tr><td class="paramname">p_relative</td><td>Relative motion vector. </td></tr>
+    <tr><td class="paramname">p_velocity</td><td>Velocity vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_gaze_display_server.html#a28b0a8ed5b4fa05bced562c47130fbda">godot::MockGazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="ae6d36dd5c45e4a3cf05a9658d8c029ad" name="ae6d36dd5c45e4a3cf05a9658d8c029ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6d36dd5c45e4a3cf05a9658d8c029ad">&#9670;&#160;</a></span>window_px_to_canvas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeDisplayServer::window_px_to_canvas </td>
+          <td>(</td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_win_pos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CanvasItem *</td>          <td class="paramname"><span class="paramname"><em>p_local_to</em></span><span class="paramdefsep"> = </span><span class="paramdefval">nullptr</span>&#160;) const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transform a window-local coordinate in logical pixels to canonical viewport canvas space. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_win_pos</td><td>Window position in logical pixels. </td></tr>
+    <tr><td class="paramname">p_local_to</td><td>Optional target CanvasItem (null for root viewport canvas space). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Canonical canvas coordinate. </dd></dl>
 
 </div>
 </div>

@@ -1,4 +1,31 @@
 var searchData=
 [
-  ['3_20basic_20gdscript_20usage_0',['3. Basic GDScript Usage',['../index.html#autotoc_md13',1,'']]]
+  ['1_200_0',['Godot Gaze (&lt;span class=&quot;tt&quot;&gt;v0.1.0&lt;/span&gt;)',['../index.html',1,'']]],
+  ['1_201_20inference_20camera_20space_20opencv_20standard_1',['1.1. Inference Camera Space (OpenCV Standard)',['../md_docs_2mathematical__model.html#autotoc_md70',1,'']]],
+  ['1_201_20zero_20allocation_20memory_20model_2',['1.1. Zero-Allocation Memory Model',['../md_docs_2vision__models.html#autotoc_md97',1,'']]],
+  ['1_202_20canonical_2035_20point_20anthropometric_203d_20face_20model_3',['1.2. Canonical 35-Point Anthropometric 3D Face Model',['../md_docs_2mathematical__model.html#autotoc_md71',1,'']]],
+  ['1_202_20platform_20specific_20camera_20ingestion_20details_4',['1.2. Platform-Specific Camera Ingestion Details',['../md_docs_2vision__models.html#autotoc_md98',1,'']]],
+  ['1_203_20godot_20camera_20space_20standard_20graphics_20camera_20space_5',['1.3. Godot Camera Space (Standard Graphics Camera Space)',['../md_docs_2mathematical__model.html#autotoc_md72',1,'']]],
+  ['1_203d_20ray_20plane_20intersection_6',['3.1. 3D Ray-Plane Intersection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md82',1,'']]],
+  ['1_204_20head_20pose_20pnp_20solvers_20sqpnp_20levenberg_20marquardt_7',['1.4. Head Pose PnP Solvers (SQPnP &amp;amp; Levenberg-Marquardt)',['../md_docs_2mathematical__model.html#autotoc_md73',1,'']]],
+  ['1_205_20continuous_20head_20roll_20un_20rotation_20feedback_20loop_8',['1.5. Continuous Head Roll Un-Rotation Feedback Loop',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md74',1,'']]],
+  ['1_206_20physical_20display_20space_20monitor_20local_20space_9',['1.6. Physical Display Space (Monitor Local Space)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md75',1,'']]],
+  ['1_207_20os_20window_20space_20logical_20pixels_20lpix_10',['1.7. OS Window Space (Logical Pixels / &lt;span class=&quot;tt&quot;&gt;lpix&lt;/span&gt;)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md76',1,'']]],
+  ['1_208_20godot_20viewport_20canvas_202d_20space_11',['1.8. Godot Viewport Canvas 2D Space',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md77',1,'']]],
+  ['1_20architectural_20rationale_3a_20why_20not_20rely_20on_20godot_20s_20displayserver_12',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]],
+  ['1_20architectural_20topology_13',['1. Architectural Topology',['../md_docs_2architecture.html#autotoc_md34',1,'']]],
+  ['1_20camera_20ingestion_20architecture_20color_20formats_14',['1. Camera Ingestion Architecture &amp;amp; Color Formats',['../md_docs_2vision__models.html#autotoc_md96',1,'']]],
+  ['1_20coordinate_20systems_20facial_20geometry_15',['1. Coordinate Systems &amp;amp; Facial Geometry',['../md_docs_2mathematical__model.html#autotoc_md69',1,'']]],
+  ['1_20executive_20summary_20benchmark_20matrix_16',['1. Executive Summary &amp;amp; Benchmark Matrix',['../md_docs_2gaze__model__evaluation.html#autotoc_md113',1,'']]],
+  ['1_20first_20class_20events_3a_20inputeventgazebase_20inputeventgaze_20inputeventgazemissing_17',['6.1. First-Class Events: &lt;span class=&quot;tt&quot;&gt;InputEventGazeBase&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;',['../md_docs_2architecture.html#autotoc_md46',1,'']]],
+  ['1_20frequently_20asserted_20quibbles_20technical_20traps_18',['1. Frequently Asserted Quibbles &amp;amp; Technical Traps',['../md_docs_2rejected__designs.html#autotoc_md130',1,'']]],
+  ['1_20inference_20camera_20space_20opencv_20standard_19',['1.1. Inference Camera Space (OpenCV Standard)',['../md_docs_2mathematical__model.html#autotoc_md70',1,'']]],
+  ['1_20input_20feature_20preprocessing_20',['6.1. Input Feature Preprocessing',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md92',1,'']]],
+  ['1_20lifecycle_20management_20with_20gazetracker_21',['1. Lifecycle Management with &lt;span class=&quot;tt&quot;&gt;GazeTracker&lt;/span&gt;',['../index.html#autotoc_md13',1,'']]],
+  ['1_20model_20specification_20matrix_22',['2.1. Model Specification Matrix',['../md_docs_2vision__models.html#autotoc_md101',1,'']]],
+  ['1_20overview_3a_20the_20reference_20counted_20lifecycle_20model_23',['1. Overview: The Reference-Counted Lifecycle Model',['../md_docs_2lifecycle__tracking.html#autotoc_md56',1,'']]],
+  ['1_20yunet_20face_20detector_20ortyunetdetector_24',['3.1. YuNet Face Detector (&lt;span class=&quot;tt&quot;&gt;ORTYuNetDetector&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md104',1,'']]],
+  ['1_20zero_20allocation_20memory_20model_25',['1.1. Zero-Allocation Memory Model',['../md_docs_2vision__models.html#autotoc_md97',1,'']]],
+  ['12–150_20ms_20discrepancy_26',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]],
+  ['1_3a_20prebuilt_20release_20godot_20gaze_20zip_27',['Option 1: Prebuilt Release (&lt;span class=&quot;tt&quot;&gt;godot-gaze.zip&lt;/span&gt;)',['../index.html#autotoc_md9',1,'']]]
 ];

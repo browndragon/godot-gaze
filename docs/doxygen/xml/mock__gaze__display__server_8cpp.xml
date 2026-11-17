@@ -4,6 +4,8 @@
     <compoundname>mock_gaze_display_server.cpp</compoundname>
     <includes refid="mock__gaze__display__server_8hpp" local="yes">mock_gaze_display_server.hpp</includes>
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <includes local="no">godot_cpp/classes/input_event_mouse_motion.hpp</includes>
+    <includes local="no">godot_cpp/classes/input_event_mouse_button.hpp</includes>
     <incdepgraph>
       <node id="3">
         <label>gaze_display_server.hpp</label>
@@ -22,7 +24,11 @@
         <link refid="mock__gaze__display__server_8cpp"/>
         <childnode refid="2" relation="include">
         </childnode>
-        <childnode refid="8" relation="include">
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -30,15 +36,31 @@
         <link refid="mock__gaze__display__server_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>godot_cpp/classes/input_event.hpp</label>
+      </node>
+      <node id="12">
+        <label>godot_cpp/classes/input_event_mouse_button.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/input_event_mouse_motion.hpp</label>
       </node>
       <node id="4">
         <label>godot_cpp/classes/object.hpp</label>
       </node>
-      <node id="8">
+      <node id="10">
         <label>godot_cpp/core/class_db.hpp</label>
       </node>
       <node id="7">
         <label>godot_cpp/variant/rect2i.hpp</label>
+      </node>
+      <node id="9">
+        <label>godot_cpp/variant/typed_array.hpp</label>
       </node>
       <node id="5">
         <label>godot_cpp/variant/vector2.hpp</label>
@@ -55,55 +77,111 @@
     <programlisting>
 <codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;mock_gaze_display_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="3"><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input_event_mouse_motion.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input_event_mouse_button.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="5"><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="7"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_size_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;size_mm&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_size_mm);</highlight></codeline>
-<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_size_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;size_pixels&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_size_pixels);</highlight></codeline>
-<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_window_rect_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rect&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_window_rect_pixels);</highlight></codeline>
-<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_scale&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;scale&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_scale);</highlight></codeline>
-<codeline lineno="11"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="12"><highlight class="normal"></highlight></codeline>
-<codeline lineno="13"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ab5a25d0e4dba60296abd18d7544345a2" kindref="member">MockGazeDisplayServer::get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_size_mm;</highlight></codeline>
-<codeline lineno="15"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="16"><highlight class="normal"></highlight></codeline>
-<codeline lineno="17"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a5855a513786da0d611d1de43630ca20c" kindref="member">MockGazeDisplayServer::get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_size_pixels;</highlight></codeline>
-<codeline lineno="19"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ae5e5f53314ead3fe8521c60656625769" kindref="member">MockGazeDisplayServer::get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>px<sp/>=<sp/>(mock_screen_size_pixels.x<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mock_screen_size_mm.x<sp/>/<sp/>mock_screen_size_pixels.x)<sp/>:<sp/>0.20;</highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>py<sp/>=<sp/>(mock_screen_size_pixels.y<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mock_screen_size_mm.y<sp/>/<sp/>mock_screen_size_pixels.y)<sp/>:<sp/>0.20;</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(px,<sp/>py);</highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="9"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_size_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;size_mm&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_size_mm);</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_size_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;size_pixels&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_size_pixels);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_window_rect_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;rect&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_window_rect_pixels);</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_screen_scale&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;scale&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_screen_scale);</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_mouse_position&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;position&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_mouse_position);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_mouse_button_state&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;mask&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::set_mouse_button_state);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_emitted_mouse_events&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::get_emitted_mouse_events);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;clear_emitted_mouse_events&quot;</highlight><highlight class="normal">),<sp/>&amp;MockGazeDisplayServer::clear_emitted_mouse_events);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ab5a25d0e4dba60296abd18d7544345a2" kindref="member">MockGazeDisplayServer::get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_size_mm;</highlight></codeline>
+<codeline lineno="21"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a5855a513786da0d611d1de43630ca20c" kindref="member">MockGazeDisplayServer::get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_size_pixels;</highlight></codeline>
 <codeline lineno="25"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="26"><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a4e2f80ac63e79325e85a531e98f31549" kindref="member">MockGazeDisplayServer::get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_scale;</highlight></codeline>
-<codeline lineno="29"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal">Rect2i<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ac558a079342a017ee92b0db0c155a0ba" kindref="member">MockGazeDisplayServer::get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_window_rect;</highlight></codeline>
-<codeline lineno="33"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_size_mm(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_mm)<sp/>{</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_size_mm<sp/>=<sp/>p_size_mm;</highlight></codeline>
-<codeline lineno="37"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_size_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_pixels)<sp/>{</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_size_pixels<sp/>=<sp/>p_size_pixels;</highlight></codeline>
-<codeline lineno="41"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"></highlight></codeline>
-<codeline lineno="43"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_window_rect_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Rect2i<sp/>&amp;p_rect)<sp/>{</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_window_rect<sp/>=<sp/>p_rect;</highlight></codeline>
-<codeline lineno="45"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"></highlight></codeline>
-<codeline lineno="47"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_scale(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_scale)<sp/>{</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_scale<sp/>=<sp/>p_scale;</highlight></codeline>
-<codeline lineno="49"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"></highlight></codeline>
-<codeline lineno="51"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ae5e5f53314ead3fe8521c60656625769" kindref="member">MockGazeDisplayServer::get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>px<sp/>=<sp/>(mock_screen_size_pixels.x<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mock_screen_size_mm.x<sp/>/<sp/>mock_screen_size_pixels.x)<sp/>:<sp/>0.20;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>py<sp/>=<sp/>(mock_screen_size_pixels.y<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mock_screen_size_mm.y<sp/>/<sp/>mock_screen_size_pixels.y)<sp/>:<sp/>0.20;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(px,<sp/>py);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a4e2f80ac63e79325e85a531e98f31549" kindref="member">MockGazeDisplayServer::get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_screen_scale;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">Rect2i<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ac558a079342a017ee92b0db0c155a0ba" kindref="member">MockGazeDisplayServer::get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_window_rect;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a9ef33ea07836903cd2d89632344907d7" kindref="member">MockGazeDisplayServer::mouse_get_position</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_mouse_position;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal">int64_t<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a647dcd08160452abf872d27fd364d9b2" kindref="member">MockGazeDisplayServer::mouse_get_button_state</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>mock_mouse_button_state;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a28b0a8ed5b4fa05bced562c47130fbda" kindref="member">MockGazeDisplayServer::parse_mouse_motion</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_relative,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_velocity)<sp/>{</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" kindref="member">GazeDisplayServer::parse_mouse_motion</ref>(p_position,<sp/>p_relative,<sp/>p_velocity);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventMouseMotion&gt;<sp/>mm;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>mm.instantiate();</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_device(-1);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_meta(</highlight><highlight class="stringliteral">&quot;synthetic_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_position(p_position);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_global_position(p_position);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_relative(p_relative);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_velocity(p_velocity);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>emitted_mouse_events.push_back(mm);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a0523728bd4967d0edcbebb7e4832bed1" kindref="member">MockGazeDisplayServer::parse_mouse_button</ref>(int64_t<sp/>p_button,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_pressed,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position)<sp/>{</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" kindref="member">GazeDisplayServer::parse_mouse_button</ref>(p_button,<sp/>p_pressed,<sp/>p_position);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventMouseButton&gt;<sp/>mb;</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>mb.instantiate();</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_device(-1);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_meta(</highlight><highlight class="stringliteral">&quot;synthetic_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_button_index((MouseButton)p_button);</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_pressed(p_pressed);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_position(p_position);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_global_position(p_position);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>emitted_mouse_events.push_back(mb);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_size_mm(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_mm)<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_size_mm<sp/>=<sp/>p_size_mm;</highlight></codeline>
+<codeline lineno="77"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"></highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_size_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_pixels)<sp/>{</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_size_pixels<sp/>=<sp/>p_size_pixels;</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_window_rect_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Rect2i<sp/>&amp;p_rect)<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_window_rect<sp/>=<sp/>p_rect;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"></highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_screen_scale(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_scale)<sp/>{</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_screen_scale<sp/>=<sp/>p_scale;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_mouse_position(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos)<sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_mouse_position<sp/>=<sp/>p_pos;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="95"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::set_mouse_button_state(int64_t<sp/>p_mask)<sp/>{</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>mock_mouse_button_state<sp/>=<sp/>p_mask;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal">TypedArray&lt;InputEvent&gt;<sp/>MockGazeDisplayServer::get_emitted_mouse_events()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>emitted_mouse_events;</highlight></codeline>
+<codeline lineno="101"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"></highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>MockGazeDisplayServer::clear_emitted_mouse_events()<sp/>{</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>emitted_mouse_events.clear();</highlight></codeline>
+<codeline lineno="105"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"></highlight></codeline>
+<codeline lineno="107"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/mock_gaze_display_server.cpp"/>
   </compounddef>

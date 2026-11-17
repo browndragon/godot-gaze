@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -159,8 +159,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:acec2f233fd39338f85b9e69afb6ce2ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the reason why gaze tracking was not achieved for this frame.  <br /></td></tr>
 <tr class="memitem:a92cabd4dee375c9ea5cd79f7ac577500" id="r_a92cabd4dee375c9ea5cd79f7ac577500"><td class="memItemLeft">MissingReason&#160;</td><td class="memItemRight"><a class="el" href="#a92cabd4dee375c9ea5cd79f7ac577500">get_reason</a> () const</td></tr>
 <tr class="memdesc:a92cabd4dee375c9ea5cd79f7ac577500"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the reason why gaze tracking was not achieved for this frame.  <br /></td></tr>
-<tr class="memitem:a6f2fcf8119c8f5ed44bbec80a6ea8fa3" id="r_a6f2fcf8119c8f5ed44bbec80a6ea8fa3"><td class="memItemLeft"><a id="a6f2fcf8119c8f5ed44bbec80a6ea8fa3" name="a6f2fcf8119c8f5ed44bbec80a6ea8fa3"></a>
-void&#160;</td><td class="memItemRight"><b>copy_from</b> (const Ref&lt; InputEventGazeMissing &gt; &amp;p_other)</td></tr>
+<tr class="memitem:a973631e280f681083b049e1cab2671fa" id="r_a973631e280f681083b049e1cab2671fa"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a973631e280f681083b049e1cab2671fa">copy_from</a> (const Ref&lt; InputEventGazeBase &gt; &amp;p_other) override</td></tr>
 <tr class="memitem:a0c3df13f1e310781113e97249c9149ac" id="r_a0c3df13f1e310781113e97249c9149ac"><td class="memItemLeft"><a id="a0c3df13f1e310781113e97249c9149ac" name="a0c3df13f1e310781113e97249c9149ac"></a>
 String&#160;</td><td class="memItemRight"><b>as_text</b> () const</td></tr>
 <tr class="inherit_header pub_methods_classgodot_1_1_input_event_gaze_base"><td colspan="2">Public Member Functions inherited from <a class="el" href="classgodot_1_1_input_event_gaze_base.html">godot::InputEventGazeBase</a></td></tr>
@@ -184,8 +183,6 @@ int64_t&#160;</td><td class="memItemRight"><b>get_window_id</b> () const</td></t
 <tr class="memdesc:adc3848db74215ffe8d35c82e3f3f677f pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
 <tr class="memitem:a8f174a146075dcd7dd371f9618598257 pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a8f174a146075dcd7dd371f9618598257"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_input_event_gaze_base.html#a8f174a146075dcd7dd371f9618598257">get_right_eye_openness</a> () const</td></tr>
 <tr class="memdesc:a8f174a146075dcd7dd371f9618598257 pub_methods_classgodot_1_1_input_event_gaze_base"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].  <br /></td></tr>
-<tr class="memitem:a7ceed2d09d3e1b059ad3e1bd32b172bf pub_methods_classgodot_1_1_input_event_gaze_base" id="r_a7ceed2d09d3e1b059ad3e1bd32b172bf"><td class="memItemLeft">
-void&#160;</td><td class="memItemRight"><b>copy_from</b> (const Ref&lt; InputEventGazeBase &gt; &amp;p_other)</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -212,6 +209,33 @@ float&#160;</td><td class="memItemRight"><b>right_eye_openness</b> = 0.0f</td></
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Input event emitted when face or eye tracking is lost or during full blink. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a973631e280f681083b049e1cab2671fa" name="a973631e280f681083b049e1cab2671fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a973631e280f681083b049e1cab2671fa">&#9670;&#160;</a></span>copy_from()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::InputEventGazeMissing::copy_from </td>
+          <td>(</td>
+          <td class="paramtype">const Ref&lt; InputEventGazeBase &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>p_other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_input_event_gaze_base.html">godot::InputEventGazeBase</a>.</p>
+
+</div>
+</div>
 <a id="a92cabd4dee375c9ea5cd79f7ac577500" name="a92cabd4dee375c9ea5cd79f7ac577500"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a92cabd4dee375c9ea5cd79f7ac577500">&#9670;&#160;</a></span>get_reason()</h2>
 

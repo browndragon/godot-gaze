@@ -1,5 +1,30 @@
 var searchData=
 [
-  ['layer_0',['Layer',['../dir_aebb8dcc11953d78e620bbef0b9e2183.html#autotoc_md0',1,'Core Layer'],['../dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0.html#autotoc_md1',1,'Godot GDExtension Layer'],['../dir_f511ba0178b53c726d0a84462dac4106.html#autotoc_md2',1,'Native Layer'],['../dir_0d4dde2834ed44e47b6207c19e4aac26.html#autotoc_md3',1,'Web Platform Layer']]],
-  ['local_20development_20symlinking_20for_20contributors_1',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]]
+  ['debug_5fcam_5ffeed_20tscn_0',['Camera &amp;amp; Landmark Overlay (&lt;span class=&quot;tt&quot;&gt;debug_cam_feed.tscn&lt;/span&gt;)',['../index.html#autotoc_md23',1,'']]],
+  ['debugging_1',['Device Calibration &amp;amp; Visual Debugging',['../index.html#autotoc_md21',1,'']]],
+  ['decision_20future_20swappable_20strategy_2',['5. Architectural Decision &amp;amp; Future Swappable Strategy',['../md_docs_2gaze__model__evaluation.html#autotoc_md124',1,'']]],
+  ['decision_3a_20openvino_20adas_200002_20remains_20default_3',['A. Production Decision: OpenVINO ADAS-0002 Remains Default',['../md_docs_2gaze__model__evaluation.html#autotoc_md125',1,'']]],
+  ['declarative_20scene_20node_20gazetracker_4',['Pattern A: Declarative Scene Node (&lt;span class=&quot;tt&quot;&gt;GazeTracker&lt;/span&gt;)',['../md_docs_2lifecycle__tracking.html#autotoc_md60',1,'']]],
+  ['deconstructing_20the_20800_20fps_20vs_2012–150_20ms_20discrepancy_5',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]],
+  ['deep_20dives_6',['Documentation &amp;amp; Deep Dives',['../index.html#autotoc_md31',1,'']]],
+  ['default_7',['A. Production Decision: OpenVINO ADAS-0002 Remains Default',['../md_docs_2gaze__model__evaluation.html#autotoc_md125',1,'']]],
+  ['denominator_8',['4. Hardware &amp;amp; Memory Model: Why CPU RAM is the Common Denominator',['../md_docs_2architecture.html#autotoc_md40',1,'']]],
+  ['depth_20triangulation_20z_20engine_9',['5. Real-Time Depth Triangulation (Z Engine)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md89',1,'']]],
+  ['designs_20anti_20patterns_10',['Rejected Designs &amp;amp; Anti-Patterns',['../md_docs_2rejected__designs.html',1,'']]],
+  ['detailed_20model_20specifications_11',['3. Detailed Model Specifications',['../md_docs_2vision__models.html#autotoc_md103',1,'']]],
+  ['details_12',['1.2. Platform-Specific Camera Ingestion Details',['../md_docs_2vision__models.html#autotoc_md98',1,'']]],
+  ['detector_20ortyunetdetector_13',['3.1. YuNet Face Detector (&lt;span class=&quot;tt&quot;&gt;ORTYuNetDetector&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md104',1,'']]],
+  ['device_20calibration_20visual_20debugging_14',['Device Calibration &amp;amp; Visual Debugging',['../index.html#autotoc_md21',1,'']]],
+  ['device_20profiles_20interactive_20calibration_20wizard_15',['Device Profiles &amp;amp; Interactive Calibration Wizard',['../index.html#autotoc_md22',1,'']]],
+  ['direct_20server_20apis_20advanced_16',['3. Direct Server APIs (Advanced)',['../md_docs_2lifecycle__tracking.html#autotoc_md66',1,'']]],
+  ['directfacegazeestimator_17',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['discrepancy_18',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]],
+  ['display_20orientation_20side_20bezel_20geometry_20_24t_5f_20camera_20viewport_20_24_19',['3.3. Unified Gravity-Aware Display Orientation &amp;amp; Side-Bezel Geometry ($T_{\\text{camera} \\to \\text{viewport}}$)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md84',1,'']]],
+  ['display_20space_20monitor_20local_20space_20',['1.6. Physical Display Space (Monitor Local Space)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md75',1,'']]],
+  ['displayserver_21',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]],
+  ['dives_22',['Documentation &amp;amp; Deep Dives',['../index.html#autotoc_md31',1,'']]],
+  ['documentation_20deep_20dives_23',['Documentation &amp;amp; Deep Dives',['../index.html#autotoc_md31',1,'']]],
+  ['dwell_20interactions_20fillaccumulator_24',['3. Inertial Dwell Interactions (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../index.html#autotoc_md15',1,'']]],
+  ['dwell_20mechanics_20fillaccumulator_25',['6.3. Inertial Dwell Mechanics (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md48',1,'']]],
+  ['dynamic_20range_20vs_20automotive_20bias_26',['3. Peripheral Dynamic Range vs. Automotive Bias',['../md_docs_2gaze__model__evaluation.html#autotoc_md119',1,'']]]
 ];

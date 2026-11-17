@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Build ${{ matrix.platform }} (${{ matrix.target }}${{ matrix.threads && format(', threads={0}', matrix.threads) || '' }})
+    name: Build ${{ matrix.platform }} (${{ matrix.target }}, ${{ matrix.variant }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: true
@@ -17,104 +17,123 @@ jobs:
           - platform: macos
             os: macos-latest
             target: template_debug
+            variant: arm64
             scons_flags: ""
           - platform: macos
             os: macos-latest
             target: template_release
+            variant: arm64
             scons_flags: ""
           - platform: macos
             os: macos-latest
             target: editor
+            variant: arm64
             scons_flags: ""
 
           - platform: windows
             os: windows-latest
             target: template_debug
+            variant: x86_64
             scons_flags: ""
           - platform: windows
             os: windows-latest
             target: template_release
+            variant: x86_64
             scons_flags: ""
           - platform: windows
             os: windows-latest
             target: editor
+            variant: x86_64
             scons_flags: ""
 
           - platform: linux
             os: ubuntu-latest
             target: template_debug
+            variant: x86_64
             scons_flags: ""
           - platform: linux
             os: ubuntu-latest
             target: template_release
+            variant: x86_64
             scons_flags: ""
           - platform: linux
             os: ubuntu-latest
             target: editor
+            variant: x86_64
             scons_flags: ""
 
           - platform: android
             os: ubuntu-latest
             target: template_debug
+            variant: arm64
             scons_flags: "arch=arm64"
           - platform: android
             os: ubuntu-latest
             target: template_release
+            variant: arm64
             scons_flags: "arch=arm64"
           - platform: android
             os: ubuntu-latest
             target: template_debug
+            variant: x86_64
             scons_flags: "arch=x86_64"
           - platform: android
             os: ubuntu-latest
             target: template_release
+            variant: x86_64
             scons_flags: "arch=x86_64"
           - platform: android
             os: ubuntu-latest
             target: editor
+            variant: arm64
             scons_flags: "arch=arm64"
           - platform: android
             os: ubuntu-latest
             target: editor
+            variant: x86_64
             scons_flags: "arch=x86_64"
 
           # Note: Godot does not support running the Godot Editor on iOS, so no iOS editor target is compiled.
           - platform: ios
             os: macos-latest
             target: template_debug
+            variant: device-arm64
             scons_flags: "ios_simulator=no arch=arm64"
           - platform: ios
             os: macos-latest
             target: template_release
+            variant: device-arm64
             scons_flags: "ios_simulator=no arch=arm64"
           - platform: ios
             os: macos-latest
             target: template_debug
+            variant: sim-arm64
             scons_flags: "ios_simulator=yes arch=arm64"
           - platform: ios
             os: macos-latest
             target: template_release
+            variant: sim-arm64
             scons_flags: "ios_simulator=yes arch=arm64"
 
           - platform: web
             os: ubuntu-latest
             target: template_debug
-            threads: "no"
+            variant: nothreads
             scons_flags: "threads=no"
           - platform: web
             os: ubuntu-latest
             target: template_release
-            threads: "no"
+            variant: nothreads
             scons_flags: "threads=no"
           - platform: web
             os: ubuntu-latest
             target: template_debug
-            threads: "yes"
+            variant: threads
             scons_flags: "threads=yes"
           - platform: web
             os: ubuntu-latest
             target: template_release
-            threads: "yes"
+            variant: threads
             scons_flags: "threads=yes"
 
     steps:
@@ -127,7 +146,12 @@ jobs:
           python-version: '3.11'
 
       - name: Install SCons and dependencies
-        run: pip install scons flatbuffers
+        shell: bash
+        run: |
+          pip install scons flatbuffers
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            pip install patchelf
+          fi
 
       - name: Checkout godot-cpp submodule
         run: git submodule update --init --recursive --depth 1 thirdparty/godot-cpp
@@ -136,9 +160,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: build/godot-cpp
-          key: godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.threads || 'nothreads' }}-${{ hashFiles('.gitmodules', 'SConstruct') }}
+          key: godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.variant }}-${{ hashFiles('.gitmodules', 'SConstruct') }}
           restore-keys: |
-            godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.threads || 'nothreads' }}-
+            godot-cpp-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.variant }}-
 
       - name: Clean pre-existing binaries
         shell: bash
@@ -148,9 +172,6 @@ jobs:
           rm -f project/addons/godot-gaze/bin/*.so
           rm -f project/addons/godot-gaze/bin/*.a
           rm -f project/addons/godot-gaze/bin/*.wasm
-
-      # Platform-specific dependency steps
-
 
       - name: Cache Android NDK
         if: matrix.platform == 'android'
@@ -167,15 +188,11 @@ jobs:
         run: |
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.1.13356709"
 
-
-
       - name: Setup dependencies (Web Emscripten)
         if: matrix.platform == 'web'
         uses: mymindstorm/setup-emsdk@v14
         with:
           version: '4.0.20'
-
-
 
       # Compilation step
       - name: Build GDExtension
@@ -185,12 +202,17 @@ jobs:
         env:
           ANDROID_NDK_ROOT: /usr/local/lib/android/sdk/ndk/28.1.13356709
 
-
+      - name: Clean intermediate symlinks and import libs before upload
+        if: matrix.platform == 'macos' || matrix.platform == 'windows'
+        shell: bash
+        run: |
+          rm -f project/addons/godot-gaze/bin/libonnxruntime.1.dylib
+          rm -f project/addons/godot-gaze/bin/*.lib
 
       - name: Upload Binaries
         uses: actions/upload-artifact@v4
         with:
-          name: bin-${{ matrix.platform }}-${{ matrix.target }}${{ matrix.threads && format('-threads-{0}', matrix.threads) || '' }}
+          name: bin-${{ matrix.platform }}-${{ matrix.target }}-${{ matrix.variant }}
           path: project/addons/godot-gaze/bin/
           if-no-files-found: warn
 
@@ -213,35 +235,20 @@ jobs:
 
       - name: Install dependencies for model conversion
         run: |
-          pip install numpy openvino2onnx onnx onnxruntime tensorflow tf2onnx
+          pip install numpy openvino2onnx onnx "onnxruntime==1.28.0"
 
-      - name: Download Models
-        shell: bash
-        run: bash scripts/download_models.sh
-
-      - name: Convert OpenVINO Models to ONNX and ORT
+      - name: Download and Convert Models
         shell: bash
         run: |
-          python3 scripts/convert_model.py
-          for model in gaze-estimation-adas-0002 facial-landmarks-35-adas-0002; do
-            if [ -f "project/addons/godot-gaze/models/${model}.onnx" ]; then
-              python3 -m onnxruntime.tools.convert_onnx_models_to_ort --optimization_style=Runtime "project/addons/godot-gaze/models/${model}.onnx"
-              if [ -f "project/addons/godot-gaze/models/${model}.with_runtime_opt.ort" ]; then
-                mv "project/addons/godot-gaze/models/${model}.with_runtime_opt.ort" "project/addons/godot-gaze/models/${model}.ort"
-              fi
-            fi
-          done
-          # Clean up config if needed
-          if [ -f project/addons/godot-gaze/models/required_operators.with_runtime_opt.config ]; then
-            grep -v "com.microsoft" project/addons/godot-gaze/models/required_operators.with_runtime_opt.config > project/addons/godot-gaze/models/required_operators.config
-            rm project/addons/godot-gaze/models/required_operators.with_runtime_opt.config
-          fi
-          # Clean up raw ONNX, TFLite, and OpenVINO intermediate files from models folder
+          bash scripts/download_models.sh
+          cp -f scripts/required_operators.config project/addons/godot-gaze/models/required_operators.config
           rm -f project/addons/godot-gaze/models/*.onnx
           rm -f project/addons/godot-gaze/models/*.tflite
           rm -f project/addons/godot-gaze/models/*.task
           rm -f project/addons/godot-gaze/models/*.xml
           rm -f project/addons/godot-gaze/models/*.bin
+          rm -f project/addons/godot-gaze/models/*.with_runtime_opt.ort
+          rm -f project/addons/godot-gaze/models/*.required_operators*.config
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
@@ -262,10 +269,66 @@ jobs:
           ls -la project/addons/godot-gaze/bin/
           ls -la project/addons/godot-gaze/models/
 
+      - name: Verify Release Package Contents
+        shell: bash
+        run: |
+          required_models=(
+            "project/addons/godot-gaze/models/face_detection_yunet_2023mar.ort"
+            "project/addons/godot-gaze/models/facial-landmarks-35-adas-0002.ort"
+            "project/addons/godot-gaze/models/gaze-estimation-adas-0002.ort"
+            "project/addons/godot-gaze/models/open_closed_eye.ort"
+            "project/addons/godot-gaze/models/required_operators.config"
+          )
+          for f in "${required_models[@]}"; do
+            if [ ! -s "$f" ]; then
+              echo "ERROR: Missing or empty required model file: $f" >&2
+              exit 1
+            fi
+          done
+
+          required_bins=(
+            "project/addons/godot-gaze/bin/libgaze.macos.editor.dylib"
+            "project/addons/godot-gaze/bin/libgaze.macos.template_debug.dylib"
+            "project/addons/godot-gaze/bin/libgaze.macos.template_release.dylib"
+            "project/addons/godot-gaze/bin/libonnxruntime.dylib"
+            "project/addons/godot-gaze/bin/gaze.windows.editor.x86_64.dll"
+            "project/addons/godot-gaze/bin/gaze.windows.template_debug.x86_64.dll"
+            "project/addons/godot-gaze/bin/gaze.windows.template_release.x86_64.dll"
+            "project/addons/godot-gaze/bin/onnxruntime.dll"
+            "project/addons/godot-gaze/bin/libgaze.linux.editor.x86_64.so"
+            "project/addons/godot-gaze/bin/libgaze.linux.template_debug.x86_64.so"
+            "project/addons/godot-gaze/bin/libgaze.linux.template_release.x86_64.so"
+            "project/addons/godot-gaze/bin/libonnxruntime.so"
+            "project/addons/godot-gaze/bin/libgaze.android.editor.arm64.so"
+            "project/addons/godot-gaze/bin/libgaze.android.template_debug.arm64.so"
+            "project/addons/godot-gaze/bin/libgaze.android.template_release.arm64.so"
+            "project/addons/godot-gaze/bin/libgaze.android.editor.x86_64.so"
+            "project/addons/godot-gaze/bin/libgaze.android.template_debug.x86_64.so"
+            "project/addons/godot-gaze/bin/libgaze.android.template_release.x86_64.so"
+            "project/addons/godot-gaze/bin/android/arm64/libonnxruntime.so"
+            "project/addons/godot-gaze/bin/android/x86_64/libonnxruntime.so"
+            "project/addons/godot-gaze/bin/libgaze.ios.template_debug.arm64.a"
+            "project/addons/godot-gaze/bin/libgaze.ios.template_release.arm64.a"
+            "project/addons/godot-gaze/bin/libgaze.ios.template_debug.simulator.arm64.a"
+            "project/addons/godot-gaze/bin/libgaze.ios.template_release.simulator.arm64.a"
+            "project/addons/godot-gaze/bin/gaze.javascript.template_debug.wasm"
+            "project/addons/godot-gaze/bin/gaze.javascript.template_release.wasm"
+            "project/addons/godot-gaze/bin/gaze.javascript.template_debug.threads.wasm"
+            "project/addons/godot-gaze/bin/gaze.javascript.template_release.threads.wasm"
+            "project/addons/godot-gaze/bin/gaze_sidecar.js"
+          )
+          for f in "${required_bins[@]}"; do
+            if [ ! -s "$f" ]; then
+              echo "ERROR: Missing or empty required binary file: $f" >&2
+              exit 1
+            fi
+          done
+          echo "All release package files verified!"
+
       - name: Zip Release Artifact
         run: |
           cd project
-          zip -r ../godot-gaze.zip addons/godot-gaze/
+          zip -r ../godot-gaze.zip addons/godot-gaze/ -x "addons/godot-gaze/tests/*" "addons/godot-gaze/tools/*"
 
       - name: Upload Final Release ZIP
         uses: actions/upload-artifact@v4

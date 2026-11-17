@@ -341,12 +341,26 @@
         </inbodydescription>
         <location file="src/core/opencv_space_conversions.hpp" line="98" column="36" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="98" bodyend="104"/>
       </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_spaced_vector3_1afbb44b01e3ac04a5157f9bb697db34fb" prot="public" static="yes" constexpr="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>SpacedVector3&lt; S &gt;</type>
+        <definition>static constexpr SpacedVector3&lt; S &gt; Gaze::SpacedVector3&lt; S &gt;::nan</definition>
+        <argsstring>()</argsstring>
+        <name>nan</name>
+        <qualifiedname>Gaze::SpacedVector3::nan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/opencv_space_conversions.hpp" line="106" column="36" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="106" bodyend="112"/>
+      </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/opencv_space_conversions.hpp" line="43" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="44" bodyend="105"/>
+    <location file="src/core/opencv_space_conversions.hpp" line="43" column="1" bodyfile="src/core/opencv_space_conversions.hpp" bodystart="44" bodyend="113"/>
     <listofallmembers>
       <member refid="struct_gaze_1_1_spaced_vector3_1a7143d377c4c37c464f43a522547107a2" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>cross</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1a6c5be72ba32be2d6316ec1f773a2cc85" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>dot</name></member>
@@ -354,6 +368,7 @@
       <member refid="struct_gaze_1_1_spaced_vector3_1a1483a9fa9a56b4dfcb9348ce5f9ed162" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>is_finite</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1acdd73ba2be3dd549dbbd0264dce5b179" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>length</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1ab90d00da99175f79438dd0078a88138d" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>length_squared</name></member>
+      <member refid="struct_gaze_1_1_spaced_vector3_1afbb44b01e3ac04a5157f9bb697db34fb" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>nan</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1a22edaf3ca13478c820b331e5e46eefb5" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>normalized</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1a2c6f3aa885eb9e7caf673de359a724b6" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>operator bool</name></member>
       <member refid="struct_gaze_1_1_spaced_vector3_1aee200f7be10ddbaf48ac149d9dab5e4c" prot="public" virt="non-virtual"><scope>Gaze::SpacedVector3</scope><name>operator!=</name></member>

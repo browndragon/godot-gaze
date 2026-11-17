@@ -1,4 +1,29 @@
 var searchData=
 [
-  ['native_20layer_0',['Native Layer',['../dir_f511ba0178b53c726d0a84462dac4106.html#autotoc_md2',1,'']]]
+  ['face_20detector_20ortyunetdetector_0',['3.1. YuNet Face Detector (&lt;span class=&quot;tt&quot;&gt;ORTYuNetDetector&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md104',1,'']]],
+  ['face_20model_1',['1.2. Canonical 35-Point Anthropometric 3D Face Model',['../md_docs_2mathematical__model.html#autotoc_md71',1,'']]],
+  ['face_5fmodel_5fgeometry_2ehpp_2',['face_model_geometry.hpp',['../face__model__geometry_8hpp.html',1,'']]],
+  ['face_5fpipeline_2ehpp_3',['face_pipeline.hpp',['../face__pipeline_8hpp.html',1,'']]],
+  ['faceinfo_4',['FaceInfo',['../structgodot_1_1_gaze_server_impl_1_1_face_info.html',1,'godot::GazeServerImpl']]],
+  ['facemodelgeometry_5',['FaceModelGeometry',['../class_gaze_1_1_face_model_geometry.html',1,'Gaze']]],
+  ['facepipeline_6',['FacePipeline',['../class_gaze_1_1_face_pipeline.html',1,'Gaze']]],
+  ['facial_20geometry_7',['1. Coordinate Systems &amp;amp; Facial Geometry',['../md_docs_2mathematical__model.html#autotoc_md69',1,'']]],
+  ['facial_20landmarker_20ortlandmarkmodel_8',['3.2. Intel ADAS 35-Point Facial Landmarker (&lt;span class=&quot;tt&quot;&gt;ORTLandmarkModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md106',1,'']]],
+  ['feature_20preprocessing_9',['6.1. Input Feature Preprocessing',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md92',1,'']]],
+  ['features_10',['Key Features',['../index.html#autotoc_md6',1,'']]],
+  ['feedback_20loop_11',['1.5. Continuous Head Roll Un-Rotation Feedback Loop',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md74',1,'']]],
+  ['fill_5faccumulator_2ehpp_12',['fill_accumulator.hpp',['../fill__accumulator_8hpp.html',1,'']]],
+  ['fillaccumulator_13',['FillAccumulator',['../index.html#autotoc_md15',1,'3. Inertial Dwell Interactions (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)'],['../md_docs_2architecture.html#autotoc_md48',1,'6.3. Inertial Dwell Mechanics (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)'],['../class_gaze_1_1_fill_accumulator.html',1,'Gaze::FillAccumulator'],['../classgodot_1_1_fill_accumulator.html',1,'godot::FillAccumulator']]],
+  ['first_20class_20events_3a_20inputeventgazebase_20inputeventgaze_20inputeventgazemissing_14',['6.1. First-Class Events: &lt;span class=&quot;tt&quot;&gt;InputEventGazeBase&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;',['../md_docs_2architecture.html#autotoc_md46',1,'']]],
+  ['flops_15',['B. Input Spatial Area &amp;amp; Computational Complexity (FLOPs)',['../md_docs_2gaze__model__evaluation.html#autotoc_md117',1,'']]],
+  ['for_20directfacegazeestimator_16',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['for_20future_20implementation_3a_17',['Blueprint for Future Implementation:',['../md_docs_2gaze__model__evaluation.html#autotoc_md127',1,'']]],
+  ['formats_18',['1. Camera Ingestion Architecture &amp;amp; Color Formats',['../md_docs_2vision__models.html#autotoc_md96',1,'']]],
+  ['fps_20vs_2012–150_20ms_20discrepancy_19',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]],
+  ['frame_20',['Frame',['../struct_gaze_1_1_frame.html',1,'Gaze']]],
+  ['frequently_20asserted_20quibbles_20technical_20traps_21',['1. Frequently Asserted Quibbles &amp;amp; Technical Traps',['../md_docs_2rejected__designs.html#autotoc_md130',1,'']]],
+  ['from_20source_20or_20symlinking_20project_20addons_20godot_20gaze_22',['Option 2: Building from Source (or Symlinking &lt;span class=&quot;tt&quot;&gt;project/addons/godot-gaze&lt;/span&gt;)',['../index.html#autotoc_md10',1,'']]],
+  ['future_20implementation_3a_23',['Blueprint for Future Implementation:',['../md_docs_2gaze__model__evaluation.html#autotoc_md127',1,'']]],
+  ['future_20readiness_3a_20blueprint_20for_20directfacegazeestimator_24',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['future_20swappable_20strategy_25',['5. Architectural Decision &amp;amp; Future Swappable Strategy',['../md_docs_2gaze__model__evaluation.html#autotoc_md124',1,'']]]
 ];

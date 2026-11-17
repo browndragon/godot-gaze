@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -160,6 +160,8 @@ virtual Vector3&#160;</td><td class="memItemRight"><b>get_gravity_vector</b> () 
 <tr class="memitem:a6bf4fdfbdf4419499aab5921a39ddf7b" id="r_a6bf4fdfbdf4419499aab5921a39ddf7b"><td class="memItemLeft"><a id="a6bf4fdfbdf4419499aab5921a39ddf7b" name="a6bf4fdfbdf4419499aab5921a39ddf7b"></a>
 virtual void&#160;</td><td class="memItemRight"><b>camera_set_device_id</b> (RID p_camera, int p_device_id)</td></tr>
 <tr class="memdesc:a6bf4fdfbdf4419499aab5921a39ddf7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the hardware device ID index to capture from. <br /></td></tr>
+<tr class="memitem:a6f23f7ad2f12fba9ecae781e2365a6e7" id="r_a6f23f7ad2f12fba9ecae781e2365a6e7"><td class="memItemLeft"><a id="a6f23f7ad2f12fba9ecae781e2365a6e7" name="a6f23f7ad2f12fba9ecae781e2365a6e7"></a>
+virtual int&#160;</td><td class="memItemRight"><b>camera_get_device_id</b> (RID p_camera)</td></tr>
 <tr class="memitem:a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" id="r_a9a6091c39ad5f3a63f5a3dbc2cdfd7ce"><td class="memItemLeft"><a id="a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" name="a9a6091c39ad5f3a63f5a3dbc2cdfd7ce"></a>
 virtual void&#160;</td><td class="memItemRight"><b>camera_set_resolution</b> (RID p_camera, int p_width, int p_height)</td></tr>
 <tr class="memdesc:a9a6091c39ad5f3a63f5a3dbc2cdfd7ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set target camera capture resolution. <br /></td></tr>
@@ -201,9 +203,9 @@ virtual void&#160;</td><td class="memItemRight"><b>camera_free</b> (RID p_camera
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a090d7a967b756eac3a0054e8132331b5" id="r_a090d7a967b756eac3a0054e8132331b5"><td class="memItemLeft"><a id="a090d7a967b756eac3a0054e8132331b5" name="a090d7a967b756eac3a0054e8132331b5"></a>
+<tr class="memitem:a3cba4eaf008618ba583b0a0887f23f5a" id="r_a3cba4eaf008618ba583b0a0887f23f5a"><td class="memItemLeft"><a id="a3cba4eaf008618ba583b0a0887f23f5a" name="a3cba4eaf008618ba583b0a0887f23f5a"></a>
 static VisionServer *&#160;</td><td class="memItemRight"><b>get_singleton</b> ()</td></tr>
-<tr class="memdesc:a090d7a967b756eac3a0054e8132331b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_vision_server.html" title="Singleton server coordinating all platform camera configurations and image capture operations.">VisionServer</a> global singleton instance. <br /></td></tr>
+<tr class="memdesc:a3cba4eaf008618ba583b0a0887f23f5a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_vision_server.html" title="Singleton server coordinating all platform camera configurations and image capture operations.">VisionServer</a> global singleton instance. <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -383,6 +385,8 @@ Vector3&#160;</td><td class="memItemRight"><b>gravity_vector</b> = Vector3(0.0, 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>True if a new frame was grabbed successfully, false otherwise. </dd></dl>
+
+<p>Reimplemented in <a class="el" href="classgodot_1_1_mock_vision_server.html#a6b5ba75e0437cfe2a71a6dd89900ddbc">godot::MockVisionServer</a>.</p>
 
 </div>
 </div>

@@ -71,10 +71,10 @@ In planar NCHW layout, all Blue pixel floats are contiguous in memory, followed 
 
 | Model Name | Model File | Provenance | Input Tensor Shape | Value Range & Normalization | Output Specification |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **YuNet Face Detector** | `face_detection_yunet_2023mar.onnx` | OpenCV Zoo (`libfacedetection`) | `[1, 3, 640, 640]` NCHW | Raw floats $[0.0, 255.0]$ | Bounding boxes, confidence scores, 5 2D landmarks |
-| **Facial Landmarker** | `facial-landmarks-35-adas-0002.onnx` | Intel OpenVINO Model Zoo | `[1, 3, 60, 60]` NCHW | Raw floats $[0.0, 255.0]$ | 35 normalized 2D facial landmarks in $[0, 1]$ |
-| **Gaze Estimation** | `gaze-estimation-adas-0002.onnx` | Intel OpenVINO Model Zoo | `[1, 3, 60, 60]` (x2) + `[1, 3]` angles | Raw floats $[0.0, 255.0]$ | 3D Gaze vector $(v_x, v_y, v_z)$ in [Inference Camera Space](mathematical_model.md#11-inference-camera-space-opencv-standard) |
-| **Eye Openness** | `eye_state_mobilenet_v2.onnx` | Fine-tuned MobileNetV2 | `[1, 3, 32, 32]` (x2) NCHW | $\frac{\text{pixel} - 127.0}{255.0} \in [-0.5, +0.5]$ | Openness scalar probability in $[0.0, 1.0]$ |
+| **YuNet Face Detector** | `face_detection_yunet_2023mar.ort` | OpenCV Zoo (`libfacedetection`) | `[1, 3, 640, 640]` NCHW | Raw floats $[0.0, 255.0]$ | Bounding boxes, confidence scores, 5 2D landmarks |
+| **Facial Landmarker** | `facial-landmarks-35-adas-0002.ort` | Intel OpenVINO Model Zoo | `[1, 3, 60, 60]` NCHW | Raw floats $[0.0, 255.0]$ | 35 normalized 2D facial landmarks in $[0, 1]$ |
+| **Gaze Estimation** | `gaze-estimation-adas-0002.ort` | Intel OpenVINO Model Zoo | `[1, 3, 60, 60]` (x2) + `[1, 3]` angles | Raw floats $[0.0, 255.0]$ | 3D Gaze vector $(v_x, v_y, v_z)$ in [Inference Camera Space](mathematical_model.md#11-inference-camera-space-opencv-standard) |
+| **Eye Openness** | `open_closed_eye.ort` | Intel OpenVINO Model Zoo (`open-closed-eye-0001`) | `[1, 3, 32, 32]` (x2) NCHW | $\frac{\text{pixel} - 127.0}{255.0} \in [-0.5, +0.5]$ | 2-class Softmax probabilities `[closed, open]` in $[0.0, 1.0]$ |
 
 ---
 
@@ -123,9 +123,9 @@ In planar NCHW layout, all Blue pixel floats are contiguous in memory, followed 
 
 ---
 
-### 3.4. MobileNetV2 Eye State & Openness (`ORTEyeStateModel`)
-* **Lineage & Provenance**: MobileNetV2 backbone fine-tuned on open eye datasets (e.g. MRL Eye Dataset / CEW) for binary eye openness classification.
-* **Network Architecture**: Depthwise separable convolutional neural network.
+### 3.4. Open-Closed Eye Classifier (`ORTEyeStateModel`)
+* **Lineage & Provenance**: Intel OpenVINO Model Zoo `open-closed-eye-0001` (`open_closed_eye.ort`, converted to ONNX opset 14 / ORT fixed optimization format).
+* **Network Architecture**: Lightweight CNN classifier emitting 2-class Softmax probabilities (`[1, 2, 1, 1]` or `[1, 2]`: index `0` = Closed, index `1` = Open).
 * **Preprocessing Pipeline**:
   1. Consumes the exact same $60\times60$ interleaved BGR8 eye crops extracted for the gaze model.
   2. Bilinearly downsamples from $60\times60$ to $32\times32$.
@@ -133,5 +133,5 @@ In planar NCHW layout, all Blue pixel floats are contiguous in memory, followed 
      $$x_{\text{norm}} = \frac{x_{\text{bgr}} - 127.0}{255.0} \in [-0.498, +0.502]$$
   4. Packs into planar NCHW float tensor $[1, 3, 32, 32]$ in BGR order.
 * **Output**:
-  - Single scalar openness probability $P(\text{open}) \in [0.0, 1.0]$.
-  - Thresholded ($\ge 0.70$ open, $\le 0.20$ closed) to emit blink, wink, and click events without heuristic false positives.
+  - Extracts index `1` (`out_data[1]`, clamped to $[0.0, 1.0]$) as scalar openness probability $P(\text{open}) \in [0.0, 1.0]$.
+  - Default blink threshold is configured via `gaze/blink/openness_threshold` (`0.50`), with calibration/validation tests enforcing clear signal separation ($\ge 0.70$ open, $\le 0.20$ closed).

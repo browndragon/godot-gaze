@@ -7,6 +7,8 @@
       <node id="3">
         <label>../core/gaze_display_types.hpp</label>
         <link refid="gaze__display__types_8hpp_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>src/web/gaze_display_server_web.cpp</label>
@@ -19,6 +21,9 @@
         <link refid="gaze__display__server__web_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
+      </node>
+      <node id="4">
+        <label>cstdint</label>
       </node>
     </incdepgraph>
     <innernamespace refid="namespace_gaze">Gaze</innernamespace>
@@ -97,31 +102,57 @@
 <codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>rect;</highlight></codeline>
 <codeline lineno="69"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="70"><highlight class="normal"></highlight></codeline>
-<codeline lineno="71"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="73"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref><sp/>gaze_web_get_display_metrics(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_index)<sp/>{</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref><sp/>metrics;</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.pixel_width<sp/>=<sp/>1920;</highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.pixel_height<sp/>=<sp/>1080;</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.scale_factor<sp/>=<sp/>1.0;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.width_mm<sp/>=<sp/>508.0;</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.height_mm<sp/>=<sp/>285.75;</highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>metrics;</highlight></codeline>
-<codeline lineno="82"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"></highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref><sp/>gaze_web_get_window_rect(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>window_index)<sp/>{</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref><sp/>rect;</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.x<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.y<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.width<sp/>=<sp/>1920;</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.height<sp/>=<sp/>1080;</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>rect;</highlight></codeline>
-<codeline lineno="91"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"></highlight></codeline>
-<codeline lineno="93"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="94"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="95"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_mouse_point" kindref="compound">GazeMousePoint</ref><sp/>gaze_web_get_mouse_position()<sp/>{</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_mouse_point" kindref="compound">GazeMousePoint</ref><sp/>pt;</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>pt.x<sp/>=<sp/>EM_ASM_DOUBLE({</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(window.__gaze_last_mouse_x<sp/>!==<sp/>undefined)<sp/>?<sp/>window.__gaze_last_mouse_x<sp/>:<sp/>0.0;</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>pt.y<sp/>=<sp/>EM_ASM_DOUBLE({</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(window.__gaze_last_mouse_y<sp/>!==<sp/>undefined)<sp/>?<sp/>window.__gaze_last_mouse_y<sp/>:<sp/>0.0;</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pt;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"></highlight></codeline>
+<codeline lineno="82"><highlight class="normal">int64_t<sp/>gaze_web_get_mouse_button_state()<sp/>{</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>EM_ASM_INT({</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(window.__gaze_last_mouse_buttons<sp/>!==<sp/>undefined)<sp/>?<sp/>window.__gaze_last_mouse_buttons<sp/>:<sp/>0;</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/>});</highlight></codeline>
+<codeline lineno="86"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"></highlight></codeline>
+<codeline lineno="88"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="90"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">Gaze<sp/>{</highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref><sp/>gaze_web_get_display_metrics(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_index)<sp/>{</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_display_metrics" kindref="compound">GazeDisplayMetrics</ref><sp/>metrics;</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.pixel_width<sp/>=<sp/>1920;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.pixel_height<sp/>=<sp/>1080;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.scale_factor<sp/>=<sp/>1.0;</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.width_mm<sp/>=<sp/>508.0;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>metrics.height_mm<sp/>=<sp/>285.75;</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>metrics;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref><sp/>gaze_web_get_window_rect(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>window_index)<sp/>{</highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_gaze_window_rect" kindref="compound">GazeWindowRect</ref><sp/>rect;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.x<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.y<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.width<sp/>=<sp/>1920;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>rect.height<sp/>=<sp/>1080;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>rect;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_mouse_point" kindref="compound">GazeMousePoint</ref><sp/>gaze_web_get_mouse_position()<sp/>{</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{0.0,<sp/>0.0};</highlight></codeline>
+<codeline lineno="112"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal">int64_t<sp/>gaze_web_get_mouse_button_state()<sp/>{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight></codeline>
+<codeline lineno="118"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/web/gaze_display_server_web.cpp"/>
   </compounddef>

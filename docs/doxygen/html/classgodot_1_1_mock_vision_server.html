@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -155,6 +155,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aacade9a5fbef9962053deb89231cdcd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the latest captured frame texture for Godot rendering.  <br /></td></tr>
 <tr class="memitem:a181eb28a8ae03bafef5e1c6edeeaf809" id="r_a181eb28a8ae03bafef5e1c6edeeaf809"><td class="memItemLeft">virtual Ref&lt; Image &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a181eb28a8ae03bafef5e1c6edeeaf809">camera_get_current_image</a> (RID p_camera) override</td></tr>
 <tr class="memdesc:a181eb28a8ae03bafef5e1c6edeeaf809"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the latest captured CPU image resource.  <br /></td></tr>
+<tr class="memitem:a6b5ba75e0437cfe2a71a6dd89900ddbc" id="r_a6b5ba75e0437cfe2a71a6dd89900ddbc"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="#a6b5ba75e0437cfe2a71a6dd89900ddbc">get_camera_current_frame</a> (RID p_camera, <a class="el" href="struct_gaze_1_1_frame.html">Gaze::Frame</a> &amp;r_frame) override</td></tr>
+<tr class="memdesc:a6b5ba75e0437cfe2a71a6dd89900ddbc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html">GazeServer</a> or background pipeline threads.  <br /></td></tr>
 <tr class="memitem:ac9ecd69c6d4fa719955a2b662ae0dec9" id="r_ac9ecd69c6d4fa719955a2b662ae0dec9"><td class="memItemLeft"><a id="ac9ecd69c6d4fa719955a2b662ae0dec9" name="ac9ecd69c6d4fa719955a2b662ae0dec9"></a>
 virtual void&#160;</td><td class="memItemRight"><b>set_simulated_acceleration</b> (const Vector3 &amp;p_accel)</td></tr>
 <tr class="memdesc:ac9ecd69c6d4fa719955a2b662ae0dec9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set simulated acceleration in test scenarios, deriving unit gravity vector. <br /></td></tr>
@@ -170,6 +172,8 @@ virtual Vector3&#160;</td><td class="memItemRight"><b>get_gravity_vector</b> () 
 <tr class="memitem:a6bf4fdfbdf4419499aab5921a39ddf7b pub_methods_classgodot_1_1_vision_server" id="r_a6bf4fdfbdf4419499aab5921a39ddf7b"><td class="memItemLeft">
 virtual void&#160;</td><td class="memItemRight"><b>camera_set_device_id</b> (RID p_camera, int p_device_id)</td></tr>
 <tr class="memdesc:a6bf4fdfbdf4419499aab5921a39ddf7b pub_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the hardware device ID index to capture from. <br /></td></tr>
+<tr class="memitem:a6f23f7ad2f12fba9ecae781e2365a6e7 pub_methods_classgodot_1_1_vision_server" id="r_a6f23f7ad2f12fba9ecae781e2365a6e7"><td class="memItemLeft">
+virtual int&#160;</td><td class="memItemRight"><b>camera_get_device_id</b> (RID p_camera)</td></tr>
 <tr class="memitem:a9a6091c39ad5f3a63f5a3dbc2cdfd7ce pub_methods_classgodot_1_1_vision_server" id="r_a9a6091c39ad5f3a63f5a3dbc2cdfd7ce"><td class="memItemLeft">
 virtual void&#160;</td><td class="memItemRight"><b>camera_set_resolution</b> (RID p_camera, int p_width, int p_height)</td></tr>
 <tr class="memdesc:a9a6091c39ad5f3a63f5a3dbc2cdfd7ce pub_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set target camera capture resolution. <br /></td></tr>
@@ -196,8 +200,6 @@ virtual double&#160;</td><td class="memItemRight"><b>camera_get_last_readback_ms
 <tr class="memitem:ae723eed2cc069d00b1e59761f33617b5 pub_methods_classgodot_1_1_vision_server" id="r_ae723eed2cc069d00b1e59761f33617b5"><td class="memItemLeft">
 virtual void&#160;</td><td class="memItemRight"><b>camera_free</b> (RID p_camera)</td></tr>
 <tr class="memdesc:ae723eed2cc069d00b1e59761f33617b5 pub_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the camera resource. <br /></td></tr>
-<tr class="memitem:ad9768aeaf47648743bff2c0b57b10735 pub_methods_classgodot_1_1_vision_server" id="r_ad9768aeaf47648743bff2c0b57b10735"><td class="memItemLeft">virtual bool&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_vision_server.html#ad9768aeaf47648743bff2c0b57b10735">get_camera_current_frame</a> (RID p_camera, <a class="el" href="struct_gaze_1_1_frame.html">Gaze::Frame</a> &amp;r_frame)</td></tr>
-<tr class="memdesc:ad9768aeaf47648743bff2c0b57b10735 pub_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html">GazeServer</a> or background pipeline threads.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -210,9 +212,9 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_methods_classgodot_1_1_vision_server"><td colspan="2">Static Public Member Functions inherited from <a class="el" href="classgodot_1_1_vision_server.html">godot::VisionServer</a></td></tr>
-<tr class="memitem:a090d7a967b756eac3a0054e8132331b5 pub_static_methods_classgodot_1_1_vision_server" id="r_a090d7a967b756eac3a0054e8132331b5"><td class="memItemLeft">
+<tr class="memitem:a3cba4eaf008618ba583b0a0887f23f5a pub_static_methods_classgodot_1_1_vision_server" id="r_a3cba4eaf008618ba583b0a0887f23f5a"><td class="memItemLeft">
 static VisionServer *&#160;</td><td class="memItemRight"><b>get_singleton</b> ()</td></tr>
-<tr class="memdesc:a090d7a967b756eac3a0054e8132331b5 pub_static_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_vision_server.html" title="Singleton server coordinating all platform camera configurations and image capture operations.">VisionServer</a> global singleton instance. <br /></td></tr>
+<tr class="memdesc:a3cba4eaf008618ba583b0a0887f23f5a pub_static_methods_classgodot_1_1_vision_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_vision_server.html" title="Singleton server coordinating all platform camera configurations and image capture operations.">VisionServer</a> global singleton instance. <br /></td></tr>
 <tr class="inherit_header pro_attribs_classgodot_1_1_vision_server"><td colspan="2">Protected Attributes inherited from <a class="el" href="classgodot_1_1_vision_server.html">godot::VisionServer</a></td></tr>
 <tr class="memitem:ad825a376aba1970a9d3979671effdcd8 pro_attribs_classgodot_1_1_vision_server" id="r_ad825a376aba1970a9d3979671effdcd8"><td class="memItemLeft">
 RID_PtrOwner&lt; <a class="el" href="structgodot_1_1_vision_server_1_1_camera_data.html">CameraData</a>, true &gt;&#160;</td><td class="memItemRight"><b>camera_owner</b></td></tr>
@@ -341,6 +343,47 @@ Vector3&#160;</td><td class="memItemRight"><b>gravity_vector</b> = Vector3(0.0, 
 <p>Stop frame capture and release hardware resources. </p>
 
 <p>Reimplemented from <a class="el" href="classgodot_1_1_vision_server.html#acfd359215cca0d1bd9c86a2832b883bc">godot::VisionServer</a>.</p>
+
+</div>
+</div>
+<a id="a6b5ba75e0437cfe2a71a6dd89900ddbc" name="a6b5ba75e0437cfe2a71a6dd89900ddbc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b5ba75e0437cfe2a71a6dd89900ddbc">&#9670;&#160;</a></span>get_camera_current_frame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::MockVisionServer::get_camera_current_frame </td>
+          <td>(</td>
+          <td class="paramtype">RID</td>          <td class="paramname"><span class="paramname"><em>p_camera</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_gaze_1_1_frame.html">Gaze::Frame</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>r_frame</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the raw frame data for <a class="el" href="classgodot_1_1_gaze_server.html">GazeServer</a> or background pipeline threads. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_camera</td><td>The camera RID. </td></tr>
+    <tr><td class="paramname">r_frame</td><td>Frame structure to populate. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if a new frame was grabbed successfully, false otherwise. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_vision_server.html#ad9768aeaf47648743bff2c0b57b10735">godot::VisionServer</a>.</p>
 
 </div>
 </div>

@@ -21,6 +21,28 @@
     <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1abbae97910f3f83690e897b7f0a464b10" kind="function"><name>clear</name></member>
     <member refid="class_gaze_1_1_concurrency_1_1_atomic_mailbox_1a5e07c054a87963e1f6a2dc1e706dca99" kind="function"><name>is_pending</name></member>
   </compound>
+  <compound refid="class_gaze_1_1_blink_state_machine" kind="class"><name>Gaze::BlinkStateMachine</name>
+    <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18" kind="enum"><name>State</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18a1a923d1faf2c60f419f5bc5e23f02cc2" kind="enumvalue"><name>STATE_UNTRACKED</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18ad0fbeaa021302a26948a2b443b036db7" kind="enumvalue"><name>STATE_EYES_OPEN</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18aa60d0339ffced18f7d6747f8e05ddd77" kind="enumvalue"><name>STATE_CLICK_PRESSED</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56" kind="enum"><name>Action</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a4e3c63f7eaac1632dff6f8b4ec07660b" kind="enumvalue"><name>ACTION_NONE</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56aa1315053f5b2ffb3c3bde1c0d358e7a0" kind="enumvalue"><name>ACTION_BUTTON_DOWN</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a27f477d746a7008c0b88e17c5ce234c8" kind="enumvalue"><name>ACTION_BUTTON_UP</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a7384f090c32d6083f3b7d165e76d37f6" kind="variable"><name>state</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1ad6934cd5e5f7d4e177e7ae388991ace8" kind="variable"><name>open_threshold</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a1a1767e04dd2d3c87d52e8cf64a23f52" kind="variable"><name>close_threshold</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1ab7c6df569f4ed4146b335a947615e5b2" kind="function"><name>BlinkStateMachine</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1af8a24e59ac33094231e6ce9570a1af84" kind="function"><name>reset</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1afd8371ccd59d25bf6a1f4b6cceac04c1" kind="function"><name>update</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1aed136fc7b6ccff895dc054f7d40ac6b4" kind="function"><name>is_button_down</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a0917d0e685770863dc89b5604edda393" kind="function"><name>get_state</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1a6a32e054b3c25c6704e04009d1d7d53a" kind="function"><name>set_open_threshold</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1aec60bbe5397e2e2e6c24ed85bd2ff85d" kind="function"><name>get_open_threshold</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1ac64d0eb21a9114399fd9ef5ec418a7a6" kind="function"><name>set_close_threshold</name></member>
+    <member refid="class_gaze_1_1_blink_state_machine_1ab1eb022f755242c731685ce35b239cfa" kind="function"><name>get_close_threshold</name></member>
+  </compound>
   <compound refid="structgodot_1_1_vision_server_1_1_camera_data" kind="struct"><name>godot::VisionServer::CameraData</name>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1ad37d17f2e26609eed0d09338db7a6bc1" kind="variable"><name>device_id</name></member>
     <member refid="structgodot_1_1_vision_server_1_1_camera_data_1a308f8b48cfa32560e22c29659cf53885" kind="variable"><name>width</name></member>
@@ -57,8 +79,27 @@
     <member refid="class_gaze_1_1_c_p_u_image_warper_1a466ab81c0edd44f9a44bc78112ac2697" kind="function"><name>get_gray_pixel</name></member>
     <member refid="class_gaze_1_1_c_p_u_image_warper_1aa2b87e7d662467e77124006a7737a083" kind="function"><name>warp</name></member>
   </compound>
+  <compound refid="class_gaze_1_1_damped_spring" kind="class"><name>Gaze::DampedSpring</name>
+    <member refid="class_gaze_1_1_damped_spring_1a2a12eb27c1b83c25a50a5050cd6f5c62" kind="variable"><name>pos</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a9a2ff8086922b169832e701e18447ef8" kind="variable"><name>vel</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1ad97c460b7c8a970d6211d309c70ff3a7" kind="variable"><name>response_sec</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a6bcfd19ed9fb44dfa9c849f6f0a7dfaf" kind="variable"><name>damping_ratio</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1ab76b5ee1c122bc7a8d466a1dc9971347" kind="variable"><name>initialized</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a342f28859f48443d49cda07d6463469a" kind="function"><name>DampedSpring</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a8f180372578e3b68315bfcddcf6cace0" kind="function"><name>DampedSpring</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1ab3bdbb73c51b6b5e67fa4b4c3256741d" kind="function"><name>reset</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a603e87a477328607914b240836d4a7cf" kind="function"><name>set_response_sec</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a4235d3515ada0f96bbbd36dd03ffd168" kind="function"><name>get_response_sec</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a0e73ffad108113c8c6dc42e0ab513d25" kind="function"><name>set_damping_ratio</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a74de9872dbc803178a8b0d940e44c48e" kind="function"><name>get_damping_ratio</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a1c45fac0242564a899d7a0a8ab13b103" kind="function"><name>get_position</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1ab117bbc91c55ecc226f7149085452bb5" kind="function"><name>get_velocity</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1a6a432de313848c1e1634b54915e4daff" kind="function"><name>is_initialized</name></member>
+    <member refid="class_gaze_1_1_damped_spring_1ae0fcc102ff7c0fe9b3390855f2c46c19" kind="function"><name>update</name></member>
+  </compound>
   <compound refid="structgodot_1_1_gaze_server_impl_1_1_display_info" kind="struct"><name>godot::GazeServerImpl::DisplayInfo</name>
     <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1a88a4f9614537d9dee1407cc1a460104d" kind="variable"><name>device_profile</name></member>
+    <member refid="structgodot_1_1_gaze_server_impl_1_1_display_info_1afceaaa7414f9858ef315268d46208966" kind="variable"><name>gds</name></member>
   </compound>
   <compound refid="class_gaze_1_1_eye_blink_estimator" kind="class"><name>Gaze::EyeBlinkEstimator</name>
     <member refid="class_gaze_1_1_eye_blink_estimator_1a8a68949e0397c1a285506681d67a9562" kind="function"><name>~EyeBlinkEstimator</name></member>
@@ -100,6 +141,9 @@
     <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1a33c30f627cba4b8383cd6be342fae30b" kind="variable"><name>head_pose_translation</name></member>
     <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1aaf522bbdb13b3c48a929c6185a69ab50" kind="variable"><name>head_pose_rotation</name></member>
     <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1af21d6fd45705915a035c0bfbfddaa892" kind="variable"><name>landmarks_2d</name></member>
+    <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab5ee2dafba1776ff99d5f492e6787079" kind="variable"><name>face_bbox</name></member>
+    <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1a82208e8cdf4b66066de44a867382cf29" kind="variable"><name>face_obb_2d</name></member>
+    <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1aebcfd702d3ffc7b5bc2a297859703b3e" kind="variable"><name>is_temporal_tracking</name></member>
     <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1ab51e6d62ad845582d326077a77b34217" kind="variable"><name>roll_hint_rad</name></member>
     <member refid="structgodot_1_1_gaze_server_impl_1_1_face_info_1a987aa371cd56b25aa7e7134bb32d9849" kind="variable"><name>auto_roll_enabled</name></member>
   </compound>
@@ -127,6 +171,89 @@
     <member refid="class_gaze_1_1_face_pipeline_1a915d5d9fd8ba14e84e9f981860b2a909" kind="function"><name>set_image_warper</name></member>
     <member refid="class_gaze_1_1_face_pipeline_1a4e880a2386aa3fc57c9a0ef9ada2051e" kind="function"><name>get_image_warper</name></member>
   </compound>
+  <compound refid="class_gaze_1_1_fill_accumulator" kind="class"><name>Gaze::FillAccumulator</name>
+    <member refid="class_gaze_1_1_fill_accumulator_1a3031c0573166f09e912138e1504dba1c" kind="variable"><name>fill</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1af9a978a4ac6527cf3bb2e3d9aa75780c" kind="variable"><name>velocity</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a7cd59ae39e26e0486e9846d75b5ed2ec" kind="variable"><name>fill_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a1dfb93bafd29349cd056e24c63553421" kind="variable"><name>drain_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a61edfad2da2bca14bd5cc2ceeec92665" kind="variable"><name>fill_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a0fa14d808b68cce10cb7fe7b97ba5e84" kind="variable"><name>drain_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ac7800b0dda7d4eb315f8b502f161d919" kind="variable"><name>error_doubling_distance</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a000f5f6b2c369f1f3aa132833b7d579b" kind="function"><name>FillAccumulator</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ad7e85ad1a1f9495788372b24b3c4d0e0" kind="function"><name>FillAccumulator</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a94b39842b647fff33987c64ca2cc2f0f" kind="function"><name>reset</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a5a8c11ccb87ab24549c882f260d789ac" kind="function"><name>set_fill</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a4dbf9bfe81d56d51dd50fe2e2d4e45c1" kind="function"><name>get_fill</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ad7d4fd36f33f4623240d7a941d524303" kind="function"><name>get_velocity</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a0d0bf5716afd02604afb33836ea48d06" kind="function"><name>set_velocity</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1aa44c429c3c49be1837362e80a2d6a8fa" kind="function"><name>is_filled</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1aff1b9ccb4cea2e7d0a6ac908ce7f8fcd" kind="function"><name>is_empty</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1aeab22cdee2e9132af9b3fff4855fd285" kind="function"><name>set_fill_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ae3696d088d2264e437731f8510874f4d" kind="function"><name>get_fill_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a249e1b01c8c59e6f6ee6de8b8f9c3f3a" kind="function"><name>set_drain_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ae24216f1e3671c8bd66586c890293b94" kind="function"><name>get_drain_rate</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1aaf822f543f8506966dd1063e30b58dd6" kind="function"><name>set_fill_sec</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1af937acb8297e8dd6a11f131c157acf81" kind="function"><name>get_fill_sec</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1abfa76e2769382a2cad6bbd82d562709a" kind="function"><name>set_drain_sec</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1adca8761a91f2452d931bf3585afd2f28" kind="function"><name>get_drain_sec</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a7de723507600d6a26ec0e7c620cdf0b1" kind="function"><name>set_fill_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a02b6e0e8a6a3d154fc72e0f2bd0ab600" kind="function"><name>get_fill_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1af41d0ad616dbcf096d13de9c163409b7" kind="function"><name>set_drain_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1abce4cdbf701c1690ad1372d78a86e3a2" kind="function"><name>get_drain_acceleration</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a8a2c945ba95c4ff05420246cb59c8b95" kind="function"><name>set_error_doubling_distance</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a6b4231d8c08e5d168c75f3f471cd1c70" kind="function"><name>get_error_doubling_distance</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ac3a0a10066423241a4af044585e8e333" kind="function"><name>set_characteristic_error</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ae3df20fd72334c8c73f5a7ba89de3162" kind="function"><name>get_characteristic_error</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a948f03fc4c3caf142ef020e1c148669d" kind="function"><name>process_error_delta</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1a451ebda772fe71c5ed97da7dd00b3338" kind="function"><name>process_dwell_delta</name></member>
+    <member refid="class_gaze_1_1_fill_accumulator_1ad0fff48b8798aece16972abec854b1be" kind="function"><name>update</name></member>
+  </compound>
+  <compound refid="classgodot_1_1_fill_accumulator" kind="class"><name>godot::FillAccumulator</name>
+    <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kind="enum"><name>ProcessCallback</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" kind="enumvalue"><name>PROCESS_MANUAL</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" kind="enumvalue"><name>PROCESS_IDLE</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" kind="enumvalue"><name>PROCESS_PHYSICS</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a5f0b18ef44bb62c1df18062bb5aef515" kind="variable"><name>impl</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1adbb0c1fa30829613deee44c1801af543" kind="variable"><name>process_callback</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a5f057dc2b6dfb7831a637611c078526e" kind="variable"><name>last_was_charging</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a59f92f38e9b00f558d68f707419a45f6" kind="variable"><name>last_is_filled</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a1171fcf1efeca4420f80be674ec191b3" kind="variable"><name>last_is_empty</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aecc2d79abf24e973c97afa318e76e829" kind="variable"><name>current_error</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1adb0110854aab84865c8b32981fb9bfbb" kind="variable"><name>is_active_target</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aaa11939abf0cec0225383c0f5d6a9abb" kind="function"><name>GDCLASS</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a0625f4a13ce5247d4e1e1e3f4748dde0" kind="function"><name>_bind_methods</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a1f4d0b87c252a979ff7fd3bd1313b11a" kind="function"><name>_notification</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aac1a1d409a653cdeb4a8127e39418561" kind="function"><name>FillAccumulator</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ad27cc8a2d8619d8138c2174f5f68f5e7" kind="function"><name>~FillAccumulator</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a79c50ff41255ed1b38ecb32286e4d928" kind="function"><name>set_fill</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ac2403c2ccd4b62f6d83a19ad855161fb" kind="function"><name>get_fill</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ab2f481c2f52d506599b0e0327bceaa8c" kind="function"><name>get_velocity</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aa03771304c4b792e31251dc4641a15bd" kind="function"><name>is_filled</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a17c13d3395c38d0a502451bc9f2f1655" kind="function"><name>is_empty</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aaadda3c4705f5a655254de84342eb69f" kind="function"><name>set_fill_rate</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ad086dd00e2f8a6808d3f13b03aee3126" kind="function"><name>get_fill_rate</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a8121ca02bd1adb7624e03adc55d66028" kind="function"><name>set_drain_rate</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a09dcb3df78ea360aa433d29872b4f5e4" kind="function"><name>get_drain_rate</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1af223aa89c2b43e6c2f3c91a2fb56a9a4" kind="function"><name>set_fill_sec</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1adbc1d971e7fe2d1a33ef19ace3549db1" kind="function"><name>get_fill_sec</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a535137d038069cf3816093cced62525d" kind="function"><name>set_drain_sec</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a5d80bd2fd5b145ffc3f65bf9fbd80b5f" kind="function"><name>get_drain_sec</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a225848b9a62ef2aaea7031218c595732" kind="function"><name>set_fill_acceleration</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1abc4552dba4ae2896b6b78074c08cb79e" kind="function"><name>get_fill_acceleration</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ad49ab7f7727cee56388f6e6ba5014ee8" kind="function"><name>set_drain_acceleration</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a94395a77c7c3f0ae003ceae632991c4a" kind="function"><name>get_drain_acceleration</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a14d7dcead6d3723b64325ab0a2e81eac" kind="function"><name>set_error_doubling_distance</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ad4a95af8e6354e90674d4ce85a0eb05a" kind="function"><name>get_error_doubling_distance</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1ae2a1a4200e7d8575fee812bdd210e6fe" kind="function"><name>set_process_callback</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1af9888315e995f6d2dc42505c1ee2d0a0" kind="function"><name>get_process_callback</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aeddd00dfce7463e0317a1277035e704e" kind="function"><name>set_target_error</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1afc6c27cf7b01e921ed3631297acf4df3" kind="function"><name>get_target_error</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a1f818e6e1cab9eed5138aa15a3505512" kind="function"><name>set_active_target</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a7f2c348a4abb659022c249e7a37859cb" kind="function"><name>is_active_target_dwell</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" kind="function"><name>process_error_delta</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" kind="function"><name>process_dwell_delta</name></member>
+    <member refid="classgodot_1_1_fill_accumulator_1a3ec5361b6167dd364780604e4e8f9d60" kind="function"><name>reset</name></member>
+  </compound>
   <compound refid="struct_gaze_1_1_frame" kind="struct"><name>Gaze::Frame</name>
     <member refid="struct_gaze_1_1_frame_1ab21e35cd338702f25865adf931e637a5" kind="variable"><name>width</name></member>
     <member refid="struct_gaze_1_1_frame_1a551d5f6f9085dde4b88e74977a2ea1a3" kind="variable"><name>height</name></member>
@@ -139,9 +266,12 @@
     <member refid="classgodot_1_1_gaze_device_profile_1a1c2516bcf60719cafe7c82b43906531a" kind="variable"><name>logical_size_px</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ad96796aa895b954a29ad1dfb1eded13e" kind="variable"><name>camera_offset_mm</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ac01a8b0995238b429a6a802aaf0c8cf4" kind="variable"><name>camera_roll_deg</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1a5b7176a5216c4259886b28f7836701d4" kind="variable"><name>camera_tilt_deg</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ac48232eeebf65633c37dff903c9fbdd6" kind="variable"><name>camera_hfov_deg</name></member>
-    <member refid="classgodot_1_1_gaze_device_profile_1ad7648431835f8ed0d6be93ae14fb078b" kind="function"><name>GDCLASS</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1ae53a4b23ca41dfe3ae4f824980e98f7d" kind="function"><name>GDCLASS</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1aec6c66bb88bbca4f77a4bd076fb26f77" kind="function"><name>_bind_methods</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1ac05fa55b03c09dcc6a837a31a0004787" kind="function"><name>_write_to_config</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1aec1f714eec061d62836e4a28cbd33da5" kind="function"><name>_read_from_config</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a335f57c97a0d0aac897d5f94a4fa146a" kind="function"><name>GazeDeviceProfile</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a24dcb05bfd5d7776891f903bfdaed812" kind="function"><name>~GazeDeviceProfile</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a3283fa6836493c591607a9de16e367a1" kind="function"><name>get_pixel_pitch_mm</name></member>
@@ -152,12 +282,16 @@
     <member refid="classgodot_1_1_gaze_device_profile_1a17c5f82e05c28a962cb67c3fddeef320" kind="function"><name>set_camera_offset_mm</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a39e6847212ed289d18a30c732732c2e6" kind="function"><name>get_camera_roll_deg</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ad19faab3f4b714ae155d1af122db6f03" kind="function"><name>set_camera_roll_deg</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1a7b418349f47406a25d1e4927ff6ae68b" kind="function"><name>get_camera_tilt_deg</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1acba94e509db1bc790fa7cddc880eccb4" kind="function"><name>set_camera_tilt_deg</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a0cd86629332f2c479eb44aefbbdfeae5" kind="function"><name>get_camera_hfov_deg</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ae5d1ab74834ee13f1b8b4ba6753d5f16" kind="function"><name>set_camera_hfov_deg</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1aedfb9a01436888144ebc6cc7ef557127" kind="function"><name>get_physical_size_mm</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a3a444fff9909838adcf7064caf72c7cb" kind="function"><name>set_physical_size_mm</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1aa5f6b8d942a85ec7ff445f6515318b8c" kind="function"><name>get_dpi</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1af7dadedac119cbfb8f4458a1b73bf1a4" kind="function"><name>get_focal_length_px</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1a4140271ebb6e10ea144deca9c21421c8" kind="function"><name>project_gaze_screen_px</name></member>
+    <member refid="classgodot_1_1_gaze_device_profile_1a82370a872b7f74d22fe62744c653133a" kind="function"><name>unproject_px_to_cam_mm</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1a3686ca33c38103c673c67faee53292f3" kind="function"><name>calibrate_from_card_width</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ad64abe25c8b914ff1b1958cc417dc499" kind="function"><name>create_system_guess</name></member>
     <member refid="classgodot_1_1_gaze_device_profile_1ab4ef2ed9712404083c0dc23e9b5ec68a" kind="function"><name>get_focal_length_under_scaling_static</name></member>
@@ -183,7 +317,13 @@
     <member refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kind="function"><name>get_screen_scale</name></member>
     <member refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kind="function"><name>get_window_rect_pixels</name></member>
     <member refid="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" kind="function"><name>get_default_camera_offset_mm</name></member>
-    <member refid="classgodot_1_1_gaze_display_server_1a4497e3c5df05fa0b65cfaab9227f2ecb" kind="function"><name>get_singleton</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" kind="function"><name>mouse_get_position</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1a2c065195e453e3fdc4e6b4c08a1563a5" kind="function"><name>get_window_mouse_position</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1af46c5c44cae47f6d06f276fe592c2a46" kind="function"><name>mouse_get_button_state</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" kind="function"><name>parse_mouse_motion</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" kind="function"><name>parse_mouse_button</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1ae6d36dd5c45e4a3cf05a9658d8c029ad" kind="function"><name>window_px_to_canvas</name></member>
+    <member refid="classgodot_1_1_gaze_display_server_1a0003a6a08e0d79e2f56a09550717f9eb" kind="function"><name>get_singleton</name></member>
   </compound>
   <compound refid="classgodot_1_1_gaze_event_factory" kind="class"><name>godot::GazeEventFactory</name>
     <member refid="classgodot_1_1_gaze_event_factory_1a9e1053588e39f4f457037a98ee9f2a00" kind="function"><name>GDCLASS</name></member>
@@ -204,6 +344,9 @@
     <member refid="classgodot_1_1_gaze_frame_1a10982267ce8033854ea2afb6ffa96c26" kind="variable"><name>timestamp</name></member>
     <member refid="classgodot_1_1_gaze_frame_1a3396e2ba8b2ffcabbb4bf9dfb73d35b8" kind="variable"><name>face_detected</name></member>
     <member refid="classgodot_1_1_gaze_frame_1aee7597fe4fd052369f8d16e9fe936df8" kind="variable"><name>gaze_success</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1a654a89a0173d1ce7e669b9a263de3e92" kind="variable"><name>temporal_tracking</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1aef1673b350f14abf49c48087ff53dc93" kind="variable"><name>face_bbox</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1aa0932cc6f3c4e466a9844a7d845779d3" kind="variable"><name>face_obb</name></member>
     <member refid="classgodot_1_1_gaze_frame_1a57a7bd0ce30e96be2c2eeb1b95d4c395" kind="variable"><name>left_eye_openness</name></member>
     <member refid="classgodot_1_1_gaze_frame_1afa335c8b45cffc04c8abfeec8d464a32" kind="variable"><name>right_eye_openness</name></member>
     <member refid="classgodot_1_1_gaze_frame_1ad9d9abf966fda7107b3fc01a14ae6890" kind="variable"><name>head_translation</name></member>
@@ -231,6 +374,12 @@
     <member refid="classgodot_1_1_gaze_frame_1a21584f7180a8c5bfdb578c3badcdc9c1" kind="function"><name>get_timestamp</name></member>
     <member refid="classgodot_1_1_gaze_frame_1aa2d7a906c7b6843fb6e439c18a284899" kind="function"><name>set_face_detected</name></member>
     <member refid="classgodot_1_1_gaze_frame_1a0fcc2031c2cc598140a8a30cdc7bdd0b" kind="function"><name>get_face_detected</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1a287734b820b15ae3877b271f62e10502" kind="function"><name>set_face_bbox</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1ade6f284457f324d9325b79d3956415fd" kind="function"><name>get_face_bbox</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1af29bcebed7b8a33391b74b4ce8378a3d" kind="function"><name>set_face_obb</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1a2e1fa400da475ff4cb75a80b56bba8eb" kind="function"><name>get_face_obb</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1a64f68281cf0922802e4a9790a6d51185" kind="function"><name>set_is_temporal_tracking</name></member>
+    <member refid="classgodot_1_1_gaze_frame_1aa3f29069e0d8ce94d553b3f2835b08d2" kind="function"><name>is_temporal_tracking</name></member>
     <member refid="classgodot_1_1_gaze_frame_1ae4fc51b8bae62f9b23d2341946e53dc9" kind="function"><name>set_gaze_success</name></member>
     <member refid="classgodot_1_1_gaze_frame_1abd5a3fee3169ded1baab291e6c22a14b" kind="function"><name>get_gaze_success</name></member>
     <member refid="classgodot_1_1_gaze_frame_1ab2d2744d8ac8a79789c6baf933f50784" kind="function"><name>set_left_eye_openness</name></member>
@@ -259,8 +408,16 @@
     <member refid="struct_gaze_1_1_gaze_frame_data_1a17814e1963c875e0da1b0f0aaa41ada5" kind="variable"><name>roll_hint_rad</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1aad5264e8238f9df46ae942dca284d30b" kind="variable"><name>auto_roll_enabled</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1aaed00805f0700f1ee3ebba5ad95fab86" kind="variable"><name>face_bbox</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a5192c1bb00f056fb4acc5c08d9a77da1" kind="variable"><name>face_bbox_cam</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a8cb316e211b794d071f08db0461fd987" kind="variable"><name>face_obb_cam_px</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a45d578223e75f9e46c6f55db05fec187" kind="variable"><name>tracking_mode</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a424b9114566829ab11645040cf653bea" kind="variable"><name>is_temporal_tracking</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a5354c1f94ee6c4d184aeb4151c70b706" kind="variable"><name>landmark_rmse_px</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1af2d92fbc94724d7a29683007ba195a20" kind="variable"><name>landmark_quality</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1ad3666a8df15da621b455e4455842d7f9" kind="variable"><name>face_score</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1a707ef24165a72309a46f7adcf4d8edfe" kind="variable"><name>eye_box_sz</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1a8b393c306594c3ddefb568aba26d471a" kind="variable"><name>right_eye_box_sz</name></member>
+    <member refid="struct_gaze_1_1_gaze_frame_data_1abcc93cad26114952300790ece1b9fa70" kind="variable"><name>left_eye_box_sz</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1abe102119735c0daf1cd28ab7450c500e" kind="variable"><name>internal_landmarks_working_px</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1ae0c703e19ac23ec6f672be04930e8b36" kind="variable"><name>eye_crops</name></member>
     <member refid="struct_gaze_1_1_gaze_frame_data_1a8128e918ce094d52dd107d9122e5a476" kind="variable"><name>face_detected</name></member>
@@ -291,6 +448,10 @@
     <member refid="class_gaze_1_1_gaze_model_1a1b5a9df819ffa91ade74829efa2690a7" kind="function"><name>estimate_raw_gaze</name></member>
     <member refid="class_gaze_1_1_gaze_model_1a128e54ad723e438c2840b18d83e5b902" kind="function"><name>set_config</name></member>
   </compound>
+  <compound refid="struct_gaze_1_1_gaze_mouse_point" kind="struct"><name>Gaze::GazeMousePoint</name>
+    <member refid="struct_gaze_1_1_gaze_mouse_point_1a43c6662db6179bc5644b4c490ab6dc72" kind="variable"><name>x</name></member>
+    <member refid="struct_gaze_1_1_gaze_mouse_point_1a1294f054b00e1a636d84860640ac1330" kind="variable"><name>y</name></member>
+  </compound>
   <compound refid="classgodot_1_1_gaze_pipeline_config" kind="class"><name>godot::GazePipelineConfig</name>
     <member refid="classgodot_1_1_gaze_pipeline_config_1a0c1ad6611d203d2c4e09766e55b36d75" kind="variable"><name>config</name></member>
     <member refid="classgodot_1_1_gaze_pipeline_config_1a9996da53f16bdde9d008cdf7b230be5a" kind="function"><name>GDCLASS</name></member>
@@ -310,6 +471,16 @@
     <member refid="classgodot_1_1_gaze_pipeline_config_1aeec3c1e201b40e54505c24126f6b7e9f" kind="function"><name>set_debug_image_throttle_interval</name></member>
     <member refid="classgodot_1_1_gaze_pipeline_config_1a74c56ae29b9dd4151d13b8b25621b734" kind="function"><name>get_debug_image_throttle_interval</name></member>
     <member refid="classgodot_1_1_gaze_pipeline_config_1a53d294b823e622f3bf4af870f8890a7f" kind="function"><name>get_config</name></member>
+  </compound>
+  <compound refid="classgodot_1_1_gaze_profile" kind="class"><name>godot::GazeProfile</name>
+    <member refid="classgodot_1_1_gaze_profile_1a72da57809da10886f2ad18b62a0291e3" kind="function"><name>GDCLASS</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1aad9f7a5ea62145110e745b30bc97b479" kind="function"><name>_bind_methods</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1a7af0d3d12ddc67300dfca8108ed5c242" kind="function"><name>_write_to_config</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1aa9fb7efd4536482af7e93e6f30e5d8fe" kind="function"><name>_read_from_config</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1a0a2e19ab32ed8b535d1c25683c37dc16" kind="function"><name>GazeProfile</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1ac1fcd21b71d65af31406c93227e0a282" kind="function"><name>~GazeProfile</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1a751766762f982193e4a8143a5bfc6228" kind="function"><name>save_to_file</name></member>
+    <member refid="classgodot_1_1_gaze_profile_1a38b47669054da826a662fa40e24d358b" kind="function"><name>load_from_file</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_gaze_rect" kind="struct"><name>Gaze::GazeRect</name>
     <member refid="struct_gaze_1_1_gaze_rect_1a5c9aab1e503d77b7156b949cbcf26e0c" kind="variable"><name>x</name></member>
@@ -337,11 +508,17 @@
     <member refid="classgodot_1_1_gaze_server_1ab68c4c7c72bb93bdfa4a2a30e8747c2c" kind="variable"><name>active_trackers</name></member>
     <member refid="classgodot_1_1_gaze_server_1aec790c04c4ec144b96a0ca6af9889c53" kind="variable"><name>emulate_gaze_from_mouse</name></member>
     <member refid="classgodot_1_1_gaze_server_1a22ff5b2bdc82b756f92bda275b32f787" kind="variable"><name>emulate_mouse_from_gaze</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a60c1bb772b475039fe5c0d08ff10ba3b" kind="variable"><name>default_clamping</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a8e6189da4ce0b7014b6af787b050099a" kind="variable"><name>mouse_filter_recenter_needed</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a1386c9d4e4c564425c8a64327a7d2d7c" kind="variable"><name>mouse_filter_x</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ae77c8385bab415c0c791360aa423d208" kind="variable"><name>mouse_filter_y</name></member>
     <member refid="classgodot_1_1_gaze_server_1a75d41700df5eb94c58f747732e6d892b" kind="variable"><name>last_camera_face_detected_usec</name></member>
-    <member refid="classgodot_1_1_gaze_server_1a0b8475e257ab179b7f271bb02f89ab37" kind="variable"><name>was_both_closed</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a448d273c53084421292d520d92023005" kind="variable"><name>blink_state_machine</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a46678cc0d95b93dbab8f2db064f9f533" kind="variable"><name>DEVICE_ID_GAZE_SYNTHETIC</name></member>
     <member refid="classgodot_1_1_gaze_server_1a3768608882fa29f1315d5f153e9325ba" kind="function"><name>GDCLASS</name></member>
     <member refid="classgodot_1_1_gaze_server_1abdaec16f7e618f7f7dbf81d859bef70f" kind="function"><name>_bind_methods</name></member>
     <member refid="classgodot_1_1_gaze_server_1a8b8ae459b933ffd1418be7e1bab0bdcf" kind="function"><name>get_singleton</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a0e8a54ed102a8d9b04ad0604dc8dd468" kind="function"><name>is_synthetic_mouse_event</name></member>
     <member refid="classgodot_1_1_gaze_server_1a1601eda7c599bafea6616eb4933678dd" kind="function"><name>get_build_info</name></member>
     <member refid="classgodot_1_1_gaze_server_1a09de30757865b32c833c06d1903ae7dc" kind="function"><name>get_build_timestamp</name></member>
     <member refid="classgodot_1_1_gaze_server_1aaa7e73383e8ddfad651448f3f410932a" kind="function"><name>GazeServer</name></member>
@@ -378,6 +555,12 @@
     <member refid="classgodot_1_1_gaze_server_1a5d88b346f9e1a6237ee15c1c1ef92068" kind="function"><name>get_face_landmarks</name></member>
     <member refid="classgodot_1_1_gaze_server_1a0667e341f52790f2e381e6aaaa6a105f" kind="function"><name>get_debug_landmarks</name></member>
     <member refid="classgodot_1_1_gaze_server_1aa6b3cfe29fb3810f41d4ddb8d88833aa" kind="function"><name>set_face_landmarks_2d</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ae2ae3f7bc392406c24e50eede9c87b36" kind="function"><name>get_face_bbox</name></member>
+    <member refid="classgodot_1_1_gaze_server_1adf18b6b05f4b1f9bcbc05a7fa26c4ec4" kind="function"><name>set_face_bbox</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a8e6d004cbd86c6643259349b31f09291" kind="function"><name>get_face_obb_2d</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ae00a867ffb58f3d70c8c0051431b3530" kind="function"><name>set_face_obb_2d</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a667d0f97da02d0882bd08e23ed97c0ef" kind="function"><name>is_temporal_tracking</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ac8e2f1a5875d22ac43d9d740b04f1980" kind="function"><name>set_is_temporal_tracking</name></member>
     <member refid="classgodot_1_1_gaze_server_1a7099d489659b680dff02581ee03b746f" kind="function"><name>get_face_model_points</name></member>
     <member refid="classgodot_1_1_gaze_server_1aca8573acacb93ac6a0d9aa3f7c5aaa27" kind="function"><name>set_roll_hint</name></member>
     <member refid="classgodot_1_1_gaze_server_1a7abe7e80202f1b8fb86e4d2af793f221" kind="function"><name>get_roll_hint</name></member>
@@ -417,8 +600,18 @@
     <member refid="classgodot_1_1_gaze_server_1acd3a78080049bde148630357aedabc7c" kind="function"><name>create_default_missing_event</name></member>
     <member refid="classgodot_1_1_gaze_server_1afba19bd41e7e4bb6bb5af21b4e1f872c" kind="function"><name>set_emulate_gaze_from_mouse</name></member>
     <member refid="classgodot_1_1_gaze_server_1af9941e2c6bfebf948eeacbac67648750" kind="function"><name>get_emulate_gaze_from_mouse</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ab1c6979216b46b6e2fa29fcb777902fa" kind="function"><name>is_mouse_emulated</name></member>
     <member refid="classgodot_1_1_gaze_server_1a01d82ad0c25e44ee8534ef2bd97c96ae" kind="function"><name>set_emulate_mouse_from_gaze</name></member>
     <member refid="classgodot_1_1_gaze_server_1a1435b15bf7bf0ff0c874284fdcfe3eb5" kind="function"><name>get_emulate_mouse_from_gaze</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a5e5dcabf787451b58450ce7a376d1968" kind="function"><name>set_default_clamping</name></member>
+    <member refid="classgodot_1_1_gaze_server_1af0585c386114fba80be375b80689fb51" kind="function"><name>is_clamping_by_default</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a18e0fa63c0b5b0abdc81a209c659eada" kind="function"><name>is_physical_mouse_still</name></member>
+    <member refid="classgodot_1_1_gaze_server_1ad1c2893cae2c2f34fb4ba922080b190f" kind="function"><name>is_physical_mouse_active</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a388bece8825868e659bcd416df160e93" kind="function"><name>set_mouse_stillness_duration</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a4ae8bf0792397a56e3f32ff842da35f8" kind="function"><name>get_mouse_stillness_duration</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a8e179acc82ed2a105a70f6b74630d272" kind="function"><name>set_mouse_stillness_threshold_px</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a1bbf59a09b2596bbb043310011e478ec" kind="function"><name>get_mouse_stillness_threshold_px</name></member>
+    <member refid="classgodot_1_1_gaze_server_1a40d425b642ba56d62d37416b0377e4e1" kind="function"><name>get_canonical_viewport_size</name></member>
     <member refid="classgodot_1_1_gaze_server_1a69aea5a350ec6f94e19994b549cc6d19" kind="function"><name>set_mouse_emulation_dwell_sec</name></member>
     <member refid="classgodot_1_1_gaze_server_1ae0e1af81160134c07f3e6d8e8a9dde24" kind="function"><name>get_mouse_emulation_dwell_sec</name></member>
     <member refid="classgodot_1_1_gaze_server_1a5a2a0eaa64ef70ccb6890350e1dd35fd" kind="function"><name>set_mouse_emulation_transition_sec</name></member>
@@ -461,7 +654,7 @@
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a53a12c145d56e36775d5ef2222c8423e" kind="variable"><name>gaze_estimator</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a6e23e70584cea649ae20a3263dbd24ca" kind="variable"><name>worker_thread</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ae344b36ac03a7cbc002b64f754d01161" kind="variable"><name>thread_running</name></member>
-    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a4b69b9983aafee10910fef07dcb1df32" kind="variable"><name>state_mutex</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a366cd04b42906aea6dbab33ca4a1abf2" kind="variable"><name>state_mutex</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a48f0572b6e5f01eda096e959bb6dded3" kind="variable"><name>worker_cv</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1add24542d41cd712c37c4216cba13f385" kind="variable"><name>worker_mutex</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a17839dee84a776c7dcf82dbcc44210fb" kind="variable"><name>lifecycle_mutex</name></member>
@@ -473,6 +666,20 @@
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ae54b5e8341804774e9898aadb982e7d0" kind="variable"><name>config_dirty</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a5526e8abf6576e8e6a3286f5d0057cbb" kind="variable"><name>worker_busy</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ac25b5af4a66f99e3ba80b413a7ff6b10" kind="variable"><name>roll_filter</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a75b75d1b23b0586d59f9005bef9568ad" kind="variable"><name>face_found</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a06cd4ddaef4edb475442c2b291995cbc" kind="variable"><name>tracking_mode</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a8b7f5f42e2e38b4eabd3c29e2da1e752" kind="variable"><name>roi_anchor_face</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a68d00c422530afe824426a6f82043c8a" kind="variable"><name>roi_phys_w_mm</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ac4546c137458e43d7e7ca2de91dc5a94" kind="variable"><name>roi_phys_h_mm</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a8c99f0d7d92f57b62425043af1c65e0d" kind="variable"><name>last_rvec</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a2f5a7928b713decae8501e4fbb1a1344" kind="variable"><name>last_tvec</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ac9995661b5b2d5c1064c801cc417a136" kind="variable"><name>last_roll_hint_rad</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a8a5ce7e61b16108303480953ad67e20a" kind="variable"><name>tracking_face_center_cam</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a6d31684b7d559db01962e1ac36f7e556" kind="variable"><name>offset_work</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a0651c045166c8ca99dc4875db68f3675" kind="variable"><name>tracking_face_w</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1abd16c454bd96db23b33db5e7c60d4a16" kind="variable"><name>tracking_face_h</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a3cd7c9cbc682efedc41b38bde0e7bcdc" kind="variable"><name>last_frame_w</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1ab357216c793d8571b13feeed80b81773" kind="variable"><name>last_frame_h</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a89dbe0aa50dc354d0dba83bea445db87" kind="variable"><name>frame_pool</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a7e45122d36e916c8a8d1db80275c7320" kind="function"><name>_worker_loop</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1abc1c103c404575522b9b5ef0dd9c5456" kind="function"><name>_stage_1_apply_roll_hint</name></member>
@@ -494,6 +701,7 @@
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1afe6c7f9d5c67882770e6f987df43c171" kind="function"><name>push_frame_request</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a3071ccd0f3622a90fb3a6e6ce7b9acaf" kind="function"><name>pop_result</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a6de071df6b2487d9697a6da3cd7d5454" kind="function"><name>clear_work_queue</name></member>
+    <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a51d9827c04a934a83341591e8b16f94f" kind="function"><name>reset_face_tracking</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a5ce06372b771ce2f356861ef448589c5" kind="function"><name>reset_tracker</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1a6ff64be17b701f18dfb5e341e7c2792f" kind="function"><name>is_initialized</name></member>
     <member refid="class_gaze_1_1_gaze_tracking_pipeline_1aa2f809fc4369523921e4c44bbfc118c4" kind="function"><name>is_busy</name></member>
@@ -542,28 +750,31 @@
     <member refid="class_gaze_1_1_image_warper_1a2f2cee9ed586c287b35eb3dede5b9201" kind="function"><name>increment_frame_number</name></member>
   </compound>
   <compound refid="classgodot_1_1_input_event_gaze" kind="class"><name>godot::InputEventGaze</name>
+    <member refid="classgodot_1_1_input_event_gaze_1a6f7df72a5b79ca21eef0658e3816bc27" kind="enum"><name>ClampingMode</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a6f7df72a5b79ca21eef0658e3816bc27a476b0956a7e3b250de1d6e93f51ed405" kind="enumvalue"><name>CLAMPING_FREE</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a6f7df72a5b79ca21eef0658e3816bc27ad9b940dc4064ee6ad2703f855040e7f4" kind="enumvalue"><name>CLAMPING_CLAMPED</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a6f7df72a5b79ca21eef0658e3816bc27a3f588fb8c7661df637acaec2596539ca" kind="enumvalue"><name>CLAMPING_DEFAULT</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a00366a78591bf34f9fff1b44d54b3b2a" kind="variable"><name>eye_gaze_position</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1af2e058d12e7630c545985dab7a4d0005" kind="variable"><name>nose_gaze_position</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a5d48d7430a09d1fb62c6b175d74c987b" kind="variable"><name>head_transform</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a1bc1e08450980659ffce502a8c39bafd" kind="variable"><name>gaze_transform</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a822b5eb43864cd4572c24d04f76380e1" kind="variable"><name>eye_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1abfdca591beb0b4518c7c26a4b3930ba4" kind="function"><name>GDCLASS</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a13b5fb43d138ce305ceeadc489f92caf" kind="function"><name>_bind_methods</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a81f8f94e7db83ed5ec1d28ea6df60789" kind="function"><name>InputEventGaze</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1ae538cf85b2ca5fa4b95341c3f1a18401" kind="function"><name>~InputEventGaze</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" kind="function"><name>is_face_tracked</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kind="function"><name>get_eye_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a57abd8026a2b533ffc6d318d53b99bac" kind="function"><name>get_eye_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1afc26596d9e42c0b3d051a6cf77e5c871" kind="function"><name>_get_eye_gaze_property</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kind="function"><name>set_eye_gaze</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kind="function"><name>get_nose_gaze</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1abc5289461caf2837837e3ecdbbe2f898" kind="function"><name>get_nose_gaze</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kind="function"><name>set_nose_gaze</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" kind="function"><name>get_head_pose</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" kind="function"><name>set_head_pose</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" kind="function"><name>get_eye_origin</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" kind="function"><name>get_eye_direction</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kind="function"><name>set_head_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kind="function"><name>get_head_transform</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kind="function"><name>set_gaze_transform</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a762e1a352ab6800a3a49267051ed3cfc" kind="function"><name>set_eye_transform</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1ad9b62e2ef70da9a4302b398e038188ac" kind="function"><name>get_eye_transform</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" kind="function"><name>get_gaze_transform</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_1a2a012045ed15323894546f0fc13dd959" kind="function"><name>copy_from</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kind="function"><name>set_gaze_transform</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_1a089fe652aa16d1178675d3867ad09e6c" kind="function"><name>copy_from</name></member>
     <member refid="classgodot_1_1_input_event_gaze_1a2d5b5b04af966c2d93b68144afe67d16" kind="function"><name>as_text</name></member>
   </compound>
   <compound refid="classgodot_1_1_input_event_gaze_base" kind="class"><name>godot::InputEventGazeBase</name>
@@ -603,7 +814,7 @@
     <member refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" kind="function"><name>is_face_tracked</name></member>
     <member refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" kind="function"><name>set_reason</name></member>
     <member refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" kind="function"><name>get_reason</name></member>
-    <member refid="classgodot_1_1_input_event_gaze_missing_1a6f2fcf8119c8f5ed44bbec80a6ea8fa3" kind="function"><name>copy_from</name></member>
+    <member refid="classgodot_1_1_input_event_gaze_missing_1a973631e280f681083b049e1cab2671fa" kind="function"><name>copy_from</name></member>
     <member refid="classgodot_1_1_input_event_gaze_missing_1a0c3df13f1e310781113e97249c9149ac" kind="function"><name>as_text</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_concurrency_1_1_pool_1_1_item" kind="struct"><name>Gaze::Concurrency::Pool::Item</name>
@@ -615,6 +826,9 @@
     <member refid="classgodot_1_1_mock_gaze_display_server_1a538aca576ae6deb682ab2c58b986d76c" kind="variable"><name>mock_screen_size_pixels</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1ac5e36d500d5cab145b8e2aaa4ff745c6" kind="variable"><name>mock_window_rect</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1ab91982658eb76b4187370eae837eeba1" kind="variable"><name>mock_screen_scale</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a3b37a569262751d21c0bcd1948357bf2" kind="variable"><name>mock_mouse_position</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a32b040aba1ddce4f38648fb86b219434" kind="variable"><name>mock_mouse_button_state</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a418527838c2305b67cce10d7936d2975" kind="variable"><name>emitted_mouse_events</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a3057656ccc21893b01ffe5a46f620a8b" kind="function"><name>GDCLASS</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1ade2b7d9904788784305e933675e7a3c5" kind="function"><name>_bind_methods</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a243ffbbeb5e9116ba60600ae8478f057" kind="function"><name>MockGazeDisplayServer</name></member>
@@ -624,10 +838,18 @@
     <member refid="classgodot_1_1_mock_gaze_display_server_1ae5e5f53314ead3fe8521c60656625769" kind="function"><name>get_pixel_pitch_mm</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a4e2f80ac63e79325e85a531e98f31549" kind="function"><name>get_screen_scale</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1ac558a079342a017ee92b0db0c155a0ba" kind="function"><name>get_window_rect_pixels</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a9ef33ea07836903cd2d89632344907d7" kind="function"><name>mouse_get_position</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a647dcd08160452abf872d27fd364d9b2" kind="function"><name>mouse_get_button_state</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a28b0a8ed5b4fa05bced562c47130fbda" kind="function"><name>parse_mouse_motion</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a0523728bd4967d0edcbebb7e4832bed1" kind="function"><name>parse_mouse_button</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1afbef17ee4170af1d596ad2a7b204ae2e" kind="function"><name>set_screen_size_mm</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a819ccd0080a4187dea258b294e4a1681" kind="function"><name>set_screen_size_pixels</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a84fdd34786e918d3cde77aac8c60960c" kind="function"><name>set_window_rect_pixels</name></member>
     <member refid="classgodot_1_1_mock_gaze_display_server_1a7b1967864d7ac4a3d982c2bd22b7fe06" kind="function"><name>set_screen_scale</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1a9033a3c6bf4c7e9135179fc20dc0421e" kind="function"><name>set_mouse_position</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1ac8297427134741d04c33b97c1e5a53e3" kind="function"><name>set_mouse_button_state</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1afb556ed02acbbd870dfc611772b8f752" kind="function"><name>get_emitted_mouse_events</name></member>
+    <member refid="classgodot_1_1_mock_gaze_display_server_1ac6a5605964aafde0038ffa15cbe06418" kind="function"><name>clear_emitted_mouse_events</name></member>
   </compound>
   <compound refid="classgodot_1_1_mock_vision_server" kind="class"><name>godot::MockVisionServer</name>
     <member refid="classgodot_1_1_mock_vision_server_1a36e6e72a35e880fc4ce94be169fd9ebe" kind="function"><name>GDCLASS</name></member>
@@ -639,6 +861,7 @@
     <member refid="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" kind="function"><name>camera_stop</name></member>
     <member refid="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" kind="function"><name>get_camera_current_texture</name></member>
     <member refid="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" kind="function"><name>camera_get_current_image</name></member>
+    <member refid="classgodot_1_1_mock_vision_server_1a6b5ba75e0437cfe2a71a6dd89900ddbc" kind="function"><name>get_camera_current_frame</name></member>
     <member refid="classgodot_1_1_mock_vision_server_1ac9ecd69c6d4fa719955a2b662ae0dec9" kind="function"><name>set_simulated_acceleration</name></member>
     <member refid="classgodot_1_1_mock_vision_server_1a6b5b3db71732c984c4393f0c87de7a6d" kind="function"><name>inject_texture</name></member>
   </compound>
@@ -646,12 +869,12 @@
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a861a261080b66498290da8c7e7f1e1c2" kind="variable"><name>dwell_time_sec</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1ad7303dad137dfaf627bf2f90df02066b" kind="variable"><name>transition_duration_sec</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1ab2aacbba579d82f3a77bafdf309d0e05" kind="variable"><name>motion_threshold_px</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1ab272d5c959fccfff2c64cf7eb7fcd747" kind="variable"><name>arbitrator</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1ad92883a92ed56c0a24a4bf8b56055b24" kind="variable"><name>dwell_timer</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a0f6a8cc6fae993dc75c893e5a6b81dad" kind="variable"><name>blend_progress</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a70b97b630cd030bf3f325c88eb21d3bb" kind="variable"><name>last_mouse_pos</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a85e6071ade6558ac3eaf82ad83f285c1" kind="variable"><name>last_screen_mouse_pos</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1aefe2812b6e2c515d9b7d70bc8af970b3" kind="variable"><name>last_window_pos</name></member>
-    <member refid="classgodot_1_1_mouse_gaze_emulation_1a50aad31b1485e82e7748575b853f0385" kind="variable"><name>last_window_mode</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a70f26d8f77c2dd7eb7a9839a6dbcf537" kind="variable"><name>has_last_mouse_pos</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a27331a0f79d2bf77f56f29ca5292cf77" kind="variable"><name>has_last_window_state</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a94a342e3cf9ea7c6b9678f341da90dbe" kind="variable"><name>last_cam_gaze_pos</name></member>
@@ -664,19 +887,64 @@
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a41bff64fda95b73686e69f9717749e15" kind="function"><name>~MouseGazeEmulation</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a3d78847b99251e828e4aa3da7fc66e60" kind="function"><name>set_dwell_time</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a2cdce985a5d4d3817ea234293f9bdebb" kind="function"><name>get_dwell_time</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1aec3f79ba0f11b5e433c247c5877bf536" kind="function"><name>set_stillness_duration</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a61b8da3c0f024e7eb1d7086365636f9f" kind="function"><name>get_stillness_duration</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a7aac969d181f9fc791cf51c698d57301" kind="function"><name>set_stillness_threshold</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a1f3f9100e591ab596629fc34921264c3" kind="function"><name>get_stillness_threshold</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a00e12d116326073fb5735a10712fe4e9" kind="function"><name>set_transition_duration</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1af2b999207383e834ebae202c21e7f763" kind="function"><name>get_transition_duration</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1aa72d483ca7bb69797a4ebbc9f8bcf0ff" kind="function"><name>set_motion_threshold</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a7f1a095c1fe48e6b320fda6c6428abc3" kind="function"><name>get_motion_threshold</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1ab08a302e8a02d695f846fd477c81de8a" kind="function"><name>is_physical_mouse_still</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a7157894ee9f2b519da722738de09e9bd" kind="function"><name>is_physical_mouse_active</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a9e38f1115fe63ac589caebd31e6a211e" kind="function"><name>has_interacted</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1ab84b9180fb0514a741a43b0d6905f15a" kind="function"><name>get_stillness_timer</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a9e74a89a6854d3fb68fbbdf9cdc7a9a0" kind="function"><name>notify_camera_event</name></member>
-    <member refid="classgodot_1_1_mouse_gaze_emulation_1ad99c6c67b39f951d13c96bc39855c20a" kind="function"><name>update</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a066ee263cdcfa190d751da92e31bb8a9" kind="function"><name>update</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a3345192d5a062013b209db4e285bae74" kind="function"><name>is_emulation_active</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1ac36edc4787dffd8ad575392e70965f88" kind="function"><name>is_in_transition</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a61e76542aef8664a0f56fa9b13781f0a" kind="function"><name>get_dwell_timer</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a1ea977a4a716f74a29d9d9529fa09990" kind="function"><name>get_blend_progress</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1a7f3e88da3516e15cdd2cfca90b7ea651" kind="function"><name>get_eased_blend_factor</name></member>
-    <member refid="classgodot_1_1_mouse_gaze_emulation_1a474f5948d1b127f84103d44dd6223e4f" kind="function"><name>synthesize_event</name></member>
+    <member refid="classgodot_1_1_mouse_gaze_emulation_1a96dd95d6a8dcc404f5429419849cd238" kind="function"><name>synthesize_event</name></member>
     <member refid="classgodot_1_1_mouse_gaze_emulation_1ae5683ebe731de153dd75ef8e32eba833" kind="function"><name>reset</name></member>
+  </compound>
+  <compound refid="class_gaze_1_1_mouse_stillness_arbitrator" kind="class"><name>Gaze::MouseStillnessArbitrator</name>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10b" kind="enum"><name>State</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10ba8abbff1fca5d215ba5fa05029c76f85d" kind="enumvalue"><name>STATE_ACTIVE</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10bae09b9db511da0f93f5047b0c308bf730" kind="enumvalue"><name>STATE_SETTLING</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10baff6812e3a95cd7d965980518b0c7a5a3" kind="enumvalue"><name>STATE_STILL</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1adaa1649edac7504a3d40a17ad053b2a2" kind="variable"><name>state</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a028e91321f16bfeb90d3842453333e2d" kind="variable"><name>ring_buffer</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ab9cd6f2d1a06e40cdbe7e2cda4b9cfff" kind="variable"><name>ring_head</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9cf0ead77c09dd968d83565056ed8353" kind="variable"><name>ring_count</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a821ff910b962ad78e2c54e0fe1c2be50" kind="variable"><name>anchor_pos</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ad4f403efb47131cd9d92c07f3e9bd1ad" kind="variable"><name>has_anchor</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9a39b26f6d07701bcf264e461beb0e86" kind="variable"><name>anchor_bubble_radius_px</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af87da67c5f69c2e6b03cb31c1769b16d" kind="variable"><name>window_velocity_threshold_px_s</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1acee624c8663f58316ec042983ee39410" kind="variable"><name>window_duration_usec</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a69307252a1d61b7d528465d784fb4555" kind="variable"><name>stillness_timer</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af48f4f3d3d0ac0c459f067fa8b703e92" kind="variable"><name>stillness_duration_sec</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1afed001e350f69b83910f01fd1f9ca3a0" kind="variable"><name>has_user_interacted</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a79d54a9182d00e73a6526058b3c29ffa" kind="variable"><name>RING_CAPACITY</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ad7107b4297cd50f82e61d9826a84bc2c" kind="function"><name>MouseStillnessArbitrator</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af551aefb1ea428046842cc3433352337" kind="function"><name>reset</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa2e153d848b17ae3be64c0a6d9357291" kind="function"><name>record_sample</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ac9e05eedc8b5076286c82581f46d5ac9" kind="function"><name>compute_window_velocity</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9da78e200f60add89dbe9f5dd1e5ed0c" kind="function"><name>is_mouse_still</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a01b4a0c53556a2bbee6723cc890874c4" kind="function"><name>is_mouse_active</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af3490d31c3ed6e8d2be6a59d1803da92" kind="function"><name>get_target_blend</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a322d5c236f01514020f4d8194de7cbc7" kind="function"><name>update</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aae80ea2a3d64c8d1fd2458632f2465fe" kind="function"><name>get_stillness_duration</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa3c0f96c3f16f65b749f6df40b602586" kind="function"><name>set_stillness_duration</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a69efa7bf849b01be7aa981d505b28d0c" kind="function"><name>get_anchor_bubble_radius_px</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1afc2b01c50b5944712110c6f5cbde8d52" kind="function"><name>set_anchor_bubble_radius_px</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a00b7b903257c0dd2d226cf93e6cb142c" kind="function"><name>get_window_velocity_threshold_px_s</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9a5270f920d746e8ede3e94f3992e07a" kind="function"><name>set_window_velocity_threshold_px_s</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a046db33369589d3cb88a957bb3d5bf4a" kind="function"><name>get_window_duration_usec</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a4d19a3c5205a62d2478e9bd66f0154f2" kind="function"><name>set_window_duration_usec</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a7139b3da7d30bba2d29db7987179ccf5" kind="function"><name>get_stillness_timer</name></member>
+    <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a8f6a07f5ec1bb76dbc07e7916fc17a87" kind="function"><name>has_interacted</name></member>
   </compound>
   <compound refid="classgodot_1_1_one_euro_filter_state" kind="class"><name>godot::OneEuroFilterState</name>
     <member refid="classgodot_1_1_one_euro_filter_state_1a3fcd2ab08a785b2f9f1eeced45343c90" kind="variable"><name>impl</name></member>
@@ -712,6 +980,8 @@
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1af22193963e4466d19e12afcde7fb3e37" kind="variable"><name>memory_info</name></member>
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1a55069ed0f03632242afe9f5dc0376ea2" kind="variable"><name>input_name</name></member>
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1a752fa68ab8df11c165bc5f1a48d45980" kind="variable"><name>output_name</name></member>
+    <member refid="class_gaze_1_1_o_r_t_eye_state_model_1a7c464eb6e751e3bf19a965bd5800ddc1" kind="variable"><name>input_tensor_data</name></member>
+    <member refid="class_gaze_1_1_o_r_t_eye_state_model_1a5ac385870ac898b257736e7d32d83730" kind="variable"><name>input_shape</name></member>
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1aeb4b0c09b75cc6f75c74f50636cd528c" kind="function"><name>preprocess_eye_crop_32</name></member>
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1af37ac6c30ab349cbbfa07f783f6a3af2" kind="function"><name>ORTEyeStateModel</name></member>
     <member refid="class_gaze_1_1_o_r_t_eye_state_model_1a7c8f54343f1f7acce384911a5fc990d9" kind="function"><name>ORTEyeStateModel</name></member>
@@ -728,6 +998,11 @@
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1adaea253d279af97a43636d10f43cea57" kind="variable"><name>config</name></member>
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1a658f8e289bd38928ca1adb620ff03005" kind="variable"><name>input_names</name></member>
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1ab13eab164a52e50cbdc25f159c05606b" kind="variable"><name>output_names</name></member>
+    <member refid="class_gaze_1_1_o_r_t_gaze_model_1a9152fe5a2d89ef5222ab55454510b3d2" kind="variable"><name>left_eye_tensor_data</name></member>
+    <member refid="class_gaze_1_1_o_r_t_gaze_model_1a9eeba06a1992868a55c1fd248717e913" kind="variable"><name>right_eye_tensor_data</name></member>
+    <member refid="class_gaze_1_1_o_r_t_gaze_model_1a42c750b4eb5e05f870e94b1d10d8392c" kind="variable"><name>head_pose_tensor_data</name></member>
+    <member refid="class_gaze_1_1_o_r_t_gaze_model_1a558c9e74efdabe224ce6c1131b1641a3" kind="variable"><name>eye_shape</name></member>
+    <member refid="class_gaze_1_1_o_r_t_gaze_model_1ad36b1b31c13ee5822164b61063d0e156" kind="variable"><name>head_shape</name></member>
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1a6fcb187332769b4c79a523bcef7d2591" kind="function"><name>preprocess_eye_crop</name></member>
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1abb79047badbd7ab8ce5c621d8711e879" kind="function"><name>ORTGazeModel</name></member>
     <member refid="class_gaze_1_1_o_r_t_gaze_model_1ac161a5ba84b50679276dce4d511438ef" kind="function"><name>ORTGazeModel</name></member>
@@ -746,6 +1021,8 @@
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a73da1cbeeeeb76edc1416b9d5728f309" kind="variable"><name>memory_info</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a0ee327f2bccdf194ad3d9155f564ebd5" kind="variable"><name>input_names</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a459e0df54bebd3eebc0fea1251c735e7" kind="variable"><name>output_names</name></member>
+    <member refid="class_gaze_1_1_o_r_t_landmark_model_1a49127995af6d5f1ee10d928ff628b027" kind="variable"><name>cached_crop_60</name></member>
+    <member refid="class_gaze_1_1_o_r_t_landmark_model_1abafeecdc38243e85f26d68ce44f6396e" kind="variable"><name>cached_input_tensor</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a03b1378e851fbfaed66474de08bdee51" kind="function"><name>preprocess_face_crop</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a4df101dc9de79afaf1a51f12adc4f0e0" kind="function"><name>ORTLandmarkModel</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1ade43b0c3a2102df79499278749467c2f" kind="function"><name>ORTLandmarkModel</name></member>
@@ -754,6 +1031,7 @@
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a4c17fcecb46cc85657c99ec20c2626aa" kind="function"><name>extract_landmarks_norm</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a9307140ef205e5a84631072ebc1b9af3" kind="function"><name>extract_landmarks</name></member>
     <member refid="class_gaze_1_1_o_r_t_landmark_model_1a6c27c4449363ac36f17043180678a53f" kind="function"><name>extract_landmarks</name></member>
+    <member refid="class_gaze_1_1_o_r_t_landmark_model_1a3cb5e3d6e1ee6b9890831864fbb65b69" kind="function"><name>extract_landmarks_working_space</name></member>
   </compound>
   <compound refid="class_gaze_1_1_o_r_t_yu_net_detector" kind="class"><name>Gaze::ORTYuNetDetector</name>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1ac8ea64ec74d1682152a8dad490638cda" kind="variable"><name>input_width</name></member>
@@ -769,6 +1047,9 @@
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a2f42817006cb0765742cdb342aa22086" kind="variable"><name>input_names</name></member>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a56aab02930f9927c781750ed56fd971e" kind="variable"><name>output_names</name></member>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1ac313f5de83d67b4a79f118c9a1932af1" kind="variable"><name>config</name></member>
+    <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a32be3091ef76d394df2f343614fdcd05" kind="variable"><name>cached_anchors</name></member>
+    <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a6fca37cf967d52a69e645adb735d3c3f" kind="variable"><name>cached_input_tensor_data</name></member>
+    <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a9dcd8fea185cc909b770749497cf3869" kind="variable"><name>cached_resized_bgr</name></member>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1a33c2dd7df80c74af19ed92a563b81d8a" kind="function"><name>generate_anchors</name></member>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1afac0ae802a877109ec2ee00aa02083c4" kind="function"><name>ORTYuNetDetector</name></member>
     <member refid="class_gaze_1_1_o_r_t_yu_net_detector_1adf8336ab266933c9dcac1a6ba829af86" kind="function"><name>ORTYuNetDetector</name></member>
@@ -788,6 +1069,26 @@
     <member refid="struct_gaze_1_1_pipeline_config_1a1c9b354cbc738ea1947478839cc2bfed" kind="variable"><name>desired_camera_width</name></member>
     <member refid="struct_gaze_1_1_pipeline_config_1aaee25596e0592ad97674cf2762ee8490" kind="variable"><name>desired_camera_height</name></member>
     <member refid="struct_gaze_1_1_pipeline_config_1aa1f01bffcfbd3b7d7b2ad144b4e9a4e6" kind="variable"><name>debug_image_throttle_interval</name></member>
+  </compound>
+  <compound refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kind="struct"><name>Gaze::DampedSpring::Point2D</name>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1c7b1c16b7b0455f10417adb6284f66e" kind="variable"><name>x</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a1aa0c67ea2382099b11d8b5123c3ea59" kind="variable"><name>y</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a5824f51846cf3314ead627f280c1e619" kind="function"><name>Point2D</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a526d19ef9f0c77fb9fa4ebe4812d6170" kind="function"><name>Point2D</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a82acbe18e1d0b82482ee1ec6ceaa95a1" kind="function"><name>operator+</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a09f02a3f9d3de2bf859a137982aa4878" kind="function"><name>operator-</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1abb4925abc40393b2c6fbd14b319a32bf" kind="function"><name>operator*</name></member>
+    <member refid="struct_gaze_1_1_damped_spring_1_1_point2_d_1a80ea62355df05383cb73b08ea2795518" kind="function"><name>length</name></member>
+  </compound>
+  <compound refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kind="struct"><name>Gaze::MouseStillnessArbitrator::Point2D</name>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1aeeebf79029913966061e2ffc0fffa2d9" kind="variable"><name>x</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a02a85127529bf514ac5ac11079f7fbfd" kind="variable"><name>y</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a3eb25e527cd90d36cc4bd08b4d02a55f" kind="function"><name>Point2D</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a633a069dc78ad8a33f32d25d1b0a86e1" kind="function"><name>Point2D</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a749d918daeea4d758f21788a2bddf963" kind="function"><name>operator-</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad48aca384bda979035351bbc8d2fcb10" kind="function"><name>operator+</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1adb1d1f4f9cba2fe560a2b0aee1592668" kind="function"><name>operator*</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad6bfeb916a84c0b66424ae932b0faf01" kind="function"><name>length</name></member>
   </compound>
   <compound refid="class_gaze_1_1_concurrency_1_1_pool" kind="class"><name>Gaze::Concurrency::Pool</name>
     <member refid="class_gaze_1_1_concurrency_1_1_pool_1a955c6126b378938135451052c92729f6" kind="variable"><name>items</name></member>
@@ -832,6 +1133,10 @@
     <member refid="class_gaze_1_1_projection_engine_1a283d1496569c8a418638f55d98b13f25" kind="function"><name>screen_mm_to_camera_space</name></member>
     <member refid="class_gaze_1_1_projection_engine_1a3fe06d84bd683196bceae659cbab844f" kind="function"><name>project_gaze</name></member>
     <member refid="class_gaze_1_1_projection_engine_1a76a235b72ada715947e5e75ca7d83e0e" kind="function"><name>gravity_to_orientation</name></member>
+  </compound>
+  <compound refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample" kind="struct"><name>Gaze::MouseStillnessArbitrator::Sample</name>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a6702f7caf963c101cfcc91bfdd8fe712" kind="variable"><name>timestamp_usec</name></member>
+    <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a1e4c8ede20143b3642726ca2fce7d74c" kind="variable"><name>pos</name></member>
   </compound>
   <compound refid="class_gaze_1_1_screen_projector" kind="class"><name>Gaze::ScreenProjector</name>
     <member refid="class_gaze_1_1_screen_projector_1a9d2c7bf548906c128f7eb335d4f311ab" kind="variable"><name>window_position_px</name></member>
@@ -919,6 +1224,9 @@
     <member refid="struct_gaze_1_1_spaced_vector2_1aaf780a9a3facba15ab78d4f743d50fc9" kind="function"><name>length_squared</name></member>
     <member refid="struct_gaze_1_1_spaced_vector2_1ab0b7ed67f84b752c844428847a66aa34" kind="function"><name>length</name></member>
     <member refid="struct_gaze_1_1_spaced_vector2_1ae72caf61393f68f77a0dcc1b93dea485" kind="function"><name>normalized</name></member>
+    <member refid="struct_gaze_1_1_spaced_vector2_1ab2feab4958c5d4d6a7d6449e799fea3e" kind="function"><name>is_finite</name></member>
+    <member refid="struct_gaze_1_1_spaced_vector2_1ad08dfde75568df97abbb45dedf4249d3" kind="function"><name>infinite</name></member>
+    <member refid="struct_gaze_1_1_spaced_vector2_1a5215353a97f9124be90505363e0b5761" kind="function"><name>nan</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_spaced_vector3" kind="struct"><name>Gaze::SpacedVector3</name>
     <member refid="struct_gaze_1_1_spaced_vector3_1a6e52391b503320ca92c6e157905d72d9" kind="variable"><name>x</name></member>
@@ -941,10 +1249,11 @@
     <member refid="struct_gaze_1_1_spaced_vector3_1a22edaf3ca13478c820b331e5e46eefb5" kind="function"><name>normalized</name></member>
     <member refid="struct_gaze_1_1_spaced_vector3_1a1483a9fa9a56b4dfcb9348ce5f9ed162" kind="function"><name>is_finite</name></member>
     <member refid="struct_gaze_1_1_spaced_vector3_1afec2468f28fa19c029f687cca3c6d4c0" kind="function"><name>infinite</name></member>
+    <member refid="struct_gaze_1_1_spaced_vector3_1afbb44b01e3ac04a5157f9bb697db34fb" kind="function"><name>nan</name></member>
   </compound>
   <compound refid="class_gaze_1_1_s_q_pn_p_solver" kind="class"><name>Gaze::SQPnPSolver</name>
-    <member refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kind="function"><name>solve</name></member>
-    <member refid="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" kind="function"><name>solve_rvec</name></member>
+    <member refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" kind="function"><name>solve</name></member>
+    <member refid="class_gaze_1_1_s_q_pn_p_solver_1a2c89a361dd41a098c73e8608b90cf409" kind="function"><name>solve_rvec</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_stage_timings" kind="struct"><name>Gaze::StageTimings</name>
     <member refid="struct_gaze_1_1_stage_timings_1a23eb410b7d1930dec3bf1b9d4a764e0f" kind="variable"><name>capture_gpu_readback_ms</name></member>
@@ -972,6 +1281,7 @@
     <member refid="classgodot_1_1_vision_server_1a067e714ed2f27d1cf4c4b581a3b65eb3" kind="function"><name>get_gravity_vector</name></member>
     <member refid="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e" kind="function"><name>camera_create</name></member>
     <member refid="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" kind="function"><name>camera_set_device_id</name></member>
+    <member refid="classgodot_1_1_vision_server_1a6f23f7ad2f12fba9ecae781e2365a6e7" kind="function"><name>camera_get_device_id</name></member>
     <member refid="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" kind="function"><name>camera_set_resolution</name></member>
     <member refid="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" kind="function"><name>camera_set_focal_length</name></member>
     <member refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" kind="function"><name>camera_get_focal_length</name></member>
@@ -988,7 +1298,7 @@
     <member refid="classgodot_1_1_vision_server_1a11e809cea839327af8c3614c52caca96" kind="function"><name>camera_get_last_readback_ms</name></member>
     <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" kind="function"><name>camera_free</name></member>
     <member refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" kind="function"><name>get_camera_current_frame</name></member>
-    <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" kind="function"><name>get_singleton</name></member>
+    <member refid="classgodot_1_1_vision_server_1a3cba4eaf008618ba583b0a0887f23f5a" kind="function"><name>get_singleton</name></member>
   </compound>
   <compound refid="struct_gaze_1_1_yu_net_result" kind="struct"><name>Gaze::YuNetResult</name>
     <member refid="struct_gaze_1_1_yu_net_result_1af19c961b9926bf425d0e5f5694dc41b3" kind="variable"><name>face_detected</name></member>
@@ -1005,6 +1315,9 @@
     <member refid="struct_gaze_1_1_yu_net_result_1a87093338f062e6226e3fb340d7d110f9" kind="variable"><name>head_pose</name></member>
   </compound>
   <compound refid="namespace_gaze" kind="namespace"><name>Gaze</name>
+    <member refid="gaze__frame__data_8hpp_1a40579fcd8bc2c3f9b6f013db2104e31b" kind="enum"><name>PipelineTrackingMode</name></member>
+    <member refid="gaze__frame__data_8hpp_1a40579fcd8bc2c3f9b6f013db2104e31babfbc56361e31213f93f9a67b0f16b597" kind="enumvalue"><name>SEEKING</name></member>
+    <member refid="gaze__frame__data_8hpp_1a40579fcd8bc2c3f9b6f013db2104e31ba8728801b2a11ad95c8ecf855bfd484e4" kind="enumvalue"><name>TRACKING</name></member>
     <member refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kind="enum"><name>Space</name></member>
     <member refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4d429453fb0bc3419753429ffc5e841a" kind="enumvalue"><name>GodotCamera</name></member>
     <member refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a0b30978560f8832e17cb9e9f2986b976" kind="enumvalue"><name>GodotFaceLocal</name></member>
@@ -1057,6 +1370,7 @@
     <member refid="log_8hpp_1abcd6f53a7312a1fae64a14c3bd8d2989" kind="function"><name>log_error</name></member>
     <member refid="math__defs_8hpp_1ae6da62914f1bba3510e826b1d196e27f" kind="function"><name>resize_bgr_to_rgb</name></member>
     <member refid="math__defs_8hpp_1a945b5c3067c6ca03687e2ecf1cd125da" kind="function"><name>crop_and_resize_bgr</name></member>
+    <member refid="math__defs_8hpp_1ae22aa71c801973e85d5ef50a7fdef422" kind="function"><name>crop_and_resize_bgr_with_unroll</name></member>
     <member refid="math__defs_8hpp_1ae08ff5882cb209cac072def9526519ac" kind="function"><name>crop_and_resize_bgr_to_rgb</name></member>
     <member refid="math__defs_8hpp_1a598ea344cf8ef8b3d9083dde52cd3197" kind="function"><name>get_focal_length_px</name></member>
     <member refid="math__defs_8hpp_1a61faa4b0cd24d89b41478d29adb054d6" kind="function"><name>get_focal_length_under_scaling</name></member>
@@ -1078,12 +1392,15 @@
     <member refid="opencv__space__conversions_8hpp_1a8479afdd6055ba7cc0ca119848c4b0b0" kind="function"><name>project_ray_to_camera_plane</name></member>
     <member refid="pnp__solver_8hpp_1a7a498f1578b7bc2b65c7e6b687ea4a28" kind="function"><name>solve_pnp_rvec</name></member>
     <member refid="pnp__solver_8hpp_1a836b53529a168a1bc4317e9efa26a2bf" kind="function"><name>solve_pnp</name></member>
-    <member refid="sqpnp__solver_8cpp_1ae18f58a8d0b68a2efc776b0c6d8289c4" kind="function"><name>SQPnPSolver::solve&lt; Space::GodotCameraWorkingImagePixels &gt;</name></member>
-    <member refid="sqpnp__solver_8cpp_1a39534a7a9d8175f0cf51c29db3217297" kind="function"><name>SQPnPSolver::solve&lt; Space::GodotCameraImagePixels &gt;</name></member>
-    <member refid="sqpnp__solver_8cpp_1a9389d04e8db1e59eb38cb6346280f103" kind="function"><name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraWorkingImagePixels &gt;</name></member>
-    <member refid="sqpnp__solver_8cpp_1a7f0d640f836d1b3d20afe99a262ae6ad" kind="function"><name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraImagePixels &gt;</name></member>
+    <member refid="projection__engine_8hpp_1ae1deac1fe2c8ba201503f20ca0d2b1f4" kind="function"><name>wrap_angle_rad</name></member>
+    <member refid="sqpnp__solver_8cpp_1a3c17e0703792d6e39aebf6ec1321e0f6" kind="function"><name>SQPnPSolver::solve&lt; Space::GodotCameraWorkingImagePixels &gt;</name></member>
+    <member refid="sqpnp__solver_8cpp_1a14173c22a4a6017ae5b802e3753583b3" kind="function"><name>SQPnPSolver::solve&lt; Space::GodotCameraImagePixels &gt;</name></member>
+    <member refid="sqpnp__solver_8cpp_1af7be9a743b54eb4f89a4eeb80b64f63a" kind="function"><name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraWorkingImagePixels &gt;</name></member>
+    <member refid="sqpnp__solver_8cpp_1a4de025689f7568246f4874a0475fdfea" kind="function"><name>SQPnPSolver::solve_rvec&lt; Space::GodotCameraImagePixels &gt;</name></member>
     <member refid="gaze__display__fallback_8cpp_1a9330e5e2c14098ff364900ddad0b2f59" kind="function"><name>gaze_fallback_get_display_metrics</name></member>
     <member refid="gaze__display__fallback_8cpp_1aced30d546bea6b4f996998c729ccbef4" kind="function"><name>gaze_fallback_get_window_rect</name></member>
+    <member refid="gaze__display__fallback_8cpp_1a503f23ce2d467427a704e32a22a1d551" kind="function"><name>gaze_fallback_get_mouse_position</name></member>
+    <member refid="gaze__display__fallback_8cpp_1abfe7025e6ffa0e836a6b4350e1079702" kind="function"><name>gaze_fallback_get_mouse_button_state</name></member>
     <member refid="ort__gaze__model_8hpp_1acc280d0d313f97f3deab08e12d3403f7" kind="function"><name>get_ort_env</name></member>
     <member refid="ort__landmark__model_8cpp_1a34cbf9587c03da28adf638c0bfc119f0" kind="function"><name>adjust_bounding_box</name></member>
     <member refid="ort__yunet__detector_8cpp_1a3a5bfeef24e334ab182b0048325905a0" kind="function"><name>bilinear_resize_direct</name></member>
@@ -1092,6 +1409,8 @@
     <member refid="platform__ort_8fallback_8cpp_1aa056d0da16f7a14294069d186098b1c0" kind="function"><name>platform_create_ort_session</name></member>
     <member refid="gaze__display__server__web_8cpp_1ad72d078b6ab3a1009145cb191727f5f0" kind="function"><name>gaze_web_get_display_metrics</name></member>
     <member refid="gaze__display__server__web_8cpp_1a47d593f6da185d51b81daf429be3ebac" kind="function"><name>gaze_web_get_window_rect</name></member>
+    <member refid="gaze__display__server__web_8cpp_1a5af8bfe6bbb0323ce8e84200f44c9c32" kind="function"><name>gaze_web_get_mouse_position</name></member>
+    <member refid="gaze__display__server__web_8cpp_1a0fa34310eadf7bf48bf72761a6326870" kind="function"><name>gaze_web_get_mouse_button_state</name></member>
   </compound>
   <compound refid="namespace_gaze_1_1_0d160217063045063025206327035156146041154044037175" kind="namespace"><name>Gaze::@160217063045063025206327035156146041154044037175</name>
   </compound>
@@ -1117,17 +1436,35 @@
     <member refid="gaze__server_8cpp_1aaa7ce825608ed8737c49e990b8d07885" kind="typedef"><name>EyeInfo</name></member>
     <member refid="vision__server_8hpp_1afcd7be7020b34eea5e6a7f3f1fb53892" kind="typedef"><name>GazeVisionServer</name></member>
     <member refid="vision__server_8hpp_1aa43b7184144b93b376af4769d3234caa" kind="typedef"><name>GazeVisionServerMock</name></member>
+    <member refid="register__types_8cpp_1a2e0a35449b9e5f34114b836c4067868e" kind="variable"><name>singletons_initialized</name></member>
     <member refid="register__types_8cpp_1afeeb9dfa64a26d3565a3b36580d7c043" kind="variable"><name>vision_server_singleton</name></member>
     <member refid="register__types_8cpp_1a742bb3c63b2210a23496673ecab3c7de" kind="variable"><name>gaze_server_singleton</name></member>
     <member refid="register__types_8cpp_1a46a088efd1400bfc9988018e115d8997" kind="variable"><name>gaze_display_server_singleton</name></member>
+    <member refid="gaze__server_8cpp_1a013a7ab46fcb140cb63f30a8714d4656" kind="function"><name>_get_gds</name></member>
     <member refid="gaze__server_8cpp_1ad236010cbcf08245b59d3f79c3fd4b16" kind="function"><name>_calc_projected_window_px</name></member>
-    <member refid="gaze__server_8cpp_1abf70669217d09b5600fdf00b2bb81c69" kind="function"><name>_xform_window_px_to_canvas</name></member>
     <member refid="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" kind="function"><name>resolve_model_path</name></member>
     <member refid="godot__files_8hpp_1a438d87c72f03b6b817f49243709e71b3" kind="function"><name>load_file_buffer</name></member>
+    <member refid="input__event__gaze_8cpp_1a767b4bfdf2fd65fdfa1ce89a079ae80e" kind="function"><name>_clamp_to_viewport</name></member>
     <member refid="register__types_8cpp_1ab47c55fc6efbb2b016683f73c317a77a" kind="function"><name>register_gaze_project_settings</name></member>
+    <member refid="register__types_8cpp_1a44536aa859139788af035a57e9582873" kind="function"><name>setup_gaze_singletons</name></member>
+    <member refid="register__types_8cpp_1a83e33e24f3a2aabede89915437abcccd" kind="function"><name>on_startup_callback</name></member>
     <member refid="register__types_8cpp_1a5bdb7944917b948a595175b7dd080a38" kind="function"><name>initialize_gaze_module</name></member>
     <member refid="register__types_8cpp_1aa63ec0122dad078a5d8132f4f93f9ce1" kind="function"><name>uninitialize_gaze_module</name></member>
     <member refid="register__types_8cpp_1a26ba0015844c927077a2fdd22bf05f11" kind="function"><name>gaze_library_init</name></member>
+  </compound>
+  <compound refid="architecture_8md" kind="file"><name>architecture.md</name>
+  </compound>
+  <compound refid="gaze__model__evaluation_8md" kind="file"><name>gaze_model_evaluation.md</name>
+  </compound>
+  <compound refid="lifecycle__tracking_8md" kind="file"><name>lifecycle_tracking.md</name>
+  </compound>
+  <compound refid="mathematical__model_8md" kind="file"><name>mathematical_model.md</name>
+  </compound>
+  <compound refid="rejected__designs_8md" kind="file"><name>rejected_designs.md</name>
+  </compound>
+  <compound refid="vision__models_8md" kind="file"><name>vision_models.md</name>
+  </compound>
+  <compound refid="blink__state__machine_8hpp" kind="file"><name>blink_state_machine.hpp</name>
   </compound>
   <compound refid="camera__interface_8hpp" kind="file"><name>camera_interface.hpp</name>
   </compound>
@@ -1139,11 +1476,15 @@
   </compound>
   <compound refid="cpu__image__warper_8hpp" kind="file"><name>cpu_image_warper.hpp</name>
   </compound>
+  <compound refid="damped__spring_8hpp" kind="file"><name>damped_spring.hpp</name>
+  </compound>
   <compound refid="eye__blink__estimator_8hpp" kind="file"><name>eye_blink_estimator.hpp</name>
   </compound>
   <compound refid="face__model__geometry_8hpp" kind="file"><name>face_model_geometry.hpp</name>
   </compound>
   <compound refid="face__pipeline_8hpp" kind="file"><name>face_pipeline.hpp</name>
+  </compound>
+  <compound refid="fill__accumulator_8hpp" kind="file"><name>fill_accumulator.hpp</name>
   </compound>
   <compound refid="gaze__display__types_8hpp" kind="file"><name>gaze_display_types.hpp</name>
   </compound>
@@ -1154,6 +1495,8 @@
   <compound refid="log_8hpp" kind="file"><name>log.hpp</name>
   </compound>
   <compound refid="math__defs_8hpp" kind="file"><name>math_defs.hpp</name>
+  </compound>
+  <compound refid="mouse__stillness__arbitrator_8hpp" kind="file"><name>mouse_stillness_arbitrator.hpp</name>
   </compound>
   <compound refid="opencv__space__conversions_8hpp" kind="file"><name>opencv_space_conversions.hpp</name>
   </compound>
@@ -1166,6 +1509,7 @@
   <compound refid="projection__engine_8cpp" kind="file"><name>projection_engine.cpp</name>
   </compound>
   <compound refid="projection__engine_8hpp" kind="file"><name>projection_engine.hpp</name>
+    <member refid="projection__engine_8hpp_1ae71449b1cc6e6250b91f539153a7a0d3" kind="define"><name>M_PI</name></member>
   </compound>
   <compound refid="_r_e_a_d_m_e_8md" kind="file"><name>README.md</name>
   </compound>
@@ -1187,6 +1531,11 @@
   </compound>
   <compound refid="sqpnp__solver_8hpp" kind="file"><name>sqpnp_solver.hpp</name>
   </compound>
+  <compound refid="fill__accumulator__node_8cpp" kind="file"><name>fill_accumulator_node.cpp</name>
+  </compound>
+  <compound refid="fill__accumulator__node_8hpp" kind="file"><name>fill_accumulator_node.hpp</name>
+    <member refid="fill__accumulator__node_8hpp_1a8d78a42ab77b645509b9c7e653a8928d" kind="function"><name>VARIANT_ENUM_CAST</name></member>
+  </compound>
   <compound refid="gaze__device__profile_8cpp" kind="file"><name>gaze_device_profile.cpp</name>
   </compound>
   <compound refid="gaze__device__profile_8hpp" kind="file"><name>gaze_device_profile.hpp</name>
@@ -1194,6 +1543,8 @@
   <compound refid="gaze__display__server_8cpp" kind="file"><name>gaze_display_server.cpp</name>
     <member refid="gaze__display__server_8cpp_1a1fefd3b67ca85bf5ec59673644e54702" kind="define"><name>NATIVE_GET_METRICS</name></member>
     <member refid="gaze__display__server_8cpp_1afba3d913c73cd612abf62fb9d54bf29f" kind="define"><name>NATIVE_GET_WINDOW_RECT</name></member>
+    <member refid="gaze__display__server_8cpp_1a4a9e16c09fc791fea20b334f2d1a6d76" kind="define"><name>NATIVE_GET_MOUSE_POSITION</name></member>
+    <member refid="gaze__display__server_8cpp_1af9815553a4d2c29c749e26a388347037" kind="define"><name>NATIVE_GET_MOUSE_BUTTONS</name></member>
   </compound>
   <compound refid="gaze__display__server_8hpp" kind="file"><name>gaze_display_server.hpp</name>
   </compound>
@@ -1208,6 +1559,10 @@
   <compound refid="gaze__pipeline__config_8cpp" kind="file"><name>gaze_pipeline_config.cpp</name>
   </compound>
   <compound refid="gaze__pipeline__config_8hpp" kind="file"><name>gaze_pipeline_config.hpp</name>
+  </compound>
+  <compound refid="gaze__profile_8cpp" kind="file"><name>gaze_profile.cpp</name>
+  </compound>
+  <compound refid="gaze__profile_8hpp" kind="file"><name>gaze_profile.hpp</name>
   </compound>
   <compound refid="gaze__server_8cpp" kind="file"><name>gaze_server.cpp</name>
   </compound>
@@ -1226,6 +1581,7 @@
   <compound refid="input__event__gaze_8cpp" kind="file"><name>input_event_gaze.cpp</name>
   </compound>
   <compound refid="input__event__gaze_8hpp" kind="file"><name>input_event_gaze.hpp</name>
+    <member refid="input__event__gaze_8hpp_1a40dcb33a494d9034bc7ae9136482c01b" kind="function"><name>VARIANT_ENUM_CAST</name></member>
     <member refid="input__event__gaze_8hpp_1a0f1a2ff9d79498826b1ab0bdf681ca20" kind="function"><name>VARIANT_ENUM_CAST</name></member>
   </compound>
   <compound refid="mock__gaze__display__server_8cpp" kind="file"><name>mock_gaze_display_server.cpp</name>
@@ -1297,9 +1653,23 @@
   </compound>
   <compound refid="web__binding__state_8hpp" kind="file"><name>web_binding_state.hpp</name>
   </compound>
+  <compound refid="md_docs_2architecture" kind="page"><name>md_docs_2architecture</name>
+  </compound>
+  <compound refid="md_docs_2lifecycle__tracking" kind="page"><name>md_docs_2lifecycle__tracking</name>
+  </compound>
+  <compound refid="md_docs_2mathematical__model" kind="page"><name>md_docs_2mathematical__model</name>
+  </compound>
+  <compound refid="md_docs_2vision__models" kind="page"><name>md_docs_2vision__models</name>
+  </compound>
+  <compound refid="md_docs_2gaze__model__evaluation" kind="page"><name>md_docs_2gaze__model__evaluation</name>
+  </compound>
+  <compound refid="md_docs_2rejected__designs" kind="page"><name>md_docs_2rejected__designs</name>
+  </compound>
   <compound refid="dir_50e4bd64939a37cf7445b59b0e9d31d6" kind="dir"><name>src/core/concurrency</name>
   </compound>
   <compound refid="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir"><name>src/core</name>
+  </compound>
+  <compound refid="dir_49e56c817e5e54854c35e136979f97ca" kind="dir"><name>docs</name>
   </compound>
   <compound refid="dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0" kind="dir"><name>src/godot</name>
   </compound>

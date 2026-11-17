@@ -30,7 +30,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -145,14 +145,14 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('pnp__solver_8h
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt; &amp;rotation, OpenCVCameraVector3 &amp;translation)</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>{</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09">SQPnPSolver::solve</a>(model_points, image_points, fx, fy, cx, cy, rotation, translation);</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="class_gaze_1_1_s_q_pn_p_solver.html#a7368f5c7343c842188341aeaa5eba229">SQPnPSolver::solve</a>(model_points, image_points, fx, fy, cx, cy, rotation, translation);</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>}</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>} <span class="comment">// namespace Gaze</span></div>
-<div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html_a1241abb25b689a755110b9d7298f1d09"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09">Gaze::SQPnPSolver::solve</a></div><div class="ttdeci">static bool solve(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation)</div><div class="ttdoc">Solves the PnP problem given 3D object points and corresponding 2D image points.</div><div class="ttdef"><b>Definition</b> sqpnp_solver.cpp:708</div></div>
+<div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html_a7368f5c7343c842188341aeaa5eba229"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html#a7368f5c7343c842188341aeaa5eba229">Gaze::SQPnPSolver::solve</a></div><div class="ttdeci">static bool solve(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation, double *out_squared_reproj_error=nullptr)</div><div class="ttdoc">Solves the PnP problem given 3D object points and corresponding 2D image points.</div><div class="ttdef"><b>Definition</b> sqpnp_solver.cpp:708</div></div>
 <div class="ttc" id="apnp__solver_8hpp_html_a7a498f1578b7bc2b65c7e6b687ea4a28"><div class="ttname"><a href="pnp__solver_8hpp.html#a7a498f1578b7bc2b65c7e6b687ea4a28">Gaze::solve_pnp_rvec</a></div><div class="ttdeci">bool solve_pnp_rvec(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;model_points, const std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, OpenCVCameraVector3 &amp;rvec, OpenCVCameraVector3 &amp;tvec)</div><div class="ttdoc">Solves the Perspective-n-Point pose using the globally optimal SQPnP algorithm.</div><div class="ttdef"><b>Definition</b> pnp_solver.hpp:27</div></div>
 <div class="ttc" id="asqpnp__solver_8hpp_html"><div class="ttname"><a href="sqpnp__solver_8hpp.html">sqpnp_solver.hpp</a></div><div class="ttdoc">Self-Contained Globally Optimal Sequential Quadratic Programming PnP (SQPnP) Solver.</div></div>
-<div class="ttc" id="astruct_gaze_1_1_spaced_vector2_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_vector2.html">Gaze::SpacedVector2</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:124</div></div>
+<div class="ttc" id="astruct_gaze_1_1_spaced_vector2_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_vector2.html">Gaze::SpacedVector2</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:132</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

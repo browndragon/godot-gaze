@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="md_docs_2architecture" kind="page">
+    <compoundname>md_docs_2architecture</compoundname>
+    <title>System Architecture &amp; Technical Specification</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_docs_2architecture_1autotoc_md32"/></para>
+<para><bold>Project:</bold> <computeroutput>godot-gaze</computeroutput> <linebreak/>
+ <bold>Integration:</bold> Godot 4 GDExtension Plugin <linebreak/>
+</para>
+<para><hruler/>
+</para>
+<sect1 id="md_docs_2architecture_1autotoc_md34">
+<title>1. Architectural Topology</title><para><computeroutput>godot-gaze</computeroutput> is engineered as a strictly layered 3D gaze-tracking and facial analysis engine. It decouples high-level engine nodes from numerical algorithms, hardware ingestion, and ONNX Runtime neural inference backends.</para>
+<para><mermaid>flowchart TD
+    subgraph L4[&quot;Layer 4: Godot High-Level Frontends (InputEvent &amp; UI)&quot;]
+        IE[&quot;InputEventGaze / InputEventGazeMissing&lt;br/&gt;(Native Input Dispatch)&quot;]
+        HUD[&quot;Debug HUD / Overlay&lt;br/&gt;(debug_cam_feed.tscn)&quot;]
+        DP[&quot;GazeDeviceProfile&lt;br/&gt;(Screen Geometry &amp; Mount Offsets)&quot;]
+        FA[&quot;FillAccumulator&lt;br/&gt;(Inertial 2nd-Order Dwell Engine)&quot;]
+    end
+
+    subgraph L3[&quot;Layer 3: Godot GDExtension Servers &amp; Platform Backends&quot;]
+        GS[&quot;GazeServer Singleton&lt;br/&gt;(RID State Ownership &amp; Concurrency)&quot;]
+        VS[&quot;VisionServer Singleton&lt;br/&gt;(Frame Ingestion &amp; Textures)&quot;]
+        GDS[&quot;GazeDisplayServer&lt;br/&gt;(Logical Pixel Platform Abstraction)&quot;]
+        MGE[&quot;MouseGazeEmulation&lt;br/&gt;(Pointer Stillness Arbitration)&quot;]
+        JS[&quot;Web JavaScriptBridge Sidecar&lt;br/&gt;(Emscripten / ONNX Web)&quot;]
+        WIN[&quot;Windows WMF Backend&lt;br/&gt;(MultiByte UTF-8 Path Safety)&quot;]
+    end
+
+    subgraph L2[&quot;Layer 2: Native ML Inference &amp; Pipeline&quot;]
+        GTP[&quot;GazeTrackingPipeline&lt;br/&gt;(Asynchronous Worker Loop)&quot;]
+        YN[&quot;ORTYuNetDetector&lt;br/&gt;(Face Detection &amp; Bounding Box)&quot;]
+        LM[&quot;ORTLandmarkModel&lt;br/&gt;(ADAS 35-Point Landmark Regression)&quot;]
+        PNP[&quot;SQPnP / LM PnP Solvers&lt;br/&gt;(Non-Linear Head Pose Optimization)&quot;]
+        EM[&quot;ORTEyeStateModel&lt;br/&gt;(32x32 Open/Closed Classifier)&quot;]
+        GM[&quot;ORTGazeModel&lt;br/&gt;(ADAS-0002 Gaze Vector Regression)&quot;]
+    end
+
+    subgraph L1[&quot;Layer 1: Core Math &amp; Utilities (Zero-Dependency C++)&quot;]
+        PE[&quot;ProjectionEngine &amp; ScreenProjector&lt;br/&gt;(Ray-Plane &amp; Viewport Pixel Math)&quot;]
+        MD[&quot;MathDefs, GazeBasis3D, Rodrigues, Warper&lt;br/&gt;(POD Math &amp; Image Geometry)&quot;]
+        PL[&quot;Pool &amp; AtomicMailbox&lt;br/&gt;(Lock-Free Inter-Thread Queues)&quot;]
+        GFD[&quot;GazeFrameData POD&lt;br/&gt;(Double-Buffered Frame Payloads)&quot;]
+        MSA[&quot;MouseStillnessArbitrator&lt;br/&gt;(Anchor Bubble Motion Thresholding)&quot;]
+    end
+
+    IE --&gt; GS &amp; VS
+    GS --&gt; GTP &amp; GDS &amp; MGE
+    MGE --&gt; MSA
+    GTP --&gt; YN &amp; LM &amp; PNP &amp; EM &amp; GM
+    GTP --&gt; GFD &amp; PL
+    GS --&gt; PE &amp; MD</mermaid>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md36">
+<title>2. Layer Isolation &amp; Purity Rules</title><para><orderedlist>
+<listitem><para><bold>Layer 1 (Core - <computeroutput>src/core/</computeroutput>):</bold><itemizedlist>
+<listitem><para>Must remain <bold>100% zero-dependency pure C++17/20 standard library</bold>.</para>
+</listitem><listitem><para>No inclusion of <computeroutput>&lt;godot_cpp/...&gt;</computeroutput> headers, no Godot RIDs, no ONNX Runtime headers, and no platform-specific OS APIs.</para>
+</listitem><listitem><para>Responsible for pure geometric math, screen projections, numerical solvers, and thread-safe data containers (<computeroutput>AtomicMailbox</computeroutput>, <computeroutput>Pool</computeroutput>).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Layer 2 (Native ML - <computeroutput>src/native/</computeroutput>):</bold><itemizedlist>
+<listitem><para>Wraps ONNX Runtime (<computeroutput>onnxruntime_cxx_api.h</computeroutput>).</para>
+</listitem><listitem><para>Implements multi-threaded inference pipelining (<computeroutput>GazeTrackingPipeline</computeroutput>).</para>
+</listitem><listitem><para>Does not depend on Godot engine types or GDScript bindings.</para>
+</listitem><listitem><para>For detailed neural model specifications, tensor formats, and provenances, see <ref refid="md_docs_2vision__models" kindref="compound">Vision Models &amp; Camera Ingestion Specification</ref>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Layer 3 (Platforms &amp; Servers - <computeroutput>src/godot/</computeroutput>, <computeroutput>src/windows/</computeroutput>, <computeroutput>src/web/</computeroutput>):</bold><itemizedlist>
+<listitem><para>Implements Godot&apos;s RID (Resource Identifier) server architecture (<computeroutput>GazeServer</computeroutput>, <computeroutput>VisionServer</computeroutput>).</para>
+</listitem><listitem><para>Manages platform camera feeds (Windows Media Foundation, Godot CameraFeed, Web <computeroutput>getUserMedia</computeroutput>).</para>
+</listitem><listitem><para>Normalizes hardware capture frames to packed BGR8 working buffers (see <ulink url="vision_models.md#1-camera-ingestion-architecture--color-formats">Vision Models &amp; Camera Ingestion Specification</ulink>).</para>
+</listitem><listitem><para>Enforces Pimpl (<computeroutput>GazeServerImpl</computeroutput>) encapsulation to insulate Godot bindings from native allocations.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Layer 4 (High-Level Nodes &amp; Events - <computeroutput>src/godot/</computeroutput> &amp; downstream scenes):</bold><itemizedlist>
+<listitem><para><computeroutput>GazeTracker</computeroutput> declarative node and <computeroutput>GazeTracker.track_node()</computeroutput> lifecycle manager.</para>
+</listitem><listitem><para><computeroutput>InputEventGazeBase</computeroutput>, <computeroutput>InputEventGaze</computeroutput>, <computeroutput>InputEventGazeMissing</computeroutput>, and resources (<computeroutput>GazeDeviceProfile</computeroutput>, <computeroutput>GazePipelineConfig</computeroutput>).</para>
+</listitem><listitem><para>Communicates with backends solely by managing <computeroutput>GazeTracker</computeroutput> lifecycle, querying <computeroutput>GazeServer</computeroutput>, or receiving input events.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md38">
+<title>3. Concurrency &amp; Threading Model</title><para><mermaid>sequenceDiagram
+    autonumber
+    participant MainThread as Godot Main Thread (GazeServer)
+    participant RequestMailbox as AtomicMailbox&lt;GazeFrameData*&gt;
+    participant WorkerThread as GazeTrackingPipeline Worker Thread
+    participant ResultsMailbox as AtomicMailbox&lt;GazeFrameData*&gt;
+
+    Note over MainThread,WorkerThread: Frame Ingestion &amp; Dispatch
+    MainThread-&gt;&gt;RequestMailbox: push_frame_request(frame_data)
+    WorkerThread-&gt;&gt;RequestMailbox: take(data) (Lock-Free)
+    Note over WorkerThread: 1. Counter-rotate frame for Roll&lt;br/&gt;2. YuNet Face Detection&lt;br/&gt;3. ADAS 35-pt Landmark Regression&lt;br/&gt;4. Levenberg-Marquardt PnP Head Pose&lt;br/&gt;5. Dense 60x60 Eye Crops&lt;br/&gt;6. Eye Openness &amp; Gaze Estimation
+    WorkerThread-&gt;&gt;ResultsMailbox: push_result(data) (Lock-Free)
+    MainThread-&gt;&gt;ResultsMailbox: pop_result(&amp;out_res) (Every _process frame)
+    MainThread-&gt;&gt;MainThread: Update Spatial RIDs &amp; Screen Projections</mermaid>
+</para>
+<para><itemizedlist>
+<listitem><para><bold>Lock-Free Pipeline Execution:</bold> The background inference worker thread communicates with Godot exclusively via <computeroutput>AtomicMailbox&lt;GazeFrameData*&gt;</computeroutput>. The worker loop never locks <computeroutput>GazeServer::state_mutex</computeroutput>.</para>
+</listitem><listitem><para><bold>Main Thread Mutex Safety:</bold> <computeroutput>GazeServer::state_mutex</computeroutput> exists solely to synchronize concurrent or recursive GDScript/C++ calls against internal RID registry dictionaries.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md40">
+<title>4. Hardware &amp; Memory Model: Why CPU RAM is the Common Denominator</title><para>Our tracking pipeline is a multi-stage <bold>hybrid pipeline</bold>: $$\text{Camera Frame} \xrightarrow{\text{CPU}} \text{YuNet CNN} \xrightarrow{\text{CPU Transform}} \text{ADAS LM CNN} \xrightarrow{\text{CPU PnP Solver}} \text{ADAS GazeNet CNN} \xrightarrow{\text{Screen Projection}}$$</para>
+<sect2 id="md_docs_2architecture_1autotoc_md41">
+<title>Why Zero-Copy GPU Roundtrips Were Rejected</title><para><itemizedlist>
+<listitem><para><bold>Iterative Solvers on CPU:</bold> Head pose estimation requires a non-linear Levenberg-Marquardt / SQPnP optimization solver over 35 $(X, Y)$ landmarks. This is an iterative CPU numerical algorithm.</para>
+</listitem><listitem><para><bold>Cross-Platform GDExtension Boundaries:</bold> Passing GPU textures directly into neural execution providers (e.g. DirectML, Metal, WebGPU) without CPU readbacks requires compute shaders for intermediate bounding-box rotations and eye crops across macOS, Windows, Android, and WebAssembly.</para>
+</listitem><listitem><para><bold>Contiguous CPU Memory:</bold> Pre-allocating contiguous BGR buffers (<computeroutput>GazeFrameData::camera_raw_bgr</computeroutput>, <computeroutput>GazeFrameData::rotated_frame_bgr</computeroutput>) provides zero-allocation steady-state performance at 60 FPS without GPU $\leftrightarrow$ CPU synchronization pipeline bubbles.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md43">
+<title>5. WebAssembly &amp; JavaScript Boundary Architecture</title><para>For Godot Web exports (HTML5 / WebAssembly):</para>
+<para><mermaid>flowchart LR
+    subgraph BrowserJS[&quot;Browser Main Thread (JavaScript)&quot;]
+        Cam[&quot;getUserMedia&lt;br/&gt;Video Stream&quot;]
+        ONNXWeb[&quot;onnxruntime-web&lt;br/&gt;(WebGL / WebGPU)&quot;]
+    end
+
+    subgraph GodotWASM[&quot;Godot C++ GDExtension (WebAssembly)&quot;]
+        Bridge[&quot;JavaScriptBridge Ingestion&quot;]
+        PnP[&quot;PnP LM / SQPnP Solvers&lt;br/&gt;(src/core/pnp_solver.cpp)&quot;]
+        Proj[&quot;Screen Ray Projections&lt;br/&gt;(src/core/projection_engine.cpp)&quot;]
+    end
+
+    Cam --&gt; ONNXWeb
+    ONNXWeb -- &quot;Raw 2D Landmarks &amp; Crops&quot; --&gt; Bridge
+    Bridge --&gt; PnP --&gt; Proj</mermaid>
+</para>
+<para><orderedlist>
+<listitem><para><bold>Hardware &amp; ML I/O Bridge (<computeroutput>gaze_sidecar.js</computeroutput>):</bold><itemizedlist>
+<listitem><para>Manages browser permissions and video stream capture (<computeroutput>navigator.mediaDevices.getUserMedia</computeroutput>).</para>
+</listitem><listitem><para>Executes neural network graphs in browser-optimized WebGL/WebGPU kernels via <computeroutput>onnxruntime-web</computeroutput>.</para>
+</listitem><listitem><para>Passes raw bounding boxes and 2D landmark coordinates to Godot via <computeroutput>JavaScriptBridge</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Unified Mathematical Core (C++ WebAssembly):</bold><itemizedlist>
+<listitem><para>100% of spatial geometry, PnP head pose solving, basis rotations, and screen ray projections are compiled directly from <computeroutput>src/core/</computeroutput> into WebAssembly.</para>
+</listitem><listitem><para>Eliminates JavaScript math duplication and guarantees identical behavior between Native desktop and Web builds.</para>
+</listitem><listitem><para>WebAssembly execution reduces main-thread CPU time by ~2x–4x compared to pure JavaScript numerical loops.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md45">
+<title>6. Input Subsystem &amp; Event Architecture</title><para><computeroutput>godot-gaze</computeroutput> models eye-gaze as first-class engine input events routed through Godot&apos;s standard input tree (<computeroutput>Input.parse_input_event()</computeroutput>), while providing seamless OS mouse emulation and 2nd-order inertial dwell mechanics.</para>
+<para><mermaid>flowchart TD
+    GS[&quot;GazeServer Singleton&quot;] --&gt;|Constructs 60 FPS Frame Event| IEG[&quot;InputEventGaze / InputEventGazeMissing&lt;br/&gt;(inherits InputEventAction)&quot;]
+    IEG --&gt;|Input.parse_input_event| INP[&quot;Godot Input Pipeline&quot;]
+    INP --&gt;|Standard Dispatch| UN[&quot;Node._unhandled_input / _input&quot;]
+    INP --&gt;|Dwell Control| FA[&quot;FillAccumulator (2nd-Order Inertial Dynamics)&quot;]
+    FA --&gt;|fill_changed / filled| UI[&quot;UI Focus &amp; Button Activation&quot;]
+    GS --&gt;|emulate_mouse_from_gaze| MGE[&quot;MouseGazeEmulation &amp; DisplayServer&quot;]</mermaid>
+</para>
+<sect2 id="md_docs_2architecture_1autotoc_md46">
+<title>6.1. First-Class Events: <computeroutput>InputEventGazeBase</computeroutput>, <computeroutput>InputEventGaze</computeroutput>, <computeroutput>InputEventGazeMissing</computeroutput></title><para><itemizedlist>
+<listitem><para><bold>Inheritance</bold>: Subclasses <computeroutput>InputEventAction</computeroutput> (concrete in Godot&apos;s <computeroutput>ClassDB</computeroutput>), enabling registration and routing through <computeroutput>Input::get_singleton()-&gt;parse_input_event()</computeroutput>.</para>
+</listitem><listitem><para><bold><computeroutput>InputEventGazeBase</computeroutput></bold>:<itemizedlist>
+<listitem><para><computeroutput>window_id: int</computeroutput>, <computeroutput>frame_id: int</computeroutput>, <computeroutput>timestamp_usec: int</computeroutput>.</para>
+</listitem><listitem><para>Continuous eye openness: <computeroutput>left_eye_openness: float</computeroutput>, <computeroutput>right_eye_openness: float</computeroutput> ($0.0$ closed to $1.0$ open).</para>
+</listitem><listitem><para><computeroutput>is_face_tracked() -&gt; bool</computeroutput>: Virtual method returning <computeroutput>false</computeroutput> on <computeroutput>InputEventGazeBase</computeroutput> / <computeroutput>InputEventGazeMissing</computeroutput> and <computeroutput>true</computeroutput> on <computeroutput>InputEventGaze</computeroutput>.</para>
+</listitem><listitem><para><computeroutput>copy_from(other)</computeroutput>: Copies event base/derived fields into another <computeroutput>InputEventGazeBase</computeroutput> instance (used by custom <computeroutput>GazeEventFactory</computeroutput> subclasses).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold><computeroutput>InputEventGaze</computeroutput></bold>:<itemizedlist>
+<listitem><para>Dispatched when face detection and gaze estimation succeed.</para>
+</listitem><listitem><para><bold>Localized 2D Coordinates</bold>:<itemizedlist>
+<listitem><para><computeroutput>get_eye_gaze(local_to = null, clamping = CLAMPING_DEFAULT) -&gt; Vector2</computeroutput>: Combined eye-gaze viewport/canvas coordinate in logical pixels (<computeroutput>lpix</computeroutput>). When <computeroutput>local_to</computeroutput> (<computeroutput>CanvasItem</computeroutput>) is passed, returns coordinates mapped directly into the local 2D coordinate space of <computeroutput>local_to</computeroutput>. Defaults to <computeroutput>Vector2(NAN, NAN)</computeroutput> when unavailable/invalid; callers should check <computeroutput>pos.is_finite()</computeroutput>.</para>
+</listitem><listitem><para><computeroutput>get_nose_gaze(local_to = null, clamping = CLAMPING_DEFAULT) -&gt; Vector2</computeroutput>: Head pose projection coordinate in logical pixels (<computeroutput>lpix</computeroutput>). Defaults to <computeroutput>Vector2(NAN, NAN)</computeroutput> when unavailable/invalid.</para>
+</listitem><listitem><para>Property <computeroutput>eye_gaze: Vector2</computeroutput>: Reads/writes raw canvas eye-gaze position using default clamping.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>3D Spatial Transforms</bold>:<itemizedlist>
+<listitem><para><computeroutput>head_transform: Transform3D</computeroutput>: 3D head pose origin and orientation in camera millimeters.</para>
+</listitem><listitem><para><computeroutput>eye_transform: Transform3D</computeroutput>: 3D inter-eye midpoint transform in camera millimeters.</para>
+</listitem><listitem><para><computeroutput>gaze_transform: Transform3D</computeroutput>: 3D gaze ray origin and orientation in camera millimeters.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Clamping (<computeroutput>ClampingMode</computeroutput>)</bold>:<itemizedlist>
+<listitem><para><computeroutput>CLAMPING_FREE</computeroutput> (<computeroutput>0</computeroutput>), <computeroutput>CLAMPING_CLAMPED</computeroutput> (<computeroutput>1</computeroutput>), <computeroutput>CLAMPING_DEFAULT</computeroutput> (<computeroutput>2</computeroutput>, inherits <computeroutput>gaze/pointing/default_clamping</computeroutput>). Non-finite (<computeroutput>NAN</computeroutput>) coordinates remain non-finite regardless of clamping mode.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold><computeroutput>InputEventGazeMissing</computeroutput></bold>:<itemizedlist>
+<listitem><para>Dispatched when face or eye tracking drops or the sensor is inactive.</para>
+</listitem><listitem><para>Carries <computeroutput>reason: MissingReason</computeroutput> (<computeroutput>REASON_NO_FACE_DETECTED = 0</computeroutput>, <computeroutput>REASON_OCCLUDED = 1</computeroutput>, <computeroutput>REASON_OUT_OF_BOUNDS = 2</computeroutput>, <computeroutput>REASON_SENSOR_INACTIVE = 3</computeroutput>).</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2architecture_1autotoc_md47">
+<title>6.2. Pointer Arbitration &amp; Mouse Emulation (<computeroutput>MouseGazeEmulation</computeroutput>)</title><para><computeroutput>godot-gaze</computeroutput> integrates a native C++ mouse stillness arbitrator (<ulink url="../src/core/mouse_stillness_arbitrator.hpp"><computeroutput>MouseStillnessArbitrator</computeroutput></ulink>) and pointer emulator (<ulink url="../src/godot/mouse_gaze_emulation.hpp"><computeroutput>MouseGazeEmulation</computeroutput></ulink>):<itemizedlist>
+<listitem><para><bold>Stillness Arbitration</bold>: When physical mouse motion exceeds the anchor bubble threshold (<computeroutput>mouse_stillness_threshold_px</computeroutput>, default $3.0\text{ px}$), the physical mouse claims instant authority. When the mouse remains motionless within the anchor bubble for <computeroutput>mouse_stillness_duration_sec</computeroutput> (default $1.5\text{ s}$), gaze smoothly resumes control via an eased blend transition (<computeroutput>mouse_emulation_transition_sec</computeroutput>, default $0.3\text{ s}$).</para>
+</listitem><listitem><para><bold>Bi-Directional Emulation</bold>:<itemizedlist>
+<listitem><para><computeroutput>gaze/pointing/emulate_mouse_from_gaze = true</computeroutput>: Synthesizes OS mouse motion and click events into Godot&apos;s <computeroutput>DisplayServer</computeroutput>, driving standard engine UI controls directly.</para>
+</listitem><listitem><para><computeroutput>gaze/pointing/emulate_gaze_from_mouse = true</computeroutput>: In developer environments without webcams, synthesizes <computeroutput>InputEventGaze</computeroutput> from mouse movements to exercise downstream gaze pipelines.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2architecture_1autotoc_md48">
+<title>6.3. Inertial Dwell Mechanics (<computeroutput>FillAccumulator</computeroutput>)</title><para>For hands-free eye-gaze selection without physical clicks, <computeroutput>FillAccumulator</computeroutput> provides a 2nd-order dynamical dwell state machine:<itemizedlist>
+<listitem><para><bold>Kinematic Formulation</bold>: $$\frac{dv}{dt} = \begin{cases} a_{\text{fill}} &amp; \text{if gazing on target (charging, } \text{error} \le 0) \ -a_{\text{drain}} \cdot \text{penalty} &amp; \text{if off target (releasing, } \text{error} &gt; 0) \end{cases}$$ $$\text{penalty} = 1.0 + \frac{\text{error}}{\text{error_doubling_distance}}$$ $$\frac{d(\text{fill})}{dt} = v, \quad v \in [-v_{\text{drain}} \cdot \text{penalty}, +v_{\text{fill}}], \quad \text{fill} \in [0.0, 1.0]$$</para>
+</listitem><listitem><para><bold>Micro-Saccade &amp; Blink Momentum Tolerance</bold>: Because velocity ramps with finite acceleration ($a \approx 32\text{ units/s}^2$), a brief $100\text{–}150\text{ ms}$ physiological blink or micro-saccade only begins decelerating positive velocity. The accumulator coasts forward or holds, preventing jarring resets or progress dumps during natural gaze flutter.</para>
+</listitem><listitem><para><bold>Fuzzy Boundary Matching (<computeroutput>error_doubling_distance</computeroutput>)</bold>: For dwell UI controls, near-miss boundary tremors ($10\text{ px}$) incur negligible drain penalty ($\approx 1.1\times$), providing forgiving foveal tolerance. In contrast, an intentional saccade across the display ($300\text{ px}$) scales the drain penalty to $4\times$, purging momentum and draining in $&lt;150\text{ ms}$ so the next target can be acquired immediately.</para>
+</listitem><listitem><para><bold>Signal Separation Invariant</bold>: Enforces a strict domain separation bound ($\Delta \ge 0.50$ between empty and full states) preventing accidental activations.</para>
+</listitem><listitem><para><bold>Signals</bold>: <computeroutput>fill_started</computeroutput>, <computeroutput>fill_changed(fill: float)</computeroutput>, <computeroutput>filled</computeroutput>, <computeroutput>emptied</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_docs_2architecture_1autotoc_md50">
+<title>7. GazeDisplayServer &amp; Platform Windowing Abstraction</title><para>To ensure mathematically consistent projection geometry and seamless mouse-gaze emulation, <computeroutput>godot-gaze</computeroutput> introduces <computeroutput>GazeDisplayServer</computeroutput> as an authoritative platform windowing and pointer abstraction.</para>
+<sect2 id="md_docs_2architecture_1autotoc_md51">
+<title>7.1. Architectural Rationale: Why Not Rely on Godot&apos;s <computeroutput>DisplayServer</computeroutput>?</title><para>Direct reliance on Godot&apos;s built-in <computeroutput>DisplayServer</computeroutput> across tracking and projection code is strictly prohibited in <computeroutput>godot-gaze</computeroutput>. Godot&apos;s <computeroutput>DisplayServer</computeroutput> has platform-dependent quirks, coordinate frame inconsistencies, and non-client decoration offsets:<itemizedlist>
+<listitem><para>On macOS, direct Cocoa window coordinates can diverge from Godot&apos;s active viewport coordinate frame, and window setters/getters have subtle scaling semantics across engine revisions.</para>
+</listitem><listitem><para>On Windows, <computeroutput>DisplayServer.window_get_position()</computeroutput> includes non-client window borders and drop shadows, offsetting the client drawing area.</para>
+</listitem><listitem><para>On Web (HTML5), Godot reports internal WebGL canvas buffer dimensions rather than CSS layout geometry.</para>
+</listitem></itemizedlist>
+</para>
+<para>Downstream tracking math (<computeroutput>ProjectionEngine</computeroutput>, <computeroutput>GazeServer</computeroutput>, and <computeroutput>MouseGazeEmulation</computeroutput>) requires a single, self-consistent coordinate model. Rather than scattering ad-hoc platform workarounds throughout consumers, <computeroutput>GazeDisplayServer</computeroutput> acts as the single authoritative display geometry provider, backed by dedicated per-platform native implementations (<computeroutput>src/macos</computeroutput>, <computeroutput>src/windows</computeroutput>, <computeroutput>src/ios</computeroutput>, <computeroutput>src/android</computeroutput>, <computeroutput>src/web</computeroutput>, <computeroutput>src/native</computeroutput>). All spatial queries across the codebase route strictly through <computeroutput>GazeDisplayServer</computeroutput>.</para>
+</sect2>
+<sect2 id="md_docs_2architecture_1autotoc_md52">
+<title>7.2. The Unified Coordinate Contract: Logical Pixels (<computeroutput>lpix</computeroutput>)</title><para>Across the entire project, exactly <bold>two</bold> coordinate systems exist:<orderedlist>
+<listitem><para><bold>Camera Millimeters (3D Physical)</bold>: Physical metric coordinates centered at the tracking camera sensor ($+X$ right, $+Y$ up, $-Z$ forward in Godot camera convention).</para>
+</listitem><listitem><para><bold>Logical Pixels (<computeroutput>lpix</computeroutput>, 2D)</bold>: The authoritative 2D display and viewport coordinate space matching Godot&apos;s 2D canvas and input event system.</para>
+</listitem></orderedlist>
+</para>
+<para>All spatial and pointer queries on <computeroutput>GazeDisplayServer</computeroutput> operate strictly in <bold>Logical Pixels (<computeroutput>lpix</computeroutput>)</bold>:<itemizedlist>
+<listitem><para><bold><computeroutput>get_screen_size_pixels()</computeroutput></bold>: Display dimensions $(W_{\text{disp}}, H_{\text{disp}})_{\text{lpix}}$ in logical units matching the viewport coordinate system.</para>
+</listitem><listitem><para><bold><computeroutput>get_window_rect_pixels()</computeroutput></bold>: Application window client rect $[x, y, w, h]_{\text{lpix}}$ relative to display top-left origin.</para>
+</listitem><listitem><para><bold><computeroutput>mouse_get_position()</computeroutput></bold>: OS cursor screen position $(x, y)_{\text{lpix}}$ relative to display top-left origin.</para>
+</listitem><listitem><para><bold><computeroutput>get_window_mouse_position()</computeroutput></bold>: OS cursor position relative to the application window client area in logical pixels.</para>
+</listitem><listitem><para><bold><computeroutput>mouse_get_button_state()</computeroutput></bold>: Bitmask of pressed mouse buttons directly from the OS.</para>
+</listitem><listitem><para><bold><computeroutput>get_screen_scale()</computeroutput></bold>: Backing-store HiDPI scale factor ($2.0$ on Retina, $\text{DPI}/96$ on Windows, <computeroutput>devicePixelRatio</computeroutput> on Web).</para>
+</listitem><listitem><para><bold><computeroutput>get_pixel_pitch_mm()</computeroutput></bold>: Physical millimeters per logical pixel: $(W_{\text{mm}} / W_{\text{lpix}}, H_{\text{mm}} / H_{\text{lpix}})$.</para>
+</listitem><listitem><para><bold><computeroutput>window_px_to_canvas()</computeroutput></bold>: Authoritative viewport transformation converting window-local logical pixels directly to canonical 2D Viewport canvas coordinates (inverting <computeroutput>root-&gt;get_final_transform()</computeroutput>) without any artificial scale multipliers.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2architecture_1autotoc_md53">
+<title>7.3. Platform Geometry Mapping Matrix</title><para><table rows="10" cols="5"><row>
+<entry thead="yes" align='left'><para>Platform  </para>
+</entry><entry thead="yes" align='left'><para>Query / Metric  </para>
+</entry><entry thead="yes" align='left'><para>Native Source / Normalization  </para>
+</entry><entry thead="yes" align='left'><para><computeroutput>GazeDisplayServer</computeroutput> (Authoritative)  </para>
+</entry><entry thead="yes" align='left'><para>Design Rationale  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>macOS</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>get_window_rect_pixels()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>[window contentRectForFrameRect:[window frame]]</computeroutput> scaled by <computeroutput>backingScaleFactor</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>Logical Pixels (<computeroutput>lpix</computeroutput>)</bold>  </para>
+</entry><entry thead="no" align='left'><para>Directly matches Godot&apos;s client viewport dimensions and position without title bar or border decoration offsets.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>macOS</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>get_screen_size_pixels()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>CGDisplayModeGetPixelWidth/Height</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>Logical Pixels (<computeroutput>lpix</computeroutput>)</bold>  </para>
+</entry><entry thead="no" align='left'><para>Authoritative display resolution matching window and viewport coordinates.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>macOS</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>mouse_get_position()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>[NSEvent mouseLocation]</computeroutput> scaled by <computeroutput>backingScaleFactor</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>Logical Pixels (<computeroutput>lpix</computeroutput>)</bold>  </para>
+</entry><entry thead="no" align='left'><para>Seamlessly matches <computeroutput>DisplayServer</computeroutput> mouse tracking and Godot canvas mouse events.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Windows</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>get_window_rect_pixels()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>GetClientRect</computeroutput> + <computeroutput>ClientToScreen</computeroutput> normalized to client viewport  </para>
+</entry><entry thead="no" align='left'><para><bold>Logical Client Rect</bold>  </para>
+</entry><entry thead="no" align='left'><para>Eliminates window drop-shadows and title bar decorations.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Windows</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>mouse_get_position()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>GetCursorPos</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>Logical Pixels</bold>  </para>
+</entry><entry thead="no" align='left'><para>Consistent multi-monitor desktop coordinate space.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Web</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>get_window_rect_pixels()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>canvas.getBoundingClientRect()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>CSS Pixels</bold>  </para>
+</entry><entry thead="no" align='left'><para>Aligns client canvas placement with DOM layout geometry.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Web</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>mouse_get_position()</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>DOM pointer/mouse events relative to document  </para>
+</entry><entry thead="no" align='left'><para><bold>CSS Pixels</bold>  </para>
+</entry><entry thead="no" align='left'><para>1:1 consistency with browser window geometry.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>iOS</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>window_rect</computeroutput> / <computeroutput>screen_size</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>UIScreen.bounds</computeroutput>, <computeroutput>UIWindow.bounds</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><bold>UIKit Points</bold>  </para>
+</entry><entry thead="no" align='left'><para>Preserves 1:1 scale invariance with touch coordinates.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Android</bold>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>window_rect</computeroutput> / <computeroutput>screen_size</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>WindowManager metrics  </para>
+</entry><entry thead="no" align='left'><para><bold>DIPs / Surface Pixels</bold>  </para>
+</entry><entry thead="no" align='left'><para>Consistent logical units across display densities.  </para>
+</entry></row>
+</table>
+</para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="docs/architecture.md"/>
+  </compounddef>
+</doxygen>

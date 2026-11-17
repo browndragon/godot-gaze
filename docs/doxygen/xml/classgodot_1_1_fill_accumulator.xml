@@ -1,0 +1,837 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="classgodot_1_1_fill_accumulator" kind="class" language="C++" prot="public">
+    <compoundname>godot::FillAccumulator</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">Node</basecompoundref>
+    <includes refid="fill__accumulator__node_8hpp" local="no">fill_accumulator_node.hpp</includes>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" prot="public" static="no" strong="no">
+        <type></type>
+        <name>ProcessCallback</name>
+        <qualifiedname>godot::FillAccumulator::ProcessCallback</qualifiedname>
+        <enumvalue id="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" prot="public">
+          <name>PROCESS_MANUAL</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+<para>Only advances when <ref refid="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" kindref="member">process_error_delta()</ref> or <ref refid="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" kindref="member">process_dwell_delta()</ref> is called manually. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" prot="public">
+          <name>PROCESS_IDLE</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+<para>Advances automatically during _process(delta) using active_target / target_error. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" prot="public">
+          <name>PROCESS_PHYSICS</name>
+          <initializer>= 2</initializer>
+          <briefdescription>
+<para>Advances automatically during _physics_process(delta) using active_target / target_error. </para>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Controls when the accumulator steps automatically. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="29" column="5" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="29" bodyend="33"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1a5f0b18ef44bb62c1df18062bb5aef515" prot="private" static="no" mutable="no">
+        <type><ref refid="class_gaze_1_1_fill_accumulator" kindref="compound">Gaze::FillAccumulator</ref></type>
+        <definition>Gaze::FillAccumulator godot::FillAccumulator::impl</definition>
+        <argsstring></argsstring>
+        <name>impl</name>
+        <qualifiedname>godot::FillAccumulator::impl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="36" column="27" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1adbb0c1fa30829613deee44c1801af543" prot="private" static="no" mutable="no">
+        <type><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref></type>
+        <definition>ProcessCallback godot::FillAccumulator::process_callback</definition>
+        <argsstring></argsstring>
+        <name>process_callback</name>
+        <qualifiedname>godot::FillAccumulator::process_callback</qualifiedname>
+        <initializer>= <ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" kindref="member">PROCESS_MANUAL</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="37" column="21" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1a5f057dc2b6dfb7831a637611c078526e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::last_was_charging</definition>
+        <argsstring></argsstring>
+        <name>last_was_charging</name>
+        <qualifiedname>godot::FillAccumulator::last_was_charging</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="38" column="10" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1a59f92f38e9b00f558d68f707419a45f6" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::last_is_filled</definition>
+        <argsstring></argsstring>
+        <name>last_is_filled</name>
+        <qualifiedname>godot::FillAccumulator::last_is_filled</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="39" column="10" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1a1171fcf1efeca4420f80be674ec191b3" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::last_is_empty</definition>
+        <argsstring></argsstring>
+        <name>last_is_empty</name>
+        <qualifiedname>godot::FillAccumulator::last_is_empty</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="40" column="10" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1aecc2d79abf24e973c97afa318e76e829" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::current_error</definition>
+        <argsstring></argsstring>
+        <name>current_error</name>
+        <qualifiedname>godot::FillAccumulator::current_error</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="41" column="12" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_fill_accumulator_1adb0110854aab84865c8b32981fb9bfbb" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::is_active_target</definition>
+        <argsstring></argsstring>
+        <name>is_active_target</name>
+        <qualifiedname>godot::FillAccumulator::is_active_target</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="42" column="10" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aaa11939abf0cec0225383c0f5d6a9abb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::FillAccumulator::GDCLASS</definition>
+        <argsstring>(FillAccumulator, Node)</argsstring>
+        <name>GDCLASS</name>
+        <qualifiedname>godot::FillAccumulator::GDCLASS</qualifiedname>
+        <param>
+          <type>FillAccumulator</type>
+        </param>
+        <param>
+          <type>Node</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="23" column="5"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a0625f4a13ce5247d4e1e1e3f4748dde0" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::_bind_methods</definition>
+        <argsstring>()</argsstring>
+        <name>_bind_methods</name>
+        <qualifiedname>godot::FillAccumulator::_bind_methods</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="45" column="17" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="5" bodyend="65"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a1f4d0b87c252a979ff7fd3bd1313b11a" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::_notification</definition>
+        <argsstring>(int p_what)</argsstring>
+        <name>_notification</name>
+        <qualifiedname>godot::FillAccumulator::_notification</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>p_what</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="46" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="250" bodyend="281"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aac1a1d409a653cdeb4a8127e39418561" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>godot::FillAccumulator::FillAccumulator</definition>
+        <argsstring>()</argsstring>
+        <name>FillAccumulator</name>
+        <qualifiedname>godot::FillAccumulator::FillAccumulator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="49" column="5" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="67" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ad27cc8a2d8619d8138c2174f5f68f5e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual godot::FillAccumulator::~FillAccumulator</definition>
+        <argsstring>()=default</argsstring>
+        <name>~FillAccumulator</name>
+        <qualifiedname>godot::FillAccumulator::~FillAccumulator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="50" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a79c50ff41255ed1b38ecb32286e4d928" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_fill</definition>
+        <argsstring>(double p_fill)</argsstring>
+        <name>set_fill</name>
+        <qualifiedname>godot::FillAccumulator::set_fill</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_fill</declname>
+        </param>
+        <briefdescription>
+<para>Sets the normalized fill level clamped to [0.0, 1.0]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="53" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ac2403c2ccd4b62f6d83a19ad855161fb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_fill</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill</name>
+        <qualifiedname>godot::FillAccumulator::get_fill</qualifiedname>
+        <briefdescription>
+<para>Returns the normalized fill level in [0.0, 1.0]. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="55" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="79" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ab2f481c2f52d506599b0e0327bceaa8c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_velocity</definition>
+        <argsstring>() const</argsstring>
+        <name>get_velocity</name>
+        <qualifiedname>godot::FillAccumulator::get_velocity</qualifiedname>
+        <briefdescription>
+<para>Returns the current fill rate-of-change velocity in fill units per second. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="58" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="83" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aa03771304c4b792e31251dc4641a15bd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::is_filled</definition>
+        <argsstring>() const</argsstring>
+        <name>is_filled</name>
+        <qualifiedname>godot::FillAccumulator::is_filled</qualifiedname>
+        <briefdescription>
+<para>Returns true when fill has reached 1.0. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="61" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="87" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a17c13d3395c38d0a502451bc9f2f1655" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::is_empty</definition>
+        <argsstring>() const</argsstring>
+        <name>is_empty</name>
+        <qualifiedname>godot::FillAccumulator::is_empty</qualifiedname>
+        <briefdescription>
+<para>Returns true when fill is at 0.0. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="63" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="91" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aaadda3c4705f5a655254de84342eb69f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_fill_rate</definition>
+        <argsstring>(double p_rate)</argsstring>
+        <name>set_fill_rate</name>
+        <qualifiedname>godot::FillAccumulator::set_fill_rate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_rate</declname>
+        </param>
+        <briefdescription>
+<para>Sets maximum charging rate in normalized fill units per second (default 1.6). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="66" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="95" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ad086dd00e2f8a6808d3f13b03aee3126" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_fill_rate</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_rate</name>
+        <qualifiedname>godot::FillAccumulator::get_fill_rate</qualifiedname>
+        <briefdescription>
+<para>Returns maximum charging rate in normalized fill units per second. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="68" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="99" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a8121ca02bd1adb7624e03adc55d66028" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_drain_rate</definition>
+        <argsstring>(double p_rate)</argsstring>
+        <name>set_drain_rate</name>
+        <qualifiedname>godot::FillAccumulator::set_drain_rate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_rate</declname>
+        </param>
+        <briefdescription>
+<para>Sets base draining rate in normalized fill units per second (default 2.0). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="71" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="103" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a09dcb3df78ea360aa433d29872b4f5e4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_drain_rate</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_rate</name>
+        <qualifiedname>godot::FillAccumulator::get_drain_rate</qualifiedname>
+        <briefdescription>
+<para>Returns base draining rate in normalized fill units per second. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="73" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="107" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1af223aa89c2b43e6c2f3c91a2fb56a9a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_fill_sec</definition>
+        <argsstring>(double p_sec)</argsstring>
+        <name>set_fill_sec</name>
+        <qualifiedname>godot::FillAccumulator::set_fill_sec</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+<para>Sets time in seconds to fill from 0.0 to 1.0 at max rate (inverse of fill_rate). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="76" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="111" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1adbc1d971e7fe2d1a33ef19ace3549db1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_fill_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_sec</name>
+        <qualifiedname>godot::FillAccumulator::get_fill_sec</qualifiedname>
+        <briefdescription>
+<para>Returns time in seconds to fill from 0.0 to 1.0 at max rate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="78" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="115" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a535137d038069cf3816093cced62525d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_drain_sec</definition>
+        <argsstring>(double p_sec)</argsstring>
+        <name>set_drain_sec</name>
+        <qualifiedname>godot::FillAccumulator::set_drain_sec</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+<para>Sets time in seconds to drain from 1.0 to 0.0 at base drain rate (inverse of drain_rate). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="81" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="119" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a5d80bd2fd5b145ffc3f65bf9fbd80b5f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_drain_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_sec</name>
+        <qualifiedname>godot::FillAccumulator::get_drain_sec</qualifiedname>
+        <briefdescription>
+<para>Returns time in seconds to drain from 1.0 to 0.0 at base drain rate. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="83" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="123" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a225848b9a62ef2aaea7031218c595732" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_fill_acceleration</definition>
+        <argsstring>(double p_accel)</argsstring>
+        <name>set_fill_acceleration</name>
+        <qualifiedname>godot::FillAccumulator::set_fill_acceleration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_accel</declname>
+        </param>
+        <briefdescription>
+<para>Sets acceleration toward fill_rate in units/sec^2 (default 32.0). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="86" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="127" bodyend="129"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1abc4552dba4ae2896b6b78074c08cb79e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_fill_acceleration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_acceleration</name>
+        <qualifiedname>godot::FillAccumulator::get_fill_acceleration</qualifiedname>
+        <briefdescription>
+<para>Returns acceleration toward fill_rate in units/sec^2. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="88" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="131" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ad49ab7f7727cee56388f6e6ba5014ee8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_drain_acceleration</definition>
+        <argsstring>(double p_accel)</argsstring>
+        <name>set_drain_acceleration</name>
+        <qualifiedname>godot::FillAccumulator::set_drain_acceleration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_accel</declname>
+        </param>
+        <briefdescription>
+<para>Sets deceleration / drain acceleration in units/sec^2 (default 32.0). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="91" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="135" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a94395a77c7c3f0ae003ceae632991c4a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_drain_acceleration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_acceleration</name>
+        <qualifiedname>godot::FillAccumulator::get_drain_acceleration</qualifiedname>
+        <briefdescription>
+<para>Returns drain acceleration in units/sec^2. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="93" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="139" bodyend="141"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a14d7dcead6d3723b64325ab0a2e81eac" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_error_doubling_distance</definition>
+        <argsstring>(double p_dist)</argsstring>
+        <name>set_error_doubling_distance</name>
+        <qualifiedname>godot::FillAccumulator::set_error_doubling_distance</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_dist</declname>
+        </param>
+        <briefdescription>
+<para>Sets distance (px) at which positive target_error doubles drain acceleration (default 100.0). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="96" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="143" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ad4a95af8e6354e90674d4ce85a0eb05a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_error_doubling_distance</definition>
+        <argsstring>() const</argsstring>
+        <name>get_error_doubling_distance</name>
+        <qualifiedname>godot::FillAccumulator::get_error_doubling_distance</qualifiedname>
+        <briefdescription>
+<para>Returns error doubling distance in logical pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="98" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="147" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1ae2a1a4200e7d8575fee812bdd210e6fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_process_callback</definition>
+        <argsstring>(ProcessCallback p_callback)</argsstring>
+        <name>set_process_callback</name>
+        <qualifiedname>godot::FillAccumulator::set_process_callback</qualifiedname>
+        <param>
+          <type><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref></type>
+          <declname>p_callback</declname>
+        </param>
+        <briefdescription>
+<para>Sets automatic stepping mode (PROCESS_MANUAL, PROCESS_IDLE, or PROCESS_PHYSICS). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="101" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="151" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1af9888315e995f6d2dc42505c1ee2d0a0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref></type>
+        <definition>FillAccumulator::ProcessCallback godot::FillAccumulator::get_process_callback</definition>
+        <argsstring>() const</argsstring>
+        <name>get_process_callback</name>
+        <qualifiedname>godot::FillAccumulator::get_process_callback</qualifiedname>
+        <briefdescription>
+<para>Returns automatic stepping mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="103" column="21" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="157" bodyend="159"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aeddd00dfce7463e0317a1277035e704e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_target_error</definition>
+        <argsstring>(double p_error)</argsstring>
+        <name>set_target_error</name>
+        <qualifiedname>godot::FillAccumulator::set_target_error</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_error</declname>
+        </param>
+        <briefdescription>
+<para>Sets signed target boundary distance in pixels (&lt;= 0 charges, &gt; 0 drains) used by automatic processing. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="106" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="161" bodyend="163"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1afc6c27cf7b01e921ed3631297acf4df3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>double</type>
+        <definition>double godot::FillAccumulator::get_target_error</definition>
+        <argsstring>() const</argsstring>
+        <name>get_target_error</name>
+        <qualifiedname>godot::FillAccumulator::get_target_error</qualifiedname>
+        <briefdescription>
+<para>Returns signed target boundary distance in pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="108" column="12" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="165" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a1f818e6e1cab9eed5138aa15a3505512" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::set_active_target</definition>
+        <argsstring>(bool p_active)</argsstring>
+        <name>set_active_target</name>
+        <qualifiedname>godot::FillAccumulator::set_active_target</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_active</declname>
+        </param>
+        <briefdescription>
+<para>Sets boolean dwell active flag used by automatic processing when true. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="111" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="169" bodyend="171"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a7f2c348a4abb659022c249e7a37859cb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::FillAccumulator::is_active_target_dwell</definition>
+        <argsstring>() const</argsstring>
+        <name>is_active_target_dwell</name>
+        <qualifiedname>godot::FillAccumulator::is_active_target_dwell</qualifiedname>
+        <briefdescription>
+<para>Returns whether automatic processing treats the dwell target as active. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="113" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="173" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::process_error_delta</definition>
+        <argsstring>(double p_error, double p_delta)</argsstring>
+        <name>process_error_delta</name>
+        <qualifiedname>godot::FillAccumulator::process_error_delta</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_error</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_delta</declname>
+        </param>
+        <briefdescription>
+<para>Advances the accumulator for a single time step given signed boundary error. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_error</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Signed distance outside target boundary in logical pixels (&lt;= 0 fills, &gt; 0 drains). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_delta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Elapsed time in seconds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="120" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="177" bodyend="208"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::process_dwell_delta</definition>
+        <argsstring>(bool p_is_active, double p_delta)</argsstring>
+        <name>process_dwell_delta</name>
+        <qualifiedname>godot::FillAccumulator::process_dwell_delta</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>p_is_active</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_delta</declname>
+        </param>
+        <briefdescription>
+<para>Advances the accumulator for a single time step given boolean activation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_is_active</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True to charge toward 1.0, false to drain toward 0.0. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_delta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Elapsed time in seconds. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="127" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="210" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_fill_accumulator_1a3ec5361b6167dd364780604e4e8f9d60" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::FillAccumulator::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>godot::FillAccumulator::reset</qualifiedname>
+        <briefdescription>
+<para>Resets fill and velocity to 0.0 and emits emptied/fill_changed signals if state changed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="130" column="10" bodyfile="src/godot/fill_accumulator_node.cpp" bodystart="243" bodyend="248"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Second-order inertial dwell / charge accumulator node for gaze UI interactions. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Smoothly charges <computeroutput>fill</computeroutput> in <computeroutput>[0.0, 1.0]</computeroutput> toward <computeroutput>1.0</computeroutput> when <computeroutput>target_error &lt;= 0</computeroutput> (or <computeroutput>active_target</computeroutput> is true) and drains toward <computeroutput>0.0</computeroutput> when outside the target, accelerating rate changes via <computeroutput>fill_acceleration</computeroutput> and <computeroutput>drain_acceleration</computeroutput> and scaling drain acceleration with <computeroutput>(1 + error / error_doubling_distance)</computeroutput>.</para>
+<para>Configure <computeroutput>fill_sec</computeroutput> / <computeroutput>drain_sec</computeroutput> (or <computeroutput>fill_rate</computeroutput> / <computeroutput>drain_rate</computeroutput>) and choose automatic updates via <computeroutput>process_callback</computeroutput> (<computeroutput><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" kindref="member">PROCESS_MANUAL</ref></computeroutput>, <computeroutput><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" kindref="member">PROCESS_IDLE</ref></computeroutput>, or <computeroutput><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" kindref="member">PROCESS_PHYSICS</ref></computeroutput>), or call <computeroutput><ref refid="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" kindref="member">process_error_delta()</ref></computeroutput> / <computeroutput><ref refid="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" kindref="member">process_dwell_delta()</ref></computeroutput> manually.</para>
+<para>Signals emitted: <computeroutput>fill_changed(fill: float)</computeroutput>, <computeroutput>fill_started()</computeroutput>, <computeroutput>filled()</computeroutput>, <computeroutput>emptied()</computeroutput>. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Node</label>
+      </node>
+      <node id="1">
+        <label>godot::FillAccumulator</label>
+        <link refid="classgodot_1_1_fill_accumulator"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Node</label>
+      </node>
+      <node id="1">
+        <label>godot::FillAccumulator</label>
+        <link refid="classgodot_1_1_fill_accumulator"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/godot/fill_accumulator_node.hpp" line="22" column="1" bodyfile="src/godot/fill_accumulator_node.hpp" bodystart="22" bodyend="131"/>
+    <listofallmembers>
+      <member refid="classgodot_1_1_fill_accumulator_1a0625f4a13ce5247d4e1e1e3f4748dde0" prot="protected" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>_bind_methods</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a1f4d0b87c252a979ff7fd3bd1313b11a" prot="protected" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>_notification</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aecc2d79abf24e973c97afa318e76e829" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>current_error</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aac1a1d409a653cdeb4a8127e39418561" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>FillAccumulator</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aaa11939abf0cec0225383c0f5d6a9abb" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>GDCLASS</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a94395a77c7c3f0ae003ceae632991c4a" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_drain_acceleration</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a09dcb3df78ea360aa433d29872b4f5e4" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_drain_rate</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a5d80bd2fd5b145ffc3f65bf9fbd80b5f" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_drain_sec</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ad4a95af8e6354e90674d4ce85a0eb05a" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_error_doubling_distance</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ac2403c2ccd4b62f6d83a19ad855161fb" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_fill</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1abc4552dba4ae2896b6b78074c08cb79e" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_fill_acceleration</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ad086dd00e2f8a6808d3f13b03aee3126" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_fill_rate</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1adbc1d971e7fe2d1a33ef19ace3549db1" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_fill_sec</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1af9888315e995f6d2dc42505c1ee2d0a0" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_process_callback</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1afc6c27cf7b01e921ed3631297acf4df3" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_target_error</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ab2f481c2f52d506599b0e0327bceaa8c" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>get_velocity</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a5f0b18ef44bb62c1df18062bb5aef515" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>impl</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1adb0110854aab84865c8b32981fb9bfbb" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>is_active_target</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a7f2c348a4abb659022c249e7a37859cb" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>is_active_target_dwell</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a17c13d3395c38d0a502451bc9f2f1655" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>is_empty</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aa03771304c4b792e31251dc4641a15bd" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>is_filled</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a1171fcf1efeca4420f80be674ec191b3" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>last_is_empty</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a59f92f38e9b00f558d68f707419a45f6" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>last_is_filled</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a5f057dc2b6dfb7831a637611c078526e" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>last_was_charging</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1adbb0c1fa30829613deee44c1801af543" prot="private" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>process_callback</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>process_dwell_delta</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>process_error_delta</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>PROCESS_IDLE</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>PROCESS_MANUAL</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>PROCESS_PHYSICS</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>ProcessCallback</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a3ec5361b6167dd364780604e4e8f9d60" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>reset</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a1f818e6e1cab9eed5138aa15a3505512" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_active_target</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ad49ab7f7727cee56388f6e6ba5014ee8" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_drain_acceleration</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a8121ca02bd1adb7624e03adc55d66028" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_drain_rate</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a535137d038069cf3816093cced62525d" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_drain_sec</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a14d7dcead6d3723b64325ab0a2e81eac" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_error_doubling_distance</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a79c50ff41255ed1b38ecb32286e4d928" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_fill</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1a225848b9a62ef2aaea7031218c595732" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_fill_acceleration</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aaadda3c4705f5a655254de84342eb69f" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_fill_rate</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1af223aa89c2b43e6c2f3c91a2fb56a9a4" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_fill_sec</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ae2a1a4200e7d8575fee812bdd210e6fe" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_process_callback</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1aeddd00dfce7463e0317a1277035e704e" prot="public" virt="non-virtual"><scope>godot::FillAccumulator</scope><name>set_target_error</name></member>
+      <member refid="classgodot_1_1_fill_accumulator_1ad27cc8a2d8619d8138c2174f5f68f5e7" prot="public" virt="virtual"><scope>godot::FillAccumulator</scope><name>~FillAccumulator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

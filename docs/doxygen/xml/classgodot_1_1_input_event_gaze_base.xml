@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="27" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="17" bodyend="42"/>
+        <location file="src/godot/input_event_gaze.hpp" line="27" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="22" bodyend="47"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="30" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="10" bodyend="15"/>
+        <location file="src/godot/input_event_gaze.hpp" line="30" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="15" bodyend="20"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a00c3f06deb9f6dd63b691ab34f49020a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -390,12 +390,14 @@
         </inbodydescription>
         <location file="src/godot/input_event_gaze.hpp" line="88" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="88" bodyend="88"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
         <definition>void godot::InputEventGazeBase::copy_from</definition>
         <argsstring>(const Ref&lt; InputEventGazeBase &gt; &amp;p_other)</argsstring>
         <name>copy_from</name>
         <qualifiedname>godot::InputEventGazeBase::copy_from</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_input_event_gaze_1a089fe652aa16d1178675d3867ad09e6c">copy_from</reimplementedby>
+        <reimplementedby refid="classgodot_1_1_input_event_gaze_missing_1a973631e280f681083b049e1cab2671fa">copy_from</reimplementedby>
         <param>
           <type>const Ref&lt; InputEventGazeBase &gt; &amp;</type>
           <declname>p_other</declname>
@@ -406,7 +408,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="90" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="44" bodyend="52"/>
+        <location file="src/godot/input_event_gaze.hpp" line="90" column="18" bodyfile="src/godot/input_event_gaze.cpp" bodystart="49" bodyend="56"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -451,7 +453,7 @@
     <location file="src/godot/input_event_gaze.hpp" line="17" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="17" bodyend="91"/>
     <listofallmembers>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8d87766d27085162f61f3a8528edca82" prot="protected" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>_bind_methods</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>copy_from</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" virt="virtual"><scope>godot::InputEventGazeBase</scope><name>copy_from</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1ab2587e100540bf1254f64fed52c5e658" prot="protected" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>frame_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1ab4c0b30c2778c4a5ed4524dbdb8f6d6e" prot="private" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>GDCLASS</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" prot="public" virt="non-virtual"><scope>godot::InputEventGazeBase</scope><name>get_frame_id</name></member>

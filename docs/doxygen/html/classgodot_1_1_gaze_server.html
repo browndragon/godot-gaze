@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -204,6 +204,18 @@ PackedVector2Array&#160;</td><td class="memItemRight"><b>get_face_landmarks</b> 
 PackedVector2Array&#160;</td><td class="memItemRight"><b>get_debug_landmarks</b> () const</td></tr>
 <tr class="memitem:aa6b3cfe29fb3810f41d4ddb8d88833aa" id="r_aa6b3cfe29fb3810f41d4ddb8d88833aa"><td class="memItemLeft"><a id="aa6b3cfe29fb3810f41d4ddb8d88833aa" name="aa6b3cfe29fb3810f41d4ddb8d88833aa"></a>
 void&#160;</td><td class="memItemRight"><b>set_face_landmarks_2d</b> (const PackedVector2Array &amp;p_landmarks)</td></tr>
+<tr class="memitem:ae2ae3f7bc392406c24e50eede9c87b36" id="r_ae2ae3f7bc392406c24e50eede9c87b36"><td class="memItemLeft"><a id="ae2ae3f7bc392406c24e50eede9c87b36" name="ae2ae3f7bc392406c24e50eede9c87b36"></a>
+Rect2&#160;</td><td class="memItemRight"><b>get_face_bbox</b> () const</td></tr>
+<tr class="memitem:adf18b6b05f4b1f9bcbc05a7fa26c4ec4" id="r_adf18b6b05f4b1f9bcbc05a7fa26c4ec4"><td class="memItemLeft"><a id="adf18b6b05f4b1f9bcbc05a7fa26c4ec4" name="adf18b6b05f4b1f9bcbc05a7fa26c4ec4"></a>
+void&#160;</td><td class="memItemRight"><b>set_face_bbox</b> (const Rect2 &amp;p_bbox)</td></tr>
+<tr class="memitem:a8e6d004cbd86c6643259349b31f09291" id="r_a8e6d004cbd86c6643259349b31f09291"><td class="memItemLeft"><a id="a8e6d004cbd86c6643259349b31f09291" name="a8e6d004cbd86c6643259349b31f09291"></a>
+PackedVector2Array&#160;</td><td class="memItemRight"><b>get_face_obb_2d</b> () const</td></tr>
+<tr class="memitem:ae00a867ffb58f3d70c8c0051431b3530" id="r_ae00a867ffb58f3d70c8c0051431b3530"><td class="memItemLeft"><a id="ae00a867ffb58f3d70c8c0051431b3530" name="ae00a867ffb58f3d70c8c0051431b3530"></a>
+void&#160;</td><td class="memItemRight"><b>set_face_obb_2d</b> (const PackedVector2Array &amp;p_obb)</td></tr>
+<tr class="memitem:a667d0f97da02d0882bd08e23ed97c0ef" id="r_a667d0f97da02d0882bd08e23ed97c0ef"><td class="memItemLeft"><a id="a667d0f97da02d0882bd08e23ed97c0ef" name="a667d0f97da02d0882bd08e23ed97c0ef"></a>
+bool&#160;</td><td class="memItemRight"><b>is_temporal_tracking</b> () const</td></tr>
+<tr class="memitem:ac8e2f1a5875d22ac43d9d740b04f1980" id="r_ac8e2f1a5875d22ac43d9d740b04f1980"><td class="memItemLeft"><a id="ac8e2f1a5875d22ac43d9d740b04f1980" name="ac8e2f1a5875d22ac43d9d740b04f1980"></a>
+void&#160;</td><td class="memItemRight"><b>set_is_temporal_tracking</b> (bool p_temporal)</td></tr>
 <tr class="memitem:a7099d489659b680dff02581ee03b746f" id="r_a7099d489659b680dff02581ee03b746f"><td class="memItemLeft"><a id="a7099d489659b680dff02581ee03b746f" name="a7099d489659b680dff02581ee03b746f"></a>
 PackedVector3Array&#160;</td><td class="memItemRight"><b>get_face_model_points</b> () const</td></tr>
 <tr class="memitem:aca8573acacb93ac6a0d9aa3f7c5aaa27" id="r_aca8573acacb93ac6a0d9aa3f7c5aaa27"><td class="memItemLeft"><a id="aca8573acacb93ac6a0d9aa3f7c5aaa27" name="aca8573acacb93ac6a0d9aa3f7c5aaa27"></a>
@@ -282,10 +294,30 @@ void&#160;</td><td class="memItemRight"><b>_ensure_event_factory_loaded</b> ()</
 <tr class="memdesc:afba19bd41e7e4bb6bb5af21b4e1f872c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables mouse-to-gaze input emulation.  <br /></td></tr>
 <tr class="memitem:af9941e2c6bfebf948eeacbac67648750" id="r_af9941e2c6bfebf948eeacbac67648750"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af9941e2c6bfebf948eeacbac67648750">get_emulate_gaze_from_mouse</a> () const</td></tr>
 <tr class="memdesc:af9941e2c6bfebf948eeacbac67648750"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if mouse-to-gaze input emulation is currently enabled.  <br /></td></tr>
+<tr class="memitem:ab1c6979216b46b6e2fa29fcb777902fa" id="r_ab1c6979216b46b6e2fa29fcb777902fa"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ab1c6979216b46b6e2fa29fcb777902fa">is_mouse_emulated</a> () const</td></tr>
+<tr class="memdesc:ab1c6979216b46b6e2fa29fcb777902fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if mouse emulation is currently driving gaze input.  <br /></td></tr>
 <tr class="memitem:a01d82ad0c25e44ee8534ef2bd97c96ae" id="r_a01d82ad0c25e44ee8534ef2bd97c96ae"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a01d82ad0c25e44ee8534ef2bd97c96ae">set_emulate_mouse_from_gaze</a> (bool p_enable)</td></tr>
 <tr class="memdesc:a01d82ad0c25e44ee8534ef2bd97c96ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables or disables gaze-to-mouse emulation (driving the OS/window mouse cursor from eye gaze).  <br /></td></tr>
 <tr class="memitem:a1435b15bf7bf0ff0c874284fdcfe3eb5" id="r_a1435b15bf7bf0ff0c874284fdcfe3eb5"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1435b15bf7bf0ff0c874284fdcfe3eb5">get_emulate_mouse_from_gaze</a> () const</td></tr>
 <tr class="memdesc:a1435b15bf7bf0ff0c874284fdcfe3eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if gaze-to-mouse emulation is currently enabled.  <br /></td></tr>
+<tr class="memitem:a5e5dcabf787451b58450ce7a376d1968" id="r_a5e5dcabf787451b58450ce7a376d1968"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5e5dcabf787451b58450ce7a376d1968">set_default_clamping</a> (bool p_clamping)</td></tr>
+<tr class="memdesc:a5e5dcabf787451b58450ce7a376d1968"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets whether viewport boundary clamping is enabled by default for gaze projection and mouse emulation.  <br /></td></tr>
+<tr class="memitem:af0585c386114fba80be375b80689fb51" id="r_af0585c386114fba80be375b80689fb51"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#af0585c386114fba80be375b80689fb51">is_clamping_by_default</a> () const</td></tr>
+<tr class="memdesc:af0585c386114fba80be375b80689fb51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether viewport boundary clamping is enabled by default.  <br /></td></tr>
+<tr class="memitem:a18e0fa63c0b5b0abdc81a209c659eada" id="r_a18e0fa63c0b5b0abdc81a209c659eada"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a18e0fa63c0b5b0abdc81a209c659eada">is_physical_mouse_still</a> () const</td></tr>
+<tr class="memdesc:a18e0fa63c0b5b0abdc81a209c659eada"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the physical hardware mouse is currently still (allowing gaze-to-mouse emulation).  <br /></td></tr>
+<tr class="memitem:ad1c2893cae2c2f34fb4ba922080b190f" id="r_ad1c2893cae2c2f34fb4ba922080b190f"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ad1c2893cae2c2f34fb4ba922080b190f">is_physical_mouse_active</a> () const</td></tr>
+<tr class="memdesc:ad1c2893cae2c2f34fb4ba922080b190f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether the physical hardware mouse is currently active (suppressing gaze-to-mouse emulation).  <br /></td></tr>
+<tr class="memitem:a388bece8825868e659bcd416df160e93" id="r_a388bece8825868e659bcd416df160e93"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a388bece8825868e659bcd416df160e93">set_mouse_stillness_duration</a> (float p_sec)</td></tr>
+<tr class="memdesc:a388bece8825868e659bcd416df160e93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the stillness duration required before control transitions back to gaze.  <br /></td></tr>
+<tr class="memitem:a4ae8bf0792397a56e3f32ff842da35f8" id="r_a4ae8bf0792397a56e3f32ff842da35f8"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a4ae8bf0792397a56e3f32ff842da35f8">get_mouse_stillness_duration</a> () const</td></tr>
+<tr class="memdesc:a4ae8bf0792397a56e3f32ff842da35f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the stillness duration required before control transitions back to gaze.  <br /></td></tr>
+<tr class="memitem:a8e179acc82ed2a105a70f6b74630d272" id="r_a8e179acc82ed2a105a70f6b74630d272"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8e179acc82ed2a105a70f6b74630d272">set_mouse_stillness_threshold_px</a> (float p_px)</td></tr>
+<tr class="memdesc:a8e179acc82ed2a105a70f6b74630d272"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the physical mouse stillness motion threshold in pixels.  <br /></td></tr>
+<tr class="memitem:a1bbf59a09b2596bbb043310011e478ec" id="r_a1bbf59a09b2596bbb043310011e478ec"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a1bbf59a09b2596bbb043310011e478ec">get_mouse_stillness_threshold_px</a> () const</td></tr>
+<tr class="memdesc:a1bbf59a09b2596bbb043310011e478ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the physical mouse stillness motion threshold in pixels.  <br /></td></tr>
+<tr class="memitem:a40d425b642ba56d62d37416b0377e4e1" id="r_a40d425b642ba56d62d37416b0377e4e1"><td class="memItemLeft">Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a40d425b642ba56d62d37416b0377e4e1">get_canonical_viewport_size</a> () const</td></tr>
+<tr class="memdesc:a40d425b642ba56d62d37416b0377e4e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the canonical active viewport size in pixels (accounting for window/display server).  <br /></td></tr>
 <tr class="memitem:a69aea5a350ec6f94e19994b549cc6d19" id="r_a69aea5a350ec6f94e19994b549cc6d19"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a69aea5a350ec6f94e19994b549cc6d19">set_mouse_emulation_dwell_sec</a> (float p_sec)</td></tr>
 <tr class="memdesc:a69aea5a350ec6f94e19994b549cc6d19"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the dwell time in seconds for mouse interaction override before smoothly returning to camera gaze.  <br /></td></tr>
 <tr class="memitem:ae0e1af81160134c07f3e6d8e8a9dde24" id="r_ae0e1af81160134c07f3e6d8e8a9dde24"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#ae0e1af81160134c07f3e6d8e8a9dde24">get_mouse_emulation_dwell_sec</a> () const</td></tr>
@@ -303,10 +335,17 @@ int&#160;</td><td class="memItemRight"><b>get_verbosity</b> () const</td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a8b8ae459b933ffd1418be7e1bab0bdcf" id="r_a8b8ae459b933ffd1418be7e1bab0bdcf"><td class="memItemLeft"><a id="a8b8ae459b933ffd1418be7e1bab0bdcf" name="a8b8ae459b933ffd1418be7e1bab0bdcf"></a>
 static GazeServer *&#160;</td><td class="memItemRight"><b>get_singleton</b> ()</td></tr>
+<tr class="memitem:a0e8a54ed102a8d9b04ad0604dc8dd468" id="r_a0e8a54ed102a8d9b04ad0604dc8dd468"><td class="memItemLeft"><a id="a0e8a54ed102a8d9b04ad0604dc8dd468" name="a0e8a54ed102a8d9b04ad0604dc8dd468"></a>
+static bool&#160;</td><td class="memItemRight"><b>is_synthetic_mouse_event</b> (const Ref&lt; InputEvent &gt; &amp;p_event)</td></tr>
 <tr class="memitem:a1601eda7c599bafea6616eb4933678dd" id="r_a1601eda7c599bafea6616eb4933678dd"><td class="memItemLeft"><a id="a1601eda7c599bafea6616eb4933678dd" name="a1601eda7c599bafea6616eb4933678dd"></a>
 static String&#160;</td><td class="memItemRight"><b>get_build_info</b> ()</td></tr>
 <tr class="memitem:a09de30757865b32c833c06d1903ae7dc" id="r_a09de30757865b32c833c06d1903ae7dc"><td class="memItemLeft"><a id="a09de30757865b32c833c06d1903ae7dc" name="a09de30757865b32c833c06d1903ae7dc"></a>
 static String&#160;</td><td class="memItemRight"><b>get_build_timestamp</b> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a46678cc0d95b93dbab8f2db064f9f533" id="r_a46678cc0d95b93dbab8f2db064f9f533"><td class="memItemLeft"><a id="a46678cc0d95b93dbab8f2db064f9f533" name="a46678cc0d95b93dbab8f2db064f9f533"></a>
+static constexpr int&#160;</td><td class="memItemRight"><b>DEVICE_ID_GAZE_SYNTHETIC</b> = -1</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -357,6 +396,26 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Ref&lt;InputEventGazeMissing&gt; Newly created missing gaze event. </dd></dl>
+
+</div>
+</div>
+<a id="a40d425b642ba56d62d37416b0377e4e1" name="a40d425b642ba56d62d37416b0377e4e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40d425b642ba56d62d37416b0377e4e1">&#9670;&#160;</a></span>get_canonical_viewport_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::GazeServer::get_canonical_viewport_size </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the canonical active viewport size in pixels (accounting for window/display server). </p>
+<dl class="section return"><dt>Returns</dt><dd>Vector2 Viewport size in pixels. </dd></dl>
 
 </div>
 </div>
@@ -460,6 +519,126 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 
 </div>
 </div>
+<a id="a4ae8bf0792397a56e3f32ff842da35f8" name="a4ae8bf0792397a56e3f32ff842da35f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae8bf0792397a56e3f32ff842da35f8">&#9670;&#160;</a></span>get_mouse_stillness_duration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float godot::GazeServer::get_mouse_stillness_duration </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the stillness duration required before control transitions back to gaze. </p>
+<dl class="section return"><dt>Returns</dt><dd>float Duration in seconds. </dd></dl>
+
+</div>
+</div>
+<a id="a1bbf59a09b2596bbb043310011e478ec" name="a1bbf59a09b2596bbb043310011e478ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bbf59a09b2596bbb043310011e478ec">&#9670;&#160;</a></span>get_mouse_stillness_threshold_px()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float godot::GazeServer::get_mouse_stillness_threshold_px </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Gets the physical mouse stillness motion threshold in pixels. </p>
+<dl class="section return"><dt>Returns</dt><dd>float Threshold radius in pixels. </dd></dl>
+
+</div>
+</div>
+<a id="af0585c386114fba80be375b80689fb51" name="af0585c386114fba80be375b80689fb51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0585c386114fba80be375b80689fb51">&#9670;&#160;</a></span>is_clamping_by_default()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::is_clamping_by_default </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether viewport boundary clamping is enabled by default. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if clamping by default. </dd></dl>
+
+</div>
+</div>
+<a id="ab1c6979216b46b6e2fa29fcb777902fa" name="ab1c6979216b46b6e2fa29fcb777902fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1c6979216b46b6e2fa29fcb777902fa">&#9670;&#160;</a></span>is_mouse_emulated()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::is_mouse_emulated </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks if mouse emulation is currently driving gaze input. </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if mouse emulation is active. </dd></dl>
+
+</div>
+</div>
+<a id="ad1c2893cae2c2f34fb4ba922080b190f" name="ad1c2893cae2c2f34fb4ba922080b190f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1c2893cae2c2f34fb4ba922080b190f">&#9670;&#160;</a></span>is_physical_mouse_active()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::is_physical_mouse_active </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether the physical hardware mouse is currently active (suppressing gaze-to-mouse emulation). </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if physical mouse is actively moving or clicked. </dd></dl>
+
+</div>
+</div>
+<a id="a18e0fa63c0b5b0abdc81a209c659eada" name="a18e0fa63c0b5b0abdc81a209c659eada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18e0fa63c0b5b0abdc81a209c659eada">&#9670;&#160;</a></span>is_physical_mouse_still()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool godot::GazeServer::is_physical_mouse_still </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Checks whether the physical hardware mouse is currently still (allowing gaze-to-mouse emulation). </p>
+<dl class="section return"><dt>Returns</dt><dd>bool True if physical mouse is still. </dd></dl>
+
+</div>
+</div>
 <a id="a456c4cc19663f4186a12fcaa4ea9cc36" name="a456c4cc19663f4186a12fcaa4ea9cc36"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a456c4cc19663f4186a12fcaa4ea9cc36">&#9670;&#160;</a></span>project_ray_to_camera_plane()</h2>
 
@@ -487,7 +666,7 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Vector3 Intersection point on camera plane, or (INFINITY, INFINITY, INFINITY) if parallel. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector3 Intersection point on camera plane, or (NAN, NAN, NAN) if parallel or behind the camera. </dd></dl>
 
 </div>
 </div>
@@ -525,7 +704,7 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in canvas space or local coordinates, or (INFINITY, INFINITY) if no intersection. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in canvas space or local coordinates, or (NAN, NAN) if no intersection. </dd></dl>
 
 </div>
 </div>
@@ -557,7 +736,32 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in window logical points, or (INFINITY, INFINITY) if no intersection. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Vector2 Intersection point in window logical points, or (NAN, NAN) if no intersection. </dd></dl>
+
+</div>
+</div>
+<a id="a5e5dcabf787451b58450ce7a376d1968" name="a5e5dcabf787451b58450ce7a376d1968"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e5dcabf787451b58450ce7a376d1968">&#9670;&#160;</a></span>set_default_clamping()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_default_clamping </td>
+          <td>(</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>p_clamping</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets whether viewport boundary clamping is enabled by default for gaze projection and mouse emulation. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_clamping</td><td>True to clamp coordinates to the viewport bounds. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -681,6 +885,56 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p_sec</td><td>Transition duration in seconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a388bece8825868e659bcd416df160e93" name="a388bece8825868e659bcd416df160e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a388bece8825868e659bcd416df160e93">&#9670;&#160;</a></span>set_mouse_stillness_duration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_mouse_stillness_duration </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>p_sec</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the stillness duration required before control transitions back to gaze. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_sec</td><td>Duration in seconds. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8e179acc82ed2a105a70f6b74630d272" name="a8e179acc82ed2a105a70f6b74630d272"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e179acc82ed2a105a70f6b74630d272">&#9670;&#160;</a></span>set_mouse_stillness_threshold_px()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::GazeServer::set_mouse_stillness_threshold_px </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>p_px</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Sets the physical mouse stillness motion threshold in pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_px</td><td>Threshold radius in pixels. </td></tr>
   </table>
   </dd>
 </dl>

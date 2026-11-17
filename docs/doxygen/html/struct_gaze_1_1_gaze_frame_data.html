@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -160,10 +160,26 @@ float&#160;</td><td class="memItemRight"><b>roll_hint_rad</b> = 0.0f</td></tr>
 bool&#160;</td><td class="memItemRight"><b>auto_roll_enabled</b> = true</td></tr>
 <tr class="memitem:aaed00805f0700f1ee3ebba5ad95fab86" id="r_aaed00805f0700f1ee3ebba5ad95fab86"><td class="memItemLeft"><a id="aaed00805f0700f1ee3ebba5ad95fab86" name="aaed00805f0700f1ee3ebba5ad95fab86"></a>
 <a class="el" href="struct_gaze_1_1_gaze_rect.html">GazeRect</a>&#160;</td><td class="memItemRight"><b>face_bbox</b></td></tr>
+<tr class="memitem:a5192c1bb00f056fb4acc5c08d9a77da1" id="r_a5192c1bb00f056fb4acc5c08d9a77da1"><td class="memItemLeft"><a id="a5192c1bb00f056fb4acc5c08d9a77da1" name="a5192c1bb00f056fb4acc5c08d9a77da1"></a>
+<a class="el" href="struct_gaze_1_1_gaze_rect.html">GazeRect</a>&#160;</td><td class="memItemRight"><b>face_bbox_cam</b></td></tr>
+<tr class="memitem:a8cb316e211b794d071f08db0461fd987" id="r_a8cb316e211b794d071f08db0461fd987"><td class="memItemLeft"><a id="a8cb316e211b794d071f08db0461fd987" name="a8cb316e211b794d071f08db0461fd987"></a>
+float&#160;</td><td class="memItemRight"><b>face_obb_cam_px</b> [8] = {0.0f}</td></tr>
+<tr class="memitem:a45d578223e75f9e46c6f55db05fec187" id="r_a45d578223e75f9e46c6f55db05fec187"><td class="memItemLeft"><a id="a45d578223e75f9e46c6f55db05fec187" name="a45d578223e75f9e46c6f55db05fec187"></a>
+PipelineTrackingMode&#160;</td><td class="memItemRight"><b>tracking_mode</b> = PipelineTrackingMode::SEEKING</td></tr>
+<tr class="memitem:a424b9114566829ab11645040cf653bea" id="r_a424b9114566829ab11645040cf653bea"><td class="memItemLeft"><a id="a424b9114566829ab11645040cf653bea" name="a424b9114566829ab11645040cf653bea"></a>
+bool&#160;</td><td class="memItemRight"><b>is_temporal_tracking</b> = false</td></tr>
+<tr class="memitem:a5354c1f94ee6c4d184aeb4151c70b706" id="r_a5354c1f94ee6c4d184aeb4151c70b706"><td class="memItemLeft"><a id="a5354c1f94ee6c4d184aeb4151c70b706" name="a5354c1f94ee6c4d184aeb4151c70b706"></a>
+float&#160;</td><td class="memItemRight"><b>landmark_rmse_px</b> = 0.0f</td></tr>
+<tr class="memitem:af2d92fbc94724d7a29683007ba195a20" id="r_af2d92fbc94724d7a29683007ba195a20"><td class="memItemLeft"><a id="af2d92fbc94724d7a29683007ba195a20" name="af2d92fbc94724d7a29683007ba195a20"></a>
+float&#160;</td><td class="memItemRight"><b>landmark_quality</b> = 0.0f</td></tr>
 <tr class="memitem:ad3666a8df15da621b455e4455842d7f9" id="r_ad3666a8df15da621b455e4455842d7f9"><td class="memItemLeft"><a id="ad3666a8df15da621b455e4455842d7f9" name="ad3666a8df15da621b455e4455842d7f9"></a>
 float&#160;</td><td class="memItemRight"><b>face_score</b> = 0.0f</td></tr>
 <tr class="memitem:a707ef24165a72309a46f7adcf4d8edfe" id="r_a707ef24165a72309a46f7adcf4d8edfe"><td class="memItemLeft"><a id="a707ef24165a72309a46f7adcf4d8edfe" name="a707ef24165a72309a46f7adcf4d8edfe"></a>
 float&#160;</td><td class="memItemRight"><b>eye_box_sz</b> = 0.0f</td></tr>
+<tr class="memitem:a8b393c306594c3ddefb568aba26d471a" id="r_a8b393c306594c3ddefb568aba26d471a"><td class="memItemLeft"><a id="a8b393c306594c3ddefb568aba26d471a" name="a8b393c306594c3ddefb568aba26d471a"></a>
+float&#160;</td><td class="memItemRight"><b>right_eye_box_sz</b> = 0.0f</td></tr>
+<tr class="memitem:abcc93cad26114952300790ece1b9fa70" id="r_abcc93cad26114952300790ece1b9fa70"><td class="memItemLeft"><a id="abcc93cad26114952300790ece1b9fa70" name="abcc93cad26114952300790ece1b9fa70"></a>
+float&#160;</td><td class="memItemRight"><b>left_eye_box_sz</b> = 0.0f</td></tr>
 <tr class="memitem:abe102119735c0daf1cd28ab7450c500e" id="r_abe102119735c0daf1cd28ab7450c500e"><td class="memItemLeft"><a id="abe102119735c0daf1cd28ab7450c500e" name="abe102119735c0daf1cd28ab7450c500e"></a>
 std::vector&lt; <a class="el" href="struct_gaze_1_1_spaced_vector2.html">SpacedVector2</a>&lt; <a class="el" href="opencv__space__conversions_8hpp.html#ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624">Space::GodotCameraWorkingImagePixels</a> &gt; &gt;&#160;</td><td class="memItemRight"><b>internal_landmarks_working_px</b></td></tr>
 <tr class="memitem:ae0c703e19ac23ec6f672be04930e8b36" id="r_ae0c703e19ac23ec6f672be04930e8b36"><td class="memItemLeft"><a id="ae0c703e19ac23ec6f672be04930e8b36" name="ae0c703e19ac23ec6f672be04930e8b36"></a>

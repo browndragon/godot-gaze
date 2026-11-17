@@ -9,14 +9,14 @@
         <argsstring></argsstring>
         <name>dwell_time_sec</name>
         <qualifiedname>godot::MouseGazeEmulation::dwell_time_sec</qualifiedname>
-        <initializer>= 2.0f</initializer>
+        <initializer>= 1.5f</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="19" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="19" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="20" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="20" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1ad7303dad137dfaf627bf2f90df02066b" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -31,7 +31,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="20" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="20" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="21" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="21" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1ab2aacbba579d82f3a77bafdf309d0e05" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -46,7 +46,21 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="21" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="21" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="22" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1ab272d5c959fccfff2c64cf7eb7fcd747" prot="private" static="no" mutable="no">
+        <type><ref refid="class_gaze_1_1_mouse_stillness_arbitrator" kindref="compound">Gaze::MouseStillnessArbitrator</ref></type>
+        <definition>Gaze::MouseStillnessArbitrator godot::MouseGazeEmulation::arbitrator</definition>
+        <argsstring></argsstring>
+        <name>arbitrator</name>
+        <qualifiedname>godot::MouseGazeEmulation::arbitrator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="24" column="36" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="24" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1ad92883a92ed56c0a24a4bf8b56055b24" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -61,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="23" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="23" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="26" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="26" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a0f6a8cc6fae993dc75c893e5a6b81dad" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -76,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="24" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="24" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="27" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="27" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a70b97b630cd030bf3f325c88eb21d3bb" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -91,7 +105,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="26" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="26" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="29" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="29" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a85e6071ade6558ac3eaf82ad83f285c1" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -106,7 +120,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="27" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="27" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="30" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="30" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1aefe2812b6e2c515d9b7d70bc8af970b3" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -121,22 +135,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="28" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="28" bodyend="-1"/>
-      </memberdef>
-      <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a50aad31b1485e82e7748575b853f0385" prot="private" static="no" mutable="no">
-        <type>DisplayServer::WindowMode</type>
-        <definition>DisplayServer::WindowMode godot::MouseGazeEmulation::last_window_mode</definition>
-        <argsstring></argsstring>
-        <name>last_window_mode</name>
-        <qualifiedname>godot::MouseGazeEmulation::last_window_mode</qualifiedname>
-        <initializer>= DisplayServer::WINDOW_MODE_WINDOWED</initializer>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="29" column="31" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="29" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="31" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="31" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a70f26d8f77c2dd7eb7a9839a6dbcf537" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -151,7 +150,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="30" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="30" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="32" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="32" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a27331a0f79d2bf77f56f29ca5292cf77" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -166,7 +165,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="31" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="31" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="33" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a94a342e3cf9ea7c6b9678f341da90dbe" prot="private" static="no" mutable="no">
         <type>Vector2</type>
@@ -174,14 +173,14 @@
         <argsstring></argsstring>
         <name>last_cam_gaze_pos</name>
         <qualifiedname>godot::MouseGazeEmulation::last_cam_gaze_pos</qualifiedname>
-        <initializer>= Vector2(0, 0)</initializer>
+        <initializer>= Vector2(NAN, NAN)</initializer>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="33" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="33" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="35" column="13" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a040c4ed1c9b3961423a0675639af9ea6" prot="private" static="no" mutable="no">
         <type>Transform3D</type>
@@ -195,7 +194,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="34" column="17" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="34" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="36" column="17" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1ad1b90aeff3cd671be9711d0395aafa64" prot="private" static="no" mutable="no">
         <type>Transform3D</type>
@@ -209,7 +208,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="35" column="17" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="35" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="37" column="17" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a5e3c0328b054c1716804389ab7434232" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -224,7 +223,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="36" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="36" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="38" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1a84f9e096455a66d9be3e1b8f43bfe046" prot="private" static="no" mutable="no">
         <type>float</type>
@@ -239,7 +238,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="37" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="37" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="39" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="classgodot_1_1_mouse_gaze_emulation_1aa89d4f9abe06f490d0275bbbdaa0967c" prot="private" static="no" mutable="no">
         <type>bool</type>
@@ -254,7 +253,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="38" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="38" bodyend="-1"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="40" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="40" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -270,7 +269,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="41" column="5" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="11" bodyend="14"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="43" column="5" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="11" bodyend="14"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a41bff64fda95b73686e69f9717749e15" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -284,7 +283,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="42" column="5"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="44" column="5"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a3d78847b99251e828e4aa3da7fc66e60" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -302,7 +301,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="44" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="44" bodyend="44"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="46" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a2cdce985a5d4d3817ea234293f9bdebb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -316,7 +315,71 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="45" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="45" bodyend="45"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="47" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="47" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1aec3f79ba0f11b5e433c247c5877bf536" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::MouseGazeEmulation::set_stillness_duration</definition>
+        <argsstring>(float p_sec)</argsstring>
+        <name>set_stillness_duration</name>
+        <qualifiedname>godot::MouseGazeEmulation::set_stillness_duration</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="49" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a61b8da3c0f024e7eb1d7086365636f9f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::MouseGazeEmulation::get_stillness_duration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_stillness_duration</name>
+        <qualifiedname>godot::MouseGazeEmulation::get_stillness_duration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="53" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="53" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a7aac969d181f9fc791cf51c698d57301" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::MouseGazeEmulation::set_stillness_threshold</definition>
+        <argsstring>(float p_px)</argsstring>
+        <name>set_stillness_threshold</name>
+        <qualifiedname>godot::MouseGazeEmulation::set_stillness_threshold</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="55" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a1f3f9100e591ab596629fc34921264c3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::MouseGazeEmulation::get_stillness_threshold</definition>
+        <argsstring>() const</argsstring>
+        <name>get_stillness_threshold</name>
+        <qualifiedname>godot::MouseGazeEmulation::get_stillness_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="59" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="59" bodyend="59"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a00e12d116326073fb5735a10712fe4e9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -334,7 +397,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="47" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="47" bodyend="47"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="61" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="61" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1af2b999207383e834ebae202c21e7f763" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -348,7 +411,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="48" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="48" bodyend="48"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="62" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="62" bodyend="62"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1aa72d483ca7bb69797a4ebbc9f8bcf0ff" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -366,7 +429,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="50" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="50" bodyend="50"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="64" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="64" bodyend="64"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a7f1a095c1fe48e6b320fda6c6428abc3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -380,7 +443,63 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="51" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="51" bodyend="51"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="65" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="65" bodyend="65"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ab08a302e8a02d695f846fd477c81de8a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::MouseGazeEmulation::is_physical_mouse_still</definition>
+        <argsstring>() const</argsstring>
+        <name>is_physical_mouse_still</name>
+        <qualifiedname>godot::MouseGazeEmulation::is_physical_mouse_still</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="67" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="67" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a7157894ee9f2b519da722738de09e9bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::MouseGazeEmulation::is_physical_mouse_active</definition>
+        <argsstring>() const</argsstring>
+        <name>is_physical_mouse_active</name>
+        <qualifiedname>godot::MouseGazeEmulation::is_physical_mouse_active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="68" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="68" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a9e38f1115fe63ac589caebd31e6a211e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool godot::MouseGazeEmulation::has_interacted</definition>
+        <argsstring>() const</argsstring>
+        <name>has_interacted</name>
+        <qualifiedname>godot::MouseGazeEmulation::has_interacted</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="69" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="69" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ab84b9180fb0514a741a43b0d6905f15a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float godot::MouseGazeEmulation::get_stillness_timer</definition>
+        <argsstring>() const</argsstring>
+        <name>get_stillness_timer</name>
+        <qualifiedname>godot::MouseGazeEmulation::get_stillness_timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="70" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="70" bodyend="70"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a9e74a89a6854d3fb68fbbdf9cdc7a9a0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -398,12 +517,12 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="53" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="24" bodyend="35"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="72" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="26" bodyend="37"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ad99c6c67b39f951d13c96bc39855c20a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a066ee263cdcfa190d751da92e31bb8a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>void godot::MouseGazeEmulation::update</definition>
-        <argsstring>(double p_delta_sec, bool p_camera_tracking_active, bool p_face_detected, bool p_emulate_gaze_from_mouse, DisplayServer *p_ds)</argsstring>
+        <argsstring>(double p_delta_sec, bool p_camera_tracking_active, bool p_face_detected, bool p_emulate_gaze_from_mouse, bool p_emulate_mouse_from_gaze, GazeDisplayServer *p_gds)</argsstring>
         <name>update</name>
         <qualifiedname>godot::MouseGazeEmulation::update</qualifiedname>
         <param>
@@ -423,8 +542,12 @@
           <declname>p_emulate_gaze_from_mouse</declname>
         </param>
         <param>
-          <type>DisplayServer *</type>
-          <declname>p_ds</declname>
+          <type>bool</type>
+          <declname>p_emulate_mouse_from_gaze</declname>
+        </param>
+        <param>
+          <type><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref> *</type>
+          <declname>p_gds</declname>
         </param>
         <briefdescription>
         </briefdescription>
@@ -432,7 +555,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="55" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="43" bodyend="104"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="74" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="45" bodyend="100"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a3345192d5a062013b209db4e285bae74" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -446,7 +569,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="63" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="63" bodyend="65"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="83" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="83" bodyend="85"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ac36edc4787dffd8ad575392e70965f88" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>bool</type>
@@ -460,7 +583,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="67" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="67" bodyend="69"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="87" column="10" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="87" bodyend="89"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a61e76542aef8664a0f56fa9b13781f0a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -474,7 +597,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="71" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="71" bodyend="71"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="91" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="91" bodyend="91"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a1ea977a4a716f74a29d9d9529fa09990" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>float</type>
@@ -488,7 +611,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="72" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="72" bodyend="72"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="92" column="11" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="92" bodyend="92"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a7f3e88da3516e15cdd2cfca90b7ea651" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>float</type>
@@ -502,17 +625,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="73" column="11" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="37" bodyend="41"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="93" column="11" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="39" bodyend="43"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a474f5948d1b127f84103d44dd6223e4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1a96dd95d6a8dcc404f5429419849cd238" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Ref&lt; <ref refid="classgodot_1_1_input_event_gaze_base" kindref="compound">InputEventGazeBase</ref> &gt;</type>
         <definition>Ref&lt; InputEventGazeBase &gt; godot::MouseGazeEmulation::synthesize_event</definition>
-        <argsstring>(DisplayServer *p_ds, const Ref&lt; GazeDeviceProfile &gt; &amp;p_profile, const Ref&lt; GazeEventFactory &gt; &amp;p_event_factory, uint64_t &amp;r_frame_id, uint64_t &amp;r_last_event_time_usec, Vector2 &amp;r_last_gaze_pos, Vector2 &amp;r_last_screen_pos)</argsstring>
+        <argsstring>(GazeDisplayServer *p_gds, const Ref&lt; GazeDeviceProfile &gt; &amp;p_profile, const Ref&lt; GazeEventFactory &gt; &amp;p_event_factory, uint64_t &amp;r_frame_id, uint64_t &amp;r_last_event_time_usec, Vector2 &amp;r_last_gaze_pos, Vector2 &amp;r_last_screen_pos)</argsstring>
         <name>synthesize_event</name>
         <qualifiedname>godot::MouseGazeEmulation::synthesize_event</qualifiedname>
         <param>
-          <type>DisplayServer *</type>
-          <declname>p_ds</declname>
+          <type><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref> *</type>
+          <declname>p_gds</declname>
         </param>
         <param>
           <type>const Ref&lt; <ref refid="classgodot_1_1_gaze_device_profile" kindref="compound">GazeDeviceProfile</ref> &gt; &amp;</type>
@@ -544,7 +667,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="75" column="9" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="106" bodyend="198"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="95" column="9" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="103" bodyend="202"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mouse_gaze_emulation_1ae5683ebe731de153dd75ef8e32eba833" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -558,15 +681,16 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/mouse_gaze_emulation.hpp" line="85" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="16" bodyend="22"/>
+        <location file="src/godot/mouse_gaze_emulation.hpp" line="105" column="10" bodyfile="src/godot/mouse_gaze_emulation.cpp" bodystart="16" bodyend="24"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/godot/mouse_gaze_emulation.hpp" line="17" column="1" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="17" bodyend="86"/>
+    <location file="src/godot/mouse_gaze_emulation.hpp" line="18" column="1" bodyfile="src/godot/mouse_gaze_emulation.hpp" bodystart="18" bodyend="106"/>
     <listofallmembers>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1ab272d5c959fccfff2c64cf7eb7fcd747" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>arbitrator</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a0f6a8cc6fae993dc75c893e5a6b81dad" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>blend_progress</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a861a261080b66498290da8c7e7f1e1c2" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>dwell_time_sec</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ad92883a92ed56c0a24a4bf8b56055b24" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>dwell_timer</name></member>
@@ -575,12 +699,18 @@
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a61e76542aef8664a0f56fa9b13781f0a" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_dwell_timer</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a7f3e88da3516e15cdd2cfca90b7ea651" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_eased_blend_factor</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a7f1a095c1fe48e6b320fda6c6428abc3" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_motion_threshold</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a61b8da3c0f024e7eb1d7086365636f9f" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_stillness_duration</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a1f3f9100e591ab596629fc34921264c3" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_stillness_threshold</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1ab84b9180fb0514a741a43b0d6905f15a" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_stillness_timer</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1af2b999207383e834ebae202c21e7f763" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>get_transition_duration</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1aa89d4f9abe06f490d0275bbbdaa0967c" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>has_camera_data</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a9e38f1115fe63ac589caebd31e6a211e" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>has_interacted</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a70f26d8f77c2dd7eb7a9839a6dbcf537" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>has_last_mouse_pos</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a27331a0f79d2bf77f56f29ca5292cf77" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>has_last_window_state</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a3345192d5a062013b209db4e285bae74" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>is_emulation_active</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ac36edc4787dffd8ad575392e70965f88" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>is_in_transition</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a7157894ee9f2b519da722738de09e9bd" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>is_physical_mouse_active</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1ab08a302e8a02d695f846fd477c81de8a" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>is_physical_mouse_still</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a94a342e3cf9ea7c6b9678f341da90dbe" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_cam_gaze_pos</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ad1b90aeff3cd671be9711d0395aafa64" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_cam_gaze_xform</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a040c4ed1c9b3961423a0675639af9ea6" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_cam_head_xform</name></member>
@@ -588,7 +718,6 @@
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a84f9e096455a66d9be3e1b8f43bfe046" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_cam_right_open</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a70b97b630cd030bf3f325c88eb21d3bb" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_mouse_pos</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a85e6071ade6558ac3eaf82ad83f285c1" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_screen_mouse_pos</name></member>
-      <member refid="classgodot_1_1_mouse_gaze_emulation_1a50aad31b1485e82e7748575b853f0385" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_window_mode</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1aefe2812b6e2c515d9b7d70bc8af970b3" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>last_window_pos</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ab2aacbba579d82f3a77bafdf309d0e05" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>motion_threshold_px</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1acd44df9947963b74ff26e470fb92a6ab" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>MouseGazeEmulation</name></member>
@@ -596,10 +725,12 @@
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ae5683ebe731de153dd75ef8e32eba833" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>reset</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a3d78847b99251e828e4aa3da7fc66e60" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>set_dwell_time</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1aa72d483ca7bb69797a4ebbc9f8bcf0ff" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>set_motion_threshold</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1aec3f79ba0f11b5e433c247c5877bf536" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>set_stillness_duration</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a7aac969d181f9fc791cf51c698d57301" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>set_stillness_threshold</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a00e12d116326073fb5735a10712fe4e9" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>set_transition_duration</name></member>
-      <member refid="classgodot_1_1_mouse_gaze_emulation_1a474f5948d1b127f84103d44dd6223e4f" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>synthesize_event</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a96dd95d6a8dcc404f5429419849cd238" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>synthesize_event</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1ad7303dad137dfaf627bf2f90df02066b" prot="private" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>transition_duration_sec</name></member>
-      <member refid="classgodot_1_1_mouse_gaze_emulation_1ad99c6c67b39f951d13c96bc39855c20a" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>update</name></member>
+      <member refid="classgodot_1_1_mouse_gaze_emulation_1a066ee263cdcfa190d751da92e31bb8a9" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>update</name></member>
       <member refid="classgodot_1_1_mouse_gaze_emulation_1a41bff64fda95b73686e69f9717749e15" prot="public" virt="non-virtual"><scope>godot::MouseGazeEmulation</scope><name>~MouseGazeEmulation</name></member>
     </listofallmembers>
   </compounddef>

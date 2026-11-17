@@ -30,7 +30,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -121,31 +121,41 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__display_
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="keyword">namespace </span>Gaze {</div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span></div>
-<div class="foldopen" id="foldopen00009" data-start="{" data-end="};">
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_display_metrics.html">    9</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_display_metrics.html">GazeDisplayMetrics</a> {</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    <span class="keywordtype">double</span> width_mm = 0.0;</div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    <span class="keywordtype">double</span> height_mm = 0.0;</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordtype">int</span> pixel_width = 0;</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordtype">int</span> pixel_height = 0;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordtype">double</span> scale_factor = 1.0;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>};</div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span> </div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="keyword">namespace </span>Gaze {</div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span></div>
+<div class="foldopen" id="foldopen00011" data-start="{" data-end="};">
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_display_metrics.html">   11</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_display_metrics.html">GazeDisplayMetrics</a> {</div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>    <span class="keywordtype">double</span> width_mm = 0.0;</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <span class="keywordtype">double</span> height_mm = 0.0;</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    <span class="keywordtype">int</span> pixel_width = 0;</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>    <span class="keywordtype">int</span> pixel_height = 0;</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>    <span class="keywordtype">double</span> scale_factor = 1.0;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>};</div>
 </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span></div>
-<div class="foldopen" id="foldopen00021" data-start="{" data-end="};">
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_window_rect.html">   21</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_window_rect.html">GazeWindowRect</a> {</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    <span class="keywordtype">int</span> x = 0;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="keywordtype">int</span> y = 0;</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">int</span> width = 0;</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">int</span> height = 0;</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>};</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span></div>
+<div class="foldopen" id="foldopen00023" data-start="{" data-end="};">
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_window_rect.html">   23</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_window_rect.html">GazeWindowRect</a> {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordtype">int</span> x = 0;</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    <span class="keywordtype">int</span> y = 0;</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    <span class="keywordtype">int</span> width = 0;</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="keywordtype">int</span> height = 0;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>};</div>
 </div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>} <span class="comment">// namespace Gaze</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_display_metrics_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_display_metrics.html">Gaze::GazeDisplayMetrics</a></div><div class="ttdoc">Represents physical dimensions and logical resolution of a display.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:9</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_window_rect_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_window_rect.html">Gaze::GazeWindowRect</a></div><div class="ttdoc">Represents position and dimensions of an application window in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:21</div></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span></div>
+<div class="foldopen" id="foldopen00034" data-start="{" data-end="};">
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno"><a class="line" href="struct_gaze_1_1_gaze_mouse_point.html">   34</a></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_gaze_1_1_gaze_mouse_point.html">GazeMousePoint</a> {</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keywordtype">double</span> x = 0.0;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordtype">double</span> y = 0.0;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>};</div>
+</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_display_metrics_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_display_metrics.html">Gaze::GazeDisplayMetrics</a></div><div class="ttdoc">Represents physical dimensions and logical resolution of a display.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:11</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_mouse_point_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_mouse_point.html">Gaze::GazeMousePoint</a></div><div class="ttdoc">Represents position of mouse cursor on screen in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:34</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_window_rect_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_window_rect.html">Gaze::GazeWindowRect</a></div><div class="ttdoc">Represents position and dimensions of an application window in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

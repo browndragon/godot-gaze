@@ -30,7 +30,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -127,11 +127,14 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('gaze__display_
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><a class="code hl_struct" href="struct_gaze_1_1_gaze_display_metrics.html">GazeDisplayMetrics</a> gaze_web_get_display_metrics(<span class="keywordtype">int</span> screen_index = 0);</div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><a class="code hl_struct" href="struct_gaze_1_1_gaze_window_rect.html">GazeWindowRect</a> gaze_web_get_window_rect(<span class="keywordtype">int</span> window_index = 0);</div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><a class="code hl_struct" href="struct_gaze_1_1_gaze_mouse_point.html">GazeMousePoint</a> gaze_web_get_mouse_position();</div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>int64_t gaze_web_get_mouse_button_state();</div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_display_metrics_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_display_metrics.html">Gaze::GazeDisplayMetrics</a></div><div class="ttdoc">Represents physical dimensions and logical resolution of a display.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:9</div></div>
-<div class="ttc" id="astruct_gaze_1_1_gaze_window_rect_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_window_rect.html">Gaze::GazeWindowRect</a></div><div class="ttdoc">Represents position and dimensions of an application window in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:21</div></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span> </div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_display_metrics_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_display_metrics.html">Gaze::GazeDisplayMetrics</a></div><div class="ttdoc">Represents physical dimensions and logical resolution of a display.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:11</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_mouse_point_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_mouse_point.html">Gaze::GazeMousePoint</a></div><div class="ttdoc">Represents position of mouse cursor on screen in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:34</div></div>
+<div class="ttc" id="astruct_gaze_1_1_gaze_window_rect_html"><div class="ttname"><a href="struct_gaze_1_1_gaze_window_rect.html">Gaze::GazeWindowRect</a></div><div class="ttdoc">Represents position and dimensions of an application window in logical pixels.</div><div class="ttdef"><b>Definition</b> gaze_display_types.hpp:23</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

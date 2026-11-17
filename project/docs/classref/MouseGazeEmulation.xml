@@ -13,6 +13,24 @@
 			<return type="float"></return>
 			<description></description>
 		</method>
+		<method name="set_stillness_duration">
+			<return type="void"></return>
+			<param index="0" name="p_sec" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_stillness_duration">
+			<return type="float"></return>
+			<description></description>
+		</method>
+		<method name="set_stillness_threshold">
+			<return type="void"></return>
+			<param index="0" name="p_px" type="float"></param>
+			<description></description>
+		</method>
+		<method name="get_stillness_threshold">
+			<return type="float"></return>
+			<description></description>
+		</method>
 		<method name="set_transition_duration">
 			<return type="void"></return>
 			<param index="0" name="p_sec" type="float"></param>
@@ -31,6 +49,22 @@
 			<return type="float"></return>
 			<description></description>
 		</method>
+		<method name="is_physical_mouse_still">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="is_physical_mouse_active">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="has_interacted">
+			<return type="bool"></return>
+			<description></description>
+		</method>
+		<method name="get_stillness_timer">
+			<return type="float"></return>
+			<description></description>
+		</method>
 		<method name="notify_camera_event">
 			<return type="void"></return>
 			<param index="0" name="p_cam_event" type="const Ref&lt; InputEventGazeBase &gt; &amp;"></param>
@@ -42,7 +76,8 @@
 			<param index="1" name="p_camera_tracking_active" type="bool"></param>
 			<param index="2" name="p_face_detected" type="bool"></param>
 			<param index="3" name="p_emulate_gaze_from_mouse" type="bool"></param>
-			<param index="4" name="p_ds" type="DisplayServer *"></param>
+			<param index="4" name="p_emulate_mouse_from_gaze" type="bool"></param>
+			<param index="5" name="p_gds" type="GazeDisplayServer *"></param>
 			<description></description>
 		</method>
 		<method name="is_emulation_active">
@@ -67,7 +102,7 @@
 		</method>
 		<method name="synthesize_event">
 			<return type="Ref&lt; InputEventGazeBase &gt;"></return>
-			<param index="0" name="p_ds" type="DisplayServer *"></param>
+			<param index="0" name="p_gds" type="GazeDisplayServer *"></param>
 			<param index="1" name="p_profile" type="const Ref&lt; GazeDeviceProfile &gt; &amp;"></param>
 			<param index="2" name="p_event_factory" type="const Ref&lt; GazeEventFactory &gt; &amp;"></param>
 			<param index="3" name="r_frame_id" type="uint64_t &amp;"></param>

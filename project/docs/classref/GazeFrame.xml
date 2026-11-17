@@ -73,6 +73,33 @@
 			<return type="bool"></return>
 			<description></description>
 		</method>
+		<method name="set_face_bbox">
+			<return type="void"></return>
+			<param index="0" name="b" type="const Rect2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_face_bbox">
+			<return type="Rect2"></return>
+			<description></description>
+		</method>
+		<method name="set_face_obb">
+			<return type="void"></return>
+			<param index="0" name="o" type="const PackedVector2Array &amp;"></param>
+			<description></description>
+		</method>
+		<method name="get_face_obb">
+			<return type="PackedVector2Array"></return>
+			<description></description>
+		</method>
+		<method name="set_is_temporal_tracking">
+			<return type="void"></return>
+			<param index="0" name="t" type="bool"></param>
+			<description></description>
+		</method>
+		<method name="is_temporal_tracking">
+			<return type="bool"></return>
+			<description></description>
+		</method>
 		<method name="set_gaze_success">
 			<return type="void"></return>
 			<param index="0" name="s" type="bool"></param>

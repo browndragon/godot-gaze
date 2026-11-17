@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::MouseStillnessArbitrator::Sample</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a6702f7caf963c101cfcc91bfdd8fe712" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::MouseStillnessArbitrator::Sample::timestamp_usec</definition>
+        <argsstring></argsstring>
+        <name>timestamp_usec</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Sample::timestamp_usec</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="37" column="18" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a1e4c8ede20143b3642726ca2fce7d74c" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::MouseStillnessArbitrator::Sample::pos</definition>
+        <argsstring></argsstring>
+        <name>pos</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Sample::pos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="38" column="17" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>Gaze::MouseStillnessArbitrator::Point2D</label>
+        <link refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d"/>
+      </node>
+      <node id="1">
+        <label>Gaze::MouseStillnessArbitrator::Sample</label>
+        <link refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pos</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/mouse_stillness_arbitrator.hpp" line="36" column="5" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="36" bodyend="39"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a1e4c8ede20143b3642726ca2fce7d74c" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Sample</scope><name>pos</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample_1a6702f7caf963c101cfcc91bfdd8fe712" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Sample</scope><name>timestamp_usec</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

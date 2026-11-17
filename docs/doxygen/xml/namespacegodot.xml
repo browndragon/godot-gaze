@@ -2,11 +2,13 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="namespacegodot" kind="namespace" language="C++">
     <compoundname>godot</compoundname>
+    <innerclass refid="classgodot_1_1_fill_accumulator" prot="public">godot::FillAccumulator</innerclass>
     <innerclass refid="classgodot_1_1_gaze_device_profile" prot="public">godot::GazeDeviceProfile</innerclass>
     <innerclass refid="classgodot_1_1_gaze_display_server" prot="public">godot::GazeDisplayServer</innerclass>
     <innerclass refid="classgodot_1_1_gaze_event_factory" prot="public">godot::GazeEventFactory</innerclass>
     <innerclass refid="classgodot_1_1_gaze_frame" prot="public">godot::GazeFrame</innerclass>
     <innerclass refid="classgodot_1_1_gaze_pipeline_config" prot="public">godot::GazePipelineConfig</innerclass>
+    <innerclass refid="classgodot_1_1_gaze_profile" prot="public">godot::GazeProfile</innerclass>
     <innerclass refid="classgodot_1_1_gaze_server" prot="public">godot::GazeServer</innerclass>
     <innerclass refid="classgodot_1_1_gaze_server_event_factory" prot="public">godot::GazeServerEventFactory</innerclass>
     <innerclass refid="structgodot_1_1_gaze_server_impl" prot="public">godot::GazeServerImpl</innerclass>
@@ -34,7 +36,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="81" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="81" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="85" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="85" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1ab070609219a178075b631f7a0e54dfe9" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_camera_info" kindref="compound">GazeServerImpl::CameraInfo</ref></type>
@@ -48,7 +50,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="82" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="82" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="86" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="86" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aa24283970a9aaa3091d657d00c57ad5c" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_face_info" kindref="compound">GazeServerImpl::FaceInfo</ref></type>
@@ -62,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="83" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="83" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="87" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="87" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="gaze__server_8cpp_1aaa7ce825608ed8737c49e990b8d07885" prot="public" static="no">
         <type><ref refid="structgodot_1_1_gaze_server_impl_1_1_eye_info" kindref="compound">GazeServerImpl::EyeInfo</ref></type>
@@ -76,7 +78,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="84" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="84" bodyend="-1"/>
+        <location file="src/godot/gaze_server.cpp" line="88" column="1" bodyfile="src/godot/gaze_server.cpp" bodystart="88" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="vision__server_8hpp_1afcd7be7020b34eea5e6a7f3f1fb53892" prot="public" static="no">
         <type><ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref></type>
@@ -90,7 +92,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="203" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="203" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="205" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="205" bodyend="-1"/>
       </memberdef>
       <memberdef kind="typedef" id="vision__server_8hpp_1aa43b7184144b93b376af4769d3234caa" prot="public" static="no">
         <type><ref refid="classgodot_1_1_mock_vision_server" kindref="compound">MockVisionServer</ref></type>
@@ -104,10 +106,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="204" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="204" bodyend="-1"/>
+        <location file="src/godot/vision_server.hpp" line="206" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="206" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="var">
+      <memberdef kind="variable" id="register__types_8cpp_1a2e0a35449b9e5f34114b836c4067868e" prot="public" static="yes" mutable="no">
+        <type>bool</type>
+        <definition>bool godot::singletons_initialized</definition>
+        <argsstring></argsstring>
+        <name>singletons_initialized</name>
+        <qualifiedname>godot::singletons_initialized</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="45" column="13" bodyfile="src/godot/register_types.cpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
       <memberdef kind="variable" id="register__types_8cpp_1afeeb9dfa64a26d3565a3b36580d7c043" prot="public" static="yes" mutable="no">
         <type><ref refid="classgodot_1_1_vision_server" kindref="compound">VisionServer</ref> *</type>
         <definition>VisionServer* godot::vision_server_singleton</definition>
@@ -121,7 +138,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="39" column="21" bodyfile="src/godot/register_types.cpp" bodystart="39" bodyend="-1"/>
+        <location file="src/godot/register_types.cpp" line="46" column="21" bodyfile="src/godot/register_types.cpp" bodystart="46" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="register__types_8cpp_1a742bb3c63b2210a23496673ecab3c7de" prot="public" static="yes" mutable="no">
         <type><ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> *</type>
@@ -136,7 +153,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="40" column="19" bodyfile="src/godot/register_types.cpp" bodystart="40" bodyend="-1"/>
+        <location file="src/godot/register_types.cpp" line="47" column="19" bodyfile="src/godot/register_types.cpp" bodystart="47" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="register__types_8cpp_1a46a088efd1400bfc9988018e115d8997" prot="public" static="yes" mutable="no">
         <type><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref> *</type>
@@ -151,10 +168,28 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="41" column="26" bodyfile="src/godot/register_types.cpp" bodystart="41" bodyend="-1"/>
+        <location file="src/godot/register_types.cpp" line="48" column="26" bodyfile="src/godot/register_types.cpp" bodystart="48" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="func">
+      <memberdef kind="function" id="gaze__server_8cpp_1a013a7ab46fcb140cb63f30a8714d4656" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref> *</type>
+        <definition>static GazeDisplayServer * godot::_get_gds</definition>
+        <argsstring>(const GazeServerImpl *p_impl)</argsstring>
+        <name>_get_gds</name>
+        <qualifiedname>godot::_get_gds</qualifiedname>
+        <param>
+          <type>const <ref refid="structgodot_1_1_gaze_server_impl" kindref="compound">GazeServerImpl</ref> *</type>
+          <declname>p_impl</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_server.cpp" line="90" column="26" bodyfile="src/godot/gaze_server.cpp" bodystart="90" bodyend="92"/>
+      </memberdef>
       <memberdef kind="function" id="gaze__server_8cpp_1ad236010cbcf08245b59d3f79c3fd4b16" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>Vector2</type>
         <definition>static Vector2 godot::_calc_projected_window_px</definition>
@@ -179,25 +214,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="635" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="635" bodyend="669"/>
-      </memberdef>
-      <memberdef kind="function" id="gaze__server_8cpp_1abf70669217d09b5600fdf00b2bb81c69" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
-        <type>Vector2</type>
-        <definition>static Vector2 godot::_xform_window_px_to_canvas</definition>
-        <argsstring>(const Vector2 &amp;p_win_pos)</argsstring>
-        <name>_xform_window_px_to_canvas</name>
-        <qualifiedname>godot::_xform_window_px_to_canvas</qualifiedname>
-        <param>
-          <type>const Vector2 &amp;</type>
-          <declname>p_win_pos</declname>
-        </param>
-        <briefdescription>
-        </briefdescription>
-        <detaileddescription>
-        </detaileddescription>
-        <inbodydescription>
-        </inbodydescription>
-        <location file="src/godot/gaze_server.cpp" line="848" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="848" bodyend="865"/>
+        <location file="src/godot/gaze_server.cpp" line="743" column="16" bodyfile="src/godot/gaze_server.cpp" bodystart="743" bodyend="756"/>
       </memberdef>
       <memberdef kind="function" id="godot__files_8hpp_1a8b35896322b0f4af040f508f62eff6ed" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>String</type>
@@ -237,6 +254,28 @@
         </inbodydescription>
         <location file="src/godot/godot_files.hpp" line="93" column="20" bodyfile="src/godot/godot_files.hpp" bodystart="93" bodyend="112"/>
       </memberdef>
+      <memberdef kind="function" id="input__event__gaze_8cpp_1a767b4bfdf2fd65fdfa1ce89a079ae80e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Vector2</type>
+        <definition>static Vector2 godot::_clamp_to_viewport</definition>
+        <argsstring>(const Vector2 &amp;p_pos, const CanvasItem *p_local_to)</argsstring>
+        <name>_clamp_to_viewport</name>
+        <qualifiedname>godot::_clamp_to_viewport</qualifiedname>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_pos</declname>
+        </param>
+        <param>
+          <type>const CanvasItem *</type>
+          <declname>p_local_to</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/input_event_gaze.cpp" line="69" column="16" bodyfile="src/godot/input_event_gaze.cpp" bodystart="69" bodyend="91"/>
+      </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1ab47c55fc6efbb2b016683f73c317a77a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
         <definition>static void godot::register_gaze_project_settings</definition>
@@ -249,7 +288,35 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="43" column="13" bodyfile="src/godot/register_types.cpp" bodystart="43" bodyend="253"/>
+        <location file="src/godot/register_types.cpp" line="50" column="13" bodyfile="src/godot/register_types.cpp" bodystart="50" bodyend="297"/>
+      </memberdef>
+      <memberdef kind="function" id="register__types_8cpp_1a44536aa859139788af035a57e9582873" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void godot::setup_gaze_singletons</definition>
+        <argsstring>()</argsstring>
+        <name>setup_gaze_singletons</name>
+        <qualifiedname>godot::setup_gaze_singletons</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="299" column="6" bodyfile="src/godot/register_types.cpp" bodystart="299" bodyend="385" declfile="src/godot/register_types.hpp" declline="17" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="register__types_8cpp_1a83e33e24f3a2aabede89915437abcccd" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void godot::on_startup_callback</definition>
+        <argsstring>()</argsstring>
+        <name>on_startup_callback</name>
+        <qualifiedname>godot::on_startup_callback</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/register_types.cpp" line="387" column="13" bodyfile="src/godot/register_types.cpp" bodystart="387" bodyend="422"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a5bdb7944917b948a595175b7dd080a38" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -267,7 +334,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="255" column="6" bodyfile="src/godot/register_types.cpp" bodystart="255" bodyend="341" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="424" column="6" bodyfile="src/godot/register_types.cpp" bodystart="424" bodyend="504" declfile="src/godot/register_types.hpp" declline="15" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1aa63ec0122dad078a5d8132f4f93f9ce1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>void</type>
@@ -285,7 +352,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="343" column="6" bodyfile="src/godot/register_types.cpp" bodystart="343" bodyend="381" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
+        <location file="src/godot/register_types.cpp" line="506" column="6" bodyfile="src/godot/register_types.cpp" bodystart="506" bodyend="546" declfile="src/godot/register_types.hpp" declline="16" declcolumn="6"/>
       </memberdef>
       <memberdef kind="function" id="register__types_8cpp_1a26ba0015844c927077a2fdd22bf05f11" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>GDExtensionBool GDE_EXPORT</type>
@@ -311,13 +378,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/register_types.cpp" line="385" column="28" bodyfile="src/godot/register_types.cpp" bodystart="385" bodyend="397"/>
+        <location file="src/godot/register_types.cpp" line="550" column="28" bodyfile="src/godot/register_types.cpp" bodystart="550" bodyend="565"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/godot/gaze_device_profile.cpp" line="13" column="1"/>
+    <location file="src/godot/fill_accumulator_node.cpp" line="3" column="1"/>
   </compounddef>
 </doxygen>

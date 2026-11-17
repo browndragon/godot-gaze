@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="34" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="19" bodyend="38"/>
+        <location file="src/godot/vision_server.hpp" line="34" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="27" bodyend="47"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -134,7 +134,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="61" column="5" bodyfile="src/godot/vision_server.cpp" bodystart="85" bodyend="89"/>
+        <location file="src/godot/vision_server.hpp" line="61" column="5" bodyfile="src/godot/vision_server.cpp" bodystart="94" bodyend="98"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a2ff6ccb65696aeb1e01df8be74e21765" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="62" column="13" bodyfile="src/godot/vision_server.cpp" bodystart="91" bodyend="115"/>
+        <location file="src/godot/vision_server.hpp" line="62" column="13" bodyfile="src/godot/vision_server.cpp" bodystart="100" bodyend="124"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a09127e37d532ad94f80ffb08e5bccbba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>Vector3</type>
@@ -194,7 +194,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="82" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="117" bodyend="122"/>
+        <location file="src/godot/vision_server.hpp" line="82" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="126" bodyend="131"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a6bf4fdfbdf4419499aab5921a39ddf7b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -217,7 +217,25 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="87" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="124" bodyend="128"/>
+        <location file="src/godot/vision_server.hpp" line="87" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="133" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a6f23f7ad2f12fba9ecae781e2365a6e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>int</type>
+        <definition>int godot::VisionServer::camera_get_device_id</definition>
+        <argsstring>(RID p_camera)</argsstring>
+        <name>camera_get_device_id</name>
+        <qualifiedname>godot::VisionServer::camera_get_device_id</qualifiedname>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="88" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="139" bodyend="143"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a9a6091c39ad5f3a63f5a3dbc2cdfd7ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -244,7 +262,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="92" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="130" bodyend="135"/>
+        <location file="src/godot/vision_server.hpp" line="93" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="145" bodyend="150"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a89fa8a4d03abdfb9af56edc8677683ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -267,7 +285,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="97" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="137" bodyend="141"/>
+        <location file="src/godot/vision_server.hpp" line="98" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="152" bodyend="156"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>double</type>
@@ -286,7 +304,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="102" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="143" bodyend="147"/>
+        <location file="src/godot/vision_server.hpp" line="103" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="158" bodyend="162"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a20378b77c0668dc723ba6446875be1da" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -309,7 +327,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="107" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="149" bodyend="153"/>
+        <location file="src/godot/vision_server.hpp" line="108" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="164" bodyend="168"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>double</type>
@@ -328,7 +346,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="112" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="155" bodyend="159"/>
+        <location file="src/godot/vision_server.hpp" line="113" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="170" bodyend="174"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a2f08934369e54b58cbed71c8427f4364" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -370,7 +388,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="119" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="46" bodyend="83"/>
+        <location file="src/godot/vision_server.hpp" line="120" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="55" bodyend="92"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a6a077be45fb502ef66adbd69a9b1baf0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -393,7 +411,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="125" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="18" bodyend="45"/>
+        <location file="src/godot/vision_server.hpp" line="126" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="19" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a03c288b98c40f01d8686ff087d6e9085" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -411,7 +429,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="126" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="40" bodyend="44"/>
+        <location file="src/godot/vision_server.hpp" line="127" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="49" bodyend="53"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1acfd359215cca0d1bd9c86a2832b883bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -431,7 +449,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="131" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="47" bodyend="71"/>
+        <location file="src/godot/vision_server.hpp" line="132" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="48" bodyend="72"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Texture2D &gt;</type>
@@ -451,7 +469,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="136" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="216" bodyend="221"/>
+        <location file="src/godot/vision_server.hpp" line="137" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="231" bodyend="236"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Image &gt;</type>
@@ -471,7 +489,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="141" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="223" bodyend="228"/>
+        <location file="src/godot/vision_server.hpp" line="142" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="238" bodyend="243"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a84b9f93d216f3e83c676636293f797e0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -493,7 +511,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="143" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="161" bodyend="185"/>
+        <location file="src/godot/vision_server.hpp" line="144" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="176" bodyend="200"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a69edf2a62052127bad03b4dbc51ff953" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -511,7 +529,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="144" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="187" bodyend="191"/>
+        <location file="src/godot/vision_server.hpp" line="145" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="202" bodyend="206"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1a11e809cea839327af8c3614c52caca96" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>double</type>
@@ -529,7 +547,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="145" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="193" bodyend="197"/>
+        <location file="src/godot/vision_server.hpp" line="146" column="20" bodyfile="src/godot/vision_server.cpp" bodystart="208" bodyend="212"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -548,7 +566,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="150" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="199" bodyend="214"/>
+        <location file="src/godot/vision_server.hpp" line="151" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="214" bodyend="229"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -556,6 +574,7 @@
         <argsstring>(RID p_camera, Gaze::Frame &amp;r_frame)</argsstring>
         <name>get_camera_current_frame</name>
         <qualifiedname>godot::VisionServer::get_camera_current_frame</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_vision_server_1a6b5ba75e0437cfe2a71a6dd89900ddbc">get_camera_current_frame</reimplementedby>
         <param>
           <type>RID</type>
           <declname>p_camera</declname>
@@ -591,13 +610,13 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="158" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="73" bodyend="140"/>
+        <location file="src/godot/vision_server.hpp" line="159" column="18" bodyfile="src/godot/vision_server_native.cpp" bodystart="74" bodyend="132"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_vision_server_1a3cba4eaf008618ba583b0a0887f23f5a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>VisionServer *</type>
-        <definition>static VisionServer * godot::VisionServer::get_singleton</definition>
+        <definition>VisionServer * godot::VisionServer::get_singleton</definition>
         <argsstring>()</argsstring>
         <name>get_singleton</name>
         <qualifiedname>godot::VisionServer::get_singleton</qualifiedname>
@@ -608,7 +627,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="67" column="25" bodyfile="src/godot/vision_server.hpp" bodystart="67" bodyend="67"/>
+        <location file="src/godot/vision_server.hpp" line="67" column="25" bodyfile="src/godot/vision_server.cpp" bodystart="20" bodyend="25"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -651,13 +670,14 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/vision_server.hpp" line="27" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="27" bodyend="159"/>
+    <location file="src/godot/vision_server.hpp" line="27" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="27" bodyend="160"/>
     <listofallmembers>
       <member refid="classgodot_1_1_vision_server_1a4ae566b3463da96a5592ef7a36486d17" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_vision_server_1ac3fa98a823c4e2f8428a6dfa5f059254" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>allocated_cameras</name></member>
       <member refid="classgodot_1_1_vision_server_1a2833cfaf158dfc50c0a7c96d974ade5e" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_create</name></member>
       <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_free</name></member>
       <member refid="classgodot_1_1_vision_server_1ad8d5004a8a389366c3e84d123dcea72a" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_current_image</name></member>
+      <member refid="classgodot_1_1_vision_server_1a6f23f7ad2f12fba9ecae781e2365a6e7" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_device_id</name></member>
       <member refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_focal_length</name></member>
       <member refid="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_fov</name></member>
       <member refid="classgodot_1_1_vision_server_1a11e809cea839327af8c3614c52caca96" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>camera_get_last_readback_ms</name></member>
@@ -676,7 +696,7 @@
       <member refid="classgodot_1_1_vision_server_1a89c29bb40ca0e5453d3faf6e636397b8" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>get_camera_current_texture</name></member>
       <member refid="classgodot_1_1_vision_server_1a067e714ed2f27d1cf4c4b581a3b65eb3" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>get_gravity_vector</name></member>
       <member refid="classgodot_1_1_vision_server_1a09127e37d532ad94f80ffb08e5bccbba" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>get_raw_acceleration</name></member>
-      <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" virt="non-virtual"><scope>godot::VisionServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_vision_server_1a3cba4eaf008618ba583b0a0887f23f5a" prot="public" virt="non-virtual"><scope>godot::VisionServer</scope><name>get_singleton</name></member>
       <member refid="classgodot_1_1_vision_server_1a5376e72488f45d09f6472e469eea502c" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>gravity_vector</name></member>
       <member refid="classgodot_1_1_vision_server_1a2f08934369e54b58cbed71c8427f4364" prot="public" virt="virtual"><scope>godot::VisionServer</scope><name>inject_texture</name></member>
       <member refid="classgodot_1_1_vision_server_1ad4ae784e3e27fc56add7f12c418e9b4a" prot="protected" virt="non-virtual"><scope>godot::VisionServer</scope><name>raw_acceleration</name></member>

@@ -69,6 +69,62 @@ Window index.
 
 Window Rect2i(x, y, width, height).</description>
 		</method>
+		<method name="mouse_get_position">
+			<return type="Vector2"></return>
+			<description>Retrieve the current mouse cursor position in logical screen coordinates.
+
+Screen mouse position Vector2(x, y).
+
+Screen mouse position Vector2(x, y).</description>
+		</method>
+		<method name="mouse_get_button_state">
+			<return type="int64_t"></return>
+			<description>Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.
+
+Bitmask of pressed mouse buttons.
+
+Bitmask of pressed mouse buttons.</description>
+		</method>
+		<method name="parse_mouse_motion">
+			<return type="void"></return>
+			<param index="0" name="p_position" type="const Vector2 &amp;"></param>
+			<param index="1" name="p_relative" type="const Vector2 &amp;"></param>
+			<param index="2" name="p_velocity" type="const Vector2 &amp;"></param>
+			<description>Dispatch emulated synthetic mouse motion to the engine input queue.
+
+p_position
+Canonical canvas position.
+p_relative
+Relative motion vector.
+p_velocity
+Velocity vector.
+
+Canonical canvas position.
+
+Relative motion vector.
+
+Velocity vector.</description>
+		</method>
+		<method name="parse_mouse_button">
+			<return type="void"></return>
+			<param index="0" name="p_button" type="int64_t"></param>
+			<param index="1" name="p_pressed" type="bool"></param>
+			<param index="2" name="p_position" type="const Vector2 &amp;"></param>
+			<description>Dispatch emulated synthetic mouse button event to the engine input queue.
+
+p_button
+Mouse button index.
+p_pressed
+True for press, false for release.
+p_position
+Canvas position where the click occurred.
+
+Mouse button index.
+
+True for press, false for release.
+
+Canvas position where the click occurred.</description>
+		</method>
 		<method name="set_screen_size_mm">
 			<return type="void"></return>
 			<param index="0" name="p_size_mm" type="const Vector2 &amp;"></param>
@@ -87,6 +143,24 @@ Window Rect2i(x, y, width, height).</description>
 		<method name="set_screen_scale">
 			<return type="void"></return>
 			<param index="0" name="p_scale" type="double"></param>
+			<description></description>
+		</method>
+		<method name="set_mouse_position">
+			<return type="void"></return>
+			<param index="0" name="p_pos" type="const Vector2 &amp;"></param>
+			<description></description>
+		</method>
+		<method name="set_mouse_button_state">
+			<return type="void"></return>
+			<param index="0" name="p_mask" type="int64_t"></param>
+			<description></description>
+		</method>
+		<method name="get_emitted_mouse_events">
+			<return type="TypedArray&lt; InputEvent &gt;"></return>
+			<description></description>
+		</method>
+		<method name="clear_emitted_mouse_events">
+			<return type="void"></return>
 			<description></description>
 		</method>
 	</methods>

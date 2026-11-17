@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__profile_8cpp" kind="file" language="C++">
+    <compoundname>gaze_profile.cpp</compoundname>
+    <includes refid="gaze__profile_8hpp" local="yes">gaze_profile.hpp</includes>
+    <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <includes local="no">godot_cpp/classes/file_access.hpp</includes>
+    <includes local="no">godot_cpp/classes/dir_access.hpp</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>src/godot/gaze_profile.cpp</label>
+        <link refid="gaze__profile_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gaze_profile.hpp</label>
+        <link refid="gaze__profile_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>godot_cpp/classes/config_file.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/classes/dir_access.hpp</label>
+      </node>
+      <node id="7">
+        <label>godot_cpp/classes/file_access.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="6">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="5">
+        <label>godot_cpp/variant/string.hpp</label>
+      </node>
+    </incdepgraph>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+<para>Implement GazeProfile base resource class. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="gaze__profile_8hpp" kindref="compound">gaze_profile.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/file_access.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/dir_access.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeProfile::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;save_to_file&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;path&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeProfile::save_to_file);</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;load_from_file&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;path&quot;</highlight><highlight class="normal">),<sp/>&amp;GazeProfile::load_from_file);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal">Error<sp/>GazeProfile::save_to_file(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;p_path)<sp/>{</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_path.is_empty())<sp/>{</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ERR_INVALID_PARAMETER;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>base_dir<sp/>=<sp/>p_path.get_base_dir();</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!base_dir.is_empty()<sp/>&amp;&amp;<sp/>!DirAccess::dir_exists_absolute(base_dir))<sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Error<sp/>err<sp/>=<sp/>DirAccess::make_dir_recursive_absolute(base_dir);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(err<sp/>!=<sp/>OK)<sp/>{</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>err;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;ConfigFile&gt;<sp/>cfg;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>cfg.instantiate();</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(FileAccess::file_exists(p_path))<sp/>{</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cfg-&gt;load(p_path);</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>_write_to_config(cfg);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>cfg-&gt;save(p_path);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal">Error<sp/>GazeProfile::load_from_file(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;p_path)<sp/>{</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_path.is_empty()<sp/>||<sp/>!FileAccess::file_exists(p_path))<sp/>{</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ERR_FILE_NOT_FOUND;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;ConfigFile&gt;<sp/>cfg;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>cfg.instantiate();</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>Error<sp/>err<sp/>=<sp/>cfg-&gt;load(p_path);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(err<sp/>!=<sp/>OK)<sp/>{</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>err;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_read_from_config(cfg);</highlight></codeline>
+<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_profile.cpp"/>
+  </compounddef>
+</doxygen>

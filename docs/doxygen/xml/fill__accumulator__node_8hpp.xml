@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="fill__accumulator__node_8hpp" kind="file" language="C++">
+    <compoundname>fill_accumulator_node.hpp</compoundname>
+    <includes local="no">godot_cpp/classes/node.hpp</includes>
+    <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <includes refid="fill__accumulator_8hpp" local="yes">../core/fill_accumulator.hpp</includes>
+    <includedby refid="fill__accumulator__node_8cpp" local="yes">src/godot/fill_accumulator_node.cpp</includedby>
+    <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
+    <incdepgraph>
+      <node id="4">
+        <label>../core/fill_accumulator.hpp</label>
+        <link refid="fill__accumulator_8hpp"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>src/godot/fill_accumulator_node.hpp</label>
+        <link refid="fill__accumulator__node_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>algorithm</label>
+      </node>
+      <node id="2">
+        <label>godot_cpp/classes/node.hpp</label>
+      </node>
+      <node id="3">
+        <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="classgodot_1_1_fill_accumulator" prot="public">godot::FillAccumulator</innerclass>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="fill__accumulator__node_8hpp_1a8d78a42ab77b645509b9c7e653a8928d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>VARIANT_ENUM_CAST</definition>
+        <argsstring>(godot::FillAccumulator::ProcessCallback)</argsstring>
+        <name>VARIANT_ENUM_CAST</name>
+        <param>
+          <type><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">godot::FillAccumulator::ProcessCallback</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/fill_accumulator_node.hpp" line="135" column="1" declfile="src/godot/fill_accumulator_node.hpp" declline="135" declcolumn="1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/node.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="fill__accumulator_8hpp" kindref="compound">../core/fill_accumulator.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22" refid="classgodot_1_1_fill_accumulator" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">FillAccumulator<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Node<sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(FillAccumulator,<sp/>Node);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="29" refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref><sp/>{</highlight></codeline>
+<codeline lineno="30" refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" kindref="member">PROCESS_MANUAL</ref><sp/>=<sp/>0,<sp/><sp/></highlight></codeline>
+<codeline lineno="31" refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a031e7572e78efd323e4966f809d3008b" kindref="member">PROCESS_IDLE</ref><sp/>=<sp/>1,<sp/><sp/><sp/><sp/></highlight></codeline>
+<codeline lineno="32" refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0aece55ac55645b5173135169237d106a6" kindref="member">PROCESS_PHYSICS</ref><sp/>=<sp/>2,<sp/></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="class_gaze_1_1_fill_accumulator" kindref="compound">Gaze::FillAccumulator</ref><sp/>impl;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref><sp/>process_callback<sp/>=<sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0a7cc957263ea2658de48ddbdd983c4dcb" kindref="member">PROCESS_MANUAL</ref>;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>last_was_charging<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>last_is_filled<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>last_is_empty<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>current_error<sp/>=<sp/>0.0;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>is_active_target<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_notification(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_what);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator" kindref="compound">FillAccumulator</ref>();</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator" kindref="compound">~FillAccumulator</ref>()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a79c50ff41255ed1b38ecb32286e4d928" kindref="member">set_fill</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_fill);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ac2403c2ccd4b62f6d83a19ad855161fb" kindref="member">get_fill</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ab2f481c2f52d506599b0e0327bceaa8c" kindref="member">get_velocity</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1aa03771304c4b792e31251dc4641a15bd" kindref="member">is_filled</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a17c13d3395c38d0a502451bc9f2f1655" kindref="member">is_empty</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1aaadda3c4705f5a655254de84342eb69f" kindref="member">set_fill_rate</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_rate);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ad086dd00e2f8a6808d3f13b03aee3126" kindref="member">get_fill_rate</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a8121ca02bd1adb7624e03adc55d66028" kindref="member">set_drain_rate</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_rate);</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a09dcb3df78ea360aa433d29872b4f5e4" kindref="member">get_drain_rate</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1af223aa89c2b43e6c2f3c91a2fb56a9a4" kindref="member">set_fill_sec</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_sec);</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1adbc1d971e7fe2d1a33ef19ace3549db1" kindref="member">get_fill_sec</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"></highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a535137d038069cf3816093cced62525d" kindref="member">set_drain_sec</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_sec);</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a5d80bd2fd5b145ffc3f65bf9fbd80b5f" kindref="member">get_drain_sec</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a225848b9a62ef2aaea7031218c595732" kindref="member">set_fill_acceleration</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_accel);</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1abc4552dba4ae2896b6b78074c08cb79e" kindref="member">get_fill_acceleration</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"></highlight></codeline>
+<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ad49ab7f7727cee56388f6e6ba5014ee8" kindref="member">set_drain_acceleration</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_accel);</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a94395a77c7c3f0ae003ceae632991c4a" kindref="member">get_drain_acceleration</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"></highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a14d7dcead6d3723b64325ab0a2e81eac" kindref="member">set_error_doubling_distance</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_dist);</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ad4a95af8e6354e90674d4ce85a0eb05a" kindref="member">get_error_doubling_distance</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1ae2a1a4200e7d8575fee812bdd210e6fe" kindref="member">set_process_callback</ref>(<ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref><sp/>p_callback);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">ProcessCallback</ref><sp/><ref refid="classgodot_1_1_fill_accumulator_1af9888315e995f6d2dc42505c1ee2d0a0" kindref="member">get_process_callback</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"></highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1aeddd00dfce7463e0317a1277035e704e" kindref="member">set_target_error</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_error);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1afc6c27cf7b01e921ed3631297acf4df3" kindref="member">get_target_error</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a1f818e6e1cab9eed5138aa15a3505512" kindref="member">set_active_target</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_active);</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a7f2c348a4abb659022c249e7a37859cb" kindref="member">is_active_target_dwell</ref>()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a8d1db8df866e14d0cc7f2749cd4717e7" kindref="member">process_error_delta</ref>(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_error,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_delta);</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"></highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1aae2062f49799bb6893b23bc41265ec91" kindref="member">process_dwell_delta</ref>(</highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_is_active,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_delta);</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"></highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_fill_accumulator_1a3ec5361b6167dd364780604e4e8f9d60" kindref="member">reset</ref>();</highlight></codeline>
+<codeline lineno="131"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"></highlight></codeline>
+<codeline lineno="133"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal">VARIANT_ENUM_CAST(<ref refid="classgodot_1_1_fill_accumulator_1a25955743466c26eeb2374d212109f2c0" kindref="member">godot::FillAccumulator::ProcessCallback</ref>);</highlight></codeline>
+    </programlisting>
+    <location file="src/godot/fill_accumulator_node.hpp"/>
+  </compounddef>
+</doxygen>

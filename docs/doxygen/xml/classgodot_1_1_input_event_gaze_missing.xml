@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="217" column="5" bodyfile="src/godot/input_event_gaze.hpp" bodystart="217" bodyend="222"/>
+        <location file="src/godot/input_event_gaze.hpp" line="210" column="5" bodyfile="src/godot/input_event_gaze.hpp" bodystart="210" bodyend="215"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-attrib">
@@ -64,7 +64,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="225" column="19" bodyfile="src/godot/input_event_gaze.hpp" bodystart="225" bodyend="-1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="218" column="19" bodyfile="src/godot/input_event_gaze.hpp" bodystart="218" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -86,7 +86,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="214" column="5"/>
+        <location file="src/godot/input_event_gaze.hpp" line="207" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -102,7 +102,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="228" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="137" bodyend="148"/>
+        <location file="src/godot/input_event_gaze.hpp" line="221" column="17" bodyfile="src/godot/input_event_gaze.cpp" bodystart="185" bodyend="195"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -118,7 +118,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="231" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="131" bodyend="135"/>
+        <location file="src/godot/input_event_gaze.hpp" line="224" column="5" bodyfile="src/godot/input_event_gaze.cpp" bodystart="179" bodyend="183"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1adda7853381d69d9b211e3ab1aa26301e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -132,7 +132,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="232" column="13"/>
+        <location file="src/godot/input_event_gaze.hpp" line="225" column="13"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
         <type>bool</type>
@@ -151,7 +151,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="234" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="234" bodyend="234"/>
+        <location file="src/godot/input_event_gaze.hpp" line="227" column="18" bodyfile="src/godot/input_event_gaze.hpp" bodystart="227" bodyend="227"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -180,7 +180,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="240" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="240" bodyend="240"/>
+        <location file="src/godot/input_event_gaze.hpp" line="233" column="10" bodyfile="src/godot/input_event_gaze.hpp" bodystart="233" bodyend="233"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>MissingReason</type>
@@ -198,16 +198,17 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="246" column="19" bodyfile="src/godot/input_event_gaze.hpp" bodystart="246" bodyend="246"/>
+        <location file="src/godot/input_event_gaze.hpp" line="239" column="19" bodyfile="src/godot/input_event_gaze.hpp" bodystart="239" bodyend="239"/>
       </memberdef>
-      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1a6f2fcf8119c8f5ed44bbec80a6ea8fa3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1a973631e280f681083b049e1cab2671fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
         <definition>void godot::InputEventGazeMissing::copy_from</definition>
-        <argsstring>(const Ref&lt; InputEventGazeMissing &gt; &amp;p_other)</argsstring>
+        <argsstring>(const Ref&lt; InputEventGazeBase &gt; &amp;p_other) override</argsstring>
         <name>copy_from</name>
         <qualifiedname>godot::InputEventGazeMissing::copy_from</qualifiedname>
+        <reimplements refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf">copy_from</reimplements>
         <param>
-          <type>const Ref&lt; InputEventGazeMissing &gt; &amp;</type>
+          <type>const Ref&lt; InputEventGazeBase &gt; &amp;</type>
           <declname>p_other</declname>
         </param>
         <briefdescription>
@@ -216,7 +217,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="248" column="10" bodyfile="src/godot/input_event_gaze.cpp" bodystart="150" bodyend="155"/>
+        <location file="src/godot/input_event_gaze.hpp" line="241" column="18" bodyfile="src/godot/input_event_gaze.cpp" bodystart="197" bodyend="203"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_input_event_gaze_missing_1a0c3df13f1e310781113e97249c9149ac" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>String</type>
@@ -230,7 +231,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="250" column="12" bodyfile="src/godot/input_event_gaze.cpp" bodystart="157" bodyend="159"/>
+        <location file="src/godot/input_event_gaze.hpp" line="243" column="12" bodyfile="src/godot/input_event_gaze.cpp" bodystart="205" bodyend="207"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -272,12 +273,11 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/input_event_gaze.hpp" line="213" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="213" bodyend="251"/>
+    <location file="src/godot/input_event_gaze.hpp" line="206" column="1" bodyfile="src/godot/input_event_gaze.hpp" bodystart="206" bodyend="244"/>
     <listofallmembers>
       <member refid="classgodot_1_1_input_event_gaze_missing_1a47c8cffa1b1ab3ad7a2580e4b3e77319" prot="protected" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_input_event_gaze_missing_1a0c3df13f1e310781113e97249c9149ac" prot="public" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>as_text</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_missing_1a6f2fcf8119c8f5ed44bbec80a6ea8fa3" prot="public" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>copy_from</name></member>
-      <member refid="classgodot_1_1_input_event_gaze_base_1a7ceed2d09d3e1b059ad3e1bd32b172bf" prot="public" virt="non-virtual" ambiguityscope="godot::InputEventGazeBase::"><scope>godot::InputEventGazeMissing</scope><name>copy_from</name></member>
+      <member refid="classgodot_1_1_input_event_gaze_missing_1a973631e280f681083b049e1cab2671fa" prot="public" virt="virtual"><scope>godot::InputEventGazeMissing</scope><name>copy_from</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1ab2587e100540bf1254f64fed52c5e658" prot="protected" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>frame_id</name></member>
       <member refid="classgodot_1_1_input_event_gaze_missing_1a51825d7096350a07c3afd90bd218dc02" prot="private" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>GDCLASS</name></member>
       <member refid="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" prot="public" virt="non-virtual"><scope>godot::InputEventGazeMissing</scope><name>get_frame_id</name></member>

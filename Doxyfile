@@ -3,7 +3,7 @@
 
 # Project Settings
 PROJECT_NAME           = "Godot Gaze"
-PROJECT_NUMBER         = "1.0.0"
+PROJECT_NUMBER         = "0.1.0"
 PROJECT_BRIEF          = "Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine"
 OUTPUT_DIRECTORY       = "docs/doxygen"
 CREATE_SUBDIRS         = NO
@@ -13,7 +13,7 @@ BRIEF_MEMBER_DESC      = YES
 REPEAT_BRIEF           = YES
 
 # Input Options
-INPUT                  = src/core src/godot src/native src/web README.md docs/gaze_math_physical_model.md
+INPUT                  = src/core src/godot src/native src/web README.md docs/architecture.md docs/lifecycle_tracking.md docs/mathematical_model.md docs/vision_models.md docs/gaze_model_evaluation.md docs/rejected_designs.md
 FILE_PATTERNS          = *.hpp *.cpp *.h *.js *.md
 RECURSIVE              = YES
 EXCLUDE                = thirdparty/

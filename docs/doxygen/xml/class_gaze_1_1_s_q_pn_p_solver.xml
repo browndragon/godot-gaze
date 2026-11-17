@@ -4,7 +4,7 @@
     <compoundname>Gaze::SQPnPSolver</compoundname>
     <innerclass refid="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution" prot="public">Gaze::SQPnPSolver::Solution</innerclass>
     <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
             <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
@@ -15,7 +15,7 @@
         </templateparamlist>
         <type>bool</type>
         <definition>bool Gaze::SQPnPSolver::solve</definition>
-        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation)</argsstring>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation, double *out_squared_reproj_error=nullptr)</argsstring>
         <name>solve</name>
         <qualifiedname>Gaze::SQPnPSolver::solve</qualifiedname>
         <param>
@@ -49,6 +49,11 @@
         <param>
           <type>OpenCVCameraVector3 &amp;</type>
           <declname>out_translation</declname>
+        </param>
+        <param>
+          <type>double *</type>
+          <declname>out_squared_reproj_error</declname>
+          <defval>nullptr</defval>
         </param>
         <briefdescription>
 <para>Solves the PnP problem given 3D object points and corresponding 2D image points. </para>
@@ -125,9 +130,9 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/sqpnp_solver.hpp" line="42" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="708" bodyend="883"/>
+        <location file="src/core/sqpnp_solver.hpp" line="42" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="708" bodyend="888"/>
       </memberdef>
-      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+      <memberdef kind="function" id="class_gaze_1_1_s_q_pn_p_solver_1a2c89a361dd41a098c73e8608b90cf409" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <templateparamlist>
           <param>
             <type><ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981" kindref="member">Space</ref></type>
@@ -138,7 +143,7 @@
         </templateparamlist>
         <type>bool</type>
         <definition>bool Gaze::SQPnPSolver::solve_rvec</definition>
-        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, OpenCVCameraVector3 &amp;out_rvec, OpenCVCameraVector3 &amp;out_translation)</argsstring>
+        <argsstring>(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, OpenCVCameraVector3 &amp;out_rvec, OpenCVCameraVector3 &amp;out_translation, double *out_squared_reproj_error=nullptr)</argsstring>
         <name>solve_rvec</name>
         <qualifiedname>Gaze::SQPnPSolver::solve_rvec</qualifiedname>
         <param>
@@ -173,23 +178,28 @@
           <type>OpenCVCameraVector3 &amp;</type>
           <declname>out_translation</declname>
         </param>
+        <param>
+          <type>double *</type>
+          <declname>out_squared_reproj_error</declname>
+          <defval>nullptr</defval>
+        </param>
         <briefdescription>
         </briefdescription>
         <detaileddescription>
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/sqpnp_solver.hpp" line="50" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="886" bodyend="900"/>
+        <location file="src/core/sqpnp_solver.hpp" line="51" column="17" bodyfile="src/core/sqpnp_solver.cpp" bodystart="891" bodyend="906"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/sqpnp_solver.hpp" line="19" column="1" bodyfile="src/core/sqpnp_solver.hpp" bodystart="20" bodyend="56"/>
+    <location file="src/core/sqpnp_solver.hpp" line="19" column="1" bodyfile="src/core/sqpnp_solver.hpp" bodystart="20" bodyend="58"/>
     <listofallmembers>
-      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve</name></member>
-      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a5614173617e001d0888faf19a37f43f2" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve_rvec</name></member>
+      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve</name></member>
+      <member refid="class_gaze_1_1_s_q_pn_p_solver_1a2c89a361dd41a098c73e8608b90cf409" prot="public" virt="non-virtual"><scope>Gaze::SQPnPSolver</scope><name>solve_rvec</name></member>
     </listofallmembers>
   </compounddef>
 </doxygen>

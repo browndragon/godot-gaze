@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['mockgazedisplayserver_0',['MockGazeDisplayServer',['../classgodot_1_1_mock_gaze_display_server.html',1,'godot']]],
-  ['mockvisionserver_1',['MockVisionServer',['../classgodot_1_1_mock_vision_server.html',1,'godot']]],
-  ['mousegazeemulation_2',['MouseGazeEmulation',['../classgodot_1_1_mouse_gaze_emulation.html',1,'godot']]]
+  ['imagewarper_0',['ImageWarper',['../class_gaze_1_1_image_warper.html',1,'Gaze']]],
+  ['inputeventgaze_1',['InputEventGaze',['../classgodot_1_1_input_event_gaze.html',1,'godot']]],
+  ['inputeventgazebase_2',['InputEventGazeBase',['../classgodot_1_1_input_event_gaze_base.html',1,'godot']]],
+  ['inputeventgazemissing_3',['InputEventGazeMissing',['../classgodot_1_1_input_event_gaze_missing.html',1,'godot']]]
 ];

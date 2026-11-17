@@ -17,7 +17,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_display_types.hpp" line="10" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="10" bodyend="-1"/>
+        <location file="src/core/gaze_display_types.hpp" line="12" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="12" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_display_metrics_1ad231a3212746aab7c6b1924ddfddf04a" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -32,7 +32,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_display_types.hpp" line="11" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="11" bodyend="-1"/>
+        <location file="src/core/gaze_display_types.hpp" line="13" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="13" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_display_metrics_1a10198fc4e9b4cae6f2f296da59b24ef5" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -47,7 +47,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_display_types.hpp" line="12" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="12" bodyend="-1"/>
+        <location file="src/core/gaze_display_types.hpp" line="14" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="14" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_display_metrics_1a1f9aca41c3095ca00c8226ecba130dc8" prot="public" static="no" mutable="no">
         <type>int</type>
@@ -62,7 +62,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_display_types.hpp" line="13" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="13" bodyend="-1"/>
+        <location file="src/core/gaze_display_types.hpp" line="15" column="9" bodyfile="src/core/gaze_display_types.hpp" bodystart="15" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="struct_gaze_1_1_gaze_display_metrics_1a62b6bc70ae566a62d4b3bdf6a6bbddf1" prot="public" static="no" mutable="no">
         <type>double</type>
@@ -77,7 +77,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/gaze_display_types.hpp" line="14" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="14" bodyend="-1"/>
+        <location file="src/core/gaze_display_types.hpp" line="16" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="16" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -85,7 +85,7 @@
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/gaze_display_types.hpp" line="9" column="1" bodyfile="src/core/gaze_display_types.hpp" bodystart="9" bodyend="15"/>
+    <location file="src/core/gaze_display_types.hpp" line="11" column="1" bodyfile="src/core/gaze_display_types.hpp" bodystart="11" bodyend="17"/>
     <listofallmembers>
       <member refid="struct_gaze_1_1_gaze_display_metrics_1ad231a3212746aab7c6b1924ddfddf04a" prot="public" virt="non-virtual"><scope>Gaze::GazeDisplayMetrics</scope><name>height_mm</name></member>
       <member refid="struct_gaze_1_1_gaze_display_metrics_1a1f9aca41c3095ca00c8226ecba130dc8" prot="public" virt="non-virtual"><scope>Gaze::GazeDisplayMetrics</scope><name>pixel_height</name></member>

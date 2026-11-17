@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="FillAccumulator" inherits="Node">
+	<brief_description>Second-order inertial dwell / charge accumulator node for gaze UI interactions.</brief_description>
+	<description>Smoothly charges fill in [0.0, 1.0] toward 1.0 when target_error &lt;= 0 (or active_target is true) and drains toward 0.0 when outside the target, accelerating rate changes via fill_acceleration and drain_acceleration and scaling drain acceleration with (1 + error / error_doubling_distance).
+
+Configure fill_sec / drain_sec (or fill_rate / drain_rate) and choose automatic updates via process_callback (PROCESS_MANUAL, PROCESS_IDLE, or PROCESS_PHYSICS), or call process_error_delta() / process_dwell_delta() manually.
+
+Signals emitted: fill_changed(fill: float), fill_started(), filled(), emptied().</description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="set_fill">
+			<return type="void"></return>
+			<param index="0" name="p_fill" type="double"></param>
+			<description>Sets the normalized fill level clamped to [0.0, 1.0].</description>
+		</method>
+		<method name="get_fill">
+			<return type="double"></return>
+			<description>Returns the normalized fill level in [0.0, 1.0].</description>
+		</method>
+		<method name="get_velocity">
+			<return type="double"></return>
+			<description>Returns the current fill rate-of-change velocity in fill units per second.</description>
+		</method>
+		<method name="is_filled">
+			<return type="bool"></return>
+			<description>Returns true when fill has reached 1.0.</description>
+		</method>
+		<method name="is_empty">
+			<return type="bool"></return>
+			<description>Returns true when fill is at 0.0.</description>
+		</method>
+		<method name="set_fill_rate">
+			<return type="void"></return>
+			<param index="0" name="p_rate" type="double"></param>
+			<description>Sets maximum charging rate in normalized fill units per second (default 1.6).</description>
+		</method>
+		<method name="get_fill_rate">
+			<return type="double"></return>
+			<description>Returns maximum charging rate in normalized fill units per second.</description>
+		</method>
+		<method name="set_drain_rate">
+			<return type="void"></return>
+			<param index="0" name="p_rate" type="double"></param>
+			<description>Sets base draining rate in normalized fill units per second (default 2.0).</description>
+		</method>
+		<method name="get_drain_rate">
+			<return type="double"></return>
+			<description>Returns base draining rate in normalized fill units per second.</description>
+		</method>
+		<method name="set_fill_sec">
+			<return type="void"></return>
+			<param index="0" name="p_sec" type="double"></param>
+			<description>Sets time in seconds to fill from 0.0 to 1.0 at max rate (inverse of fill_rate).</description>
+		</method>
+		<method name="get_fill_sec">
+			<return type="double"></return>
+			<description>Returns time in seconds to fill from 0.0 to 1.0 at max rate.</description>
+		</method>
+		<method name="set_drain_sec">
+			<return type="void"></return>
+			<param index="0" name="p_sec" type="double"></param>
+			<description>Sets time in seconds to drain from 1.0 to 0.0 at base drain rate (inverse of drain_rate).</description>
+		</method>
+		<method name="get_drain_sec">
+			<return type="double"></return>
+			<description>Returns time in seconds to drain from 1.0 to 0.0 at base drain rate.</description>
+		</method>
+		<method name="set_fill_acceleration">
+			<return type="void"></return>
+			<param index="0" name="p_accel" type="double"></param>
+			<description>Sets acceleration toward fill_rate in units/sec^2 (default 32.0).</description>
+		</method>
+		<method name="get_fill_acceleration">
+			<return type="double"></return>
+			<description>Returns acceleration toward fill_rate in units/sec^2.</description>
+		</method>
+		<method name="set_drain_acceleration">
+			<return type="void"></return>
+			<param index="0" name="p_accel" type="double"></param>
+			<description>Sets deceleration / drain acceleration in units/sec^2 (default 32.0).</description>
+		</method>
+		<method name="get_drain_acceleration">
+			<return type="double"></return>
+			<description>Returns drain acceleration in units/sec^2.</description>
+		</method>
+		<method name="set_error_doubling_distance">
+			<return type="void"></return>
+			<param index="0" name="p_dist" type="double"></param>
+			<description>Sets distance (px) at which positive target_error doubles drain acceleration (default 100.0).</description>
+		</method>
+		<method name="get_error_doubling_distance">
+			<return type="double"></return>
+			<description>Returns error doubling distance in logical pixels.</description>
+		</method>
+		<method name="set_process_callback">
+			<return type="void"></return>
+			<param index="0" name="p_callback" type="ProcessCallback"></param>
+			<description>Sets automatic stepping mode (PROCESS_MANUAL, PROCESS_IDLE, or PROCESS_PHYSICS).</description>
+		</method>
+		<method name="get_process_callback">
+			<return type="ProcessCallback"></return>
+			<description>Returns automatic stepping mode.</description>
+		</method>
+		<method name="set_target_error">
+			<return type="void"></return>
+			<param index="0" name="p_error" type="double"></param>
+			<description>Sets signed target boundary distance in pixels (&lt;= 0 charges, &gt; 0 drains) used by automatic processing.</description>
+		</method>
+		<method name="get_target_error">
+			<return type="double"></return>
+			<description>Returns signed target boundary distance in pixels.</description>
+		</method>
+		<method name="set_active_target">
+			<return type="void"></return>
+			<param index="0" name="p_active" type="bool"></param>
+			<description>Sets boolean dwell active flag used by automatic processing when true.</description>
+		</method>
+		<method name="is_active_target_dwell">
+			<return type="bool"></return>
+			<description>Returns whether automatic processing treats the dwell target as active.</description>
+		</method>
+		<method name="process_error_delta">
+			<return type="void"></return>
+			<param index="0" name="p_error" type="double"></param>
+			<param index="1" name="p_delta" type="double"></param>
+			<description>Advances the accumulator for a single time step given signed boundary error.
+
+p_error
+Signed distance outside target boundary in logical pixels (&lt;= 0 fills, &gt; 0 drains).
+p_delta
+Elapsed time in seconds.
+
+Signed distance outside target boundary in logical pixels (&lt;= 0 fills, &gt; 0 drains).
+
+Elapsed time in seconds.</description>
+		</method>
+		<method name="process_dwell_delta">
+			<return type="void"></return>
+			<param index="0" name="p_is_active" type="bool"></param>
+			<param index="1" name="p_delta" type="double"></param>
+			<description>Advances the accumulator for a single time step given boolean activation.
+
+p_is_active
+True to charge toward 1.0, false to drain toward 0.0.
+p_delta
+Elapsed time in seconds.
+
+True to charge toward 1.0, false to drain toward 0.0.
+
+Elapsed time in seconds.</description>
+		</method>
+		<method name="reset">
+			<return type="void"></return>
+			<description>Resets fill and velocity to 0.0 and emits emptied/fill_changed signals if state changed.</description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

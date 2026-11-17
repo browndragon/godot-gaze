@@ -534,14 +534,18 @@ def setup_onnxruntime(env):
             except Exception:
                 pass
 
+        subprocess.run(["install_name_tool", "-id", "@rpath/libonnxruntime.dylib", expected_lib_path], check=False)
+
         safe_copy_dylib(expected_lib_path, dylib_path)
         print(f"[SCons] Copied {expected_lib_path} to {out_dir}")
+        subprocess.run(["install_name_tool", "-id", "@rpath/libonnxruntime.dylib", dylib_path], check=False)
         subprocess.run(["codesign", "-s", "-", "--force", dylib_path], check=False)
         
         test_dir = "build/tests"
         os.makedirs(test_dir, exist_ok=True)
         test_dylib = os.path.join(test_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
         safe_copy_dylib(expected_lib_path, test_dylib)
+        subprocess.run(["install_name_tool", "-id", "@rpath/libonnxruntime.dylib", test_dylib], check=False)
         subprocess.run(["codesign", "-s", "-", "--force", test_dylib], check=False)
         print(f"[SCons] Copied and signed {expected_lib_path} in {test_dir} for macOS SIP compliance")
 
@@ -569,7 +573,12 @@ def setup_onnxruntime(env):
             env.Append(LINKFLAGS=["-Wl,-rpath,$ORIGIN"])
         os.makedirs(out_dir, exist_ok=True)
         import shutil
-        shutil.copy2(expected_lib_path, os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}"))
+        dst_ort = os.path.join(out_dir, f"{lib_prefix}{ort_lib_name}{lib_suffix}")
+        if platform == "linux" and shutil.which("patchelf"):
+            subprocess.run(["patchelf", "--set-soname", "libonnxruntime.so", expected_lib_path], check=False)
+        shutil.copy2(expected_lib_path, dst_ort)
+        if platform == "linux" and shutil.which("patchelf"):
+            subprocess.run(["patchelf", "--set-soname", "libonnxruntime.so", dst_ort], check=False)
     elif platform == "windows":
         out_dir = "project/addons/godot-gaze/bin"
         os.makedirs(out_dir, exist_ok=True)
@@ -767,9 +776,14 @@ if env["platform"] == "ios":
 else:
     library = env.SharedLibrary(target=target_lib, source=library_objs)
 
-# Ad-hoc codesigning on macOS to satisfy Gatekeeper and SIP
+# Fix ONNX Runtime install_name / SONAME references and ad-hoc codesign on macOS
 if env["platform"] == "macos":
+    env.AddPostAction(library, "install_name_tool -change @rpath/libonnxruntime.1.dylib @rpath/libonnxruntime.dylib $TARGET")
     env.AddPostAction(library, "codesign -s - --force $TARGET")
+elif env["platform"] == "linux":
+    import shutil
+    if shutil.which("patchelf"):
+        env.AddPostAction(library, "patchelf --replace-needed libonnxruntime.so.1 libonnxruntime.so $TARGET")
 
 env.Default(library)
 

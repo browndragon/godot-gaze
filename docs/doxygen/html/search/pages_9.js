@@ -1,11 +1,5 @@
 var searchData=
 [
-  ['gaze_0',['godot-gaze',['../index.html',1,'']]],
-  ['gdextension_20layer_1',['Godot GDExtension Layer',['../dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0.html#autotoc_md1',1,'']]],
-  ['gdscript_20usage_2',['3. Basic GDScript Usage',['../index.html#autotoc_md13',1,'']]],
-  ['getting_20started_3',['Getting Started',['../index.html#autotoc_md8',1,'']]],
-  ['godot_20gaze_4',['godot-gaze',['../index.html',1,'']]],
-  ['godot_20gdextension_20layer_5',['Godot GDExtension Layer',['../dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0.html#autotoc_md1',1,'']]],
-  ['guidelines_6',['Web / HTML5 Export Guidelines',['../index.html#autotoc_md15',1,'']]],
-  ['guidelines_20architecture_7',['Developer Guidelines &amp;amp; Architecture',['../index.html#autotoc_md17',1,'']]]
+  ['8_20godot_20viewport_20canvas_202d_20space_0',['1.8. Godot Viewport Canvas 2D Space',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md77',1,'']]],
+  ['800_20fps_20vs_2012–150_20ms_20discrepancy_1',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]]
 ];

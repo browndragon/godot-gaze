@@ -1019,8 +1019,8 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
         event->set_left_eye_openness(active_read_data->left_eye_openness);
         event->set_right_eye_openness(active_read_data->right_eye_openness);
     } else {
-        event->set_left_eye_openness(1.0f);
-        event->set_right_eye_openness(1.0f);
+        event->set_left_eye_openness(get_left_eye_openness());
+        event->set_right_eye_openness(get_right_eye_openness());
     }
 
     Vector2 local_pos = get_gaze_screen_px(false);
@@ -1056,6 +1056,9 @@ Ref<InputEventGaze> GazeServer::create_default_event() {
     if (active_read_data && active_read_data->gaze_success) {
         gaze_d = Vector3(active_read_data->gaze_direction.x, active_read_data->gaze_direction.y, active_read_data->gaze_direction.z);
         gaze_o = Vector3(active_read_data->gaze_origin.x, active_read_data->gaze_origin.y, active_read_data->gaze_origin.z);
+    } else if (is_gaze_detected()) {
+        gaze_d = get_gaze_direction();
+        gaze_o = get_gaze_origin();
     }
     Vector3 norm_gaze_dir = gaze_d.is_normalized() ? gaze_d : gaze_d.normalized();
     if (norm_gaze_dir.length_squared() < 1e-4) {
@@ -1092,6 +1095,9 @@ Ref<InputEventGazeMissing> GazeServer::create_default_missing_event(int p_reason
     if (active_read_data) {
         event->set_left_eye_openness(active_read_data->left_eye_openness);
         event->set_right_eye_openness(active_read_data->right_eye_openness);
+    } else {
+        event->set_left_eye_openness(get_left_eye_openness());
+        event->set_right_eye_openness(get_right_eye_openness());
     }
     return event;
 }
@@ -1522,7 +1528,7 @@ bool GazeServer::is_synthetic_mouse_event(const Ref<InputEvent> &p_event) {
 }
 
 String GazeServer::get_build_info() {
-    return String("godot-gaze Native GDExtension v4.8");
+    return String("godot-gaze v0.1.0");
 }
 
 String GazeServer::get_build_timestamp() {

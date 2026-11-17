@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -158,6 +158,8 @@ Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight"><b>Gaze::resize_bgr_to_rgb</b> (const uint8_t *src, int src_w, int src_h, uint8_t *dst, int dst_w, int dst_h)</td></tr>
 <tr class="memitem:a945b5c3067c6ca03687e2ecf1cd125da" id="r_a945b5c3067c6ca03687e2ecf1cd125da"><td class="memItemLeft"><a id="a945b5c3067c6ca03687e2ecf1cd125da" name="a945b5c3067c6ca03687e2ecf1cd125da"></a>
 void&#160;</td><td class="memItemRight"><b>Gaze::crop_and_resize_bgr</b> (const unsigned char *src, int src_w, int src_h, float crop_x, float crop_y, float crop_w, float crop_h, unsigned char *dst, int dst_w, int dst_h)</td></tr>
+<tr class="memitem:ae22aa71c801973e85d5ef50a7fdef422" id="r_ae22aa71c801973e85d5ef50a7fdef422"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae22aa71c801973e85d5ef50a7fdef422">Gaze::crop_and_resize_bgr_with_unroll</a> (const unsigned char *src, int src_w, int src_h, float crop_x, float crop_y, float crop_w, float crop_h, double roll_angle_rad, unsigned char *dst, int dst_w, int dst_h)</td></tr>
+<tr class="memdesc:ae22aa71c801973e85d5ef50a7fdef422"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crops a rectangle from a hint-rolled working coordinate space directly from the raw camera frame, folding the roll unwarping into bilinear sampling.  <br /></td></tr>
 <tr class="memitem:ae08ff5882cb209cac072def9526519ac" id="r_ae08ff5882cb209cac072def9526519ac"><td class="memItemLeft"><a id="ae08ff5882cb209cac072def9526519ac" name="ae08ff5882cb209cac072def9526519ac"></a>
 void&#160;</td><td class="memItemRight"><b>Gaze::crop_and_resize_bgr_to_rgb</b> (const uint8_t *src, int src_w, int src_h, float roi_x, float roi_y, float roi_w, float roi_h, uint8_t *dst, int dst_w, int dst_h)</td></tr>
 <tr class="memitem:a598ea344cf8ef8b3d9083dde52cd3197" id="r_a598ea344cf8ef8b3d9083dde52cd3197"><td class="memItemLeft"><a id="a598ea344cf8ef8b3d9083dde52cd3197" name="a598ea344cf8ef8b3d9083dde52cd3197"></a>
@@ -206,6 +208,83 @@ double&#160;</td><td class="memItemRight"><b>Gaze::diagonal_to_horizontal_fov</b
 
 <p>Computes default pinhole focal length in pixels for a given frame width and horizontal FOV. </p>
 <p>Standard webcam default: HFOV = 65.0 deg. </p>
+
+</div>
+</div>
+<a id="ae22aa71c801973e85d5ef50a7fdef422" name="ae22aa71c801973e85d5ef50a7fdef422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae22aa71c801973e85d5ef50a7fdef422">&#9670;&#160;</a></span>crop_and_resize_bgr_with_unroll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Gaze::crop_and_resize_bgr_with_unroll </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *</td>          <td class="paramname"><span class="paramname"><em>src</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>src_w</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>src_h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>crop_x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>crop_y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>crop_w</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>crop_h</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>roll_angle_rad</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned char *</td>          <td class="paramname"><span class="paramname"><em>dst</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>dst_w</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>dst_h</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Crops a rectangle from a hint-rolled working coordinate space directly from the raw camera frame, folding the roll unwarping into bilinear sampling. </p>
+<p>Guarantees identical pixel output to rotate_image(src, +roll_angle_rad) followed by crop_and_resize_bgr(), but touches ONLY dst_w * dst_h pixels and requires zero full-frame heap allocations or passes. </p>
 
 </div>
 </div>

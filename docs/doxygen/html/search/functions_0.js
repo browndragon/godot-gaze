@@ -14,5 +14,6 @@ var searchData=
   ['camera_5fstop_11',['camera_stop',['../classgodot_1_1_vision_server.html#acfd359215cca0d1bd9c86a2832b883bc',1,'godot::VisionServer::camera_stop()'],['../classgodot_1_1_mock_vision_server.html#aa043038fb3f8f4b57a8df1ed58643b8b',1,'godot::MockVisionServer::camera_stop()']]],
   ['clear_12',['clear',['../class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#abbae97910f3f83690e897b7f0a464b10',1,'Gaze::Concurrency::AtomicMailbox']]],
   ['create_5fdefault_5fevent_13',['create_default_event',['../classgodot_1_1_gaze_server.html#aa9545b9113275a2dab894a858d0db570',1,'godot::GazeServer']]],
-  ['create_5fdefault_5fmissing_5fevent_14',['create_default_missing_event',['../classgodot_1_1_gaze_server.html#acd3a78080049bde148630357aedabc7c',1,'godot::GazeServer']]]
+  ['create_5fdefault_5fmissing_5fevent_14',['create_default_missing_event',['../classgodot_1_1_gaze_server.html#acd3a78080049bde148630357aedabc7c',1,'godot::GazeServer']]],
+  ['crop_5fand_5fresize_5fbgr_5fwith_5funroll_15',['crop_and_resize_bgr_with_unroll',['../math__defs_8hpp.html#ae22aa71c801973e85d5ef50a7fdef422',1,'Gaze']]]
 ];

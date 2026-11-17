@@ -1,6 +1,26 @@
 var searchData=
 [
-  ['b_20local_20development_20symlinking_20for_20contributors_0',['B. Local Development Symlinking (For Contributors)',['../index.html#autotoc_md11',1,'']]],
-  ['basic_20gdscript_20usage_1',['3. Basic GDScript Usage',['../index.html#autotoc_md13',1,'']]],
-  ['basic_20setup_2',['2. Basic Setup',['../index.html#autotoc_md12',1,'']]]
+  ['3_201_203d_20ray_20plane_20intersection_0',['3.1. 3D Ray-Plane Intersection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md82',1,'']]],
+  ['3_201_20yunet_20face_20detector_20ortyunetdetector_1',['3.1. YuNet Face Detector (&lt;span class=&quot;tt&quot;&gt;ORTYuNetDetector&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md104',1,'']]],
+  ['3_202_20intel_20adas_2035_20point_20facial_20landmarker_20ortlandmarkmodel_2',['3.2. Intel ADAS 35-Point Facial Landmarker (&lt;span class=&quot;tt&quot;&gt;ORTLandmarkModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md106',1,'']]],
+  ['3_202_20screen_20center_20virtual_20projection_20anchor_20os_20window_20space_20logical_20pixels_3',['3.2. Screen-Center Virtual Projection Anchor &amp;amp; OS Window Space (Logical Pixels)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md83',1,'']]],
+  ['3_203_20intel_20adas_20gaze_20estimation_20ortgazemodel_4',['3.3. Intel ADAS Gaze Estimation (&lt;span class=&quot;tt&quot;&gt;ORTGazeModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md108',1,'']]],
+  ['3_203_20unified_20gravity_20aware_20display_20orientation_20side_20bezel_20geometry_20_24t_5f_20camera_20viewport_20_24_5',['3.3. Unified Gravity-Aware Display Orientation &amp;amp; Side-Bezel Geometry ($T_{\\text{camera} \\to \\text{viewport}}$)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md84',1,'']]],
+  ['3_204_20open_20closed_20eye_20classifier_20orteyestatemodel_6',['3.4. Open-Closed Eye Classifier (&lt;span class=&quot;tt&quot;&gt;ORTEyeStateModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md110',1,'']]],
+  ['3_204_20os_20window_20space_20to_20godot_20viewport_20canvas_202d_20space_20stretch_20modes_7',['3.4. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md85',1,'']]],
+  ['3_20concurrency_20threading_20model_8',['3. Concurrency &amp;amp; Threading Model',['../md_docs_2architecture.html#autotoc_md38',1,'']]],
+  ['3_20detailed_20model_20specifications_9',['3. Detailed Model Specifications',['../md_docs_2vision__models.html#autotoc_md103',1,'']]],
+  ['3_20direct_20server_20apis_20advanced_10',['3. Direct Server APIs (Advanced)',['../md_docs_2lifecycle__tracking.html#autotoc_md66',1,'']]],
+  ['3_20godot_20camera_20space_20standard_20graphics_20camera_20space_11',['1.3. Godot Camera Space (Standard Graphics Camera Space)',['../md_docs_2mathematical__model.html#autotoc_md72',1,'']]],
+  ['3_20inertial_20dwell_20interactions_20fillaccumulator_12',['3. Inertial Dwell Interactions (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../index.html#autotoc_md15',1,'']]],
+  ['3_20inertial_20dwell_20mechanics_20fillaccumulator_13',['6.3. Inertial Dwell Mechanics (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md48',1,'']]],
+  ['3_20intel_20adas_20gaze_20estimation_20ortgazemodel_14',['3.3. Intel ADAS Gaze Estimation (&lt;span class=&quot;tt&quot;&gt;ORTGazeModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md108',1,'']]],
+  ['3_20peripheral_20dynamic_20range_20vs_20automotive_20bias_15',['3. Peripheral Dynamic Range vs. Automotive Bias',['../md_docs_2gaze__model__evaluation.html#autotoc_md119',1,'']]],
+  ['3_20physical_20geometry_20ray_20plane_20projection_16',['3. Physical Geometry &amp;amp; Ray-Plane Projection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md81',1,'']]],
+  ['3_20platform_20geometry_20mapping_20matrix_17',['7.3. Platform Geometry Mapping Matrix',['../md_docs_2architecture.html#autotoc_md53',1,'']]],
+  ['3_20unified_20gravity_20aware_20display_20orientation_20side_20bezel_20geometry_20_24t_5f_20camera_20viewport_20_24_18',['3.3. Unified Gravity-Aware Display Orientation &amp;amp; Side-Bezel Geometry ($T_{\\text{camera} \\to \\text{viewport}}$)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md84',1,'']]],
+  ['35_20point_20anthropometric_203d_20face_20model_19',['1.2. Canonical 35-Point Anthropometric 3D Face Model',['../md_docs_2mathematical__model.html#autotoc_md71',1,'']]],
+  ['35_20point_20facial_20landmarker_20ortlandmarkmodel_20',['3.2. Intel ADAS 35-Point Facial Landmarker (&lt;span class=&quot;tt&quot;&gt;ORTLandmarkModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md106',1,'']]],
+  ['3d_20face_20model_21',['1.2. Canonical 35-Point Anthropometric 3D Face Model',['../md_docs_2mathematical__model.html#autotoc_md71',1,'']]],
+  ['3d_20ray_20plane_20intersection_22',['3.1. 3D Ray-Plane Intersection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md82',1,'']]]
 ];

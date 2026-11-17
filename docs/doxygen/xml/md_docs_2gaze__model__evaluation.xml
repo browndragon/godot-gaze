@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="md_docs_2gaze__model__evaluation" kind="page">
+    <compoundname>md_docs_2gaze__model__evaluation</compoundname>
+    <title>Gaze Estimation Model Evaluation &amp; Architectural Comparison</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_docs_2gaze__model__evaluation_1autotoc_md111"/></para>
+<para>This document records the empirical benchmarking, architectural analysis, and model trade-offs conducted to resolve the peripheral non-linearity and angular compression discovered in desktop gaze tracking.</para>
+<para><hruler/>
+</para>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md113">
+<title>1. Executive Summary &amp; Benchmark Matrix</title><para>All models were evaluated on host hardware (<bold>Apple Silicon M1, 8 CPU cores</bold>, single-threaded ONNX Runtime CPU execution) against our canonical test fixture suite (<computeroutput>tests/resources/*.jpg</computeroutput>) using our automated benchmark harness (<computeroutput>scons tools/benchmark_models</computeroutput>).</para>
+<para><table rows="7" cols="9"><row>
+<entry thead="yes" align='left'><para>Model Name  </para>
+</entry><entry thead="yes" align='left'><para>Architecture / Backbone  </para>
+</entry><entry thead="yes" align='center'><para>Input Shape  </para>
+</entry><entry thead="yes" align='center'><para>Disk Size  </para>
+</entry><entry thead="yes" align='center'><para>Mean Latency  </para>
+</entry><entry thead="yes" align='center'><para>p95 Latency  </para>
+</entry><entry thead="yes" align='center'><para>Throughput  </para>
+</entry><entry thead="yes" align='center'><para>Horiz. Dynamic Span  </para>
+</entry><entry thead="yes" align='center'><para>Head/Gaze Decoupling  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>OpenVINO ADAS-0002</bold> <emphasis>(Baseline)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>Custom Shallow CNN  </para>
+</entry><entry thead="no" align='center'><para>Dual 60×60 + Head [1,3]  </para>
+</entry><entry thead="no" align='center'><para><bold>7.2 MB</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>1.22 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>1.58 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>817.2 FPS</bold>  </para>
+</entry><entry thead="no" align='center'><para>Saturates at $\pm 20^\circ$  </para>
+</entry><entry thead="no" align='center'><para>Dependent on PnP  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>MobileOne-S0 Gaze</bold> <emphasis>(L2CS)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>MobileOne-S0 (RepVGG)  </para>
+</entry><entry thead="no" align='center'><para>1×3×448×448  </para>
+</entry><entry thead="no" align='center'><para><bold>4.7 MB</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>12.06 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>13.51 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>82.9 FPS</bold>  </para>
+</entry><entry thead="no" align='center'><para>16.8° (at 448)  </para>
+</entry><entry thead="no" align='center'><para><bold>+43.1°</bold> (Robust)  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>MobileNetV2 Gaze</bold> <emphasis>(L2CS)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>MobileNetV2  </para>
+</entry><entry thead="no" align='center'><para>1×3×448×448  </para>
+</entry><entry thead="no" align='center'><para>9.3 MB  </para>
+</entry><entry thead="no" align='center'><para>24.21 ms  </para>
+</entry><entry thead="no" align='center'><para>26.39 ms  </para>
+</entry><entry thead="no" align='center'><para>41.3 FPS  </para>
+</entry><entry thead="no" align='center'><para>9.9°  </para>
+</entry><entry thead="no" align='center'><para>Weak  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>ETH-XGaze</bold> <emphasis>(Direct Regression)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>ResNet-50  </para>
+</entry><entry thead="no" align='center'><para>1×3×224×224  </para>
+</entry><entry thead="no" align='center'><para>89.6 MB  </para>
+</entry><entry thead="no" align='center'><para><bold>42.43 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>57.41 ms</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>23.6 FPS</bold>  </para>
+</entry><entry thead="no" align='center'><para><bold>40.5°</bold> (Symmetric)  </para>
+</entry><entry thead="no" align='center'><para><bold>+21.0°</bold> (Robust)  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>ResNet-18 Gaze</bold> <emphasis>(L2CS)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>ResNet-18  </para>
+</entry><entry thead="no" align='center'><para>1×3×448×448  </para>
+</entry><entry thead="no" align='center'><para>43.0 MB  </para>
+</entry><entry thead="no" align='center'><para>52.12 ms  </para>
+</entry><entry thead="no" align='center'><para>59.24 ms  </para>
+</entry><entry thead="no" align='center'><para>19.2 FPS  </para>
+</entry><entry thead="no" align='center'><para>31.6°  </para>
+</entry><entry thead="no" align='center'><para>Moderate  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>ResNet-50 Gaze</bold> <emphasis>(L2CS)</emphasis>  </para>
+</entry><entry thead="no" align='left'><para>ResNet-50  </para>
+</entry><entry thead="no" align='center'><para>1×3×448×448  </para>
+</entry><entry thead="no" align='center'><para>91.0 MB  </para>
+</entry><entry thead="no" align='center'><para>149.20 ms  </para>
+</entry><entry thead="no" align='center'><para>175.57 ms  </para>
+</entry><entry thead="no" align='center'><para>6.7 FPS  </para>
+</entry><entry thead="no" align='center'><para><bold>57.3°</bold> (Widest)  </para>
+</entry><entry thead="no" align='center'><para><bold>+22.5°</bold> (Robust)  </para>
+</entry></row>
+</table>
+</para>
+<para><emphasis>Artifacts generated</emphasis>:<itemizedlist>
+<listitem><para>Machine-readable metrics: <computeroutput>build/tests/artifacts/gaze_model_comparison.json</computeroutput></para>
+</listitem><listitem><para>Visual interactive report: <computeroutput>build/tests/artifacts/gaze_model_comparison.html</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md115">
+<title>2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy</title><para>The dramatic throughput gap between OpenVINO ADAS-0002 (817 FPS / 1.22 ms) and candidate models (7–83 FPS) is not an experimental artifact. It stems from two fundamental architectural differences:</para>
+<sect2 id="md_docs_2gaze__model__evaluation_1autotoc_md116">
+<title>A. The &quot;Baking / Upstream Offload&quot; Illusion</title><para>OpenVINO ADAS-0002 is <bold>not</bold> an end-to-end gaze estimator. It only performs the final tensor dot product on heavily pre-digested inputs:<orderedlist>
+<listitem><para><bold>Upstream Landmark Model</bold>: An 18 MB neural network (<computeroutput>facial-landmarks-35-adas-0002.onnx</computeroutput>) must first execute on an upright, counter-rotated face crop to regress 35 2D landmarks.</para>
+</listitem><listitem><para><bold>Upstream PnP Solver</bold>: A Levenberg-Marquardt / SQPnP non-linear iterative solver must compute 3D head pose rotation ($R, t$) from the 35 landmarks.</para>
+</listitem><listitem><para><bold>Dual Eye Warpers</bold>: Two separate bilinear interpolation passes must crop, rotate, and resample the left and right ocular regions into $60\times60$ patches.</para>
+</listitem><listitem><para><bold>Final Step</bold>: Only after steps 1–3 have consumed <bold>3–6 ms of CPU time</bold> does <computeroutput>gaze-estimation-adas-0002</computeroutput> execute its 1.2 ms forward pass.</para>
+</listitem></orderedlist>
+</para>
+<para>In contrast, <bold>ETH-XGaze and L2CS-Net are full-face appearance models</bold>:<itemizedlist>
+<listitem><para>They ingest the face bounding box directly from the initial YuNet face detector.</para>
+</listitem><listitem><para>They completely bypass the 18 MB landmark model, PnP solver, and eye-warping routines.</para>
+</listitem><listitem><para>The face crop is passed directly to the network, eliminating all upstream landmark jitter and head-pose handoff discontinuities.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2gaze__model__evaluation_1autotoc_md117">
+<title>B. Input Spatial Area &amp; Computational Complexity (FLOPs)</title><para>Convolutional operations scale linearly with input spatial area ($H \times W$):<itemizedlist>
+<listitem><para><bold>ADAS-0002</bold>: $2 \times (60 \times 60 \times 3) + 3 = \mathbf{21,603\text{ input floats}}$. Total compute is $\approx \mathbf{0.07\text{ GFLOPs}}$.</para>
+</listitem><listitem><para><bold>ETH-XGaze</bold>: $1 \times (224 \times 224 \times 3) = \mathbf{150,528\text{ input floats}}$ (**$7\times$ larger**). Total compute is $\approx \mathbf{4.1\text{ GFLOPs}}$.</para>
+</listitem><listitem><para><bold>L2CS-Net Models</bold>: $1 \times (448 \times 448 \times 3) = \mathbf{602,112\text{ input floats}}$ (**$28\times$ larger** than ADAS).<itemizedlist>
+<listitem><para>A $448 \times 448$ image has **$4\times$ the pixel area** of a $224 \times 224$ image ($448^2 / 224^2 = 4$).</para>
+</listitem><listitem><para>Consequently, ResNet-50 at 448×448 requires $\approx \mathbf{16.4\text{ GFLOPs}}$, explaining its 149 ms latency compared to ETH-XGaze ResNet-50&apos;s 42 ms at 224×224.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md119">
+<title>3. Peripheral Dynamic Range vs. Automotive Bias</title><para><table rows="4" cols="3"><row>
+<entry thead="yes" align='left'><para>Aspect  </para>
+</entry><entry thead="yes" align='left'><para>OpenVINO ADAS-0002  </para>
+</entry><entry thead="yes" align='left'><para>ETH-XGaze &amp; L2CS Family  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Training Domain</bold>  </para>
+</entry><entry thead="no" align='left'><para>In-cabin automotive driver monitoring (forward road view, mirrors, instrument cluster).  </para>
+</entry><entry thead="no" align='left'><para>In-the-wild desktop monitors, mobile phones, and 360° gaze spheres (ETH-XGaze, Gaze360).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Angular Range</bold>  </para>
+</entry><entry thead="no" align='left'><para>Confined to $\pm 15^\circ\text{<ndash/>}20^\circ$. Looking beyond $20^\circ$ causes non-linear compression and flat-line saturation.  </para>
+</entry><entry thead="no" align='left'><para>Continuous coverage across $\pm 45^\circ\text{<ndash/>}60^\circ$ eccentricities without mean-collapse.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><bold>Head Coupling</bold>  </para>
+</entry><entry thead="no" align='left'><para>Heavily couples eye gaze to head pose angles. When head pose is static, eye excursions are severely compressed.  </para>
+</entry><entry thead="no" align='left'><para>Full facial appearance decouples eye movements from head orientation (e.g. $+43.1^\circ$ on <computeroutput>self_noseleft_eyesright</computeroutput>).  </para>
+</entry></row>
+</table>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md121">
+<title>4. Resolution Scaling &amp; Optimization Opportunities</title><para>Candidate models use adaptive global average pooling (<computeroutput>AdaptiveAvgPool2d((1, 1))</computeroutput>), which means their feature maps can accept arbitrary input resolutions without architectural changes:<itemizedlist>
+<listitem><para><bold>MobileOne-S0 at 224×224</bold>: Reducing MobileOne-S0 from 448×448 to 224×224 reduces spatial tensor area by $4\times$. Projected CPU inference latency drops from <bold>12 ms (83 FPS)</bold> down to **$\approx 3.0\text{ ms}$ ($&gt; 300\text{ FPS}$)** on Apple Silicon, while maintaining a tiny <bold>4.7 MB</bold> disk footprint.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md123">
+<title>5. Architectural Roadmap: Pluggable Gaze Estimator Strategy</title><para>To provide flexibility across platforms (mobile, web, desktop) and use cases (low-power vs. high-accuracy desktop), <computeroutput>godot-gaze</computeroutput> will adopt a pluggable model strategy:</para>
+</sect1>
+<sect1 id="md_docs_2gaze__model__evaluation_1autotoc_md124">
+<title>5. Architectural Decision &amp; Future Swappable Strategy</title><sect2 id="md_docs_2gaze__model__evaluation_1autotoc_md125">
+<title>A. Production Decision: OpenVINO ADAS-0002 Remains Default</title><para><itemizedlist>
+<listitem><para><bold>Rationale</bold>: Over the vast majority of common interactive display regions and typical head/eye angles ($\le 20^\circ$), OpenVINO ADAS-0002 performs roughly on par with larger candidate models.</para>
+</listitem><listitem><para><bold>Throughput &amp; Multiplatform Reach</bold>: Its lightweight footprint and 600–800 FPS execution speed provide unmatched power efficiency and low latency across all targeted deployment targets (desktop, mobile, and web).</para>
+</listitem><listitem><para><bold>Conclusion</bold>: We will not perform an immediate architectural replacement. OpenVINO ADAS-0002 is maintained as the primary production estimator.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2gaze__model__evaluation_1autotoc_md126">
+<title>B. Future Readiness: Blueprint for <computeroutput>DirectFaceGazeEstimator</computeroutput></title><para>When requirements expand to require extreme peripheral display coverage or when GPU/NPU acceleration is prioritized, a <computeroutput>DirectFaceGazeEstimator</computeroutput> strategy can drop in cleanly:</para>
+<para><mermaid>flowchart TD
+    FRAME[&quot;Incoming Camera Frame (BGR8)&quot;] --&gt; DET[&quot;ORTYuNetDetector (640x640)&quot;]
+    DET --&gt; STRAT{&quot;Gaze Estimator Strategy&lt;br/&gt;(gaze/models/estimator_type)&quot;}
+
+    subgraph ADAS[&quot;Strategy A: OpenVINO ADAS (Production Default)&quot;]
+        STRAT --&gt;|&quot;adas_0002&quot; (default)| LM[&quot;ORTLandmarkModel (60x60)&lt;br/&gt;35-point counter-rotated&quot;]
+        LM --&gt; PNP[&quot;PnP Solver (Head Pose angles)&quot;]
+        PNP --&gt; EYE[&quot;Dual Eye Cropper (60x60 x2)&quot;]
+        EYE --&gt; ADAS_NET[&quot;ORTGazeModel (1.2 ms)&lt;br/&gt;Ultra-high throughput, standard range&quot;]
+    end
+
+    subgraph END2END[&quot;Strategy B: Direct Face Estimator (Future Extension)&quot;]
+        STRAT --&gt;|&quot;mobileone_s0&quot; / &quot;eth_xgaze&quot;| FCROP[&quot;Face Cropper (224x224 / 448x448)&quot;]
+        FCROP --&gt; E2E_NET[&quot;DirectFaceGazeEstimator&lt;br/&gt;(3 - 12 ms, wide angular range)&quot;]
+    end
+
+    ADAS_NET --&gt; PROJ[&quot;ProjectionEngine (Ray-Plane Intersection)&quot;]
+    E2E_NET --&gt; PROJ</mermaid>
+</para>
+<sect3 id="md_docs_2gaze__model__evaluation_1autotoc_md127">
+<title>Blueprint for Future Implementation:</title><para><orderedlist>
+<listitem><para><bold>Interface Contract</bold>: Define an abstract <computeroutput>IGazeDirectionEstimator</computeroutput> with: <programlisting filename=".cpp"><codeline><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>estimate_gaze(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>GazeFrameData&amp;<sp/>frame,<sp/>Vector3&amp;<sp/>out_gaze_dir)<sp/>=<sp/>0;</highlight></codeline>
+</programlisting></para>
+</listitem><listitem><para><bold>Implementation Strategy</bold>:<itemizedlist>
+<listitem><para><computeroutput>ADASGazeEstimator</computeroutput>: Wraps existing <computeroutput>ORTLandmarkModel</computeroutput> + <computeroutput>PnPSolver</computeroutput> + <computeroutput>ORTGazeModel</computeroutput>.</para>
+</listitem><listitem><para><computeroutput>DirectFaceGazeEstimator</computeroutput>: Takes the face bounding box directly from <computeroutput>ORTYuNetDetector</computeroutput>, crops and normalizes the face patch, and invokes <computeroutput>mobileone_s0_gaze.onnx</computeroutput> or <computeroutput>eth_xgaze.onnx</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Reproducibility &amp; Weight Provenance</bold>:<itemizedlist>
+<listitem><para>Refer to <computeroutput>test_assets/models/README.md</computeroutput> for automated download scripts, PyTorch-to-ONNX conversion instructions, and the repeatable benchmark harness (<computeroutput>scons tools/benchmark_models</computeroutput>). </para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+</sect3>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="docs/gaze_model_evaluation.md"/>
+  </compounddef>
+</doxygen>

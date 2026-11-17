@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="lifecycle__tracking_8md" kind="file" language="Markdown">
+    <compoundname>lifecycle_tracking.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Gaze<sp/>Tracking<sp/>Lifecycle<sp/>&amp;<sp/>Reference-Counted<sp/>Architecture</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>document<sp/>explains<sp/>how<sp/>tracking<sp/>lifecycle<sp/>is<sp/>managed<sp/>in<sp/>`godot-gaze`,<sp/>the<sp/>reference-counted<sp/>tracker<sp/>model<sp/>in<sp/>`GazeServer`,<sp/>and<sp/>how<sp/>downstream<sp/>consumer<sp/>projects<sp/>should<sp/>integrate<sp/>`GazeTracker`<sp/>nodes<sp/>or<sp/>`GazeTracker.track_node()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>1.<sp/>Overview:<sp/>The<sp/>Reference-Counted<sp/>Lifecycle<sp/>Model</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`godot-gaze`<sp/>uses<sp/>an<sp/>active<sp/>reference-counter<sp/>(`active_trackers`)<sp/>on<sp/>the<sp/>engine<sp/>singleton<sp/>`GazeServer`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">active_trackers<sp/>==<sp/>0<sp/>:<sp/>Camera<sp/>pipeline<sp/>&amp;<sp/>ML<sp/>worker<sp/>threads<sp/>are<sp/>STOPPED<sp/>(hardware<sp/>LED<sp/>off).</highlight></codeline>
+<codeline><highlight class="normal">active_trackers<sp/>&gt;=<sp/>1<sp/>:<sp/>Camera<sp/>pipeline<sp/>&amp;<sp/>ML<sp/>worker<sp/>threads<sp/>are<sp/>RUNNING<sp/>(hardware<sp/>LED<sp/>on).</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Why<sp/>Reference<sp/>Counting?</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**Privacy<sp/>&amp;<sp/>Battery**:<sp/>Webcams<sp/>and<sp/>heavy<sp/>neural<sp/>inference<sp/>models<sp/>(face<sp/>detection,<sp/>facial<sp/>landmarks,<sp/>gaze<sp/>vector<sp/>regression,<sp/>and<sp/>eye<sp/>openness)<sp/>should<sp/>only<sp/>run<sp/>when<sp/>an<sp/>active<sp/>scene<sp/>or<sp/>gameplay<sp/>mechanic<sp/>requires<sp/>gaze.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Web<sp/>/<sp/>Browser<sp/>Compliance**:<sp/>Modern<sp/>browsers<sp/>require<sp/>user<sp/>interaction<sp/>before<sp/>granting<sp/>camera<sp/>permissions.<sp/>Starting<sp/>tracking<sp/>prematurely<sp/>on<sp/>engine<sp/>boot<sp/>triggers<sp/>immediate<sp/>permission<sp/>dialogs<sp/>before<sp/>the<sp/>user<sp/>interacts<sp/>with<sp/>the<sp/>canvas.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>**Headless<sp/>Unit<sp/>Testing**:<sp/>Fast<sp/>unit<sp/>tests<sp/>(e.g.<sp/>testing<sp/>math,<sp/>event<sp/>hierarchies,<sp/>or<sp/>UI<sp/>layouts)<sp/>do<sp/>not<sp/>need<sp/>to<sp/>query<sp/>or<sp/>lock<sp/>physical<sp/>camera<sp/>devices.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>2.<sp/>Integration<sp/>Patterns</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Pattern<sp/>A:<sp/>Declarative<sp/>Scene<sp/>Node<sp/>(`GazeTracker`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Add<sp/>a<sp/>`GazeTracker`<sp/>node<sp/>as<sp/>a<sp/>child<sp/>of<sp/>any<sp/>scene<sp/>or<sp/>component<sp/>that<sp/>relies<sp/>on<sp/>gaze<sp/>input:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline><highlight class="normal">TutorialLevel<sp/>(Node2D)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>GazeTracker<sp/>(Node)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>Paddle<sp/>(CharacterBody2D)</highlight></codeline>
+<codeline><highlight class="normal">└──<sp/>Ball<sp/>(RigidBody2D)</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>Invariants<sp/>&amp;<sp/>Behavior</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Tree<sp/>Entry<sp/>(`NOTIFICATION_ENTER_TREE`)**:<sp/>Increments<sp/>`GazeServer.active_trackers`.<sp/>If<sp/>transitioning<sp/>from<sp/>`0<sp/>-&gt;<sp/>1`,<sp/>starts<sp/>the<sp/>camera<sp/>capture<sp/>feed<sp/>and<sp/>ML<sp/>worker<sp/>thread.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Tree<sp/>Exit<sp/>(`NOTIFICATION_EXIT_TREE`)**:<sp/>Decrements<sp/>`GazeServer.active_trackers`.<sp/>If<sp/>dropping<sp/>to<sp/>`0`,<sp/>stops<sp/>the<sp/>camera<sp/>capture<sp/>feed<sp/>and<sp/>ML<sp/>worker<sp/>thread.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Dynamic<sp/>Property<sp/>(`enabled`)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>Toggling<sp/>`enabled<sp/>=<sp/>false`<sp/>while<sp/>in<sp/>tree<sp/>releases<sp/>its<sp/>reference<sp/>count.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>Toggling<sp/>`enabled<sp/>=<sp/>true`<sp/>while<sp/>in<sp/>tree<sp/>acquires<sp/>its<sp/>reference<sp/>count.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Multiple<sp/>Inclusion<sp/>Safety**:<sp/>If<sp/>multiple<sp/>subcomponents<sp/>in<sp/>a<sp/>scene<sp/>each<sp/>contain<sp/>a<sp/>`GazeTracker`<sp/>node<sp/>(e.g.<sp/>both<sp/>a<sp/>`Paddle`<sp/>component<sp/>and<sp/>a<sp/>`FluidField`<sp/>visualizer),<sp/>the<sp/>reference<sp/>count<sp/>safely<sp/>increments<sp/>to<sp/>2.<sp/>When<sp/>one<sp/>component<sp/>is<sp/>freed,<sp/>tracking<sp/>remains<sp/>active<sp/>for<sp/>the<sp/>other<sp/>until<sp/>all<sp/>trackers<sp/>exit<sp/>the<sp/>tree.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Pattern<sp/>B:<sp/>Programmatic<sp/>GDScript<sp/>Attachment<sp/>(`GazeTracker.track_node`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>custom<sp/>GDScript<sp/>scenes<sp/>or<sp/>standalone<sp/>root<sp/>nodes<sp/>that<sp/>don&apos;t<sp/>want<sp/>to<sp/>manually<sp/>edit<sp/>`.tscn`<sp/>hierarchies:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_init()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Attaches<sp/>an<sp/>internal<sp/>GazeTracker<sp/>child<sp/>that<sp/>mirrors<sp/>this<sp/>node&apos;s<sp/>tree<sp/>lifecycle</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GazeTracker.track_node(self)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Handles<sp/>gaze<sp/>position,<sp/>eye<sp/>openness,<sp/>and<sp/>blink<sp/>triggers</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>How<sp/>`track_node()`<sp/>Works</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Inserts<sp/>an<sp/>internal<sp/>`GazeTracker`<sp/>child<sp/>using<sp/>`Node.INTERNAL_MODE_FRONT`.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Because<sp/>it<sp/>is<sp/>an<sp/>internal<sp/>child:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>It<sp/>is<sp/>completely<sp/>hidden<sp/>from<sp/>`get_children()`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>It<sp/>does<sp/>not<sp/>clutter<sp/>the<sp/>Godot<sp/>editor<sp/>inspector<sp/>or<sp/>scene<sp/>dock.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>It<sp/>is<sp/>not<sp/>serialized<sp/>into<sp/>`.tscn`<sp/>file<sp/>saves.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>When<sp/>the<sp/>parent<sp/>node<sp/>is<sp/>added<sp/>to<sp/>the<sp/>scene<sp/>tree<sp/>via<sp/>`add_child()`,<sp/>the<sp/>internal<sp/>tracker<sp/>enters<sp/>the<sp/>tree<sp/>and<sp/>starts<sp/>tracking.<sp/>When<sp/>the<sp/>parent<sp/>leaves<sp/>the<sp/>tree<sp/>or<sp/>is<sp/>freed<sp/>(`queue_free()`),<sp/>the<sp/>internal<sp/>tracker<sp/>exits<sp/>the<sp/>tree<sp/>and<sp/>releases<sp/>the<sp/>reference<sp/>count.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Idempotent:<sp/>Calling<sp/>`GazeTracker.track_node(self)`<sp/>multiple<sp/>times<sp/>on<sp/>the<sp/>same<sp/>node<sp/>is<sp/>safely<sp/>deduplicated.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>3.<sp/>Direct<sp/>Server<sp/>APIs<sp/>(Advanced)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>specialized<sp/>tools,<sp/>calibration<sp/>wizards,<sp/>or<sp/>diagnostics<sp/>that<sp/>need<sp/>manual<sp/>control<sp/>outside<sp/>of<sp/>scene<sp/>trees:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>gs<sp/>=<sp/>Engine.get_singleton(&quot;GazeServer&quot;)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Manually<sp/>start<sp/>tracking<sp/>(increments<sp/>active_trackers)</highlight></codeline>
+<codeline><highlight class="normal">gs.start_tracking()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Query<sp/>tracking<sp/>state</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>is_active<sp/>=<sp/>gs.is_tracking_active()</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>tracker_count<sp/>=<sp/>gs.get_active_tracker_count()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Manually<sp/>stop<sp/>tracking<sp/>(decrements<sp/>active_trackers)</highlight></codeline>
+<codeline><highlight class="normal">gs.stop_tracking()</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+    </programlisting>
+    <location file="docs/lifecycle_tracking.md"/>
+  </compounddef>
+</doxygen>

@@ -4,9 +4,254 @@
     <compoundname>input_event_gaze.cpp</compoundname>
     <includes refid="input__event__gaze_8hpp" local="yes">input_event_gaze.hpp</includes>
     <includes local="no">godot_cpp/classes/canvas_item.hpp</includes>
+    <includes local="no">godot_cpp/classes/scene_tree.hpp</includes>
+    <includes local="no">godot_cpp/classes/window.hpp</includes>
+    <includes local="no">godot_cpp/classes/engine.hpp</includes>
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
     <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
+    <includes local="no">algorithm</includes>
+    <includes refid="gaze__server_8hpp" local="yes">gaze_server.hpp</includes>
     <incdepgraph>
+      <node id="60">
+        <label>../core/blink_state_machine.hpp</label>
+        <link refid="blink__state__machine_8hpp"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>camera_interface.hpp</label>
+        <link refid="camera__interface_8hpp"/>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>camera_placement.hpp</label>
+        <link refid="camera__placement_8hpp"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>../core/face_model_geometry.hpp</label>
+        <link refid="face__model__geometry_8hpp"/>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="57">
+        <label>face_pipeline.hpp</label>
+        <link refid="face__pipeline_8hpp"/>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="56">
+        <label>../core/gaze_frame_data.hpp</label>
+        <link refid="gaze__frame__data_8hpp_source"/>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>../core/mouse_stillness_arbitrator.hpp</label>
+        <link refid="mouse__stillness__arbitrator_8hpp"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>opencv_space_conversions.hpp</label>
+        <link refid="opencv__space__conversions_8hpp"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>../core/projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="26" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>gaze_device_profile.hpp</label>
+        <link refid="gaze__device__profile_8hpp"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>gaze_display_server.hpp</label>
+        <link refid="gaze__display__server_8hpp_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>gaze_event_factory.hpp</label>
+        <link refid="gaze__event__factory_8hpp_source"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>gaze_frame.hpp</label>
+        <link refid="gaze__frame_8hpp_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>gaze_pipeline_config.hpp</label>
+        <link refid="gaze__pipeline__config_8hpp"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>gaze_profile.hpp</label>
+        <link refid="gaze__profile_8hpp"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+      </node>
       <node id="1">
         <label>src/godot/input_event_gaze.cpp</label>
         <link refid="input__event__gaze_8cpp"/>
@@ -17,6 +262,16 @@
         <childnode refid="9" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
         </childnode>
       </node>
       <node id="2">
@@ -33,14 +288,125 @@
         <childnode refid="7" relation="include">
         </childnode>
       </node>
+      <node id="46">
+        <label>mouse_gaze_emulation.hpp</label>
+        <link refid="mouse__gaze__emulation_8hpp_source"/>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>one_euro_smoother.hpp</label>
+        <link refid="one__euro__smoother_8hpp_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>smoother.hpp</label>
+        <link refid="smoother_8hpp_source"/>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>algorithm</label>
+      </node>
+      <node id="29">
+        <label>cmath</label>
+      </node>
+      <node id="63">
+        <label>condition_variable</label>
+      </node>
+      <node id="51">
+        <label>cstddef</label>
+      </node>
+      <node id="31">
+        <label>cstdint</label>
+      </node>
       <node id="8">
         <label>godot_cpp/classes/canvas_item.hpp</label>
+      </node>
+      <node id="38">
+        <label>godot_cpp/classes/config_file.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/engine.hpp</label>
+      </node>
+      <node id="21">
+        <label>godot_cpp/classes/image.hpp</label>
+      </node>
+      <node id="22">
+        <label>godot_cpp/classes/image_texture.hpp</label>
       </node>
       <node id="3">
         <label>godot_cpp/classes/input_event_action.hpp</label>
       </node>
+      <node id="16">
+        <label>godot_cpp/classes/object.hpp</label>
+      </node>
+      <node id="18">
+        <label>godot_cpp/classes/project_settings.hpp</label>
+      </node>
+      <node id="40">
+        <label>godot_cpp/classes/ref.hpp</label>
+      </node>
+      <node id="17">
+        <label>godot_cpp/classes/ref_counted.hpp</label>
+      </node>
+      <node id="37">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
       <node id="9">
+        <label>godot_cpp/classes/scene_tree.hpp</label>
+      </node>
+      <node id="24">
+        <label>godot_cpp/classes/time.hpp</label>
+      </node>
+      <node id="10">
+        <label>godot_cpp/classes/window.hpp</label>
+      </node>
+      <node id="12">
         <label>godot_cpp/core/class_db.hpp</label>
+      </node>
+      <node id="23">
+        <label>godot_cpp/templates/safe_refcount.hpp</label>
+      </node>
+      <node id="42">
+        <label>godot_cpp/variant/array.hpp</label>
+      </node>
+      <node id="55">
+        <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="20">
+        <label>godot_cpp/variant/rect2.hpp</label>
+      </node>
+      <node id="49">
+        <label>godot_cpp/variant/rect2i.hpp</label>
+      </node>
+      <node id="19">
+        <label>godot_cpp/variant/rid.hpp</label>
       </node>
       <node id="7">
         <label>godot_cpp/variant/string.hpp</label>
@@ -48,14 +414,41 @@
       <node id="6">
         <label>godot_cpp/variant/transform3d.hpp</label>
       </node>
-      <node id="10">
+      <node id="13">
         <label>godot_cpp/variant/utility_functions.hpp</label>
+      </node>
+      <node id="43">
+        <label>godot_cpp/variant/variant.hpp</label>
       </node>
       <node id="4">
         <label>godot_cpp/variant/vector2.hpp</label>
       </node>
+      <node id="39">
+        <label>godot_cpp/variant/vector2i.hpp</label>
+      </node>
       <node id="5">
         <label>godot_cpp/variant/vector3.hpp</label>
+      </node>
+      <node id="33">
+        <label>limits</label>
+      </node>
+      <node id="58">
+        <label>memory</label>
+      </node>
+      <node id="62">
+        <label>mutex</label>
+      </node>
+      <node id="45">
+        <label>one_euro_filter.hpp</label>
+      </node>
+      <node id="61">
+        <label>thread</label>
+      </node>
+      <node id="30">
+        <label>type_traits</label>
+      </node>
+      <node id="32">
+        <label>vector</label>
       </node>
     </incdepgraph>
     <innernamespace refid="namespacegodot">godot</innernamespace>
@@ -66,165 +459,213 @@
     <programlisting>
 <codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;input_event_gaze.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/canvas_item.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight></codeline>
-<codeline lineno="8"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGazeBase<sp/>---</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight></codeline>
-<codeline lineno="10"><highlight class="normal">InputEventGazeBase::InputEventGazeBase()<sp/>{</highlight></codeline>
-<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>frame_id<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>timestamp_usec<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
-<codeline lineno="15"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="16"><highlight class="normal"></highlight></codeline>
-<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeBase::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_window_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;id&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::set_window_id);</highlight></codeline>
-<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_window_id&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::get_window_id);</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_frame_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;frame_id&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a11f3a0812c0505f1f5d5730b61a02fb2" kindref="member">InputEventGazeBase::set_frame_id</ref>);</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_frame_id&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" kindref="member">InputEventGazeBase::get_frame_id</ref>);</highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_timestamp_usec&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;timestamp_usec&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a816f584e0e7c29622e19584e51107aa4" kindref="member">InputEventGazeBase::set_timestamp_usec</ref>);</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_timestamp_usec&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1aec4fe5aa9648434bfbbffa74ad45a204" kindref="member">InputEventGazeBase::get_timestamp_usec</ref>);</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_left_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8c8526e2d2da7f512789ffd372cb6462" kindref="member">InputEventGazeBase::set_left_eye_openness</ref>);</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_left_eye_openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a4ee9bf4e873112fb80342bcfe1e908ee" kindref="member">InputEventGazeBase::get_left_eye_openness</ref>);</highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_right_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1adc3848db74215ffe8d35c82e3f3f677f" kindref="member">InputEventGazeBase::set_right_eye_openness</ref>);</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_right_eye_openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8f174a146075dcd7dd371f9618598257" kindref="member">InputEventGazeBase::get_right_eye_openness</ref>);</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight></codeline>
-<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;is_face_tracked&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138" kindref="member">InputEventGazeBase::is_face_tracked</ref>);</highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/scene_tree.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/window.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/engine.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;algorithm&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;gaze_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGazeBase<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal">InputEventGazeBase::InputEventGazeBase()<sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/>frame_id<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>timestamp_usec<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeBase::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_window_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;id&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::set_window_id);</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_window_id&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::get_window_id);</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_frame_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;frame_id&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a11f3a0812c0505f1f5d5730b61a02fb2" kindref="member">InputEventGazeBase::set_frame_id</ref>);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_frame_id&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8cb9bdfda5fd1afa1cf8abe022727695" kindref="member">InputEventGazeBase::get_frame_id</ref>);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_timestamp_usec&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;timestamp_usec&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a816f584e0e7c29622e19584e51107aa4" kindref="member">InputEventGazeBase::set_timestamp_usec</ref>);</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_timestamp_usec&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1aec4fe5aa9648434bfbbffa74ad45a204" kindref="member">InputEventGazeBase::get_timestamp_usec</ref>);</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_left_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8c8526e2d2da7f512789ffd372cb6462" kindref="member">InputEventGazeBase::set_left_eye_openness</ref>);</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_left_eye_openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a4ee9bf4e873112fb80342bcfe1e908ee" kindref="member">InputEventGazeBase::get_left_eye_openness</ref>);</highlight></codeline>
 <codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;copy_from&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;other&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::copy_from);</highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight></codeline>
-<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;window_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_window_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_window_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;frame_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_frame_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_frame_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;timestamp_usec&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_timestamp_usec&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_timestamp_usec&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;left_eye_openness&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_left_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_left_eye_openness&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;right_eye_openness&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_right_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_right_eye_openness&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="42"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"></highlight></codeline>
-<codeline lineno="44"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeBase::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_other.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>window_id<sp/>=<sp/>p_other-&gt;window_id;</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>frame_id<sp/>=<sp/>p_other-&gt;frame_id;</highlight></codeline>
-<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>timestamp_usec<sp/>=<sp/>p_other-&gt;timestamp_usec;</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>p_other-&gt;left_eye_openness;</highlight></codeline>
-<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>p_other-&gt;right_eye_openness;</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="52"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"></highlight></codeline>
-<codeline lineno="54"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGaze<sp/>---</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="55"><highlight class="normal"></highlight></codeline>
-<codeline lineno="56"><highlight class="normal">InputEventGaze::InputEventGaze()<sp/>{</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>1.0f;</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>1.0f;</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>Vector2(0,<sp/>0);</highlight></codeline>
-<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>Vector2(0,<sp/>0);</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>head_transform<sp/>=<sp/>Transform3D();</highlight></codeline>
-<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>gaze_transform<sp/>=<sp/>Transform3D();</highlight></codeline>
-<codeline lineno="63"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"></highlight></codeline>
-<codeline lineno="65"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kindref="member">InputEventGaze::get_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!p_local_to)<sp/>{</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>eye_gaze_position;</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p_local_to-&gt;get_global_transform_with_canvas().affine_inverse().xform(eye_gaze_position);</highlight></codeline>
-<codeline lineno="70"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"></highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">InputEventGaze::set_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos)<sp/>{</highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>p_pos;</highlight></codeline>
-<codeline lineno="74"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="75"><highlight class="normal"></highlight></codeline>
-<codeline lineno="76"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kindref="member">InputEventGaze::get_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!p_local_to)<sp/>{</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>nose_gaze_position;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p_local_to-&gt;get_global_transform_with_canvas().affine_inverse().xform(nose_gaze_position);</highlight></codeline>
-<codeline lineno="81"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"></highlight></codeline>
-<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">InputEventGaze::set_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos)<sp/>{</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>p_pos;</highlight></codeline>
-<codeline lineno="85"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGaze::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_eye_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;local_to&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kindref="member">InputEventGaze::get_eye_gaze</ref>,<sp/>DEFVAL(</highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">));</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_eye_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;eye_gaze&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">InputEventGaze::set_eye_gaze</ref>);</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"></highlight></codeline>
-<codeline lineno="91"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_nose_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;local_to&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kindref="member">InputEventGaze::get_nose_gaze</ref>,<sp/>DEFVAL(</highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">));</highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_nose_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;nose_gaze&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">InputEventGaze::set_nose_gaze</ref>);</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"></highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_head_pose&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" kindref="member">InputEventGaze::get_head_pose</ref>);</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_head_pose&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;head_pose&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" kindref="member">InputEventGaze::set_head_pose</ref>);</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"></highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_eye_origin&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" kindref="member">InputEventGaze::get_eye_origin</ref>);</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_eye_direction&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" kindref="member">InputEventGaze::get_eye_direction</ref>);</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"></highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_head_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;head_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kindref="member">InputEventGaze::set_head_transform</ref>);</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_head_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kindref="member">InputEventGaze::get_head_transform</ref>);</highlight></codeline>
-<codeline lineno="102"><highlight class="normal"></highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_gaze_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;gaze_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kindref="member">InputEventGaze::set_gaze_transform</ref>);</highlight></codeline>
-<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_gaze_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" kindref="member">InputEventGaze::get_gaze_transform</ref>);</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"></highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;copy_from&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;other&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGaze::copy_from);</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"></highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;head_pose&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_head_pose&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_head_pose&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;eye_origin&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_eye_origin&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR3,<sp/></highlight><highlight class="stringliteral">&quot;eye_direction&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_eye_direction&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;head_transform&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_head_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_head_transform&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;gaze_transform&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_gaze_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_gaze_transform&quot;</highlight><highlight class="normal">);</highlight></codeline>
-<codeline lineno="113"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="114"><highlight class="normal"></highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGaze::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGaze&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
-<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_other.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeBase::copy_from(p_other);</highlight></codeline>
-<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>p_other-&gt;eye_gaze_position;</highlight></codeline>
-<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>p_other-&gt;nose_gaze_position;</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>head_transform<sp/>=<sp/>p_other-&gt;head_transform;</highlight></codeline>
-<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gaze_transform<sp/>=<sp/>p_other-&gt;gaze_transform;</highlight></codeline>
-<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="123"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_right_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1adc3848db74215ffe8d35c82e3f3f677f" kindref="member">InputEventGazeBase::set_right_eye_openness</ref>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_right_eye_openness&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1a8f174a146075dcd7dd371f9618598257" kindref="member">InputEventGazeBase::get_right_eye_openness</ref>);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;is_face_tracked&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138" kindref="member">InputEventGazeBase::is_face_tracked</ref>);</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;copy_from&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;other&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeBase::copy_from);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;window_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_window_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_window_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;frame_id&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_frame_id&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_frame_id&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;timestamp_usec&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_timestamp_usec&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_timestamp_usec&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;left_eye_openness&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_left_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_left_eye_openness&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::FLOAT,<sp/></highlight><highlight class="stringliteral">&quot;right_eye_openness&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_right_eye_openness&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_right_eye_openness&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="47"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeBase::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/><sp/><sp/>ERR_FAIL_COND_MSG(p_other.is_null(),<sp/></highlight><highlight class="stringliteral">&quot;Cannot<sp/>copy<sp/>from<sp/>null<sp/>event.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/>window_id<sp/>=<sp/>p_other-&gt;window_id;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/>frame_id<sp/>=<sp/>p_other-&gt;frame_id;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>timestamp_usec<sp/>=<sp/>p_other-&gt;timestamp_usec;</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>p_other-&gt;left_eye_openness;</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>p_other-&gt;right_eye_openness;</highlight></codeline>
+<codeline lineno="56"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGaze<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal">InputEventGaze::InputEventGaze()<sp/>{</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>1.0f;</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>1.0f;</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>Vector2(NAN,<sp/>NAN);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>Vector2(NAN,<sp/>NAN);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>head_transform<sp/>=<sp/>Transform3D();</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_transform<sp/>=<sp/>Transform3D();</highlight></codeline>
+<codeline lineno="67"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"></highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/>Vector2<sp/>_clamp_to_viewport(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to)<sp/>{</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!std::isfinite(p_pos.x)<sp/>||<sp/>!std::isfinite(p_pos.y))<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(NAN,<sp/>NAN);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>vp_size(1152.0f,<sp/>648.0f);</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_local_to<sp/>&amp;&amp;<sp/>p_local_to-&gt;get_viewport())<sp/>{</highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vp_size<sp/>=<sp/>p_local_to-&gt;get_viewport()-&gt;get_visible_rect().size;</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/>{</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SceneTree<sp/>*st<sp/>=<sp/>Object::cast_to&lt;SceneTree&gt;(Engine::get_singleton()-&gt;get_main_loop());</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(st<sp/>&amp;&amp;<sp/>st-&gt;get_root())<sp/>{</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vp_size<sp/>=<sp/>st-&gt;get_root()-&gt;get_visible_rect().size;</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(GazeServer::get_singleton())<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>vp_size<sp/>=<sp/>GazeServer::get_singleton()-&gt;get_canonical_viewport_size();</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(vp_size.x<sp/>&gt;<sp/>0.0f<sp/>&amp;&amp;<sp/>vp_size.y<sp/>&gt;<sp/>0.0f)<sp/>{</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(</highlight></codeline>
+<codeline lineno="86"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::clamp(p_pos.x,<sp/>0.0f,<sp/>vp_size.x<sp/>-<sp/>1e-4f),</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>std::clamp(p_pos.y,<sp/>0.0f,<sp/>vp_size.y<sp/>-<sp/>1e-4f)</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p_pos;</highlight></codeline>
+<codeline lineno="91"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal"></highlight></codeline>
+<codeline lineno="93"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a57abd8026a2b533ffc6d318d53b99bac" kindref="member">InputEventGaze::get_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to,<sp/>ClampingMode<sp/>p_clamping)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>should_clamp<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_clamping<sp/>==<sp/>CLAMPING_CLAMPED)<sp/>{</highlight></codeline>
+<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>should_clamp<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_clamping<sp/>==<sp/>CLAMPING_DEFAULT)<sp/>{</highlight></codeline>
+<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/>GazeServer::get_singleton();</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>should_clamp<sp/>=<sp/>gs<sp/>?<sp/>gs-&gt;is_clamping_by_default()<sp/>:<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>pos<sp/>=<sp/>should_clamp<sp/>?<sp/>_clamp_to_viewport(eye_gaze_position,<sp/>p_local_to)<sp/>:<sp/>eye_gaze_position;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!p_local_to<sp/>||<sp/>!pos.is_finite())<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pos;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p_local_to-&gt;get_global_transform_with_canvas().affine_inverse().xform(pos);</highlight></codeline>
+<codeline lineno="108"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">InputEventGaze::set_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos)<sp/>{</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>p_pos;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1abc5289461caf2837837e3ecdbbe2f898" kindref="member">InputEventGaze::get_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to,<sp/>ClampingMode<sp/>p_clamping)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>should_clamp<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_clamping<sp/>==<sp/>CLAMPING_CLAMPED)<sp/>{</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>should_clamp<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_clamping<sp/>==<sp/>CLAMPING_DEFAULT)<sp/>{</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GazeServer<sp/>*gs<sp/>=<sp/>GazeServer::get_singleton();</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>should_clamp<sp/>=<sp/>gs<sp/>?<sp/>gs-&gt;is_clamping_by_default()<sp/>:<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>pos<sp/>=<sp/>should_clamp<sp/>?<sp/>_clamp_to_viewport(nose_gaze_position,<sp/>p_local_to)<sp/>:<sp/>nose_gaze_position;</highlight></codeline>
 <codeline lineno="124"><highlight class="normal"></highlight></codeline>
-<codeline lineno="125"><highlight class="normal">String<sp/>InputEventGaze::as_text()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>String(</highlight><highlight class="stringliteral">&quot;InputEventGaze:<sp/>eye=&quot;</highlight><highlight class="normal">)<sp/>+<sp/>String(eye_gaze_position)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>nose=&quot;</highlight><highlight class="normal"><sp/>+<sp/>String(nose_gaze_position)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>open=(&quot;</highlight><highlight class="normal"><sp/>+<sp/>String::num(left_eye_openness,<sp/>2)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>String::num(right_eye_openness,<sp/>2)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="127"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"></highlight></codeline>
-<codeline lineno="129"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGazeMissing<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!p_local_to<sp/>||<sp/>!pos.is_finite())<sp/>{</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>pos;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>p_local_to-&gt;get_global_transform_with_canvas().affine_inverse().xform(pos);</highlight></codeline>
+<codeline lineno="129"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="130"><highlight class="normal"></highlight></codeline>
-<codeline lineno="131"><highlight class="normal">InputEventGazeMissing::InputEventGazeMissing()<sp/>{</highlight></codeline>
-<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
-<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
-<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>reason<sp/>=<sp/>REASON_NO_FACE_DETECTED;</highlight></codeline>
-<codeline lineno="135"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="136"><highlight class="normal"></highlight></codeline>
-<codeline lineno="137"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeMissing::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_reason&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;reason&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" kindref="member">InputEventGazeMissing::set_reason</ref>);</highlight></codeline>
-<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_reason&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" kindref="member">InputEventGazeMissing::get_reason</ref>);</highlight></codeline>
-<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;copy_from&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;other&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGazeMissing::copy_from);</highlight></codeline>
-<codeline lineno="141"><highlight class="normal"></highlight></codeline>
-<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;reason&quot;</highlight><highlight class="normal">,<sp/>PROPERTY_HINT_ENUM,<sp/></highlight><highlight class="stringliteral">&quot;NoFaceDetected,Occluded,OutOfBounds,SensorInactive&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_reason&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_reason&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">InputEventGaze::set_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos)<sp/>{</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>p_pos;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGaze::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(CLAMPING_FREE);</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(CLAMPING_CLAMPED);</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(CLAMPING_DEFAULT);</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"></highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_eye_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;local_to&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;clamping&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a57abd8026a2b533ffc6d318d53b99bac" kindref="member">InputEventGaze::get_eye_gaze</ref>,<sp/>DEFVAL(</highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">),<sp/>DEFVAL(CLAMPING_DEFAULT));</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_eye_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;eye_gaze&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">InputEventGaze::set_eye_gaze</ref>);</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;_get_eye_gaze_property&quot;</highlight><highlight class="normal">),<sp/>&amp;InputEventGaze::_get_eye_gaze_property);</highlight></codeline>
 <codeline lineno="143"><highlight class="normal"></highlight></codeline>
-<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_NO_FACE_DETECTED);</highlight></codeline>
-<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_OCCLUDED);</highlight></codeline>
-<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_OUT_OF_BOUNDS);</highlight></codeline>
-<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_SENSOR_INACTIVE);</highlight></codeline>
-<codeline lineno="148"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_nose_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;local_to&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;clamping&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1abc5289461caf2837837e3ecdbbe2f898" kindref="member">InputEventGaze::get_nose_gaze</ref>,<sp/>DEFVAL(</highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">),<sp/>DEFVAL(CLAMPING_DEFAULT));</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_nose_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;nose_gaze&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">InputEventGaze::set_nose_gaze</ref>);</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_head_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;head_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kindref="member">InputEventGaze::set_head_transform</ref>);</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_head_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kindref="member">InputEventGaze::get_head_transform</ref>);</highlight></codeline>
 <codeline lineno="149"><highlight class="normal"></highlight></codeline>
-<codeline lineno="150"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeMissing::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeMissing&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
-<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_other.is_valid())<sp/>{</highlight></codeline>
-<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeBase::copy_from(p_other);</highlight></codeline>
-<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reason<sp/>=<sp/>p_other-&gt;reason;</highlight></codeline>
-<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="155"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="156"><highlight class="normal"></highlight></codeline>
-<codeline lineno="157"><highlight class="normal">String<sp/>InputEventGazeMissing::as_text()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>String(</highlight><highlight class="stringliteral">&quot;InputEventGazeMissing:<sp/>reason=&quot;</highlight><highlight class="normal">)<sp/>+<sp/>String::num_int64(reason);</highlight></codeline>
-<codeline lineno="159"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="160"><highlight class="normal"></highlight></codeline>
-<codeline lineno="161"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_eye_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;eye_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a762e1a352ab6800a3a49267051ed3cfc" kindref="member">InputEventGaze::set_eye_transform</ref>);</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_eye_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1ad9b62e2ef70da9a4302b398e038188ac" kindref="member">InputEventGaze::get_eye_transform</ref>);</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"></highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_gaze_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;gaze_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kindref="member">InputEventGaze::set_gaze_transform</ref>);</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_gaze_transform&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" kindref="member">InputEventGaze::get_gaze_transform</ref>);</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::VECTOR2,<sp/></highlight><highlight class="stringliteral">&quot;eye_gaze&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_eye_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;_get_eye_gaze_property&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;head_transform&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_head_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_head_transform&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;eye_transform&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_eye_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_eye_transform&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::TRANSFORM3D,<sp/></highlight><highlight class="stringliteral">&quot;gaze_transform&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_gaze_transform&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_gaze_transform&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="160"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"></highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGaze::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/>ERR_FAIL_COND_MSG(p_other.is_null(),<sp/></highlight><highlight class="stringliteral">&quot;Cannot<sp/>copy<sp/>from<sp/>null<sp/>event.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGaze&gt;<sp/>other_gaze<sp/>=<sp/>p_other;</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/>ERR_FAIL_COND_MSG(other_gaze.is_null(),<sp/></highlight><highlight class="stringliteral">&quot;Cannot<sp/>copy<sp/>InputEventGaze<sp/>from<sp/>incompatible<sp/>event<sp/>type.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGazeBase::copy_from(p_other);</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_gaze_position<sp/>=<sp/>other_gaze-&gt;eye_gaze_position;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/><sp/><sp/>nose_gaze_position<sp/>=<sp/>other_gaze-&gt;nose_gaze_position;</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/><sp/><sp/>head_transform<sp/>=<sp/>other_gaze-&gt;head_transform;</highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/><sp/><sp/>eye_transform<sp/>=<sp/>other_gaze-&gt;eye_transform;</highlight></codeline>
+<codeline lineno="171"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173"><highlight class="normal">String<sp/>InputEventGaze::as_text()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>String(</highlight><highlight class="stringliteral">&quot;InputEventGaze:<sp/>eye=&quot;</highlight><highlight class="normal">)<sp/>+<sp/>String(eye_gaze_position)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>nose=&quot;</highlight><highlight class="normal"><sp/>+<sp/>String(nose_gaze_position)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>open=(&quot;</highlight><highlight class="normal"><sp/>+<sp/>String::num(left_eye_openness,<sp/>2)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;,<sp/>&quot;</highlight><highlight class="normal"><sp/>+<sp/>String::num(right_eye_openness,<sp/>2)<sp/>+<sp/></highlight><highlight class="stringliteral">&quot;)&quot;</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="175"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"></highlight></codeline>
+<codeline lineno="177"><highlight class="normal"></highlight><highlight class="comment">//<sp/>---<sp/>InputEventGazeMissing<sp/>---</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="178"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179"><highlight class="normal">InputEventGazeMissing::InputEventGazeMissing()<sp/>{</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/>left_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/>right_eye_openness<sp/>=<sp/>0.0f;</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>reason<sp/>=<sp/>REASON_NO_FACE_DETECTED;</highlight></codeline>
+<codeline lineno="183"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"></highlight></codeline>
+<codeline lineno="185"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeMissing::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;set_reason&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;reason&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" kindref="member">InputEventGazeMissing::set_reason</ref>);</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_reason&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" kindref="member">InputEventGazeMissing::get_reason</ref>);</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"></highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/>ADD_PROPERTY(PropertyInfo(Variant::INT,<sp/></highlight><highlight class="stringliteral">&quot;reason&quot;</highlight><highlight class="normal">,<sp/>PROPERTY_HINT_ENUM,<sp/></highlight><highlight class="stringliteral">&quot;NoFaceDetected,Occluded,OutOfBounds,SensorInactive&quot;</highlight><highlight class="normal">),<sp/></highlight><highlight class="stringliteral">&quot;set_reason&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;get_reason&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"></highlight></codeline>
+<codeline lineno="191"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_NO_FACE_DETECTED);</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_OCCLUDED);</highlight></codeline>
+<codeline lineno="193"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_OUT_OF_BOUNDS);</highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/><sp/><sp/>BIND_ENUM_CONSTANT(REASON_SENSOR_INACTIVE);</highlight></codeline>
+<codeline lineno="195"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>InputEventGazeMissing::copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/>{</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/><sp/><sp/>ERR_FAIL_COND_MSG(p_other.is_null(),<sp/></highlight><highlight class="stringliteral">&quot;Cannot<sp/>copy<sp/>from<sp/>null<sp/>event.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventGazeMissing&gt;<sp/>other_missing<sp/>=<sp/>p_other;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/>ERR_FAIL_COND_MSG(other_missing.is_null(),<sp/></highlight><highlight class="stringliteral">&quot;Cannot<sp/>copy<sp/>InputEventGazeMissing<sp/>from<sp/>incompatible<sp/>event<sp/>type.&quot;</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGazeBase::copy_from(p_other);</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/>reason<sp/>=<sp/>other_missing-&gt;reason;</highlight></codeline>
+<codeline lineno="203"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal">String<sp/>InputEventGazeMissing::as_text()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>String(</highlight><highlight class="stringliteral">&quot;InputEventGazeMissing:<sp/>reason=&quot;</highlight><highlight class="normal">)<sp/>+<sp/>String::num_int64(reason);</highlight></codeline>
+<codeline lineno="207"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"></highlight></codeline>
+<codeline lineno="209"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/input_event_gaze.cpp"/>
   </compounddef>

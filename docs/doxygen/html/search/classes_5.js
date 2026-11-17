@@ -1,19 +1,8 @@
 var searchData=
 [
-  ['gazedeviceprofile_0',['GazeDeviceProfile',['../classgodot_1_1_gaze_device_profile.html',1,'godot']]],
-  ['gazedisplaymetrics_1',['GazeDisplayMetrics',['../struct_gaze_1_1_gaze_display_metrics.html',1,'Gaze']]],
-  ['gazedisplayserver_2',['GazeDisplayServer',['../classgodot_1_1_gaze_display_server.html',1,'godot']]],
-  ['gazeeventfactory_3',['GazeEventFactory',['../classgodot_1_1_gaze_event_factory.html',1,'godot']]],
-  ['gazeframe_4',['GazeFrame',['../classgodot_1_1_gaze_frame.html',1,'godot']]],
-  ['gazeframedata_5',['GazeFrameData',['../struct_gaze_1_1_gaze_frame_data.html',1,'Gaze']]],
-  ['gazemodel_6',['GazeModel',['../class_gaze_1_1_gaze_model.html',1,'Gaze']]],
-  ['gazepipelineconfig_7',['GazePipelineConfig',['../classgodot_1_1_gaze_pipeline_config.html',1,'godot']]],
-  ['gazerect_8',['GazeRect',['../struct_gaze_1_1_gaze_rect.html',1,'Gaze']]],
-  ['gazeserver_9',['GazeServer',['../classgodot_1_1_gaze_server.html',1,'godot']]],
-  ['gazeservereventfactory_10',['GazeServerEventFactory',['../classgodot_1_1_gaze_server_event_factory.html',1,'godot']]],
-  ['gazeserverimpl_11',['GazeServerImpl',['../structgodot_1_1_gaze_server_impl.html',1,'godot']]],
-  ['gazetracker_12',['GazeTracker',['../classgodot_1_1_gaze_tracker.html',1,'godot']]],
-  ['gazetrackingpipeline_13',['GazeTrackingPipeline',['../class_gaze_1_1_gaze_tracking_pipeline.html',1,'Gaze']]],
-  ['gazewindowrect_14',['GazeWindowRect',['../struct_gaze_1_1_gaze_window_rect.html',1,'Gaze']]],
-  ['godotcamera_15',['GodotCamera',['../class_gaze_1_1_godot_camera.html',1,'Gaze']]]
+  ['faceinfo_0',['FaceInfo',['../structgodot_1_1_gaze_server_impl_1_1_face_info.html',1,'godot::GazeServerImpl']]],
+  ['facemodelgeometry_1',['FaceModelGeometry',['../class_gaze_1_1_face_model_geometry.html',1,'Gaze']]],
+  ['facepipeline_2',['FacePipeline',['../class_gaze_1_1_face_pipeline.html',1,'Gaze']]],
+  ['fillaccumulator_3',['FillAccumulator',['../class_gaze_1_1_fill_accumulator.html',1,'Gaze::FillAccumulator'],['../classgodot_1_1_fill_accumulator.html',1,'godot::FillAccumulator']]],
+  ['frame_4',['Frame',['../struct_gaze_1_1_frame.html',1,'Gaze']]]
 ];

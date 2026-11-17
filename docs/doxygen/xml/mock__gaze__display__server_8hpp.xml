@@ -3,6 +3,8 @@
   <compounddef id="mock__gaze__display__server_8hpp" kind="file" language="C++">
     <compoundname>mock_gaze_display_server.hpp</compoundname>
     <includes refid="gaze__display__server_8hpp" local="yes">gaze_display_server.hpp</includes>
+    <includes local="no">godot_cpp/classes/input_event.hpp</includes>
+    <includes local="no">godot_cpp/variant/typed_array.hpp</includes>
     <includedby refid="mock__gaze__display__server_8cpp" local="yes">src/godot/mock_gaze_display_server.cpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
     <incdepgraph>
@@ -23,12 +25,22 @@
         <link refid="mock__gaze__display__server_8hpp"/>
         <childnode refid="2" relation="include">
         </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>godot_cpp/classes/input_event.hpp</label>
       </node>
       <node id="3">
         <label>godot_cpp/classes/object.hpp</label>
       </node>
       <node id="6">
         <label>godot_cpp/variant/rect2i.hpp</label>
+      </node>
+      <node id="8">
+        <label>godot_cpp/variant/typed_array.hpp</label>
       </node>
       <node id="4">
         <label>godot_cpp/variant/vector2.hpp</label>
@@ -47,38 +59,53 @@
 <codeline lineno="1"><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="2"><highlight class="normal"></highlight></codeline>
 <codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;gaze_display_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input_event.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/typed_array.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="6"><highlight class="normal"></highlight></codeline>
-<codeline lineno="7" refid="classgodot_1_1_mock_gaze_display_server" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">MockGazeDisplayServer<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>GazeDisplayServer<sp/>{</highlight></codeline>
-<codeline lineno="8"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(MockGazeDisplayServer,<sp/>GazeDisplayServer);</highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight></codeline>
-<codeline lineno="10"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="11"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mock_screen_size_mm{301.59,<sp/>188.49};</highlight></codeline>
-<codeline lineno="12"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mock_screen_size_pixels{1512.0,<sp/>982.0};</highlight></codeline>
-<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>Rect2i<sp/>mock_window_rect{Vector2i(100,<sp/>100),<sp/>Vector2i(1312,<sp/>782)};</highlight></codeline>
-<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>mock_screen_scale<sp/>=<sp/>2.0;</highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight></codeline>
-<codeline lineno="16"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
-<codeline lineno="18"><highlight class="normal"></highlight></codeline>
-<codeline lineno="19"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/>MockGazeDisplayServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~MockGazeDisplayServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ab5a25d0e4dba60296abd18d7544345a2" kindref="member">get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a5855a513786da0d611d1de43630ca20c" kindref="member">get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ae5e5f53314ead3fe8521c60656625769" kindref="member">get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a4e2f80ac63e79325e85a531e98f31549" kindref="member">get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Rect2i<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ac558a079342a017ee92b0db0c155a0ba" kindref="member">get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window<sp/>=<sp/>0)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_size_mm(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_mm);</highlight></codeline>
-<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_size_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_pixels);</highlight></codeline>
-<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_window_rect_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Rect2i<sp/>&amp;p_rect);</highlight></codeline>
-<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_scale(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_scale);</highlight></codeline>
-<codeline lineno="33"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9" refid="classgodot_1_1_mock_gaze_display_server" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">MockGazeDisplayServer<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>GazeDisplayServer<sp/>{</highlight></codeline>
+<codeline lineno="10"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(MockGazeDisplayServer,<sp/>GazeDisplayServer);</highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="13"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mock_screen_size_mm{301.59,<sp/>188.49};</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mock_screen_size_pixels{1512.0,<sp/>982.0};</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>Rect2i<sp/>mock_window_rect{Vector2i(100,<sp/>100),<sp/>Vector2i(1312,<sp/>782)};</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>mock_screen_scale<sp/>=<sp/>2.0;</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mock_mouse_position{0.0,<sp/>0.0};</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/><sp/><sp/>int64_t<sp/>mock_mouse_button_state{0};</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/>TypedArray&lt;InputEvent&gt;<sp/>emitted_mouse_events;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/><sp/><sp/>MockGazeDisplayServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~MockGazeDisplayServer()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ab5a25d0e4dba60296abd18d7544345a2" kindref="member">get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a5855a513786da0d611d1de43630ca20c" kindref="member">get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ae5e5f53314ead3fe8521c60656625769" kindref="member">get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a4e2f80ac63e79325e85a531e98f31549" kindref="member">get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen<sp/>=<sp/>-1)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Rect2i<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1ac558a079342a017ee92b0db0c155a0ba" kindref="member">get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window<sp/>=<sp/>0)<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Vector2<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a9ef33ea07836903cd2d89632344907d7" kindref="member">mouse_get_position</ref>()<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>int64_t<sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a647dcd08160452abf872d27fd364d9b2" kindref="member">mouse_get_button_state</ref>()<sp/></highlight><highlight class="keyword">const<sp/>override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a28b0a8ed5b4fa05bced562c47130fbda" kindref="member">parse_mouse_motion</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_relative,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_velocity)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_mock_gaze_display_server_1a0523728bd4967d0edcbebb7e4832bed1" kindref="member">parse_mouse_button</ref>(int64_t<sp/>p_button,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_pressed,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_size_mm(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_mm);</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_size_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_size_pixels);</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_window_rect_pixels(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Rect2i<sp/>&amp;p_rect);</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_screen_scale(</highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>p_scale);</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_mouse_position(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos);</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_mouse_button_state(int64_t<sp/>p_mask);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>TypedArray&lt;InputEvent&gt;<sp/>get_emitted_mouse_events()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>clear_emitted_mouse_events();</highlight></codeline>
+<codeline lineno="48"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/mock_gaze_display_server.hpp"/>
   </compounddef>

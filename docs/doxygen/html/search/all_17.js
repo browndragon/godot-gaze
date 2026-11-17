@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['web_20html5_20export_20guidelines_0',['Web / HTML5 Export Guidelines',['../index.html#autotoc_md15',1,'']]],
-  ['web_20platform_20layer_1',['Web Platform Layer',['../dir_0d4dde2834ed44e47b6207c19e4aac26.html#autotoc_md3',1,'']]],
-  ['web_5fbinding_5fstate_2ehpp_2',['web_binding_state.hpp',['../web__binding__state_8hpp.html',1,'']]]
+  ['native_20layer_0',['Native Layer',['../dir_f511ba0178b53c726d0a84462dac4106.html#autotoc_md2',1,'']]],
+  ['neural_20preprocessing_1',['2. Model Catalog &amp;amp; Neural Preprocessing',['../md_docs_2vision__models.html#autotoc_md100',1,'']]],
+  ['node_20gazetracker_2',['Pattern A: Declarative Scene Node (&lt;span class=&quot;tt&quot;&gt;GazeTracker&lt;/span&gt;)',['../md_docs_2lifecycle__tracking.html#autotoc_md60',1,'']]],
+  ['not_20rely_20on_20godot_20s_20displayserver_3',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]]
 ];

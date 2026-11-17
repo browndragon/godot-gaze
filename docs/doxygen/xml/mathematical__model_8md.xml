@@ -1,0 +1,238 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="mathematical__model_8md" kind="file" language="Markdown">
+    <compoundname>mathematical_model.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Gaze<sp/>Tracking<sp/>Mathematical<sp/>&amp;<sp/>Physical<sp/>Model</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>document<sp/>outlines<sp/>the<sp/>coordinate<sp/>systems,<sp/>physical<sp/>screen<sp/>mapping<sp/>projection<sp/>math,<sp/>biological<sp/>calibration<sp/>models,<sp/>and<sp/>optimization<sp/>formulation<sp/>utilized<sp/>in<sp/>`godot-gaze`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>1.<sp/>Coordinate<sp/>Systems<sp/>&amp;<sp/>Facial<sp/>Geometry</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>model<sp/>the<sp/>physical<sp/>and<sp/>inference<sp/>tracking<sp/>states,<sp/>the<sp/>engine<sp/>utilizes<sp/>five<sp/>distinct<sp/>3D<sp/>and<sp/>2D<sp/>coordinate<sp/>spaces.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">graph<sp/>TD</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>INF_FACE[&quot;Canonical<sp/>35-pt<sp/>3D<sp/>Face<sp/>Model&quot;]<sp/>--<sp/>&quot;Head<sp/>Pose<sp/>(rvec,<sp/>tvec)&quot;<sp/>--&gt;<sp/>INF_CAM[&quot;Inference<sp/>Camera<sp/>Space<sp/>(OpenCV)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>INF_CAM<sp/>--<sp/>&quot;180°<sp/>Pitch<sp/>(X-axis<sp/>Flip)&quot;<sp/>--&gt;<sp/>GG_CAM[&quot;Godot<sp/>Camera<sp/>Space&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GG_CAM<sp/>--<sp/>&quot;Camera<sp/>Offset<sp/>(O_cam)<sp/>&amp;<sp/>Tilt<sp/>(theta)&quot;<sp/>--&gt;<sp/>DISP[&quot;Physical<sp/>Display<sp/>Space<sp/>(mm)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>DISP<sp/>--<sp/>&quot;Pixel<sp/>Pitch<sp/>(s_x,<sp/>s_y)<sp/>&amp;<sp/>Window<sp/>Offset&quot;<sp/>--&gt;<sp/>WIN[&quot;OS<sp/>Window<sp/>Space<sp/>(lpix)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>WIN<sp/>--<sp/>&quot;Viewport<sp/>Canvas<sp/>Transform<sp/>(M_canvas^-1)&quot;<sp/>--&gt;<sp/>CANV[&quot;Godot<sp/>Viewport<sp/>Canvas<sp/>Space<sp/>(2D)&quot;]</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.1.<sp/>Inference<sp/>Camera<sp/>Space<sp/>(OpenCV<sp/>Standard)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Origin<sp/>($C_{\text{inf}}$)**:<sp/>Optical<sp/>center<sp/>of<sp/>the<sp/>camera<sp/>lens.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$X_{\text{inf}}$-axis**:<sp/>Horizontal,<sp/>pointing<sp/>right<sp/>from<sp/>the<sp/>camera&apos;s<sp/>perspective<sp/>(subject&apos;s<sp/>left).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$Y_{\text{inf}}$-axis**:<sp/>Vertical,<sp/>pointing<sp/>down.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$Z_{\text{inf}}$-axis**:<sp/>Optical<sp/>axis,<sp/>pointing<sp/>forward<sp/>into<sp/>the<sp/>camera&apos;s<sp/>view<sp/>cone<sp/>(towards<sp/>the<sp/>subject).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.2.<sp/>Canonical<sp/>35-Point<sp/>Anthropometric<sp/>3D<sp/>Face<sp/>Model</highlight></codeline>
+<codeline><highlight class="normal">Rather<sp/>than<sp/>a<sp/>coarse<sp/>5-point<sp/>bounding<sp/>polygon,<sp/>`godot-gaze`<sp/>uses<sp/>a<sp/>35-point<sp/>anthropometric<sp/>3D<sp/>face<sp/>model<sp/>defined<sp/>directly<sp/>in<sp/>the<sp/>camera<sp/>rest<sp/>frame<sp/>(+X<sp/>right,<sp/>+Y<sp/>down,<sp/>+Z<sp/>forward):</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Points<sp/>0–3**:<sp/>Inner<sp/>and<sp/>outer<sp/>eye<sp/>canthi<sp/>for<sp/>left<sp/>and<sp/>right<sp/>eyes.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Points<sp/>4–15**:<sp/>Eyebrow<sp/>contour<sp/>points.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Points<sp/>16–22**:<sp/>Nose<sp/>bridge,<sp/>crest,<sp/>and<sp/>subnasale.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Points<sp/>23–34**:<sp/>Upper/lower<sp/>vermilion<sp/>lip<sp/>borders<sp/>and<sp/>mouth<sp/>oral<sp/>commissures.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.3.<sp/>Godot<sp/>Camera<sp/>Space<sp/>(Standard<sp/>Graphics<sp/>Camera<sp/>Space)</highlight></codeline>
+<codeline><highlight class="normal">Aligned<sp/>with<sp/>standard<sp/>right-handed<sp/>graphics<sp/>conventions:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Origin<sp/>($C_{\text{cam}}$)**:<sp/>Optical<sp/>center<sp/>of<sp/>the<sp/>camera<sp/>lens.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$X_{\text{cam}}$-axis**:<sp/>Horizontal,<sp/>pointing<sp/>right<sp/>from<sp/>the<sp/>camera&apos;s<sp/>perspective.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$Y_{\text{cam}}$-axis**:<sp/>Vertical,<sp/>pointing<sp/>up.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**$Z_{\text{cam}}$-axis**:<sp/>Perpendicular<sp/>to<sp/>the<sp/>display,<sp/>pointing<sp/>**backward**<sp/>out<sp/>of<sp/>the<sp/>camera<sp/>(away<sp/>from<sp/>the<sp/>user).<sp/>Thus,<sp/>the<sp/>user<sp/>is<sp/>located<sp/>at<sp/>negative<sp/>Z<sp/>($z_{\text{cam}}<sp/>&lt;<sp/>0$).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Mapping<sp/>from<sp/>Inference<sp/>Camera<sp/>Space**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$X_{\text{cam}}<sp/>=<sp/>X_{\text{inf}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$Y_{\text{cam}}<sp/>=<sp/>-Y_{\text{inf}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$Z_{\text{cam}}<sp/>=<sp/>-Z_{\text{inf}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.4.<sp/>Head<sp/>Pose<sp/>PnP<sp/>Solvers<sp/>(SQPnP<sp/>&amp;<sp/>Levenberg-Marquardt)</highlight></codeline>
+<codeline><highlight class="normal">Given<sp/>35<sp/>detected<sp/>2D<sp/>landmarks<sp/>$\{p_i<sp/>=<sp/>(u_i,<sp/>v_i)\}$<sp/>and<sp/>corresponding<sp/>3D<sp/>canonical<sp/>model<sp/>points<sp/>$\{P_i<sp/>=<sp/>(X_i,<sp/>Y_i,<sp/>Z_i)\}$,<sp/>head<sp/>pose<sp/>optimization<sp/>computes<sp/>$(r_{\text{vec}},<sp/>t_{\text{vec}})$:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**SQPnP<sp/>(Sequential<sp/>Quadratic<sp/>Programming<sp/>PnP):**<sp/>Computes<sp/>globally<sp/>optimal<sp/>non-iterative<sp/>polynomial<sp/>pose<sp/>estimates.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Levenberg-Marquardt<sp/>Iterative<sp/>Solver:**<sp/>Refines<sp/>pose<sp/>parameters<sp/>by<sp/>minimizing<sp/>re-projection<sp/>residuals:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$\min_{r,<sp/>t}<sp/>\sum_{i=1}^{35}<sp/>\left\|<sp/>p_i<sp/>-<sp/>\pi(K,<sp/>R(r)<sp/>P_i<sp/>+<sp/>t)<sp/>\right\|^2$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>where<sp/>$K$<sp/>is<sp/>the<sp/>camera<sp/>intrinsic<sp/>matrix<sp/>and<sp/>$\pi(\cdot)$<sp/>is<sp/>the<sp/>perspective<sp/>projection.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.5.<sp/>Continuous<sp/>Head<sp/>Roll<sp/>Un-Rotation<sp/>Feedback<sp/>Loop</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>head<sp/>roll<sp/>$\phi_{\text{roll}}<sp/>\neq<sp/>0$<sp/>is<sp/>detected:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>The<sp/>working<sp/>image<sp/>frame<sp/>is<sp/>counter-rotated<sp/>by<sp/>$-\phi_{\text{roll}}$<sp/>so<sp/>the<sp/>face<sp/>is<sp/>upright<sp/>for<sp/>the<sp/>ADAS<sp/>landmark<sp/>regression<sp/>network.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>After<sp/>landmark<sp/>extraction,<sp/>landmarks<sp/>and<sp/>PnP<sp/>pose<sp/>are<sp/>rotated<sp/>back<sp/>to<sp/>original<sp/>camera<sp/>space<sp/>via:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$R_{\text{final}}<sp/>=<sp/>R_Z(-\phi_{\text{roll}})<sp/>\cdot<sp/>R_{\text{upright}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$t_{\text{final}}<sp/>=<sp/>R_Z(-\phi_{\text{roll}})<sp/>\cdot<sp/>t_{\text{upright}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.6.<sp/>Physical<sp/>Display<sp/>Space<sp/>(Monitor<sp/>Local<sp/>Space)</highlight></codeline>
+<codeline><highlight class="normal">This<sp/>centered<sp/>millimeter<sp/>coordinate<sp/>system<sp/>defines<sp/>symmetric<sp/>screen<sp/>planes:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Origin<sp/>($S$)**:<sp/>Center<sp/>of<sp/>the<sp/>physical<sp/>display/monitor<sp/>screen.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**X-axis**:<sp/>Horizontal,<sp/>pointing<sp/>right<sp/>(in<sp/>mm).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Y-axis**:<sp/>Vertical,<sp/>pointing<sp/>down<sp/>(in<sp/>mm).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Z-axis**:<sp/>Perpendicular<sp/>to<sp/>the<sp/>screen<sp/>plane,<sp/>pointing<sp/>toward<sp/>the<sp/>user<sp/>(in<sp/>mm).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>flat<sp/>display<sp/>plane<sp/>is<sp/>defined<sp/>by<sp/>the<sp/>equation<sp/>$z_{\text{screen}}<sp/>=<sp/>0$.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.7.<sp/>OS<sp/>Window<sp/>Space<sp/>(Logical<sp/>Pixels<sp/>/<sp/>`lpix`)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Origin**:<sp/>Top-left<sp/>corner<sp/>of<sp/>the<sp/>application&apos;s<sp/>OS<sp/>window<sp/>client<sp/>area.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Units**:<sp/>Logical<sp/>screen<sp/>pixels<sp/>(`lpix`<sp/>/<sp/>points<sp/>/<sp/>CSS<sp/>pixels),<sp/>governed<sp/>authoritatively<sp/>by<sp/>`GazeDisplayServer`<sp/>(see<sp/>[architecture.md<sp/>Section<sp/>7](architecture.md#7-gazedisplayserver--platform-windowing-abstraction)).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Platform<sp/>Invariance**:<sp/>On<sp/>Retina,<sp/>HiDPI,<sp/>and<sp/>multi-monitor<sp/>setups,<sp/>`GazeDisplayServer`<sp/>guarantees<sp/>that<sp/>`get_screen_size_pixels()`,<sp/>`get_window_rect_pixels()`,<sp/>and<sp/>`mouse_get_position()`<sp/>operate<sp/>in<sp/>identical<sp/>logical<sp/>units.<sp/>Spatial<sp/>projection<sp/>math<sp/>maintains<sp/>1:1<sp/>scale<sp/>invariance<sp/>by<sp/>working<sp/>exclusively<sp/>in<sp/>`lpix`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.8.<sp/>Godot<sp/>Viewport<sp/>Canvas<sp/>2D<sp/>Space</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Origin**:<sp/>Top-left<sp/>corner<sp/>of<sp/>the<sp/>Godot<sp/>Viewport<sp/>2D<sp/>drawing<sp/>canvas.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Units**:<sp/>Virtual<sp/>canvas<sp/>coordinates<sp/>used<sp/>by<sp/>`Control`<sp/>nodes,<sp/>2D<sp/>nodes,<sp/>and<sp/>`_draw()`<sp/>methods.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Transformation<sp/>Pipeline**:<sp/>To<sp/>convert<sp/>an<sp/>OS<sp/>Window<sp/>coordinate<sp/>$\mathbf{p}_{\text{win}}<sp/>\in<sp/>\text{lpix}$<sp/>to<sp/>Canvas<sp/>space<sp/>$\mathbf{p}_{\text{canvas}}$:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>1.<sp/>Convert<sp/>window<sp/>logical<sp/>pixels<sp/>to<sp/>window<sp/>physical<sp/>framebuffer<sp/>pixels<sp/>using<sp/>screen<sp/>scale<sp/>factor<sp/>$S<sp/>=<sp/>\text{GazeDisplayServer.get\_screen\_scale()}$:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$\mathbf{p}_{\text{phys}}<sp/>=<sp/>\mathbf{p}_{\text{win}}<sp/>\cdot<sp/>S$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>2.<sp/>Invert<sp/>the<sp/>Viewport&apos;s<sp/>affine<sp/>transformation<sp/>matrix<sp/>$M_{\text{canvas}}<sp/>=<sp/>\text{Viewport.get\_final\_transform()}$:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$\mathbf{p}_{\text{canvas}}<sp/>=<sp/>M_{\text{canvas}}^{-1}<sp/>\cdot<sp/>\mathbf{p}_{\text{phys}}$$</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Closed-Loop<sp/>Pointer<sp/>Consistency**:<sp/>For<sp/>mouse-gaze<sp/>emulation,<sp/>the<sp/>synthetic<sp/>camera-space<sp/>gaze<sp/>target<sp/>$(X_s,<sp/>Y_s)$<sp/>projects<sp/>through<sp/>`ProjectionEngine`<sp/>directly<sp/>to<sp/>$\mathbf{p}_{\text{win}}$,<sp/>guaranteeing<sp/>that<sp/>$\mathbf{p}_{\text{canvas}}$<sp/>matches<sp/>the<sp/>native<sp/>Godot<sp/>mouse<sp/>cursor<sp/>with<sp/>zero<sp/>mathematical<sp/>divergence.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>2.<sp/>Parameterization<sp/>&amp;<sp/>Scale<sp/>Invariance</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Instead<sp/>of<sp/>treating<sp/>total<sp/>monitor<sp/>size<sp/>as<sp/>an<sp/>independent<sp/>parameter,<sp/>we<sp/>parameterize<sp/>the<sp/>display<sp/>using<sp/>the<sp/>display<sp/>**Pixel<sp/>Size**<sp/>(pixel<sp/>pitch)<sp/>in<sp/>millimeters:</highlight></codeline>
+<codeline><highlight class="normal">$$\mathbf{s}_{\text{pixel\_size}}<sp/>=<sp/>(s_x,<sp/>s_y)<sp/>\quad<sp/>\text{[mm/pixel]}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>a<sp/>display<sp/>with<sp/>hardware<sp/>resolution<sp/>$(W_{\text{pixels}},<sp/>H_{\text{pixels}})$,<sp/>the<sp/>physical<sp/>dimensions<sp/>of<sp/>the<sp/>monitor<sp/>in<sp/>millimeters<sp/>are<sp/>dynamically<sp/>derived:</highlight></codeline>
+<codeline><highlight class="normal">$$W_{\text{mm}}<sp/>=<sp/>W_{\text{pixels}}<sp/>\cdot<sp/>s_x$$</highlight></codeline>
+<codeline><highlight class="normal">$$H_{\text{mm}}<sp/>=<sp/>H_{\text{pixels}}<sp/>\cdot<sp/>s_y$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>formulation<sp/>is<sp/>**scale-invariant**:<sp/>if<sp/>the<sp/>window<sp/>size,<sp/>window<sp/>position,<sp/>or<sp/>screen<sp/>resolution<sp/>change<sp/>(e.g.,<sp/>entering<sp/>fullscreen,<sp/>resizing,<sp/>or<sp/>switching<sp/>displays),<sp/>the<sp/>physical<sp/>pixel<sp/>pitch<sp/>$s_x,<sp/>s_y$<sp/>remains<sp/>constant.<sp/>This<sp/>allows<sp/>the<sp/>system<sp/>to<sp/>scale<sp/>physical<sp/>screen<sp/>coordinate<sp/>transformations<sp/>dynamically<sp/>without<sp/>introducing<sp/>projection<sp/>errors.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>3.<sp/>Physical<sp/>Geometry<sp/>&amp;<sp/>Ray-Plane<sp/>Projection</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Let<sp/>the<sp/>camera&apos;s<sp/>physical<sp/>position<sp/>in<sp/>Physical<sp/>Display<sp/>Space<sp/>be<sp/>configured<sp/>as:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Camera<sp/>Offset<sp/>($O_{\text{cam}}$)**:<sp/>Vector<sp/>$(x_{\text{off}},<sp/>y_{\text{off}},<sp/>z_{\text{off}})$<sp/>in<sp/>mm.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Camera<sp/>Tilt<sp/>($\theta$)**:<sp/>Downward<sp/>tilt<sp/>angle<sp/>in<sp/>degrees<sp/>about<sp/>the<sp/>camera&apos;s<sp/>local<sp/>X-axis.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>rotation<sp/>matrix<sp/>$R$<sp/>rotating<sp/>vectors<sp/>from<sp/>Camera<sp/>Space<sp/>to<sp/>Physical<sp/>Display<sp/>Space<sp/>(for<sp/>tilt<sp/>angle<sp/>$\theta$<sp/>in<sp/>radians)<sp/>is:</highlight></codeline>
+<codeline><highlight class="normal">$$R<sp/>=<sp/>R_x(\theta)<sp/>=<sp/>\begin{pmatrix}<sp/>1<sp/>&amp;<sp/>0<sp/>&amp;<sp/>0<sp/>\\<sp/>0<sp/>&amp;<sp/>\cos\theta<sp/>&amp;<sp/>-\sin\theta<sp/>\\<sp/>0<sp/>&amp;<sp/>\sin\theta<sp/>&amp;<sp/>\cos\theta<sp/>\end{pmatrix}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>any<sp/>point<sp/>$P_{\text{cam}}$<sp/>in<sp/>Camera<sp/>Space,<sp/>its<sp/>position<sp/>in<sp/>Physical<sp/>Display<sp/>Space<sp/>is:</highlight></codeline>
+<codeline><highlight class="normal">$$P_{\text{screen}}<sp/>=<sp/>R<sp/>\cdot<sp/>P_{\text{cam}}<sp/>+<sp/>O_{\text{cam}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Substituting<sp/>components:</highlight></codeline>
+<codeline><highlight class="normal">$$x_s<sp/>=<sp/>x_{\text{cam}}<sp/>+<sp/>x_{\text{off}}$$</highlight></codeline>
+<codeline><highlight class="normal">$$y_s<sp/>=<sp/>y_{\text{cam}}<sp/>\cos\theta<sp/>-<sp/>z_{\text{cam}}<sp/>\sin\theta<sp/>+<sp/>y_{\text{off}}$$</highlight></codeline>
+<codeline><highlight class="normal">$$z_s<sp/>=<sp/>y_{\text{cam}}<sp/>\sin\theta<sp/>+<sp/>z_{\text{cam}}<sp/>\cos\theta<sp/>+<sp/>z_{\text{off}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.1.<sp/>3D<sp/>Ray-Plane<sp/>Intersection</highlight></codeline>
+<codeline><highlight class="normal">A<sp/>gaze<sp/>ray<sp/>starting<sp/>at<sp/>origin<sp/>$P_{0\_\text{cam}}<sp/>=<sp/>(x_0,<sp/>y_0,<sp/>z_0)$<sp/>with<sp/>normalized<sp/>direction<sp/>vector<sp/>$V_{\text{cam}}<sp/>=<sp/>(v_x,<sp/>v_y,<sp/>v_z)$<sp/>in<sp/>Camera<sp/>Space<sp/>is<sp/>parameterized<sp/>by<sp/>$t$:</highlight></codeline>
+<codeline><highlight class="normal">$$\mathbf{p}_{\text{cam}}(t)<sp/>=<sp/>P_{0\_\text{cam}}<sp/>+<sp/>t<sp/>\cdot<sp/>V_{\text{cam}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>find<sp/>where<sp/>it<sp/>intersects<sp/>the<sp/>screen<sp/>plane,<sp/>we<sp/>project<sp/>the<sp/>ray<sp/>into<sp/>Physical<sp/>Display<sp/>Space<sp/>and<sp/>solve<sp/>for<sp/>$z_s(t)<sp/>=<sp/>0$:</highlight></codeline>
+<codeline><highlight class="normal">$$z_s(t)<sp/>=<sp/>(y_0<sp/>+<sp/>t<sp/>v_y)<sp/>\sin\theta<sp/>+<sp/>(z_0<sp/>+<sp/>t<sp/>v_z)<sp/>\cos\theta<sp/>+<sp/>z_{\text{off}}<sp/>=<sp/>0$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Solving<sp/>for<sp/>$t$:</highlight></codeline>
+<codeline><highlight class="normal">$$t<sp/>=<sp/>-<sp/>\frac{y_0<sp/>\sin\theta<sp/>+<sp/>z_0<sp/>\cos\theta<sp/>+<sp/>z_{\text{off}}}{v_y<sp/>\sin\theta<sp/>+<sp/>v_z<sp/>\cos\theta}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>$t<sp/>&lt;<sp/>0$,<sp/>the<sp/>gaze<sp/>ray<sp/>points<sp/>away<sp/>from<sp/>the<sp/>screen<sp/>(no<sp/>intersection).<sp/>Otherwise,<sp/>we<sp/>compute<sp/>the<sp/>camera-space<sp/>intersection<sp/>point:</highlight></codeline>
+<codeline><highlight class="normal">$$P_{\text{int\_cam}}<sp/>=<sp/>P_{0\_\text{cam}}<sp/>+<sp/>t<sp/>\cdot<sp/>V_{\text{cam}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.2.<sp/>Screen-Center<sp/>Virtual<sp/>Projection<sp/>Anchor<sp/>&amp;<sp/>OS<sp/>Window<sp/>Space<sp/>(Logical<sp/>Pixels)</highlight></codeline>
+<codeline><highlight class="normal">In<sp/>physical<sp/>setups,<sp/>webcams<sp/>are<sp/>mounted<sp/>on<sp/>the<sp/>top<sp/>bezel.<sp/>However,<sp/>appearance-based<sp/>neural<sp/>gaze<sp/>estimators<sp/>(e.g.<sp/>OpenVINO<sp/>ADAS-0002)<sp/>produce<sp/>compressed<sp/>pitch<sp/>angular<sp/>distributions<sp/>($\approx<sp/>\pm<sp/>5^\circ<sp/>-<sp/>8^\circ$)<sp/>for<sp/>intra-socket<sp/>eye<sp/>movements<sp/>when<sp/>the<sp/>head<sp/>is<sp/>stationary.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>projected<sp/>from<sp/>the<sp/>top<sp/>bezel<sp/>($Y<sp/>=<sp/>0$),<sp/>a<sp/>maximum<sp/>$-5^\circ$<sp/>downward<sp/>gaze<sp/>at<sp/>$500\text{<sp/>mm}$<sp/>user<sp/>distance<sp/>covers<sp/>only<sp/>$500<sp/>\cdot<sp/>\tan(5^\circ)<sp/>=<sp/>43.7\text{<sp/>mm}<sp/>\approx<sp/>218\text{<sp/>px}$,<sp/>which<sp/>physically<sp/>prevents<sp/>eye<sp/>gaze<sp/>from<sp/>ever<sp/>crossing<sp/>below<sp/>the<sp/>screen<sp/>midpoint<sp/>($Y<sp/>=<sp/>540\text{<sp/>px}$<sp/>on<sp/>a<sp/>$1080\text{p}$<sp/>monitor).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>ensure<sp/>full,<sp/>symmetric<sp/>vertical<sp/>accessibility<sp/>across<sp/>the<sp/>screen<sp/>without<sp/>requiring<sp/>synthetic<sp/>non-linear<sp/>gain<sp/>multipliers,<sp/>`godot-gaze`<sp/>anchors<sp/>the<sp/>neutral<sp/>optical<sp/>axis<sp/>to<sp/>the<sp/>**Screen<sp/>Center**<sp/>($W_{\text{lpix}}/2,<sp/>H_{\text{lpix}}/2$):</highlight></codeline>
+<codeline><highlight class="normal">$$x_{\text{lpix}}<sp/>=<sp/>\frac{W_{\text{lpix}}}{2}<sp/>+<sp/>\frac{P_{\text{int\_cam}}.x<sp/>+<sp/>x_{\text{off}}}{s_x}$$</highlight></codeline>
+<codeline><highlight class="normal">$$y_{\text{lpix}}<sp/>=<sp/>\frac{H_{\text{lpix}}}{2}<sp/>-<sp/>\frac{P_{\text{int\_cam}}.y<sp/>\cos\theta<sp/>+<sp/>P_{\text{int\_cam}}.z<sp/>\sin\theta<sp/>+<sp/>y_{\text{off}}}{s_y}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>maps<sp/>a<sp/>neutral<sp/>straight-ahead<sp/>gaze<sp/>($V_{\text{cam}}<sp/>=<sp/>(0,<sp/>0,<sp/>1)$)<sp/>to<sp/>the<sp/>center<sp/>of<sp/>the<sp/>display,<sp/>and<sp/>symmetrically<sp/>maps<sp/>the<sp/>$\pm<sp/>5^\circ$<sp/>eye<sp/>pitch<sp/>range<sp/>across<sp/>the<sp/>upper<sp/>and<sp/>lower<sp/>halves<sp/>of<sp/>the<sp/>screen<sp/>($Y<sp/>\approx<sp/>250\text{<sp/>px}<sp/>\dots<sp/>830\text{<sp/>px}$).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>application<sp/>window-local<sp/>coordinate<sp/>$\mathbf{p}_{\text{window}}<sp/>=<sp/>(x_{\text{win}},<sp/>y_{\text{win}})$<sp/>is<sp/>computed<sp/>by<sp/>subtracting<sp/>the<sp/>window<sp/>top-left<sp/>desktop<sp/>offset:</highlight></codeline>
+<codeline><highlight class="normal">$$x_{\text{win}}<sp/>=<sp/>x_{\text{lpix}}<sp/>-<sp/>\text{window\_pos.x}$$</highlight></codeline>
+<codeline><highlight class="normal">$$y_{\text{win}}<sp/>=<sp/>y_{\text{lpix}}<sp/>-<sp/>\text{window\_pos.y}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">On<sp/>HiDPI<sp/>/<sp/>Retina<sp/>displays,<sp/>all<sp/>desktop<sp/>quantities<sp/>($W_{\text{lpix}},<sp/>H_{\text{lpix}},<sp/>\text{window\_pos}$)<sp/>are<sp/>processed<sp/>in<sp/>logical<sp/>screen<sp/>points<sp/>(`lpix`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.3.<sp/>Unified<sp/>Gravity-Aware<sp/>Display<sp/>Orientation<sp/>&amp;<sp/>Side-Bezel<sp/>Geometry<sp/>($T_{\text{camera}<sp/>\to<sp/>\text{viewport}}$)</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>devices<sp/>are<sp/>rotated<sp/>into<sp/>portrait<sp/>or<sp/>landscape<sp/>orientations<sp/>($0^\circ,<sp/>90^\circ,<sp/>180^\circ,<sp/>270^\circ$),<sp/>the<sp/>physical<sp/>panel<sp/>dimensions<sp/>($W_{\text{phys}},<sp/>H_{\text{phys}}$)<sp/>and<sp/>camera<sp/>mechanical<sp/>mount<sp/>position<sp/>($\mathbf{O}_{\text{mount}}$)<sp/>remain<sp/>invariant<sp/>physical<sp/>constants<sp/>of<sp/>the<sp/>hardware<sp/>chassis.<sp/>The<sp/>device&apos;s<sp/>spatial<sp/>orientation<sp/>is<sp/>modeled<sp/>strictly<sp/>as<sp/>a<sp/>software<sp/>coordinate<sp/>mapping<sp/>$R_{\text{display}}$<sp/>between<sp/>physical<sp/>display<sp/>space<sp/>and<sp/>viewport<sp/>space:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>**Physical<sp/>Screen<sp/>Coordinate<sp/>Calculation<sp/>(Centered<sp/>Origin)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$x_{\text{disp\_mm}}<sp/>=<sp/>\frac{W_{\text{phys}}}{2}<sp/>+<sp/>P_{\text{int\_cam}}.x<sp/>+<sp/>O_{\text{mount}}.x$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$y_{\text{disp\_mm}}<sp/>=<sp/>\frac{H_{\text{phys}}}{2}<sp/>-<sp/>(P_{\text{int\_cam}}.y<sp/>\cos\theta<sp/>+<sp/>P_{\text{int\_cam}}.z<sp/>\sin\theta<sp/>+<sp/>O_{\text{mount}}.y)$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">2.<sp/>**Display<sp/>Orientation<sp/>Transformation<sp/>($R_{\text{display}}$)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>**$0^\circ$<sp/>(ORIENTATION_0<sp/>/<sp/>Standard<sp/>Upright)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$x_{\text{vp\_mm}}<sp/>=<sp/>x_{\text{disp\_mm}},<sp/>\quad<sp/>y_{\text{vp\_mm}}<sp/>=<sp/>y_{\text{disp\_mm}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>**$90^\circ$<sp/>(ORIENTATION_90<sp/>/<sp/>Clockwise<sp/>Landscape<sp/>-<sp/>Camera<sp/>on<sp/>Right<sp/>Bezel)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$x_{\text{vp\_mm}}<sp/>=<sp/>H_{\text{phys}}<sp/>-<sp/>y_{\text{disp\_mm}},<sp/>\quad<sp/>y_{\text{vp\_mm}}<sp/>=<sp/>x_{\text{disp\_mm}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>**$180^\circ$<sp/>(ORIENTATION_180<sp/>/<sp/>Inverted)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$x_{\text{vp\_mm}}<sp/>=<sp/>W_{\text{phys}}<sp/>-<sp/>x_{\text{disp\_mm}},<sp/>\quad<sp/>y_{\text{vp\_mm}}<sp/>=<sp/>H_{\text{phys}}<sp/>-<sp/>y_{\text{disp\_mm}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>**$270^\circ$<sp/>(ORIENTATION_270<sp/>/<sp/>Counter-Clockwise<sp/>Landscape<sp/>-<sp/>Camera<sp/>on<sp/>Left<sp/>Bezel)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$x_{\text{vp\_mm}}<sp/>=<sp/>y_{\text{disp\_mm}},<sp/>\quad<sp/>y_{\text{vp\_mm}}<sp/>=<sp/>W_{\text{phys}}<sp/>-<sp/>x_{\text{disp\_mm}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">3.<sp/>**Pixel<sp/>Pitch<sp/>Scaling<sp/>&amp;<sp/>Window<sp/>Offset**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$x_{\text{vp\_px}}<sp/>=<sp/>x_{\text{vp\_mm}}<sp/>\cdot<sp/>\frac{W_{\text{lpix}}}{W_{\text{vp\_mm}}}<sp/>-<sp/>\text{window\_pos.x}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>$$y_{\text{vp\_px}}<sp/>=<sp/>y_{\text{vp\_mm}}<sp/>\cdot<sp/>\frac{H_{\text{lpix}}}{H_{\text{vp\_mm}}}<sp/>-<sp/>\text{window\_pos.y}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">4.<sp/>**Gravity<sp/>Orientation<sp/>Derivation**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>`ProjectionEngine::gravity_to_orientation(Vector3<sp/>gravity)`<sp/>dynamically<sp/>maps<sp/>3D<sp/>accelerometer<sp/>readings<sp/>to<sp/>`DisplayOrientation`:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>$g_y<sp/>&lt;<sp/>-0.7<sp/>\implies<sp/>\text{ORIENTATION\_0}$<sp/>(Standard<sp/>Upright)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>$g_x<sp/>&gt;<sp/>0.7<sp/>\implies<sp/>\text{ORIENTATION\_90}$<sp/>(Landscape<sp/>Right)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>$g_y<sp/>&gt;<sp/>0.7<sp/>\implies<sp/>\text{ORIENTATION\_180}$<sp/>(Inverted)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*<sp/>$g_x<sp/>&lt;<sp/>-0.7<sp/>\implies<sp/>\text{ORIENTATION\_270}$<sp/>(Landscape<sp/>Left)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.4.<sp/>OS<sp/>Window<sp/>Space<sp/>to<sp/>Godot<sp/>Viewport<sp/>Canvas<sp/>2D<sp/>Space<sp/>(Stretch<sp/>Modes)</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>Godot<sp/>project<sp/>stretch<sp/>modes<sp/>are<sp/>configured<sp/>(e.g.,<sp/>`window/stretch/mode<sp/>=<sp/>&quot;canvas_items&quot;`<sp/>or<sp/>`&quot;viewport&quot;`<sp/>with<sp/>`aspect<sp/>=<sp/>&quot;expand&quot;`<sp/>/<sp/>`&quot;keep&quot;`),<sp/>the<sp/>2D<sp/>Viewport<sp/>Canvas<sp/>maintains<sp/>a<sp/>virtual<sp/>base<sp/>coordinate<sp/>space<sp/>that<sp/>is<sp/>scaled<sp/>and<sp/>letterboxed<sp/>relative<sp/>to<sp/>the<sp/>physical<sp/>OS<sp/>window<sp/>backing<sp/>render<sp/>buffer:</highlight></codeline>
+<codeline><highlight class="normal">$$M_{\text{canvas}}<sp/>=<sp/>\text{Viewport.get\_final\_transform()}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Because<sp/>$M_{\text{canvas}}$<sp/>transforms<sp/>from<sp/>2D<sp/>Canvas<sp/>coordinates<sp/>to<sp/>**physical<sp/>backing<sp/>render<sp/>buffer<sp/>pixels**,<sp/>mapping<sp/>an<sp/>OS<sp/>Window<sp/>coordinate<sp/>$\mathbf{p}_{\text{window}}$<sp/>(in<sp/>logical<sp/>points<sp/>`lpix`,<sp/>such<sp/>as<sp/>the<sp/>output<sp/>from<sp/>`GazeServer.project_ray_to_viewport()`)<sp/>into<sp/>2D<sp/>drawing<sp/>canvas<sp/>space<sp/>$\mathbf{p}_{\text{canvas}}$<sp/>requires<sp/>converting<sp/>logical<sp/>points<sp/>to<sp/>physical<sp/>pixels<sp/>first<sp/>via<sp/>display<sp/>scale<sp/>$s_{\text{scale}}<sp/>=<sp/>\text{DisplayServer.screen\_get\_scale()}$:</highlight></codeline>
+<codeline><highlight class="normal">$$\mathbf{p}_{\text{canvas}}<sp/>=<sp/>M_{\text{canvas}}^{-1}<sp/>\cdot<sp/>(\mathbf{p}_{\text{window}}<sp/>\cdot<sp/>s_{\text{scale}})$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*<sp/>**Windowed<sp/>Mode<sp/>($1152<sp/>\times<sp/>648$<sp/>at<sp/>$2\times$<sp/>scale,<sp/>render<sp/>target<sp/>$2304<sp/>\times<sp/>1296$)**:<sp/>$M_{\text{canvas}}$<sp/>scales<sp/>by<sp/>$2.0$.<sp/>Multiplying<sp/>by<sp/>$s_{\text{scale}}<sp/>=<sp/>2.0$<sp/>and<sp/>applying<sp/>$M_{\text{canvas}}^{-1}$<sp/>yields<sp/>$\mathbf{p}_{\text{canvas}}<sp/>=<sp/>\frac{1}{2.0}<sp/>\cdot<sp/>(\mathbf{p}_{\text{window}}<sp/>\cdot<sp/>2.0)<sp/>=<sp/>\mathbf{p}_{\text{window}}$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Fullscreen<sp/>Mode<sp/>(e.g.<sp/>$1512<sp/>\times<sp/>945\text{<sp/>pt}$<sp/>at<sp/>$2\times$<sp/>scale,<sp/>render<sp/>target<sp/>$3024<sp/>\times<sp/>1890$)**:<sp/>$M_{\text{canvas}}$<sp/>applies<sp/>a<sp/>uniform<sp/>scale<sp/>factor<sp/>$s<sp/>=<sp/>\frac{3024}{1152}<sp/>=<sp/>2.625$.<sp/>Multiplying<sp/>by<sp/>$s_{\text{scale}}<sp/>=<sp/>2.0$<sp/>maps<sp/>window<sp/>center<sp/>($756\text{<sp/>pt}$)<sp/>to<sp/>physical<sp/>render<sp/>center<sp/>($1512\text{<sp/>px}$);<sp/>applying<sp/>$M_{\text{canvas}}^{-1}$<sp/>yields<sp/>$\frac{1512}{2.625}<sp/>=<sp/>576\text{<sp/>px}$<sp/>(exact<sp/>Canvas<sp/>Center),<sp/>keeping<sp/>2D<sp/>visual<sp/>projections<sp/>centered<sp/>and<sp/>invariant<sp/>across<sp/>all<sp/>display<sp/>modes<sp/>and<sp/>window<sp/>sizes.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>4.<sp/>Biological<sp/>Angle<sp/>Kappa<sp/>&amp;<sp/>Calibration<sp/>[RETIRED]</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Personalized<sp/>biological<sp/>Angle<sp/>Kappa<sp/>($\boldsymbol{\kappa}$)<sp/>calibration<sp/>and<sp/>non-linear<sp/>multi-point<sp/>simplex<sp/>optimization<sp/>(Nelder-Mead)<sp/>were<sp/>previously<sp/>implemented<sp/>and<sp/>evaluated,<sp/>but<sp/>have<sp/>been<sp/>permanently<sp/>retired:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Noise<sp/>Floor<sp/>vs.<sp/>Anatomical<sp/>Offset**:<sp/>Anatomical<sp/>Angle<sp/>Kappa<sp/>($\approx<sp/>0.35^\circ\text{–}1.0^\circ$)<sp/>is<sp/>well<sp/>below<sp/>the<sp/>single-camera<sp/>appearance-based<sp/>neural<sp/>network<sp/>noise<sp/>floor<sp/>($\sigma<sp/>\approx<sp/>1.5^\circ\text{–}2.0^\circ$).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Model<sp/>Ocular<sp/>Eccentricity<sp/>Compression**:<sp/>Peripheral<sp/>gaze<sp/>distortions<sp/>($\pm<sp/>5^\circ$<sp/>near<sp/>screen<sp/>borders)<sp/>stem<sp/>from<sp/>appearance<sp/>model<sp/>training<sp/>distributions<sp/>(in-vehicle<sp/>driver<sp/>monitoring<sp/>where<sp/>gazes<sp/>$&gt;<sp/>10^\circ$<sp/>accompany<sp/>head<sp/>turns)<sp/>rather<sp/>than<sp/>rigid<sp/>anatomical<sp/>ocular<sp/>misalignments.<sp/>Attempting<sp/>to<sp/>fit<sp/>a<sp/>rigid<sp/>head-space<sp/>rotation<sp/>produces<sp/>hypothesis<sp/>thrashing.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Unified<sp/>Public<sp/>Contract**:<sp/>All<sp/>public<sp/>distinction<sp/>between<sp/>&quot;raw&quot;<sp/>and<sp/>&quot;calibrated&quot;<sp/>gaze<sp/>has<sp/>been<sp/>retired.<sp/>Public<sp/>APIs<sp/>provide<sp/>unified,<sp/>localized<sp/>gaze<sp/>via<sp/>`InputEventGaze.get_eye_gaze()`<sp/>and<sp/>`InputEventGaze.get_nose_gaze()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>full<sp/>historical<sp/>rationale<sp/>and<sp/>empirical<sp/>findings,<sp/>see<sp/>[Rejected<sp/>Designs<sp/>&amp;<sp/>Anti-Patterns](rejected_designs.md).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>5.<sp/>Real-Time<sp/>Depth<sp/>Triangulation<sp/>(Z<sp/>Engine)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Using<sp/>a<sp/>pinhole<sp/>camera<sp/>model,<sp/>the<sp/>distance<sp/>$Z$<sp/>from<sp/>the<sp/>camera<sp/>sensor<sp/>is<sp/>calculated<sp/>from:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Interpupillary<sp/>Distance<sp/>(IPD)**:<sp/>$63.0$<sp/>mm<sp/>(constant<sp/>average<sp/>adult).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Focal<sp/>Length<sp/>in<sp/>Pixels<sp/>($f_{\text{px}}$)**:<sp/>Screen<sp/>width<sp/>or<sp/>height<sp/>scale<sp/>multiplier.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Pixel<sp/>Distance<sp/>($d_{\text{px}}$)**:<sp/>Detected<sp/>distance<sp/>between<sp/>eye<sp/>centers<sp/>in<sp/>the<sp/>2D<sp/>frame.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">$$Z_{\text{mm}}<sp/>=<sp/>\frac{\text{IPD}_{\text{mm}}<sp/>\cdot<sp/>f_{\text{px}}}{d_{\text{px}}}$$</highlight></codeline>
+<codeline><highlight class="normal">$$Z_{\text{cm}}<sp/>=<sp/>\frac{Z_{\text{mm}}}{10.0}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>6.<sp/>Model<sp/>Sign<sp/>Conventions<sp/>(OpenVINO<sp/>ADAS-0002)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>OpenModelZoo<sp/>gaze<sp/>estimation<sp/>network<sp/>(`gaze-estimation-adas-0002`)<sp/>operates<sp/>with<sp/>distinct<sp/>input/output<sp/>coordinate<sp/>space<sp/>and<sp/>sign<sp/>conventions:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>6.1.<sp/>Input<sp/>Feature<sp/>Preprocessing</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Eye<sp/>Crop<sp/>Inputs**:<sp/>The<sp/>model<sp/>defines<sp/>its<sp/>inputs<sp/>from<sp/>the<sp/>camera/viewer&apos;s<sp/>perspective.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>`&quot;left_eye_image&quot;`<sp/>receives<sp/>the<sp/>crop<sp/>of<sp/>the<sp/>eye<sp/>appearing<sp/>on<sp/>the<sp/>**left<sp/>side<sp/>of<sp/>the<sp/>image<sp/>frame**<sp/>(which<sp/>is<sp/>the<sp/>subject&apos;s<sp/>anatomical<sp/>**right<sp/>eye**).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>`&quot;right_eye_image&quot;`<sp/>receives<sp/>the<sp/>crop<sp/>of<sp/>the<sp/>eye<sp/>appearing<sp/>on<sp/>the<sp/>**right<sp/>side<sp/>of<sp/>the<sp/>image<sp/>frame**<sp/>(the<sp/>subject&apos;s<sp/>anatomical<sp/>**left<sp/>eye**).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>*Effect*:<sp/>The<sp/>eye<sp/>crops<sp/>are<sp/>swapped<sp/>relative<sp/>to<sp/>anatomical<sp/>labeling<sp/>when<sp/>passed<sp/>to<sp/>the<sp/>model.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Head<sp/>Pose<sp/>Sign<sp/>Alignment**:<sp/>The<sp/>model<sp/>expects<sp/>input<sp/>head<sp/>pose<sp/>angles<sp/>in<sp/>degrees<sp/>with<sp/>positive-left<sp/>(yaw),<sp/>positive-down<sp/>(pitch),<sp/>and<sp/>positive-clockwise<sp/>(roll)<sp/>orientations:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>**Yaw**:<sp/>Negated<sp/>(`-crops.head_pose_rotation.y`),<sp/>mapping<sp/>negative<sp/>SolvePnP<sp/>yaw<sp/>to<sp/>positive<sp/>model<sp/>yaw.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>**Pitch**:<sp/>Direct<sp/>(`crops.head_pose_rotation.x`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>**Roll**:<sp/>Negated<sp/>(`-crops.head_pose_rotation.z`),<sp/>aligning<sp/>the<sp/>roll<sp/>coordinate<sp/>signs.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>6.2.<sp/>Output<sp/>Vector<sp/>Mapping</highlight></codeline>
+<codeline><highlight class="normal">The<sp/>3D<sp/>direction<sp/>vector<sp/>output<sp/>by<sp/>the<sp/>model<sp/>(`raw_gaze_dir`)<sp/>is<sp/>mapped<sp/>to<sp/>GodotGaze<sp/>Camera<sp/>Space:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**X<sp/>Component**:<sp/>Direct<sp/>(`raw_gaze_dir.x`),<sp/>as<sp/>$+X$<sp/>points<sp/>right<sp/>(camera&apos;s<sp/>left<sp/>/<sp/>user&apos;s<sp/>right)<sp/>in<sp/>both<sp/>spaces.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Y<sp/>Component**:<sp/>Direct<sp/>(`raw_gaze_dir.y`),<sp/>as<sp/>$+Y$<sp/>points<sp/>UP<sp/>in<sp/>both<sp/>spaces.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Z<sp/>Component**:<sp/>Negated<sp/>(`-raw_gaze_dir.z`),<sp/>reversing<sp/>the<sp/>optical<sp/>direction<sp/>so<sp/>the<sp/>unit<sp/>vector<sp/>points<sp/>forward<sp/>towards<sp/>the<sp/>screen<sp/>plane<sp/>($Z_{\text{cam}}<sp/>=<sp/>0$,<sp/>$v_z<sp/>&gt;<sp/>0$)<sp/>rather<sp/>than<sp/>backward<sp/>into<sp/>the<sp/>camera<sp/>($v_z<sp/>&lt;<sp/>0$).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>*Note*:<sp/>The<sp/>model<sp/>outputs<sp/>its<sp/>gaze<sp/>vector<sp/>in<sp/>its<sp/>own<sp/>left-handed<sp/>space<sp/>(+X<sp/>right,<sp/>+Y<sp/>up,<sp/>+Z<sp/>forward<sp/>towards<sp/>the<sp/>user).<sp/>To<sp/>transform<sp/>this<sp/>left-handed<sp/>vector<sp/>to<sp/>the<sp/>right-handed<sp/>GodotGaze<sp/>Camera<sp/>Space<sp/>(+X<sp/>right,<sp/>+Y<sp/>up,<sp/>+Z<sp/>backward),<sp/>we<sp/>preserve<sp/>X<sp/>and<sp/>Y<sp/>and<sp/>negate<sp/>Z.<sp/>This<sp/>reflection<sp/>transforms<sp/>the<sp/>coordinate<sp/>systems<sp/>correctly.</highlight></codeline>
+    </programlisting>
+    <location file="docs/mathematical_model.md"/>
+  </compounddef>
+</doxygen>

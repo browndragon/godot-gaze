@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="architecture_8md" kind="file" language="Markdown">
+    <compoundname>architecture.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>System<sp/>Architecture<sp/>&amp;<sp/>Technical<sp/>Specification</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Project:**<sp/>`godot-gaze`<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">**Integration:**<sp/>Godot<sp/>4<sp/>GDExtension<sp/>Plugin<sp/><sp/></highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>1.<sp/>Architectural<sp/>Topology</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`godot-gaze`<sp/>is<sp/>engineered<sp/>as<sp/>a<sp/>strictly<sp/>layered<sp/>3D<sp/>gaze-tracking<sp/>and<sp/>facial<sp/>analysis<sp/>engine.<sp/>It<sp/>decouples<sp/>high-level<sp/>engine<sp/>nodes<sp/>from<sp/>numerical<sp/>algorithms,<sp/>hardware<sp/>ingestion,<sp/>and<sp/>ONNX<sp/>Runtime<sp/>neural<sp/>inference<sp/>backends.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">flowchart<sp/>TD</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>L4[&quot;Layer<sp/>4:<sp/>Godot<sp/>High-Level<sp/>Frontends<sp/>(InputEvent<sp/>&amp;<sp/>UI)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>IE[&quot;InputEventGaze<sp/>/<sp/>InputEventGazeMissing&lt;br/&gt;(Native<sp/>Input<sp/>Dispatch)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>HUD[&quot;Debug<sp/>HUD<sp/>/<sp/>Overlay&lt;br/&gt;(debug_cam_feed.tscn)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DP[&quot;GazeDeviceProfile&lt;br/&gt;(Screen<sp/>Geometry<sp/>&amp;<sp/>Mount<sp/>Offsets)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FA[&quot;FillAccumulator&lt;br/&gt;(Inertial<sp/>2nd-Order<sp/>Dwell<sp/>Engine)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>L3[&quot;Layer<sp/>3:<sp/>Godot<sp/>GDExtension<sp/>Servers<sp/>&amp;<sp/>Platform<sp/>Backends&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GS[&quot;GazeServer<sp/>Singleton&lt;br/&gt;(RID<sp/>State<sp/>Ownership<sp/>&amp;<sp/>Concurrency)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>VS[&quot;VisionServer<sp/>Singleton&lt;br/&gt;(Frame<sp/>Ingestion<sp/>&amp;<sp/>Textures)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GDS[&quot;GazeDisplayServer&lt;br/&gt;(Logical<sp/>Pixel<sp/>Platform<sp/>Abstraction)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MGE[&quot;MouseGazeEmulation&lt;br/&gt;(Pointer<sp/>Stillness<sp/>Arbitration)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>JS[&quot;Web<sp/>JavaScriptBridge<sp/>Sidecar&lt;br/&gt;(Emscripten<sp/>/<sp/>ONNX<sp/>Web)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WIN[&quot;Windows<sp/>WMF<sp/>Backend&lt;br/&gt;(MultiByte<sp/>UTF-8<sp/>Path<sp/>Safety)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>L2[&quot;Layer<sp/>2:<sp/>Native<sp/>ML<sp/>Inference<sp/>&amp;<sp/>Pipeline&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GTP[&quot;GazeTrackingPipeline&lt;br/&gt;(Asynchronous<sp/>Worker<sp/>Loop)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>YN[&quot;ORTYuNetDetector&lt;br/&gt;(Face<sp/>Detection<sp/>&amp;<sp/>Bounding<sp/>Box)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LM[&quot;ORTLandmarkModel&lt;br/&gt;(ADAS<sp/>35-Point<sp/>Landmark<sp/>Regression)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PNP[&quot;SQPnP<sp/>/<sp/>LM<sp/>PnP<sp/>Solvers&lt;br/&gt;(Non-Linear<sp/>Head<sp/>Pose<sp/>Optimization)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>EM[&quot;ORTEyeStateModel&lt;br/&gt;(32x32<sp/>Open/Closed<sp/>Classifier)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GM[&quot;ORTGazeModel&lt;br/&gt;(ADAS-0002<sp/>Gaze<sp/>Vector<sp/>Regression)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>L1[&quot;Layer<sp/>1:<sp/>Core<sp/>Math<sp/>&amp;<sp/>Utilities<sp/>(Zero-Dependency<sp/>C++)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PE[&quot;ProjectionEngine<sp/>&amp;<sp/>ScreenProjector&lt;br/&gt;(Ray-Plane<sp/>&amp;<sp/>Viewport<sp/>Pixel<sp/>Math)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MD[&quot;MathDefs,<sp/>GazeBasis3D,<sp/>Rodrigues,<sp/>Warper&lt;br/&gt;(POD<sp/>Math<sp/>&amp;<sp/>Image<sp/>Geometry)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PL[&quot;Pool<sp/>&amp;<sp/>AtomicMailbox&lt;br/&gt;(Lock-Free<sp/>Inter-Thread<sp/>Queues)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>GFD[&quot;GazeFrameData<sp/>POD&lt;br/&gt;(Double-Buffered<sp/>Frame<sp/>Payloads)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>MSA[&quot;MouseStillnessArbitrator&lt;br/&gt;(Anchor<sp/>Bubble<sp/>Motion<sp/>Thresholding)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>IE<sp/>--&gt;<sp/>GS<sp/>&amp;<sp/>VS</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GS<sp/>--&gt;<sp/>GTP<sp/>&amp;<sp/>GDS<sp/>&amp;<sp/>MGE</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MGE<sp/>--&gt;<sp/>MSA</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GTP<sp/>--&gt;<sp/>YN<sp/>&amp;<sp/>LM<sp/>&amp;<sp/>PNP<sp/>&amp;<sp/>EM<sp/>&amp;<sp/>GM</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GTP<sp/>--&gt;<sp/>GFD<sp/>&amp;<sp/>PL</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GS<sp/>--&gt;<sp/>PE<sp/>&amp;<sp/>MD</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>2.<sp/>Layer<sp/>Isolation<sp/>&amp;<sp/>Purity<sp/>Rules</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>**Layer<sp/>1<sp/>(Core<sp/>-<sp/>`src/core/`):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Must<sp/>remain<sp/>**100%<sp/>zero-dependency<sp/>pure<sp/>C++17/20<sp/>standard<sp/>library**.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>No<sp/>inclusion<sp/>of<sp/>`&lt;godot_cpp/...&gt;`<sp/>headers,<sp/>no<sp/>Godot<sp/>RIDs,<sp/>no<sp/>ONNX<sp/>Runtime<sp/>headers,<sp/>and<sp/>no<sp/>platform-specific<sp/>OS<sp/>APIs.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Responsible<sp/>for<sp/>pure<sp/>geometric<sp/>math,<sp/>screen<sp/>projections,<sp/>numerical<sp/>solvers,<sp/>and<sp/>thread-safe<sp/>data<sp/>containers<sp/>(`AtomicMailbox`,<sp/>`Pool`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">2.<sp/>**Layer<sp/>2<sp/>(Native<sp/>ML<sp/>-<sp/>`src/native/`):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Wraps<sp/>ONNX<sp/>Runtime<sp/>(`onnxruntime_cxx_api.h`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Implements<sp/>multi-threaded<sp/>inference<sp/>pipelining<sp/>(`GazeTrackingPipeline`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Does<sp/>not<sp/>depend<sp/>on<sp/>Godot<sp/>engine<sp/>types<sp/>or<sp/>GDScript<sp/>bindings.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>For<sp/>detailed<sp/>neural<sp/>model<sp/>specifications,<sp/>tensor<sp/>formats,<sp/>and<sp/>provenances,<sp/>see<sp/>[Vision<sp/>Models<sp/>&amp;<sp/>Camera<sp/>Ingestion<sp/>Specification](vision_models.md).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">3.<sp/>**Layer<sp/>3<sp/>(Platforms<sp/>&amp;<sp/>Servers<sp/>-<sp/>`src/godot/`,<sp/>`src/windows/`,<sp/>`src/web/`):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Implements<sp/>Godot&apos;s<sp/>RID<sp/>(Resource<sp/>Identifier)<sp/>server<sp/>architecture<sp/>(`GazeServer`,<sp/>`VisionServer`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Manages<sp/>platform<sp/>camera<sp/>feeds<sp/>(Windows<sp/>Media<sp/>Foundation,<sp/>Godot<sp/>CameraFeed,<sp/>Web<sp/>`getUserMedia`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Normalizes<sp/>hardware<sp/>capture<sp/>frames<sp/>to<sp/>packed<sp/>BGR8<sp/>working<sp/>buffers<sp/>(see<sp/>[Vision<sp/>Models<sp/>&amp;<sp/>Camera<sp/>Ingestion<sp/>Specification](vision_models.md#1-camera-ingestion-architecture--color-formats)).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Enforces<sp/>Pimpl<sp/>(`GazeServerImpl`)<sp/>encapsulation<sp/>to<sp/>insulate<sp/>Godot<sp/>bindings<sp/>from<sp/>native<sp/>allocations.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">4.<sp/>**Layer<sp/>4<sp/>(High-Level<sp/>Nodes<sp/>&amp;<sp/>Events<sp/>-<sp/>`src/godot/`<sp/>&amp;<sp/>downstream<sp/>scenes):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`GazeTracker`<sp/>declarative<sp/>node<sp/>and<sp/>`GazeTracker.track_node()`<sp/>lifecycle<sp/>manager.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`InputEventGazeBase`,<sp/>`InputEventGaze`,<sp/>`InputEventGazeMissing`,<sp/>and<sp/>resources<sp/>(`GazeDeviceProfile`,<sp/>`GazePipelineConfig`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Communicates<sp/>with<sp/>backends<sp/>solely<sp/>by<sp/>managing<sp/>`GazeTracker`<sp/>lifecycle,<sp/>querying<sp/>`GazeServer`,<sp/>or<sp/>receiving<sp/>input<sp/>events.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>3.<sp/>Concurrency<sp/>&amp;<sp/>Threading<sp/>Model</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">sequenceDiagram</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>autonumber</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>participant<sp/>MainThread<sp/>as<sp/>Godot<sp/>Main<sp/>Thread<sp/>(GazeServer)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>participant<sp/>RequestMailbox<sp/>as<sp/>AtomicMailbox&lt;GazeFrameData*&gt;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>participant<sp/>WorkerThread<sp/>as<sp/>GazeTrackingPipeline<sp/>Worker<sp/>Thread</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>participant<sp/>ResultsMailbox<sp/>as<sp/>AtomicMailbox&lt;GazeFrameData*&gt;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Note<sp/>over<sp/>MainThread,WorkerThread:<sp/>Frame<sp/>Ingestion<sp/>&amp;<sp/>Dispatch</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MainThread-&gt;&gt;RequestMailbox:<sp/>push_frame_request(frame_data)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>WorkerThread-&gt;&gt;RequestMailbox:<sp/>take(data)<sp/>(Lock-Free)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Note<sp/>over<sp/>WorkerThread:<sp/>1.<sp/>Counter-rotate<sp/>frame<sp/>for<sp/>Roll&lt;br/&gt;2.<sp/>YuNet<sp/>Face<sp/>Detection&lt;br/&gt;3.<sp/>ADAS<sp/>35-pt<sp/>Landmark<sp/>Regression&lt;br/&gt;4.<sp/>Levenberg-Marquardt<sp/>PnP<sp/>Head<sp/>Pose&lt;br/&gt;5.<sp/>Dense<sp/>60x60<sp/>Eye<sp/>Crops&lt;br/&gt;6.<sp/>Eye<sp/>Openness<sp/>&amp;<sp/>Gaze<sp/>Estimation</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>WorkerThread-&gt;&gt;ResultsMailbox:<sp/>push_result(data)<sp/>(Lock-Free)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MainThread-&gt;&gt;ResultsMailbox:<sp/>pop_result(&amp;out_res)<sp/>(Every<sp/>_process<sp/>frame)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>MainThread-&gt;&gt;MainThread:<sp/>Update<sp/>Spatial<sp/>RIDs<sp/>&amp;<sp/>Screen<sp/>Projections</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Lock-Free<sp/>Pipeline<sp/>Execution:**<sp/>The<sp/>background<sp/>inference<sp/>worker<sp/>thread<sp/>communicates<sp/>with<sp/>Godot<sp/>exclusively<sp/>via<sp/>`AtomicMailbox&lt;GazeFrameData*&gt;`.<sp/>The<sp/>worker<sp/>loop<sp/>never<sp/>locks<sp/>`GazeServer::state_mutex`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Main<sp/>Thread<sp/>Mutex<sp/>Safety:**<sp/>`GazeServer::state_mutex`<sp/>exists<sp/>solely<sp/>to<sp/>synchronize<sp/>concurrent<sp/>or<sp/>recursive<sp/>GDScript/C++<sp/>calls<sp/>against<sp/>internal<sp/>RID<sp/>registry<sp/>dictionaries.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>4.<sp/>Hardware<sp/>&amp;<sp/>Memory<sp/>Model:<sp/>Why<sp/>CPU<sp/>RAM<sp/>is<sp/>the<sp/>Common<sp/>Denominator</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Our<sp/>tracking<sp/>pipeline<sp/>is<sp/>a<sp/>multi-stage<sp/>**hybrid<sp/>pipeline**:</highlight></codeline>
+<codeline><highlight class="normal">$$\text{Camera<sp/>Frame}<sp/>\xrightarrow{\text{CPU}}<sp/>\text{YuNet<sp/>CNN}<sp/>\xrightarrow{\text{CPU<sp/>Transform}}<sp/>\text{ADAS<sp/>LM<sp/>CNN}<sp/>\xrightarrow{\text{CPU<sp/>PnP<sp/>Solver}}<sp/>\text{ADAS<sp/>GazeNet<sp/>CNN}<sp/>\xrightarrow{\text{Screen<sp/>Projection}}$$</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Why<sp/>Zero-Copy<sp/>GPU<sp/>Roundtrips<sp/>Were<sp/>Rejected</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Iterative<sp/>Solvers<sp/>on<sp/>CPU:**<sp/>Head<sp/>pose<sp/>estimation<sp/>requires<sp/>a<sp/>non-linear<sp/>Levenberg-Marquardt<sp/>/<sp/>SQPnP<sp/>optimization<sp/>solver<sp/>over<sp/>35<sp/>$(X,<sp/>Y)$<sp/>landmarks.<sp/>This<sp/>is<sp/>an<sp/>iterative<sp/>CPU<sp/>numerical<sp/>algorithm.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Cross-Platform<sp/>GDExtension<sp/>Boundaries:**<sp/>Passing<sp/>GPU<sp/>textures<sp/>directly<sp/>into<sp/>neural<sp/>execution<sp/>providers<sp/>(e.g.<sp/>DirectML,<sp/>Metal,<sp/>WebGPU)<sp/>without<sp/>CPU<sp/>readbacks<sp/>requires<sp/>compute<sp/>shaders<sp/>for<sp/>intermediate<sp/>bounding-box<sp/>rotations<sp/>and<sp/>eye<sp/>crops<sp/>across<sp/>macOS,<sp/>Windows,<sp/>Android,<sp/>and<sp/>WebAssembly.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Contiguous<sp/>CPU<sp/>Memory:**<sp/>Pre-allocating<sp/>contiguous<sp/>BGR<sp/>buffers<sp/>(`GazeFrameData::camera_raw_bgr`,<sp/>`GazeFrameData::rotated_frame_bgr`)<sp/>provides<sp/>zero-allocation<sp/>steady-state<sp/>performance<sp/>at<sp/>60<sp/>FPS<sp/>without<sp/>GPU<sp/>$\leftrightarrow$<sp/>CPU<sp/>synchronization<sp/>pipeline<sp/>bubbles.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>5.<sp/>WebAssembly<sp/>&amp;<sp/>JavaScript<sp/>Boundary<sp/>Architecture</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">For<sp/>Godot<sp/>Web<sp/>exports<sp/>(HTML5<sp/>/<sp/>WebAssembly):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">flowchart<sp/>LR</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>BrowserJS[&quot;Browser<sp/>Main<sp/>Thread<sp/>(JavaScript)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Cam[&quot;getUserMedia&lt;br/&gt;Video<sp/>Stream&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ONNXWeb[&quot;onnxruntime-web&lt;br/&gt;(WebGL<sp/>/<sp/>WebGPU)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>GodotWASM[&quot;Godot<sp/>C++<sp/>GDExtension<sp/>(WebAssembly)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Bridge[&quot;JavaScriptBridge<sp/>Ingestion&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PnP[&quot;PnP<sp/>LM<sp/>/<sp/>SQPnP<sp/>Solvers&lt;br/&gt;(src/core/pnp_solver.cpp)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Proj[&quot;Screen<sp/>Ray<sp/>Projections&lt;br/&gt;(src/core/projection_engine.cpp)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Cam<sp/>--&gt;<sp/>ONNXWeb</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ONNXWeb<sp/>--<sp/>&quot;Raw<sp/>2D<sp/>Landmarks<sp/>&amp;<sp/>Crops&quot;<sp/>--&gt;<sp/>Bridge</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>Bridge<sp/>--&gt;<sp/>PnP<sp/>--&gt;<sp/>Proj</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>**Hardware<sp/>&amp;<sp/>ML<sp/>I/O<sp/>Bridge<sp/>(`gaze_sidecar.js`):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Manages<sp/>browser<sp/>permissions<sp/>and<sp/>video<sp/>stream<sp/>capture<sp/>(`navigator.mediaDevices.getUserMedia`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Executes<sp/>neural<sp/>network<sp/>graphs<sp/>in<sp/>browser-optimized<sp/>WebGL/WebGPU<sp/>kernels<sp/>via<sp/>`onnxruntime-web`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Passes<sp/>raw<sp/>bounding<sp/>boxes<sp/>and<sp/>2D<sp/>landmark<sp/>coordinates<sp/>to<sp/>Godot<sp/>via<sp/>`JavaScriptBridge`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">2.<sp/>**Unified<sp/>Mathematical<sp/>Core<sp/>(C++<sp/>WebAssembly):**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>100%<sp/>of<sp/>spatial<sp/>geometry,<sp/>PnP<sp/>head<sp/>pose<sp/>solving,<sp/>basis<sp/>rotations,<sp/>and<sp/>screen<sp/>ray<sp/>projections<sp/>are<sp/>compiled<sp/>directly<sp/>from<sp/>`src/core/`<sp/>into<sp/>WebAssembly.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Eliminates<sp/>JavaScript<sp/>math<sp/>duplication<sp/>and<sp/>guarantees<sp/>identical<sp/>behavior<sp/>between<sp/>Native<sp/>desktop<sp/>and<sp/>Web<sp/>builds.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>WebAssembly<sp/>execution<sp/>reduces<sp/>main-thread<sp/>CPU<sp/>time<sp/>by<sp/>~2x–4x<sp/>compared<sp/>to<sp/>pure<sp/>JavaScript<sp/>numerical<sp/>loops.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>6.<sp/>Input<sp/>Subsystem<sp/>&amp;<sp/>Event<sp/>Architecture</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`godot-gaze`<sp/>models<sp/>eye-gaze<sp/>as<sp/>first-class<sp/>engine<sp/>input<sp/>events<sp/>routed<sp/>through<sp/>Godot&apos;s<sp/>standard<sp/>input<sp/>tree<sp/>(`Input.parse_input_event()`),<sp/>while<sp/>providing<sp/>seamless<sp/>OS<sp/>mouse<sp/>emulation<sp/>and<sp/>2nd-order<sp/>inertial<sp/>dwell<sp/>mechanics.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">flowchart<sp/>TD</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GS[&quot;GazeServer<sp/>Singleton&quot;]<sp/>--&gt;|Constructs<sp/>60<sp/>FPS<sp/>Frame<sp/>Event|<sp/>IEG[&quot;InputEventGaze<sp/>/<sp/>InputEventGazeMissing&lt;br/&gt;(inherits<sp/>InputEventAction)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>IEG<sp/>--&gt;|Input.parse_input_event|<sp/>INP[&quot;Godot<sp/>Input<sp/>Pipeline&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>INP<sp/>--&gt;|Standard<sp/>Dispatch|<sp/>UN[&quot;Node._unhandled_input<sp/>/<sp/>_input&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>INP<sp/>--&gt;|Dwell<sp/>Control|<sp/>FA[&quot;FillAccumulator<sp/>(2nd-Order<sp/>Inertial<sp/>Dynamics)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>FA<sp/>--&gt;|fill_changed<sp/>/<sp/>filled|<sp/>UI[&quot;UI<sp/>Focus<sp/>&amp;<sp/>Button<sp/>Activation&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GS<sp/>--&gt;|emulate_mouse_from_gaze|<sp/>MGE[&quot;MouseGazeEmulation<sp/>&amp;<sp/>DisplayServer&quot;]</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>6.1.<sp/>First-Class<sp/>Events:<sp/>`InputEventGazeBase`,<sp/>`InputEventGaze`,<sp/>`InputEventGazeMissing`</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Inheritance**:<sp/>Subclasses<sp/>`InputEventAction`<sp/>(concrete<sp/>in<sp/>Godot&apos;s<sp/>`ClassDB`),<sp/>enabling<sp/>registration<sp/>and<sp/>routing<sp/>through<sp/>`Input::get_singleton()-&gt;parse_input_event()`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`InputEventGazeBase`**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`window_id:<sp/>int`,<sp/>`frame_id:<sp/>int`,<sp/>`timestamp_usec:<sp/>int`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Continuous<sp/>eye<sp/>openness:<sp/>`left_eye_openness:<sp/>float`,<sp/>`right_eye_openness:<sp/>float`<sp/>($0.0$<sp/>closed<sp/>to<sp/>$1.0$<sp/>open).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`is_face_tracked()<sp/>-&gt;<sp/>bool`:<sp/>Virtual<sp/>method<sp/>returning<sp/>`false`<sp/>on<sp/>`InputEventGazeBase`<sp/>/<sp/>`InputEventGazeMissing`<sp/>and<sp/>`true`<sp/>on<sp/>`InputEventGaze`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`copy_from(other)`:<sp/>Copies<sp/>event<sp/>base/derived<sp/>fields<sp/>into<sp/>another<sp/>`InputEventGazeBase`<sp/>instance<sp/>(used<sp/>by<sp/>custom<sp/>`GazeEventFactory`<sp/>subclasses).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`InputEventGaze`**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Dispatched<sp/>when<sp/>face<sp/>detection<sp/>and<sp/>gaze<sp/>estimation<sp/>succeed.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Localized<sp/>2D<sp/>Coordinates**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`get_eye_gaze(local_to<sp/>=<sp/>null,<sp/>clamping<sp/>=<sp/>CLAMPING_DEFAULT)<sp/>-&gt;<sp/>Vector2`:<sp/>Combined<sp/>eye-gaze<sp/>viewport/canvas<sp/>coordinate<sp/>in<sp/>logical<sp/>pixels<sp/>(`lpix`).<sp/>When<sp/>`local_to`<sp/>(`CanvasItem`)<sp/>is<sp/>passed,<sp/>returns<sp/>coordinates<sp/>mapped<sp/>directly<sp/>into<sp/>the<sp/>local<sp/>2D<sp/>coordinate<sp/>space<sp/>of<sp/>`local_to`.<sp/>Defaults<sp/>to<sp/>`Vector2(NAN,<sp/>NAN)`<sp/>when<sp/>unavailable/invalid;<sp/>callers<sp/>should<sp/>check<sp/>`pos.is_finite()`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`get_nose_gaze(local_to<sp/>=<sp/>null,<sp/>clamping<sp/>=<sp/>CLAMPING_DEFAULT)<sp/>-&gt;<sp/>Vector2`:<sp/>Head<sp/>pose<sp/>projection<sp/>coordinate<sp/>in<sp/>logical<sp/>pixels<sp/>(`lpix`).<sp/>Defaults<sp/>to<sp/>`Vector2(NAN,<sp/>NAN)`<sp/>when<sp/>unavailable/invalid.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>Property<sp/>`eye_gaze:<sp/>Vector2`:<sp/>Reads/writes<sp/>raw<sp/>canvas<sp/>eye-gaze<sp/>position<sp/>using<sp/>default<sp/>clamping.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**3D<sp/>Spatial<sp/>Transforms**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`head_transform:<sp/>Transform3D`:<sp/>3D<sp/>head<sp/>pose<sp/>origin<sp/>and<sp/>orientation<sp/>in<sp/>camera<sp/>millimeters.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`eye_transform:<sp/>Transform3D`:<sp/>3D<sp/>inter-eye<sp/>midpoint<sp/>transform<sp/>in<sp/>camera<sp/>millimeters.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`gaze_transform:<sp/>Transform3D`:<sp/>3D<sp/>gaze<sp/>ray<sp/>origin<sp/>and<sp/>orientation<sp/>in<sp/>camera<sp/>millimeters.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Clamping<sp/>(`ClampingMode`)**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>-<sp/>`CLAMPING_FREE`<sp/>(`0`),<sp/>`CLAMPING_CLAMPED`<sp/>(`1`),<sp/>`CLAMPING_DEFAULT`<sp/>(`2`,<sp/>inherits<sp/>`gaze/pointing/default_clamping`).<sp/>Non-finite<sp/>(`NAN`)<sp/>coordinates<sp/>remain<sp/>non-finite<sp/>regardless<sp/>of<sp/>clamping<sp/>mode.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`InputEventGazeMissing`**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Dispatched<sp/>when<sp/>face<sp/>or<sp/>eye<sp/>tracking<sp/>drops<sp/>or<sp/>the<sp/>sensor<sp/>is<sp/>inactive.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Carries<sp/>`reason:<sp/>MissingReason`<sp/>(`REASON_NO_FACE_DETECTED<sp/>=<sp/>0`,<sp/>`REASON_OCCLUDED<sp/>=<sp/>1`,<sp/>`REASON_OUT_OF_BOUNDS<sp/>=<sp/>2`,<sp/>`REASON_SENSOR_INACTIVE<sp/>=<sp/>3`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>6.2.<sp/>Pointer<sp/>Arbitration<sp/>&amp;<sp/>Mouse<sp/>Emulation<sp/>(`MouseGazeEmulation`)</highlight></codeline>
+<codeline><highlight class="normal">`godot-gaze`<sp/>integrates<sp/>a<sp/>native<sp/>C++<sp/>mouse<sp/>stillness<sp/>arbitrator<sp/>([`MouseStillnessArbitrator`](../src/core/mouse_stillness_arbitrator.hpp))<sp/>and<sp/>pointer<sp/>emulator<sp/>([`MouseGazeEmulation`](../src/godot/mouse_gaze_emulation.hpp)):</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Stillness<sp/>Arbitration**:<sp/>When<sp/>physical<sp/>mouse<sp/>motion<sp/>exceeds<sp/>the<sp/>anchor<sp/>bubble<sp/>threshold<sp/>(`mouse_stillness_threshold_px`,<sp/>default<sp/>$3.0\text{<sp/>px}$),<sp/>the<sp/>physical<sp/>mouse<sp/>claims<sp/>instant<sp/>authority.<sp/>When<sp/>the<sp/>mouse<sp/>remains<sp/>motionless<sp/>within<sp/>the<sp/>anchor<sp/>bubble<sp/>for<sp/>`mouse_stillness_duration_sec`<sp/>(default<sp/>$1.5\text{<sp/>s}$),<sp/>gaze<sp/>smoothly<sp/>resumes<sp/>control<sp/>via<sp/>an<sp/>eased<sp/>blend<sp/>transition<sp/>(`mouse_emulation_transition_sec`,<sp/>default<sp/>$0.3\text{<sp/>s}$).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Bi-Directional<sp/>Emulation**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`gaze/pointing/emulate_mouse_from_gaze<sp/>=<sp/>true`:<sp/>Synthesizes<sp/>OS<sp/>mouse<sp/>motion<sp/>and<sp/>click<sp/>events<sp/>into<sp/>Godot&apos;s<sp/>`DisplayServer`,<sp/>driving<sp/>standard<sp/>engine<sp/>UI<sp/>controls<sp/>directly.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`gaze/pointing/emulate_gaze_from_mouse<sp/>=<sp/>true`:<sp/>In<sp/>developer<sp/>environments<sp/>without<sp/>webcams,<sp/>synthesizes<sp/>`InputEventGaze`<sp/>from<sp/>mouse<sp/>movements<sp/>to<sp/>exercise<sp/>downstream<sp/>gaze<sp/>pipelines.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>6.3.<sp/>Inertial<sp/>Dwell<sp/>Mechanics<sp/>(`FillAccumulator`)</highlight></codeline>
+<codeline><highlight class="normal">For<sp/>hands-free<sp/>eye-gaze<sp/>selection<sp/>without<sp/>physical<sp/>clicks,<sp/>`FillAccumulator`<sp/>provides<sp/>a<sp/>2nd-order<sp/>dynamical<sp/>dwell<sp/>state<sp/>machine:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Kinematic<sp/>Formulation**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$\frac{dv}{dt}<sp/>=<sp/>\begin{cases}<sp/>a_{\text{fill}}<sp/>&amp;<sp/>\text{if<sp/>gazing<sp/>on<sp/>target<sp/>(charging,<sp/>}<sp/>\text{error}<sp/>\le<sp/>0)<sp/>\\<sp/>-a_{\text{drain}}<sp/>\cdot<sp/>\text{penalty}<sp/>&amp;<sp/>\text{if<sp/>off<sp/>target<sp/>(releasing,<sp/>}<sp/>\text{error}<sp/>&gt;<sp/>0)<sp/>\end{cases}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$\text{penalty}<sp/>=<sp/>1.0<sp/>+<sp/>\frac{\text{error}}{\text{error\_doubling\_distance}}$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>$$\frac{d(\text{fill})}{dt}<sp/>=<sp/>v,<sp/>\quad<sp/>v<sp/>\in<sp/>[-v_{\text{drain}}<sp/>\cdot<sp/>\text{penalty},<sp/>+v_{\text{fill}}],<sp/>\quad<sp/>\text{fill}<sp/>\in<sp/>[0.0,<sp/>1.0]$$</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Micro-Saccade<sp/>&amp;<sp/>Blink<sp/>Momentum<sp/>Tolerance**:<sp/>Because<sp/>velocity<sp/>ramps<sp/>with<sp/>finite<sp/>acceleration<sp/>($a<sp/>\approx<sp/>32\text{<sp/>units/s}^2$),<sp/>a<sp/>brief<sp/>$100\text{–}150\text{<sp/>ms}$<sp/>physiological<sp/>blink<sp/>or<sp/>micro-saccade<sp/>only<sp/>begins<sp/>decelerating<sp/>positive<sp/>velocity.<sp/>The<sp/>accumulator<sp/>coasts<sp/>forward<sp/>or<sp/>holds,<sp/>preventing<sp/>jarring<sp/>resets<sp/>or<sp/>progress<sp/>dumps<sp/>during<sp/>natural<sp/>gaze<sp/>flutter.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Fuzzy<sp/>Boundary<sp/>Matching<sp/>(`error_doubling_distance`)**:<sp/>For<sp/>dwell<sp/>UI<sp/>controls,<sp/>near-miss<sp/>boundary<sp/>tremors<sp/>($10\text{<sp/>px}$)<sp/>incur<sp/>negligible<sp/>drain<sp/>penalty<sp/>($\approx<sp/>1.1\times$),<sp/>providing<sp/>forgiving<sp/>foveal<sp/>tolerance.<sp/>In<sp/>contrast,<sp/>an<sp/>intentional<sp/>saccade<sp/>across<sp/>the<sp/>display<sp/>($300\text{<sp/>px}$)<sp/>scales<sp/>the<sp/>drain<sp/>penalty<sp/>to<sp/>$4\times$,<sp/>purging<sp/>momentum<sp/>and<sp/>draining<sp/>in<sp/>$&lt;150\text{<sp/>ms}$<sp/>so<sp/>the<sp/>next<sp/>target<sp/>can<sp/>be<sp/>acquired<sp/>immediately.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Signal<sp/>Separation<sp/>Invariant**:<sp/>Enforces<sp/>a<sp/>strict<sp/>domain<sp/>separation<sp/>bound<sp/>($\Delta<sp/>\ge<sp/>0.50$<sp/>between<sp/>empty<sp/>and<sp/>full<sp/>states)<sp/>preventing<sp/>accidental<sp/>activations.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Signals**:<sp/>`fill_started`,<sp/>`fill_changed(fill:<sp/>float)`,<sp/>`filled`,<sp/>`emptied`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>7.<sp/>GazeDisplayServer<sp/>&amp;<sp/>Platform<sp/>Windowing<sp/>Abstraction</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>ensure<sp/>mathematically<sp/>consistent<sp/>projection<sp/>geometry<sp/>and<sp/>seamless<sp/>mouse-gaze<sp/>emulation,<sp/>`godot-gaze`<sp/>introduces<sp/>`GazeDisplayServer`<sp/>as<sp/>an<sp/>authoritative<sp/>platform<sp/>windowing<sp/>and<sp/>pointer<sp/>abstraction.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>7.1.<sp/>Architectural<sp/>Rationale:<sp/>Why<sp/>Not<sp/>Rely<sp/>on<sp/>Godot&apos;s<sp/>`DisplayServer`?</highlight></codeline>
+<codeline><highlight class="normal">Direct<sp/>reliance<sp/>on<sp/>Godot&apos;s<sp/>built-in<sp/>`DisplayServer`<sp/>across<sp/>tracking<sp/>and<sp/>projection<sp/>code<sp/>is<sp/>strictly<sp/>prohibited<sp/>in<sp/>`godot-gaze`.<sp/>Godot&apos;s<sp/>`DisplayServer`<sp/>has<sp/>platform-dependent<sp/>quirks,<sp/>coordinate<sp/>frame<sp/>inconsistencies,<sp/>and<sp/>non-client<sp/>decoration<sp/>offsets:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>On<sp/>macOS,<sp/>direct<sp/>Cocoa<sp/>window<sp/>coordinates<sp/>can<sp/>diverge<sp/>from<sp/>Godot&apos;s<sp/>active<sp/>viewport<sp/>coordinate<sp/>frame,<sp/>and<sp/>window<sp/>setters/getters<sp/>have<sp/>subtle<sp/>scaling<sp/>semantics<sp/>across<sp/>engine<sp/>revisions.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>On<sp/>Windows,<sp/>`DisplayServer.window_get_position()`<sp/>includes<sp/>non-client<sp/>window<sp/>borders<sp/>and<sp/>drop<sp/>shadows,<sp/>offsetting<sp/>the<sp/>client<sp/>drawing<sp/>area.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>On<sp/>Web<sp/>(HTML5),<sp/>Godot<sp/>reports<sp/>internal<sp/>WebGL<sp/>canvas<sp/>buffer<sp/>dimensions<sp/>rather<sp/>than<sp/>CSS<sp/>layout<sp/>geometry.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Downstream<sp/>tracking<sp/>math<sp/>(`ProjectionEngine`,<sp/>`GazeServer`,<sp/>and<sp/>`MouseGazeEmulation`)<sp/>requires<sp/>a<sp/>single,<sp/>self-consistent<sp/>coordinate<sp/>model.<sp/>Rather<sp/>than<sp/>scattering<sp/>ad-hoc<sp/>platform<sp/>workarounds<sp/>throughout<sp/>consumers,<sp/>`GazeDisplayServer`<sp/>acts<sp/>as<sp/>the<sp/>single<sp/>authoritative<sp/>display<sp/>geometry<sp/>provider,<sp/>backed<sp/>by<sp/>dedicated<sp/>per-platform<sp/>native<sp/>implementations<sp/>(`src/macos`,<sp/>`src/windows`,<sp/>`src/ios`,<sp/>`src/android`,<sp/>`src/web`,<sp/>`src/native`).<sp/>All<sp/>spatial<sp/>queries<sp/>across<sp/>the<sp/>codebase<sp/>route<sp/>strictly<sp/>through<sp/>`GazeDisplayServer`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>7.2.<sp/>The<sp/>Unified<sp/>Coordinate<sp/>Contract:<sp/>Logical<sp/>Pixels<sp/>(`lpix`)</highlight></codeline>
+<codeline><highlight class="normal">Across<sp/>the<sp/>entire<sp/>project,<sp/>exactly<sp/>**two**<sp/>coordinate<sp/>systems<sp/>exist:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**Camera<sp/>Millimeters<sp/>(3D<sp/>Physical)**:<sp/>Physical<sp/>metric<sp/>coordinates<sp/>centered<sp/>at<sp/>the<sp/>tracking<sp/>camera<sp/>sensor<sp/>($+X$<sp/>right,<sp/>$+Y$<sp/>up,<sp/>$-Z$<sp/>forward<sp/>in<sp/>Godot<sp/>camera<sp/>convention).</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Logical<sp/>Pixels<sp/>(`lpix`,<sp/>2D)**:<sp/>The<sp/>authoritative<sp/>2D<sp/>display<sp/>and<sp/>viewport<sp/>coordinate<sp/>space<sp/>matching<sp/>Godot&apos;s<sp/>2D<sp/>canvas<sp/>and<sp/>input<sp/>event<sp/>system.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">All<sp/>spatial<sp/>and<sp/>pointer<sp/>queries<sp/>on<sp/>`GazeDisplayServer`<sp/>operate<sp/>strictly<sp/>in<sp/>**Logical<sp/>Pixels<sp/>(`lpix`)**:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`get_screen_size_pixels()`**:<sp/>Display<sp/>dimensions<sp/>$(W_{\text{disp}},<sp/>H_{\text{disp}})_{\text{lpix}}$<sp/>in<sp/>logical<sp/>units<sp/>matching<sp/>the<sp/>viewport<sp/>coordinate<sp/>system.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`get_window_rect_pixels()`**:<sp/>Application<sp/>window<sp/>client<sp/>rect<sp/>$[x,<sp/>y,<sp/>w,<sp/>h]_{\text{lpix}}$<sp/>relative<sp/>to<sp/>display<sp/>top-left<sp/>origin.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`mouse_get_position()`**:<sp/>OS<sp/>cursor<sp/>screen<sp/>position<sp/>$(x,<sp/>y)_{\text{lpix}}$<sp/>relative<sp/>to<sp/>display<sp/>top-left<sp/>origin.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`get_window_mouse_position()`**:<sp/>OS<sp/>cursor<sp/>position<sp/>relative<sp/>to<sp/>the<sp/>application<sp/>window<sp/>client<sp/>area<sp/>in<sp/>logical<sp/>pixels.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`mouse_get_button_state()`**:<sp/>Bitmask<sp/>of<sp/>pressed<sp/>mouse<sp/>buttons<sp/>directly<sp/>from<sp/>the<sp/>OS.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`get_screen_scale()`**:<sp/>Backing-store<sp/>HiDPI<sp/>scale<sp/>factor<sp/>($2.0$<sp/>on<sp/>Retina,<sp/>$\text{DPI}/96$<sp/>on<sp/>Windows,<sp/>`devicePixelRatio`<sp/>on<sp/>Web).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`get_pixel_pitch_mm()`**:<sp/>Physical<sp/>millimeters<sp/>per<sp/>logical<sp/>pixel:<sp/>$(W_{\text{mm}}<sp/>/<sp/>W_{\text{lpix}},<sp/>H_{\text{mm}}<sp/>/<sp/>H_{\text{lpix}})$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**`window_px_to_canvas()`**:<sp/>Authoritative<sp/>viewport<sp/>transformation<sp/>converting<sp/>window-local<sp/>logical<sp/>pixels<sp/>directly<sp/>to<sp/>canonical<sp/>2D<sp/>Viewport<sp/>canvas<sp/>coordinates<sp/>(inverting<sp/>`root-&gt;get_final_transform()`)<sp/>without<sp/>any<sp/>artificial<sp/>scale<sp/>multipliers.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>7.3.<sp/>Platform<sp/>Geometry<sp/>Mapping<sp/>Matrix</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Platform<sp/>|<sp/>Query<sp/>/<sp/>Metric<sp/>|<sp/>Native<sp/>Source<sp/>/<sp/>Normalization<sp/>|<sp/>`GazeDisplayServer`<sp/>(Authoritative)<sp/>|<sp/>Design<sp/>Rationale<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**macOS**<sp/>|<sp/>`get_window_rect_pixels()`<sp/>|<sp/>`[window<sp/>contentRectForFrameRect:[window<sp/>frame]]`<sp/>scaled<sp/>by<sp/>`backingScaleFactor`<sp/>|<sp/>**Logical<sp/>Pixels<sp/>(`lpix`)**<sp/>|<sp/>Directly<sp/>matches<sp/>Godot&apos;s<sp/>client<sp/>viewport<sp/>dimensions<sp/>and<sp/>position<sp/>without<sp/>title<sp/>bar<sp/>or<sp/>border<sp/>decoration<sp/>offsets.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**macOS**<sp/>|<sp/>`get_screen_size_pixels()`<sp/>|<sp/>`CGDisplayModeGetPixelWidth/Height`<sp/>|<sp/>**Logical<sp/>Pixels<sp/>(`lpix`)**<sp/>|<sp/>Authoritative<sp/>display<sp/>resolution<sp/>matching<sp/>window<sp/>and<sp/>viewport<sp/>coordinates.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**macOS**<sp/>|<sp/>`mouse_get_position()`<sp/>|<sp/>`[NSEvent<sp/>mouseLocation]`<sp/>scaled<sp/>by<sp/>`backingScaleFactor`<sp/>|<sp/>**Logical<sp/>Pixels<sp/>(`lpix`)**<sp/>|<sp/>Seamlessly<sp/>matches<sp/>`DisplayServer`<sp/>mouse<sp/>tracking<sp/>and<sp/>Godot<sp/>canvas<sp/>mouse<sp/>events.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Windows**<sp/>|<sp/>`get_window_rect_pixels()`<sp/>|<sp/>`GetClientRect`<sp/>+<sp/>`ClientToScreen`<sp/>normalized<sp/>to<sp/>client<sp/>viewport<sp/>|<sp/>**Logical<sp/>Client<sp/>Rect**<sp/>|<sp/>Eliminates<sp/>window<sp/>drop-shadows<sp/>and<sp/>title<sp/>bar<sp/>decorations.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Windows**<sp/>|<sp/>`mouse_get_position()`<sp/>|<sp/>`GetCursorPos`<sp/>|<sp/>**Logical<sp/>Pixels**<sp/>|<sp/>Consistent<sp/>multi-monitor<sp/>desktop<sp/>coordinate<sp/>space.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Web**<sp/>|<sp/>`get_window_rect_pixels()`<sp/>|<sp/>`canvas.getBoundingClientRect()`<sp/>|<sp/>**CSS<sp/>Pixels**<sp/>|<sp/>Aligns<sp/>client<sp/>canvas<sp/>placement<sp/>with<sp/>DOM<sp/>layout<sp/>geometry.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Web**<sp/>|<sp/>`mouse_get_position()`<sp/>|<sp/>DOM<sp/>pointer/mouse<sp/>events<sp/>relative<sp/>to<sp/>document<sp/>|<sp/>**CSS<sp/>Pixels**<sp/>|<sp/>1:1<sp/>consistency<sp/>with<sp/>browser<sp/>window<sp/>geometry.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**iOS**<sp/>|<sp/>`window_rect`<sp/>/<sp/>`screen_size`<sp/>|<sp/>`UIScreen.bounds`,<sp/>`UIWindow.bounds`<sp/>|<sp/>**UIKit<sp/>Points**<sp/>|<sp/>Preserves<sp/>1:1<sp/>scale<sp/>invariance<sp/>with<sp/>touch<sp/>coordinates.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Android**<sp/>|<sp/>`window_rect`<sp/>/<sp/>`screen_size`<sp/>|<sp/>WindowManager<sp/>metrics<sp/>|<sp/>**DIPs<sp/>/<sp/>Surface<sp/>Pixels**<sp/>|<sp/>Consistent<sp/>logical<sp/>units<sp/>across<sp/>display<sp/>densities.<sp/>|</highlight></codeline>
+<codeline></codeline>
+    </programlisting>
+    <location file="docs/architecture.md"/>
+  </compounddef>
+</doxygen>

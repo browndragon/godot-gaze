@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -150,6 +150,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4e2f80ac63e79325e85a531e98f31549"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve screen HiDPI scale factor.  <br /></td></tr>
 <tr class="memitem:ac558a079342a017ee92b0db0c155a0ba" id="r_ac558a079342a017ee92b0db0c155a0ba"><td class="memItemLeft">virtual Rect2i&#160;</td><td class="memItemRight"><a class="el" href="#ac558a079342a017ee92b0db0c155a0ba">get_window_rect_pixels</a> (int p_window=0) const override</td></tr>
 <tr class="memdesc:ac558a079342a017ee92b0db0c155a0ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve application window bounding rectangle in logical pixels.  <br /></td></tr>
+<tr class="memitem:a9ef33ea07836903cd2d89632344907d7" id="r_a9ef33ea07836903cd2d89632344907d7"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a9ef33ea07836903cd2d89632344907d7">mouse_get_position</a> () const override</td></tr>
+<tr class="memdesc:a9ef33ea07836903cd2d89632344907d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the current mouse cursor position in logical screen coordinates.  <br /></td></tr>
+<tr class="memitem:a647dcd08160452abf872d27fd364d9b2" id="r_a647dcd08160452abf872d27fd364d9b2"><td class="memItemLeft">virtual int64_t&#160;</td><td class="memItemRight"><a class="el" href="#a647dcd08160452abf872d27fd364d9b2">mouse_get_button_state</a> () const override</td></tr>
+<tr class="memdesc:a647dcd08160452abf872d27fd364d9b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.  <br /></td></tr>
+<tr class="memitem:a28b0a8ed5b4fa05bced562c47130fbda" id="r_a28b0a8ed5b4fa05bced562c47130fbda"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a28b0a8ed5b4fa05bced562c47130fbda">parse_mouse_motion</a> (const Vector2 &amp;p_position, const Vector2 &amp;p_relative, const Vector2 &amp;p_velocity) override</td></tr>
+<tr class="memdesc:a28b0a8ed5b4fa05bced562c47130fbda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch emulated synthetic mouse motion to the engine input queue.  <br /></td></tr>
+<tr class="memitem:a0523728bd4967d0edcbebb7e4832bed1" id="r_a0523728bd4967d0edcbebb7e4832bed1"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a0523728bd4967d0edcbebb7e4832bed1">parse_mouse_button</a> (int64_t p_button, bool p_pressed, const Vector2 &amp;p_position) override</td></tr>
+<tr class="memdesc:a0523728bd4967d0edcbebb7e4832bed1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Dispatch emulated synthetic mouse button event to the engine input queue.  <br /></td></tr>
 <tr class="memitem:afbef17ee4170af1d596ad2a7b204ae2e" id="r_afbef17ee4170af1d596ad2a7b204ae2e"><td class="memItemLeft"><a id="afbef17ee4170af1d596ad2a7b204ae2e" name="afbef17ee4170af1d596ad2a7b204ae2e"></a>
 void&#160;</td><td class="memItemRight"><b>set_screen_size_mm</b> (const Vector2 &amp;p_size_mm)</td></tr>
 <tr class="memitem:a819ccd0080a4187dea258b294e4a1681" id="r_a819ccd0080a4187dea258b294e4a1681"><td class="memItemLeft"><a id="a819ccd0080a4187dea258b294e4a1681" name="a819ccd0080a4187dea258b294e4a1681"></a>
@@ -158,9 +166,21 @@ void&#160;</td><td class="memItemRight"><b>set_screen_size_pixels</b> (const Vec
 void&#160;</td><td class="memItemRight"><b>set_window_rect_pixels</b> (const Rect2i &amp;p_rect)</td></tr>
 <tr class="memitem:a7b1967864d7ac4a3d982c2bd22b7fe06" id="r_a7b1967864d7ac4a3d982c2bd22b7fe06"><td class="memItemLeft"><a id="a7b1967864d7ac4a3d982c2bd22b7fe06" name="a7b1967864d7ac4a3d982c2bd22b7fe06"></a>
 void&#160;</td><td class="memItemRight"><b>set_screen_scale</b> (double p_scale)</td></tr>
+<tr class="memitem:a9033a3c6bf4c7e9135179fc20dc0421e" id="r_a9033a3c6bf4c7e9135179fc20dc0421e"><td class="memItemLeft"><a id="a9033a3c6bf4c7e9135179fc20dc0421e" name="a9033a3c6bf4c7e9135179fc20dc0421e"></a>
+void&#160;</td><td class="memItemRight"><b>set_mouse_position</b> (const Vector2 &amp;p_pos)</td></tr>
+<tr class="memitem:ac8297427134741d04c33b97c1e5a53e3" id="r_ac8297427134741d04c33b97c1e5a53e3"><td class="memItemLeft"><a id="ac8297427134741d04c33b97c1e5a53e3" name="ac8297427134741d04c33b97c1e5a53e3"></a>
+void&#160;</td><td class="memItemRight"><b>set_mouse_button_state</b> (int64_t p_mask)</td></tr>
+<tr class="memitem:afb556ed02acbbd870dfc611772b8f752" id="r_afb556ed02acbbd870dfc611772b8f752"><td class="memItemLeft"><a id="afb556ed02acbbd870dfc611772b8f752" name="afb556ed02acbbd870dfc611772b8f752"></a>
+TypedArray&lt; InputEvent &gt;&#160;</td><td class="memItemRight"><b>get_emitted_mouse_events</b> () const</td></tr>
+<tr class="memitem:ac6a5605964aafde0038ffa15cbe06418" id="r_ac6a5605964aafde0038ffa15cbe06418"><td class="memItemLeft"><a id="ac6a5605964aafde0038ffa15cbe06418" name="ac6a5605964aafde0038ffa15cbe06418"></a>
+void&#160;</td><td class="memItemRight"><b>clear_emitted_mouse_events</b> ()</td></tr>
 <tr class="inherit_header pub_methods_classgodot_1_1_gaze_display_server"><td colspan="2">Public Member Functions inherited from <a class="el" href="classgodot_1_1_gaze_display_server.html">godot::GazeDisplayServer</a></td></tr>
 <tr class="memitem:a385facf0158530c6ae0fb7ddc0d4bf14 pub_methods_classgodot_1_1_gaze_display_server" id="r_a385facf0158530c6ae0fb7ddc0d4bf14"><td class="memItemLeft">virtual Vector3&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_display_server.html#a385facf0158530c6ae0fb7ddc0d4bf14">get_default_camera_offset_mm</a> (int p_screen=-1) const</td></tr>
 <tr class="memdesc:a385facf0158530c6ae0fb7ddc0d4bf14 pub_methods_classgodot_1_1_gaze_display_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the default hardware camera placement offset for the display.  <br /></td></tr>
+<tr class="memitem:a2c065195e453e3fdc4e6b4c08a1563a5 pub_methods_classgodot_1_1_gaze_display_server" id="r_a2c065195e453e3fdc4e6b4c08a1563a5"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_display_server.html#a2c065195e453e3fdc4e6b4c08a1563a5">get_window_mouse_position</a> (int p_window=0) const</td></tr>
+<tr class="memdesc:a2c065195e453e3fdc4e6b4c08a1563a5 pub_methods_classgodot_1_1_gaze_display_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve the current mouse cursor position relative to the application window in logical pixels.  <br /></td></tr>
+<tr class="memitem:ae6d36dd5c45e4a3cf05a9658d8c029ad pub_methods_classgodot_1_1_gaze_display_server" id="r_ae6d36dd5c45e4a3cf05a9658d8c029ad"><td class="memItemLeft">virtual Vector2&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_display_server.html#ae6d36dd5c45e4a3cf05a9658d8c029ad">window_px_to_canvas</a> (const Vector2 &amp;p_win_pos, const CanvasItem *p_local_to=nullptr) const</td></tr>
+<tr class="memdesc:ae6d36dd5c45e4a3cf05a9658d8c029ad pub_methods_classgodot_1_1_gaze_display_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transform a window-local coordinate in logical pixels to canonical viewport canvas space.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-static-methods" class="groupheader"><a id="pro-static-methods" name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -173,8 +193,8 @@ static void&#160;</td><td class="memItemRight"><b>_bind_methods</b> ()</td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-inherited" class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_methods_classgodot_1_1_gaze_display_server"><td colspan="2">Static Public Member Functions inherited from <a class="el" href="classgodot_1_1_gaze_display_server.html">godot::GazeDisplayServer</a></td></tr>
-<tr class="memitem:a4497e3c5df05fa0b65cfaab9227f2ecb pub_static_methods_classgodot_1_1_gaze_display_server" id="r_a4497e3c5df05fa0b65cfaab9227f2ecb"><td class="memItemLeft">static GazeDisplayServer *&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_display_server.html#a4497e3c5df05fa0b65cfaab9227f2ecb">get_singleton</a> ()</td></tr>
-<tr class="memdesc:a4497e3c5df05fa0b65cfaab9227f2ecb pub_static_methods_classgodot_1_1_gaze_display_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_gaze_display_server.html" title="Singleton query server providing physical display geometry, scale factors, and hardware camera offset...">GazeDisplayServer</a> global singleton instance.  <br /></td></tr>
+<tr class="memitem:a0003a6a08e0d79e2f56a09550717f9eb pub_static_methods_classgodot_1_1_gaze_display_server" id="r_a0003a6a08e0d79e2f56a09550717f9eb"><td class="memItemLeft">static GazeDisplayServer *&#160;</td><td class="memItemRight"><a class="el" href="classgodot_1_1_gaze_display_server.html#a0003a6a08e0d79e2f56a09550717f9eb">get_singleton</a> ()</td></tr>
+<tr class="memdesc:a0003a6a08e0d79e2f56a09550717f9eb pub_static_methods_classgodot_1_1_gaze_display_server"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the <a class="el" href="classgodot_1_1_gaze_display_server.html" title="Singleton query server providing physical display geometry, scale factors, and hardware camera offset...">GazeDisplayServer</a> global singleton instance.  <br /></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="ae5e5f53314ead3fe8521c60656625769" name="ae5e5f53314ead3fe8521c60656625769"></a>
@@ -354,6 +374,158 @@ Additional Inherited Members</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Window Rect2i(x, y, width, height). </dd></dl>
 
 <p>Reimplemented from <a class="el" href="classgodot_1_1_gaze_display_server.html#aa560e9bc3bb60be8aa7220821ad0eb7a">godot::GazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a647dcd08160452abf872d27fd364d9b2" name="a647dcd08160452abf872d27fd364d9b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a647dcd08160452abf872d27fd364d9b2">&#9670;&#160;</a></span>mouse_get_button_state()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int64_t godot::MockGazeDisplayServer::mouse_get_button_state </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer. </p>
+<dl class="section return"><dt>Returns</dt><dd>Bitmask of pressed mouse buttons. </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_gaze_display_server.html#af46c5c44cae47f6d06f276fe592c2a46">godot::GazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a9ef33ea07836903cd2d89632344907d7" name="a9ef33ea07836903cd2d89632344907d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ef33ea07836903cd2d89632344907d7">&#9670;&#160;</a></span>mouse_get_position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 godot::MockGazeDisplayServer::mouse_get_position </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieve the current mouse cursor position in logical screen coordinates. </p>
+<dl class="section return"><dt>Returns</dt><dd>Screen mouse position Vector2(x, y). </dd></dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_gaze_display_server.html#a2db9b3ee7d0299b77e7279b609567824">godot::GazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a0523728bd4967d0edcbebb7e4832bed1" name="a0523728bd4967d0edcbebb7e4832bed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0523728bd4967d0edcbebb7e4832bed1">&#9670;&#160;</a></span>parse_mouse_button()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::MockGazeDisplayServer::parse_mouse_button </td>
+          <td>(</td>
+          <td class="paramtype">int64_t</td>          <td class="paramname"><span class="paramname"><em>p_button</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>p_pressed</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_position</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dispatch emulated synthetic mouse button event to the engine input queue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_button</td><td>Mouse button index. </td></tr>
+    <tr><td class="paramname">p_pressed</td><td>True for press, false for release. </td></tr>
+    <tr><td class="paramname">p_position</td><td>Canvas position where the click occurred. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_gaze_display_server.html#a49a158a4bcfa6d5b549b871e12960ce7">godot::GazeDisplayServer</a>.</p>
+
+</div>
+</div>
+<a id="a28b0a8ed5b4fa05bced562c47130fbda" name="a28b0a8ed5b4fa05bced562c47130fbda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28b0a8ed5b4fa05bced562c47130fbda">&#9670;&#160;</a></span>parse_mouse_motion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void godot::MockGazeDisplayServer::parse_mouse_motion </td>
+          <td>(</td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_position</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_relative</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Vector2 &amp;</td>          <td class="paramname"><span class="paramname"><em>p_velocity</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Dispatch emulated synthetic mouse motion to the engine input queue. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_position</td><td>Canonical canvas position. </td></tr>
+    <tr><td class="paramname">p_relative</td><td>Relative motion vector. </td></tr>
+    <tr><td class="paramname">p_velocity</td><td>Velocity vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="classgodot_1_1_gaze_display_server.html#a4b616296f9164d9f815eb5408f163f12">godot::GazeDisplayServer</a>.</p>
 
 </div>
 </div>

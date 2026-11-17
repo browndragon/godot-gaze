@@ -16,42 +16,82 @@
 		<method name="set_frame_id">
 			<return type="void"></return>
 			<param index="0" name="p_id" type="uint64_t"></param>
-			<description></description>
+			<description>Sets the sequential video pipeline frame identifier.
+
+p_id
+Monotonically increasing frame counter.
+
+Monotonically increasing frame counter.</description>
 		</method>
 		<method name="get_frame_id">
 			<return type="uint64_t"></return>
-			<description></description>
+			<description>Retrieves the sequential video pipeline frame identifier.
+
+uint64_t Frame counter.
+
+uint64_t Frame counter.</description>
 		</method>
 		<method name="set_timestamp_usec">
 			<return type="void"></return>
 			<param index="0" name="p_time" type="uint64_t"></param>
-			<description></description>
+			<description>Sets the event creation timestamp in microseconds (from Time::get_ticks_usec()).
+
+p_time
+Timestamp in microseconds.
+
+Timestamp in microseconds.</description>
 		</method>
 		<method name="get_timestamp_usec">
 			<return type="uint64_t"></return>
-			<description></description>
+			<description>Retrieves the event creation timestamp in microseconds.
+
+uint64_t Timestamp in microseconds.
+
+uint64_t Timestamp in microseconds.</description>
 		</method>
 		<method name="set_left_eye_openness">
 			<return type="void"></return>
 			<param index="0" name="p_val" type="float"></param>
-			<description></description>
+			<description>Sets the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+
+p_val
+Openness value between 0.0 and 1.0.
+
+Openness value between 0.0 and 1.0.</description>
 		</method>
 		<method name="get_left_eye_openness">
 			<return type="float"></return>
-			<description></description>
+			<description>Retrieves the left eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+
+float Openness value between 0.0 and 1.0.
+
+float Openness value between 0.0 and 1.0.</description>
 		</method>
 		<method name="set_right_eye_openness">
 			<return type="void"></return>
 			<param index="0" name="p_val" type="float"></param>
-			<description></description>
+			<description>Sets the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+
+p_val
+Openness value between 0.0 and 1.0.
+
+Openness value between 0.0 and 1.0.</description>
 		</method>
 		<method name="get_right_eye_openness">
 			<return type="float"></return>
-			<description></description>
+			<description>Retrieves the right eye openness estimate [0.0 = fully closed, 1.0 = fully open].
+
+float Openness value between 0.0 and 1.0.
+
+float Openness value between 0.0 and 1.0.</description>
 		</method>
 		<method name="is_face_tracked">
 			<return type="bool"></return>
-			<description></description>
+			<description>Indicates whether valid face tracking data is present in this event.
+
+bool True if face is tracked; false for missing or lost tracking events.
+
+bool True if face is tracked; false for missing or lost tracking events.</description>
 		</method>
 		<method name="copy_from">
 			<return type="void"></return>

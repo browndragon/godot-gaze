@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_gaze_mouse_point" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::GazeMousePoint</compoundname>
+    <includes refid="gaze__display__types_8hpp" local="no">gaze_display_types.hpp</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_mouse_point_1a43c6662db6179bc5644b4c490ab6dc72" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GazeMousePoint::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::GazeMousePoint::x</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="35" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_gaze_mouse_point_1a1294f054b00e1a636d84860640ac1330" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::GazeMousePoint::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::GazeMousePoint::y</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/gaze_display_types.hpp" line="36" column="12" bodyfile="src/core/gaze_display_types.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Represents position of mouse cursor on screen in logical pixels. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/gaze_display_types.hpp" line="34" column="1" bodyfile="src/core/gaze_display_types.hpp" bodystart="34" bodyend="37"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_gaze_mouse_point_1a43c6662db6179bc5644b4c490ab6dc72" prot="public" virt="non-virtual"><scope>Gaze::GazeMousePoint</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_gaze_mouse_point_1a1294f054b00e1a636d84860640ac1330" prot="public" virt="non-virtual"><scope>Gaze::GazeMousePoint</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

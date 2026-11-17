@@ -28,7 +28,7 @@ This document records architectural decisions, technical theories, and design pa
 
 6. **CameraFeed Formats & ONNX Model Color Spaces**:
    * **False Assumption**: Assuming all camera feeds deliver ready `FORMAT_RGB8` directly, or that all deep learning models take RGB.
-   * **Fact**: All four neural models in `godot-gaze` (YuNet, ADAS Landmarker, ADAS Gaze, and Eye Openness) require **BGR** input channel ordering. Camera ingestion normalizes OS frames (`RGBA8`, `RGB8`, `R8`, `NV12`) directly into packed BGR8 working buffers without redundant intermediate color permutations. For full model provenances, tensor layouts, and hardware capture characteristics, see [Vision Models & Camera Ingestion Specification](file:///Users/acunningham/src/godot-gaze/docs/vision_models.md).
+   * **Fact**: All four neural models in `godot-gaze` (YuNet, ADAS Landmarker, ADAS Gaze, and Eye Openness) require **BGR** input channel ordering. Camera ingestion normalizes OS frames (`RGBA8`, `RGB8`, `R8`, `NV12`) directly into packed BGR8 working buffers without redundant intermediate color permutations. For full model provenances, tensor layouts, and hardware capture characteristics, see [Vision Models & Camera Ingestion Specification](vision_models.md).
 
 7. **Pure Top-Bezel Ray Anchoring for Gaze Models without Angular Gain**:
    * **False Assumption**: Modeling vertical screen projection strictly at the physical camera location ($Y = 0\text{ px}$, top bezel) in the absence of an angular pitch gain multiplier or personalized multi-point polynomial calibration.

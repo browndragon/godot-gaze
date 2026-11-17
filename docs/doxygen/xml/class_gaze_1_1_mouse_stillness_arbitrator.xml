@@ -1,0 +1,616 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_mouse_stillness_arbitrator" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::MouseStillnessArbitrator</compoundname>
+    <innerclass refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" prot="public">Gaze::MouseStillnessArbitrator::Point2D</innerclass>
+    <innerclass refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample" prot="public">Gaze::MouseStillnessArbitrator::Sample</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10b" prot="public" static="no" strong="no">
+        <type></type>
+        <name>State</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::State</qualifiedname>
+        <enumvalue id="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10ba8abbff1fca5d215ba5fa05029c76f85d" prot="public">
+          <name>STATE_ACTIVE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10bae09b9db511da0f93f5047b0c308bf730" prot="public">
+          <name>STATE_SETTLING</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10baff6812e3a95cd7d965980518b0c7a5a3" prot="public">
+          <name>STATE_STILL</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="28" column="5" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="28" bodyend="32"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1adaa1649edac7504a3d40a17ad053b2a2" prot="public" static="no" mutable="no">
+        <type>State</type>
+        <definition>State Gaze::MouseStillnessArbitrator::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::state</qualifiedname>
+        <initializer>= STATE_STILL</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="34" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a028e91321f16bfeb90d3842453333e2d" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample" kindref="compound">Sample</ref></type>
+        <definition>Sample Gaze::MouseStillnessArbitrator::ring_buffer[RING_CAPACITY]</definition>
+        <argsstring>[RING_CAPACITY]</argsstring>
+        <name>ring_buffer</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::ring_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="42" column="12" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1ab9cd6f2d1a06e40cdbe7e2cda4b9cfff" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::MouseStillnessArbitrator::ring_head</definition>
+        <argsstring></argsstring>
+        <name>ring_head</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::ring_head</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="43" column="12" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a9cf0ead77c09dd968d83565056ed8353" prot="public" static="no" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::MouseStillnessArbitrator::ring_count</definition>
+        <argsstring></argsstring>
+        <name>ring_count</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::ring_count</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="44" column="12" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a821ff910b962ad78e2c54e0fe1c2be50" prot="public" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::MouseStillnessArbitrator::anchor_pos</definition>
+        <argsstring></argsstring>
+        <name>anchor_pos</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::anchor_pos</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref>(-9999.0f, -9999.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="46" column="13" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1ad4f403efb47131cd9d92c07f3e9bd1ad" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::MouseStillnessArbitrator::has_anchor</definition>
+        <argsstring></argsstring>
+        <name>has_anchor</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::has_anchor</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="47" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a9a39b26f6d07701bcf264e461beb0e86" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::anchor_bubble_radius_px</definition>
+        <argsstring></argsstring>
+        <name>anchor_bubble_radius_px</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::anchor_bubble_radius_px</qualifiedname>
+        <initializer>= 3.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="49" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1af87da67c5f69c2e6b03cb31c1769b16d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::window_velocity_threshold_px_s</definition>
+        <argsstring></argsstring>
+        <name>window_velocity_threshold_px_s</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::window_velocity_threshold_px_s</qualifiedname>
+        <initializer>= 15.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="50" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1acee624c8663f58316ec042983ee39410" prot="public" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::MouseStillnessArbitrator::window_duration_usec</definition>
+        <argsstring></argsstring>
+        <name>window_duration_usec</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::window_duration_usec</qualifiedname>
+        <initializer>= 200000</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="51" column="14" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a69307252a1d61b7d528465d784fb4555" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::stillness_timer</definition>
+        <argsstring></argsstring>
+        <name>stillness_timer</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::stillness_timer</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="53" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1af48f4f3d3d0ac0c459f067fa8b703e92" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::stillness_duration_sec</definition>
+        <argsstring></argsstring>
+        <name>stillness_duration_sec</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::stillness_duration_sec</qualifiedname>
+        <initializer>= 1.5f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="54" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1afed001e350f69b83910f01fd1f9ca3a0" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::MouseStillnessArbitrator::has_user_interacted</definition>
+        <argsstring></argsstring>
+        <name>has_user_interacted</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::has_user_interacted</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="55" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_mouse_stillness_arbitrator_1a79d54a9182d00e73a6526058b3c29ffa" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>size_t</type>
+        <definition>size_t Gaze::MouseStillnessArbitrator::RING_CAPACITY</definition>
+        <argsstring></argsstring>
+        <name>RING_CAPACITY</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::RING_CAPACITY</qualifiedname>
+        <initializer>= 16</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="41" column="29" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1ad7107b4297cd50f82e61d9826a84bc2c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::MouseStillnessArbitrator::MouseStillnessArbitrator</definition>
+        <argsstring>()</argsstring>
+        <name>MouseStillnessArbitrator</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::MouseStillnessArbitrator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="57" column="5" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="57" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1af551aefb1ea428046842cc3433352337" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="61" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="61" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1aa2e153d848b17ae3be64c0a6d9357291" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::record_sample</definition>
+        <argsstring>(uint64_t timestamp_usec, const Point2D &amp;pos)</argsstring>
+        <name>record_sample</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::record_sample</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>timestamp_usec</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="71" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="71" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1ac9e05eedc8b5076286c82581f46d5ac9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::compute_window_velocity</definition>
+        <argsstring>(uint64_t current_time_usec, const Point2D &amp;current_pos) const</argsstring>
+        <name>compute_window_velocity</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::compute_window_velocity</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>current_time_usec</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>current_pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="79" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="79" bodyend="102"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a9da78e200f60add89dbe9f5dd1e5ed0c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::MouseStillnessArbitrator::is_mouse_still</definition>
+        <argsstring>() const</argsstring>
+        <name>is_mouse_still</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::is_mouse_still</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="104" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="104" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a01b4a0c53556a2bbee6723cc890874c4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::MouseStillnessArbitrator::is_mouse_active</definition>
+        <argsstring>() const</argsstring>
+        <name>is_mouse_active</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::is_mouse_active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="108" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="108" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1af3490d31c3ed6e8d2be6a59d1803da92" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::get_target_blend</definition>
+        <argsstring>(bool camera_tracking_active, bool emulate_gaze_from_mouse) const</argsstring>
+        <name>get_target_blend</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_target_blend</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>camera_tracking_active</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>emulate_gaze_from_mouse</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="112" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="112" bodyend="119"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a322d5c236f01514020f4d8194de7cbc7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::update</definition>
+        <argsstring>(double delta_sec, uint64_t timestamp_usec, const Point2D &amp;screen_mouse_pos, bool mouse_clicked)</argsstring>
+        <name>update</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::update</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>delta_sec</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>timestamp_usec</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>screen_mouse_pos</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>mouse_clicked</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="121" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="121" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1aae80ea2a3d64c8d1fd2458632f2465fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::get_stillness_duration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_stillness_duration</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_stillness_duration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="169" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="169" bodyend="169"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1aa3c0f96c3f16f65b749f6df40b602586" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::set_stillness_duration</definition>
+        <argsstring>(float p_sec)</argsstring>
+        <name>set_stillness_duration</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::set_stillness_duration</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="170" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="170" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a69efa7bf849b01be7aa981d505b28d0c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::get_anchor_bubble_radius_px</definition>
+        <argsstring>() const</argsstring>
+        <name>get_anchor_bubble_radius_px</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_anchor_bubble_radius_px</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="172" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="172" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1afc2b01c50b5944712110c6f5cbde8d52" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::set_anchor_bubble_radius_px</definition>
+        <argsstring>(float p_px)</argsstring>
+        <name>set_anchor_bubble_radius_px</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::set_anchor_bubble_radius_px</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_px</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="173" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="173" bodyend="173"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a00b7b903257c0dd2d226cf93e6cb142c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::get_window_velocity_threshold_px_s</definition>
+        <argsstring>() const</argsstring>
+        <name>get_window_velocity_threshold_px_s</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_window_velocity_threshold_px_s</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="175" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="175" bodyend="175"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a9a5270f920d746e8ede3e94f3992e07a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::set_window_velocity_threshold_px_s</definition>
+        <argsstring>(float p_px_s)</argsstring>
+        <name>set_window_velocity_threshold_px_s</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::set_window_velocity_threshold_px_s</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_px_s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="176" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="176" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a046db33369589d3cb88a957bb3d5bf4a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t Gaze::MouseStillnessArbitrator::get_window_duration_usec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_window_duration_usec</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_window_duration_usec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="178" column="14" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="178" bodyend="178"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a4d19a3c5205a62d2478e9bd66f0154f2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::MouseStillnessArbitrator::set_window_duration_usec</definition>
+        <argsstring>(uint64_t p_usec)</argsstring>
+        <name>set_window_duration_usec</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::set_window_duration_usec</qualifiedname>
+        <param>
+          <type>uint64_t</type>
+          <declname>p_usec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="179" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="179" bodyend="179"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a7139b3da7d30bba2d29db7987179ccf5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::get_stillness_timer</definition>
+        <argsstring>() const</argsstring>
+        <name>get_stillness_timer</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::get_stillness_timer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="181" column="11" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="181" bodyend="181"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_mouse_stillness_arbitrator_1a8f6a07f5ec1bb76dbc07e7916fc17a87" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::MouseStillnessArbitrator::has_interacted</definition>
+        <argsstring>() const</argsstring>
+        <name>has_interacted</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::has_interacted</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="182" column="10" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="182" bodyend="182"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>Gaze::MouseStillnessArbitrator</label>
+        <link refid="class_gaze_1_1_mouse_stillness_arbitrator"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>ring_buffer</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>anchor_pos</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Gaze::MouseStillnessArbitrator::Point2D</label>
+        <link refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d"/>
+      </node>
+      <node id="2">
+        <label>Gaze::MouseStillnessArbitrator::Sample</label>
+        <link refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_sample"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>pos</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/core/mouse_stillness_arbitrator.hpp" line="15" column="1" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="15" bodyend="183"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9a39b26f6d07701bcf264e461beb0e86" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>anchor_bubble_radius_px</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a821ff910b962ad78e2c54e0fe1c2be50" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>anchor_pos</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ac9e05eedc8b5076286c82581f46d5ac9" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>compute_window_velocity</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a69efa7bf849b01be7aa981d505b28d0c" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_anchor_bubble_radius_px</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aae80ea2a3d64c8d1fd2458632f2465fe" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_stillness_duration</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a7139b3da7d30bba2d29db7987179ccf5" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_stillness_timer</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af3490d31c3ed6e8d2be6a59d1803da92" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_target_blend</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a046db33369589d3cb88a957bb3d5bf4a" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_window_duration_usec</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a00b7b903257c0dd2d226cf93e6cb142c" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>get_window_velocity_threshold_px_s</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ad4f403efb47131cd9d92c07f3e9bd1ad" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>has_anchor</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a8f6a07f5ec1bb76dbc07e7916fc17a87" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>has_interacted</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1afed001e350f69b83910f01fd1f9ca3a0" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>has_user_interacted</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a01b4a0c53556a2bbee6723cc890874c4" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>is_mouse_active</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9da78e200f60add89dbe9f5dd1e5ed0c" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>is_mouse_still</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ad7107b4297cd50f82e61d9826a84bc2c" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>MouseStillnessArbitrator</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa2e153d848b17ae3be64c0a6d9357291" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>record_sample</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af551aefb1ea428046842cc3433352337" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>reset</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a028e91321f16bfeb90d3842453333e2d" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>ring_buffer</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a79d54a9182d00e73a6526058b3c29ffa" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>RING_CAPACITY</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9cf0ead77c09dd968d83565056ed8353" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>ring_count</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1ab9cd6f2d1a06e40cdbe7e2cda4b9cfff" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>ring_head</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1afc2b01c50b5944712110c6f5cbde8d52" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>set_anchor_bubble_radius_px</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa3c0f96c3f16f65b749f6df40b602586" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>set_stillness_duration</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a4d19a3c5205a62d2478e9bd66f0154f2" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>set_window_duration_usec</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a9a5270f920d746e8ede3e94f3992e07a" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>set_window_velocity_threshold_px_s</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10b" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>State</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1adaa1649edac7504a3d40a17ad053b2a2" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>state</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10ba8abbff1fca5d215ba5fa05029c76f85d" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>STATE_ACTIVE</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10bae09b9db511da0f93f5047b0c308bf730" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>STATE_SETTLING</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1aa4fe348f355723114c0cee68d924c10baff6812e3a95cd7d965980518b0c7a5a3" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>STATE_STILL</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af48f4f3d3d0ac0c459f067fa8b703e92" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>stillness_duration_sec</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a69307252a1d61b7d528465d784fb4555" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>stillness_timer</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1a322d5c236f01514020f4d8194de7cbc7" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>update</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1acee624c8663f58316ec042983ee39410" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>window_duration_usec</name></member>
+      <member refid="class_gaze_1_1_mouse_stillness_arbitrator_1af87da67c5f69c2e6b03cb31c1769b16d" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator</scope><name>window_velocity_threshold_px_s</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

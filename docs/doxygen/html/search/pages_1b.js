@@ -1,0 +1,26 @@
+var searchData=
+[
+  ['ram_20is_20the_20common_20denominator_0',['4. Hardware &amp;amp; Memory Model: Why CPU RAM is the Common Denominator',['../md_docs_2architecture.html#autotoc_md40',1,'']]],
+  ['range_20vs_20automotive_20bias_1',['3. Peripheral Dynamic Range vs. Automotive Bias',['../md_docs_2gaze__model__evaluation.html#autotoc_md119',1,'']]],
+  ['rationale_3a_20why_20not_20rely_20on_20godot_20s_20displayserver_2',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]],
+  ['ray_20plane_20intersection_3',['3.1. 3D Ray-Plane Intersection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md82',1,'']]],
+  ['ray_20plane_20projection_4',['3. Physical Geometry &amp;amp; Ray-Plane Projection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md81',1,'']]],
+  ['readiness_3a_20blueprint_20for_20directfacegazeestimator_5',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['real_20time_20depth_20triangulation_20z_20engine_6',['5. Real-Time Depth Triangulation (Z Engine)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md89',1,'']]],
+  ['reference_7',['Project Settings Reference',['../index.html#autotoc_md27',1,'']]],
+  ['reference_20counted_20architecture_8',['Gaze Tracking Lifecycle &amp;amp; Reference-Counted Architecture',['../md_docs_2lifecycle__tracking.html',1,'']]],
+  ['reference_20counted_20lifecycle_20model_9',['1. Overview: The Reference-Counted Lifecycle Model',['../md_docs_2lifecycle__tracking.html#autotoc_md56',1,'']]],
+  ['reference_20counting_10',['Why Reference Counting?',['../md_docs_2lifecycle__tracking.html#autotoc_md57',1,'']]],
+  ['rejected_11',['Why Zero-Copy GPU Roundtrips Were Rejected',['../md_docs_2architecture.html#autotoc_md41',1,'']]],
+  ['rejected_20designs_20anti_20patterns_12',['Rejected Designs &amp;amp; Anti-Patterns',['../md_docs_2rejected__designs.html',1,'']]],
+  ['release_20godot_20gaze_20zip_13',['Option 1: Prebuilt Release (&lt;span class=&quot;tt&quot;&gt;godot-gaze.zip&lt;/span&gt;)',['../index.html#autotoc_md9',1,'']]],
+  ['rely_20on_20godot_20s_20displayserver_14',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]],
+  ['remains_20default_15',['A. Production Decision: OpenVINO ADAS-0002 Remains Default',['../md_docs_2gaze__model__evaluation.html#autotoc_md125',1,'']]],
+  ['resolution_20scaling_20optimization_20opportunities_16',['4. Resolution Scaling &amp;amp; Optimization Opportunities',['../md_docs_2gaze__model__evaluation.html#autotoc_md121',1,'']]],
+  ['retired_17',['4. Biological Angle Kappa &amp;amp; Calibration [RETIRED]',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md87',1,'']]],
+  ['roadmap_3a_20pluggable_20gaze_20estimator_20strategy_18',['5. Architectural Roadmap: Pluggable Gaze Estimator Strategy',['../md_docs_2gaze__model__evaluation.html#autotoc_md123',1,'']]],
+  ['roll_20un_20rotation_20feedback_20loop_19',['1.5. Continuous Head Roll Un-Rotation Feedback Loop',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md74',1,'']]],
+  ['rotation_20feedback_20loop_20',['1.5. Continuous Head Roll Un-Rotation Feedback Loop',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md74',1,'']]],
+  ['roundtrips_20were_20rejected_21',['Why Zero-Copy GPU Roundtrips Were Rejected',['../md_docs_2architecture.html#autotoc_md41',1,'']]],
+  ['rules_22',['2. Layer Isolation &amp;amp; Purity Rules',['../md_docs_2architecture.html#autotoc_md36',1,'']]]
+];

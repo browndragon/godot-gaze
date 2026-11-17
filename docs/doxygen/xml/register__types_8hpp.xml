@@ -3,7 +3,10 @@
   <compounddef id="register__types_8hpp" kind="file" language="C++">
     <compoundname>register_types.hpp</compoundname>
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
+    <includedby refid="gaze__display__server_8cpp" local="yes">src/godot/gaze_display_server.cpp</includedby>
+    <includedby refid="gaze__server_8cpp" local="yes">src/godot/gaze_server.cpp</includedby>
     <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
+    <includedby refid="vision__server_8cpp" local="yes">src/godot/vision_server.cpp</includedby>
     <incdepgraph>
       <node id="1">
         <label>src/godot/register_types.hpp</label>
@@ -20,7 +23,7 @@
 <para>GDExtension module registration hooks. </para>
     </briefdescription>
     <detaileddescription>
-<para>Declares the initialization and teardown entry points for registering the GazeServer, InputEventGaze, and GazeCalibration classes into the Godot engine ClassDB. </para>
+<para>Declares the initialization and teardown entry points for registering the GazeServer and InputEventGaze classes into the Godot engine ClassDB. </para>
     </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="normal"></highlight></codeline>
@@ -32,8 +35,9 @@
 <codeline lineno="14"><highlight class="normal"></highlight></codeline>
 <codeline lineno="15"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>initialize_gaze_module(ModuleInitializationLevel<sp/>p_level);</highlight></codeline>
 <codeline lineno="16"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>uninitialize_gaze_module(ModuleInitializationLevel<sp/>p_level);</highlight></codeline>
-<codeline lineno="17"><highlight class="normal"></highlight></codeline>
-<codeline lineno="18"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>setup_gaze_singletons();</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/register_types.hpp"/>
   </compounddef>

@@ -2,7 +2,7 @@
 <doxyfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="doxyfile.xsd" version="1.17.0" xml:lang="en-US">
   <option  id='DOXYFILE_ENCODING' default='yes' type='string'><value><![CDATA[UTF-8]]></value></option>
   <option  id='PROJECT_NAME' default='no' type='string'><value><![CDATA["Godot Gaze"]]></value></option>
-  <option  id='PROJECT_NUMBER' default='no' type='string'><value><![CDATA[1.0.0]]></value></option>
+  <option  id='PROJECT_NUMBER' default='no' type='string'><value><![CDATA[0.1.0]]></value></option>
   <option  id='PROJECT_BRIEF' default='no' type='string'><value><![CDATA["Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine"]]></value></option>
   <option  id='PROJECT_LOGO' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='PROJECT_ICON' default='yes' type='string'><value><![CDATA[]]></value></option>
@@ -136,7 +136,12 @@
     <value><![CDATA[src/native]]></value>
     <value><![CDATA[src/web]]></value>
     <value><![CDATA[README.md]]></value>
-    <value><![CDATA[docs/gaze_math_physical_model.md]]></value>
+    <value><![CDATA[docs/architecture.md]]></value>
+    <value><![CDATA[docs/lifecycle_tracking.md]]></value>
+    <value><![CDATA[docs/mathematical_model.md]]></value>
+    <value><![CDATA[docs/vision_models.md]]></value>
+    <value><![CDATA[docs/gaze_model_evaluation.md]]></value>
+    <value><![CDATA[docs/rejected_designs.md]]></value>
   </option>
   <option  id='INPUT_ENCODING' default='yes' type='string'><value><![CDATA[UTF-8]]></value></option>
   <option  id='INPUT_FILE_ENCODING' default='yes' type='stringlist'>

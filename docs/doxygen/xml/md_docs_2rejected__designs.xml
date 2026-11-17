@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="md_docs_2rejected__designs" kind="page">
+    <compoundname>md_docs_2rejected__designs</compoundname>
+    <title>Rejected Designs &amp; Anti-Patterns</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_docs_2rejected__designs_1autotoc_md128"/></para>
+<para>This document records architectural decisions, technical theories, and design patterns that have been tested, rejected, or identified as anti-patterns in <computeroutput>godot-gaze</computeroutput>. Contributors must consider these Frequently Asserted Quibbles when evaluating features or diagnosing issues.</para>
+<para><hruler/>
+</para>
+<sect1 id="md_docs_2rejected__designs_1autotoc_md130">
+<title>1. Frequently Asserted Quibbles &amp; Technical Traps</title><para><orderedlist>
+<listitem><para><bold>Mac Webcam Feed Mirroring Assumption</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Assuming macOS webcam feeds are horizontally mirrored by default and adding manual GDScript or C++ flip logic.</para>
+</listitem><listitem><para><bold>Fact</bold>: Frame orientation is handled consistently upstream by Godot and AVFoundation. Adding manual flips breaks facial landmark alignment and gaze vector projection math.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Custom Classifiers &amp; Synthesized Heuristics</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Inventing hardcoded heuristics, state machines, or synthesized dummy algorithms when an ML feature (like blink detection or iris tracking) is needed.</para>
+</listitem><listitem><para><bold>Fact</bold>: Inventing custom heuristics fails in practice. When a model or classifier is required, search upstream open-source alternatives (OpenCV, MediaPipe, OpenVINO, ONNX Model Zoo) for models supported by established literature.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Attributing Head Pose Tracking Errors to Calibration</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Claiming 3D head pose translation or rotation errors are caused by missing or uncalibrated screen/bio geometry.</para>
+</listitem><listitem><para><bold>Fact</bold>: Gaze projection vectors may relate to bio or screen calibration, but head pose tracking errors have never been caused by calibration. Head pose errors are always caused by logic bugs (misaligned spatial transformations, bad PnP solve inputs, invented landmark coordinates, or frame offset math).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Zero-Copy GPU Texture Pipeline</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Streaming raw camera frames directly on GPU to ONNX Runtime without CPU memory roundtrips.</para>
+</listitem><listitem><para><bold>Fact</bold>: Partial CPU-GPU-CPU synchronization stalls for facial crop extraction negated any compute speedups. Abandoned in favor of the self-contained CPU pipeline (see <computeroutput>TODO.md</computeroutput> Item 8).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>DisplayServer Coordinates on HiDPI / Retina Displays</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Assuming <computeroutput>DisplayServer.screen_get_size()</computeroutput> or <computeroutput>DisplayServer.window_get_position()</computeroutput> return physical hardware pixels that must be divided by <computeroutput>DisplayServer.screen_get_scale()</computeroutput>.</para>
+</listitem><listitem><para><bold>Fact</bold>: In Godot 4 on macOS, <computeroutput>DisplayServer</computeroutput> coordinates are already expressed in logical screen points/pixels (<computeroutput>lpix</computeroutput>), matching 2D viewport coordinates. Dividing by <computeroutput>scale</computeroutput> halves the screen and window coordinates, causing projection misalignment by a factor of 2. All Godot-facing spatial APIs must consistently use logical pixels (<computeroutput>lpix</computeroutput>).</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>CameraFeed Formats &amp; ONNX Model Color Spaces</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Assuming all camera feeds deliver ready <computeroutput>FORMAT_RGB8</computeroutput> directly, or that all deep learning models take RGB.</para>
+</listitem><listitem><para><bold>Fact</bold>: All four neural models in <computeroutput>godot-gaze</computeroutput> (YuNet, ADAS Landmarker, ADAS Gaze, and Eye Openness) require <bold>BGR</bold> input channel ordering. Camera ingestion normalizes OS frames (<computeroutput>RGBA8</computeroutput>, <computeroutput>RGB8</computeroutput>, <computeroutput>R8</computeroutput>, <computeroutput>NV12</computeroutput>) directly into packed BGR8 working buffers without redundant intermediate color permutations. For full model provenances, tensor layouts, and hardware capture characteristics, see <ref refid="md_docs_2vision__models" kindref="compound">Vision Models &amp; Camera Ingestion Specification</ref>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Pure Top-Bezel Ray Anchoring for Gaze Models without Angular Gain</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Modeling vertical screen projection strictly at the physical camera location ($Y = 0\text{ px}$, top bezel) in the absence of an angular pitch gain multiplier or personalized multi-point polynomial calibration.</para>
+</listitem><listitem><para><bold>Fact</bold>: Pre-trained appearance-based gaze estimation networks (such as OpenVINO ADAS-0002) predict subtle intra-socket eye vector deviations with compressed angular pitch ranges ($\approx \pm 5^\circ$ to $\pm 8^\circ$). When projected from the physical top bezel ($Y = 0$), a downward eye gaze of $-5^\circ$ at $500\text{ mm}$ eye relief only travels $43.7\text{ mm}$ ($\approx 218\text{ px}$), preventing the user from ever gazing below the screen midpoint ($Y = 540\text{ px}$). Centering the virtual optical axis at screen center ($Y = H/2$) provides symmetric vertical reach ($250\text{ px} \dots 830\text{ px}$) across typical viewing distances without requiring synthetic polynomial distortion.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Dynamic Physical Hardware Resizing on Display Rotation</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Swapping physical panel dimensions ($W_{\text{phys}} \leftrightarrow H_{\text{phys}}$) or assuming the mechanical camera mount position changes on device rotation.</para>
+</listitem><listitem><para><bold>Fact</bold>: Physical hardware panel dimensions ($W_{\text{phys}}, H_{\text{phys}}$) and camera mechanical mount position ($\mathbf{O}_{\text{mount}}$) remain fixed constants of the device chassis. Device orientation ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) is strictly a software viewport orientation mapping ($R_{\text{display}}$) transforming physical display millimeter coordinates to viewport millimeter coordinates before pixel pitch scaling.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Personalized Angle Kappa Calibration for Appearance-Based Webcam Tracking</bold>:<itemizedlist>
+<listitem><para><bold>False Assumption</bold>: Assuming user-specific optical-to-visual axis calibration (Angle Kappa $\boldsymbol{\kappa}$) is required and measurable to correct gaze projection errors on desktop monitors.</para>
+</listitem><listitem><para><bold>Fact</bold>: For typical users on desktop/laptop displays, anatomical Angle Kappa ($\approx 0.35^\circ\text{<ndash/>}1.0^\circ$) is well below the angular noise floor of single-camera appearance-based neural networks ($\sigma \approx 1.5^\circ\text{<ndash/>}2.0^\circ$). The observed large angular errors near screen edges ($-5^\circ$ on left, $+5^\circ$ on right) are not biological offsets, but <bold>ocular eccentricity compression</bold> of the appearance gaze model (trained on in-vehicle driver monitoring where gazes $&gt; 10^\circ$ are accompanied by head turns). Attempting to calibrate Angle Kappa across the screen is an anti-pattern: it causes hypothesis thrashing because a single rigid rotation cannot reconcile symmetric opposite errors at the edges. Completely retired in favor of model-level wide-angle evaluation and head-space angular compensation. Additionally, all public APIs distinguishing &quot;raw&quot; vs &quot;calibrated/cooked&quot; gaze are retired.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="md_docs_2rejected__designs_1autotoc_md132">
+<title>2. Code Style &amp; Integration Guidelines</title><para><orderedlist>
+<listitem><para><bold>GDExtension Subclassing &amp; Method Overrides</bold>:<itemizedlist>
+<listitem><para>When overriding a virtual method in GDScript (e.g., <computeroutput>_process</computeroutput>), only invoke <computeroutput>super(...)</computeroutput> if that virtual method is explicitly defined in the C++ parent class.</para>
+</listitem><listitem><para>Calling <computeroutput>super()</computeroutput> on a method NOT defined in the parent C++ class causes a GDScript runtime error. Inspect <computeroutput>src/godot/</computeroutput> C++ class bindings first.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Explicit Coordinate Space Annotations</bold>:<itemizedlist>
+<listitem><para>Methods transforming spatial coordinates (e.g., camera space, viewport space, inference space, screen space) must explicitly document and annotate coordinate systems at function parameter boundaries.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>GDExtension Signal Parameter Types</bold>:<itemizedlist>
+<listitem><para>Signal signatures exposed from C++ to GDScript should use standard engine primitives (<computeroutput>Vector2</computeroutput>, <computeroutput>Transform2D</computeroutput>, <computeroutput>float</computeroutput>, <computeroutput>int</computeroutput>, <computeroutput>bool</computeroutput>) to avoid binding friction across script boundaries. </para>
+</listitem></itemizedlist>
+</para>
+</listitem></orderedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="docs/rejected_designs.md"/>
+  </compounddef>
+</doxygen>

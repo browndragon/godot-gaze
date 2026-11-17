@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="md_docs_2lifecycle__tracking" kind="page">
+    <compoundname>md_docs_2lifecycle__tracking</compoundname>
+    <title>Gaze Tracking Lifecycle &amp; Reference-Counted Architecture</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_docs_2lifecycle__tracking_1autotoc_md54"/></para>
+<para>This document explains how tracking lifecycle is managed in <computeroutput>godot-gaze</computeroutput>, the reference-counted tracker model in <computeroutput>GazeServer</computeroutput>, and how downstream consumer projects should integrate <computeroutput>GazeTracker</computeroutput> nodes or <computeroutput>GazeTracker.track_node()</computeroutput>.</para>
+<para><hruler/>
+</para>
+<sect1 id="md_docs_2lifecycle__tracking_1autotoc_md56">
+<title>1. Overview: The Reference-Counted Lifecycle Model</title><para><computeroutput>godot-gaze</computeroutput> uses an active reference-counter (<computeroutput>active_trackers</computeroutput>) on the engine singleton <computeroutput>GazeServer</computeroutput>:</para>
+<para><programlisting><codeline><highlight class="normal">active_trackers<sp/>==<sp/>0<sp/>:<sp/>Camera<sp/>pipeline<sp/>&amp;<sp/>ML<sp/>worker<sp/>threads<sp/>are<sp/>STOPPED<sp/>(hardware<sp/>LED<sp/>off).</highlight></codeline>
+<codeline><highlight class="normal">active_trackers<sp/>&gt;=<sp/>1<sp/>:<sp/>Camera<sp/>pipeline<sp/>&amp;<sp/>ML<sp/>worker<sp/>threads<sp/>are<sp/>RUNNING<sp/>(hardware<sp/>LED<sp/>on).</highlight></codeline>
+</programlisting></para>
+<sect2 id="md_docs_2lifecycle__tracking_1autotoc_md57">
+<title>Why Reference Counting?</title><para><orderedlist>
+<listitem><para><bold>Privacy &amp; Battery</bold>: Webcams and heavy neural inference models (face detection, facial landmarks, gaze vector regression, and eye openness) should only run when an active scene or gameplay mechanic requires gaze.</para>
+</listitem><listitem><para><bold>Web / Browser Compliance</bold>: Modern browsers require user interaction before granting camera permissions. Starting tracking prematurely on engine boot triggers immediate permission dialogs before the user interacts with the canvas.</para>
+</listitem><listitem><para><bold>Headless Unit Testing</bold>: Fast unit tests (e.g. testing math, event hierarchies, or UI layouts) do not need to query or lock physical camera devices.</para>
+</listitem></orderedlist>
+</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="md_docs_2lifecycle__tracking_1autotoc_md59">
+<title>2. Integration Patterns</title><sect2 id="md_docs_2lifecycle__tracking_1autotoc_md60">
+<title>Pattern A: Declarative Scene Node (<computeroutput>GazeTracker</computeroutput>)</title><para>Add a <computeroutput>GazeTracker</computeroutput> node as a child of any scene or component that relies on gaze input:</para>
+<para><programlisting><codeline><highlight class="normal">TutorialLevel<sp/>(Node2D)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>GazeTracker<sp/>(Node)</highlight></codeline>
+<codeline><highlight class="normal">├──<sp/>Paddle<sp/>(CharacterBody2D)</highlight></codeline>
+<codeline><highlight class="normal">└──<sp/>Ball<sp/>(RigidBody2D)</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_docs_2lifecycle__tracking_1autotoc_md61">
+<title>Invariants &amp; Behavior</title><para><itemizedlist>
+<listitem><para><bold>Tree Entry (<computeroutput>NOTIFICATION_ENTER_TREE</computeroutput>)</bold>: Increments <computeroutput>GazeServer.active_trackers</computeroutput>. If transitioning from <computeroutput>0 -&gt; 1</computeroutput>, starts the camera capture feed and ML worker thread.</para>
+</listitem><listitem><para><bold>Tree Exit (<computeroutput>NOTIFICATION_EXIT_TREE</computeroutput>)</bold>: Decrements <computeroutput>GazeServer.active_trackers</computeroutput>. If dropping to <computeroutput>0</computeroutput>, stops the camera capture feed and ML worker thread.</para>
+</listitem><listitem><para><bold>Dynamic Property (<computeroutput>enabled</computeroutput>)</bold>:<itemizedlist>
+<listitem><para>Toggling <computeroutput>enabled = false</computeroutput> while in tree releases its reference count.</para>
+</listitem><listitem><para>Toggling <computeroutput>enabled = true</computeroutput> while in tree acquires its reference count.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Multiple Inclusion Safety</bold>: If multiple subcomponents in a scene each contain a <computeroutput>GazeTracker</computeroutput> node (e.g. both a <computeroutput>Paddle</computeroutput> component and a <computeroutput>FluidField</computeroutput> visualizer), the reference count safely increments to 2. When one component is freed, tracking remains active for the other until all trackers exit the tree.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect3>
+</sect2>
+<sect2 id="md_docs_2lifecycle__tracking_1autotoc_md63">
+<title>Pattern B: Programmatic GDScript Attachment (<computeroutput>GazeTracker.track_node</computeroutput>)</title><para>For custom GDScript scenes or standalone root nodes that don&apos;t want to manually edit <computeroutput>.tscn</computeroutput> hierarchies:</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_init()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Attaches<sp/>an<sp/>internal<sp/>GazeTracker<sp/>child<sp/>that<sp/>mirrors<sp/>this<sp/>node&apos;s<sp/>tree<sp/>lifecycle</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>GazeTracker.track_node(self)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Handles<sp/>gaze<sp/>position,<sp/>eye<sp/>openness,<sp/>and<sp/>blink<sp/>triggers</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass</highlight></codeline>
+</programlisting></para>
+<sect3 id="md_docs_2lifecycle__tracking_1autotoc_md64">
+<title>How <computeroutput>track_node()</computeroutput> Works</title><para><itemizedlist>
+<listitem><para>Inserts an internal <computeroutput>GazeTracker</computeroutput> child using <computeroutput>Node.INTERNAL_MODE_FRONT</computeroutput>.</para>
+</listitem><listitem><para>Because it is an internal child:<itemizedlist>
+<listitem><para>It is completely hidden from <computeroutput>get_children()</computeroutput>.</para>
+</listitem><listitem><para>It does not clutter the Godot editor inspector or scene dock.</para>
+</listitem><listitem><para>It is not serialized into <computeroutput>.tscn</computeroutput> file saves.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>When the parent node is added to the scene tree via <computeroutput>add_child()</computeroutput>, the internal tracker enters the tree and starts tracking. When the parent leaves the tree or is freed (<computeroutput>queue_free()</computeroutput>), the internal tracker exits the tree and releases the reference count.</para>
+</listitem><listitem><para>Idempotent: Calling <computeroutput>GazeTracker.track_node(self)</computeroutput> multiple times on the same node is safely deduplicated.</para>
+</listitem></itemizedlist>
+</para>
+<para><hruler/>
+</para>
+</sect3>
+</sect2>
+</sect1>
+<sect1 id="md_docs_2lifecycle__tracking_1autotoc_md66">
+<title>3. Direct Server APIs (Advanced)</title><para>For specialized tools, calibration wizards, or diagnostics that need manual control outside of scene trees:</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">var<sp/>gs<sp/>=<sp/>Engine.get_singleton(&quot;GazeServer&quot;)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Manually<sp/>start<sp/>tracking<sp/>(increments<sp/>active_trackers)</highlight></codeline>
+<codeline><highlight class="normal">gs.start_tracking()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Query<sp/>tracking<sp/>state</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>is_active<sp/>=<sp/>gs.is_tracking_active()</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>tracker_count<sp/>=<sp/>gs.get_active_tracker_count()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">#<sp/>Manually<sp/>stop<sp/>tracking<sp/>(decrements<sp/>active_trackers)</highlight></codeline>
+<codeline><highlight class="normal">gs.stop_tracking()</highlight></codeline>
+</programlisting> </para>
+</sect1>
+    </detaileddescription>
+    <location file="docs/lifecycle_tracking.md"/>
+  </compounddef>
+</doxygen>

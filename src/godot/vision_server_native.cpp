@@ -1,3 +1,4 @@
+#ifndef WEB_ENABLED
 #include "vision_server.hpp"
 #include "../core/log.hpp"
 #include <godot_cpp/classes/image.hpp>
@@ -131,3 +132,4 @@ bool VisionServer::get_camera_current_frame(RID p_camera, Gaze::Frame &r_frame) 
 }
 
 } // namespace godot
+#endif

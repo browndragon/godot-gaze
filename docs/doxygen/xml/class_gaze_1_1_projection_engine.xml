@@ -15,7 +15,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="28" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="28" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="33" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="33" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a2770522d5014ea9c0f0ca5653b44c1b2" prot="private" static="no" mutable="no">
         <type>GodotDisplayVector2</type>
@@ -30,7 +30,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="29" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="29" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="34" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="34" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a0e4ff1a4976e1bb24b7d606ebb4ce795" prot="private" static="no" mutable="no">
         <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
@@ -45,7 +45,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="30" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="30" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="35" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="35" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" static="no" mutable="no">
         <type>double</type>
@@ -60,7 +60,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="31" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="31" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="36" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="36" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1ae0a100993eb9b58945a8d7941822b877" prot="private" static="no" mutable="no">
         <type>DisplayOrientation</type>
@@ -75,7 +75,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="32" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="32" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="37" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="37" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a62a80348be0cc6ca123209b8af68ae1c" prot="private" static="no" mutable="no">
         <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
@@ -90,7 +90,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="33" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="33" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="38" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="38" bodyend="-1"/>
       </memberdef>
       <memberdef kind="variable" id="class_gaze_1_1_projection_engine_1a9b86a01c92ee772014c9b1d15f0da47e" prot="private" static="no" mutable="no">
         <type>GodotDisplayVector2</type>
@@ -105,7 +105,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="34" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="34" bodyend="-1"/>
+        <location file="src/core/projection_engine.hpp" line="39" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="39" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -121,7 +121,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="37" column="9"/>
+        <location file="src/core/projection_engine.hpp" line="42" column="9"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9af4a8be2ff84ab6c2bd78cf1fae6e66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -139,7 +139,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="40" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="40" bodyend="40"/>
+        <location file="src/core/projection_engine.hpp" line="45" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="45" bodyend="45"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ab40c4ec2da44a8f6e9b71515fe6a44c0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_camera_placement" kindref="compound">CameraPlacement</ref></type>
@@ -153,7 +153,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="41" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="41" bodyend="41"/>
+        <location file="src/core/projection_engine.hpp" line="46" column="25" bodyfile="src/core/projection_engine.hpp" bodystart="46" bodyend="46"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a17b9fd667a65b9be8fdc41436edc4cd7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -171,7 +171,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="43" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="43" bodyend="43"/>
+        <location file="src/core/projection_engine.hpp" line="48" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="48" bodyend="48"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a937cdd4eff810f3eb32c7a09fd1cea0e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>GodotDisplayVector2</type>
@@ -185,7 +185,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="44" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="44" bodyend="44"/>
+        <location file="src/core/projection_engine.hpp" line="49" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="49" bodyend="49"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ad43c73f5f7deda86cca5da9cd8b3f1b3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -203,7 +203,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="46" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="46" bodyend="46"/>
+        <location file="src/core/projection_engine.hpp" line="51" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="51" bodyend="51"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9d65e9d0e344e57b459dbc2656c4169d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
@@ -217,7 +217,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="47" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="47" bodyend="47"/>
+        <location file="src/core/projection_engine.hpp" line="52" column="23" bodyfile="src/core/projection_engine.hpp" bodystart="52" bodyend="52"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1aae392df178118a39b5ea9f68585eae12" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -235,7 +235,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="49" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="49" bodyend="49"/>
+        <location file="src/core/projection_engine.hpp" line="54" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="54" bodyend="54"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae678ec86b05c2be708d5ac65fbc9ee6c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>double</type>
@@ -249,7 +249,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="50" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="50" bodyend="50"/>
+        <location file="src/core/projection_engine.hpp" line="55" column="16" bodyfile="src/core/projection_engine.hpp" bodystart="55" bodyend="55"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ac9cbd8fef1dcbd8b085f49b338299835" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -267,7 +267,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="52" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="52" bodyend="52"/>
+        <location file="src/core/projection_engine.hpp" line="57" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="57" bodyend="57"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a85503e45ba9999d72887c0170f55ceba" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>DisplayOrientation</type>
@@ -281,7 +281,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="53" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="53" bodyend="53"/>
+        <location file="src/core/projection_engine.hpp" line="58" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="58" bodyend="58"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a03062d3f1719cc530c2cdfdd347daf35" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -299,7 +299,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="55" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="55" bodyend="55"/>
+        <location file="src/core/projection_engine.hpp" line="60" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="60" bodyend="60"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1ae30ec8c0a361322c4c7111a8876505c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
@@ -313,7 +313,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="56" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="56" bodyend="56"/>
+        <location file="src/core/projection_engine.hpp" line="61" column="28" bodyfile="src/core/projection_engine.hpp" bodystart="61" bodyend="61"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a4ddd5f9909c7db378a378e26cec3e276" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
         <type>void</type>
@@ -331,7 +331,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="58" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="58" bodyend="58"/>
+        <location file="src/core/projection_engine.hpp" line="63" column="14" bodyfile="src/core/projection_engine.hpp" bodystart="63" bodyend="63"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a9c4686cf499c1c3df9f55443c9291ab5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
         <type>GodotDisplayVector2</type>
@@ -345,7 +345,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="59" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="59" bodyend="59"/>
+        <location file="src/core/projection_engine.hpp" line="64" column="29" bodyfile="src/core/projection_engine.hpp" bodystart="64" bodyend="64"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1afd883cbd9fac343f99f6c385fc54c8f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>double</type>
@@ -389,7 +389,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="67" column="16" bodyfile="src/core/projection_engine.cpp" bodystart="7" bodyend="12"/>
+        <location file="src/core/projection_engine.hpp" line="72" column="16" bodyfile="src/core/projection_engine.cpp" bodystart="7" bodyend="12"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a702af3b59a4e742ea25e43e4f4af1d48" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a28e2d0e53cfd2743d19687809afaa110" kindref="member">Space::GodotDisplayMm</ref> &gt;</type>
@@ -420,7 +420,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="74" column="23" bodyfile="src/core/projection_engine.cpp" bodystart="115" bodyend="130"/>
+        <location file="src/core/projection_engine.hpp" line="79" column="23" bodyfile="src/core/projection_engine.cpp" bodystart="119" bodyend="134"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a283d1496569c8a418638f55d98b13f25" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type><ref refid="opencv__space__conversions_8hpp_1a0491a44211152b05dd97f8d68ff790f7" kindref="member">GodotCameraVector3</ref></type>
@@ -451,7 +451,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="81" column="28" bodyfile="src/core/projection_engine.cpp" bodystart="132" bodyend="144"/>
+        <location file="src/core/projection_engine.hpp" line="86" column="28" bodyfile="src/core/projection_engine.cpp" bodystart="136" bodyend="148"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_projection_engine_1a3fe06d84bd683196bceae659cbab844f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -506,7 +506,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="90" column="14" bodyfile="src/core/projection_engine.cpp" bodystart="15" bodyend="113"/>
+        <location file="src/core/projection_engine.hpp" line="95" column="14" bodyfile="src/core/projection_engine.cpp" bodystart="15" bodyend="117"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
@@ -539,14 +539,14 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/core/projection_engine.hpp" line="99" column="35"/>
+        <location file="src/core/projection_engine.hpp" line="104" column="35"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/core/projection_engine.hpp" line="25" column="5" bodyfile="src/core/projection_engine.hpp" bodystart="26" bodyend="100"/>
+    <location file="src/core/projection_engine.hpp" line="30" column="5" bodyfile="src/core/projection_engine.hpp" bodystart="31" bodyend="105"/>
     <listofallmembers>
       <member refid="class_gaze_1_1_projection_engine_1a00412b35c8e8ba446aea89fee592178f" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>camera_focal_length_px</name></member>
       <member refid="class_gaze_1_1_projection_engine_1ae0a100993eb9b58945a8d7941822b877" prot="private" virt="non-virtual"><scope>Gaze::ProjectionEngine</scope><name>display_orientation</name></member>

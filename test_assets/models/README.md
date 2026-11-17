@@ -6,10 +6,11 @@ This directory contains developer model references and outlines procedures for f
 
 ## 1. Production Baseline Models
 
-The current production baseline utilizes the **Intel OpenVINO ADAS-0002** suite:
+The current production baseline uses YuNet + **Intel OpenVINO ADAS-0002** + **OpenVINO open-closed-eye-0001** (converted to `.ort` runtime models by `scripts/download_models.sh`):
 * `face_detection_yunet_2023mar.ort`: YuNet 5-point face detector (`[1, 3, 640, 640]` BGR NCHW).
-* `facial-landmarks-35-adas-0002.onnx`: 35-point facial landmark regressor (`[1, 3, 60, 60]` BGR NCHW).
-* `gaze-estimation-adas-0002.onnx`: Dual eye crop + head pose gaze regressor (`[1, 3, 60, 60]` x2 + `[1, 3]` angles).
+* `facial-landmarks-35-adas-0002.xml` / `.bin`: 35-point facial landmark regressor IR (`[1, 3, 60, 60]` BGR NCHW).
+* `gaze-estimation-adas-0002.xml` / `.bin`: Dual eye crop + head pose gaze regressor IR (`[1, 3, 60, 60]` x2 + `[1, 3]` angles).
+* `open_closed_eye.onnx`: Standardized opset-14 Softmax eye openness classifier (`[1, 3, 32, 32]` BGR NCHW).
 
 ---
 

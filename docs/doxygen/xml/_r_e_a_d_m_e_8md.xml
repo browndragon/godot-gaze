@@ -7,110 +7,305 @@
     <detaileddescription>
     </detaileddescription>
     <programlisting>
-<codeline><highlight class="normal">#<sp/>godot-gaze</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Godot<sp/>Gaze<sp/>(`v0.1.0`)</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">A<sp/>high-frequency,<sp/>real-time<sp/>3D<sp/>gaze<sp/>estimation<sp/>&amp;<sp/>projecting<sp/>GDExtension<sp/>plugin<sp/>for<sp/>Godot<sp/>4.7+.</highlight></codeline>
+<codeline><highlight class="normal">Real-time,<sp/>on-device<sp/>eye-gaze<sp/>and<sp/>6-DoF<sp/>head-pose<sp/>tracking<sp/>GDExtension<sp/>for<sp/>**Godot<sp/>4**,<sp/>powered<sp/>by<sp/>**ONNX<sp/>Runtime**<sp/>and<sp/>physical<sp/>camera-to-display<sp/>ray<sp/>projection.</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">##<sp/>Key<sp/>Features</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">-<sp/>**Cross-Platform<sp/>Gaze<sp/>Tracking**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Native<sp/>Desktop<sp/>&amp;<sp/>Mobile<sp/>(macOS,<sp/>Windows,<sp/>Linux,<sp/>iOS,<sp/>Android)**:<sp/>Runs<sp/>an<sp/>optimized<sp/>CPU-based<sp/>**ONNX<sp/>Runtime<sp/>(CPU/XNNPACK)**<sp/>pipeline<sp/>for<sp/>face<sp/>detection<sp/>(YuNet)<sp/>and<sp/>gaze<sp/>estimation<sp/>(OpenVINO<sp/>vehicle<sp/>models).</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**WebAssembly<sp/>(WASM)**:<sp/>Leverages<sp/>browser-native<sp/>**ONNX<sp/>Runtime<sp/>Web**<sp/>(WebGPU/WebGL<sp/>accelerated)<sp/>and<sp/>the<sp/>same<sp/>models<sp/>as<sp/>the<sp/>desktop.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**Background<sp/>Inference**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Native<sp/>(Desktop/Mobile)**:<sp/>All<sp/>ML<sp/>model<sp/>estimation<sp/>runs<sp/>in<sp/>a<sp/>dedicated<sp/>C++<sp/>background<sp/>worker<sp/>thread<sp/>(`GazeTrackingPipeline`)<sp/>with<sp/>lock-free<sp/>double<sp/>buffering.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Web<sp/>(WASM)**:<sp/>Camera<sp/>capture<sp/>and<sp/>inference<sp/>run<sp/>asynchronously<sp/>outside<sp/>the<sp/>WebAssembly<sp/>runtime<sp/>via<sp/>the<sp/>browser<sp/>sidecar<sp/>(`gaze_sidecar.js`)<sp/>using<sp/>ONNX<sp/>Runtime<sp/>Web<sp/>(WebGPU/WebGL<sp/>accelerated).</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**Principled<sp/>3D<sp/>Spherical<sp/>Calibration**:<sp/>Corrects<sp/>biological<sp/>user<sp/>differences<sp/>using<sp/>3D<sp/>angular<sp/>biases<sp/>(pitch/yaw)<sp/>applied<sp/>directly<sp/>to<sp/>the<sp/>estimated<sp/>3D<sp/>gaze<sp/>vector.</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>**Adaptive<sp/>Smoothing**:<sp/>Implements<sp/>a<sp/>**1<sp/>Euro<sp/>Filter**<sp/>to<sp/>suppress<sp/>saccadic<sp/>jitter<sp/>during<sp/>steady<sp/>gaze<sp/>while<sp/>preserving<sp/>low<sp/>latency<sp/>during<sp/>rapid<sp/>eye<sp/>movements.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**On-Device<sp/>ML<sp/>Pipeline<sp/>(No<sp/>External<sp/>Services)**:<sp/>Runs<sp/>face<sp/>detection<sp/>(`face_detection_yunet_2023mar.ort`),<sp/>35-point<sp/>facial<sp/>landmarks<sp/>(`facial-landmarks-35-adas-0002.ort`),<sp/>3D<sp/>gaze<sp/>estimation<sp/>(`gaze-estimation-adas-0002.ort`),<sp/>and<sp/>eye-openness<sp/>classification<sp/>(`open_closed_eye.ort`)<sp/>locally<sp/>via<sp/>ONNX<sp/>Runtime.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Physical<sp/>Camera-to-Display<sp/>Geometry**:<sp/>Solves<sp/>3D<sp/>head<sp/>pose<sp/>via<sp/>EPnP<sp/>in<sp/>millimeter<sp/>camera<sp/>space<sp/>and<sp/>intersects<sp/>the<sp/>fused<sp/>gaze<sp/>ray<sp/>with<sp/>the<sp/>physical<sp/>screen<sp/>plane,<sp/>converting<sp/>automatically<sp/>to<sp/>Godot<sp/>canvas<sp/>and<sp/>`CanvasItem`-local<sp/>coordinates<sp/>across<sp/>window<sp/>sizes<sp/>and<sp/>DPI<sp/>scales.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**First-Class<sp/>Godot<sp/>Input<sp/>Events**:<sp/>Dispatches<sp/>`InputEventGaze`<sp/>and<sp/>`InputEventGazeMissing`<sp/>through<sp/>Godot&apos;s<sp/>standard<sp/>`Input`<sp/>pipeline.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Reference-Counted<sp/>Lifecycle<sp/>(`GazeTracker`)**:<sp/>Automatically<sp/>starts/stops<sp/>camera<sp/>capture<sp/>and<sp/>inference<sp/>when<sp/>nodes<sp/>enter<sp/>or<sp/>leave<sp/>the<sp/>scene<sp/>tree.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Inertial<sp/>Dwell<sp/>Node<sp/>(`FillAccumulator`)**:<sp/>2nd-order<sp/>smooth<sp/>dwell/charge<sp/>accumulator<sp/>with<sp/>blink/micro-saccade<sp/>momentum<sp/>tolerance<sp/>and<sp/>distance-scaled<sp/>off-target<sp/>drain.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Mouse<sp/>&amp;<sp/>Gaze<sp/>Coexistence**:<sp/>Built-in<sp/>`MouseStillnessArbitrator`<sp/>and<sp/>bi-directional<sp/>mouse<sp/>emulation<sp/>(`emulate_mouse_from_gaze`,<sp/>`emulate_gaze_from_mouse`)<sp/>so<sp/>physical<sp/>mouse<sp/>input<sp/>takes<sp/>instant<sp/>priority<sp/>and<sp/>mouse-only<sp/>dev<sp/>machines<sp/>can<sp/>test<sp/>gaze<sp/>UIs<sp/>without<sp/>a<sp/>webcam.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Calibration<sp/>&amp;<sp/>Visual<sp/>Debugger**:<sp/>Interactive<sp/>`GazeCalibrationWizard`,<sp/>persistent<sp/>`GazeDeviceProfile`,<sp/>and<sp/>live<sp/>`debug_cam_feed.tscn`<sp/>camera<sp/>overlay.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Headless<sp/>CI<sp/>Testing<sp/>(`MockVisionServer`)**:<sp/>Deterministic<sp/>synthetic<sp/>camera/gaze<sp/>driver<sp/>for<sp/>automated<sp/>testing<sp/>without<sp/>hardware<sp/>webcams.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Cross-Platform**:<sp/>Windows,<sp/>macOS,<sp/>Linux,<sp/>Android,<sp/>iOS,<sp/>and<sp/>Web<sp/>(WebAssembly<sp/>+<sp/>`gaze_sidecar.js`).</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Getting<sp/>Started</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Installation</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">###<sp/>1.<sp/>Installation</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>Option<sp/>1:<sp/>Prebuilt<sp/>Release<sp/>(`godot-gaze.zip`)</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">You<sp/>can<sp/>install<sp/>`godot-gaze`<sp/>using<sp/>one<sp/>of<sp/>the<sp/>following<sp/>methods:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>Download<sp/>`godot-gaze.zip`<sp/>from<sp/>the<sp/>[GitHub<sp/>Releases](../../releases)<sp/>page.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Extract<sp/>it<sp/>into<sp/>the<sp/>root<sp/>of<sp/>your<sp/>Godot<sp/>project<sp/>so<sp/>that<sp/>`addons/godot-gaze/`<sp/>sits<sp/>inside<sp/>your<sp/>`res://`<sp/>directory<sp/>(`res://addons/godot-gaze/gaze.gdextension`).</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Open<sp/>your<sp/>project<sp/>in<sp/>Godot<sp/>4,<sp/>go<sp/>to<sp/>**Project<sp/>-&gt;<sp/>Project<sp/>Settings<sp/>-&gt;<sp/>Plugins**,<sp/>and<sp/>enable<sp/>**Godot<sp/>Gaze**.</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">####<sp/>A.<sp/>From<sp/>Pre-compiled<sp/>Release<sp/>(Recommended)</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>Option<sp/>2:<sp/>Building<sp/>from<sp/>Source<sp/>(or<sp/>Symlinking<sp/>`project/addons/godot-gaze`)</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>Download<sp/>the<sp/>latest<sp/>`godot-gaze.zip`<sp/>from<sp/>the<sp/>[GitHub<sp/>Releases](https://github.com/browndragon/godot-gaze/releases)<sp/>page.</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>Extract<sp/>the<sp/>archive<sp/>and<sp/>copy<sp/>the<sp/>`addons/godot-gaze`<sp/>directory<sp/>directly<sp/>into<sp/>your<sp/>Godot<sp/>project&apos;s<sp/>root<sp/>`addons/`<sp/>directory.</highlight></codeline>
-<codeline><highlight class="normal">3.<sp/>Open<sp/>your<sp/>project<sp/>in<sp/>the<sp/>Godot<sp/>Editor,<sp/>navigate<sp/>to<sp/>**Project<sp/>Settings<sp/>&gt;<sp/>Plugins**,<sp/>and<sp/>enable<sp/>the<sp/>`Godot<sp/>Gaze`<sp/>plugin.</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">####<sp/>B.<sp/>Local<sp/>Development<sp/>Symlinking<sp/>(For<sp/>Contributors)</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">If<sp/>you<sp/>are<sp/>developing<sp/>this<sp/>plugin<sp/>locally<sp/>and<sp/>want<sp/>to<sp/>test<sp/>changes<sp/>in<sp/>your<sp/>own<sp/>Godot<sp/>project<sp/>without<sp/>repeatedly<sp/>copying<sp/>files:</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>Create<sp/>a<sp/>symbolic<sp/>link<sp/>from<sp/>your<sp/>project&apos;s<sp/>`addons`<sp/>directory<sp/>back<sp/>to<sp/>this<sp/>repository&apos;s<sp/>addon<sp/>folder:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>Clone<sp/>the<sp/>repository<sp/>with<sp/>submodules<sp/>(`thirdparty/godot-cpp`,<sp/>`thirdparty/onnxruntime`):</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/>```bash</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>ln<sp/>-s<sp/>/path/to/godot-gaze/project/addons/godot-gaze<sp/>/path/to/your-project/addons/godot-gaze</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>git<sp/>clone<sp/>--recursive<sp/>https://github.com/browndragon/godot-gaze.git</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>cd<sp/>godot-gaze</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>When<sp/>you<sp/>run<sp/>`scons`<sp/>to<sp/>rebuild<sp/>any<sp/>template<sp/>(e.g.<sp/>`scons<sp/>platform=macos<sp/>target=editor`),<sp/>the<sp/>compiled<sp/>binaries<sp/>in<sp/>`project/addons/godot-gaze/bin`<sp/>are<sp/>instantly<sp/>available<sp/>and<sp/>loaded<sp/>by<sp/>your<sp/>target<sp/>project.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>Download<sp/>and<sp/>prepare<sp/>the<sp/>`.ort`<sp/>neural<sp/>models<sp/>into<sp/>`project/addons/godot-gaze/models/`:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```bash</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>./scripts/download_models.sh</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>Build<sp/>the<sp/>GDExtension<sp/>for<sp/>your<sp/>platform<sp/>(`macos`,<sp/>`linux`,<sp/>`windows`,<sp/>`android`,<sp/>`ios`,<sp/>or<sp/>`web`):</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```bash</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>scons<sp/>platform=macos<sp/>target=editor</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>scons<sp/>platform=macos<sp/>target=template_debug</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>scons<sp/>platform=macos<sp/>target=template_release</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>*(Optional)*<sp/>Regenerate<sp/>Doxygen<sp/>+<sp/>Godot<sp/>Editor<sp/>Class<sp/>Reference<sp/>XML<sp/>files<sp/>(`project/docs/classref/*.xml`,<sp/>loaded<sp/>automatically<sp/>in<sp/>the<sp/>editor<sp/>from<sp/>`res://docs/classref`):</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```bash</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>./scripts/generate_docs.sh</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>Symlink<sp/>or<sp/>copy<sp/>`project/addons/godot-gaze`<sp/>into<sp/>`&lt;your-godot-project&gt;/addons/godot-gaze`<sp/>and<sp/>enable<sp/>**Godot<sp/>Gaze**<sp/>in<sp/>**Project<sp/>Settings<sp/>-&gt;<sp/>Plugins**.</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">###<sp/>2.<sp/>Basic<sp/>Setup</highlight></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>**Autostart<sp/>&amp;<sp/>Configuration**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>When<sp/>the<sp/>plugin<sp/>is<sp/>enabled,<sp/>it<sp/>automatically<sp/>registers<sp/>project<sp/>settings<sp/>under<sp/>`gaze/`:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/general/autostart`<sp/>(default<sp/>`true`):<sp/>Starts<sp/>camera<sp/>tracking<sp/>automatically<sp/>on<sp/>startup.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/pointing/emulate_gaze_from_mouse`<sp/>(default<sp/>`true`):<sp/>Emulates<sp/>`InputEventGaze`<sp/>from<sp/>mouse<sp/>cursor<sp/>movements<sp/>using<sp/>3D<sp/>inverse<sp/>kinematics<sp/>when<sp/>camera<sp/>tracking<sp/>is<sp/>inactive.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/pointing/emulate_mouse_from_gaze`<sp/>(default<sp/>`false`):<sp/>Dispatches<sp/>synthetic<sp/>mouse<sp/>move<sp/>events<sp/>based<sp/>on<sp/>gaze<sp/>coordinates.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`gaze/calibration/device_profile_path`<sp/>(defaults<sp/>to<sp/>`user://calibrations/device_profile.tres`).</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>**Model<sp/>Weights**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>Model<sp/>weights<sp/>(`.ort`<sp/>format)<sp/>are<sp/>pre-bundled<sp/>inside<sp/>`addons/godot-gaze/models/`.</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Quick<sp/>Start</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">###<sp/>3.<sp/>Basic<sp/>GDScript<sp/>Usage</highlight></codeline>
+<codeline><highlight class="normal">###<sp/>1.<sp/>Lifecycle<sp/>Management<sp/>with<sp/>`GazeTracker`</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">Nodes<sp/>receive<sp/>gaze<sp/>events<sp/>idiomatically<sp/>through<sp/>`_unhandled_input(event)`:</highlight></codeline>
+<codeline><highlight class="normal">By<sp/>default,<sp/>`gaze/general/autostart`<sp/>is<sp/>`true`,<sp/>so<sp/>tracking<sp/>starts<sp/>automatically<sp/>on<sp/>startup.<sp/>For<sp/>explicit<sp/>scene-scoped<sp/>tracking<sp/>(or<sp/>if<sp/>you<sp/>disable<sp/>`autostart`),<sp/>attach<sp/>a<sp/>`GazeTracker`<sp/>node<sp/>or<sp/>call<sp/>`GazeTracker.track_node(self)`.<sp/>When<sp/>all<sp/>active<sp/>`GazeTracker`<sp/>nodes<sp/>have<sp/>`enabled<sp/>=<sp/>false`<sp/>or<sp/>exit<sp/>the<sp/>tree,<sp/>`GazeServer`<sp/>releases<sp/>the<sp/>camera<sp/>automatically.</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">```gdscript</highlight></codeline>
-<codeline><highlight class="normal">extends<sp/>Node2D</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">@onready<sp/>var<sp/>cursor:<sp/>Node2D<sp/>=<sp/>$Cursor</highlight></codeline>
-<codeline><highlight class="normal">@onready<sp/>var<sp/>status:<sp/>Label<sp/>=<sp/>$Status</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">func<sp/>_unhandled_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>2D<sp/>Screen<sp/>/<sp/>Viewport<sp/>position</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cursor.global_position<sp/>=<sp/>event.get_eye_gaze()</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Face<sp/>Tracked<sp/>(Openness<sp/>L:<sp/>%.2f,<sp/>R:<sp/>%.2f)&quot;<sp/>%<sp/>[event.left_eye_openness,<sp/>event.right_eye_openness]</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>Head<sp/>&amp;<sp/>Gaze<sp/>properties</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>head_pos_mm<sp/>=<sp/>event.head_pose.origin</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>eye_ray_dir<sp/>=<sp/>event.eye_direction</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>elif<sp/>event<sp/>is<sp/>InputEventGazeMissing:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Gaze<sp/>Lost<sp/>(Reason:<sp/>%d)&quot;<sp/>%<sp/>event.reason</highlight></codeline>
+<codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">func<sp/>_ready()<sp/>-&gt;<sp/>void:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Tracking<sp/>starts<sp/>automatically<sp/>when<sp/>autostart<sp/>is<sp/>true.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>You<sp/>can<sp/>also<sp/>manually<sp/>control<sp/>tracking<sp/>refcounts:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>gs<sp/>=<sp/>Engine.get_singleton(&quot;GazeServer&quot;)</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>gs:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gs.start_tracking()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Attach<sp/>a<sp/>reference-counted<sp/>GazeTracker<sp/>to<sp/>this<sp/>node&apos;s<sp/>lifetime</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>tracker<sp/>:=<sp/>GazeTracker.track_node(self)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Tracking<sp/>active:<sp/>&quot;,<sp/>tracker.is_tracking_active())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Build:<sp/>&quot;,<sp/>GazeServer.get_build_info())<sp/>#<sp/>e.g.<sp/>&quot;godot-gaze<sp/>v0.1.0&quot;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>2.<sp/>Handling<sp/>`InputEventGaze`<sp/>and<sp/>`InputEventGazeMissing`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`InputEventGaze`<sp/>and<sp/>`InputEventGazeMissing`<sp/>both<sp/>inherit<sp/>`InputEventGazeBase`<sp/>(`InputEventAction`),<sp/>so<sp/>they<sp/>flow<sp/>through<sp/>standard<sp/>`_input(event)`<sp/>/<sp/>`_unhandled_input(event)`<sp/>callbacks.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">&gt;<sp/>**Important:**<sp/>Uninitialized<sp/>or<sp/>invalid<sp/>gaze<sp/>positions<sp/>are<sp/>represented<sp/>as<sp/>`Vector2(NAN,<sp/>NAN)`,<sp/>and<sp/>clamping<sp/>preserves<sp/>non-finite<sp/>values<sp/>rather<sp/>than<sp/>collapsing<sp/>them<sp/>to<sp/>`(0,<sp/>0)`.<sp/>Always<sp/>check<sp/>`pos.is_finite()`<sp/>before<sp/>consuming<sp/>gaze<sp/>coordinates.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@onready<sp/>var<sp/>reticle:<sp/>Control<sp/>=<sp/>$Reticle</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>2D<sp/>canvas<sp/>coordinates<sp/>(or<sp/>pass<sp/>`self`<sp/>for<sp/>coordinates<sp/>local<sp/>to<sp/>this<sp/>Control)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>gaze_pos:<sp/>Vector2<sp/>=<sp/>event.get_eye_gaze(self,<sp/>InputEventGaze.CLAMPING_DEFAULT)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>gaze_pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.position<sp/>=<sp/>gaze_pos</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.visible<sp/>=<sp/>true</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Optional<sp/>head<sp/>pose<sp/>projection<sp/>&amp;<sp/>continuous<sp/>eye<sp/>openness<sp/>[0.0<sp/>closed<sp/>..<sp/>1.0<sp/>open]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>nose_pos:<sp/>Vector2<sp/>=<sp/>event.get_nose_gaze(self)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>left_open:<sp/>float<sp/>=<sp/>event.left_eye_openness</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>right_open:<sp/>float<sp/>=<sp/>event.right_eye_openness</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>transforms<sp/>in<sp/>camera-space<sp/>millimeters</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>_head_xform:<sp/>Transform3D<sp/>=<sp/>event.head_transform</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>_gaze_xform:<sp/>Transform3D<sp/>=<sp/>event.gaze_transform</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>elif<sp/>event<sp/>is<sp/>InputEventGazeMissing:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.visible<sp/>=<sp/>false</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>match<sp/>event.reason:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_NO_FACE_DETECTED:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>No<sp/>face<sp/>in<sp/>camera<sp/>frame</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_OCCLUDED:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Eyes<sp/>occluded<sp/>/<sp/>blink</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_OUT_OF_BOUNDS:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Gaze<sp/>fell<sp/>outside<sp/>display<sp/>bounds</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_SENSOR_INACTIVE:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Camera/pipeline<sp/>inactive</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`InputEventGaze.ClampingMode`<sp/>options<sp/>for<sp/>`get_eye_gaze(local_to,<sp/>clamping)`<sp/>and<sp/>`get_nose_gaze(local_to,<sp/>clamping)`:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`InputEventGaze.CLAMPING_FREE`<sp/>(`0`):<sp/>Unclamped<sp/>viewport/canvas<sp/>coordinates<sp/>(may<sp/>fall<sp/>outside<sp/>the<sp/>window).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`InputEventGaze.CLAMPING_CLAMPED`<sp/>(`1`):<sp/>Clamped<sp/>to<sp/>viewport<sp/>bounds.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`InputEventGaze.CLAMPING_DEFAULT`<sp/>(`2`):<sp/>Uses<sp/>the<sp/>`gaze/pointing/default_clamping`<sp/>project<sp/>setting<sp/>(default<sp/>`true`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.<sp/>Inertial<sp/>Dwell<sp/>Interactions<sp/>(`FillAccumulator`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`FillAccumulator`<sp/>provides<sp/>a<sp/>2nd-order<sp/>damped<sp/>charge/drain<sp/>state<sp/>machine<sp/>for<sp/>gaze<sp/>buttons<sp/>and<sp/>dwell<sp/>targets<sp/>without<sp/>harsh<sp/>resets<sp/>during<sp/>blinks<sp/>or<sp/>micro-saccades:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">var<sp/>dwell:<sp/>FillAccumulator</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>reticle_canvas_pos<sp/>:=<sp/>Vector2(NAN,<sp/>NAN)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_ready()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell<sp/>=<sp/>FillAccumulator.new()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.fill_sec<sp/>=<sp/>0.8</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.drain_sec<sp/>=<sp/>0.4</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.error_doubling_distance<sp/>=<sp/>100.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.process_callback<sp/>=<sp/>FillAccumulator.PROCESS_IDLE</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.filled.connect(_on_dwell_filled)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>add_child(dwell)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>pos:<sp/>Vector2<sp/>=<sp/>event.get_eye_gaze()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle_canvas_pos<sp/>=<sp/>pos</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_process(_delta:<sp/>float)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>not<sp/>reticle_canvas_pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dwell.target_error<sp/>=<sp/>200.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Signed<sp/>distance<sp/>outside<sp/>this<sp/>Control&apos;s<sp/>global<sp/>rect<sp/>(&lt;=<sp/>0<sp/>charges,<sp/>&gt;<sp/>0<sp/>drains)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>rect<sp/>:=<sp/>get_global_rect()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>clamped<sp/>:=<sp/>reticle_canvas_pos.clamp(rect.position,<sp/>rect.end)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.target_error<sp/>=<sp/>reticle_canvas_pos.distance_to(clamped)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>queue_redraw()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_on_dwell_filled()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Activated<sp/>by<sp/>gaze<sp/>dwell!&quot;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.reset()</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>also<sp/>step<sp/>manually<sp/>with<sp/>`dwell.process_callback<sp/>=<sp/>FillAccumulator.PROCESS_MANUAL`<sp/>and<sp/>call<sp/>`dwell.process_error_delta(error_px,<sp/>delta)`<sp/>or<sp/>`dwell.process_dwell_delta(is_active,<sp/>delta)`.<sp/>Signals<sp/>emitted:<sp/>`fill_changed(fill:<sp/>float)`,<sp/>`fill_started()`,<sp/>`filled()`,<sp/>`emptied()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Mouse<sp/>&amp;<sp/>Gaze<sp/>Coexistence</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Gaze<sp/>-&gt;<sp/>Mouse<sp/>(`gaze/pointing/emulate_mouse_from_gaze`,<sp/>default<sp/>`true`)**:<sp/>Drives<sp/>Godot&apos;s<sp/>pointer<sp/>position<sp/>from<sp/>gaze<sp/>when<sp/>the<sp/>physical<sp/>mouse<sp/>is<sp/>idle,<sp/>with<sp/>optional<sp/>dwell<sp/>clicks<sp/>(`gaze/pointing/mouse_emulation_dwell_sec`,<sp/>default<sp/>`1.5`s).<sp/>Moving<sp/>the<sp/>physical<sp/>mouse<sp/>outside<sp/>the<sp/>anchor<sp/>bubble<sp/>(`gaze/pointing/mouse_stillness_threshold_px`,<sp/>default<sp/>`3.0`<sp/>px)<sp/>immediately<sp/>returns<sp/>pointer<sp/>authority<sp/>to<sp/>the<sp/>mouse;<sp/>remaining<sp/>still<sp/>for<sp/>`gaze/pointing/mouse_stillness_duration_sec`<sp/>(`1.5`s)<sp/>blends<sp/>control<sp/>back<sp/>to<sp/>gaze<sp/>over<sp/>`gaze/pointing/mouse_emulation_transition_sec`<sp/>(`0.3`s).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Mouse<sp/>-&gt;<sp/>Gaze<sp/>(`gaze/pointing/emulate_gaze_from_mouse`,<sp/>default<sp/>`true`)**:<sp/>When<sp/>no<sp/>face/webcam<sp/>feed<sp/>is<sp/>tracking,<sp/>mouse<sp/>movement<sp/>synthesizes<sp/>`InputEventGaze`<sp/>events<sp/>so<sp/>you<sp/>can<sp/>develop<sp/>and<sp/>test<sp/>gaze<sp/>interactions<sp/>with<sp/>a<sp/>regular<sp/>mouse.<sp/>Inspect<sp/>runtime<sp/>authority<sp/>with<sp/>`GazeServer.is_physical_mouse_still()`,<sp/>`GazeServer.is_physical_mouse_active()`,<sp/>and<sp/>`GazeServer.is_mouse_emulated()`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Customizing<sp/>Events<sp/>(`GazeEventFactory`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>attach<sp/>domain<sp/>metadata<sp/>or<sp/>return<sp/>a<sp/>custom<sp/>subclass<sp/>of<sp/>`InputEventGaze`<sp/>/<sp/>`InputEventGazeMissing`,<sp/>extend<sp/>`GazeEventFactory`<sp/>and<sp/>override<sp/>`create_gaze_event()`<sp/>/<sp/>`create_missing_event(reason)`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">extends<sp/>GazeEventFactory</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">class<sp/>AppGazeEvent<sp/>extends<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>tag:<sp/>String<sp/>=<sp/>&quot;&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>create_gaze_event()<sp/>-&gt;<sp/>InputEventGazeBase:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>base<sp/>:=<sp/>GazeServer.create_default_event()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>ev<sp/>:=<sp/>AppGazeEvent.new()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ev.copy_from(base)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ev.tag<sp/>=<sp/>&quot;gameplay&quot;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>ev</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>create_missing_event(reason:<sp/>int)<sp/>-&gt;<sp/>InputEventGazeBase:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>GazeServer.create_default_missing_event(reason)</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Register<sp/>your<sp/>factory<sp/>resource<sp/>via<sp/>**Project<sp/>Settings<sp/>-&gt;<sp/>`gaze/events/event_factory_path`**<sp/>or<sp/>dynamically<sp/>via<sp/>`GazeServer.set_event_factory(my_factory)`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Device<sp/>Calibration<sp/>&amp;<sp/>Visual<sp/>Debugging</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Device<sp/>Profiles<sp/>&amp;<sp/>Interactive<sp/>Calibration<sp/>Wizard</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Accurate<sp/>projection<sp/>relies<sp/>on<sp/>physical<sp/>display<sp/>pitch,<sp/>resolution,<sp/>and<sp/>camera<sp/>offset/tilt<sp/>represented<sp/>by<sp/>`GazeDeviceProfile`<sp/>(default<sp/>storage<sp/>path:<sp/>`user://calibrations/device_profile.cfg`<sp/>via<sp/>`gaze/calibration/device_profile_path`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Built-in<sp/>Wizard<sp/>Scene**:<sp/>Instantiate<sp/>`res://addons/godot-gaze/calibration/gaze_calibration_wizard.tscn`<sp/>(`GazeCalibrationWizard`),<sp/>connect<sp/>`wizard_completed(profile)`<sp/>/<sp/>`wizard_canceled()`,<sp/>and<sp/>call<sp/>`start_wizard()`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Programmatic<sp/>Configuration**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>```gdscript</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>var<sp/>profile<sp/>:=<sp/>GazeDeviceProfile.create_system_guess()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>profile.camera_offset_mm<sp/>=<sp/>Vector3(0.0,<sp/>12.0,<sp/>0.0)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>profile.camera_tilt_deg<sp/>=<sp/>-4.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>GazeServer.set_device_profile(profile)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>profile.save_to_file(&quot;user://calibrations/device_profile.cfg&quot;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Camera<sp/>&amp;<sp/>Landmark<sp/>Overlay<sp/>(`debug_cam_feed.tscn`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Instance<sp/>`res://addons/godot-gaze/debug_cam_feed.tscn`<sp/>(`DebugCamFeed`,<sp/>configured<sp/>by<sp/>`gaze/debug/overlay_scene_path`)<sp/>in<sp/>your<sp/>scene<sp/>to<sp/>visualize<sp/>the<sp/>live<sp/>BGR<sp/>camera<sp/>preview,<sp/>face<sp/>bounding<sp/>box,<sp/>35<sp/>facial<sp/>landmarks,<sp/>eye<sp/>crops,<sp/>and<sp/>stage<sp/>timings<sp/>(`GazeServer.get_pipeline_stage_timings()`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Headless<sp/>Testing<sp/>&amp;<sp/>CI<sp/>(`MockVisionServer`)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>vision<sp/>driver<sp/>automatically<sp/>switches<sp/>to<sp/>`MockVisionServer`<sp/>when<sp/>any<sp/>of<sp/>the<sp/>following<sp/>is<sp/>true:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Godot<sp/>is<sp/>running<sp/>headless<sp/>(`DisplayServer`<sp/>name<sp/>is<sp/>`&quot;headless&quot;`),<sp/>e.g.,<sp/>`--headless`<sp/>unit<sp/>tests.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>`--mock-camera`<sp/>or<sp/>`--mock-vision`<sp/>is<sp/>passed<sp/>on<sp/>the<sp/>command<sp/>line.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Environment<sp/>variable<sp/>`GAZE_VISION_DRIVER=mock`<sp/>is<sp/>set.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Project<sp/>setting<sp/>`gaze/vision/driver`<sp/>is<sp/>set<sp/>to<sp/>`&quot;mock&quot;`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>tests,<sp/>you<sp/>can<sp/>inject<sp/>synthetic<sp/>tracking<sp/>state<sp/>directly<sp/>into<sp/>`GazeServer`:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```gdscript</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_face_pose(Vector3(0.0,<sp/>0.0,<sp/>500.0),<sp/>Vector3.ZERO,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_gaze(Vector3(0.0,<sp/>0.0,<sp/>500.0),<sp/>Vector3(0.0,<sp/>0.0,<sp/>-1.0))</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_eye_openness(0.95,<sp/>0.95)</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.trigger_process()</highlight></codeline>
 <codeline><highlight class="normal">```</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Web<sp/>/<sp/>HTML5<sp/>Export<sp/>Guidelines</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Project<sp/>Settings<sp/>Reference</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">When<sp/>exporting<sp/>your<sp/>project<sp/>to<sp/>the<sp/>Web,<sp/>keep<sp/>the<sp/>following<sp/>considerations<sp/>in<sp/>mind:</highlight></codeline>
+<codeline><highlight class="normal">All<sp/>settings<sp/>are<sp/>registered<sp/>under<sp/>the<sp/>`gaze/`<sp/>namespace<sp/>in<sp/>**Project<sp/>-&gt;<sp/>Project<sp/>Settings**<sp/>(`Advanced<sp/>Settings`<sp/>enabled):</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">1.<sp/>**Automatic<sp/>Sidecar<sp/>Export**:<sp/>The<sp/>Gaze<sp/>Tracker<sp/>plugin<sp/>includes<sp/>an<sp/>editor<sp/>export<sp/>plugin<sp/>(`export_plugin.gd`)<sp/>that<sp/>automatically<sp/>copies<sp/>`gaze_sidecar.js`<sp/>to<sp/>your<sp/>HTML5<sp/>export<sp/>folder.</highlight></codeline>
-<codeline><highlight class="normal">2.<sp/>**Cross-Origin<sp/>Isolation<sp/>Requirements<sp/>(For<sp/>Threaded<sp/>Exports)**:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Godot&apos;s<sp/>WebAssembly<sp/>export<sp/>template<sp/>supports<sp/>multi-threading<sp/>via<sp/>SharedArrayBuffer.<sp/>If<sp/>you<sp/>enable<sp/>**Thread<sp/>Support**<sp/>in<sp/>your<sp/>Godot<sp/>Web<sp/>Export<sp/>Preset<sp/>options,<sp/>the<sp/>hosting<sp/>server<sp/>**must**<sp/>serve<sp/>your<sp/>game<sp/>with<sp/>the<sp/>following<sp/>HTTP<sp/>response<sp/>headers:</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>Setting<sp/>Key<sp/>|<sp/>Type<sp/>|<sp/>Default<sp/>|<sp/>Description<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/general/autostart`<sp/>|<sp/>`bool`<sp/>|<sp/>`true`<sp/>|<sp/>Automatically<sp/>start<sp/>gaze<sp/>tracking<sp/>when<sp/>the<sp/>engine<sp/>boots.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/emulate_gaze_from_mouse`<sp/>|<sp/>`bool`<sp/>|<sp/>`true`<sp/>|<sp/>Synthesize<sp/>`InputEventGaze`<sp/>from<sp/>mouse<sp/>events<sp/>when<sp/>tracking<sp/>is<sp/>inactive/missing.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/emulate_mouse_from_gaze`<sp/>|<sp/>`bool`<sp/>|<sp/>`true`<sp/>|<sp/>Drive<sp/>Godot&apos;s<sp/>mouse<sp/>pointer<sp/>from<sp/>gaze<sp/>when<sp/>the<sp/>physical<sp/>mouse<sp/>is<sp/>still.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/default_clamping`<sp/>|<sp/>`bool`<sp/>|<sp/>`true`<sp/>|<sp/>Default<sp/>behavior<sp/>for<sp/>`InputEventGaze.CLAMPING_DEFAULT`.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/mouse_stillness_duration_sec`<sp/>|<sp/>`float`<sp/>|<sp/>`1.5`<sp/>|<sp/>Seconds<sp/>the<sp/>physical<sp/>mouse<sp/>must<sp/>stay<sp/>still<sp/>before<sp/>gaze<sp/>regains<sp/>pointer<sp/>control.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/mouse_stillness_threshold_px`<sp/>|<sp/>`float`<sp/>|<sp/>`3.0`<sp/>|<sp/>Anchor<sp/>bubble<sp/>radius<sp/>(px)<sp/>above<sp/>which<sp/>physical<sp/>mouse<sp/>motion<sp/>claims<sp/>control.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/mouse_emulation_dwell_sec`<sp/>|<sp/>`float`<sp/>|<sp/>`1.5`<sp/>|<sp/>Dwell<sp/>duration<sp/>(s)<sp/>for<sp/>synthesized<sp/>gaze-to-mouse<sp/>clicks.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/pointing/mouse_emulation_transition_sec`<sp/>|<sp/>`float`<sp/>|<sp/>`0.3`<sp/>|<sp/>Blend<sp/>duration<sp/>(s)<sp/>when<sp/>returning<sp/>pointer<sp/>authority<sp/>to<sp/>gaze.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/search_paths`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;res://models,res://addons/godot-gaze/models&quot;`<sp/>|<sp/>Comma-separated<sp/>model<sp/>search<sp/>directories.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/face_detector_prefix`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;face_detection_yunet_2023mar&quot;`<sp/>|<sp/>Filename<sp/>prefix<sp/>for<sp/>face<sp/>detector<sp/>model.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/yunet_prefix`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;face_detection_yunet_2023mar&quot;`<sp/>|<sp/>Legacy<sp/>YuNet<sp/>prefix<sp/>key<sp/>(mirrors<sp/>`face_detector_prefix`).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/landmarks_prefix`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;facial-landmarks-35-adas-0002&quot;`<sp/>|<sp/>Filename<sp/>prefix<sp/>for<sp/>35-point<sp/>facial<sp/>landmarker<sp/>model.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/gaze_prefix`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;gaze-estimation-adas-0002&quot;`<sp/>|<sp/>Filename<sp/>prefix<sp/>for<sp/>gaze<sp/>estimation<sp/>model.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/eye_openness_prefix`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;open_closed_eye&quot;`<sp/>|<sp/>Filename<sp/>prefix<sp/>for<sp/>eye<sp/>openness<sp/>classifier<sp/>model.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/models/acceptable_suffixes`<sp/>|<sp/>`PackedStringArray`<sp/>|<sp/>`[&quot;.ort&quot;,<sp/>&quot;.xml&quot;]`<sp/>|<sp/>Allowed<sp/>model<sp/>file<sp/>extensions<sp/>during<sp/>resolution.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/pitch_t_gain`<sp/>|<sp/>`float`<sp/>|<sp/>`0.0`<sp/>|<sp/>Head-pitch<sp/>compensation<sp/>gain<sp/>for<sp/>gaze<sp/>estimation.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/yaw_t_gain`<sp/>|<sp/>`float`<sp/>|<sp/>`0.0`<sp/>|<sp/>Head-yaw<sp/>compensation<sp/>gain<sp/>for<sp/>gaze<sp/>estimation.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/nose_y`<sp/>|<sp/>`float`<sp/>|<sp/>`-0.5`<sp/>|<sp/>Nose<sp/>anchor<sp/>Y<sp/>ratio<sp/>for<sp/>head-pose<sp/>estimation.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/nose_z`<sp/>|<sp/>`float`<sp/>|<sp/>`-52.0`<sp/>|<sp/>Nose<sp/>anchor<sp/>Z<sp/>offset<sp/>(mm).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/ipd_mm`<sp/>|<sp/>`float`<sp/>|<sp/>`63.0`<sp/>|<sp/>Default<sp/>interpupillary<sp/>distance<sp/>(mm).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/debug_image_throttle_interval`<sp/>|<sp/>`int`<sp/>|<sp/>`1`<sp/>|<sp/>Frame<sp/>throttle<sp/>interval<sp/>for<sp/>debug<sp/>preview<sp/>texture<sp/>updates.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/desired_camera_width`<sp/>|<sp/>`int`<sp/>|<sp/>`640`<sp/>|<sp/>Requested<sp/>hardware<sp/>capture<sp/>width<sp/>(px).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/desired_camera_height`<sp/>|<sp/>`int`<sp/>|<sp/>`480`<sp/>|<sp/>Requested<sp/>hardware<sp/>capture<sp/>height<sp/>(px).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/config/force_cpu`<sp/>|<sp/>`bool`<sp/>|<sp/>`false`<sp/>|<sp/>Force<sp/>CPU<sp/>ONNX<sp/>Runtime<sp/>execution<sp/>provider<sp/>instead<sp/>of<sp/>CoreML/NNAPI/DirectML.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/calibration/device_profile_path`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;user://calibrations/device_profile.cfg&quot;`<sp/>|<sp/>Default<sp/>file<sp/>path<sp/>for<sp/>saved<sp/>`GazeDeviceProfile`<sp/>resources.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/debug/overlay_scene_path`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;res://addons/godot-gaze/debug_cam_feed.tscn&quot;`<sp/>|<sp/>Scene<sp/>path<sp/>used<sp/>by<sp/>the<sp/>debug<sp/>camera<sp/>overlay.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/blink/openness_threshold`<sp/>|<sp/>`float`<sp/>|<sp/>`0.50`<sp/>|<sp/>Openness<sp/>probability<sp/>threshold<sp/>(`[0.0,<sp/>1.0]`).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/blink/allow_single_eye`<sp/>|<sp/>`bool`<sp/>|<sp/>`true`<sp/>|<sp/>Allow<sp/>single-eye<sp/>winks<sp/>when<sp/>classifying<sp/>blink<sp/>state.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/blink/min_duration`<sp/>|<sp/>`float`<sp/>|<sp/>`0.05`<sp/>|<sp/>Minimum<sp/>blink<sp/>duration<sp/>(seconds).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/debug/verbosity`<sp/>|<sp/>`int`<sp/>|<sp/>`1`<sp/>|<sp/>Logging<sp/>verbosity<sp/>level.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/events/event_factory_path`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;&quot;`<sp/>|<sp/>Optional<sp/>path<sp/>to<sp/>a<sp/>custom<sp/>`GazeEventFactory`<sp/>`.tres`/`.gd`<sp/>resource.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`gaze/vision/driver`<sp/>|<sp/>`String`<sp/>|<sp/>`&quot;native&quot;`<sp/>|<sp/>Vision<sp/>backend<sp/>(`&quot;native&quot;`<sp/>or<sp/>`&quot;mock&quot;`).<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Web<sp/>Export<sp/>Guidelines</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">When<sp/>exporting<sp/>a<sp/>project<sp/>to<sp/>**Web<sp/>(HTML5<sp/>/<sp/>WebAssembly)**:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>**Enable<sp/>the<sp/>Godot<sp/>Gaze<sp/>Editor<sp/>Plugin**:<sp/>Activating<sp/>the<sp/>plugin<sp/>registers<sp/>`GodotGazeExportPlugin`,<sp/>which<sp/>automatically<sp/>copies<sp/>`res://addons/godot-gaze/bin/gaze_sidecar.js`<sp/>into<sp/>your<sp/>export<sp/>output<sp/>folder<sp/>alongside<sp/>the<sp/>HTML/JS<sp/>bundle.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Thread<sp/>Support<sp/>&amp;<sp/>Cross-Origin<sp/>Isolation<sp/>Headers**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>If<sp/>you<sp/>enable<sp/>**Thread<sp/>Support**<sp/>in<sp/>your<sp/>Godot<sp/>Web<sp/>export<sp/>preset,<sp/>browsers<sp/>require<sp/>`SharedArrayBuffer`<sp/>cross-origin<sp/>isolation.<sp/>Your<sp/>web<sp/>server<sp/>**must**<sp/>send:</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>```http</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>Cross-Origin-Opener-Policy:<sp/>same-origin</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>Cross-Origin-Embedder-Policy:<sp/>require-corp</highlight></codeline>
 <codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>```</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>These<sp/>headers<sp/>are<sp/>standard<sp/>browser<sp/>security<sp/>requirements<sp/>for<sp/>SharedArrayBuffer<sp/>(not<sp/>specific<sp/>to<sp/>this<sp/>plugin).<sp/>If<sp/>your<sp/>hosting<sp/>environment<sp/>(e.g.<sp/>itch.io,<sp/>GitHub<sp/>Pages,<sp/>or<sp/>corporate<sp/>intranet)<sp/>does<sp/>not<sp/>allow<sp/>you<sp/>to<sp/>configure<sp/>these<sp/>custom<sp/>headers,<sp/>you<sp/>**must<sp/>disable<sp/>Thread<sp/>Support**<sp/>in<sp/>your<sp/>Godot<sp/>export<sp/>preset,<sp/>which<sp/>falls<sp/>back<sp/>to<sp/>the<sp/>non-threaded<sp/>WebAssembly<sp/>template.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>If<sp/>your<sp/>static<sp/>host<sp/>does<sp/>not<sp/>let<sp/>you<sp/>configure<sp/>custom<sp/>HTTP<sp/>headers,<sp/>**disable<sp/>Thread<sp/>Support**<sp/>in<sp/>the<sp/>Web<sp/>export<sp/>preset<sp/>so<sp/>Godot<sp/>uses<sp/>the<sp/>single-threaded<sp/>`.wasm`<sp/>GDExtension<sp/>binary.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>**Web<sp/>Model<sp/>Assets**:<sp/>Web<sp/>exports<sp/>initialize<sp/>`gaze_sidecar.js`<sp/>(`onnxruntime-web`)<sp/>against<sp/>`res://models/face_detection_yunet_2023mar.onnx`<sp/>and<sp/>`res://models/gaze-estimation-adas-0002.onnx`.<sp/>Ensure<sp/>those<sp/>non-resource<sp/>model<sp/>files<sp/>are<sp/>included<sp/>in<sp/>your<sp/>Web<sp/>export<sp/>preset&apos;s<sp/>non-resource<sp/>file<sp/>filter<sp/>(`*.onnx,<sp/>*.ort`).</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">---</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">##<sp/>Developer<sp/>Guidelines<sp/>&amp;<sp/>Architecture</highlight></codeline>
+<codeline><highlight class="normal">##<sp/>Documentation<sp/>&amp;<sp/>Deep<sp/>Dives</highlight></codeline>
 <codeline></codeline>
-<codeline><highlight class="normal">-<sp/>For<sp/>the<sp/>full<sp/>system<sp/>architecture,<sp/>layer<sp/>isolation<sp/>rules,<sp/>and<sp/>concurrency<sp/>model,<sp/>refer<sp/>to<sp/>[System<sp/>Architecture<sp/>&amp;<sp/>Technical<sp/>Specification](docs/architecture.md).</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>For<sp/>guidelines<sp/>on<sp/>compiling<sp/>the<sp/>plugin<sp/>from<sp/>source,<sp/>running<sp/>test<sp/>suites,<sp/>or<sp/>contributing,<sp/>please<sp/>refer<sp/>to<sp/>[CONTRIBUTING.md](CONTRIBUTING.md).</highlight></codeline>
-<codeline><highlight class="normal">-<sp/>For<sp/>mathematical<sp/>and<sp/>physical<sp/>projection<sp/>guides,<sp/>refer<sp/>to<sp/>[docs/mathematical_model.md](docs/mathematical_model.md).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Architecture<sp/>Overview](docs/architecture.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Mathematical<sp/>Model<sp/>&amp;<sp/>Camera-to-Display<sp/>Projection](docs/mathematical_model.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Vision<sp/>Models<sp/>&amp;<sp/>Camera<sp/>Ingestion<sp/>Specification](docs/vision_models.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Lifecycle<sp/>&amp;<sp/>Reference-Counted<sp/>Tracking](docs/lifecycle_tracking.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Gaze<sp/>Model<sp/>Evaluation](docs/gaze_model_evaluation.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Rejected<sp/>Designs<sp/>&amp;<sp/>Anti-Patterns](docs/rejected_designs.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[Contributing<sp/>&amp;<sp/>Test<sp/>Suite<sp/>Guide](CONTRIBUTING.md)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>[License<sp/>&amp;<sp/>Third-Party<sp/>Notices](LICENSE.md)</highlight></codeline>
     </programlisting>
     <location file="README.md"/>
   </compounddef>

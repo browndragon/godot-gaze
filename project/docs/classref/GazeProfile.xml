@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GazeProfile" inherits="Resource">
+	<brief_description></brief_description>
+	<description></description>
+	<tutorials></tutorials>
+	<methods>
+		<method name="save_to_file">
+			<return type="Error"></return>
+			<param index="0" name="p_path" type="const String &amp;"></param>
+			<description></description>
+		</method>
+		<method name="load_from_file">
+			<return type="Error"></return>
+			<param index="0" name="p_path" type="const String &amp;"></param>
+			<description></description>
+		</method>
+	</methods>
+	<members></members>
+	<signals></signals>
+</class>

@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['offload_20illusion_0',['A. The &quot;Baking / Upstream Offload&quot; Illusion',['../md_docs_2gaze__model__evaluation.html#autotoc_md116',1,'']]],
+  ['on_20godot_20s_20displayserver_1',['7.1. Architectural Rationale: Why Not Rely on Godot&apos;s &lt;span class=&quot;tt&quot;&gt;DisplayServer&lt;/span&gt;?',['../md_docs_2architecture.html#autotoc_md51',1,'']]],
+  ['open_20closed_20eye_20classifier_20orteyestatemodel_2',['3.4. Open-Closed Eye Classifier (&lt;span class=&quot;tt&quot;&gt;ORTEyeStateModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md110',1,'']]],
+  ['opencv_20standard_3',['1.1. Inference Camera Space (OpenCV Standard)',['../md_docs_2mathematical__model.html#autotoc_md70',1,'']]],
+  ['openvino_20adas_200002_4',['6. Model Sign Conventions (OpenVINO ADAS-0002)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md91',1,'']]],
+  ['openvino_20adas_200002_20remains_20default_5',['A. Production Decision: OpenVINO ADAS-0002 Remains Default',['../md_docs_2gaze__model__evaluation.html#autotoc_md125',1,'']]],
+  ['opportunities_6',['4. Resolution Scaling &amp;amp; Optimization Opportunities',['../md_docs_2gaze__model__evaluation.html#autotoc_md121',1,'']]],
+  ['optimization_20opportunities_7',['4. Resolution Scaling &amp;amp; Optimization Opportunities',['../md_docs_2gaze__model__evaluation.html#autotoc_md121',1,'']]],
+  ['option_201_3a_20prebuilt_20release_20godot_20gaze_20zip_8',['Option 1: Prebuilt Release (&lt;span class=&quot;tt&quot;&gt;godot-gaze.zip&lt;/span&gt;)',['../index.html#autotoc_md9',1,'']]],
+  ['option_202_3a_20building_20from_20source_20or_20symlinking_20project_20addons_20godot_20gaze_9',['Option 2: Building from Source (or Symlinking &lt;span class=&quot;tt&quot;&gt;project/addons/godot-gaze&lt;/span&gt;)',['../index.html#autotoc_md10',1,'']]],
+  ['or_20symlinking_20project_20addons_20godot_20gaze_10',['Option 2: Building from Source (or Symlinking &lt;span class=&quot;tt&quot;&gt;project/addons/godot-gaze&lt;/span&gt;)',['../index.html#autotoc_md10',1,'']]],
+  ['orientation_20side_20bezel_20geometry_20_24t_5f_20camera_20viewport_20_24_11',['3.3. Unified Gravity-Aware Display Orientation &amp;amp; Side-Bezel Geometry ($T_{\\text{camera} \\to \\text{viewport}}$)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md84',1,'']]],
+  ['orteyestatemodel_12',['3.4. Open-Closed Eye Classifier (&lt;span class=&quot;tt&quot;&gt;ORTEyeStateModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md110',1,'']]],
+  ['ortgazemodel_13',['3.3. Intel ADAS Gaze Estimation (&lt;span class=&quot;tt&quot;&gt;ORTGazeModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md108',1,'']]],
+  ['ortlandmarkmodel_14',['3.2. Intel ADAS 35-Point Facial Landmarker (&lt;span class=&quot;tt&quot;&gt;ORTLandmarkModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md106',1,'']]],
+  ['ortyunetdetector_15',['3.1. YuNet Face Detector (&lt;span class=&quot;tt&quot;&gt;ORTYuNetDetector&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md104',1,'']]],
+  ['os_20window_20space_20logical_20pixels_16',['3.2. Screen-Center Virtual Projection Anchor &amp;amp; OS Window Space (Logical Pixels)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md83',1,'']]],
+  ['os_20window_20space_20logical_20pixels_20lpix_17',['1.7. OS Window Space (Logical Pixels / &lt;span class=&quot;tt&quot;&gt;lpix&lt;/span&gt;)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md76',1,'']]],
+  ['os_20window_20space_20to_20godot_20viewport_20canvas_202d_20space_20stretch_20modes_18',['3.4. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md85',1,'']]],
+  ['output_20vector_20mapping_19',['6.2. Output Vector Mapping',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md93',1,'']]],
+  ['overlay_20debug_5fcam_5ffeed_20tscn_20',['Camera &amp;amp; Landmark Overlay (&lt;span class=&quot;tt&quot;&gt;debug_cam_feed.tscn&lt;/span&gt;)',['../index.html#autotoc_md23',1,'']]],
+  ['overview_3a_20the_20reference_20counted_20lifecycle_20model_21',['1. Overview: The Reference-Counted Lifecycle Model',['../md_docs_2lifecycle__tracking.html#autotoc_md56',1,'']]]
+];

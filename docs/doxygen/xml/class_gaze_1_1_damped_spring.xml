@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_damped_spring" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::DampedSpring</compoundname>
+    <innerclass refid="struct_gaze_1_1_damped_spring_1_1_point2_d" prot="public">Gaze::DampedSpring::Point2D</innerclass>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_damped_spring_1a2a12eb27c1b83c25a50a5050cd6f5c62" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::DampedSpring::pos</definition>
+        <argsstring></argsstring>
+        <name>pos</name>
+        <qualifiedname>Gaze::DampedSpring::pos</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref>(0.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="27" column="13" bodyfile="src/core/damped_spring.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_damped_spring_1a9a2ff8086922b169832e701e18447ef8" prot="private" static="no" mutable="no">
+        <type><ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::DampedSpring::vel</definition>
+        <argsstring></argsstring>
+        <name>vel</name>
+        <qualifiedname>Gaze::DampedSpring::vel</qualifiedname>
+        <initializer>= <ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref>(0.0f, 0.0f)</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="28" column="13" bodyfile="src/core/damped_spring.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_damped_spring_1ad97c460b7c8a970d6211d309c70ff3a7" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DampedSpring::response_sec</definition>
+        <argsstring></argsstring>
+        <name>response_sec</name>
+        <qualifiedname>Gaze::DampedSpring::response_sec</qualifiedname>
+        <initializer>= 0.30</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="29" column="12" bodyfile="src/core/damped_spring.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_damped_spring_1a6bcfd19ed9fb44dfa9c849f6f0a7dfaf" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::DampedSpring::damping_ratio</definition>
+        <argsstring></argsstring>
+        <name>damping_ratio</name>
+        <qualifiedname>Gaze::DampedSpring::damping_ratio</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="30" column="12" bodyfile="src/core/damped_spring.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_damped_spring_1ab76b5ee1c122bc7a8d466a1dc9971347" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool Gaze::DampedSpring::initialized</definition>
+        <argsstring></argsstring>
+        <name>initialized</name>
+        <qualifiedname>Gaze::DampedSpring::initialized</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="31" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a342f28859f48443d49cda07d6463469a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::DampedSpring::DampedSpring</definition>
+        <argsstring>()=default</argsstring>
+        <name>DampedSpring</name>
+        <qualifiedname>Gaze::DampedSpring::DampedSpring</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="34" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a8f180372578e3b68315bfcddcf6cace0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::DampedSpring::DampedSpring</definition>
+        <argsstring>(double p_response_sec, double p_damping_ratio=1.0)</argsstring>
+        <name>DampedSpring</name>
+        <qualifiedname>Gaze::DampedSpring::DampedSpring</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_response_sec</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_damping_ratio</declname>
+          <defval>1.0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="36" column="5" bodyfile="src/core/damped_spring.hpp" bodystart="36" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1ab3bdbb73c51b6b5e67fa4b4c3256741d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DampedSpring::reset</definition>
+        <argsstring>(const Point2D &amp;p_pos, const Point2D &amp;p_vel=Point2D(0.0f, 0.0f))</argsstring>
+        <name>reset</name>
+        <qualifiedname>Gaze::DampedSpring::reset</qualifiedname>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>p_pos</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>p_vel</declname>
+          <defval><ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref>(0.0f, 0.0f)</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="39" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="39" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a603e87a477328607914b240836d4a7cf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DampedSpring::set_response_sec</definition>
+        <argsstring>(double p_sec)</argsstring>
+        <name>set_response_sec</name>
+        <qualifiedname>Gaze::DampedSpring::set_response_sec</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="45" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="45" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a4235d3515ada0f96bbbd36dd03ffd168" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::DampedSpring::get_response_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_response_sec</name>
+        <qualifiedname>Gaze::DampedSpring::get_response_sec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="49" column="12" bodyfile="src/core/damped_spring.hpp" bodystart="49" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a0e73ffad108113c8c6dc42e0ab513d25" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DampedSpring::set_damping_ratio</definition>
+        <argsstring>(double p_zeta)</argsstring>
+        <name>set_damping_ratio</name>
+        <qualifiedname>Gaze::DampedSpring::set_damping_ratio</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_zeta</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="53" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="53" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a74de9872dbc803178a8b0d940e44c48e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::DampedSpring::get_damping_ratio</definition>
+        <argsstring>() const</argsstring>
+        <name>get_damping_ratio</name>
+        <qualifiedname>Gaze::DampedSpring::get_damping_ratio</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="57" column="12" bodyfile="src/core/damped_spring.hpp" bodystart="57" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a1c45fac0242564a899d7a0a8ab13b103" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::DampedSpring::get_position</definition>
+        <argsstring>() const</argsstring>
+        <name>get_position</name>
+        <qualifiedname>Gaze::DampedSpring::get_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="61" column="13" bodyfile="src/core/damped_spring.hpp" bodystart="61" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1ab117bbc91c55ecc226f7149085452bb5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref></type>
+        <definition>Point2D Gaze::DampedSpring::get_velocity</definition>
+        <argsstring>() const</argsstring>
+        <name>get_velocity</name>
+        <qualifiedname>Gaze::DampedSpring::get_velocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="65" column="13" bodyfile="src/core/damped_spring.hpp" bodystart="65" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1a6a432de313848c1e1634b54915e4daff" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::DampedSpring::is_initialized</definition>
+        <argsstring>() const</argsstring>
+        <name>is_initialized</name>
+        <qualifiedname>Gaze::DampedSpring::is_initialized</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="69" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="69" bodyend="71"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_damped_spring_1ae0fcc102ff7c0fe9b3390855f2c46c19" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::DampedSpring::update</definition>
+        <argsstring>(double dt, const Point2D &amp;target_pos)</argsstring>
+        <name>update</name>
+        <qualifiedname>Gaze::DampedSpring::update</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_damped_spring_1_1_point2_d" kindref="compound">Point2D</ref> &amp;</type>
+          <declname>target_pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/damped_spring.hpp" line="73" column="10" bodyfile="src/core/damped_spring.hpp" bodystart="73" bodyend="145"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/damped_spring.hpp" line="13" column="1" bodyfile="src/core/damped_spring.hpp" bodystart="13" bodyend="146"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_damped_spring_1a342f28859f48443d49cda07d6463469a" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>DampedSpring</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a8f180372578e3b68315bfcddcf6cace0" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>DampedSpring</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a6bcfd19ed9fb44dfa9c849f6f0a7dfaf" prot="private" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>damping_ratio</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a74de9872dbc803178a8b0d940e44c48e" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>get_damping_ratio</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a1c45fac0242564a899d7a0a8ab13b103" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>get_position</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a4235d3515ada0f96bbbd36dd03ffd168" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>get_response_sec</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1ab117bbc91c55ecc226f7149085452bb5" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>get_velocity</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1ab76b5ee1c122bc7a8d466a1dc9971347" prot="private" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>initialized</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a6a432de313848c1e1634b54915e4daff" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>is_initialized</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a2a12eb27c1b83c25a50a5050cd6f5c62" prot="private" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>pos</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1ab3bdbb73c51b6b5e67fa4b4c3256741d" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>reset</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1ad97c460b7c8a970d6211d309c70ff3a7" prot="private" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>response_sec</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a0e73ffad108113c8c6dc42e0ab513d25" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>set_damping_ratio</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a603e87a477328607914b240836d4a7cf" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>set_response_sec</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1ae0fcc102ff7c0fe9b3390855f2c46c19" prot="public" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>update</name></member>
+      <member refid="class_gaze_1_1_damped_spring_1a9a2ff8086922b169832e701e18447ef8" prot="private" virt="non-virtual"><scope>Gaze::DampedSpring</scope><name>vel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

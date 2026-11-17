@@ -187,7 +187,7 @@ Personalized biological Angle Kappa ($\boldsymbol{\kappa}$) calibration and non-
 - **Model Ocular Eccentricity Compression**: Peripheral gaze distortions ($\pm 5^\circ$ near screen borders) stem from appearance model training distributions (in-vehicle driver monitoring where gazes $> 10^\circ$ accompany head turns) rather than rigid anatomical ocular misalignments. Attempting to fit a rigid head-space rotation produces hypothesis thrashing.
 - **Unified Public Contract**: All public distinction between "raw" and "calibrated" gaze has been retired. Public APIs provide unified, localized gaze via `InputEventGaze.get_eye_gaze()` and `InputEventGaze.get_nose_gaze()`.
 
-For full historical rationale and empirical findings, see [Rejected Designs & Anti-Patterns: Item 9](file:///Users/acunningham/src/godot-gaze/docs/rejected_designs.md#L41-L44).
+For full historical rationale and empirical findings, see [Rejected Designs & Anti-Patterns](rejected_designs.md).
 
 ---
 

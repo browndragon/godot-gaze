@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.17.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Godot Gaze: godot-gaze</title>
+<title>Godot Gaze: Godot Gaze (v0.1.0)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="codefolding.js"></script>
 <script type="text/javascript" src="clipboard.js"></script>
@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -134,108 +134,300 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title">godot-gaze </div></div>
+  <div class="headertitle"><div class="title">Godot Gaze (<span class="tt">v0.1.0</span>) </div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a></p>
-<p>A high-frequency, real-time 3D gaze estimation &amp; projecting GDExtension plugin for Godot 4.7+.</p>
+<p>Real-time, on-device eye-gaze and 6-DoF head-pose tracking GDExtension for <b>Godot 4</b>, powered by <b>ONNX Runtime</b> and physical camera-to-display ray projection.</p>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 Key Features</h1>
 <ul>
-<li><b>Cross-Platform Gaze Tracking</b>:<ul>
-<li><b>Native Desktop &amp; Mobile (macOS, Windows, Linux, iOS, Android)</b>: Runs an optimized CPU-based <b>ONNX Runtime (CPU/XNNPACK)</b> pipeline for face detection (YuNet) and gaze estimation (OpenVINO vehicle models).</li>
-<li><b>WebAssembly (WASM)</b>: Leverages browser-native <b>ONNX Runtime Web</b> (WebGPU/WebGL accelerated) and the same models as the desktop.</li>
-</ul>
-</li>
-<li><b>Background Inference</b>:<ul>
-<li><b>Native (Desktop/Mobile)</b>: All ML model estimation runs in a dedicated C++ background worker thread (<span class="tt">GazeTrackingPipeline</span>) with lock-free double buffering.</li>
-<li><b>Web (WASM)</b>: Camera capture and inference run asynchronously outside the WebAssembly runtime via the browser sidecar (<span class="tt">gaze_sidecar.js</span>) using ONNX Runtime Web (WebGPU/WebGL accelerated).</li>
-</ul>
-</li>
-<li><b>Principled 3D Spherical Calibration</b>: Corrects biological user differences using 3D angular biases (pitch/yaw) applied directly to the estimated 3D gaze vector.</li>
-<li><b>Adaptive Smoothing</b>: Implements a <b>1 Euro Filter</b> to suppress saccadic jitter during steady gaze while preserving low latency during rapid eye movements.</li>
+<li><b>On-Device ML Pipeline (No External Services)</b>: Runs face detection (<span class="tt">face_detection_yunet_2023mar.ort</span>), 35-point facial landmarks (<span class="tt">facial-landmarks-35-adas-0002.ort</span>), 3D gaze estimation (<span class="tt">gaze-estimation-adas-0002.ort</span>), and eye-openness classification (<span class="tt">open_closed_eye.ort</span>) locally via ONNX Runtime.</li>
+<li><b>Physical Camera-to-Display Geometry</b>: Solves 3D head pose via EPnP in millimeter camera space and intersects the fused gaze ray with the physical screen plane, converting automatically to Godot canvas and <span class="tt">CanvasItem</span>-local coordinates across window sizes and DPI scales.</li>
+<li><b>First-Class Godot Input Events</b>: Dispatches <span class="tt">InputEventGaze</span> and <span class="tt">InputEventGazeMissing</span> through Godot's standard <span class="tt">Input</span> pipeline.</li>
+<li><b>Reference-Counted Lifecycle (<span class="tt">GazeTracker</span>)</b>: Automatically starts/stops camera capture and inference when nodes enter or leave the scene tree.</li>
+<li><b>Inertial Dwell Node (<span class="tt">FillAccumulator</span>)</b>: 2nd-order smooth dwell/charge accumulator with blink/micro-saccade momentum tolerance and distance-scaled off-target drain.</li>
+<li><b>Mouse &amp; Gaze Coexistence</b>: Built-in <span class="tt">MouseStillnessArbitrator</span> and bi-directional mouse emulation (<span class="tt">emulate_mouse_from_gaze</span>, <span class="tt">emulate_gaze_from_mouse</span>) so physical mouse input takes instant priority and mouse-only dev machines can test gaze UIs without a webcam.</li>
+<li><b>Calibration &amp; Visual Debugger</b>: Interactive <span class="tt">GazeCalibrationWizard</span>, persistent <span class="tt">GazeDeviceProfile</span>, and live <span class="tt">debug_cam_feed.tscn</span> camera overlay.</li>
+<li><b>Headless CI Testing (<span class="tt">MockVisionServer</span>)</b>: Deterministic synthetic camera/gaze driver for automated testing without hardware webcams.</li>
+<li><b>Cross-Platform</b>: Windows, macOS, Linux, Android, iOS, and Web (WebAssembly + <span class="tt">gaze_sidecar.js</span>).</li>
 </ul>
 <hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
-Getting Started</h1>
+Installation</h1>
 <h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
-1. Installation</h2>
-<p>You can install <span class="tt">godot-gaze</span> using one of the following methods:</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
-A. From Pre-compiled Release (Recommended)</h3>
+Option 1: Prebuilt Release (<span class="tt">godot-gaze.zip</span>)</h2>
 <ol type="1">
-<li>Download the latest <span class="tt">godot-gaze.zip</span> from the <a href="https://github.com/browndragon/godot-gaze/releases">GitHub Releases</a> page.</li>
-<li>Extract the archive and copy the <span class="tt">addons/godot-gaze</span> directory directly into your Godot project's root <span class="tt">addons/</span> directory.</li>
-<li>Open your project in the Godot Editor, navigate to <b>Project Settings &gt; Plugins</b>, and enable the <span class="tt">Godot Gaze</span> plugin.</li>
+<li>Download <span class="tt">godot-gaze.zip</span> from the <a href="../../releases">GitHub Releases</a> page.</li>
+<li>Extract it into the root of your Godot project so that <span class="tt">addons/godot-gaze/</span> sits inside your <span class="tt">res://</span> directory (<span class="tt">res://addons/godot-gaze/gaze.gdextension</span>).</li>
+<li>Open your project in Godot 4, go to <b>Project -&gt; Project Settings -&gt; Plugins</b>, and enable <b>Godot Gaze</b>.</li>
 </ol>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
-B. Local Development Symlinking (For Contributors)</h3>
-<p>If you are developing this plugin locally and want to test changes in your own Godot project without repeatedly copying files:</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
+Option 2: Building from Source (or Symlinking <span class="tt">project/addons/godot-gaze</span>)</h2>
 <ol type="1">
-<li>Create a symbolic link from your project's <span class="tt">addons</span> directory back to this repository's addon folder: <div class="fragment"><div class="line">ln -s /path/to/godot-gaze/project/addons/godot-gaze /path/to/your-project/addons/godot-gaze</div>
+<li>Clone the repository with submodules (<span class="tt">thirdparty/godot-cpp</span>, <span class="tt">thirdparty/onnxruntime</span>): <div class="fragment"><div class="line">git clone --recursive https://github.com/browndragon/godot-gaze.git</div>
+<div class="line">cd godot-gaze</div>
 </div><!-- fragment --></li>
-<li>When you run <span class="tt">scons</span> to rebuild any template (e.g. <span class="tt">scons platform=macos target=editor</span>), the compiled binaries in <span class="tt">project/addons/godot-gaze/bin</span> are instantly available and loaded by your target project.</li>
-</ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
-2. Basic Setup</h2>
-<ol type="1">
-<li><b>Autostart &amp; Configuration</b>: When the plugin is enabled, it automatically registers project settings under <span class="tt">gaze/</span>:<ul>
-<li><span class="tt">gaze/general/autostart</span> (default <span class="tt">true</span>): Starts camera tracking automatically on startup.</li>
-<li><span class="tt">gaze/pointing/emulate_gaze_from_mouse</span> (default <span class="tt">true</span>): Emulates <span class="tt">InputEventGaze</span> from mouse cursor movements using 3D inverse kinematics when camera tracking is inactive.</li>
-<li><span class="tt">gaze/pointing/emulate_mouse_from_gaze</span> (default <span class="tt">false</span>): Dispatches synthetic mouse move events based on gaze coordinates.</li>
-<li><span class="tt">gaze/calibration/device_profile_path</span> (defaults to <span class="tt">user://calibrations/device_profile.tres</span>).</li>
-</ul>
-</li>
-<li><b>Model Weights</b>: Model weights (<span class="tt">.ort</span> format) are pre-bundled inside <span class="tt">addons/godot-gaze/models/</span>.</li>
-</ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
-3. Basic GDScript Usage</h2>
-<p>Nodes receive gaze events idiomatically through <span class="tt">_unhandled_input(event)</span>:</p>
-<div class="fragment"><div class="line">extends Node2D</div>
-<div class="line"> </div>
-<div class="line">@onready var cursor: Node2D = $Cursor</div>
-<div class="line">@onready var status: Label = $Status</div>
-<div class="line"> </div>
-<div class="line">func _unhandled_input(event: InputEvent) -&gt; void:</div>
-<div class="line">    if event is InputEventGaze:</div>
-<div class="line">        # 2D Screen / Viewport position</div>
-<div class="line">        cursor.global_position = event.get_eye_gaze()</div>
-<div class="line">        status.text = &quot;Face Tracked (Openness L: %.2f, R: %.2f)&quot; % [event.left_eye_openness, event.right_eye_openness]</div>
-<div class="line"> </div>
-<div class="line">        # 3D Head &amp; Gaze properties</div>
-<div class="line">        var head_pos_mm = event.head_pose.origin</div>
-<div class="line">        var eye_ray_dir = event.eye_direction</div>
-<div class="line">    elif event is InputEventGazeMissing:</div>
-<div class="line">        status.text = &quot;Gaze Lost (Reason: %d)&quot; % event.reason</div>
-<div class="line"> </div>
-<div class="line">func _ready() -&gt; void:</div>
-<div class="line">    # Tracking starts automatically when autostart is true.</div>
-<div class="line">    # You can also manually control tracking refcounts:</div>
-<div class="line">    var gs = Engine.get_singleton(&quot;GazeServer&quot;)</div>
-<div class="line">    if gs:</div>
-<div class="line">        gs.start_tracking()</div>
-</div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
-Web / HTML5 Export Guidelines</h1>
-<p>When exporting your project to the Web, keep the following considerations in mind:</p>
-<ol type="1">
-<li><b>Automatic Sidecar Export</b>: The Gaze Tracker plugin includes an editor export plugin (<span class="tt">export_plugin.gd</span>) that automatically copies <span class="tt">gaze_sidecar.js</span> to your HTML5 export folder.</li>
-<li><b>Cross-Origin Isolation Requirements (For Threaded Exports)</b>:<ul>
-<li>Godot's WebAssembly export template supports multi-threading via SharedArrayBuffer. If you enable <b>Thread Support</b> in your Godot Web Export Preset options, the hosting server <b>must</b> serve your game with the following HTTP response headers: <div class="fragment"><div class="line">Cross-Origin-Opener-Policy: same-origin</div>
-<div class="line">Cross-Origin-Embedder-Policy: require-corp</div>
+<li>Download and prepare the <span class="tt">.ort</span> neural models into <span class="tt">project/addons/godot-gaze/models/</span>: <div class="fragment"><div class="line">./scripts/download_models.sh</div>
 </div><!-- fragment --></li>
-<li>These headers are standard browser security requirements for SharedArrayBuffer (not specific to this plugin). If your hosting environment (e.g. itch.io, GitHub Pages, or corporate intranet) does not allow you to configure these custom headers, you <b>must disable Thread Support</b> in your Godot export preset, which falls back to the non-threaded WebAssembly template.</li>
-</ul>
-</li>
+<li>Build the GDExtension for your platform (<span class="tt">macos</span>, <span class="tt">linux</span>, <span class="tt">windows</span>, <span class="tt">android</span>, <span class="tt">ios</span>, or <span class="tt">web</span>): <div class="fragment"><div class="line">scons platform=macos target=editor</div>
+<div class="line">scons platform=macos target=template_debug</div>
+<div class="line">scons platform=macos target=template_release</div>
+</div><!-- fragment --> <em>(Optional)</em> Regenerate Doxygen + Godot Editor Class Reference XML files (<span class="tt">project/docs/classref/*.xml</span>, loaded automatically in the editor from <span class="tt">res://docs/classref</span>): <div class="fragment"><div class="line">./scripts/generate_docs.sh</div>
+</div><!-- fragment --></li>
+<li>Symlink or copy <span class="tt">project/addons/godot-gaze</span> into <span class="tt">&lt;your-godot-project&gt;/addons/godot-gaze</span> and enable <b>Godot Gaze</b> in <b>Project Settings -&gt; Plugins</b>.</li>
 </ol>
 <hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+Quick Start</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+1. Lifecycle Management with <span class="tt">GazeTracker</span></h2>
+<p>By default, <span class="tt">gaze/general/autostart</span> is <span class="tt">true</span>, so tracking starts automatically on startup. For explicit scene-scoped tracking (or if you disable <span class="tt">autostart</span>), attach a <span class="tt">GazeTracker</span> node or call <span class="tt">GazeTracker.track_node(self)</span>. When all active <span class="tt">GazeTracker</span> nodes have <span class="tt">enabled = false</span> or exit the tree, <span class="tt">GazeServer</span> releases the camera automatically.</p>
+<div class="fragment"><div class="line">extends Control</div>
+<div class="line"> </div>
+<div class="line">func _ready() -&gt; void:</div>
+<div class="line">    # Attach a reference-counted GazeTracker to this node&#39;s lifetime</div>
+<div class="line">    var tracker := GazeTracker.track_node(self)</div>
+<div class="line">    print(&quot;Tracking active: &quot;, tracker.is_tracking_active())</div>
+<div class="line">    print(&quot;Build: &quot;, GazeServer.get_build_info()) # e.g. &quot;godot-gaze v0.1.0&quot;</div>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+2. Handling <span class="tt">InputEventGaze</span> and <span class="tt">InputEventGazeMissing</span></h2>
+<p><span class="tt">InputEventGaze</span> and <span class="tt">InputEventGazeMissing</span> both inherit <span class="tt">InputEventGazeBase</span> (<span class="tt">InputEventAction</span>), so they flow through standard <span class="tt">_input(event)</span> / <span class="tt">_unhandled_input(event)</span> callbacks.</p>
+<blockquote class="doxtable">
+<p><b>Important:</b> Uninitialized or invalid gaze positions are represented as <span class="tt">Vector2(NAN, NAN)</span>, and clamping preserves non-finite values rather than collapsing them to <span class="tt">(0, 0)</span>. Always check <span class="tt">pos.is_finite()</span> before consuming gaze coordinates. </p>
+</blockquote>
+<div class="fragment"><div class="line">extends Control</div>
+<div class="line"> </div>
+<div class="line">@onready var reticle: Control = $Reticle</div>
+<div class="line"> </div>
+<div class="line">func _input(event: InputEvent) -&gt; void:</div>
+<div class="line">    if event is InputEventGaze:</div>
+<div class="line">        # 2D canvas coordinates (or pass `self` for coordinates local to this Control)</div>
+<div class="line">        var gaze_pos: Vector2 = event.get_eye_gaze(self, InputEventGaze.CLAMPING_DEFAULT)</div>
+<div class="line">        if gaze_pos.is_finite():</div>
+<div class="line">            reticle.position = gaze_pos</div>
+<div class="line">            reticle.visible = true</div>
+<div class="line"> </div>
+<div class="line">        # Optional head pose projection &amp; continuous eye openness [0.0 closed .. 1.0 open]</div>
+<div class="line">        var nose_pos: Vector2 = event.get_nose_gaze(self)</div>
+<div class="line">        var left_open: float = event.left_eye_openness</div>
+<div class="line">        var right_open: float = event.right_eye_openness</div>
+<div class="line"> </div>
+<div class="line">        # 3D transforms in camera-space millimeters</div>
+<div class="line">        var _head_xform: Transform3D = event.head_transform</div>
+<div class="line">        var _gaze_xform: Transform3D = event.gaze_transform</div>
+<div class="line"> </div>
+<div class="line">    elif event is InputEventGazeMissing:</div>
+<div class="line">        reticle.visible = false</div>
+<div class="line">        match event.reason:</div>
+<div class="line">            InputEventGazeMissing.REASON_NO_FACE_DETECTED:</div>
+<div class="line">                pass # No face in camera frame</div>
+<div class="line">            InputEventGazeMissing.REASON_OCCLUDED:</div>
+<div class="line">                pass # Eyes occluded / blink</div>
+<div class="line">            InputEventGazeMissing.REASON_OUT_OF_BOUNDS:</div>
+<div class="line">                pass # Gaze fell outside display bounds</div>
+<div class="line">            InputEventGazeMissing.REASON_SENSOR_INACTIVE:</div>
+<div class="line">                pass # Camera/pipeline inactive</div>
+</div><!-- fragment --><p><span class="tt">InputEventGaze.ClampingMode</span> options for <span class="tt">get_eye_gaze(local_to, clamping)</span> and <span class="tt">get_nose_gaze(local_to, clamping)</span>:</p><ul>
+<li><span class="tt">InputEventGaze.CLAMPING_FREE</span> (<span class="tt">0</span>): Unclamped viewport/canvas coordinates (may fall outside the window).</li>
+<li><span class="tt">InputEventGaze.CLAMPING_CLAMPED</span> (<span class="tt">1</span>): Clamped to viewport bounds.</li>
+<li><span class="tt">InputEventGaze.CLAMPING_DEFAULT</span> (<span class="tt">2</span>): Uses the <span class="tt">gaze/pointing/default_clamping</span> project setting (default <span class="tt">true</span>).</li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+3. Inertial Dwell Interactions (<span class="tt">FillAccumulator</span>)</h2>
+<p><span class="tt">FillAccumulator</span> provides a 2nd-order damped charge/drain state machine for gaze buttons and dwell targets without harsh resets during blinks or micro-saccades:</p>
+<div class="fragment"><div class="line">extends Control</div>
+<div class="line"> </div>
+<div class="line">var dwell: FillAccumulator</div>
+<div class="line">var reticle_canvas_pos := Vector2(NAN, NAN)</div>
+<div class="line"> </div>
+<div class="line">func _ready() -&gt; void:</div>
+<div class="line">    dwell = FillAccumulator.new()</div>
+<div class="line">    dwell.fill_sec = 0.8</div>
+<div class="line">    dwell.drain_sec = 0.4</div>
+<div class="line">    dwell.error_doubling_distance = 100.0</div>
+<div class="line">    dwell.process_callback = FillAccumulator.PROCESS_IDLE</div>
+<div class="line">    dwell.filled.connect(_on_dwell_filled)</div>
+<div class="line">    add_child(dwell)</div>
+<div class="line"> </div>
+<div class="line">func _input(event: InputEvent) -&gt; void:</div>
+<div class="line">    if event is InputEventGaze:</div>
+<div class="line">        var pos: Vector2 = event.get_eye_gaze()</div>
+<div class="line">        if pos.is_finite():</div>
+<div class="line">            reticle_canvas_pos = pos</div>
+<div class="line"> </div>
+<div class="line">func _process(_delta: float) -&gt; void:</div>
+<div class="line">    if not reticle_canvas_pos.is_finite():</div>
+<div class="line">        dwell.target_error = 200.0</div>
+<div class="line">        return</div>
+<div class="line">    # Signed distance outside this Control&#39;s global rect (&lt;= 0 charges, &gt; 0 drains)</div>
+<div class="line">    var rect := get_global_rect()</div>
+<div class="line">    var clamped := reticle_canvas_pos.clamp(rect.position, rect.end)</div>
+<div class="line">    dwell.target_error = reticle_canvas_pos.distance_to(clamped)</div>
+<div class="line">    queue_redraw()</div>
+<div class="line"> </div>
+<div class="line">func _on_dwell_filled() -&gt; void:</div>
+<div class="line">    print(&quot;Activated by gaze dwell!&quot;)</div>
+<div class="line">    dwell.reset()</div>
+</div><!-- fragment --><p>You can also step manually with <span class="tt">dwell.process_callback = FillAccumulator.PROCESS_MANUAL</span> and call <span class="tt">dwell.process_error_delta(error_px, delta)</span> or <span class="tt">dwell.process_dwell_delta(is_active, delta)</span>. Signals emitted: <span class="tt">fill_changed(fill: float)</span>, <span class="tt">fill_started()</span>, <span class="tt">filled()</span>, <span class="tt">emptied()</span>.</p>
+<hr  />
 <h1 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
-Developer Guidelines &amp; Architecture</h1>
+Mouse &amp; Gaze Coexistence</h1>
 <ul>
-<li>For the full system architecture, layer isolation rules, and concurrency model, refer to System Architecture &amp; Technical Specification.</li>
-<li>For guidelines on compiling the plugin from source, running test suites, or contributing, please refer to CONTRIBUTING.md.</li>
-<li>For mathematical and physical projection guides, refer to docs/mathematical_model.md. </li>
+<li><b>Gaze -&gt; Mouse (<span class="tt">gaze/pointing/emulate_mouse_from_gaze</span>, default <span class="tt">true</span>)</b>: Drives Godot's pointer position from gaze when the physical mouse is idle, with optional dwell clicks (<span class="tt">gaze/pointing/mouse_emulation_dwell_sec</span>, default <span class="tt">1.5</span>s). Moving the physical mouse outside the anchor bubble (<span class="tt">gaze/pointing/mouse_stillness_threshold_px</span>, default <span class="tt">3.0</span> px) immediately returns pointer authority to the mouse; remaining still for <span class="tt">gaze/pointing/mouse_stillness_duration_sec</span> (<span class="tt">1.5</span>s) blends control back to gaze over <span class="tt">gaze/pointing/mouse_emulation_transition_sec</span> (<span class="tt">0.3</span>s).</li>
+<li><b>Mouse -&gt; Gaze (<span class="tt">gaze/pointing/emulate_gaze_from_mouse</span>, default <span class="tt">true</span>)</b>: When no face/webcam feed is tracking, mouse movement synthesizes <span class="tt">InputEventGaze</span> events so you can develop and test gaze interactions with a regular mouse. Inspect runtime authority with <span class="tt">GazeServer.is_physical_mouse_still()</span>, <span class="tt">GazeServer.is_physical_mouse_active()</span>, and <span class="tt">GazeServer.is_mouse_emulated()</span>.</li>
+</ul>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
+Customizing Events (<span class="tt">GazeEventFactory</span>)</h1>
+<p>To attach domain metadata or return a custom subclass of <span class="tt">InputEventGaze</span> / <span class="tt">InputEventGazeMissing</span>, extend <span class="tt">GazeEventFactory</span> and override <span class="tt">create_gaze_event()</span> / <span class="tt">create_missing_event(reason)</span>:</p>
+<div class="fragment"><div class="line">extends GazeEventFactory</div>
+<div class="line"> </div>
+<div class="line">class AppGazeEvent extends InputEventGaze:</div>
+<div class="line">    var tag: String = &quot;&quot;</div>
+<div class="line"> </div>
+<div class="line">func create_gaze_event() -&gt; InputEventGazeBase:</div>
+<div class="line">    var base := GazeServer.create_default_event()</div>
+<div class="line">    var ev := AppGazeEvent.new()</div>
+<div class="line">    ev.copy_from(base)</div>
+<div class="line">    ev.tag = &quot;gameplay&quot;</div>
+<div class="line">    return ev</div>
+<div class="line"> </div>
+<div class="line">func create_missing_event(reason: int) -&gt; InputEventGazeBase:</div>
+<div class="line">    return GazeServer.create_default_missing_event(reason)</div>
+</div><!-- fragment --><p>Register your factory resource via <b>Project Settings -&gt; <span class="tt">gaze/events/event_factory_path</span></b> or dynamically via <span class="tt">GazeServer.set_event_factory(my_factory)</span>.</p>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
+Device Calibration &amp; Visual Debugging</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
+Device Profiles &amp; Interactive Calibration Wizard</h2>
+<p>Accurate projection relies on physical display pitch, resolution, and camera offset/tilt represented by <span class="tt">GazeDeviceProfile</span> (default storage path: <span class="tt">user://calibrations/device_profile.cfg</span> via <span class="tt">gaze/calibration/device_profile_path</span>).</p>
+<ul>
+<li><b>Built-in Wizard Scene</b>: Instantiate <span class="tt">res://addons/godot-gaze/calibration/gaze_calibration_wizard.tscn</span> (<span class="tt">GazeCalibrationWizard</span>), connect <span class="tt">wizard_completed(profile)</span> / <span class="tt">wizard_canceled()</span>, and call <span class="tt">start_wizard()</span>.</li>
+<li><b>Programmatic Configuration</b>: <div class="fragment"><div class="line">var profile := GazeDeviceProfile.create_system_guess()</div>
+<div class="line">profile.camera_offset_mm = Vector3(0.0, 12.0, 0.0)</div>
+<div class="line">profile.camera_tilt_deg = -4.0</div>
+<div class="line">GazeServer.set_device_profile(profile)</div>
+<div class="line">profile.save_to_file(&quot;user://calibrations/device_profile.cfg&quot;)</div>
+</div><!-- fragment --></li>
+</ul>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
+Camera &amp; Landmark Overlay (<span class="tt">debug_cam_feed.tscn</span>)</h2>
+<p>Instance <span class="tt">res://addons/godot-gaze/debug_cam_feed.tscn</span> (<span class="tt">DebugCamFeed</span>, configured by <span class="tt">gaze/debug/overlay_scene_path</span>) in your scene to visualize the live BGR camera preview, face bounding box, 35 facial landmarks, eye crops, and stage timings (<span class="tt">GazeServer.get_pipeline_stage_timings()</span>).</p>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+Headless Testing &amp; CI (<span class="tt">MockVisionServer</span>)</h1>
+<p>The vision driver automatically switches to <span class="tt">MockVisionServer</span> when any of the following is true:</p><ul>
+<li>Godot is running headless (<span class="tt">DisplayServer</span> name is <span class="tt">"headless"</span>), e.g., <span class="tt">--headless</span> unit tests.</li>
+<li><span class="tt">--mock-camera</span> or <span class="tt">--mock-vision</span> is passed on the command line.</li>
+<li>Environment variable <span class="tt">GAZE_VISION_DRIVER=mock</span> is set.</li>
+<li>Project setting <span class="tt">gaze/vision/driver</span> is set to <span class="tt">"mock"</span>.</li>
+</ul>
+<p>In tests, you can inject synthetic tracking state directly into <span class="tt">GazeServer</span>:</p>
+<div class="fragment"><div class="line">GazeServer.set_face_pose(Vector3(0.0, 0.0, 500.0), Vector3.ZERO, true)</div>
+<div class="line">GazeServer.set_gaze(Vector3(0.0, 0.0, 500.0), Vector3(0.0, 0.0, -1.0))</div>
+<div class="line">GazeServer.set_eye_openness(0.95, 0.95)</div>
+<div class="line">GazeServer.trigger_process()</div>
+</div><!-- fragment --><hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
+Project Settings Reference</h1>
+<p>All settings are registered under the <span class="tt">gaze/</span> namespace in <b>Project -&gt; Project Settings</b> (<span class="tt">Advanced Settings</span> enabled):</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">Setting Key  </th><th class="markdownTableHeadLeft">Type  </th><th class="markdownTableHeadLeft">Default  </th><th class="markdownTableHeadLeft">Description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/general/autostart</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">true</span>  </td><td class="markdownTableBodyLeft">Automatically start gaze tracking when the engine boots.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/emulate_gaze_from_mouse</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">true</span>  </td><td class="markdownTableBodyLeft">Synthesize <span class="tt">InputEventGaze</span> from mouse events when tracking is inactive/missing.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/emulate_mouse_from_gaze</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">true</span>  </td><td class="markdownTableBodyLeft">Drive Godot's mouse pointer from gaze when the physical mouse is still.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/default_clamping</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">true</span>  </td><td class="markdownTableBodyLeft">Default behavior for <span class="tt">InputEventGaze.CLAMPING_DEFAULT</span>.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/mouse_stillness_duration_sec</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">1.5</span>  </td><td class="markdownTableBodyLeft">Seconds the physical mouse must stay still before gaze regains pointer control.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/mouse_stillness_threshold_px</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">3.0</span>  </td><td class="markdownTableBodyLeft">Anchor bubble radius (px) above which physical mouse motion claims control.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/mouse_emulation_dwell_sec</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">1.5</span>  </td><td class="markdownTableBodyLeft">Dwell duration (s) for synthesized gaze-to-mouse clicks.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/pointing/mouse_emulation_transition_sec</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">0.3</span>  </td><td class="markdownTableBodyLeft">Blend duration (s) when returning pointer authority to gaze.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/search_paths</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"res://models,res://addons/godot-gaze/models"</span>  </td><td class="markdownTableBodyLeft">Comma-separated model search directories.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/face_detector_prefix</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"face_detection_yunet_2023mar"</span>  </td><td class="markdownTableBodyLeft">Filename prefix for face detector model.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/yunet_prefix</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"face_detection_yunet_2023mar"</span>  </td><td class="markdownTableBodyLeft">Legacy YuNet prefix key (mirrors <span class="tt">face_detector_prefix</span>).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/landmarks_prefix</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"facial-landmarks-35-adas-0002"</span>  </td><td class="markdownTableBodyLeft">Filename prefix for 35-point facial landmarker model.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/gaze_prefix</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"gaze-estimation-adas-0002"</span>  </td><td class="markdownTableBodyLeft">Filename prefix for gaze estimation model.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/eye_openness_prefix</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"open_closed_eye"</span>  </td><td class="markdownTableBodyLeft">Filename prefix for eye openness classifier model.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/models/acceptable_suffixes</span>  </td><td class="markdownTableBodyLeft"><span class="tt">PackedStringArray</span>  </td><td class="markdownTableBodyLeft"><span class="tt">[".ort", ".xml"]</span>  </td><td class="markdownTableBodyLeft">Allowed model file extensions during resolution.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/pitch_t_gain</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">0.0</span>  </td><td class="markdownTableBodyLeft">Head-pitch compensation gain for gaze estimation.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/yaw_t_gain</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">0.0</span>  </td><td class="markdownTableBodyLeft">Head-yaw compensation gain for gaze estimation.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/nose_y</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">-0.5</span>  </td><td class="markdownTableBodyLeft">Nose anchor Y ratio for head-pose estimation.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/nose_z</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">-52.0</span>  </td><td class="markdownTableBodyLeft">Nose anchor Z offset (mm).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/ipd_mm</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">63.0</span>  </td><td class="markdownTableBodyLeft">Default interpupillary distance (mm).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/debug_image_throttle_interval</span>  </td><td class="markdownTableBodyLeft"><span class="tt">int</span>  </td><td class="markdownTableBodyLeft"><span class="tt">1</span>  </td><td class="markdownTableBodyLeft">Frame throttle interval for debug preview texture updates.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/desired_camera_width</span>  </td><td class="markdownTableBodyLeft"><span class="tt">int</span>  </td><td class="markdownTableBodyLeft"><span class="tt">640</span>  </td><td class="markdownTableBodyLeft">Requested hardware capture width (px).  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/desired_camera_height</span>  </td><td class="markdownTableBodyLeft"><span class="tt">int</span>  </td><td class="markdownTableBodyLeft"><span class="tt">480</span>  </td><td class="markdownTableBodyLeft">Requested hardware capture height (px).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/config/force_cpu</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">false</span>  </td><td class="markdownTableBodyLeft">Force CPU ONNX Runtime execution provider instead of CoreML/NNAPI/DirectML.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/calibration/device_profile_path</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"user://calibrations/device_profile.cfg"</span>  </td><td class="markdownTableBodyLeft">Default file path for saved <span class="tt">GazeDeviceProfile</span> resources.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/debug/overlay_scene_path</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"res://addons/godot-gaze/debug_cam_feed.tscn"</span>  </td><td class="markdownTableBodyLeft">Scene path used by the debug camera overlay.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/blink/openness_threshold</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">0.50</span>  </td><td class="markdownTableBodyLeft">Openness probability threshold (<span class="tt">[0.0, 1.0]</span>).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/blink/allow_single_eye</span>  </td><td class="markdownTableBodyLeft"><span class="tt">bool</span>  </td><td class="markdownTableBodyLeft"><span class="tt">true</span>  </td><td class="markdownTableBodyLeft">Allow single-eye winks when classifying blink state.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/blink/min_duration</span>  </td><td class="markdownTableBodyLeft"><span class="tt">float</span>  </td><td class="markdownTableBodyLeft"><span class="tt">0.05</span>  </td><td class="markdownTableBodyLeft">Minimum blink duration (seconds).  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/debug/verbosity</span>  </td><td class="markdownTableBodyLeft"><span class="tt">int</span>  </td><td class="markdownTableBodyLeft"><span class="tt">1</span>  </td><td class="markdownTableBodyLeft">Logging verbosity level.  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/events/event_factory_path</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">""</span>  </td><td class="markdownTableBodyLeft">Optional path to a custom <span class="tt">GazeEventFactory</span> <span class="tt">.tres</span>/<span class="tt">.gd</span> resource.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft"><span class="tt">gaze/vision/driver</span>  </td><td class="markdownTableBodyLeft"><span class="tt">String</span>  </td><td class="markdownTableBodyLeft"><span class="tt">"native"</span>  </td><td class="markdownTableBodyLeft">Vision backend (<span class="tt">"native"</span> or <span class="tt">"mock"</span>).  </td></tr>
+</table>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
+Web Export Guidelines</h1>
+<p>When exporting a project to <b>Web (HTML5 / WebAssembly)</b>:</p>
+<ol type="1">
+<li><b>Enable the Godot Gaze Editor Plugin</b>: Activating the plugin registers <span class="tt">GodotGazeExportPlugin</span>, which automatically copies <span class="tt">res://addons/godot-gaze/bin/gaze_sidecar.js</span> into your export output folder alongside the HTML/JS bundle.</li>
+<li><b>Thread Support &amp; Cross-Origin Isolation Headers</b>:<ul>
+<li>If you enable <b>Thread Support</b> in your Godot Web export preset, browsers require <span class="tt">SharedArrayBuffer</span> cross-origin isolation. Your web server <b>must</b> send: <div class="fragment"><div class="line">Cross-Origin-Opener-Policy: same-origin</div>
+<div class="line">Cross-Origin-Embedder-Policy: require-corp</div>
+</div><!-- fragment --></li>
+<li>If your static host does not let you configure custom HTTP headers, <b>disable Thread Support</b> in the Web export preset so Godot uses the single-threaded <span class="tt">.wasm</span> GDExtension binary.</li>
+</ul>
+</li>
+<li><b>Web Model Assets</b>: Web exports initialize <span class="tt">gaze_sidecar.js</span> (<span class="tt">onnxruntime-web</span>) against <span class="tt">res://models/face_detection_yunet_2023mar.onnx</span> and <span class="tt">res://models/gaze-estimation-adas-0002.onnx</span>. Ensure those non-resource model files are included in your Web export preset's non-resource file filter (<span class="tt">*.onnx, *.ort</span>).</li>
+</ol>
+<hr  />
+<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
+Documentation &amp; Deep Dives</h1>
+<ul>
+<li><a class="el" href="md_docs_2architecture.html" title="System Architecture &amp; Technical Specification">Architecture Overview</a></li>
+<li><a class="el" href="md_docs_2mathematical__model.html" title="Gaze Tracking Mathematical &amp; Physical Model">Mathematical Model &amp; Camera-to-Display Projection</a></li>
+<li><a class="el" href="md_docs_2vision__models.html" title="Vision Models &amp; Camera Ingestion Specification">Vision Models &amp; Camera Ingestion Specification</a></li>
+<li><a class="el" href="md_docs_2lifecycle__tracking.html" title="Gaze Tracking Lifecycle &amp; Reference-Counted Architecture">Lifecycle &amp; Reference-Counted Tracking</a></li>
+<li><a class="el" href="md_docs_2gaze__model__evaluation.html" title="Gaze Estimation Model Evaluation &amp; Architectural Comparison">Gaze Model Evaluation</a></li>
+<li><a class="el" href="md_docs_2rejected__designs.html" title="Rejected Designs &amp; Anti-Patterns">Rejected Designs &amp; Anti-Patterns</a></li>
+<li>Contributing &amp; Test Suite Guide</li>
+<li>License &amp; Third-Party Notices </li>
 </ul>
 </div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>

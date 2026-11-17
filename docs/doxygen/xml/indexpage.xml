@@ -2,118 +2,454 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="indexpage" kind="page">
     <compoundname>index</compoundname>
-    <title>godot-gaze</title>
+    <title>Godot Gaze (&lt;tt&gt;v0.1.0&lt;/tt&gt;)</title>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
 <para><anchor id="index_1md__r_e_a_d_m_e"/></para>
-<para>A high-frequency, real-time 3D gaze estimation &amp; projecting GDExtension plugin for Godot 4.7+.</para>
+<para>Real-time, on-device eye-gaze and 6-DoF head-pose tracking GDExtension for <bold>Godot 4</bold>, powered by <bold>ONNX Runtime</bold> and physical camera-to-display ray projection.</para>
 <para><hruler/>
 </para>
 <sect1 id="index_1autotoc_md6">
 <title>Key Features</title><para><itemizedlist>
-<listitem><para><bold>Cross-Platform Gaze Tracking</bold>:<itemizedlist>
-<listitem><para><bold>Native Desktop &amp; Mobile (macOS, Windows, Linux, iOS, Android)</bold>: Runs an optimized CPU-based <bold>ONNX Runtime (CPU/XNNPACK)</bold> pipeline for face detection (YuNet) and gaze estimation (OpenVINO vehicle models).</para>
-</listitem><listitem><para><bold>WebAssembly (WASM)</bold>: Leverages browser-native <bold>ONNX Runtime Web</bold> (WebGPU/WebGL accelerated) and the same models as the desktop.</para>
-</listitem></itemizedlist>
-</para>
-</listitem><listitem><para><bold>Background Inference</bold>:<itemizedlist>
-<listitem><para><bold>Native (Desktop/Mobile)</bold>: All ML model estimation runs in a dedicated C++ background worker thread (<computeroutput>GazeTrackingPipeline</computeroutput>) with lock-free double buffering.</para>
-</listitem><listitem><para><bold>Web (WASM)</bold>: Camera capture and inference run asynchronously outside the WebAssembly runtime via the browser sidecar (<computeroutput>gaze_sidecar.js</computeroutput>) using ONNX Runtime Web (WebGPU/WebGL accelerated).</para>
-</listitem></itemizedlist>
-</para>
-</listitem><listitem><para><bold>Principled 3D Spherical Calibration</bold>: Corrects biological user differences using 3D angular biases (pitch/yaw) applied directly to the estimated 3D gaze vector.</para>
-</listitem><listitem><para><bold>Adaptive Smoothing</bold>: Implements a <bold>1 Euro Filter</bold> to suppress saccadic jitter during steady gaze while preserving low latency during rapid eye movements.</para>
+<listitem><para><bold>On-Device ML Pipeline (No External Services)</bold>: Runs face detection (<computeroutput>face_detection_yunet_2023mar.ort</computeroutput>), 35-point facial landmarks (<computeroutput>facial-landmarks-35-adas-0002.ort</computeroutput>), 3D gaze estimation (<computeroutput>gaze-estimation-adas-0002.ort</computeroutput>), and eye-openness classification (<computeroutput>open_closed_eye.ort</computeroutput>) locally via ONNX Runtime.</para>
+</listitem><listitem><para><bold>Physical Camera-to-Display Geometry</bold>: Solves 3D head pose via EPnP in millimeter camera space and intersects the fused gaze ray with the physical screen plane, converting automatically to Godot canvas and <computeroutput>CanvasItem</computeroutput>-local coordinates across window sizes and DPI scales.</para>
+</listitem><listitem><para><bold>First-Class Godot Input Events</bold>: Dispatches <computeroutput>InputEventGaze</computeroutput> and <computeroutput>InputEventGazeMissing</computeroutput> through Godot&apos;s standard <computeroutput>Input</computeroutput> pipeline.</para>
+</listitem><listitem><para><bold>Reference-Counted Lifecycle (<computeroutput>GazeTracker</computeroutput>)</bold>: Automatically starts/stops camera capture and inference when nodes enter or leave the scene tree.</para>
+</listitem><listitem><para><bold>Inertial Dwell Node (<computeroutput>FillAccumulator</computeroutput>)</bold>: 2nd-order smooth dwell/charge accumulator with blink/micro-saccade momentum tolerance and distance-scaled off-target drain.</para>
+</listitem><listitem><para><bold>Mouse &amp; Gaze Coexistence</bold>: Built-in <computeroutput>MouseStillnessArbitrator</computeroutput> and bi-directional mouse emulation (<computeroutput>emulate_mouse_from_gaze</computeroutput>, <computeroutput>emulate_gaze_from_mouse</computeroutput>) so physical mouse input takes instant priority and mouse-only dev machines can test gaze UIs without a webcam.</para>
+</listitem><listitem><para><bold>Calibration &amp; Visual Debugger</bold>: Interactive <computeroutput>GazeCalibrationWizard</computeroutput>, persistent <computeroutput>GazeDeviceProfile</computeroutput>, and live <computeroutput>debug_cam_feed.tscn</computeroutput> camera overlay.</para>
+</listitem><listitem><para><bold>Headless CI Testing (<computeroutput>MockVisionServer</computeroutput>)</bold>: Deterministic synthetic camera/gaze driver for automated testing without hardware webcams.</para>
+</listitem><listitem><para><bold>Cross-Platform</bold>: Windows, macOS, Linux, Android, iOS, and Web (WebAssembly + <computeroutput>gaze_sidecar.js</computeroutput>).</para>
 </listitem></itemizedlist>
 </para>
 <para><hruler/>
 </para>
 </sect1>
 <sect1 id="index_1autotoc_md8">
-<title>Getting Started</title><sect2 id="index_1autotoc_md9">
-<title>1. Installation</title><para>You can install <computeroutput>godot-gaze</computeroutput> using one of the following methods:</para>
-<sect3 id="index_1autotoc_md10">
-<title>A. From Pre-compiled Release (Recommended)</title><para><orderedlist>
-<listitem><para>Download the latest <computeroutput>godot-gaze.zip</computeroutput> from the <ulink url="https://github.com/browndragon/godot-gaze/releases">GitHub Releases</ulink> page.</para>
-</listitem><listitem><para>Extract the archive and copy the <computeroutput>addons/godot-gaze</computeroutput> directory directly into your Godot project&apos;s root <computeroutput>addons/</computeroutput> directory.</para>
-</listitem><listitem><para>Open your project in the Godot Editor, navigate to <bold>Project Settings &gt; Plugins</bold>, and enable the <computeroutput>Godot Gaze</computeroutput> plugin.</para>
+<title>Installation</title><sect2 id="index_1autotoc_md9">
+<title>Option 1: Prebuilt Release (<computeroutput>godot-gaze.zip</computeroutput>)</title><para><orderedlist>
+<listitem><para>Download <computeroutput>godot-gaze.zip</computeroutput> from the <ulink url="../../releases">GitHub Releases</ulink> page.</para>
+</listitem><listitem><para>Extract it into the root of your Godot project so that <computeroutput>addons/godot-gaze/</computeroutput> sits inside your <computeroutput>res://</computeroutput> directory (<computeroutput>res://addons/godot-gaze/gaze.gdextension</computeroutput>).</para>
+</listitem><listitem><para>Open your project in Godot 4, go to <bold>Project -&gt; Project Settings -&gt; Plugins</bold>, and enable <bold>Godot Gaze</bold>.</para>
 </listitem></orderedlist>
 </para>
-</sect3>
-<sect3 id="index_1autotoc_md11">
-<title>B. Local Development Symlinking (For Contributors)</title><para>If you are developing this plugin locally and want to test changes in your own Godot project without repeatedly copying files:</para>
-<para><orderedlist>
-<listitem><para>Create a symbolic link from your project&apos;s <computeroutput>addons</computeroutput> directory back to this repository&apos;s addon folder: <programlisting filename=".bash"><codeline><highlight class="normal">ln<sp/>-s<sp/>/path/to/godot-gaze/project/addons/godot-gaze<sp/>/path/to/your-project/addons/godot-gaze</highlight></codeline>
+</sect2>
+<sect2 id="index_1autotoc_md10">
+<title>Option 2: Building from Source (or Symlinking <computeroutput>project/addons/godot-gaze</computeroutput>)</title><para><orderedlist>
+<listitem><para>Clone the repository with submodules (<computeroutput>thirdparty/godot-cpp</computeroutput>, <computeroutput>thirdparty/onnxruntime</computeroutput>): <programlisting filename=".bash"><codeline><highlight class="normal">git<sp/>clone<sp/>--recursive<sp/>https://github.com/browndragon/godot-gaze.git</highlight></codeline>
+<codeline><highlight class="normal">cd<sp/>godot-gaze</highlight></codeline>
 </programlisting></para>
-</listitem><listitem><para>When you run <computeroutput>scons</computeroutput> to rebuild any template (e.g. <computeroutput>scons platform=macos target=editor</computeroutput>), the compiled binaries in <computeroutput>project/addons/godot-gaze/bin</computeroutput> are instantly available and loaded by your target project.</para>
+</listitem><listitem><para>Download and prepare the <computeroutput>.ort</computeroutput> neural models into <computeroutput>project/addons/godot-gaze/models/</computeroutput>: <programlisting filename=".bash"><codeline><highlight class="normal">./scripts/download_models.sh</highlight></codeline>
+</programlisting></para>
+</listitem><listitem><para>Build the GDExtension for your platform (<computeroutput>macos</computeroutput>, <computeroutput>linux</computeroutput>, <computeroutput>windows</computeroutput>, <computeroutput>android</computeroutput>, <computeroutput>ios</computeroutput>, or <computeroutput>web</computeroutput>): <programlisting filename=".bash"><codeline><highlight class="normal">scons<sp/>platform=macos<sp/>target=editor</highlight></codeline>
+<codeline><highlight class="normal">scons<sp/>platform=macos<sp/>target=template_debug</highlight></codeline>
+<codeline><highlight class="normal">scons<sp/>platform=macos<sp/>target=template_release</highlight></codeline>
+</programlisting> <emphasis>(Optional)</emphasis> Regenerate Doxygen + Godot Editor Class Reference XML files (<computeroutput>project/docs/classref/*.xml</computeroutput>, loaded automatically in the editor from <computeroutput>res://docs/classref</computeroutput>): <programlisting filename=".bash"><codeline><highlight class="normal">./scripts/generate_docs.sh</highlight></codeline>
+</programlisting></para>
+</listitem><listitem><para>Symlink or copy <computeroutput>project/addons/godot-gaze</computeroutput> into <computeroutput>&lt;your-godot-project&gt;/addons/godot-gaze</computeroutput> and enable <bold>Godot Gaze</bold> in <bold>Project Settings -&gt; Plugins</bold>.</para>
 </listitem></orderedlist>
 </para>
-</sect3>
-</sect2>
-<sect2 id="index_1autotoc_md12">
-<title>2. Basic Setup</title><para><orderedlist>
-<listitem><para><bold>Autostart &amp; Configuration</bold>: When the plugin is enabled, it automatically registers project settings under <computeroutput>gaze/</computeroutput>:<itemizedlist>
-<listitem><para><computeroutput>gaze/general/autostart</computeroutput> (default <computeroutput>true</computeroutput>): Starts camera tracking automatically on startup.</para>
-</listitem><listitem><para><computeroutput>gaze/pointing/emulate_gaze_from_mouse</computeroutput> (default <computeroutput>true</computeroutput>): Emulates <computeroutput>InputEventGaze</computeroutput> from mouse cursor movements using 3D inverse kinematics when camera tracking is inactive.</para>
-</listitem><listitem><para><computeroutput>gaze/pointing/emulate_mouse_from_gaze</computeroutput> (default <computeroutput>false</computeroutput>): Dispatches synthetic mouse move events based on gaze coordinates.</para>
-</listitem><listitem><para><computeroutput>gaze/calibration/device_profile_path</computeroutput> (defaults to <computeroutput>user://calibrations/device_profile.tres</computeroutput>).</para>
-</listitem></itemizedlist>
-</para>
-</listitem><listitem><para><bold>Model Weights</bold>: Model weights (<computeroutput>.ort</computeroutput> format) are pre-bundled inside <computeroutput>addons/godot-gaze/models/</computeroutput>.</para>
-</listitem></orderedlist>
+<para><hruler/>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md13">
-<title>3. Basic GDScript Usage</title><para>Nodes receive gaze events idiomatically through <computeroutput>_unhandled_input(event)</computeroutput>:</para>
-<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>Node2D</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">@onready<sp/>var<sp/>cursor:<sp/>Node2D<sp/>=<sp/>$Cursor</highlight></codeline>
-<codeline><highlight class="normal">@onready<sp/>var<sp/>status:<sp/>Label<sp/>=<sp/>$Status</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal">func<sp/>_unhandled_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>2D<sp/>Screen<sp/>/<sp/>Viewport<sp/>position</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>cursor.global_position<sp/>=<sp/>event.get_eye_gaze()</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Face<sp/>Tracked<sp/>(Openness<sp/>L:<sp/>%.2f,<sp/>R:<sp/>%.2f)&quot;<sp/>%<sp/>[event.left_eye_openness,<sp/>event.right_eye_openness]</highlight></codeline>
-<codeline></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>Head<sp/>&amp;<sp/>Gaze<sp/>properties</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>head_pos_mm<sp/>=<sp/>event.head_pose.origin</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>eye_ray_dir<sp/>=<sp/>event.eye_direction</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>elif<sp/>event<sp/>is<sp/>InputEventGazeMissing:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>status.text<sp/>=<sp/>&quot;Gaze<sp/>Lost<sp/>(Reason:<sp/>%d)&quot;<sp/>%<sp/>event.reason</highlight></codeline>
+</sect1>
+<sect1 id="index_1autotoc_md12">
+<title>Quick Start</title><sect2 id="index_1autotoc_md13">
+<title>1. Lifecycle Management with <computeroutput>GazeTracker</computeroutput></title><para>By default, <computeroutput>gaze/general/autostart</computeroutput> is <computeroutput>true</computeroutput>, so tracking starts automatically on startup. For explicit scene-scoped tracking (or if you disable <computeroutput>autostart</computeroutput>), attach a <computeroutput>GazeTracker</computeroutput> node or call <computeroutput>GazeTracker.track_node(self)</computeroutput>. When all active <computeroutput>GazeTracker</computeroutput> nodes have <computeroutput>enabled = false</computeroutput> or exit the tree, <computeroutput>GazeServer</computeroutput> releases the camera automatically.</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
 <codeline></codeline>
 <codeline><highlight class="normal">func<sp/>_ready()<sp/>-&gt;<sp/>void:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Tracking<sp/>starts<sp/>automatically<sp/>when<sp/>autostart<sp/>is<sp/>true.</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>You<sp/>can<sp/>also<sp/>manually<sp/>control<sp/>tracking<sp/>refcounts:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>gs<sp/>=<sp/>Engine.get_singleton(&quot;GazeServer&quot;)</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>gs:</highlight></codeline>
-<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>gs.start_tracking()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Attach<sp/>a<sp/>reference-counted<sp/>GazeTracker<sp/>to<sp/>this<sp/>node&apos;s<sp/>lifetime</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>tracker<sp/>:=<sp/>GazeTracker.track_node(self)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Tracking<sp/>active:<sp/>&quot;,<sp/>tracker.is_tracking_active())</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Build:<sp/>&quot;,<sp/>GazeServer.get_build_info())<sp/>#<sp/>e.g.<sp/>&quot;godot-gaze<sp/>v0.1.0&quot;</highlight></codeline>
 </programlisting></para>
+</sect2>
+<sect2 id="index_1autotoc_md14">
+<title>2. Handling <computeroutput>InputEventGaze</computeroutput> and <computeroutput>InputEventGazeMissing</computeroutput></title><para><computeroutput>InputEventGaze</computeroutput> and <computeroutput>InputEventGazeMissing</computeroutput> both inherit <computeroutput>InputEventGazeBase</computeroutput> (<computeroutput>InputEventAction</computeroutput>), so they flow through standard <computeroutput>_input(event)</computeroutput> / <computeroutput>_unhandled_input(event)</computeroutput> callbacks.</para>
+<para><blockquote><para><bold>Important:</bold> Uninitialized or invalid gaze positions are represented as <computeroutput>Vector2(NAN, NAN)</computeroutput>, and clamping preserves non-finite values rather than collapsing them to <computeroutput>(0, 0)</computeroutput>. Always check <computeroutput>pos.is_finite()</computeroutput> before consuming gaze coordinates. </para>
+</blockquote></para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">@onready<sp/>var<sp/>reticle:<sp/>Control<sp/>=<sp/>$Reticle</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>2D<sp/>canvas<sp/>coordinates<sp/>(or<sp/>pass<sp/>`self`<sp/>for<sp/>coordinates<sp/>local<sp/>to<sp/>this<sp/>Control)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>gaze_pos:<sp/>Vector2<sp/>=<sp/>event.get_eye_gaze(self,<sp/>InputEventGaze.CLAMPING_DEFAULT)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>gaze_pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.position<sp/>=<sp/>gaze_pos</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.visible<sp/>=<sp/>true</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>Optional<sp/>head<sp/>pose<sp/>projection<sp/>&amp;<sp/>continuous<sp/>eye<sp/>openness<sp/>[0.0<sp/>closed<sp/>..<sp/>1.0<sp/>open]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>nose_pos:<sp/>Vector2<sp/>=<sp/>event.get_nose_gaze(self)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>left_open:<sp/>float<sp/>=<sp/>event.left_eye_openness</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>right_open:<sp/>float<sp/>=<sp/>event.right_eye_openness</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>3D<sp/>transforms<sp/>in<sp/>camera-space<sp/>millimeters</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>_head_xform:<sp/>Transform3D<sp/>=<sp/>event.head_transform</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>_gaze_xform:<sp/>Transform3D<sp/>=<sp/>event.gaze_transform</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>elif<sp/>event<sp/>is<sp/>InputEventGazeMissing:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle.visible<sp/>=<sp/>false</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>match<sp/>event.reason:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_NO_FACE_DETECTED:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>No<sp/>face<sp/>in<sp/>camera<sp/>frame</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_OCCLUDED:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Eyes<sp/>occluded<sp/>/<sp/>blink</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_OUT_OF_BOUNDS:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Gaze<sp/>fell<sp/>outside<sp/>display<sp/>bounds</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>InputEventGazeMissing.REASON_SENSOR_INACTIVE:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>pass<sp/>#<sp/>Camera/pipeline<sp/>inactive</highlight></codeline>
+</programlisting></para>
+<para><computeroutput>InputEventGaze.ClampingMode</computeroutput> options for <computeroutput>get_eye_gaze(local_to, clamping)</computeroutput> and <computeroutput>get_nose_gaze(local_to, clamping)</computeroutput>:<itemizedlist>
+<listitem><para><computeroutput>InputEventGaze.CLAMPING_FREE</computeroutput> (<computeroutput>0</computeroutput>): Unclamped viewport/canvas coordinates (may fall outside the window).</para>
+</listitem><listitem><para><computeroutput>InputEventGaze.CLAMPING_CLAMPED</computeroutput> (<computeroutput>1</computeroutput>): Clamped to viewport bounds.</para>
+</listitem><listitem><para><computeroutput>InputEventGaze.CLAMPING_DEFAULT</computeroutput> (<computeroutput>2</computeroutput>): Uses the <computeroutput>gaze/pointing/default_clamping</computeroutput> project setting (default <computeroutput>true</computeroutput>).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md15">
+<title>3. Inertial Dwell Interactions (<computeroutput>FillAccumulator</computeroutput>)</title><para><computeroutput>FillAccumulator</computeroutput> provides a 2nd-order damped charge/drain state machine for gaze buttons and dwell targets without harsh resets during blinks or micro-saccades:</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>Control</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">var<sp/>dwell:<sp/>FillAccumulator</highlight></codeline>
+<codeline><highlight class="normal">var<sp/>reticle_canvas_pos<sp/>:=<sp/>Vector2(NAN,<sp/>NAN)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_ready()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell<sp/>=<sp/>FillAccumulator.new()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.fill_sec<sp/>=<sp/>0.8</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.drain_sec<sp/>=<sp/>0.4</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.error_doubling_distance<sp/>=<sp/>100.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.process_callback<sp/>=<sp/>FillAccumulator.PROCESS_IDLE</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.filled.connect(_on_dwell_filled)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>add_child(dwell)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_input(event:<sp/>InputEvent)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>event<sp/>is<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>var<sp/>pos:<sp/>Vector2<sp/>=<sp/>event.get_eye_gaze()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>if<sp/>pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>reticle_canvas_pos<sp/>=<sp/>pos</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_process(_delta:<sp/>float)<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>if<sp/>not<sp/>reticle_canvas_pos.is_finite():</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>dwell.target_error<sp/>=<sp/>200.0</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>return</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>#<sp/>Signed<sp/>distance<sp/>outside<sp/>this<sp/>Control&apos;s<sp/>global<sp/>rect<sp/>(&lt;=<sp/>0<sp/>charges,<sp/>&gt;<sp/>0<sp/>drains)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>rect<sp/>:=<sp/>get_global_rect()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>clamped<sp/>:=<sp/>reticle_canvas_pos.clamp(rect.position,<sp/>rect.end)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.target_error<sp/>=<sp/>reticle_canvas_pos.distance_to(clamped)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>queue_redraw()</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>_on_dwell_filled()<sp/>-&gt;<sp/>void:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>print(&quot;Activated<sp/>by<sp/>gaze<sp/>dwell!&quot;)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>dwell.reset()</highlight></codeline>
+</programlisting></para>
+<para>You can also step manually with <computeroutput>dwell.process_callback = FillAccumulator.PROCESS_MANUAL</computeroutput> and call <computeroutput>dwell.process_error_delta(error_px, delta)</computeroutput> or <computeroutput>dwell.process_dwell_delta(is_active, delta)</computeroutput>. Signals emitted: <computeroutput>fill_changed(fill: float)</computeroutput>, <computeroutput>fill_started()</computeroutput>, <computeroutput>filled()</computeroutput>, <computeroutput>emptied()</computeroutput>.</para>
 <para><hruler/>
 </para>
 </sect2>
 </sect1>
-<sect1 id="index_1autotoc_md15">
-<title>Web / HTML5 Export Guidelines</title><para>When exporting your project to the Web, keep the following considerations in mind:</para>
-<para><orderedlist>
-<listitem><para><bold>Automatic Sidecar Export</bold>: The Gaze Tracker plugin includes an editor export plugin (<computeroutput>export_plugin.gd</computeroutput>) that automatically copies <computeroutput>gaze_sidecar.js</computeroutput> to your HTML5 export folder.</para>
-</listitem><listitem><para><bold>Cross-Origin Isolation Requirements (For Threaded Exports)</bold>:<itemizedlist>
-<listitem><para>Godot&apos;s WebAssembly export template supports multi-threading via SharedArrayBuffer. If you enable <bold>Thread Support</bold> in your Godot Web Export Preset options, the hosting server <bold>must</bold> serve your game with the following HTTP response headers: <programlisting filename=".http"><codeline><highlight class="normal">Cross-Origin-Opener-Policy:<sp/>same-origin</highlight></codeline>
-<codeline><highlight class="normal">Cross-Origin-Embedder-Policy:<sp/>require-corp</highlight></codeline>
-</programlisting></para>
-</listitem><listitem><para>These headers are standard browser security requirements for SharedArrayBuffer (not specific to this plugin). If your hosting environment (e.g. itch.io, GitHub Pages, or corporate intranet) does not allow you to configure these custom headers, you <bold>must disable Thread Support</bold> in your Godot export preset, which falls back to the non-threaded WebAssembly template.</para>
+<sect1 id="index_1autotoc_md17">
+<title>Mouse &amp; Gaze Coexistence</title><para><itemizedlist>
+<listitem><para><bold>Gaze -&gt; Mouse (<computeroutput>gaze/pointing/emulate_mouse_from_gaze</computeroutput>, default <computeroutput>true</computeroutput>)</bold>: Drives Godot&apos;s pointer position from gaze when the physical mouse is idle, with optional dwell clicks (<computeroutput>gaze/pointing/mouse_emulation_dwell_sec</computeroutput>, default <computeroutput>1.5</computeroutput>s). Moving the physical mouse outside the anchor bubble (<computeroutput>gaze/pointing/mouse_stillness_threshold_px</computeroutput>, default <computeroutput>3.0</computeroutput> px) immediately returns pointer authority to the mouse; remaining still for <computeroutput>gaze/pointing/mouse_stillness_duration_sec</computeroutput> (<computeroutput>1.5</computeroutput>s) blends control back to gaze over <computeroutput>gaze/pointing/mouse_emulation_transition_sec</computeroutput> (<computeroutput>0.3</computeroutput>s).</para>
+</listitem><listitem><para><bold>Mouse -&gt; Gaze (<computeroutput>gaze/pointing/emulate_gaze_from_mouse</computeroutput>, default <computeroutput>true</computeroutput>)</bold>: When no face/webcam feed is tracking, mouse movement synthesizes <computeroutput>InputEventGaze</computeroutput> events so you can develop and test gaze interactions with a regular mouse. Inspect runtime authority with <computeroutput>GazeServer.is_physical_mouse_still()</computeroutput>, <computeroutput>GazeServer.is_physical_mouse_active()</computeroutput>, and <computeroutput>GazeServer.is_mouse_emulated()</computeroutput>.</para>
 </listitem></itemizedlist>
 </para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md19">
+<title>Customizing Events (<computeroutput>GazeEventFactory</computeroutput>)</title><para>To attach domain metadata or return a custom subclass of <computeroutput>InputEventGaze</computeroutput> / <computeroutput>InputEventGazeMissing</computeroutput>, extend <computeroutput>GazeEventFactory</computeroutput> and override <computeroutput>create_gaze_event()</computeroutput> / <computeroutput>create_missing_event(reason)</computeroutput>:</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">extends<sp/>GazeEventFactory</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">class<sp/>AppGazeEvent<sp/>extends<sp/>InputEventGaze:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>tag:<sp/>String<sp/>=<sp/>&quot;&quot;</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>create_gaze_event()<sp/>-&gt;<sp/>InputEventGazeBase:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>base<sp/>:=<sp/>GazeServer.create_default_event()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>var<sp/>ev<sp/>:=<sp/>AppGazeEvent.new()</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ev.copy_from(base)</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ev.tag<sp/>=<sp/>&quot;gameplay&quot;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>ev</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">func<sp/>create_missing_event(reason:<sp/>int)<sp/>-&gt;<sp/>InputEventGazeBase:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>return<sp/>GazeServer.create_default_missing_event(reason)</highlight></codeline>
+</programlisting></para>
+<para>Register your factory resource via <bold>Project Settings -&gt; <computeroutput>gaze/events/event_factory_path</computeroutput></bold> or dynamically via <computeroutput>GazeServer.set_event_factory(my_factory)</computeroutput>.</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md21">
+<title>Device Calibration &amp; Visual Debugging</title><sect2 id="index_1autotoc_md22">
+<title>Device Profiles &amp; Interactive Calibration Wizard</title><para>Accurate projection relies on physical display pitch, resolution, and camera offset/tilt represented by <computeroutput>GazeDeviceProfile</computeroutput> (default storage path: <computeroutput>user://calibrations/device_profile.cfg</computeroutput> via <computeroutput>gaze/calibration/device_profile_path</computeroutput>).</para>
+<para><itemizedlist>
+<listitem><para><bold>Built-in Wizard Scene</bold>: Instantiate <computeroutput>res://addons/godot-gaze/calibration/gaze_calibration_wizard.tscn</computeroutput> (<computeroutput>GazeCalibrationWizard</computeroutput>), connect <computeroutput>wizard_completed(profile)</computeroutput> / <computeroutput>wizard_canceled()</computeroutput>, and call <computeroutput>start_wizard()</computeroutput>.</para>
+</listitem><listitem><para><bold>Programmatic Configuration</bold>: <programlisting filename=".gdscript"><codeline><highlight class="normal">var<sp/>profile<sp/>:=<sp/>GazeDeviceProfile.create_system_guess()</highlight></codeline>
+<codeline><highlight class="normal">profile.camera_offset_mm<sp/>=<sp/>Vector3(0.0,<sp/>12.0,<sp/>0.0)</highlight></codeline>
+<codeline><highlight class="normal">profile.camera_tilt_deg<sp/>=<sp/>-4.0</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_device_profile(profile)</highlight></codeline>
+<codeline><highlight class="normal">profile.save_to_file(&quot;user://calibrations/device_profile.cfg&quot;)</highlight></codeline>
+</programlisting></para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md23">
+<title>Camera &amp; Landmark Overlay (<computeroutput>debug_cam_feed.tscn</computeroutput>)</title><para>Instance <computeroutput>res://addons/godot-gaze/debug_cam_feed.tscn</computeroutput> (<computeroutput>DebugCamFeed</computeroutput>, configured by <computeroutput>gaze/debug/overlay_scene_path</computeroutput>) in your scene to visualize the live BGR camera preview, face bounding box, 35 facial landmarks, eye crops, and stage timings (<computeroutput>GazeServer.get_pipeline_stage_timings()</computeroutput>).</para>
+<para><hruler/>
+</para>
+</sect2>
+</sect1>
+<sect1 id="index_1autotoc_md25">
+<title>Headless Testing &amp; CI (<computeroutput>MockVisionServer</computeroutput>)</title><para>The vision driver automatically switches to <computeroutput>MockVisionServer</computeroutput> when any of the following is true:<itemizedlist>
+<listitem><para>Godot is running headless (<computeroutput>DisplayServer</computeroutput> name is <computeroutput>"headless"</computeroutput>), e.g., <computeroutput>--headless</computeroutput> unit tests.</para>
+</listitem><listitem><para><computeroutput>--mock-camera</computeroutput> or <computeroutput>--mock-vision</computeroutput> is passed on the command line.</para>
+</listitem><listitem><para>Environment variable <computeroutput>GAZE_VISION_DRIVER=mock</computeroutput> is set.</para>
+</listitem><listitem><para>Project setting <computeroutput>gaze/vision/driver</computeroutput> is set to <computeroutput>"mock"</computeroutput>.</para>
+</listitem></itemizedlist>
+</para>
+<para>In tests, you can inject synthetic tracking state directly into <computeroutput>GazeServer</computeroutput>:</para>
+<para><programlisting filename=".gdscript"><codeline><highlight class="normal">GazeServer.set_face_pose(Vector3(0.0,<sp/>0.0,<sp/>500.0),<sp/>Vector3.ZERO,<sp/>true)</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_gaze(Vector3(0.0,<sp/>0.0,<sp/>500.0),<sp/>Vector3(0.0,<sp/>0.0,<sp/>-1.0))</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.set_eye_openness(0.95,<sp/>0.95)</highlight></codeline>
+<codeline><highlight class="normal">GazeServer.trigger_process()</highlight></codeline>
+</programlisting></para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md27">
+<title>Project Settings Reference</title><para>All settings are registered under the <computeroutput>gaze/</computeroutput> namespace in <bold>Project -&gt; Project Settings</bold> (<computeroutput>Advanced Settings</computeroutput> enabled):</para>
+<para><table rows="33" cols="4"><row>
+<entry thead="yes" align='left'><para>Setting Key  </para>
+</entry><entry thead="yes" align='left'><para>Type  </para>
+</entry><entry thead="yes" align='left'><para>Default  </para>
+</entry><entry thead="yes" align='left'><para>Description  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/general/autostart</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>true</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Automatically start gaze tracking when the engine boots.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/emulate_gaze_from_mouse</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>true</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Synthesize <computeroutput>InputEventGaze</computeroutput> from mouse events when tracking is inactive/missing.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/emulate_mouse_from_gaze</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>true</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Drive Godot&apos;s mouse pointer from gaze when the physical mouse is still.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/default_clamping</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>true</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Default behavior for <computeroutput>InputEventGaze.CLAMPING_DEFAULT</computeroutput>.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/mouse_stillness_duration_sec</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>1.5</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Seconds the physical mouse must stay still before gaze regains pointer control.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/mouse_stillness_threshold_px</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>3.0</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Anchor bubble radius (px) above which physical mouse motion claims control.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/mouse_emulation_dwell_sec</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>1.5</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Dwell duration (s) for synthesized gaze-to-mouse clicks.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/pointing/mouse_emulation_transition_sec</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>0.3</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Blend duration (s) when returning pointer authority to gaze.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/search_paths</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"res://models,res://addons/godot-gaze/models"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Comma-separated model search directories.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/face_detector_prefix</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"face_detection_yunet_2023mar"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Filename prefix for face detector model.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/yunet_prefix</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"face_detection_yunet_2023mar"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Legacy YuNet prefix key (mirrors <computeroutput>face_detector_prefix</computeroutput>).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/landmarks_prefix</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"facial-landmarks-35-adas-0002"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Filename prefix for 35-point facial landmarker model.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/gaze_prefix</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"gaze-estimation-adas-0002"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Filename prefix for gaze estimation model.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/eye_openness_prefix</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"open_closed_eye"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Filename prefix for eye openness classifier model.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/models/acceptable_suffixes</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>PackedStringArray</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>[".ort", ".xml"]</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Allowed model file extensions during resolution.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/pitch_t_gain</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>0.0</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Head-pitch compensation gain for gaze estimation.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/yaw_t_gain</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>0.0</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Head-yaw compensation gain for gaze estimation.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/nose_y</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>-0.5</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Nose anchor Y ratio for head-pose estimation.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/nose_z</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>-52.0</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Nose anchor Z offset (mm).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/ipd_mm</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>63.0</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Default interpupillary distance (mm).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/debug_image_throttle_interval</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>int</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>1</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Frame throttle interval for debug preview texture updates.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/desired_camera_width</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>int</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>640</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Requested hardware capture width (px).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/desired_camera_height</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>int</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>480</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Requested hardware capture height (px).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/config/force_cpu</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>false</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Force CPU ONNX Runtime execution provider instead of CoreML/NNAPI/DirectML.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/calibration/device_profile_path</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"user://calibrations/device_profile.cfg"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Default file path for saved <computeroutput>GazeDeviceProfile</computeroutput> resources.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/debug/overlay_scene_path</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"res://addons/godot-gaze/debug_cam_feed.tscn"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Scene path used by the debug camera overlay.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/blink/openness_threshold</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>0.50</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Openness probability threshold (<computeroutput>[0.0, 1.0]</computeroutput>).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/blink/allow_single_eye</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>bool</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>true</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Allow single-eye winks when classifying blink state.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/blink/min_duration</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>float</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>0.05</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Minimum blink duration (seconds).  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/debug/verbosity</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>int</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>1</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Logging verbosity level.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/events/event_factory_path</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>""</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Optional path to a custom <computeroutput>GazeEventFactory</computeroutput> <computeroutput>.tres</computeroutput>/<computeroutput>.gd</computeroutput> resource.  </para>
+</entry></row>
+<row>
+<entry thead="no" align='left'><para><computeroutput>gaze/vision/driver</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>String</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para><computeroutput>"native"</computeroutput>  </para>
+</entry><entry thead="no" align='left'><para>Vision backend (<computeroutput>"native"</computeroutput> or <computeroutput>"mock"</computeroutput>).  </para>
+</entry></row>
+</table>
+</para>
+<para><hruler/>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md29">
+<title>Web Export Guidelines</title><para>When exporting a project to <bold>Web (HTML5 / WebAssembly)</bold>:</para>
+<para><orderedlist>
+<listitem><para><bold>Enable the Godot Gaze Editor Plugin</bold>: Activating the plugin registers <computeroutput>GodotGazeExportPlugin</computeroutput>, which automatically copies <computeroutput>res://addons/godot-gaze/bin/gaze_sidecar.js</computeroutput> into your export output folder alongside the HTML/JS bundle.</para>
+</listitem><listitem><para><bold>Thread Support &amp; Cross-Origin Isolation Headers</bold>:<itemizedlist>
+<listitem><para>If you enable <bold>Thread Support</bold> in your Godot Web export preset, browsers require <computeroutput>SharedArrayBuffer</computeroutput> cross-origin isolation. Your web server <bold>must</bold> send: <programlisting filename=".http"><codeline><highlight class="normal">Cross-Origin-Opener-Policy:<sp/>same-origin</highlight></codeline>
+<codeline><highlight class="normal">Cross-Origin-Embedder-Policy:<sp/>require-corp</highlight></codeline>
+</programlisting></para>
+</listitem><listitem><para>If your static host does not let you configure custom HTTP headers, <bold>disable Thread Support</bold> in the Web export preset so Godot uses the single-threaded <computeroutput>.wasm</computeroutput> GDExtension binary.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Web Model Assets</bold>: Web exports initialize <computeroutput>gaze_sidecar.js</computeroutput> (<computeroutput>onnxruntime-web</computeroutput>) against <computeroutput>res://models/face_detection_yunet_2023mar.onnx</computeroutput> and <computeroutput>res://models/gaze-estimation-adas-0002.onnx</computeroutput>. Ensure those non-resource model files are included in your Web export preset&apos;s non-resource file filter (<computeroutput>*.onnx, *.ort</computeroutput>).</para>
 </listitem></orderedlist>
 </para>
 <para><hruler/>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md17">
-<title>Developer Guidelines &amp; Architecture</title><para><itemizedlist>
-<listitem><para>For the full system architecture, layer isolation rules, and concurrency model, refer to System Architecture &amp; Technical Specification.</para>
-</listitem><listitem><para>For guidelines on compiling the plugin from source, running test suites, or contributing, please refer to CONTRIBUTING.md.</para>
-</listitem><listitem><para>For mathematical and physical projection guides, refer to docs/mathematical_model.md. </para>
+<sect1 id="index_1autotoc_md31">
+<title>Documentation &amp; Deep Dives</title><para><itemizedlist>
+<listitem><para><ref refid="md_docs_2architecture" kindref="compound">Architecture Overview</ref></para>
+</listitem><listitem><para><ref refid="md_docs_2mathematical__model" kindref="compound">Mathematical Model &amp; Camera-to-Display Projection</ref></para>
+</listitem><listitem><para><ref refid="md_docs_2vision__models" kindref="compound">Vision Models &amp; Camera Ingestion Specification</ref></para>
+</listitem><listitem><para><ref refid="md_docs_2lifecycle__tracking" kindref="compound">Lifecycle &amp; Reference-Counted Tracking</ref></para>
+</listitem><listitem><para><ref refid="md_docs_2gaze__model__evaluation" kindref="compound">Gaze Model Evaluation</ref></para>
+</listitem><listitem><para><ref refid="md_docs_2rejected__designs" kindref="compound">Rejected Designs &amp; Anti-Patterns</ref></para>
+</listitem><listitem><para>Contributing &amp; Test Suite Guide</para>
+</listitem><listitem><para>License &amp; Third-Party Notices </para>
 </listitem></itemizedlist>
 </para>
 </sect1>

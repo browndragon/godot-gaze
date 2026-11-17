@@ -1,3 +1,4 @@
+#ifndef WEB_ENABLED
 #include "godot_camera.hpp"
 #include "../core/log.hpp"
 #include <chrono>
@@ -315,3 +316,4 @@ void GodotCamera::release() {
 }
 
 } // namespace Gaze
+#endif

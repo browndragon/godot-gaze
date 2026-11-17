@@ -177,7 +177,7 @@ public:
      *
      * @param p_origin_cam Ray origin in camera space (millimeters).
      * @param p_direction_cam Unit ray direction in camera space.
-     * @return Vector3 Intersection point on camera plane, or (INFINITY, INFINITY, INFINITY) if parallel.
+     * @return Vector3 Intersection point on camera plane, or (NAN, NAN, NAN) if parallel or behind the camera.
      */
     Vector3 project_ray_to_camera_plane(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 
@@ -192,7 +192,7 @@ public:
      * @param p_direction_cam Unit ray direction in camera space.
      * @param p_local_to Optional CanvasItem (Node2D or Control). If null (default), returns position in canonical
      *                   root Viewport Canvas coordinates. If specified, transforms the point into the local space of that CanvasItem.
-     * @return Vector2 Intersection point in canvas space or local coordinates, or (INFINITY, INFINITY) if no intersection.
+     * @return Vector2 Intersection point in canvas space or local coordinates, or (NAN, NAN) if no intersection.
      */
     Vector2 project_ray_to_canvas(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam, const CanvasItem *p_local_to = nullptr) const;
 
@@ -203,7 +203,7 @@ public:
      *
      * @param p_origin_cam Ray origin in camera space (millimeters).
      * @param p_direction_cam Unit ray direction in camera space.
-     * @return Vector2 Intersection point in window logical points, or (INFINITY, INFINITY) if no intersection.
+     * @return Vector2 Intersection point in window logical points, or (NAN, NAN) if no intersection.
      */
     Vector2 project_ray_to_viewport(const Vector3 &p_origin_cam, const Vector3 &p_direction_cam) const;
 

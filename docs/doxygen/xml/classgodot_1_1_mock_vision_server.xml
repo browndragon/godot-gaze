@@ -23,7 +23,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="168" column="5"/>
+        <location file="src/godot/vision_server.hpp" line="169" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -39,7 +39,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="171" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="233" bodyend="236"/>
+        <location file="src/godot/vision_server.hpp" line="172" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="248" bodyend="250"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -55,7 +55,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="174" column="5"/>
+        <location file="src/godot/vision_server.hpp" line="175" column="5"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a2abca97bbda4fb1b898335b0f053cf16" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -69,7 +69,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="175" column="13"/>
+        <location file="src/godot/vision_server.hpp" line="176" column="13"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>RID</type>
@@ -85,7 +85,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="177" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="238" bodyend="245"/>
+        <location file="src/godot/vision_server.hpp" line="178" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="252" bodyend="259"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>bool</type>
@@ -108,7 +108,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="178" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="247" bodyend="252"/>
+        <location file="src/godot/vision_server.hpp" line="179" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="261" bodyend="266"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -128,7 +128,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="179" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="254" bodyend="258"/>
+        <location file="src/godot/vision_server.hpp" line="180" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="268" bodyend="272"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Texture2D &gt;</type>
@@ -148,7 +148,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="180" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="260" bodyend="264"/>
+        <location file="src/godot/vision_server.hpp" line="181" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="274" bodyend="278"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>Ref&lt; Image &gt;</type>
@@ -168,7 +168,51 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="181" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="266" bodyend="270"/>
+        <location file="src/godot/vision_server.hpp" line="182" column="17" bodyfile="src/godot/vision_server.cpp" bodystart="280" bodyend="284"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a6b5ba75e0437cfe2a71a6dd89900ddbc" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool godot::MockVisionServer::get_camera_current_frame</definition>
+        <argsstring>(RID p_camera, Gaze::Frame &amp;r_frame) override</argsstring>
+        <name>get_camera_current_frame</name>
+        <qualifiedname>godot::MockVisionServer::get_camera_current_frame</qualifiedname>
+        <reimplements refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735">get_camera_current_frame</reimplements>
+        <param>
+          <type>RID</type>
+          <declname>p_camera</declname>
+        </param>
+        <param>
+          <type><ref refid="struct_gaze_1_1_frame" kindref="compound">Gaze::Frame</ref> &amp;</type>
+          <declname>r_frame</declname>
+        </param>
+        <briefdescription>
+<para>Retrieve the raw frame data for <ref refid="classgodot_1_1_gaze_server" kindref="compound">GazeServer</ref> or background pipeline threads. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_camera</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera RID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>r_frame</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Frame structure to populate. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>True if a new frame was grabbed successfully, false otherwise. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/vision_server.hpp" line="183" column="18" bodyfile="src/godot/vision_server.cpp" bodystart="286" bodyend="298"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1ac9ecd69c6d4fa719955a2b662ae0dec9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="virtual">
         <type>void</type>
@@ -187,7 +231,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="186" column="18" bodyfile="src/godot/vision_server.hpp" bodystart="186" bodyend="193"/>
+        <location file="src/godot/vision_server.hpp" line="188" column="18" bodyfile="src/godot/vision_server.hpp" bodystart="188" bodyend="195"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_mock_vision_server_1a6b5b3db71732c984c4393f0c87de7a6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type>void</type>
@@ -229,7 +273,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/vision_server.hpp" line="200" column="10" bodyfile="src/godot/vision_server.cpp" bodystart="272" bodyend="274"/>
+        <location file="src/godot/vision_server.hpp" line="202" column="10" bodyfile="src/godot/vision_server.cpp" bodystart="300" bodyend="302"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -272,13 +316,14 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/vision_server.hpp" line="167" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="167" bodyend="201"/>
+    <location file="src/godot/vision_server.hpp" line="168" column="1" bodyfile="src/godot/vision_server.hpp" bodystart="168" bodyend="203"/>
     <listofallmembers>
       <member refid="classgodot_1_1_mock_vision_server_1ae1fd44afffc72c08763eedeb1f56a072" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_vision_server_1ac3fa98a823c4e2f8428a6dfa5f059254" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>allocated_cameras</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1adaa041a3e3dfb1e4076969cd0fed5775" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_create</name></member>
       <member refid="classgodot_1_1_vision_server_1ae723eed2cc069d00b1e59761f33617b5" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_free</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1a181eb28a8ae03bafef5e1c6edeeaf809" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_current_image</name></member>
+      <member refid="classgodot_1_1_vision_server_1a6f23f7ad2f12fba9ecae781e2365a6e7" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_device_id</name></member>
       <member refid="classgodot_1_1_vision_server_1a1b887f029644e9f8fe2016fa1422db3d" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_focal_length</name></member>
       <member refid="classgodot_1_1_vision_server_1a646a7355c2c87ce6214284b1078cd5ca" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_fov</name></member>
       <member refid="classgodot_1_1_vision_server_1a11e809cea839327af8c3614c52caca96" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_get_last_readback_ms</name></member>
@@ -293,11 +338,11 @@
       <member refid="classgodot_1_1_mock_vision_server_1a4a43ab97ac090d728fe6a2a946f4a43b" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_start</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1aa043038fb3f8f4b57a8df1ed58643b8b" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>camera_stop</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1a36e6e72a35e880fc4ce94be169fd9ebe" prot="private" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>GDCLASS</name></member>
-      <member refid="classgodot_1_1_vision_server_1ad9768aeaf47648743bff2c0b57b10735" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_camera_current_frame</name></member>
+      <member refid="classgodot_1_1_mock_vision_server_1a6b5ba75e0437cfe2a71a6dd89900ddbc" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_camera_current_frame</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1aacade9a5fbef9962053deb89231cdcd4" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_camera_current_texture</name></member>
       <member refid="classgodot_1_1_vision_server_1a067e714ed2f27d1cf4c4b581a3b65eb3" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_gravity_vector</name></member>
       <member refid="classgodot_1_1_vision_server_1a09127e37d532ad94f80ffb08e5bccbba" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>get_raw_acceleration</name></member>
-      <member refid="classgodot_1_1_vision_server_1a090d7a967b756eac3a0054e8132331b5" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_vision_server_1a3cba4eaf008618ba583b0a0887f23f5a" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>get_singleton</name></member>
       <member refid="classgodot_1_1_vision_server_1a5376e72488f45d09f6472e469eea502c" prot="protected" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>gravity_vector</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1a6b5b3db71732c984c4393f0c87de7a6d" prot="public" virt="virtual"><scope>godot::MockVisionServer</scope><name>inject_texture</name></member>
       <member refid="classgodot_1_1_mock_vision_server_1a1ccdbf4e7385c83935ae960cd86904db" prot="public" virt="non-virtual"><scope>godot::MockVisionServer</scope><name>MockVisionServer</name></member>

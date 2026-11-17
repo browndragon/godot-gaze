@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['face_5fmodel_5fgeometry_2ehpp_0',['face_model_geometry.hpp',['../face__model__geometry_8hpp.html',1,'']]],
-  ['face_5fpipeline_2ehpp_1',['face_pipeline.hpp',['../face__pipeline_8hpp.html',1,'']]]
+  ['camera_5finterface_2ehpp_0',['camera_interface.hpp',['../camera__interface_8hpp.html',1,'']]],
+  ['camera_5fplacement_2ehpp_1',['camera_placement.hpp',['../camera__placement_8hpp.html',1,'']]]
 ];

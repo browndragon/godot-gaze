@@ -78,6 +78,22 @@
     <innerclass refid="classgodot_1_1_input_event_gaze_missing" prot="public">godot::InputEventGazeMissing</innerclass>
     <innernamespace refid="namespacegodot">godot</innernamespace>
     <sectiondef kind="func">
+      <memberdef kind="function" id="input__event__gaze_8hpp_1a40dcb33a494d9034bc7ae9136482c01b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>VARIANT_ENUM_CAST</definition>
+        <argsstring>(godot::InputEventGaze::ClampingMode)</argsstring>
+        <name>VARIANT_ENUM_CAST</name>
+        <param>
+          <type>godot::InputEventGaze::ClampingMode</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/input_event_gaze.hpp" line="248" column="1" declfile="src/godot/input_event_gaze.hpp" declline="248" declcolumn="1"/>
+      </memberdef>
       <memberdef kind="function" id="input__event__gaze_8hpp_1a0f1a2ff9d79498826b1ab0bdf681ca20" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
         <definition>VARIANT_ENUM_CAST</definition>
@@ -92,7 +108,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/input_event_gaze.hpp" line="255" column="1" declfile="src/godot/input_event_gaze.hpp" declline="255" declcolumn="1"/>
+        <location file="src/godot/input_event_gaze.hpp" line="249" column="1" declfile="src/godot/input_event_gaze.hpp" declline="249" declcolumn="1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -149,91 +165,97 @@
 <codeline lineno="83"><highlight class="normal"></highlight></codeline>
 <codeline lineno="88" refid="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_base_1abf8f978bea3b276b437a689180e76138" kindref="member">is_face_tracked</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
 <codeline lineno="89"><highlight class="normal"></highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other);</highlight></codeline>
+<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other);</highlight></codeline>
 <codeline lineno="91"><highlight class="normal">};</highlight></codeline>
 <codeline lineno="92"><highlight class="normal"></highlight></codeline>
 <codeline lineno="100" refid="classgodot_1_1_input_event_gaze" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">InputEventGaze<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>InputEventGazeBase<sp/>{</highlight></codeline>
 <codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(InputEventGaze,<sp/>InputEventGazeBase);</highlight></codeline>
 <codeline lineno="102"><highlight class="normal"></highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>eye_gaze_position;</highlight></codeline>
-<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>nose_gaze_position;</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"></highlight></codeline>
-<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/>head_transform;</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/>gaze_transform;</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"></highlight></codeline>
-<codeline lineno="109"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"></highlight></codeline>
-<codeline lineno="112"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGaze();</highlight></codeline>
-<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~InputEventGaze()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="115"><highlight class="normal"></highlight></codeline>
-<codeline lineno="116" refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" kindref="member">is_face_tracked</ref>()</highlight><highlight class="keyword"><sp/>const<sp/>override<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="117"><highlight class="normal"></highlight></codeline>
-<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a7529fdee3583d83f7882fc4df813ac87" kindref="member">get_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"></highlight></codeline>
-<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">set_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos);</highlight></codeline>
-<codeline lineno="133"><highlight class="normal"></highlight></codeline>
-<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a4dafd0841bc03e61d806e797aed7877d" kindref="member">get_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="145"><highlight class="normal"></highlight></codeline>
-<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">set_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos);</highlight></codeline>
-<codeline lineno="151"><highlight class="normal"></highlight></codeline>
-<codeline lineno="160" refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6bc5abcfe8fe642e806afb9a0640c75c" kindref="member">get_head_pose</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>head_transform;<sp/>}</highlight></codeline>
-<codeline lineno="161"><highlight class="normal"></highlight></codeline>
-<codeline lineno="166" refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a9c570885cf7e4d3f68a82b6c0622ce0a" kindref="member">set_head_pose</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_pose)<sp/>{<sp/>head_transform<sp/>=<sp/>p_pose;<sp/>}</highlight></codeline>
-<codeline lineno="167"><highlight class="normal"></highlight></codeline>
-<codeline lineno="172" refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/><ref refid="classgodot_1_1_input_event_gaze_1a21f83331d96846f5ba4f4b61e0233c35" kindref="member">get_eye_origin</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>gaze_transform.origin;<sp/>}</highlight></codeline>
-<codeline lineno="173"><highlight class="normal"></highlight></codeline>
-<codeline lineno="178" refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector3<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6216270138fd520ede8f96f5d0004f01" kindref="member">get_eye_direction</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>-gaze_transform.basis.get_column(2);<sp/>}</highlight></codeline>
-<codeline lineno="179"><highlight class="normal"></highlight></codeline>
-<codeline lineno="184" refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kindref="member">set_head_transform</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_xform)<sp/>{<sp/>head_transform<sp/>=<sp/>p_xform;<sp/>}</highlight></codeline>
-<codeline lineno="185"><highlight class="normal"></highlight></codeline>
-<codeline lineno="190" refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kindref="member">get_head_transform</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>head_transform;<sp/>}</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>ClampingMode<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CLAMPING_FREE<sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CLAMPING_CLAMPED<sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CLAMPING_DEFAULT<sp/>=<sp/>2,</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="109"><highlight class="normal"></highlight></codeline>
+<codeline lineno="110"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>eye_gaze_position;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>nose_gaze_position;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"></highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/>head_transform;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/>eye_transform;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"></highlight></codeline>
+<codeline lineno="117"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"></highlight></codeline>
+<codeline lineno="120"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGaze();</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~InputEventGaze()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"></highlight></codeline>
+<codeline lineno="124" refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1aceb6dbffce3c03e48b8cdd3d6b7fb866" kindref="member">is_face_tracked</ref>()</highlight><highlight class="keyword"><sp/>const<sp/>override<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"></highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1a57abd8026a2b533ffc6d318d53b99bac" kindref="member">get_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">,<sp/>ClampingMode<sp/>p_clamping<sp/>=<sp/>CLAMPING_DEFAULT)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>_get_eye_gaze_property()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a57abd8026a2b533ffc6d318d53b99bac" kindref="member">get_eye_gaze</ref>();<sp/>}</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"></highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a730a85ef2171143ea5d128a329a990ef" kindref="member">set_eye_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos);</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"></highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/><ref refid="classgodot_1_1_input_event_gaze_1abc5289461caf2837837e3ecdbbe2f898" kindref="member">get_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">,<sp/>ClampingMode<sp/>p_clamping<sp/>=<sp/>CLAMPING_DEFAULT)<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a5840113c98ceae1342ca3ef230e5d7a9" kindref="member">set_nose_gaze</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_pos);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"></highlight></codeline>
+<codeline lineno="167" refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a351bb6237af43f80ad5750dae61d6fef" kindref="member">set_head_transform</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_xform)<sp/>{<sp/>head_transform<sp/>=<sp/>p_xform;<sp/>}</highlight></codeline>
+<codeline lineno="168"><highlight class="normal"></highlight></codeline>
+<codeline lineno="173" refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6388cb4d29cbc8d89278031a82c08b7d" kindref="member">get_head_transform</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>head_transform;<sp/>}</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight></codeline>
+<codeline lineno="179" refid="classgodot_1_1_input_event_gaze_1a762e1a352ab6800a3a49267051ed3cfc" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1a762e1a352ab6800a3a49267051ed3cfc" kindref="member">set_eye_transform</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_xform)<sp/>{<sp/>eye_transform<sp/>=<sp/>p_xform;<sp/>}</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"></highlight></codeline>
+<codeline lineno="185" refid="classgodot_1_1_input_event_gaze_1ad9b62e2ef70da9a4302b398e038188ac" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1ad9b62e2ef70da9a4302b398e038188ac" kindref="member">get_eye_transform</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>eye_transform;<sp/>}</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"></highlight></codeline>
+<codeline lineno="190" refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" kindref="member">get_gaze_transform</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>eye_transform;<sp/>}</highlight></codeline>
 <codeline lineno="191"><highlight class="normal"></highlight></codeline>
-<codeline lineno="196" refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kindref="member">set_gaze_transform</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_xform)<sp/>{<sp/>gaze_transform<sp/>=<sp/>p_xform;<sp/>}</highlight></codeline>
-<codeline lineno="197"><highlight class="normal"></highlight></codeline>
-<codeline lineno="202" refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>Transform3D<sp/><ref refid="classgodot_1_1_input_event_gaze_1a6fcad6564cee08c6bfe41a104795ca2f" kindref="member">get_gaze_transform</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>gaze_transform;<sp/>}</highlight></codeline>
-<codeline lineno="203"><highlight class="normal"></highlight></codeline>
-<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGaze&gt;<sp/>&amp;p_other);</highlight></codeline>
-<codeline lineno="205"><highlight class="normal"></highlight></codeline>
-<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>as_text()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="207"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="195" refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_1aa073d03ad8b1d31d6e4aa4b4869ef60d" kindref="member">set_gaze_transform</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Transform3D<sp/>&amp;p_xform)<sp/>{<sp/>eye_transform<sp/>=<sp/>p_xform;<sp/>}</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"></highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>as_text()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="200"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"></highlight></codeline>
+<codeline lineno="206" refid="classgodot_1_1_input_event_gaze_missing" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">InputEventGazeMissing<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>InputEventGazeBase<sp/>{</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(InputEventGazeMissing,<sp/>InputEventGazeBase);</highlight></codeline>
 <codeline lineno="208"><highlight class="normal"></highlight></codeline>
-<codeline lineno="213" refid="classgodot_1_1_input_event_gaze_missing" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">InputEventGazeMissing<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>InputEventGazeBase<sp/>{</highlight></codeline>
-<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(InputEventGazeMissing,<sp/>InputEventGazeBase);</highlight></codeline>
-<codeline lineno="215"><highlight class="normal"></highlight></codeline>
-<codeline lineno="216"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>MissingReason<sp/>{</highlight></codeline>
-<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_NO_FACE_DETECTED<sp/>=<sp/>0,</highlight></codeline>
-<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_OCCLUDED<sp/>=<sp/>1,</highlight></codeline>
-<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_OUT_OF_BOUNDS<sp/>=<sp/>2,</highlight></codeline>
-<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_SENSOR_INACTIVE<sp/>=<sp/>3</highlight></codeline>
-<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="223"><highlight class="normal"></highlight></codeline>
-<codeline lineno="224"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/>MissingReason<sp/>reason<sp/>=<sp/>REASON_NO_FACE_DETECTED;</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">enum</highlight><highlight class="normal"><sp/>MissingReason<sp/>{</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_NO_FACE_DETECTED<sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_OCCLUDED<sp/>=<sp/>1,</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_OUT_OF_BOUNDS<sp/>=<sp/>2,</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>REASON_SENSOR_INACTIVE<sp/>=<sp/>3</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"></highlight></codeline>
+<codeline lineno="217"><highlight class="normal"></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/>MissingReason<sp/>reason<sp/>=<sp/>REASON_NO_FACE_DETECTED;</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"></highlight></codeline>
+<codeline lineno="220"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGazeMissing();</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~InputEventGazeMissing()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
 <codeline lineno="226"><highlight class="normal"></highlight></codeline>
-<codeline lineno="227"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
-<codeline lineno="229"><highlight class="normal"></highlight></codeline>
-<codeline lineno="230"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
-<codeline lineno="231"><highlight class="normal"><sp/><sp/><sp/><sp/>InputEventGazeMissing();</highlight></codeline>
-<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~InputEventGazeMissing()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="233"><highlight class="normal"></highlight></codeline>
-<codeline lineno="234" refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" kindref="member">is_face_tracked</ref>()</highlight><highlight class="keyword"><sp/>const<sp/>override<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
-<codeline lineno="235"><highlight class="normal"></highlight></codeline>
-<codeline lineno="240" refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" kindref="member">set_reason</ref>(MissingReason<sp/>p_reason)<sp/>{<sp/>reason<sp/>=<sp/>p_reason;<sp/>}</highlight></codeline>
-<codeline lineno="241"><highlight class="normal"></highlight></codeline>
-<codeline lineno="246" refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>MissingReason<sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" kindref="member">get_reason</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>reason;<sp/>}</highlight></codeline>
+<codeline lineno="227" refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1a280adacd326f635970e784b5eb6c06c1" kindref="member">is_face_tracked</ref>()</highlight><highlight class="keyword"><sp/>const<sp/>override<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;<sp/>}</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"></highlight></codeline>
+<codeline lineno="233" refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1acec2f233fd39338f85b9e69afb6ce2ab" kindref="member">set_reason</ref>(MissingReason<sp/>p_reason)<sp/>{<sp/>reason<sp/>=<sp/>p_reason;<sp/>}</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight></codeline>
+<codeline lineno="239" refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>MissingReason<sp/><ref refid="classgodot_1_1_input_event_gaze_missing_1a92cabd4dee375c9ea5cd79f7ac577500" kindref="member">get_reason</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>reason;<sp/>}</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"></highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeBase&gt;<sp/>&amp;p_other)<sp/></highlight><highlight class="keyword">override</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"></highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>as_text()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="244"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="247"><highlight class="normal"></highlight></codeline>
-<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>copy_from(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;InputEventGazeMissing&gt;<sp/>&amp;p_other);</highlight></codeline>
-<codeline lineno="249"><highlight class="normal"></highlight></codeline>
-<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/>String<sp/>as_text()<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="251"><highlight class="normal">};</highlight></codeline>
-<codeline lineno="252"><highlight class="normal"></highlight></codeline>
-<codeline lineno="253"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="254"><highlight class="normal"></highlight></codeline>
-<codeline lineno="255"><highlight class="normal">VARIANT_ENUM_CAST(godot::InputEventGazeMissing::MissingReason);</highlight></codeline>
+<codeline lineno="248"><highlight class="normal">VARIANT_ENUM_CAST(godot::InputEventGaze::ClampingMode);</highlight></codeline>
+<codeline lineno="249"><highlight class="normal">VARIANT_ENUM_CAST(godot::InputEventGazeMissing::MissingReason);</highlight></codeline>
     </programlisting>
     <location file="src/godot/input_event_gaze.hpp"/>
   </compounddef>

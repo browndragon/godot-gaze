@@ -167,7 +167,11 @@ if [[ $TIMEOUT -gt 0 ]]; then
     GODOT_PID=$!
     
     (
-        sleep "$TIMEOUT"
+        exec >/dev/null
+        sleep "$TIMEOUT" &
+        SLEEP_PID=$!
+        trap 'kill "$SLEEP_PID" 2>/dev/null || true; exit 0' TERM INT
+        wait "$SLEEP_PID" 2>/dev/null || true
         if kill -0 "$GODOT_PID" 2>/dev/null; then
             echo "[WATCHDOG] Godot process timed out after $TIMEOUT seconds. Terminating..." >&2
             kill -9 "$GODOT_PID" 2>/dev/null || true
@@ -180,8 +184,8 @@ if [[ $TIMEOUT -gt 0 ]]; then
     EXIT_CODE=$?
     set -e
     
-    pkill -P "$WATCHDOG_PID" 2>/dev/null || true
     kill "$WATCHDOG_PID" 2>/dev/null || true
+    wait "$WATCHDOG_PID" 2>/dev/null || true
     exit "$EXIT_CODE"
 else
     exec "$GODOT_BIN" ${FINAL_ARGS[@]+"${FINAL_ARGS[@]}"}

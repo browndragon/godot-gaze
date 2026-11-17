@@ -19,7 +19,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="18" column="30" bodyfile="src/godot/gaze_display_server.hpp" bodystart="18" bodyend="-1"/>
+        <location file="src/godot/gaze_display_server.hpp" line="20" column="30" bodyfile="src/godot/gaze_display_server.hpp" bodystart="20" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
@@ -41,7 +41,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="15" column="5"/>
+        <location file="src/godot/gaze_display_server.hpp" line="17" column="5"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="protected-static-func">
@@ -57,7 +57,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="21" column="17" bodyfile="src/godot/gaze_display_server.cpp" bodystart="41" bodyend="48"/>
+        <location file="src/godot/gaze_display_server.hpp" line="23" column="17" bodyfile="src/godot/gaze_display_server.cpp" bodystart="60" bodyend="73"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-func">
@@ -73,7 +73,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="24" column="5" bodyfile="src/godot/gaze_display_server.cpp" bodystart="50" bodyend="54"/>
+        <location file="src/godot/gaze_display_server.hpp" line="26" column="5" bodyfile="src/godot/gaze_display_server.cpp" bodystart="86" bodyend="90"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1aef37851753dcc700700bfdd3a09f7c78" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
         <type></type>
@@ -87,7 +87,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="25" column="13" bodyfile="src/godot/gaze_display_server.cpp" bodystart="56" bodyend="60"/>
+        <location file="src/godot/gaze_display_server.hpp" line="27" column="13" bodyfile="src/godot/gaze_display_server.cpp" bodystart="92" bodyend="96"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Vector2</type>
@@ -120,7 +120,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="38" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="62" bodyend="75"/>
+        <location file="src/godot/gaze_display_server.hpp" line="40" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="98" bodyend="111"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Vector2</type>
@@ -153,7 +153,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="45" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="77" bodyend="104"/>
+        <location file="src/godot/gaze_display_server.hpp" line="47" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="113" bodyend="136"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a4ecf8b703f58b2acad09c8bc4b508a94" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Vector2</type>
@@ -186,7 +186,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="52" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="106" bodyend="112"/>
+        <location file="src/godot/gaze_display_server.hpp" line="54" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="138" bodyend="144"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>double</type>
@@ -219,7 +219,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="59" column="20" bodyfile="src/godot/gaze_display_server.cpp" bodystart="114" bodyend="136"/>
+        <location file="src/godot/gaze_display_server.hpp" line="61" column="20" bodyfile="src/godot/gaze_display_server.cpp" bodystart="146" bodyend="168"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Rect2i</type>
@@ -252,7 +252,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="66" column="20" bodyfile="src/godot/gaze_display_server.cpp" bodystart="139" bodyend="159"/>
+        <location file="src/godot/gaze_display_server.hpp" line="68" column="20" bodyfile="src/godot/gaze_display_server.cpp" bodystart="171" bodyend="191"/>
       </memberdef>
       <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
         <type>Vector3</type>
@@ -284,13 +284,235 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="73" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="163" bodyend="165"/>
+        <location file="src/godot/gaze_display_server.hpp" line="75" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="195" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDisplayServer::mouse_get_position</definition>
+        <argsstring>() const</argsstring>
+        <name>mouse_get_position</name>
+        <qualifiedname>godot::GazeDisplayServer::mouse_get_position</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_gaze_display_server_1a9ef33ea07836903cd2d89632344907d7">mouse_get_position</reimplementedby>
+        <briefdescription>
+<para>Retrieve the current mouse cursor position in logical screen coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Screen mouse position Vector2(x, y). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="81" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="199" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a2c065195e453e3fdc4e6b4c08a1563a5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDisplayServer::get_window_mouse_position</definition>
+        <argsstring>(int p_window=0) const</argsstring>
+        <name>get_window_mouse_position</name>
+        <qualifiedname>godot::GazeDisplayServer::get_window_mouse_position</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>p_window</declname>
+          <defval>0</defval>
+        </param>
+        <briefdescription>
+<para>Retrieve the current mouse cursor position relative to the application window in logical pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_window</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Window index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Window mouse position Vector2(x, y). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="88" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="226" bodyend="229"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1af46c5c44cae47f6d06f276fe592c2a46" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>int64_t</type>
+        <definition>int64_t godot::GazeDisplayServer::mouse_get_button_state</definition>
+        <argsstring>() const</argsstring>
+        <name>mouse_get_button_state</name>
+        <qualifiedname>godot::GazeDisplayServer::mouse_get_button_state</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_gaze_display_server_1a647dcd08160452abf872d27fd364d9b2">mouse_get_button_state</reimplementedby>
+        <briefdescription>
+<para>Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Bitmask of pressed mouse buttons. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="94" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="231" bodyend="244"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::GazeDisplayServer::parse_mouse_motion</definition>
+        <argsstring>(const Vector2 &amp;p_position, const Vector2 &amp;p_relative, const Vector2 &amp;p_velocity)</argsstring>
+        <name>parse_mouse_motion</name>
+        <qualifiedname>godot::GazeDisplayServer::parse_mouse_motion</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_gaze_display_server_1a28b0a8ed5b4fa05bced562c47130fbda">parse_mouse_motion</reimplementedby>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_position</declname>
+        </param>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_relative</declname>
+        </param>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_velocity</declname>
+        </param>
+        <briefdescription>
+<para>Dispatch emulated synthetic mouse motion to the engine input queue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Canonical canvas position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_relative</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Relative motion vector. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_velocity</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Velocity vector. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="102" column="18" bodyfile="src/godot/gaze_display_server.cpp" bodystart="247" bodyend="259"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void godot::GazeDisplayServer::parse_mouse_button</definition>
+        <argsstring>(int64_t p_button, bool p_pressed, const Vector2 &amp;p_position)</argsstring>
+        <name>parse_mouse_button</name>
+        <qualifiedname>godot::GazeDisplayServer::parse_mouse_button</qualifiedname>
+        <reimplementedby refid="classgodot_1_1_mock_gaze_display_server_1a0523728bd4967d0edcbebb7e4832bed1">parse_mouse_button</reimplementedby>
+        <param>
+          <type>int64_t</type>
+          <declname>p_button</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>p_pressed</declname>
+        </param>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_position</declname>
+        </param>
+        <briefdescription>
+<para>Dispatch emulated synthetic mouse button event to the engine input queue. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_button</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mouse button index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_pressed</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True for press, false for release. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Canvas position where the click occurred. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="110" column="18" bodyfile="src/godot/gaze_display_server.cpp" bodystart="261" bodyend="273"/>
+      </memberdef>
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1ae6d36dd5c45e4a3cf05a9658d8c029ad" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>Vector2</type>
+        <definition>Vector2 godot::GazeDisplayServer::window_px_to_canvas</definition>
+        <argsstring>(const Vector2 &amp;p_win_pos, const CanvasItem *p_local_to=nullptr) const</argsstring>
+        <name>window_px_to_canvas</name>
+        <qualifiedname>godot::GazeDisplayServer::window_px_to_canvas</qualifiedname>
+        <param>
+          <type>const Vector2 &amp;</type>
+          <declname>p_win_pos</declname>
+        </param>
+        <param>
+          <type>const CanvasItem *</type>
+          <declname>p_local_to</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Transform a window-local coordinate in logical pixels to canonical viewport canvas space. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>p_win_pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Window position in logical pixels. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>p_local_to</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional target CanvasItem (null for root viewport canvas space). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Canonical canvas coordinate. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.hpp" line="118" column="21" bodyfile="src/godot/gaze_display_server.cpp" bodystart="275" bodyend="285"/>
       </memberdef>
     </sectiondef>
     <sectiondef kind="public-static-func">
-      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a4497e3c5df05fa0b65cfaab9227f2ecb" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+      <memberdef kind="function" id="classgodot_1_1_gaze_display_server_1a0003a6a08e0d79e2f56a09550717f9eb" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>GazeDisplayServer *</type>
-        <definition>static GazeDisplayServer * godot::GazeDisplayServer::get_singleton</definition>
+        <definition>GazeDisplayServer * godot::GazeDisplayServer::get_singleton</definition>
         <argsstring>()</argsstring>
         <name>get_singleton</name>
         <qualifiedname>godot::GazeDisplayServer::get_singleton</qualifiedname>
@@ -304,7 +526,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.hpp" line="31" column="30" bodyfile="src/godot/gaze_display_server.hpp" bodystart="31" bodyend="31"/>
+        <location file="src/godot/gaze_display_server.hpp" line="33" column="30" bodyfile="src/godot/gaze_display_server.cpp" bodystart="75" bodyend="84"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -340,7 +562,7 @@
         </childnode>
       </node>
     </collaborationgraph>
-    <location file="src/godot/gaze_display_server.hpp" line="14" column="1" bodyfile="src/godot/gaze_display_server.hpp" bodystart="14" bodyend="74"/>
+    <location file="src/godot/gaze_display_server.hpp" line="16" column="1" bodyfile="src/godot/gaze_display_server.hpp" bodystart="16" bodyend="119"/>
     <listofallmembers>
       <member refid="classgodot_1_1_gaze_display_server_1ab1d747def19d24dde50197d31266d4e4" prot="protected" virt="non-virtual"><scope>godot::GazeDisplayServer</scope><name>_bind_methods</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1a861f77bfb3cc1b118f5d6911841de687" prot="public" virt="non-virtual"><scope>godot::GazeDisplayServer</scope><name>GazeDisplayServer</name></member>
@@ -350,9 +572,15 @@
       <member refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>get_screen_scale</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>get_screen_size_mm</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>get_screen_size_pixels</name></member>
-      <member refid="classgodot_1_1_gaze_display_server_1a4497e3c5df05fa0b65cfaab9227f2ecb" prot="public" virt="non-virtual"><scope>godot::GazeDisplayServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1a0003a6a08e0d79e2f56a09550717f9eb" prot="public" virt="non-virtual"><scope>godot::GazeDisplayServer</scope><name>get_singleton</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1a2c065195e453e3fdc4e6b4c08a1563a5" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>get_window_mouse_position</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>get_window_rect_pixels</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1af46c5c44cae47f6d06f276fe592c2a46" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>mouse_get_button_state</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>mouse_get_position</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>parse_mouse_button</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>parse_mouse_motion</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1add7bf321ddc91559f712ad94a7917e05" prot="private" virt="non-virtual"><scope>godot::GazeDisplayServer</scope><name>singleton</name></member>
+      <member refid="classgodot_1_1_gaze_display_server_1ae6d36dd5c45e4a3cf05a9658d8c029ad" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>window_px_to_canvas</name></member>
       <member refid="classgodot_1_1_gaze_display_server_1aef37851753dcc700700bfdd3a09f7c78" prot="public" virt="virtual"><scope>godot::GazeDisplayServer</scope><name>~GazeDisplayServer</name></member>
     </listofallmembers>
   </compounddef>

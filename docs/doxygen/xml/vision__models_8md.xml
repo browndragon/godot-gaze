@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="vision__models_8md" kind="file" language="Markdown">
+    <compoundname>vision_models.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Vision<sp/>Models<sp/>&amp;<sp/>Camera<sp/>Ingestion<sp/>Specification</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>document<sp/>details<sp/>the<sp/>hardware<sp/>camera<sp/>ingestion<sp/>pipelines,<sp/>neural<sp/>network<sp/>models,<sp/>color<sp/>spaces,<sp/>tensor<sp/>memory<sp/>layouts,<sp/>and<sp/>coordinate<sp/>transformations<sp/>utilized<sp/>in<sp/>`godot-gaze`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>1.<sp/>Camera<sp/>Ingestion<sp/>Architecture<sp/>&amp;<sp/>Color<sp/>Formats</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Different<sp/>OS<sp/>and<sp/>capture<sp/>backends<sp/>deliver<sp/>video<sp/>frames<sp/>in<sp/>varying<sp/>color<sp/>spaces<sp/>and<sp/>initialization<sp/>states.<sp/>The<sp/>ingestion<sp/>layer<sp/>normalizes<sp/>all<sp/>incoming<sp/>frames<sp/>into<sp/>**packed<sp/>/<sp/>interleaved<sp/>BGR8**<sp/>working<sp/>buffers<sp/>(`GazeFrameData::camera_raw_bgr`)<sp/>before<sp/>dispatching<sp/>to<sp/>neural<sp/>inference<sp/>and<sp/>diagnostic<sp/>preview<sp/>pipelines.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">flowchart<sp/>TD</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>OS[&quot;OS<sp/>Video<sp/>Capture<sp/>Layer&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>AVF[&quot;macOS<sp/>AVFoundation&lt;br/&gt;(CameraFeed)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>WMF[&quot;Windows<sp/>Media<sp/>Foundation&lt;br/&gt;(WMFCamera)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>W3C[&quot;Web<sp/>Browser<sp/>API&lt;br/&gt;(getUserMedia<sp/>/<sp/>Canvas)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CAM2[&quot;Android<sp/>Camera2&lt;br/&gt;(NDK<sp/>/<sp/>JNI)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>NORM[&quot;Normalization<sp/>&amp;<sp/>Double-Buffered<sp/>Pool&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>CONV[&quot;Format<sp/>Normalizer<sp/>&amp;<sp/>Stride<sp/>Fixer&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>BUF[&quot;Packed<sp/>BGR8<sp/>Working<sp/>Buffer&lt;br/&gt;(camera_raw_bgr<sp/>in<sp/>GazeFrameData)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>ONNX[&quot;ONNX<sp/>Runtime<sp/>(ORT)<sp/>Model<sp/>Preprocessors&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_YN[&quot;YuNet<sp/>Tensor&lt;br/&gt;[1,<sp/>3,<sp/>640,<sp/>640]<sp/>NCHW&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_LM[&quot;Landmark<sp/>Tensor&lt;br/&gt;[1,<sp/>3,<sp/>60,<sp/>60]<sp/>NCHW&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_GM[&quot;Gaze<sp/>Tensors<sp/>(x2)&lt;br/&gt;[1,<sp/>3,<sp/>60,<sp/>60]<sp/>NCHW&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>T_EM[&quot;Eye<sp/>State<sp/>Tensors<sp/>(x2)&lt;br/&gt;[1,<sp/>3,<sp/>32,<sp/>32]<sp/>NCHW&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>DEBUG[&quot;Diagnostic<sp/>Previews<sp/>&amp;<sp/>Side<sp/>Outputs&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PREV_CAM[&quot;Full<sp/>Camera<sp/>Preview<sp/>Texture&lt;br/&gt;(VisionServer<sp/>RGB<sp/>Image)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PREV_FACE[&quot;Face<sp/>Crop<sp/>Preview&lt;br/&gt;(GazeFrame<sp/>160x128<sp/>BGR)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PREV_EYE_L[&quot;Left<sp/>Eye<sp/>Crop<sp/>Preview&lt;br/&gt;(GazeFrame<sp/>60x60<sp/>BGR)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PREV_EYE_R[&quot;Right<sp/>Eye<sp/>Crop<sp/>Preview&lt;br/&gt;(GazeFrame<sp/>60x60<sp/>BGR)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>AVF<sp/>&amp;<sp/>WMF<sp/>&amp;<sp/>W3C<sp/>&amp;<sp/>CAM2<sp/>--&gt;<sp/>CONV<sp/>--&gt;<sp/>BUF</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>BUF<sp/>--&gt;<sp/>T_YN<sp/>&amp;<sp/>T_LM<sp/>&amp;<sp/>T_GM<sp/>&amp;<sp/>T_EM</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>BUF<sp/>-.-&gt;<sp/>PREV_CAM</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>BUF<sp/>-.-&gt;<sp/>PREV_FACE</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>BUF<sp/>-.-&gt;<sp/>PREV_EYE_L<sp/>&amp;<sp/>PREV_EYE_R</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.1.<sp/>Zero-Allocation<sp/>Memory<sp/>Model</highlight></codeline>
+<codeline><highlight class="normal">All<sp/>frame<sp/>payloads,<sp/>intermediate<sp/>hint-rotation<sp/>scratchpads<sp/>(`rotated_frame_bgr`),<sp/>dense<sp/>eye<sp/>crops,<sp/>and<sp/>neural<sp/>input<sp/>tensor<sp/>memory<sp/>(`input_tensor_data`)<sp/>are<sp/>**statically<sp/>preallocated**<sp/>within<sp/>`GazeFrameData`<sp/>instances<sp/>managed<sp/>by<sp/>a<sp/>lock-free<sp/>`Pool&lt;GazeFrameData&gt;`.<sp/>No<sp/>heap<sp/>allocations<sp/>or<sp/>dynamic<sp/>reallocations<sp/>occur<sp/>during<sp/>the<sp/>steady-state<sp/>per-frame<sp/>inference<sp/>loop.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>1.2.<sp/>Platform-Specific<sp/>Camera<sp/>Ingestion<sp/>Details</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Backend<sp/>/<sp/>OS<sp/>|<sp/>Raw<sp/>Capture<sp/>Format<sp/>|<sp/>Initialization<sp/>Characteristics<sp/>|<sp/>Normalization<sp/>Action<sp/>in<sp/>`godot-gaze`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**macOS<sp/>(AVFoundation)**<sp/>|<sp/>`FEED_RGBA_IMAGE`<sp/>(`datatype<sp/>==<sp/>1`)<sp/>/<sp/>`FORMAT_RGBA8`<sp/>|<sp/>First<sp/>grabbed<sp/>frame<sp/>is<sp/>a<sp/>$4\times4$<sp/>placeholder<sp/>before<sp/>full<sp/>resolution<sp/>($1920\times1080$)<sp/>frames<sp/>start<sp/>arriving.<sp/>|<sp/>Duplicate/convert<sp/>to<sp/>`FORMAT_RGB8`,<sp/>swap<sp/>$R<sp/>\leftrightarrow<sp/>B$<sp/>channels<sp/>to<sp/>produce<sp/>packed<sp/>BGR8.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Windows<sp/>(WMF)**<sp/>|<sp/>`MFVideoFormat_RGB24`<sp/>/<sp/>`NV12`<sp/>|<sp/>Immediate<sp/>full-resolution<sp/>stream<sp/>via<sp/>Media<sp/>Foundation<sp/>source<sp/>reader.<sp/>|<sp/>Direct<sp/>BGR24<sp/>copy<sp/>or<sp/>NV12$\to$BGR<sp/>conversion.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Web<sp/>(Emscripten<sp/>/<sp/>Canvas)**<sp/>|<sp/>`HTMLVideoElement`<sp/>/<sp/>RGBA<sp/>Canvas<sp/>|<sp/>Browser<sp/>`getUserMedia`<sp/>video<sp/>element<sp/>streams<sp/>into<sp/>OffscreenCanvas.<sp/>|<sp/>Read<sp/>RGBA<sp/>pixel<sp/>data,<sp/>extract<sp/>3-channel<sp/>BGR<sp/>buffer.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Android<sp/>(Camera2)**<sp/>|<sp/>`YUV_420_888`<sp/>/<sp/>`NV21`<sp/>|<sp/>ImageReader<sp/>surface<sp/>with<sp/>stride<sp/>padding.<sp/>|<sp/>Convert<sp/>YUV/NV21<sp/>to<sp/>packed<sp/>BGR8.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>2.<sp/>Model<sp/>Catalog<sp/>&amp;<sp/>Neural<sp/>Preprocessing</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">All<sp/>neural<sp/>inference<sp/>models<sp/>in<sp/>`godot-gaze`<sp/>are<sp/>executed<sp/>via<sp/>**ONNX<sp/>Runtime<sp/>(ORT)**—Microsoft&apos;s<sp/>cross-platform<sp/>machine<sp/>learning<sp/>engine—and<sp/>consume<sp/>**BGR**<sp/>channels<sp/>in<sp/>**NCHW<sp/>planar<sp/>float<sp/>format**:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**N**:<sp/>Batch<sp/>size<sp/>($N=1$)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**C**:<sp/>Number<sp/>of<sp/>color<sp/>channels<sp/>($C=3$,<sp/>ordered<sp/>Blue<sp/>$\to$<sp/>Green<sp/>$\to$<sp/>Red)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**H**:<sp/>Tensor<sp/>height<sp/>in<sp/>pixels</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**W**:<sp/>Tensor<sp/>width<sp/>in<sp/>pixels</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>planar<sp/>NCHW<sp/>layout,<sp/>all<sp/>Blue<sp/>pixel<sp/>floats<sp/>are<sp/>contiguous<sp/>in<sp/>memory,<sp/>followed<sp/>by<sp/>all<sp/>Green<sp/>pixel<sp/>floats,<sp/>followed<sp/>by<sp/>all<sp/>Red<sp/>pixel<sp/>floats<sp/>(contrasting<sp/>with<sp/>interleaved/packed<sp/>NHWC<sp/>format<sp/>$H<sp/>\times<sp/>W<sp/>\times<sp/>C$).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>2.1.<sp/>Model<sp/>Specification<sp/>Matrix</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Model<sp/>Name<sp/>|<sp/>Model<sp/>File<sp/>|<sp/>Provenance<sp/>|<sp/>Input<sp/>Tensor<sp/>Shape<sp/>|<sp/>Value<sp/>Range<sp/>&amp;<sp/>Normalization<sp/>|<sp/>Output<sp/>Specification<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**YuNet<sp/>Face<sp/>Detector**<sp/>|<sp/>`face_detection_yunet_2023mar.ort`<sp/>|<sp/>OpenCV<sp/>Zoo<sp/>(`libfacedetection`)<sp/>|<sp/>`[1,<sp/>3,<sp/>640,<sp/>640]`<sp/>NCHW<sp/>|<sp/>Raw<sp/>floats<sp/>$[0.0,<sp/>255.0]$<sp/>|<sp/>Bounding<sp/>boxes,<sp/>confidence<sp/>scores,<sp/>5<sp/>2D<sp/>landmarks<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Facial<sp/>Landmarker**<sp/>|<sp/>`facial-landmarks-35-adas-0002.ort`<sp/>|<sp/>Intel<sp/>OpenVINO<sp/>Model<sp/>Zoo<sp/>|<sp/>`[1,<sp/>3,<sp/>60,<sp/>60]`<sp/>NCHW<sp/>|<sp/>Raw<sp/>floats<sp/>$[0.0,<sp/>255.0]$<sp/>|<sp/>35<sp/>normalized<sp/>2D<sp/>facial<sp/>landmarks<sp/>in<sp/>$[0,<sp/>1]$<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Gaze<sp/>Estimation**<sp/>|<sp/>`gaze-estimation-adas-0002.ort`<sp/>|<sp/>Intel<sp/>OpenVINO<sp/>Model<sp/>Zoo<sp/>|<sp/>`[1,<sp/>3,<sp/>60,<sp/>60]`<sp/>(x2)<sp/>+<sp/>`[1,<sp/>3]`<sp/>angles<sp/>|<sp/>Raw<sp/>floats<sp/>$[0.0,<sp/>255.0]$<sp/>|<sp/>3D<sp/>Gaze<sp/>vector<sp/>$(v_x,<sp/>v_y,<sp/>v_z)$<sp/>in<sp/>[Inference<sp/>Camera<sp/>Space](mathematical_model.md#11-inference-camera-space-opencv-standard)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Eye<sp/>Openness**<sp/>|<sp/>`open_closed_eye.ort`<sp/>|<sp/>Intel<sp/>OpenVINO<sp/>Model<sp/>Zoo<sp/>(`open-closed-eye-0001`)<sp/>|<sp/>`[1,<sp/>3,<sp/>32,<sp/>32]`<sp/>(x2)<sp/>NCHW<sp/>|<sp/>$\frac{\text{pixel}<sp/>-<sp/>127.0}{255.0}<sp/>\in<sp/>[-0.5,<sp/>+0.5]$<sp/>|<sp/>2-class<sp/>Softmax<sp/>probabilities<sp/>`[closed,<sp/>open]`<sp/>in<sp/>$[0.0,<sp/>1.0]$<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>3.<sp/>Detailed<sp/>Model<sp/>Specifications</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.1.<sp/>YuNet<sp/>Face<sp/>Detector<sp/>(`ORTYuNetDetector`)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Lineage<sp/>&amp;<sp/>Provenance**:<sp/>Developed<sp/>by<sp/>Shiqi<sp/>Yu<sp/>(`libfacedetection`),<sp/>upstreamed<sp/>to<sp/>OpenCV<sp/>Model<sp/>Zoo.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Network<sp/>Architecture**:<sp/>Multi-task<sp/>anchor-based<sp/>CNN<sp/>with<sp/>8-,<sp/>16-,<sp/>and<sp/>32-stride<sp/>feature<sp/>pyramids.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Preprocessing<sp/>Pipeline**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>1.<sp/>Extracts<sp/>a<sp/>1:1<sp/>square<sp/>crop<sp/>centered<sp/>on<sp/>the<sp/>frame<sp/>(`crop_size<sp/>=<sp/>min(width,<sp/>height)`).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>2.<sp/>Bilinearly<sp/>resizes<sp/>from<sp/>`crop_size`<sp/>to<sp/>$640\times640$.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>3.<sp/>Unrolls<sp/>interleaved<sp/>BGR8<sp/>into<sp/>planar<sp/>NCHW<sp/>float<sp/>tensor<sp/>$[1,<sp/>3,<sp/>640,<sp/>640]$<sp/>without<sp/>zero-centering<sp/>or<sp/>scaling.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Coordinate<sp/>Mapping**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Detected<sp/>5<sp/>landmarks<sp/>(right<sp/>eye,<sp/>left<sp/>eye,<sp/>nose<sp/>tip,<sp/>right<sp/>mouth<sp/>corner,<sp/>left<sp/>mouth<sp/>corner)<sp/>are<sp/>mapped<sp/>back<sp/>from<sp/>$[0,<sp/>640]$<sp/>crop<sp/>coordinates<sp/>to<sp/>2D<sp/>camera<sp/>pixel<sp/>space.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Computes<sp/>initial<sp/>face<sp/>bounding<sp/>boxes<sp/>and<sp/>coarse<sp/>head<sp/>roll<sp/>estimates<sp/>(see<sp/>[Inference<sp/>Camera<sp/>Space](mathematical_model.md#11-inference-camera-space-opencv-standard)).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.2.<sp/>Intel<sp/>ADAS<sp/>35-Point<sp/>Facial<sp/>Landmarker<sp/>(`ORTLandmarkModel`)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Lineage<sp/>&amp;<sp/>Provenance**:<sp/>Intel<sp/>OpenVINO<sp/>Open<sp/>Model<sp/>Zoo<sp/>(`facial-landmarks-35-adas-0002`).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Network<sp/>Architecture**:<sp/>Custom<sp/>dense<sp/>landmark<sp/>regression<sp/>CNN<sp/>designed<sp/>for<sp/>automotive<sp/>driver<sp/>monitoring<sp/>systems<sp/>(ADAS).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Preprocessing<sp/>Pipeline**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>1.<sp/>Crops<sp/>face<sp/>region<sp/>using<sp/>the<sp/>expanded<sp/>YuNet<sp/>bounding<sp/>box.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>2.<sp/>Counter-rotates<sp/>image<sp/>by<sp/>head<sp/>roll<sp/>angle<sp/>$\phi_{\text{roll}}$<sp/>to<sp/>present<sp/>an<sp/>upright<sp/>face<sp/>(see<sp/>[Continuous<sp/>Head<sp/>Roll<sp/>Un-Rotation<sp/>Feedback<sp/>Loop](mathematical_model.md#15-continuous-head-roll-un-rotation-feedback-loop)).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>3.<sp/>Bilinearly<sp/>resizes<sp/>to<sp/>$60\times60$.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>4.<sp/>Unrolls<sp/>interleaved<sp/>BGR8<sp/>into<sp/>planar<sp/>NCHW<sp/>float<sp/>tensor<sp/>$[1,<sp/>3,<sp/>60,<sp/>60]$<sp/>with<sp/>pixel<sp/>intensities<sp/>$[0.0,<sp/>255.0]$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Coordinate<sp/>Mapping**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Regresses<sp/>35<sp/>normalized<sp/>2D<sp/>coordinates<sp/>$(u_i,<sp/>v_i)<sp/>\in<sp/>[0.0,<sp/>1.0]$<sp/>relative<sp/>to<sp/>the<sp/>face<sp/>crop.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Mapped<sp/>back<sp/>to<sp/>2D<sp/>full-frame<sp/>pixel<sp/>space<sp/>and<sp/>fed<sp/>alongside<sp/>the<sp/>[Canonical<sp/>35-Point<sp/>Anthropometric<sp/>3D<sp/>Face<sp/>Model](mathematical_model.md#12-canonical-35-point-anthropometric-3d-face-model)<sp/>into<sp/>non-linear<sp/>PnP<sp/>solvers<sp/>([SQPnP<sp/>and<sp/>Levenberg-Marquardt](mathematical_model.md#14-head-pose-pnp-solvers-sqpnp--levenberg-marquardt)).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.3.<sp/>Intel<sp/>ADAS<sp/>Gaze<sp/>Estimation<sp/>(`ORTGazeModel`)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Lineage<sp/>&amp;<sp/>Provenance**:<sp/>Intel<sp/>OpenVINO<sp/>Open<sp/>Model<sp/>Zoo<sp/>(`gaze-estimation-adas-0002`).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Network<sp/>Architecture**:<sp/>Multi-input<sp/>CNN<sp/>combining<sp/>dense<sp/>eye<sp/>crops<sp/>with<sp/>head<sp/>pose<sp/>rotation<sp/>angles.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Inputs**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`left_eye_image`:<sp/>$[1,<sp/>3,<sp/>60,<sp/>60]$<sp/>NCHW<sp/>BGR<sp/>float<sp/>tensor<sp/>(anatomical<sp/>left<sp/>eye,<sp/>subject&apos;s<sp/>left<sp/>/<sp/>image<sp/>right).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`right_eye_image`:<sp/>$[1,<sp/>3,<sp/>60,<sp/>60]$<sp/>NCHW<sp/>BGR<sp/>float<sp/>tensor<sp/>(anatomical<sp/>right<sp/>eye,<sp/>subject&apos;s<sp/>right<sp/>/<sp/>image<sp/>left).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`head_pose_angles`:<sp/>$[1,<sp/>3]$<sp/>float<sp/>tensor<sp/>containing<sp/>`[yaw,<sp/>pitch,<sp/>roll]`<sp/>Euler<sp/>angles<sp/>in<sp/>**degrees**<sp/>relative<sp/>to<sp/>the<sp/>optical<sp/>axis<sp/>in<sp/>[Inference<sp/>Camera<sp/>Space](mathematical_model.md#11-inference-camera-space-opencv-standard),<sp/>computed<sp/>from<sp/>the<sp/>PnP<sp/>rotation<sp/>matrix<sp/>$R$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Output**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>`gaze_vector/sink_port_0`:<sp/>3D<sp/>unit<sp/>direction<sp/>vector<sp/>$(v_x,<sp/>v_y,<sp/>v_z)$<sp/>in<sp/>[Inference<sp/>Camera<sp/>Space](mathematical_model.md#11-inference-camera-space-opencv-standard)<sp/>(+X<sp/>right,<sp/>+Y<sp/>down,<sp/>+Z<sp/>forward).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Coordinate<sp/>Transformations**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Converted<sp/>from<sp/>Inference<sp/>Camera<sp/>Space<sp/>to<sp/>[Godot<sp/>Camera<sp/>Space](mathematical_model.md#13-godot-camera-space-standard-graphics-camera-space)<sp/>by<sp/>inverting<sp/>Y<sp/>and<sp/>Z:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>$$\mathbf{v}_{\text{godot}}<sp/>=<sp/>(v_x,<sp/>-v_y,<sp/>-v_z)$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Projected<sp/>onto<sp/>the<sp/>[Physical<sp/>Display<sp/>Space](mathematical_model.md#16-physical-display-space-monitor-local-space)<sp/>via<sp/>3D<sp/>ray-plane<sp/>intersection.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>3.4.<sp/>Open-Closed<sp/>Eye<sp/>Classifier<sp/>(`ORTEyeStateModel`)</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Lineage<sp/>&amp;<sp/>Provenance**:<sp/>Intel<sp/>OpenVINO<sp/>Model<sp/>Zoo<sp/>`open-closed-eye-0001`<sp/>(`open_closed_eye.ort`,<sp/>converted<sp/>to<sp/>ONNX<sp/>opset<sp/>14<sp/>/<sp/>ORT<sp/>fixed<sp/>optimization<sp/>format).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Network<sp/>Architecture**:<sp/>Lightweight<sp/>CNN<sp/>classifier<sp/>emitting<sp/>2-class<sp/>Softmax<sp/>probabilities<sp/>(`[1,<sp/>2,<sp/>1,<sp/>1]`<sp/>or<sp/>`[1,<sp/>2]`:<sp/>index<sp/>`0`<sp/>=<sp/>Closed,<sp/>index<sp/>`1`<sp/>=<sp/>Open).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Preprocessing<sp/>Pipeline**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>1.<sp/>Consumes<sp/>the<sp/>exact<sp/>same<sp/>$60\times60$<sp/>interleaved<sp/>BGR8<sp/>eye<sp/>crops<sp/>extracted<sp/>for<sp/>the<sp/>gaze<sp/>model.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>2.<sp/>Bilinearly<sp/>downsamples<sp/>from<sp/>$60\times60$<sp/>to<sp/>$32\times32$.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>3.<sp/>Normalizes<sp/>pixel<sp/>values<sp/>via<sp/>zero-centering:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/>$$x_{\text{norm}}<sp/>=<sp/>\frac{x_{\text{bgr}}<sp/>-<sp/>127.0}{255.0}<sp/>\in<sp/>[-0.498,<sp/>+0.502]$$</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>4.<sp/>Packs<sp/>into<sp/>planar<sp/>NCHW<sp/>float<sp/>tensor<sp/>$[1,<sp/>3,<sp/>32,<sp/>32]$<sp/>in<sp/>BGR<sp/>order.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Output**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Extracts<sp/>index<sp/>`1`<sp/>(`out_data[1]`,<sp/>clamped<sp/>to<sp/>$[0.0,<sp/>1.0]$)<sp/>as<sp/>scalar<sp/>openness<sp/>probability<sp/>$P(\text{open})<sp/>\in<sp/>[0.0,<sp/>1.0]$.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Default<sp/>blink<sp/>threshold<sp/>is<sp/>configured<sp/>via<sp/>`gaze/blink/openness_threshold`<sp/>(`0.50`),<sp/>with<sp/>calibration/validation<sp/>tests<sp/>enforcing<sp/>clear<sp/>signal<sp/>separation<sp/>($\ge<sp/>0.70$<sp/>open,<sp/>$\le<sp/>0.20$<sp/>closed).</highlight></codeline>
+    </programlisting>
+    <location file="docs/vision_models.md"/>
+  </compounddef>
+</doxygen>

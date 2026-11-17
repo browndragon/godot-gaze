@@ -1,0 +1,27 @@
+var searchData=
+[
+  ['management_20with_20gazetracker_0',['1. Lifecycle Management with &lt;span class=&quot;tt&quot;&gt;GazeTracker&lt;/span&gt;',['../index.html#autotoc_md13',1,'']]],
+  ['mapping_1',['6.2. Output Vector Mapping',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md93',1,'']]],
+  ['mapping_20matrix_2',['7.3. Platform Geometry Mapping Matrix',['../md_docs_2architecture.html#autotoc_md53',1,'']]],
+  ['marquardt_3',['1.4. Head Pose PnP Solvers (SQPnP &amp;amp; Levenberg-Marquardt)',['../md_docs_2mathematical__model.html#autotoc_md73',1,'']]],
+  ['mathematical_20physical_20model_4',['Gaze Tracking Mathematical &amp;amp; Physical Model',['../md_docs_2mathematical__model.html',1,'']]],
+  ['matrix_5',['Matrix',['../md_docs_2gaze__model__evaluation.html#autotoc_md113',1,'1. Executive Summary &amp;amp; Benchmark Matrix'],['../md_docs_2vision__models.html#autotoc_md101',1,'2.1. Model Specification Matrix'],['../md_docs_2architecture.html#autotoc_md53',1,'7.3. Platform Geometry Mapping Matrix']]],
+  ['mechanics_20fillaccumulator_6',['6.3. Inertial Dwell Mechanics (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md48',1,'']]],
+  ['memory_20model_7',['1.1. Zero-Allocation Memory Model',['../md_docs_2vision__models.html#autotoc_md97',1,'']]],
+  ['memory_20model_3a_20why_20cpu_20ram_20is_20the_20common_20denominator_8',['4. Hardware &amp;amp; Memory Model: Why CPU RAM is the Common Denominator',['../md_docs_2architecture.html#autotoc_md40',1,'']]],
+  ['mockvisionserver_9',['Headless Testing &amp;amp; CI (&lt;span class=&quot;tt&quot;&gt;MockVisionServer&lt;/span&gt;)',['../index.html#autotoc_md25',1,'']]],
+  ['model_10',['Model',['../md_docs_2lifecycle__tracking.html#autotoc_md56',1,'1. Overview: The Reference-Counted Lifecycle Model'],['../md_docs_2vision__models.html#autotoc_md97',1,'1.1. Zero-Allocation Memory Model'],['../md_docs_2mathematical__model.html#autotoc_md71',1,'1.2. Canonical 35-Point Anthropometric 3D Face Model'],['../md_docs_2architecture.html#autotoc_md38',1,'3. Concurrency &amp;amp; Threading Model'],['../md_docs_2mathematical__model.html',1,'Gaze Tracking Mathematical &amp; Physical Model']]],
+  ['model_20catalog_20neural_20preprocessing_11',['2. Model Catalog &amp;amp; Neural Preprocessing',['../md_docs_2vision__models.html#autotoc_md100',1,'']]],
+  ['model_20evaluation_20architectural_20comparison_12',['Gaze Estimation Model Evaluation &amp;amp; Architectural Comparison',['../md_docs_2gaze__model__evaluation.html',1,'']]],
+  ['model_20sign_20conventions_20openvino_20adas_200002_13',['6. Model Sign Conventions (OpenVINO ADAS-0002)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md91',1,'']]],
+  ['model_20specification_20matrix_14',['2.1. Model Specification Matrix',['../md_docs_2vision__models.html#autotoc_md101',1,'']]],
+  ['model_20specifications_15',['3. Detailed Model Specifications',['../md_docs_2vision__models.html#autotoc_md103',1,'']]],
+  ['model_3a_20why_20cpu_20ram_20is_20the_20common_20denominator_16',['4. Hardware &amp;amp; Memory Model: Why CPU RAM is the Common Denominator',['../md_docs_2architecture.html#autotoc_md40',1,'']]],
+  ['models_20camera_20ingestion_20specification_17',['Vision Models &amp;amp; Camera Ingestion Specification',['../md_docs_2vision__models.html',1,'']]],
+  ['modes_18',['3.4. OS Window Space to Godot Viewport Canvas 2D Space (Stretch Modes)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md85',1,'']]],
+  ['monitor_20local_20space_19',['1.6. Physical Display Space (Monitor Local Space)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md75',1,'']]],
+  ['mouse_20emulation_20mousegazeemulation_20',['6.2. Pointer Arbitration &amp;amp; Mouse Emulation (&lt;span class=&quot;tt&quot;&gt;MouseGazeEmulation&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md47',1,'']]],
+  ['mouse_20gaze_20coexistence_21',['Mouse &amp;amp; Gaze Coexistence',['../index.html#autotoc_md17',1,'']]],
+  ['mousegazeemulation_22',['6.2. Pointer Arbitration &amp;amp; Mouse Emulation (&lt;span class=&quot;tt&quot;&gt;MouseGazeEmulation&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md47',1,'']]],
+  ['ms_20discrepancy_23',['2. Deconstructing the 800 FPS vs 12–150 ms Discrepancy',['../md_docs_2gaze__model__evaluation.html#autotoc_md115',1,'']]]
+];

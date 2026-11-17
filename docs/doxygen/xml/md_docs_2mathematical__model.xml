@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="md_docs_2mathematical__model" kind="page">
+    <compoundname>md_docs_2mathematical__model</compoundname>
+    <title>Gaze Tracking Mathematical &amp; Physical Model</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="md_docs_2mathematical__model_1autotoc_md67"/></para>
+<para>This document outlines the coordinate systems, physical screen mapping projection math, biological calibration models, and optimization formulation utilized in <computeroutput>godot-gaze</computeroutput>.</para>
+<para><hruler/>
+</para>
+<sect1 id="md_docs_2mathematical__model_1autotoc_md69">
+<title>1. Coordinate Systems &amp; Facial Geometry</title><para>To model the physical and inference tracking states, the engine utilizes five distinct 3D and 2D coordinate spaces.</para>
+<para><mermaid>graph TD
+    INF_FACE[&quot;Canonical 35-pt 3D Face Model&quot;] -- &quot;Head Pose (rvec, tvec)&quot; --&gt; INF_CAM[&quot;Inference Camera Space (OpenCV)&quot;]
+    INF_CAM -- &quot;180° Pitch (X-axis Flip)&quot; --&gt; GG_CAM[&quot;Godot Camera Space&quot;]
+    GG_CAM -- &quot;Camera Offset (O_cam) &amp; Tilt (theta)&quot; --&gt; DISP[&quot;Physical Display Space (mm)&quot;]
+    DISP -- &quot;Pixel Pitch (s_x, s_y) &amp; Window Offset&quot; --&gt; WIN[&quot;OS Window Space (lpix)&quot;]
+    WIN -- &quot;Viewport Canvas Transform (M_canvas^-1)&quot; --&gt; CANV[&quot;Godot Viewport Canvas Space (2D)&quot;]</mermaid>
+</para>
+<sect2 id="md_docs_2mathematical__model_1autotoc_md70">
+<title>1.1. Inference Camera Space (OpenCV Standard)</title><para><itemizedlist>
+<listitem><para><bold>Origin ($C_{\text{inf}}$)</bold>: Optical center of the camera lens.</para>
+</listitem><listitem><para><bold>$X_{\text{inf}}$-axis</bold>: Horizontal, pointing right from the camera&apos;s perspective (subject&apos;s left).</para>
+</listitem><listitem><para><bold>$Y_{\text{inf}}$-axis</bold>: Vertical, pointing down.</para>
+</listitem><listitem><para><bold>$Z_{\text{inf}}$-axis</bold>: Optical axis, pointing forward into the camera&apos;s view cone (towards the subject).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2mathematical__model_1autotoc_md71">
+<title>1.2. Canonical 35-Point Anthropometric 3D Face Model</title><para>Rather than a coarse 5-point bounding polygon, <computeroutput>godot-gaze</computeroutput> uses a 35-point anthropometric 3D face model defined directly in the camera rest frame (+X right, +Y down, +Z forward):<itemizedlist>
+<listitem><para><bold>Points 0–3</bold>: Inner and outer eye canthi for left and right eyes.</para>
+</listitem><listitem><para><bold>Points 4–15</bold>: Eyebrow contour points.</para>
+</listitem><listitem><para><bold>Points 16–22</bold>: Nose bridge, crest, and subnasale.</para>
+</listitem><listitem><para><bold>Points 23–34</bold>: Upper/lower vermilion lip borders and mouth oral commissures.</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2mathematical__model_1autotoc_md72">
+<title>1.3. Godot Camera Space (Standard Graphics Camera Space)</title><para>Aligned with standard right-handed graphics conventions:<itemizedlist>
+<listitem><para><bold>Origin ($C_{\text{cam}}$)</bold>: Optical center of the camera lens.</para>
+</listitem><listitem><para><bold>$X_{\text{cam}}$-axis</bold>: Horizontal, pointing right from the camera&apos;s perspective.</para>
+</listitem><listitem><para><bold>$Y_{\text{cam}}$-axis</bold>: Vertical, pointing up.</para>
+</listitem><listitem><para><bold>$Z_{\text{cam}}$-axis</bold>: Perpendicular to the display, pointing <bold>backward</bold> out of the camera (away from the user). Thus, the user is located at negative Z ($z_{\text{cam}} &lt; 0$).</para>
+</listitem><listitem><para><bold>Mapping from Inference Camera Space</bold>: $$X_{\text{cam}} = X_{\text{inf}}$$ $$Y_{\text{cam}} = -Y_{\text{inf}}$$ $$Z_{\text{cam}} = -Z_{\text{inf}}$$</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="md_docs_2mathematical__model_1autotoc_md73">
+<title>1.4. Head Pose PnP Solvers (SQPnP &amp; Levenberg-Marquardt)</title><para>Given 35 detected 2D landmarks $p_i = (u_i, v_i) </para>
+</sect2>
+</sect1>
+    </detaileddescription>
+    <location file="docs/mathematical_model.md"/>
+  </compounddef>
+</doxygen>

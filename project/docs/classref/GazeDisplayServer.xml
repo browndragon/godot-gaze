@@ -82,6 +82,93 @@ Screen index (-1 for default/current screen).
 
 Camera offset Vector3 in millimeters.</description>
 		</method>
+		<method name="mouse_get_position">
+			<return type="Vector2"></return>
+			<description>Retrieve the current mouse cursor position in logical screen coordinates.
+
+Screen mouse position Vector2(x, y).
+
+Screen mouse position Vector2(x, y).</description>
+		</method>
+		<method name="get_window_mouse_position">
+			<return type="Vector2"></return>
+			<param index="0" name="p_window" type="int"></param>
+			<description>Retrieve the current mouse cursor position relative to the application window in logical pixels.
+
+p_window
+Window index.
+Window mouse position Vector2(x, y).
+
+Window index.
+
+Window mouse position Vector2(x, y).</description>
+		</method>
+		<method name="mouse_get_button_state">
+			<return type="int64_t"></return>
+			<description>Retrieve the bitmask of currently pressed mouse buttons directly from hardware DisplayServer.
+
+Bitmask of pressed mouse buttons.
+
+Bitmask of pressed mouse buttons.</description>
+		</method>
+		<method name="parse_mouse_motion">
+			<return type="void"></return>
+			<param index="0" name="p_position" type="const Vector2 &amp;"></param>
+			<param index="1" name="p_relative" type="const Vector2 &amp;"></param>
+			<param index="2" name="p_velocity" type="const Vector2 &amp;"></param>
+			<description>Dispatch emulated synthetic mouse motion to the engine input queue.
+
+p_position
+Canonical canvas position.
+p_relative
+Relative motion vector.
+p_velocity
+Velocity vector.
+
+Canonical canvas position.
+
+Relative motion vector.
+
+Velocity vector.</description>
+		</method>
+		<method name="parse_mouse_button">
+			<return type="void"></return>
+			<param index="0" name="p_button" type="int64_t"></param>
+			<param index="1" name="p_pressed" type="bool"></param>
+			<param index="2" name="p_position" type="const Vector2 &amp;"></param>
+			<description>Dispatch emulated synthetic mouse button event to the engine input queue.
+
+p_button
+Mouse button index.
+p_pressed
+True for press, false for release.
+p_position
+Canvas position where the click occurred.
+
+Mouse button index.
+
+True for press, false for release.
+
+Canvas position where the click occurred.</description>
+		</method>
+		<method name="window_px_to_canvas">
+			<return type="Vector2"></return>
+			<param index="0" name="p_win_pos" type="const Vector2 &amp;"></param>
+			<param index="1" name="p_local_to" type="const CanvasItem *"></param>
+			<description>Transform a window-local coordinate in logical pixels to canonical viewport canvas space.
+
+p_win_pos
+Window position in logical pixels.
+p_local_to
+Optional target CanvasItem (null for root viewport canvas space).
+Canonical canvas coordinate.
+
+Window position in logical pixels.
+
+Optional target CanvasItem (null for root viewport canvas space).
+
+Canonical canvas coordinate.</description>
+		</method>
 		<method name="get_singleton">
 			<return type="GazeDisplayServer *"></return>
 			<description>Get the GazeDisplayServer global singleton instance.

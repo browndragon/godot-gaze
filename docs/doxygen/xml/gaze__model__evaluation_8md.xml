@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__model__evaluation_8md" kind="file" language="Markdown">
+    <compoundname>gaze_model_evaluation.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>Gaze<sp/>Estimation<sp/>Model<sp/>Evaluation<sp/>&amp;<sp/>Architectural<sp/>Comparison</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>document<sp/>records<sp/>the<sp/>empirical<sp/>benchmarking,<sp/>architectural<sp/>analysis,<sp/>and<sp/>model<sp/>trade-offs<sp/>conducted<sp/>to<sp/>resolve<sp/>the<sp/>peripheral<sp/>non-linearity<sp/>and<sp/>angular<sp/>compression<sp/>discovered<sp/>in<sp/>desktop<sp/>gaze<sp/>tracking.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>1.<sp/>Executive<sp/>Summary<sp/>&amp;<sp/>Benchmark<sp/>Matrix</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">All<sp/>models<sp/>were<sp/>evaluated<sp/>on<sp/>host<sp/>hardware<sp/>(**Apple<sp/>Silicon<sp/>M1,<sp/>8<sp/>CPU<sp/>cores**,<sp/>single-threaded<sp/>ONNX<sp/>Runtime<sp/>CPU<sp/>execution)<sp/>against<sp/>our<sp/>canonical<sp/>test<sp/>fixture<sp/>suite<sp/>(`tests/resources/*.jpg`)<sp/>using<sp/>our<sp/>automated<sp/>benchmark<sp/>harness<sp/>(`scons<sp/>tools/benchmark_models`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Model<sp/>Name<sp/>|<sp/>Architecture<sp/>/<sp/>Backbone<sp/>|<sp/>Input<sp/>Shape<sp/>|<sp/>Disk<sp/>Size<sp/>|<sp/>Mean<sp/>Latency<sp/>|<sp/>p95<sp/>Latency<sp/>|<sp/>Throughput<sp/>|<sp/>Horiz.<sp/>Dynamic<sp/>Span<sp/>|<sp/>Head/Gaze<sp/>Decoupling<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|<sp/>:---:<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**OpenVINO<sp/>ADAS-0002**<sp/>*(Baseline)*<sp/>|<sp/>Custom<sp/>Shallow<sp/>CNN<sp/>|<sp/>Dual<sp/>60×60<sp/>+<sp/>Head<sp/>[1,3]<sp/>|<sp/>**7.2<sp/>MB**<sp/>|<sp/>**1.22<sp/>ms**<sp/>|<sp/>**1.58<sp/>ms**<sp/>|<sp/>**817.2<sp/>FPS**<sp/>|<sp/>Saturates<sp/>at<sp/>$\pm<sp/>20^\circ$<sp/>|<sp/>Dependent<sp/>on<sp/>PnP<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**MobileOne-S0<sp/>Gaze**<sp/>*(L2CS)*<sp/>|<sp/>MobileOne-S0<sp/>(RepVGG)<sp/>|<sp/>1×3×448×448<sp/>|<sp/>**4.7<sp/>MB**<sp/>|<sp/>**12.06<sp/>ms**<sp/>|<sp/>**13.51<sp/>ms**<sp/>|<sp/>**82.9<sp/>FPS**<sp/>|<sp/>16.8°<sp/>(at<sp/>448)<sp/>|<sp/>**+43.1°**<sp/>(Robust)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**MobileNetV2<sp/>Gaze**<sp/>*(L2CS)*<sp/>|<sp/>MobileNetV2<sp/>|<sp/>1×3×448×448<sp/>|<sp/>9.3<sp/>MB<sp/>|<sp/>24.21<sp/>ms<sp/>|<sp/>26.39<sp/>ms<sp/>|<sp/>41.3<sp/>FPS<sp/>|<sp/>9.9°<sp/>|<sp/>Weak<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**ETH-XGaze**<sp/>*(Direct<sp/>Regression)*<sp/>|<sp/>ResNet-50<sp/>|<sp/>1×3×224×224<sp/>|<sp/>89.6<sp/>MB<sp/>|<sp/>**42.43<sp/>ms**<sp/>|<sp/>**57.41<sp/>ms**<sp/>|<sp/>**23.6<sp/>FPS**<sp/>|<sp/>**40.5°**<sp/>(Symmetric)<sp/>|<sp/>**+21.0°**<sp/>(Robust)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**ResNet-18<sp/>Gaze**<sp/>*(L2CS)*<sp/>|<sp/>ResNet-18<sp/>|<sp/>1×3×448×448<sp/>|<sp/>43.0<sp/>MB<sp/>|<sp/>52.12<sp/>ms<sp/>|<sp/>59.24<sp/>ms<sp/>|<sp/>19.2<sp/>FPS<sp/>|<sp/>31.6°<sp/>|<sp/>Moderate<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**ResNet-50<sp/>Gaze**<sp/>*(L2CS)*<sp/>|<sp/>ResNet-50<sp/>|<sp/>1×3×448×448<sp/>|<sp/>91.0<sp/>MB<sp/>|<sp/>149.20<sp/>ms<sp/>|<sp/>175.57<sp/>ms<sp/>|<sp/>6.7<sp/>FPS<sp/>|<sp/>**57.3°**<sp/>(Widest)<sp/>|<sp/>**+22.5°**<sp/>(Robust)<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">*Artifacts<sp/>generated*:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Machine-readable<sp/>metrics:<sp/>`build/tests/artifacts/gaze_model_comparison.json`</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>Visual<sp/>interactive<sp/>report:<sp/>`build/tests/artifacts/gaze_model_comparison.html`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>2.<sp/>Deconstructing<sp/>the<sp/>800<sp/>FPS<sp/>vs<sp/>12–150<sp/>ms<sp/>Discrepancy</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>dramatic<sp/>throughput<sp/>gap<sp/>between<sp/>OpenVINO<sp/>ADAS-0002<sp/>(817<sp/>FPS<sp/>/<sp/>1.22<sp/>ms)<sp/>and<sp/>candidate<sp/>models<sp/>(7–83<sp/>FPS)<sp/>is<sp/>not<sp/>an<sp/>experimental<sp/>artifact.<sp/>It<sp/>stems<sp/>from<sp/>two<sp/>fundamental<sp/>architectural<sp/>differences:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>A.<sp/>The<sp/>&quot;Baking<sp/>/<sp/>Upstream<sp/>Offload&quot;<sp/>Illusion</highlight></codeline>
+<codeline><highlight class="normal">OpenVINO<sp/>ADAS-0002<sp/>is<sp/>**not**<sp/>an<sp/>end-to-end<sp/>gaze<sp/>estimator.<sp/>It<sp/>only<sp/>performs<sp/>the<sp/>final<sp/>tensor<sp/>dot<sp/>product<sp/>on<sp/>heavily<sp/>pre-digested<sp/>inputs:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**Upstream<sp/>Landmark<sp/>Model**:<sp/>An<sp/>18<sp/>MB<sp/>neural<sp/>network<sp/>(`facial-landmarks-35-adas-0002.onnx`)<sp/>must<sp/>first<sp/>execute<sp/>on<sp/>an<sp/>upright,<sp/>counter-rotated<sp/>face<sp/>crop<sp/>to<sp/>regress<sp/>35<sp/>2D<sp/>landmarks.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Upstream<sp/>PnP<sp/>Solver**:<sp/>A<sp/>Levenberg-Marquardt<sp/>/<sp/>SQPnP<sp/>non-linear<sp/>iterative<sp/>solver<sp/>must<sp/>compute<sp/>3D<sp/>head<sp/>pose<sp/>rotation<sp/>($R,<sp/>t$)<sp/>from<sp/>the<sp/>35<sp/>landmarks.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>**Dual<sp/>Eye<sp/>Warpers**:<sp/>Two<sp/>separate<sp/>bilinear<sp/>interpolation<sp/>passes<sp/>must<sp/>crop,<sp/>rotate,<sp/>and<sp/>resample<sp/>the<sp/>left<sp/>and<sp/>right<sp/>ocular<sp/>regions<sp/>into<sp/>$60\times60$<sp/>patches.</highlight></codeline>
+<codeline><highlight class="normal">4.<sp/>**Final<sp/>Step**:<sp/>Only<sp/>after<sp/>steps<sp/>1–3<sp/>have<sp/>consumed<sp/>**3–6<sp/>ms<sp/>of<sp/>CPU<sp/>time**<sp/>does<sp/>`gaze-estimation-adas-0002`<sp/>execute<sp/>its<sp/>1.2<sp/>ms<sp/>forward<sp/>pass.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">In<sp/>contrast,<sp/>**ETH-XGaze<sp/>and<sp/>L2CS-Net<sp/>are<sp/>full-face<sp/>appearance<sp/>models**:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>They<sp/>ingest<sp/>the<sp/>face<sp/>bounding<sp/>box<sp/>directly<sp/>from<sp/>the<sp/>initial<sp/>YuNet<sp/>face<sp/>detector.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>They<sp/>completely<sp/>bypass<sp/>the<sp/>18<sp/>MB<sp/>landmark<sp/>model,<sp/>PnP<sp/>solver,<sp/>and<sp/>eye-warping<sp/>routines.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>The<sp/>face<sp/>crop<sp/>is<sp/>passed<sp/>directly<sp/>to<sp/>the<sp/>network,<sp/>eliminating<sp/>all<sp/>upstream<sp/>landmark<sp/>jitter<sp/>and<sp/>head-pose<sp/>handoff<sp/>discontinuities.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>B.<sp/>Input<sp/>Spatial<sp/>Area<sp/>&amp;<sp/>Computational<sp/>Complexity<sp/>(FLOPs)</highlight></codeline>
+<codeline><highlight class="normal">Convolutional<sp/>operations<sp/>scale<sp/>linearly<sp/>with<sp/>input<sp/>spatial<sp/>area<sp/>($H<sp/>\times<sp/>W$):</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**ADAS-0002**:<sp/>$2<sp/>\times<sp/>(60<sp/>\times<sp/>60<sp/>\times<sp/>3)<sp/>+<sp/>3<sp/>=<sp/>\mathbf{21,603\text{<sp/>input<sp/>floats}}$.<sp/>Total<sp/>compute<sp/>is<sp/>$\approx<sp/>\mathbf{0.07\text{<sp/>GFLOPs}}$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**ETH-XGaze**:<sp/>$1<sp/>\times<sp/>(224<sp/>\times<sp/>224<sp/>\times<sp/>3)<sp/>=<sp/>\mathbf{150,528\text{<sp/>input<sp/>floats}}$<sp/>(**$7\times$<sp/>larger**).<sp/>Total<sp/>compute<sp/>is<sp/>$\approx<sp/>\mathbf{4.1\text{<sp/>GFLOPs}}$.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**L2CS-Net<sp/>Models**:<sp/>$1<sp/>\times<sp/>(448<sp/>\times<sp/>448<sp/>\times<sp/>3)<sp/>=<sp/>\mathbf{602,112\text{<sp/>input<sp/>floats}}$<sp/>(**$28\times$<sp/>larger**<sp/>than<sp/>ADAS).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>A<sp/>$448<sp/>\times<sp/>448$<sp/>image<sp/>has<sp/>**$4\times$<sp/>the<sp/>pixel<sp/>area**<sp/>of<sp/>a<sp/>$224<sp/>\times<sp/>224$<sp/>image<sp/>($448^2<sp/>/<sp/>224^2<sp/>=<sp/>4$).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>*<sp/>Consequently,<sp/>ResNet-50<sp/>at<sp/>448×448<sp/>requires<sp/>$\approx<sp/>\mathbf{16.4\text{<sp/>GFLOPs}}$,<sp/>explaining<sp/>its<sp/>149<sp/>ms<sp/>latency<sp/>compared<sp/>to<sp/>ETH-XGaze<sp/>ResNet-50&apos;s<sp/>42<sp/>ms<sp/>at<sp/>224×224.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>3.<sp/>Peripheral<sp/>Dynamic<sp/>Range<sp/>vs.<sp/>Automotive<sp/>Bias</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Aspect<sp/>|<sp/>OpenVINO<sp/>ADAS-0002<sp/>|<sp/>ETH-XGaze<sp/>&amp;<sp/>L2CS<sp/>Family<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>:---<sp/>|<sp/>:---<sp/>|<sp/>:---<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Training<sp/>Domain**<sp/>|<sp/>In-cabin<sp/>automotive<sp/>driver<sp/>monitoring<sp/>(forward<sp/>road<sp/>view,<sp/>mirrors,<sp/>instrument<sp/>cluster).<sp/>|<sp/>In-the-wild<sp/>desktop<sp/>monitors,<sp/>mobile<sp/>phones,<sp/>and<sp/>360°<sp/>gaze<sp/>spheres<sp/>(ETH-XGaze,<sp/>Gaze360).<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Angular<sp/>Range**<sp/>|<sp/>Confined<sp/>to<sp/>$\pm<sp/>15^\circ\text{--}20^\circ$.<sp/>Looking<sp/>beyond<sp/>$20^\circ$<sp/>causes<sp/>non-linear<sp/>compression<sp/>and<sp/>flat-line<sp/>saturation.<sp/>|<sp/>Continuous<sp/>coverage<sp/>across<sp/>$\pm<sp/>45^\circ\text{--}60^\circ$<sp/>eccentricities<sp/>without<sp/>mean-collapse.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Head<sp/>Coupling**<sp/>|<sp/>Heavily<sp/>couples<sp/>eye<sp/>gaze<sp/>to<sp/>head<sp/>pose<sp/>angles.<sp/>When<sp/>head<sp/>pose<sp/>is<sp/>static,<sp/>eye<sp/>excursions<sp/>are<sp/>severely<sp/>compressed.<sp/>|<sp/>Full<sp/>facial<sp/>appearance<sp/>decouples<sp/>eye<sp/>movements<sp/>from<sp/>head<sp/>orientation<sp/>(e.g.<sp/>$+43.1^\circ$<sp/>on<sp/>`self_noseleft_eyesright`).<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>4.<sp/>Resolution<sp/>Scaling<sp/>&amp;<sp/>Optimization<sp/>Opportunities</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Candidate<sp/>models<sp/>use<sp/>adaptive<sp/>global<sp/>average<sp/>pooling<sp/>(`AdaptiveAvgPool2d((1,<sp/>1))`),<sp/>which<sp/>means<sp/>their<sp/>feature<sp/>maps<sp/>can<sp/>accept<sp/>arbitrary<sp/>input<sp/>resolutions<sp/>without<sp/>architectural<sp/>changes:</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**MobileOne-S0<sp/>at<sp/>224×224**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Reducing<sp/>MobileOne-S0<sp/>from<sp/>448×448<sp/>to<sp/>224×224<sp/>reduces<sp/>spatial<sp/>tensor<sp/>area<sp/>by<sp/>$4\times$.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>Projected<sp/>CPU<sp/>inference<sp/>latency<sp/>drops<sp/>from<sp/>**12<sp/>ms<sp/>(83<sp/>FPS)**<sp/>down<sp/>to<sp/>**$\approx<sp/>3.0\text{<sp/>ms}$<sp/>($&gt;<sp/>300\text{<sp/>FPS}$)**<sp/>on<sp/>Apple<sp/>Silicon,<sp/>while<sp/>maintaining<sp/>a<sp/>tiny<sp/>**4.7<sp/>MB**<sp/>disk<sp/>footprint.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">---</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>5.<sp/>Architectural<sp/>Roadmap:<sp/>Pluggable<sp/>Gaze<sp/>Estimator<sp/>Strategy</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">To<sp/>provide<sp/>flexibility<sp/>across<sp/>platforms<sp/>(mobile,<sp/>web,<sp/>desktop)<sp/>and<sp/>use<sp/>cases<sp/>(low-power<sp/>vs.<sp/>high-accuracy<sp/>desktop),<sp/>`godot-gaze`<sp/>will<sp/>adopt<sp/>a<sp/>pluggable<sp/>model<sp/>strategy:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>5.<sp/>Architectural<sp/>Decision<sp/>&amp;<sp/>Future<sp/>Swappable<sp/>Strategy</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>A.<sp/>Production<sp/>Decision:<sp/>OpenVINO<sp/>ADAS-0002<sp/>Remains<sp/>Default</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Rationale**:<sp/>Over<sp/>the<sp/>vast<sp/>majority<sp/>of<sp/>common<sp/>interactive<sp/>display<sp/>regions<sp/>and<sp/>typical<sp/>head/eye<sp/>angles<sp/>($\le<sp/>20^\circ$),<sp/>OpenVINO<sp/>ADAS-0002<sp/>performs<sp/>roughly<sp/>on<sp/>par<sp/>with<sp/>larger<sp/>candidate<sp/>models.</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Throughput<sp/>&amp;<sp/>Multiplatform<sp/>Reach**:<sp/>Its<sp/>lightweight<sp/>footprint<sp/>and<sp/>600–800<sp/>FPS<sp/>execution<sp/>speed<sp/>provide<sp/>unmatched<sp/>power<sp/>efficiency<sp/>and<sp/>low<sp/>latency<sp/>across<sp/>all<sp/>targeted<sp/>deployment<sp/>targets<sp/>(desktop,<sp/>mobile,<sp/>and<sp/>web).</highlight></codeline>
+<codeline><highlight class="normal">*<sp/>**Conclusion**:<sp/>We<sp/>will<sp/>not<sp/>perform<sp/>an<sp/>immediate<sp/>architectural<sp/>replacement.<sp/>OpenVINO<sp/>ADAS-0002<sp/>is<sp/>maintained<sp/>as<sp/>the<sp/>primary<sp/>production<sp/>estimator.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>B.<sp/>Future<sp/>Readiness:<sp/>Blueprint<sp/>for<sp/>`DirectFaceGazeEstimator`</highlight></codeline>
+<codeline><highlight class="normal">When<sp/>requirements<sp/>expand<sp/>to<sp/>require<sp/>extreme<sp/>peripheral<sp/>display<sp/>coverage<sp/>or<sp/>when<sp/>GPU/NPU<sp/>acceleration<sp/>is<sp/>prioritized,<sp/>a<sp/>`DirectFaceGazeEstimator`<sp/>strategy<sp/>can<sp/>drop<sp/>in<sp/>cleanly:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```mermaid</highlight></codeline>
+<codeline><highlight class="normal">flowchart<sp/>TD</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>FRAME[&quot;Incoming<sp/>Camera<sp/>Frame<sp/>(BGR8)&quot;]<sp/>--&gt;<sp/>DET[&quot;ORTYuNetDetector<sp/>(640x640)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>DET<sp/>--&gt;<sp/>STRAT{&quot;Gaze<sp/>Estimator<sp/>Strategy&lt;br/&gt;(gaze/models/estimator_type)&quot;}</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>ADAS[&quot;Strategy<sp/>A:<sp/>OpenVINO<sp/>ADAS<sp/>(Production<sp/>Default)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRAT<sp/>--&gt;|&quot;adas_0002&quot;<sp/>(default)|<sp/>LM[&quot;ORTLandmarkModel<sp/>(60x60)&lt;br/&gt;35-point<sp/>counter-rotated&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>LM<sp/>--&gt;<sp/>PNP[&quot;PnP<sp/>Solver<sp/>(Head<sp/>Pose<sp/>angles)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>PNP<sp/>--&gt;<sp/>EYE[&quot;Dual<sp/>Eye<sp/>Cropper<sp/>(60x60<sp/>x2)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>EYE<sp/>--&gt;<sp/>ADAS_NET[&quot;ORTGazeModel<sp/>(1.2<sp/>ms)&lt;br/&gt;Ultra-high<sp/>throughput,<sp/>standard<sp/>range&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>subgraph<sp/>END2END[&quot;Strategy<sp/>B:<sp/>Direct<sp/>Face<sp/>Estimator<sp/>(Future<sp/>Extension)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>STRAT<sp/>--&gt;|&quot;mobileone_s0&quot;<sp/>/<sp/>&quot;eth_xgaze&quot;|<sp/>FCROP[&quot;Face<sp/>Cropper<sp/>(224x224<sp/>/<sp/>448x448)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>FCROP<sp/>--&gt;<sp/>E2E_NET[&quot;DirectFaceGazeEstimator&lt;br/&gt;(3<sp/>-<sp/>12<sp/>ms,<sp/>wide<sp/>angular<sp/>range)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>end</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>ADAS_NET<sp/>--&gt;<sp/>PROJ[&quot;ProjectionEngine<sp/>(Ray-Plane<sp/>Intersection)&quot;]</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/><sp/>E2E_NET<sp/>--&gt;<sp/>PROJ</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">####<sp/>Blueprint<sp/>for<sp/>Future<sp/>Implementation:</highlight></codeline>
+<codeline><highlight class="normal">1.<sp/>**Interface<sp/>Contract**:<sp/>Define<sp/>an<sp/>abstract<sp/>`IGazeDirectionEstimator`<sp/>with:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```cpp</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>virtual<sp/>bool<sp/>estimate_gaze(const<sp/>GazeFrameData&amp;<sp/>frame,<sp/>Vector3&amp;<sp/>out_gaze_dir)<sp/>=<sp/>0;</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>```</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**Implementation<sp/>Strategy**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`ADASGazeEstimator`:<sp/>Wraps<sp/>existing<sp/>`ORTLandmarkModel`<sp/>+<sp/>`PnPSolver`<sp/>+<sp/>`ORTGazeModel`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>`DirectFaceGazeEstimator`:<sp/>Takes<sp/>the<sp/>face<sp/>bounding<sp/>box<sp/>directly<sp/>from<sp/>`ORTYuNetDetector`,<sp/>crops<sp/>and<sp/>normalizes<sp/>the<sp/>face<sp/>patch,<sp/>and<sp/>invokes<sp/>`mobileone_s0_gaze.onnx`<sp/>or<sp/>`eth_xgaze.onnx`.</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>**Reproducibility<sp/>&amp;<sp/>Weight<sp/>Provenance**:</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>-<sp/>Refer<sp/>to<sp/>[`test_assets/models/README.md`](../test_assets/models/README.md)<sp/>for<sp/>automated<sp/>download<sp/>scripts,<sp/>PyTorch-to-ONNX<sp/>conversion<sp/>instructions,<sp/>and<sp/>the<sp/>repeatable<sp/>benchmark<sp/>harness<sp/>(`scons<sp/>tools/benchmark_models`).</highlight></codeline>
+<codeline></codeline>
+    </programlisting>
+    <location file="docs/gaze_model_evaluation.md"/>
+  </compounddef>
+</doxygen>

@@ -2,6 +2,8 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
   <compounddef id="dir_15e4dfd3b3ce33c9cc8e999b91bb3ff0" kind="dir">
     <compoundname>src/godot</compoundname>
+    <innerfile refid="fill__accumulator__node_8cpp">fill_accumulator_node.cpp</innerfile>
+    <innerfile refid="fill__accumulator__node_8hpp">fill_accumulator_node.hpp</innerfile>
     <innerfile refid="gaze__device__profile_8cpp">gaze_device_profile.cpp</innerfile>
     <innerfile refid="gaze__device__profile_8hpp">gaze_device_profile.hpp</innerfile>
     <innerfile refid="gaze__display__server_8cpp">gaze_display_server.cpp</innerfile>
@@ -12,6 +14,8 @@
     <innerfile refid="gaze__frame_8hpp">gaze_frame.hpp</innerfile>
     <innerfile refid="gaze__pipeline__config_8cpp">gaze_pipeline_config.cpp</innerfile>
     <innerfile refid="gaze__pipeline__config_8hpp">gaze_pipeline_config.hpp</innerfile>
+    <innerfile refid="gaze__profile_8cpp">gaze_profile.cpp</innerfile>
+    <innerfile refid="gaze__profile_8hpp">gaze_profile.hpp</innerfile>
     <innerfile refid="gaze__server_8cpp">gaze_server.cpp</innerfile>
     <innerfile refid="gaze__server_8hpp">gaze_server.hpp</innerfile>
     <innerfile refid="gaze__tracker_8cpp">gaze_tracker.cpp</innerfile>

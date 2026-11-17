@@ -68,6 +68,8 @@
         </childnode>
         <childnode refid="5" relation="include">
         </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
       </node>
       <node id="4">
         <label>src/core/screen_projector.cpp</label>
@@ -80,6 +82,10 @@
         </childnode>
       </node>
       <node id="5">
+        <label>src/godot/gaze_device_profile.cpp</label>
+        <link refid="gaze__device__profile_8cpp"/>
+      </node>
+      <node id="6">
         <label>src/godot/gaze_server.hpp</label>
         <link refid="gaze__server_8hpp_source"/>
       </node>

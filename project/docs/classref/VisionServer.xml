@@ -30,6 +30,11 @@ src/web/vision_server.cpp : Implements Web HTML5 JS/Emscripten canvas capture ca
 			<param index="1" name="p_device_id" type="int"></param>
 			<description>Set the hardware device ID index to capture from.</description>
 		</method>
+		<method name="camera_get_device_id">
+			<return type="int"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description></description>
+		</method>
 		<method name="camera_set_resolution">
 			<return type="void"></return>
 			<param index="0" name="p_camera" type="RID"></param>
@@ -111,6 +116,11 @@ True if started successfully, false otherwise.</description>
 		</method>
 		<method name="camera_is_preview_requested">
 			<return type="bool"></return>
+			<param index="0" name="p_camera" type="RID"></param>
+			<description></description>
+		</method>
+		<method name="camera_get_last_readback_ms">
+			<return type="double"></return>
 			<param index="0" name="p_camera" type="RID"></param>
 			<description></description>
 		</method>

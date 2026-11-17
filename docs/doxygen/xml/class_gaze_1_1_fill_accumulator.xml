@@ -1,0 +1,626 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_fill_accumulator" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::FillAccumulator</compoundname>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1a3031c0573166f09e912138e1504dba1c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::fill</definition>
+        <argsstring></argsstring>
+        <name>fill</name>
+        <qualifiedname>Gaze::FillAccumulator::fill</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="14" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="14" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1af9a978a4ac6527cf3bb2e3d9aa75780c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::velocity</definition>
+        <argsstring></argsstring>
+        <name>velocity</name>
+        <qualifiedname>Gaze::FillAccumulator::velocity</qualifiedname>
+        <initializer>= 0.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="15" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1a7cd59ae39e26e0486e9846d75b5ed2ec" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::fill_rate</definition>
+        <argsstring></argsstring>
+        <name>fill_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::fill_rate</qualifiedname>
+        <initializer>= 2.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="16" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1a1dfb93bafd29349cd056e24c63553421" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::drain_rate</definition>
+        <argsstring></argsstring>
+        <name>drain_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::drain_rate</qualifiedname>
+        <initializer>= 4.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="17" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1a61edfad2da2bca14bd5cc2ceeec92665" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::fill_acceleration</definition>
+        <argsstring></argsstring>
+        <name>fill_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::fill_acceleration</qualifiedname>
+        <initializer>= 1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="18" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1a0fa14d808b68cce10cb7fe7b97ba5e84" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::drain_acceleration</definition>
+        <argsstring></argsstring>
+        <name>drain_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::drain_acceleration</qualifiedname>
+        <initializer>= 1000.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="19" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_fill_accumulator_1ac7800b0dda7d4eb315f8b502f161d919" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::error_doubling_distance</definition>
+        <argsstring></argsstring>
+        <name>error_doubling_distance</name>
+        <qualifiedname>Gaze::FillAccumulator::error_doubling_distance</qualifiedname>
+        <initializer>= 100.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="20" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a000f5f6b2c369f1f3aa132833b7d579b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::FillAccumulator::FillAccumulator</definition>
+        <argsstring>()=default</argsstring>
+        <name>FillAccumulator</name>
+        <qualifiedname>Gaze::FillAccumulator::FillAccumulator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="23" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ad7e85ad1a1f9495788372b24b3c4d0e0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::FillAccumulator::FillAccumulator</definition>
+        <argsstring>(double p_fill_sec, double p_drain_sec, double p_error_dist=100.0)</argsstring>
+        <name>FillAccumulator</name>
+        <qualifiedname>Gaze::FillAccumulator::FillAccumulator</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_fill_sec</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_drain_sec</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>p_error_dist</declname>
+          <defval>100.0</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="25" column="5" bodyfile="src/core/fill_accumulator.hpp" bodystart="25" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a94b39842b647fff33987c64ca2cc2f0f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::reset</definition>
+        <argsstring>()</argsstring>
+        <name>reset</name>
+        <qualifiedname>Gaze::FillAccumulator::reset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="31" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="31" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a5a8c11ccb87ab24549c882f260d789ac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_fill</definition>
+        <argsstring>(double p_fill)</argsstring>
+        <name>set_fill</name>
+        <qualifiedname>Gaze::FillAccumulator::set_fill</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_fill</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="36" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="36" bodyend="40"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a4dbf9bfe81d56d51dd50fe2e2d4e45c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_fill</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill</name>
+        <qualifiedname>Gaze::FillAccumulator::get_fill</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="42" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="42" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ad7d4fd36f33f4623240d7a941d524303" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_velocity</definition>
+        <argsstring>() const</argsstring>
+        <name>get_velocity</name>
+        <qualifiedname>Gaze::FillAccumulator::get_velocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="46" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="46" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a0d0bf5716afd02604afb33836ea48d06" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_velocity</definition>
+        <argsstring>(double p_vel)</argsstring>
+        <name>set_velocity</name>
+        <qualifiedname>Gaze::FillAccumulator::set_velocity</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_vel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="50" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="50" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1aa44c429c3c49be1837362e80a2d6a8fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::FillAccumulator::is_filled</definition>
+        <argsstring>() const</argsstring>
+        <name>is_filled</name>
+        <qualifiedname>Gaze::FillAccumulator::is_filled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="54" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="54" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1aff1b9ccb4cea2e7d0a6ac908ce7f8fcd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::FillAccumulator::is_empty</definition>
+        <argsstring>() const</argsstring>
+        <name>is_empty</name>
+        <qualifiedname>Gaze::FillAccumulator::is_empty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="58" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="58" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1aeab22cdee2e9132af9b3fff4855fd285" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_fill_rate</definition>
+        <argsstring>(double p_rate)</argsstring>
+        <name>set_fill_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::set_fill_rate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="62" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="62" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ae3696d088d2264e437731f8510874f4d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_fill_rate</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::get_fill_rate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="66" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="66" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a249e1b01c8c59e6f6ee6de8b8f9c3f3a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_drain_rate</definition>
+        <argsstring>(double p_rate)</argsstring>
+        <name>set_drain_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::set_drain_rate</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_rate</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="70" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="70" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ae24216f1e3671c8bd66586c890293b94" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_drain_rate</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_rate</name>
+        <qualifiedname>Gaze::FillAccumulator::get_drain_rate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="74" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="74" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1aaf822f543f8506966dd1063e30b58dd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_fill_sec</definition>
+        <argsstring>(double p_sec)</argsstring>
+        <name>set_fill_sec</name>
+        <qualifiedname>Gaze::FillAccumulator::set_fill_sec</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="78" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="78" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1af937acb8297e8dd6a11f131c157acf81" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_fill_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_sec</name>
+        <qualifiedname>Gaze::FillAccumulator::get_fill_sec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="82" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="82" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1abfa76e2769382a2cad6bbd82d562709a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_drain_sec</definition>
+        <argsstring>(double p_sec)</argsstring>
+        <name>set_drain_sec</name>
+        <qualifiedname>Gaze::FillAccumulator::set_drain_sec</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_sec</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="86" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="86" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1adca8761a91f2452d931bf3585afd2f28" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_drain_sec</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_sec</name>
+        <qualifiedname>Gaze::FillAccumulator::get_drain_sec</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="90" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="90" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a7de723507600d6a26ec0e7c620cdf0b1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_fill_acceleration</definition>
+        <argsstring>(double p_accel)</argsstring>
+        <name>set_fill_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::set_fill_acceleration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_accel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="94" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="94" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a02b6e0e8a6a3d154fc72e0f2bd0ab600" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_fill_acceleration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_fill_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::get_fill_acceleration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="98" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="98" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1af41d0ad616dbcf096d13de9c163409b7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_drain_acceleration</definition>
+        <argsstring>(double p_accel)</argsstring>
+        <name>set_drain_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::set_drain_acceleration</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_accel</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="102" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="102" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1abce4cdbf701c1690ad1372d78a86e3a2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_drain_acceleration</definition>
+        <argsstring>() const</argsstring>
+        <name>get_drain_acceleration</name>
+        <qualifiedname>Gaze::FillAccumulator::get_drain_acceleration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="106" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="106" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a8a2c945ba95c4ff05420246cb59c8b95" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_error_doubling_distance</definition>
+        <argsstring>(double p_dist)</argsstring>
+        <name>set_error_doubling_distance</name>
+        <qualifiedname>Gaze::FillAccumulator::set_error_doubling_distance</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_dist</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="110" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="110" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a6b4231d8c08e5d168c75f3f471cd1c70" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_error_doubling_distance</definition>
+        <argsstring>() const</argsstring>
+        <name>get_error_doubling_distance</name>
+        <qualifiedname>Gaze::FillAccumulator::get_error_doubling_distance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="114" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="114" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ac3a0a10066423241a4af044585e8e333" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::set_characteristic_error</definition>
+        <argsstring>(double p_error)</argsstring>
+        <name>set_characteristic_error</name>
+        <qualifiedname>Gaze::FillAccumulator::set_characteristic_error</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>p_error</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="118" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="118" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ae3df20fd72334c8c73f5a7ba89de3162" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double Gaze::FillAccumulator::get_characteristic_error</definition>
+        <argsstring>() const</argsstring>
+        <name>get_characteristic_error</name>
+        <qualifiedname>Gaze::FillAccumulator::get_characteristic_error</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="122" column="12" bodyfile="src/core/fill_accumulator.hpp" bodystart="122" bodyend="124"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a948f03fc4c3caf142ef020e1c148669d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::process_error_delta</definition>
+        <argsstring>(double error, double delta)</argsstring>
+        <name>process_error_delta</name>
+        <qualifiedname>Gaze::FillAccumulator::process_error_delta</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>error</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="126" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="126" bodyend="149"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1a451ebda772fe71c5ed97da7dd00b3338" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::process_dwell_delta</definition>
+        <argsstring>(bool is_active, double delta)</argsstring>
+        <name>process_dwell_delta</name>
+        <qualifiedname>Gaze::FillAccumulator::process_dwell_delta</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>is_active</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>delta</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="151" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="151" bodyend="168"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_fill_accumulator_1ad0fff48b8798aece16972abec854b1be" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::FillAccumulator::update</definition>
+        <argsstring>(double dt, double error)</argsstring>
+        <name>update</name>
+        <qualifiedname>Gaze::FillAccumulator::update</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>dt</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>error</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/fill_accumulator.hpp" line="170" column="10" bodyfile="src/core/fill_accumulator.hpp" bodystart="170" bodyend="172"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/fill_accumulator.hpp" line="12" column="1" bodyfile="src/core/fill_accumulator.hpp" bodystart="12" bodyend="173"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_fill_accumulator_1a0fa14d808b68cce10cb7fe7b97ba5e84" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>drain_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a1dfb93bafd29349cd056e24c63553421" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>drain_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ac7800b0dda7d4eb315f8b502f161d919" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>error_doubling_distance</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a3031c0573166f09e912138e1504dba1c" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>fill</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a61edfad2da2bca14bd5cc2ceeec92665" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>fill_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a7cd59ae39e26e0486e9846d75b5ed2ec" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>fill_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a000f5f6b2c369f1f3aa132833b7d579b" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>FillAccumulator</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ad7e85ad1a1f9495788372b24b3c4d0e0" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>FillAccumulator</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ae3df20fd72334c8c73f5a7ba89de3162" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_characteristic_error</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1abce4cdbf701c1690ad1372d78a86e3a2" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_drain_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ae24216f1e3671c8bd66586c890293b94" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_drain_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1adca8761a91f2452d931bf3585afd2f28" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_drain_sec</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a6b4231d8c08e5d168c75f3f471cd1c70" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_error_doubling_distance</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a4dbf9bfe81d56d51dd50fe2e2d4e45c1" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_fill</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a02b6e0e8a6a3d154fc72e0f2bd0ab600" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_fill_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ae3696d088d2264e437731f8510874f4d" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_fill_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1af937acb8297e8dd6a11f131c157acf81" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_fill_sec</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ad7d4fd36f33f4623240d7a941d524303" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>get_velocity</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1aff1b9ccb4cea2e7d0a6ac908ce7f8fcd" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>is_empty</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1aa44c429c3c49be1837362e80a2d6a8fa" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>is_filled</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a451ebda772fe71c5ed97da7dd00b3338" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>process_dwell_delta</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a948f03fc4c3caf142ef020e1c148669d" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>process_error_delta</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a94b39842b647fff33987c64ca2cc2f0f" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>reset</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ac3a0a10066423241a4af044585e8e333" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_characteristic_error</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1af41d0ad616dbcf096d13de9c163409b7" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_drain_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a249e1b01c8c59e6f6ee6de8b8f9c3f3a" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_drain_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1abfa76e2769382a2cad6bbd82d562709a" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_drain_sec</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a8a2c945ba95c4ff05420246cb59c8b95" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_error_doubling_distance</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a5a8c11ccb87ab24549c882f260d789ac" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_fill</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a7de723507600d6a26ec0e7c620cdf0b1" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_fill_acceleration</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1aeab22cdee2e9132af9b3fff4855fd285" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_fill_rate</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1aaf822f543f8506966dd1063e30b58dd6" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_fill_sec</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1a0d0bf5716afd02604afb33836ea48d06" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>set_velocity</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1ad0fff48b8798aece16972abec854b1be" prot="public" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>update</name></member>
+      <member refid="class_gaze_1_1_fill_accumulator_1af9a978a4ac6527cf3bb2e3d9aa75780c" prot="private" virt="non-virtual"><scope>Gaze::FillAccumulator</scope><name>velocity</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -91,13 +91,13 @@ func test_mouse_emulation_settings_and_api():
 	assert_true(ProjectSettings.has_setting("gaze/pointing/mouse_emulation_transition_sec"), "gaze/pointing/mouse_emulation_transition_sec must be registered")
 	
 	var default_dwell = ProjectSettings.get_setting("gaze/pointing/mouse_emulation_dwell_sec")
-	assert_almost_eq(default_dwell, 2.0, 0.01, "Default dwell setting should be 2.0 seconds")
+	assert_almost_eq(default_dwell, 1.5, 0.01, "Default dwell setting should be 1.5 seconds")
 	
 	var default_trans = ProjectSettings.get_setting("gaze/pointing/mouse_emulation_transition_sec")
 	assert_almost_eq(default_trans, 0.3, 0.01, "Default transition setting should be 0.3 seconds")
 	
 	# Default runtime getter checks
-	assert_almost_eq(gs.get_mouse_emulation_dwell_sec(), 2.0, 0.01, "GazeServer default dwell should be 2.0 seconds")
+	assert_almost_eq(gs.get_mouse_emulation_dwell_sec(), 1.5, 0.01, "GazeServer default dwell should be 1.5 seconds")
 	assert_almost_eq(gs.get_mouse_emulation_transition_sec(), 0.3, 0.01, "GazeServer default transition should be 0.3 seconds")
 	
 	# Runtime modifications
@@ -108,7 +108,7 @@ func test_mouse_emulation_settings_and_api():
 	assert_almost_eq(gs.get_mouse_emulation_transition_sec(), 0.5, 0.01, "GazeServer should reflect updated transition")
 	
 	# Reset
-	gs.set_mouse_emulation_dwell_sec(2.0)
+	gs.set_mouse_emulation_dwell_sec(1.5)
 	gs.set_mouse_emulation_transition_sec(0.3)
 
 func test_mouse_emulation_state_and_head_pose_preservation():
@@ -132,6 +132,11 @@ func test_mouse_emulation_state_and_head_pose_preservation():
 	assert_almost_eq(ev.head_transform.origin.z, -450.0, 0.1, "Head Z matches camera pose")
 	assert_almost_eq(ev.left_eye_openness, 0.85, 0.01, "Left eye openness matches camera")
 	assert_almost_eq(ev.right_eye_openness, 0.15, 0.01, "Right eye openness matches camera")
+
+	var missing_ev = gs.create_default_missing_event(InputEventGazeMissing.REASON_OCCLUDED)
+	assert_not_null(missing_ev, "Created default missing event should not be null")
+	assert_almost_eq(missing_ev.left_eye_openness, 0.85, 0.01, "Missing event left eye openness matches server state")
+	assert_almost_eq(missing_ev.right_eye_openness, 0.15, 0.01, "Missing event right eye openness matches server state")
 
 func test_mock_vision_server_headless_injection():
 	var vs = Engine.get_singleton("VisionServer")

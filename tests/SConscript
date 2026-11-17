@@ -293,8 +293,9 @@ if env["platform"] != "javascript":
     target_test_bin = "#" + f"build/tests/test_native.{platform_str}.{env['arch']}{exe_suffix}"
     test_program = core_env.Program(target=target_test_bin, source=test_objs)
     
-    # Codesigning on macOS
+    # Codesigning and unversioned ONNX Runtime linkage on macOS
     if env["platform"] == "macos":
+        core_env.AddPostAction(test_program, "install_name_tool -change @rpath/libonnxruntime.1.dylib @rpath/libonnxruntime.dylib $TARGET")
         core_env.AddPostAction(test_program, "codesign -s - --force $TARGET")
 
     # Native test runner target
@@ -336,6 +337,26 @@ godot_headless_run = env.Command(
 )
 env.AlwaysBuild(godot_headless_run)
 env.Alias("tests/godot/headless", godot_headless_run)
+
+# Godot GUT unit test target
+gut_test_scripts = []
+for gf in sorted(Glob("#project/addons/godot-gaze/tests/test_*.gd"), key=lambda x: str(x)):
+    try:
+        with open(gf.abspath, "r", encoding="utf-8") as fh:
+            first_lines = fh.read(256)
+        if "addons/gut/test.gd" in first_lines or "extends GutTest" in first_lines:
+            gut_test_scripts.append(f"res://addons/godot-gaze/tests/{os.path.basename(str(gf))}")
+    except Exception:
+        pass
+if gut_test_scripts:
+    godot_gut_run = env.Command(
+        "build/tests/logs/tests.godot.gut.log",
+        [library],
+        Action(run_command_and_log, varlist=["TEST_CMD"]),
+        TEST_CMD=["./scripts/godot.sh", "--headless", "-gconfig=", f"-gtest={','.join(gut_test_scripts)}", "-gexit"]
+    )
+    env.AlwaysBuild(godot_gut_run)
+    env.Alias("tests/godot/gut", godot_gut_run)
 
 # Godot debug overlay robustness test target
 godot_overlay_run = env.Command(
@@ -488,12 +509,16 @@ env.Alias("tests/godot_movies", godot_movies_run)
 local_tests = ["tests/python", "tests/style"]
 if env["platform"] != "javascript":
     local_tests.extend(["tests/native", "tests/benchmark", "tests/godot_movies", "tests/godot/headless"])
+    if gut_test_scripts:
+        local_tests.append("tests/godot/gut")
 
 env.Alias("tests", local_tests)
 env.Alias("test", local_tests)
 
 # Run all E2E targets
 all_tests = ["tests/python", "tests/style", "tests/godot/headless", "tests/godot_movies", "tests/godot/windowed", "tests/web", "tests/android_managed"]
+if gut_test_scripts:
+    all_tests.append("tests/godot/gut")
 if env["platform"] != "javascript":
     all_tests.extend(["tests/native", "tests/benchmark"])
 env.Alias("tests/all", all_tests)

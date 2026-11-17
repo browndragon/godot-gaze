@@ -30,7 +30,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -142,30 +142,32 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('sqpnp__solver_
 </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span></div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keyword">template</span>&lt;Space S = Space::GodotCameraWorkingImagePixels&gt;</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09">solve</a>(</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code hl_function" href="class_gaze_1_1_s_q_pn_p_solver.html#a7368f5c7343c842188341aeaa5eba229">solve</a>(</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="keyword">const</span> std::vector&lt;OpenCVFaceVector3&gt; &amp;object_points,</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="keyword">const</span> std::vector&lt;<a class="code hl_struct" href="struct_gaze_1_1_spaced_vector2.html">SpacedVector2&lt;S&gt;</a>&gt; &amp;image_points,</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <a class="code hl_struct" href="struct_gaze_1_1_spaced_basis.html">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</a> &amp;out_rotation,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        OpenCVCameraVector3 &amp;out_translation);</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="keyword">template</span>&lt;Space S = Space::GodotCameraWorkingImagePixels&gt;</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> solve_rvec(</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="keyword">const</span> std::vector&lt;OpenCVFaceVector3&gt; &amp;object_points,</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">const</span> std::vector&lt;<a class="code hl_struct" href="struct_gaze_1_1_spaced_vector2.html">SpacedVector2&lt;S&gt;</a>&gt; &amp;image_points,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        OpenCVCameraVector3 &amp;out_rvec,</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        OpenCVCameraVector3 &amp;out_translation);</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>};</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        OpenCVCameraVector3 &amp;out_translation,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordtype">double</span> *out_squared_reproj_error = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">template</span>&lt;Space S = Space::GodotCameraWorkingImagePixels&gt;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span> solve_rvec(</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="keyword">const</span> std::vector&lt;OpenCVFaceVector3&gt; &amp;object_points,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="keyword">const</span> std::vector&lt;<a class="code hl_struct" href="struct_gaze_1_1_spaced_vector2.html">SpacedVector2&lt;S&gt;</a>&gt; &amp;image_points,</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="keywordtype">double</span> fx, <span class="keywordtype">double</span> fy, <span class="keywordtype">double</span> cx, <span class="keywordtype">double</span> cy,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>        OpenCVCameraVector3 &amp;out_rvec,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>        OpenCVCameraVector3 &amp;out_translation,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordtype">double</span> *out_squared_reproj_error = <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
 </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>} <span class="comment">// namespace Gaze</span></div>
 <div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html">Gaze::SQPnPSolver</a></div><div class="ttdef"><b>Definition</b> sqpnp_solver.hpp:20</div></div>
-<div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html_a1241abb25b689a755110b9d7298f1d09"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html#a1241abb25b689a755110b9d7298f1d09">Gaze::SQPnPSolver::solve</a></div><div class="ttdeci">static bool solve(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation)</div><div class="ttdoc">Solves the PnP problem given 3D object points and corresponding 2D image points.</div><div class="ttdef"><b>Definition</b> sqpnp_solver.cpp:708</div></div>
+<div class="ttc" id="aclass_gaze_1_1_s_q_pn_p_solver_html_a7368f5c7343c842188341aeaa5eba229"><div class="ttname"><a href="class_gaze_1_1_s_q_pn_p_solver.html#a7368f5c7343c842188341aeaa5eba229">Gaze::SQPnPSolver::solve</a></div><div class="ttdeci">static bool solve(const std::vector&lt; OpenCVFaceVector3 &gt; &amp;object_points, const std::vector&lt; SpacedVector2&lt; S &gt; &gt; &amp;image_points, double fx, double fy, double cx, double cy, SpacedBasis&lt; Space::OpenCVFaceModel, Space::OpenCVCamera &gt; &amp;out_rotation, OpenCVCameraVector3 &amp;out_translation, double *out_squared_reproj_error=nullptr)</div><div class="ttdoc">Solves the PnP problem given 3D object points and corresponding 2D image points.</div><div class="ttdef"><b>Definition</b> sqpnp_solver.cpp:708</div></div>
 <div class="ttc" id="aopencv__space__conversions_8hpp_html"><div class="ttname"><a href="opencv__space__conversions_8hpp.html">opencv_space_conversions.hpp</a></div><div class="ttdoc">Strongly-Typed Coordinate Space Definitions and Transformations.</div></div>
 <div class="ttc" id="astruct_gaze_1_1_s_q_pn_p_solver_1_1_solution_html"><div class="ttname"><a href="struct_gaze_1_1_s_q_pn_p_solver_1_1_solution.html">Gaze::SQPnPSolver::Solution</a></div><div class="ttdef"><b>Definition</b> sqpnp_solver.hpp:23</div></div>
-<div class="ttc" id="astruct_gaze_1_1_spaced_basis_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_basis.html">Gaze::SpacedBasis</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:178</div></div>
-<div class="ttc" id="astruct_gaze_1_1_spaced_vector2_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_vector2.html">Gaze::SpacedVector2</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:124</div></div>
+<div class="ttc" id="astruct_gaze_1_1_spaced_basis_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_basis.html">Gaze::SpacedBasis</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:203</div></div>
+<div class="ttc" id="astruct_gaze_1_1_spaced_vector2_html"><div class="ttname"><a href="struct_gaze_1_1_spaced_vector2.html">Gaze::SpacedVector2</a></div><div class="ttdef"><b>Definition</b> opencv_space_conversions.hpp:132</div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 </div><!-- container -->

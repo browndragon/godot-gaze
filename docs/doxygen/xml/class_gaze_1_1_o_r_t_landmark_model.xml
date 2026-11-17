@@ -119,6 +119,34 @@
         </inbodydescription>
         <location file="src/native/ort_landmark_model.hpp" line="29" column="27" bodyfile="src/native/ort_landmark_model.hpp" bodystart="29" bodyend="29"/>
       </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_landmark_model_1a49127995af6d5f1ee10d928ff628b027" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint8_t &gt;</type>
+        <definition>std::vector&lt;uint8_t&gt; Gaze::ORTLandmarkModel::cached_crop_60</definition>
+        <argsstring></argsstring>
+        <name>cached_crop_60</name>
+        <qualifiedname>Gaze::ORTLandmarkModel::cached_crop_60</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_landmark_model.hpp" line="34" column="21" bodyfile="src/native/ort_landmark_model.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_o_r_t_landmark_model_1abafeecdc38243e85f26d68ce44f6396e" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; float &gt;</type>
+        <definition>std::vector&lt;float&gt; Gaze::ORTLandmarkModel::cached_input_tensor</definition>
+        <argsstring></argsstring>
+        <name>cached_input_tensor</name>
+        <qualifiedname>Gaze::ORTLandmarkModel::cached_input_tensor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_landmark_model.hpp" line="35" column="21" bodyfile="src/native/ort_landmark_model.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
     </sectiondef>
     <sectiondef kind="private-func">
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a03b1378e851fbfaed66474de08bdee51" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
@@ -161,7 +189,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="34" column="9" bodyfile="src/native/ort_landmark_model.cpp" bodystart="16" bodyend="19"/>
+        <location file="src/native/ort_landmark_model.hpp" line="38" column="9" bodyfile="src/native/ort_landmark_model.cpp" bodystart="16" bodyend="19"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1ade43b0c3a2102df79499278749467c2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -179,7 +207,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="35" column="9" bodyfile="src/native/ort_landmark_model.cpp" bodystart="21" bodyend="24"/>
+        <location file="src/native/ort_landmark_model.hpp" line="39" column="9" bodyfile="src/native/ort_landmark_model.cpp" bodystart="21" bodyend="24"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a2d26fa1d73adf2c6a73cbffc819419d6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type></type>
@@ -193,7 +221,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="36" column="9"/>
+        <location file="src/native/ort_landmark_model.hpp" line="40" column="9"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a56086aaf3f327df7b6c3e7e62fcd5e52" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -207,7 +235,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="38" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="26" bodyend="66"/>
+        <location file="src/native/ort_landmark_model.hpp" line="42" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="26" bodyend="66"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a4c17fcecb46cc85657c99ec20c2626aa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -250,7 +278,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="46" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="87" bodyend="129"/>
+        <location file="src/native/ort_landmark_model.hpp" line="50" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="87" bodyend="132"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a9307140ef205e5a84631072ebc1b9af3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -342,7 +370,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="58" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="139" bodyend="198"/>
+        <location file="src/native/ort_landmark_model.hpp" line="62" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="142" bodyend="200"/>
       </memberdef>
       <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a6c27c4449363ac36f17043180678a53f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
         <type>bool</type>
@@ -381,18 +409,59 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/native/ort_landmark_model.hpp" line="59" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="200" bodyend="213"/>
+        <location file="src/native/ort_landmark_model.hpp" line="63" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="202" bodyend="215"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_o_r_t_landmark_model_1a3cb5e3d6e1ee6b9890831864fbb65b69" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::ORTLandmarkModel::extract_landmarks_working_space</definition>
+        <argsstring>(const uint8_t *src_data, int img_w, int img_h, const GazeRect &amp;working_face_bbox, std::vector&lt; SpacedVector2&lt; Space::GodotCameraWorkingImagePixels &gt; &gt; &amp;out_landmarks_working_px, float roll_hint_rad)</argsstring>
+        <name>extract_landmarks_working_space</name>
+        <qualifiedname>Gaze::ORTLandmarkModel::extract_landmarks_working_space</qualifiedname>
+        <param>
+          <type>const uint8_t *</type>
+          <declname>src_data</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>img_w</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>img_h</declname>
+        </param>
+        <param>
+          <type>const <ref refid="struct_gaze_1_1_gaze_rect" kindref="compound">GazeRect</ref> &amp;</type>
+          <declname>working_face_bbox</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; <ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2</ref>&lt; <ref refid="opencv__space__conversions_8hpp_1ac75696b0b38f80f25e89ff624ef55981a4fb3077627d1812a08bb5444d77d6624" kindref="member">Space::GodotCameraWorkingImagePixels</ref> &gt; &gt; &amp;</type>
+          <declname>out_landmarks_working_px</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>roll_hint_rad</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/native/ort_landmark_model.hpp" line="64" column="14" bodyfile="src/native/ort_landmark_model.cpp" bodystart="217" bodyend="264"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="src/native/ort_landmark_model.hpp" line="17" column="5" bodyfile="src/native/ort_landmark_model.hpp" bodystart="18" bodyend="60"/>
+    <location file="src/native/ort_landmark_model.hpp" line="17" column="5" bodyfile="src/native/ort_landmark_model.hpp" bodystart="18" bodyend="65"/>
     <listofallmembers>
+      <member refid="class_gaze_1_1_o_r_t_landmark_model_1a49127995af6d5f1ee10d928ff628b027" prot="private" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>cached_crop_60</name></member>
+      <member refid="class_gaze_1_1_o_r_t_landmark_model_1abafeecdc38243e85f26d68ce44f6396e" prot="private" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>cached_input_tensor</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1a9307140ef205e5a84631072ebc1b9af3" prot="public" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>extract_landmarks</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1a6c27c4449363ac36f17043180678a53f" prot="public" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>extract_landmarks</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1a4c17fcecb46cc85657c99ec20c2626aa" prot="public" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>extract_landmarks_norm</name></member>
+      <member refid="class_gaze_1_1_o_r_t_landmark_model_1a3cb5e3d6e1ee6b9890831864fbb65b69" prot="public" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>extract_landmarks_working_space</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1a56086aaf3f327df7b6c3e7e62fcd5e52" prot="public" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>initialize</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1a0ee327f2bccdf194ad3d9155f564ebd5" prot="private" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>input_names</name></member>
       <member refid="class_gaze_1_1_o_r_t_landmark_model_1ad7c024a3a0958ff7d5c32aa863c1ca4a" prot="private" virt="non-virtual"><scope>Gaze::ORTLandmarkModel</scope><name>load_from_buffer</name></member>

@@ -7,6 +7,8 @@
       <node id="3">
         <label>../core/gaze_display_types.hpp</label>
         <link refid="gaze__display__types_8hpp_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>src/native/gaze_display_fallback.cpp</label>
@@ -19,6 +21,9 @@
         <link refid="gaze__display__fallback_8hpp_source"/>
         <childnode refid="3" relation="include">
         </childnode>
+      </node>
+      <node id="4">
+        <label>cstdint</label>
       </node>
     </incdepgraph>
     <innernamespace refid="namespace_gaze">Gaze</innernamespace>
@@ -51,8 +56,17 @@
 <codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>rect;</highlight></codeline>
 <codeline lineno="23"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="24"><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><ref refid="struct_gaze_1_1_gaze_mouse_point" kindref="compound">GazeMousePoint</ref><sp/>gaze_fallback_get_mouse_position()<sp/>{</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>{0.0,<sp/>0.0};</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal">int64_t<sp/>gaze_fallback_get_mouse_button_state()<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="31"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/native/gaze_display_fallback.cpp"/>
   </compounddef>

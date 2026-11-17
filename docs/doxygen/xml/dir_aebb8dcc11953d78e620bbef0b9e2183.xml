@@ -3,17 +3,21 @@
   <compounddef id="dir_aebb8dcc11953d78e620bbef0b9e2183" kind="dir">
     <compoundname>src/core</compoundname>
     <innerdir refid="dir_50e4bd64939a37cf7445b59b0e9d31d6">src/core/concurrency</innerdir>
+    <innerfile refid="blink__state__machine_8hpp">blink_state_machine.hpp</innerfile>
     <innerfile refid="camera__interface_8hpp">camera_interface.hpp</innerfile>
     <innerfile refid="camera__placement_8hpp">camera_placement.hpp</innerfile>
     <innerfile refid="cpu__image__warper_8hpp">cpu_image_warper.hpp</innerfile>
+    <innerfile refid="damped__spring_8hpp">damped_spring.hpp</innerfile>
     <innerfile refid="eye__blink__estimator_8hpp">eye_blink_estimator.hpp</innerfile>
     <innerfile refid="face__model__geometry_8hpp">face_model_geometry.hpp</innerfile>
     <innerfile refid="face__pipeline_8hpp">face_pipeline.hpp</innerfile>
+    <innerfile refid="fill__accumulator_8hpp">fill_accumulator.hpp</innerfile>
     <innerfile refid="gaze__display__types_8hpp">gaze_display_types.hpp</innerfile>
     <innerfile refid="gaze__frame__data_8hpp">gaze_frame_data.hpp</innerfile>
     <innerfile refid="gaze__model_8hpp">gaze_model.hpp</innerfile>
     <innerfile refid="log_8hpp">log.hpp</innerfile>
     <innerfile refid="math__defs_8hpp">math_defs.hpp</innerfile>
+    <innerfile refid="mouse__stillness__arbitrator_8hpp">mouse_stillness_arbitrator.hpp</innerfile>
     <innerfile refid="opencv__space__conversions_8hpp">opencv_space_conversions.hpp</innerfile>
     <innerfile refid="pipeline__config_8hpp">pipeline_config.hpp</innerfile>
     <innerfile refid="pnp__solver_8cpp">pnp_solver.cpp</innerfile>

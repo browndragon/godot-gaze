@@ -1,4 +1,30 @@
 var searchData=
 [
-  ['usage_0',['3. Basic GDScript Usage',['../index.html#autotoc_md13',1,'']]]
+  ['illusion_0',['A. The &quot;Baking / Upstream Offload&quot; Illusion',['../md_docs_2gaze__model__evaluation.html#autotoc_md116',1,'']]],
+  ['implementation_3a_1',['Blueprint for Future Implementation:',['../md_docs_2gaze__model__evaluation.html#autotoc_md127',1,'']]],
+  ['inertial_20dwell_20interactions_20fillaccumulator_2',['3. Inertial Dwell Interactions (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../index.html#autotoc_md15',1,'']]],
+  ['inertial_20dwell_20mechanics_20fillaccumulator_3',['6.3. Inertial Dwell Mechanics (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../md_docs_2architecture.html#autotoc_md48',1,'']]],
+  ['inference_20camera_20space_20opencv_20standard_4',['1.1. Inference Camera Space (OpenCV Standard)',['../md_docs_2mathematical__model.html#autotoc_md70',1,'']]],
+  ['ingestion_20architecture_20color_20formats_5',['1. Camera Ingestion Architecture &amp;amp; Color Formats',['../md_docs_2vision__models.html#autotoc_md96',1,'']]],
+  ['ingestion_20details_6',['1.2. Platform-Specific Camera Ingestion Details',['../md_docs_2vision__models.html#autotoc_md98',1,'']]],
+  ['ingestion_20specification_7',['Vision Models &amp;amp; Camera Ingestion Specification',['../md_docs_2vision__models.html',1,'']]],
+  ['input_20feature_20preprocessing_8',['6.1. Input Feature Preprocessing',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md92',1,'']]],
+  ['input_20spatial_20area_20computational_20complexity_20flops_9',['B. Input Spatial Area &amp;amp; Computational Complexity (FLOPs)',['../md_docs_2gaze__model__evaluation.html#autotoc_md117',1,'']]],
+  ['input_20subsystem_20event_20architecture_10',['6. Input Subsystem &amp;amp; Event Architecture',['../md_docs_2architecture.html#autotoc_md45',1,'']]],
+  ['inputeventgaze_20and_20inputeventgazemissing_11',['2. Handling &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt; and &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;',['../index.html#autotoc_md14',1,'']]],
+  ['inputeventgaze_20inputeventgazemissing_12',['6.1. First-Class Events: &lt;span class=&quot;tt&quot;&gt;InputEventGazeBase&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;',['../md_docs_2architecture.html#autotoc_md46',1,'']]],
+  ['inputeventgazebase_20inputeventgaze_20inputeventgazemissing_13',['6.1. First-Class Events: &lt;span class=&quot;tt&quot;&gt;InputEventGazeBase&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;',['../md_docs_2architecture.html#autotoc_md46',1,'']]],
+  ['inputeventgazemissing_14',['InputEventGazeMissing',['../index.html#autotoc_md14',1,'2. Handling &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt; and &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;'],['../md_docs_2architecture.html#autotoc_md46',1,'6.1. First-Class Events: &lt;span class=&quot;tt&quot;&gt;InputEventGazeBase&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGaze&lt;/span&gt;, &lt;span class=&quot;tt&quot;&gt;InputEventGazeMissing&lt;/span&gt;']]],
+  ['installation_15',['Installation',['../index.html#autotoc_md8',1,'']]],
+  ['integration_20guidelines_16',['2. Code Style &amp;amp; Integration Guidelines',['../md_docs_2rejected__designs.html#autotoc_md132',1,'']]],
+  ['integration_20patterns_17',['2. Integration Patterns',['../md_docs_2lifecycle__tracking.html#autotoc_md59',1,'']]],
+  ['intel_20adas_2035_20point_20facial_20landmarker_20ortlandmarkmodel_18',['3.2. Intel ADAS 35-Point Facial Landmarker (&lt;span class=&quot;tt&quot;&gt;ORTLandmarkModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md106',1,'']]],
+  ['intel_20adas_20gaze_20estimation_20ortgazemodel_19',['3.3. Intel ADAS Gaze Estimation (&lt;span class=&quot;tt&quot;&gt;ORTGazeModel&lt;/span&gt;)',['../md_docs_2vision__models.html#autotoc_md108',1,'']]],
+  ['interactions_20fillaccumulator_20',['3. Inertial Dwell Interactions (&lt;span class=&quot;tt&quot;&gt;FillAccumulator&lt;/span&gt;)',['../index.html#autotoc_md15',1,'']]],
+  ['interactive_20calibration_20wizard_21',['Device Profiles &amp;amp; Interactive Calibration Wizard',['../index.html#autotoc_md22',1,'']]],
+  ['intersection_22',['3.1. 3D Ray-Plane Intersection',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md82',1,'']]],
+  ['invariance_23',['2. Parameterization &amp;amp; Scale Invariance',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md79',1,'']]],
+  ['invariants_20behavior_24',['Invariants &amp;amp; Behavior',['../md_docs_2lifecycle__tracking.html#autotoc_md61',1,'']]],
+  ['is_20the_20common_20denominator_25',['4. Hardware &amp;amp; Memory Model: Why CPU RAM is the Common Denominator',['../md_docs_2architecture.html#autotoc_md40',1,'']]],
+  ['isolation_20purity_20rules_26',['2. Layer Isolation &amp;amp; Purity Rules',['../md_docs_2architecture.html#autotoc_md36',1,'']]]
 ];

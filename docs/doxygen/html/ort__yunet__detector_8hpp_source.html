@@ -30,7 +30,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -208,22 +208,27 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('ort__yunet__de
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        std::vector&lt;Anchor&gt; generate_anchors(<span class="keywordtype">int</span> width, <span class="keywordtype">int</span> height);</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        ORTYuNetDetector(<span class="keyword">const</span> std::string &amp;p_model_path, <span class="keywordtype">float</span> score_thresh = 0.25f, <span class="keywordtype">float</span> nms_thresh = 0.3f);</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        ORTYuNetDetector(<span class="keyword">const</span> std::vector&lt;uint8_t&gt; &amp;p_model_buffer, <span class="keywordtype">float</span> score_thresh = 0.25f, <span class="keywordtype">float</span> nms_thresh = 0.3f);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        ~ORTYuNetDetector() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        <span class="comment">// Preallocated zero-churn inference buffers</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        std::vector&lt;Anchor&gt; cached_anchors;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        std::vector&lt;float&gt; cached_input_tensor_data;</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>        std::vector&lt;unsigned char&gt; cached_resized_bgr;</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        <span class="keywordtype">bool</span> initialize();</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        <span class="keywordtype">void</span> set_config(<span class="keyword">const</span> PipelineConfig &amp;p_config);</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keywordtype">bool</span> process_frame_single_pass(<span class="keyword">const</span> Frame &amp;frame, YuNetResult &amp;out_result, <span class="keywordtype">float</span> roll_deg);</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        <span class="keywordtype">bool</span> process_frame(<span class="keyword">const</span> Frame &amp;frame, YuNetResult &amp;out_result, <span class="keywordtype">float</span> roll_hint_rad = 0.0f);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        std::vector&lt;GodotFaceVector3&gt; get_canonical_godot_model_points() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    };</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        ORTYuNetDetector(<span class="keyword">const</span> std::string &amp;p_model_path, <span class="keywordtype">float</span> score_thresh = 0.25f, <span class="keywordtype">float</span> nms_thresh = 0.3f);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        ORTYuNetDetector(<span class="keyword">const</span> std::vector&lt;uint8_t&gt; &amp;p_model_buffer, <span class="keywordtype">float</span> score_thresh = 0.25f, <span class="keywordtype">float</span> nms_thresh = 0.3f);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        ~ORTYuNetDetector() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>        <span class="keywordtype">bool</span> initialize();</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordtype">void</span> set_config(<span class="keyword">const</span> PipelineConfig &amp;p_config);</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordtype">bool</span> process_frame_single_pass(<span class="keyword">const</span> Frame &amp;frame, YuNetResult &amp;out_result, <span class="keywordtype">float</span> roll_deg);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keywordtype">bool</span> process_frame(<span class="keyword">const</span> Frame &amp;frame, YuNetResult &amp;out_result, <span class="keywordtype">float</span> roll_hint_rad = 0.0f);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        std::vector&lt;GodotFaceVector3&gt; get_canonical_godot_model_points() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    };</div>
 </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>} <span class="comment">// namespace Gaze</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>} <span class="comment">// namespace Gaze</span></div>
 <div class="ttc" id="acamera__interface_8hpp_html"><div class="ttname"><a href="camera__interface_8hpp.html">camera_interface.hpp</a></div><div class="ttdoc">Frame Ingestion Interface (Layer 1).</div></div>
 <div class="ttc" id="amath__defs_8hpp_html"><div class="ttname"><a href="math__defs_8hpp.html">math_defs.hpp</a></div><div class="ttdoc">Zero-Dependency Image and Geometric Math utilities.</div></div>
 <div class="ttc" id="apipeline__config_8hpp_html"><div class="ttname"><a href="pipeline__config_8hpp.html">pipeline_config.hpp</a></div><div class="ttdoc">Pipeline Configurations configuration struct (Layer 2).</div></div>

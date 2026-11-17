@@ -1,9 +1,7 @@
 var searchData=
 [
-  ['oneeurofilterstate_0',['OneEuroFilterState',['../classgodot_1_1_one_euro_filter_state.html',1,'godot']]],
-  ['oneeurosmoother_1',['OneEuroSmoother',['../classgodot_1_1_one_euro_smoother.html',1,'godot']]],
-  ['orteyestatemodel_2',['ORTEyeStateModel',['../class_gaze_1_1_o_r_t_eye_state_model.html',1,'Gaze']]],
-  ['ortgazemodel_3',['ORTGazeModel',['../class_gaze_1_1_o_r_t_gaze_model.html',1,'Gaze']]],
-  ['ortlandmarkmodel_4',['ORTLandmarkModel',['../class_gaze_1_1_o_r_t_landmark_model.html',1,'Gaze']]],
-  ['ortyunetdetector_5',['ORTYuNetDetector',['../class_gaze_1_1_o_r_t_yu_net_detector.html',1,'Gaze']]]
+  ['mockgazedisplayserver_0',['MockGazeDisplayServer',['../classgodot_1_1_mock_gaze_display_server.html',1,'godot']]],
+  ['mockvisionserver_1',['MockVisionServer',['../classgodot_1_1_mock_vision_server.html',1,'godot']]],
+  ['mousegazeemulation_2',['MouseGazeEmulation',['../classgodot_1_1_mouse_gaze_emulation.html',1,'godot']]],
+  ['mousestillnessarbitrator_3',['MouseStillnessArbitrator',['../class_gaze_1_1_mouse_stillness_arbitrator.html',1,'Gaze']]]
 ];

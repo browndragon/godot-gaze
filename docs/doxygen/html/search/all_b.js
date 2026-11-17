@@ -1,12 +1,18 @@
 var searchData=
 [
-  ['imagewarper_0',['ImageWarper',['../class_gaze_1_1_image_warper.html',1,'Gaze']]],
-  ['inject_5ftexture_1',['inject_texture',['../classgodot_1_1_vision_server.html#a2f08934369e54b58cbed71c8427f4364',1,'godot::VisionServer::inject_texture()'],['../classgodot_1_1_mock_vision_server.html#a6b5b3db71732c984c4393f0c87de7a6d',1,'godot::MockVisionServer::inject_texture()']]],
-  ['inputeventgaze_2',['InputEventGaze',['../classgodot_1_1_input_event_gaze.html',1,'godot']]],
-  ['inputeventgazebase_3',['InputEventGazeBase',['../classgodot_1_1_input_event_gaze_base.html',1,'godot']]],
-  ['inputeventgazemissing_4',['InputEventGazeMissing',['../classgodot_1_1_input_event_gaze_missing.html',1,'godot']]],
-  ['installation_5',['1. Installation',['../index.html#autotoc_md9',1,'']]],
-  ['is_5fface_5ftracked_6',['is_face_tracked',['../classgodot_1_1_input_event_gaze_base.html#abf8f978bea3b276b437a689180e76138',1,'godot::InputEventGazeBase::is_face_tracked()'],['../classgodot_1_1_input_event_gaze.html#aceb6dbffce3c03e48b8cdd3d6b7fb866',1,'godot::InputEventGaze::is_face_tracked()'],['../classgodot_1_1_input_event_gaze_missing.html#a280adacd326f635970e784b5eb6c06c1',1,'godot::InputEventGazeMissing::is_face_tracked()']]],
-  ['is_5fpending_7',['is_pending',['../class_gaze_1_1_concurrency_1_1_atomic_mailbox.html#a5e07c054a87963e1f6a2dc1e706dca99',1,'Gaze::Concurrency::AtomicMailbox']]],
-  ['is_5ftracking_5factive_8',['is_tracking_active',['../classgodot_1_1_gaze_tracker.html#a56bf0348a0518adcb5908f557cef3afa',1,'godot::GazeTracker']]]
+  ['b_20future_20readiness_3a_20blueprint_20for_20directfacegazeestimator_0',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['b_20input_20spatial_20area_20computational_20complexity_20flops_1',['B. Input Spatial Area &amp;amp; Computational Complexity (FLOPs)',['../md_docs_2gaze__model__evaluation.html#autotoc_md117',1,'']]],
+  ['b_3a_20programmatic_20gdscript_20attachment_20gazetracker_20track_5fnode_2',['Pattern B: Programmatic GDScript Attachment (&lt;span class=&quot;tt&quot;&gt;GazeTracker.track_node&lt;/span&gt;)',['../md_docs_2lifecycle__tracking.html#autotoc_md63',1,'']]],
+  ['baking_20upstream_20offload_20illusion_3',['A. The &quot;Baking / Upstream Offload&quot; Illusion',['../md_docs_2gaze__model__evaluation.html#autotoc_md116',1,'']]],
+  ['behavior_4',['Invariants &amp;amp; Behavior',['../md_docs_2lifecycle__tracking.html#autotoc_md61',1,'']]],
+  ['benchmark_20matrix_5',['1. Executive Summary &amp;amp; Benchmark Matrix',['../md_docs_2gaze__model__evaluation.html#autotoc_md113',1,'']]],
+  ['bezel_20geometry_20_24t_5f_20camera_20viewport_20_24_6',['3.3. Unified Gravity-Aware Display Orientation &amp;amp; Side-Bezel Geometry ($T_{\\text{camera} \\to \\text{viewport}}$)',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md84',1,'']]],
+  ['bias_7',['3. Peripheral Dynamic Range vs. Automotive Bias',['../md_docs_2gaze__model__evaluation.html#autotoc_md119',1,'']]],
+  ['biological_20angle_20kappa_20calibration_20retired_8',['4. Biological Angle Kappa &amp;amp; Calibration [RETIRED]',['..//Users/acunningham/src/godot-gaze/docs/mathematical_model.md#autotoc_md87',1,'']]],
+  ['blink_5fstate_5fmachine_2ehpp_9',['blink_state_machine.hpp',['../blink__state__machine_8hpp.html',1,'']]],
+  ['blinkstatemachine_10',['BlinkStateMachine',['../class_gaze_1_1_blink_state_machine.html',1,'Gaze']]],
+  ['blueprint_20for_20directfacegazeestimator_11',['B. Future Readiness: Blueprint for &lt;span class=&quot;tt&quot;&gt;DirectFaceGazeEstimator&lt;/span&gt;',['../md_docs_2gaze__model__evaluation.html#autotoc_md126',1,'']]],
+  ['blueprint_20for_20future_20implementation_3a_12',['Blueprint for Future Implementation:',['../md_docs_2gaze__model__evaluation.html#autotoc_md127',1,'']]],
+  ['boundary_20architecture_13',['5. WebAssembly &amp;amp; JavaScript Boundary Architecture',['../md_docs_2architecture.html#autotoc_md43',1,'']]],
+  ['building_20from_20source_20or_20symlinking_20project_20addons_20godot_20gaze_14',['Option 2: Building from Source (or Symlinking &lt;span class=&quot;tt&quot;&gt;project/addons/godot-gaze&lt;/span&gt;)',['../index.html#autotoc_md10',1,'']]]
 ];

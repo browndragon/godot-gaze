@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d" kind="struct" language="C++" prot="public">
+    <compoundname>Gaze::MouseStillnessArbitrator::Point2D</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1aeeebf79029913966061e2ffc0fffa2d9" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::Point2D::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::x</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="18" column="15" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a02a85127529bf514ac5ac11079f7fbfd" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::Point2D::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::y</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="19" column="15" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a3eb25e527cd90d36cc4bd08b4d02a55f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::MouseStillnessArbitrator::Point2D::Point2D</definition>
+        <argsstring>()=default</argsstring>
+        <name>Point2D</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::Point2D</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a633a069dc78ad8a33f32d25d1b0a86e1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::MouseStillnessArbitrator::Point2D::Point2D</definition>
+        <argsstring>(float p_x, float p_y)</argsstring>
+        <name>Point2D</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::Point2D</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_x</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>p_y</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="21" column="9" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="21" bodyend="21"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a749d918daeea4d758f21788a2bddf963" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::MouseStillnessArbitrator::Point2D::operator-</definition>
+        <argsstring>(const Point2D &amp;o) const</argsstring>
+        <name>operator-</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::operator-</qualifiedname>
+        <param>
+          <type>const Point2D &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="22" column="17" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="22" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad48aca384bda979035351bbc8d2fcb10" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::MouseStillnessArbitrator::Point2D::operator+</definition>
+        <argsstring>(const Point2D &amp;o) const</argsstring>
+        <name>operator+</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::operator+</qualifiedname>
+        <param>
+          <type>const Point2D &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="23" column="17" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="23" bodyend="23"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1adb1d1f4f9cba2fe560a2b0aee1592668" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>Point2D</type>
+        <definition>Point2D Gaze::MouseStillnessArbitrator::Point2D::operator*</definition>
+        <argsstring>(float s) const</argsstring>
+        <name>operator*</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::operator*</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="24" column="17" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="24" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad6bfeb916a84c0b66424ae932b0faf01" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::MouseStillnessArbitrator::Point2D::length</definition>
+        <argsstring>() const</argsstring>
+        <name>length</name>
+        <qualifiedname>Gaze::MouseStillnessArbitrator::Point2D::length</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/mouse_stillness_arbitrator.hpp" line="25" column="15" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="25" bodyend="25"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/mouse_stillness_arbitrator.hpp" line="17" column="5" bodyfile="src/core/mouse_stillness_arbitrator.hpp" bodystart="17" bodyend="26"/>
+    <listofallmembers>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad6bfeb916a84c0b66424ae932b0faf01" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>length</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1adb1d1f4f9cba2fe560a2b0aee1592668" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>operator*</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1ad48aca384bda979035351bbc8d2fcb10" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>operator+</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a749d918daeea4d758f21788a2bddf963" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>operator-</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a3eb25e527cd90d36cc4bd08b4d02a55f" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>Point2D</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a633a069dc78ad8a33f32d25d1b0a86e1" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>Point2D</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1aeeebf79029913966061e2ffc0fffa2d9" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>x</name></member>
+      <member refid="struct_gaze_1_1_mouse_stillness_arbitrator_1_1_point2_d_1a02a85127529bf514ac5ac11079f7fbfd" prot="public" virt="non-virtual"><scope>Gaze::MouseStillnessArbitrator::Point2D</scope><name>y</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

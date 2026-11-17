@@ -783,230 +783,240 @@
 <codeline lineno="705"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="706"><highlight class="normal"></highlight></codeline>
 <codeline lineno="707"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;Space<sp/>S&gt;</highlight></codeline>
-<codeline lineno="708"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kindref="member">SQPnPSolver::solve</ref>(</highlight></codeline>
+<codeline lineno="708"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" kindref="member">SQPnPSolver::solve</ref>(</highlight></codeline>
 <codeline lineno="709"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;object_points,</highlight></codeline>
 <codeline lineno="710"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;S&gt;</ref>&gt;<sp/>&amp;image_points,</highlight></codeline>
 <codeline lineno="711"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fy,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cy,</highlight></codeline>
 <codeline lineno="712"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</ref><sp/>&amp;out_rotation,</highlight></codeline>
-<codeline lineno="713"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_translation)</highlight></codeline>
-<codeline lineno="714"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="715"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>=<sp/>object_points.size();</highlight></codeline>
-<codeline lineno="716"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(n<sp/>&lt;<sp/>4<sp/>||<sp/>image_points.size()<sp/>!=<sp/>n)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="717"><highlight class="normal"></highlight></codeline>
-<codeline lineno="718"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Convert<sp/>2D<sp/>image<sp/>points<sp/>to<sp/>normalized<sp/>camera<sp/>rays<sp/>(x,<sp/>y)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="719"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;SpacedVector2&lt;S&gt;&gt;<sp/>norm_img(n);</highlight></codeline>
-<codeline lineno="720"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedVector2&lt;S&gt;<sp/>sum_img(0.0,<sp/>0.0);</highlight></codeline>
-<codeline lineno="721"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVFaceVector3<sp/>sum_obj(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
-<codeline lineno="722"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sq_norm_sum<sp/>=<sp/>0.0;</highlight></codeline>
-<codeline lineno="723"><highlight class="normal"></highlight></codeline>
-<codeline lineno="724"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>n;<sp/>++i)</highlight></codeline>
-<codeline lineno="725"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="726"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>norm_img[i].x<sp/>=<sp/>(image_points[i].x<sp/>-<sp/>cx)<sp/>/<sp/>fx;</highlight></codeline>
-<codeline lineno="727"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>norm_img[i].y<sp/>=<sp/>(image_points[i].y<sp/>-<sp/>cy)<sp/>/<sp/>fy;</highlight></codeline>
-<codeline lineno="728"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_img.x<sp/>+=<sp/>norm_img[i].x;</highlight></codeline>
-<codeline lineno="729"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_img.y<sp/>+=<sp/>norm_img[i].y;</highlight></codeline>
-<codeline lineno="730"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.x<sp/>+=<sp/>object_points[i].x;</highlight></codeline>
-<codeline lineno="731"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.y<sp/>+=<sp/>object_points[i].y;</highlight></codeline>
-<codeline lineno="732"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.z<sp/>+=<sp/>object_points[i].z;</highlight></codeline>
-<codeline lineno="733"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sq_norm_sum<sp/>+=<sp/>norm_img[i].x<sp/>*<sp/>norm_img[i].x<sp/>+<sp/>norm_img[i].y<sp/>*<sp/>norm_img[i].y;</highlight></codeline>
-<codeline lineno="734"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="735"><highlight class="normal"></highlight></codeline>
-<codeline lineno="736"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat9x9<sp/>omega<sp/>=<sp/>{};</highlight></codeline>
-<codeline lineno="737"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x9<sp/>qa_sum<sp/>=<sp/>{};</highlight></codeline>
-<codeline lineno="738"><highlight class="normal"></highlight></codeline>
-<codeline lineno="739"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>n;<sp/>++i)</highlight></codeline>
-<codeline lineno="740"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="741"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>x<sp/>=<sp/>norm_img[i].x,<sp/>y<sp/>=<sp/>norm_img[i].y;</highlight></codeline>
-<codeline lineno="742"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>X<sp/>=<sp/>object_points[i].x,<sp/>Y<sp/>=<sp/>object_points[i].y,<sp/>Z<sp/>=<sp/>object_points[i].z;</highlight></codeline>
-<codeline lineno="743"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sq_norm<sp/>=<sp/>x<sp/>*<sp/>x<sp/>+<sp/>y<sp/>*<sp/>y;</highlight></codeline>
-<codeline lineno="744"><highlight class="normal"></highlight></codeline>
-<codeline lineno="745"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>X2<sp/>=<sp/>X<sp/>*<sp/>X,<sp/>XY<sp/>=<sp/>X<sp/>*<sp/>Y,<sp/>XZ<sp/>=<sp/>X<sp/>*<sp/>Z;</highlight></codeline>
-<codeline lineno="746"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>Y2<sp/>=<sp/>Y<sp/>*<sp/>Y,<sp/>YZ<sp/>=<sp/>Y<sp/>*<sp/>Z,<sp/>Z2<sp/>=<sp/>Z<sp/>*<sp/>Z;</highlight></codeline>
-<codeline lineno="747"><highlight class="normal"></highlight></codeline>
-<codeline lineno="748"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[0][0]<sp/>+=<sp/>X2;<sp/>omega[0][1]<sp/>+=<sp/>XY;<sp/>omega[0][2]<sp/>+=<sp/>XZ;</highlight></codeline>
-<codeline lineno="749"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[1][1]<sp/>+=<sp/>Y2;<sp/>omega[1][2]<sp/>+=<sp/>YZ;<sp/>omega[2][2]<sp/>+=<sp/>Z2;</highlight></codeline>
-<codeline lineno="750"><highlight class="normal"></highlight></codeline>
-<codeline lineno="751"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[0][6]<sp/>-=<sp/>x<sp/>*<sp/>X2;<sp/>omega[0][7]<sp/>-=<sp/>x<sp/>*<sp/>XY;<sp/>omega[0][8]<sp/>-=<sp/>x<sp/>*<sp/>XZ;</highlight></codeline>
-<codeline lineno="752"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[1][7]<sp/>-=<sp/>x<sp/>*<sp/>Y2;<sp/>omega[1][8]<sp/>-=<sp/>x<sp/>*<sp/>YZ;</highlight></codeline>
-<codeline lineno="753"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[2][8]<sp/>-=<sp/>x<sp/>*<sp/>Z2;</highlight></codeline>
-<codeline lineno="754"><highlight class="normal"></highlight></codeline>
-<codeline lineno="755"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[3][6]<sp/>-=<sp/>y<sp/>*<sp/>X2;<sp/>omega[3][7]<sp/>-=<sp/>y<sp/>*<sp/>XY;<sp/>omega[3][8]<sp/>-=<sp/>y<sp/>*<sp/>XZ;</highlight></codeline>
-<codeline lineno="756"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[4][7]<sp/>-=<sp/>y<sp/>*<sp/>Y2;<sp/>omega[4][8]<sp/>-=<sp/>y<sp/>*<sp/>YZ;</highlight></codeline>
-<codeline lineno="757"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[5][8]<sp/>-=<sp/>y<sp/>*<sp/>Z2;</highlight></codeline>
-<codeline lineno="758"><highlight class="normal"></highlight></codeline>
-<codeline lineno="759"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[6][6]<sp/>+=<sp/>sq_norm<sp/>*<sp/>X2;<sp/>omega[6][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>XY;<sp/>omega[6][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>XZ;</highlight></codeline>
-<codeline lineno="760"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[7][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Y2;<sp/>omega[7][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>YZ;</highlight></codeline>
-<codeline lineno="761"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[8][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Z2;</highlight></codeline>
-<codeline lineno="762"><highlight class="normal"></highlight></codeline>
-<codeline lineno="763"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[0][0]<sp/>+=<sp/>X;<sp/>qa_sum[0][1]<sp/>+=<sp/>Y;<sp/>qa_sum[0][2]<sp/>+=<sp/>Z;</highlight></codeline>
-<codeline lineno="764"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[0][6]<sp/>-=<sp/>x<sp/>*<sp/>X;<sp/>qa_sum[0][7]<sp/>-=<sp/>x<sp/>*<sp/>Y;<sp/>qa_sum[0][8]<sp/>-=<sp/>x<sp/>*<sp/>Z;</highlight></codeline>
-<codeline lineno="765"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[1][6]<sp/>-=<sp/>y<sp/>*<sp/>X;<sp/>qa_sum[1][7]<sp/>-=<sp/>y<sp/>*<sp/>Y;<sp/>qa_sum[1][8]<sp/>-=<sp/>y<sp/>*<sp/>Z;</highlight></codeline>
-<codeline lineno="766"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[2][6]<sp/>+=<sp/>sq_norm<sp/>*<sp/>X;<sp/>qa_sum[2][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Y;<sp/>qa_sum[2][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Z;</highlight></codeline>
-<codeline lineno="767"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="768"><highlight class="normal"></highlight></codeline>
-<codeline lineno="769"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[1][3]<sp/>=<sp/>qa_sum[0][0];<sp/>qa_sum[1][4]<sp/>=<sp/>qa_sum[0][1];<sp/>qa_sum[1][5]<sp/>=<sp/>qa_sum[0][2];</highlight></codeline>
-<codeline lineno="770"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[2][0]<sp/>=<sp/>qa_sum[0][6];<sp/>qa_sum[2][1]<sp/>=<sp/>qa_sum[0][7];<sp/>qa_sum[2][2]<sp/>=<sp/>qa_sum[0][8];</highlight></codeline>
-<codeline lineno="771"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[2][3]<sp/>=<sp/>qa_sum[1][6];<sp/>qa_sum[2][4]<sp/>=<sp/>qa_sum[1][7];<sp/>qa_sum[2][5]<sp/>=<sp/>qa_sum[1][8];</highlight></codeline>
-<codeline lineno="772"><highlight class="normal"></highlight></codeline>
-<codeline lineno="773"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[1][6]<sp/>=<sp/>omega[0][7];<sp/>omega[2][6]<sp/>=<sp/>omega[0][8];<sp/>omega[2][7]<sp/>=<sp/>omega[1][8];</highlight></codeline>
-<codeline lineno="774"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[4][6]<sp/>=<sp/>omega[3][7];<sp/>omega[5][6]<sp/>=<sp/>omega[3][8];<sp/>omega[5][7]<sp/>=<sp/>omega[4][8];</highlight></codeline>
-<codeline lineno="775"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[7][6]<sp/>=<sp/>omega[6][7];<sp/>omega[8][6]<sp/>=<sp/>omega[6][8];<sp/>omega[8][7]<sp/>=<sp/>omega[7][8];</highlight></codeline>
-<codeline lineno="776"><highlight class="normal"></highlight></codeline>
-<codeline lineno="777"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[3][3]<sp/>=<sp/>omega[0][0];<sp/>omega[3][4]<sp/>=<sp/>omega[0][1];<sp/>omega[3][5]<sp/>=<sp/>omega[0][2];</highlight></codeline>
-<codeline lineno="778"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[4][4]<sp/>=<sp/>omega[1][1];<sp/>omega[4][5]<sp/>=<sp/>omega[1][2];<sp/>omega[5][5]<sp/>=<sp/>omega[2][2];</highlight></codeline>
-<codeline lineno="779"><highlight class="normal"></highlight></codeline>
-<codeline lineno="780"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
-<codeline lineno="781"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>i;<sp/>++j)</highlight></codeline>
-<codeline lineno="782"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[i][j]<sp/>=<sp/>omega[j][i];</highlight></codeline>
-<codeline lineno="783"><highlight class="normal"></highlight></codeline>
-<codeline lineno="784"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x3<sp/>q<sp/>=<sp/>{};</highlight></codeline>
-<codeline lineno="785"><highlight class="normal"><sp/><sp/><sp/><sp/>q[0][0]<sp/>=<sp/>n;<sp/>q[0][1]<sp/>=<sp/>0;<sp/>q[0][2]<sp/>=<sp/>-sum_img.x;</highlight></codeline>
-<codeline lineno="786"><highlight class="normal"><sp/><sp/><sp/><sp/>q[1][0]<sp/>=<sp/>0;<sp/>q[1][1]<sp/>=<sp/>n;<sp/>q[1][2]<sp/>=<sp/>-sum_img.y;</highlight></codeline>
-<codeline lineno="787"><highlight class="normal"><sp/><sp/><sp/><sp/>q[2][0]<sp/>=<sp/>-sum_img.x;<sp/>q[2][1]<sp/>=<sp/>-sum_img.y;<sp/>q[2][2]<sp/>=<sp/>sq_norm_sum;</highlight></codeline>
-<codeline lineno="788"><highlight class="normal"></highlight></codeline>
-<codeline lineno="789"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x3<sp/>q_inv<sp/>=<sp/>{};</highlight></codeline>
-<codeline lineno="790"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!invertSPD3x3(q,<sp/>q_inv))</highlight></codeline>
-<codeline lineno="791"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="792"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!analyticalInverse3x3Symm(q,<sp/>q_inv))<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="793"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="794"><highlight class="normal"></highlight></codeline>
-<codeline lineno="795"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x9<sp/>p_mat<sp/>=<sp/>{};</highlight></codeline>
-<codeline lineno="796"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>3;<sp/>++i)</highlight></codeline>
-<codeline lineno="797"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>9;<sp/>++j)</highlight></codeline>
-<codeline lineno="798"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>3;<sp/>++k)</highlight></codeline>
-<codeline lineno="799"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>p_mat[i][j]<sp/>-=<sp/>q_inv[i][k]<sp/>*<sp/>qa_sum[k][j];</highlight></codeline>
-<codeline lineno="800"><highlight class="normal"></highlight></codeline>
-<codeline lineno="801"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
-<codeline lineno="802"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>9;<sp/>++j)</highlight></codeline>
-<codeline lineno="803"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>3;<sp/>++k)</highlight></codeline>
-<codeline lineno="804"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[i][j]<sp/>+=<sp/>qa_sum[k][i]<sp/>*<sp/>p_mat[k][j];</highlight></codeline>
-<codeline lineno="805"><highlight class="normal"></highlight></codeline>
-<codeline lineno="806"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compute<sp/>eigenvalues<sp/>and<sp/>eigenvectors<sp/>of<sp/>Omega</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="807"><highlight class="normal"><sp/><sp/><sp/><sp/>Vec9<sp/>s_eig;</highlight></codeline>
-<codeline lineno="808"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat9x9<sp/>u_mat;</highlight></codeline>
-<codeline lineno="809"><highlight class="normal"><sp/><sp/><sp/><sp/>jacobiSymmetric9x9(omega,<sp/>s_eig,<sp/>u_mat);</highlight></codeline>
-<codeline lineno="810"><highlight class="normal"></highlight></codeline>
-<codeline lineno="811"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(s_eig[0]<sp/>&lt;<sp/>1e-7)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="812"><highlight class="normal"></highlight></codeline>
-<codeline lineno="813"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Identify<sp/>nullspace<sp/>vectors<sp/>(smallest<sp/>eigenvalues)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="814"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_null<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="815"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(num_null<sp/>&lt;<sp/>6<sp/>&amp;&amp;<sp/>s_eig[8<sp/>-<sp/>num_null]<sp/>&lt;<sp/>RANK_TOLERANCE)<sp/>num_null++;</highlight></codeline>
-<codeline lineno="816"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(num_null<sp/>==<sp/>0)<sp/>num_null<sp/>=<sp/>1;</highlight></codeline>
-<codeline lineno="817"><highlight class="normal"></highlight></codeline>
-<codeline lineno="818"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>min_reproj_err<sp/>=<sp/>std::numeric_limits&lt;double&gt;::max();</highlight></codeline>
-<codeline lineno="819"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>best_R;</highlight></codeline>
-<codeline lineno="820"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>best_t;</highlight></codeline>
-<codeline lineno="821"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>found_solution<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="822"><highlight class="normal"></highlight></codeline>
-<codeline lineno="823"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>test_candidate_r<sp/>=<sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec9<sp/>&amp;r_hat)<sp/>{</highlight></codeline>
-<codeline lineno="824"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>R_cand(</highlight></codeline>
-<codeline lineno="825"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[0],<sp/>r_hat[3],<sp/>r_hat[6]),</highlight></codeline>
-<codeline lineno="826"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[1],<sp/>r_hat[4],<sp/>r_hat[7]),</highlight></codeline>
-<codeline lineno="827"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[2],<sp/>r_hat[5],<sp/>r_hat[8])</highlight></codeline>
-<codeline lineno="828"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
-<codeline lineno="829"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Translation<sp/>t<sp/>=<sp/>P<sp/>*<sp/>r_hat</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="830"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>t_cand(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
-<codeline lineno="831"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)</highlight></codeline>
-<codeline lineno="832"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="833"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.x<sp/>+=<sp/>p_mat[0][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
-<codeline lineno="834"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.y<sp/>+=<sp/>p_mat[1][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
-<codeline lineno="835"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.z<sp/>+=<sp/>p_mat[2][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
-<codeline lineno="836"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="837"><highlight class="normal"></highlight></codeline>
-<codeline lineno="838"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(t_cand.z<sp/>&gt;<sp/>0.01)</highlight></codeline>
-<codeline lineno="839"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="840"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>err<sp/>=<sp/>computeReprojectionError(object_points,<sp/>image_points,<sp/>R_cand,<sp/>t_cand,<sp/>fx,<sp/>fy,<sp/>cx,<sp/>cy);</highlight></codeline>
-<codeline lineno="841"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(err<sp/>&lt;<sp/>min_reproj_err)</highlight></codeline>
-<codeline lineno="842"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="843"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>min_reproj_err<sp/>=<sp/>err;</highlight></codeline>
-<codeline lineno="844"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>best_R<sp/>=<sp/>R_cand;</highlight></codeline>
-<codeline lineno="845"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>best_t<sp/>=<sp/>t_cand;</highlight></codeline>
-<codeline lineno="846"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>found_solution<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="847"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="848"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="849"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
-<codeline lineno="850"><highlight class="normal"></highlight></codeline>
-<codeline lineno="851"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>9<sp/>-<sp/>num_null;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
-<codeline lineno="852"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="853"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>e;</highlight></codeline>
-<codeline lineno="854"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>e[k]<sp/>=<sp/>SQRT3<sp/>*<sp/>u_mat[k][i];</highlight></codeline>
-<codeline lineno="855"><highlight class="normal"></highlight></codeline>
-<codeline lineno="856"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(orthogonalityError(e)<sp/>&lt;<sp/>ORTHOGONALITY_SQUARED_ERROR_THRESHOLD)</highlight></codeline>
-<codeline lineno="857"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="858"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d<sp/>=<sp/>det3x3(e);</highlight></codeline>
-<codeline lineno="859"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>r_hat;</highlight></codeline>
-<codeline lineno="860"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>r_hat[k]<sp/>=<sp/>d<sp/>*<sp/>e[k];</highlight></codeline>
-<codeline lineno="861"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(r_hat);</highlight></codeline>
-<codeline lineno="862"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="863"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="864"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="865"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>r1,<sp/>r2;</highlight></codeline>
-<codeline lineno="866"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nearestRotationMatrixFOAM(e,<sp/>r1);</highlight></codeline>
-<codeline lineno="867"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>opt_r1<sp/>=<sp/>runSQP(omega,<sp/>r1);</highlight></codeline>
-<codeline lineno="868"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(opt_r1);</highlight></codeline>
-<codeline lineno="869"><highlight class="normal"></highlight></codeline>
-<codeline lineno="870"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>minus_e;</highlight></codeline>
-<codeline lineno="871"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>minus_e[k]<sp/>=<sp/>-e[k];</highlight></codeline>
-<codeline lineno="872"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nearestRotationMatrixFOAM(minus_e,<sp/>r2);</highlight></codeline>
-<codeline lineno="873"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>opt_r2<sp/>=<sp/>runSQP(omega,<sp/>r2);</highlight></codeline>
-<codeline lineno="874"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(opt_r2);</highlight></codeline>
-<codeline lineno="875"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="876"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="877"><highlight class="normal"></highlight></codeline>
-<codeline lineno="878"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!found_solution)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="879"><highlight class="normal"></highlight></codeline>
-<codeline lineno="880"><highlight class="normal"><sp/><sp/><sp/><sp/>out_rotation<sp/>=<sp/>best_R;</highlight></codeline>
-<codeline lineno="881"><highlight class="normal"><sp/><sp/><sp/><sp/>out_translation<sp/>=<sp/>best_t;</highlight></codeline>
-<codeline lineno="882"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="883"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="884"><highlight class="normal"></highlight></codeline>
-<codeline lineno="885"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;Space<sp/>S&gt;</highlight></codeline>
-<codeline lineno="886"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec(</highlight></codeline>
-<codeline lineno="887"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;object_points,</highlight></codeline>
-<codeline lineno="888"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;S&gt;</ref>&gt;<sp/>&amp;image_points,</highlight></codeline>
-<codeline lineno="889"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fy,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cy,</highlight></codeline>
-<codeline lineno="890"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_rvec,</highlight></codeline>
-<codeline lineno="891"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_translation)</highlight></codeline>
-<codeline lineno="892"><highlight class="normal">{</highlight></codeline>
-<codeline lineno="893"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>R;</highlight></codeline>
-<codeline lineno="894"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kindref="member">solve&lt;S&gt;</ref>(object_points,<sp/>image_points,<sp/>fx,<sp/>fy,<sp/>cx,<sp/>cy,<sp/>R,<sp/>out_translation))</highlight></codeline>
-<codeline lineno="895"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
-<codeline lineno="896"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="897"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="898"><highlight class="normal"><sp/><sp/><sp/><sp/>out_rvec<sp/>=<sp/>basis_to_rodrigues&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;(R);</highlight></codeline>
-<codeline lineno="899"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="900"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="901"><highlight class="normal"></highlight></codeline>
-<codeline lineno="902"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Explicit<sp/>template<sp/>instantiations<sp/>for<sp/>supported<sp/>2D<sp/>spaces</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="903"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kindref="member">SQPnPSolver::solve&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>(</highlight></codeline>
-<codeline lineno="904"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="905"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="906"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="907"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</ref><sp/>&amp;,</highlight></codeline>
-<codeline lineno="908"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;);</highlight></codeline>
-<codeline lineno="909"><highlight class="normal"></highlight></codeline>
-<codeline lineno="910"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a1241abb25b689a755110b9d7298f1d09" kindref="member">SQPnPSolver::solve&lt;Space::GodotCameraImagePixels&gt;</ref>(</highlight></codeline>
-<codeline lineno="911"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="912"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="913"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="914"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</ref><sp/>&amp;,</highlight></codeline>
-<codeline lineno="915"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;);</highlight></codeline>
+<codeline lineno="713"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_translation,</highlight></codeline>
+<codeline lineno="714"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*out_squared_reproj_error)</highlight></codeline>
+<codeline lineno="715"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="716"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>n<sp/>=<sp/>object_points.size();</highlight></codeline>
+<codeline lineno="717"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(n<sp/>&lt;<sp/>4<sp/>||<sp/>image_points.size()<sp/>!=<sp/>n)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="718"><highlight class="normal"></highlight></codeline>
+<codeline lineno="719"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Convert<sp/>2D<sp/>image<sp/>points<sp/>to<sp/>normalized<sp/>camera<sp/>rays<sp/>(x,<sp/>y)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="720"><highlight class="normal"><sp/><sp/><sp/><sp/>std::vector&lt;SpacedVector2&lt;S&gt;&gt;<sp/>norm_img(n);</highlight></codeline>
+<codeline lineno="721"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedVector2&lt;S&gt;<sp/>sum_img(0.0,<sp/>0.0);</highlight></codeline>
+<codeline lineno="722"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVFaceVector3<sp/>sum_obj(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
+<codeline lineno="723"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sq_norm_sum<sp/>=<sp/>0.0;</highlight></codeline>
+<codeline lineno="724"><highlight class="normal"></highlight></codeline>
+<codeline lineno="725"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>n;<sp/>++i)</highlight></codeline>
+<codeline lineno="726"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="727"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>norm_img[i].x<sp/>=<sp/>(image_points[i].x<sp/>-<sp/>cx)<sp/>/<sp/>fx;</highlight></codeline>
+<codeline lineno="728"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>norm_img[i].y<sp/>=<sp/>(image_points[i].y<sp/>-<sp/>cy)<sp/>/<sp/>fy;</highlight></codeline>
+<codeline lineno="729"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_img.x<sp/>+=<sp/>norm_img[i].x;</highlight></codeline>
+<codeline lineno="730"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_img.y<sp/>+=<sp/>norm_img[i].y;</highlight></codeline>
+<codeline lineno="731"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.x<sp/>+=<sp/>object_points[i].x;</highlight></codeline>
+<codeline lineno="732"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.y<sp/>+=<sp/>object_points[i].y;</highlight></codeline>
+<codeline lineno="733"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sum_obj.z<sp/>+=<sp/>object_points[i].z;</highlight></codeline>
+<codeline lineno="734"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>sq_norm_sum<sp/>+=<sp/>norm_img[i].x<sp/>*<sp/>norm_img[i].x<sp/>+<sp/>norm_img[i].y<sp/>*<sp/>norm_img[i].y;</highlight></codeline>
+<codeline lineno="735"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="736"><highlight class="normal"></highlight></codeline>
+<codeline lineno="737"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat9x9<sp/>omega<sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="738"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x9<sp/>qa_sum<sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="739"><highlight class="normal"></highlight></codeline>
+<codeline lineno="740"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">size_t</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>n;<sp/>++i)</highlight></codeline>
+<codeline lineno="741"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="742"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>x<sp/>=<sp/>norm_img[i].x,<sp/>y<sp/>=<sp/>norm_img[i].y;</highlight></codeline>
+<codeline lineno="743"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>X<sp/>=<sp/>object_points[i].x,<sp/>Y<sp/>=<sp/>object_points[i].y,<sp/>Z<sp/>=<sp/>object_points[i].z;</highlight></codeline>
+<codeline lineno="744"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>sq_norm<sp/>=<sp/>x<sp/>*<sp/>x<sp/>+<sp/>y<sp/>*<sp/>y;</highlight></codeline>
+<codeline lineno="745"><highlight class="normal"></highlight></codeline>
+<codeline lineno="746"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>X2<sp/>=<sp/>X<sp/>*<sp/>X,<sp/>XY<sp/>=<sp/>X<sp/>*<sp/>Y,<sp/>XZ<sp/>=<sp/>X<sp/>*<sp/>Z;</highlight></codeline>
+<codeline lineno="747"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>Y2<sp/>=<sp/>Y<sp/>*<sp/>Y,<sp/>YZ<sp/>=<sp/>Y<sp/>*<sp/>Z,<sp/>Z2<sp/>=<sp/>Z<sp/>*<sp/>Z;</highlight></codeline>
+<codeline lineno="748"><highlight class="normal"></highlight></codeline>
+<codeline lineno="749"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[0][0]<sp/>+=<sp/>X2;<sp/>omega[0][1]<sp/>+=<sp/>XY;<sp/>omega[0][2]<sp/>+=<sp/>XZ;</highlight></codeline>
+<codeline lineno="750"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[1][1]<sp/>+=<sp/>Y2;<sp/>omega[1][2]<sp/>+=<sp/>YZ;<sp/>omega[2][2]<sp/>+=<sp/>Z2;</highlight></codeline>
+<codeline lineno="751"><highlight class="normal"></highlight></codeline>
+<codeline lineno="752"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[0][6]<sp/>-=<sp/>x<sp/>*<sp/>X2;<sp/>omega[0][7]<sp/>-=<sp/>x<sp/>*<sp/>XY;<sp/>omega[0][8]<sp/>-=<sp/>x<sp/>*<sp/>XZ;</highlight></codeline>
+<codeline lineno="753"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[1][7]<sp/>-=<sp/>x<sp/>*<sp/>Y2;<sp/>omega[1][8]<sp/>-=<sp/>x<sp/>*<sp/>YZ;</highlight></codeline>
+<codeline lineno="754"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[2][8]<sp/>-=<sp/>x<sp/>*<sp/>Z2;</highlight></codeline>
+<codeline lineno="755"><highlight class="normal"></highlight></codeline>
+<codeline lineno="756"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[3][6]<sp/>-=<sp/>y<sp/>*<sp/>X2;<sp/>omega[3][7]<sp/>-=<sp/>y<sp/>*<sp/>XY;<sp/>omega[3][8]<sp/>-=<sp/>y<sp/>*<sp/>XZ;</highlight></codeline>
+<codeline lineno="757"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[4][7]<sp/>-=<sp/>y<sp/>*<sp/>Y2;<sp/>omega[4][8]<sp/>-=<sp/>y<sp/>*<sp/>YZ;</highlight></codeline>
+<codeline lineno="758"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[5][8]<sp/>-=<sp/>y<sp/>*<sp/>Z2;</highlight></codeline>
+<codeline lineno="759"><highlight class="normal"></highlight></codeline>
+<codeline lineno="760"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[6][6]<sp/>+=<sp/>sq_norm<sp/>*<sp/>X2;<sp/>omega[6][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>XY;<sp/>omega[6][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>XZ;</highlight></codeline>
+<codeline lineno="761"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[7][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Y2;<sp/>omega[7][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>YZ;</highlight></codeline>
+<codeline lineno="762"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[8][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Z2;</highlight></codeline>
+<codeline lineno="763"><highlight class="normal"></highlight></codeline>
+<codeline lineno="764"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[0][0]<sp/>+=<sp/>X;<sp/>qa_sum[0][1]<sp/>+=<sp/>Y;<sp/>qa_sum[0][2]<sp/>+=<sp/>Z;</highlight></codeline>
+<codeline lineno="765"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[0][6]<sp/>-=<sp/>x<sp/>*<sp/>X;<sp/>qa_sum[0][7]<sp/>-=<sp/>x<sp/>*<sp/>Y;<sp/>qa_sum[0][8]<sp/>-=<sp/>x<sp/>*<sp/>Z;</highlight></codeline>
+<codeline lineno="766"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[1][6]<sp/>-=<sp/>y<sp/>*<sp/>X;<sp/>qa_sum[1][7]<sp/>-=<sp/>y<sp/>*<sp/>Y;<sp/>qa_sum[1][8]<sp/>-=<sp/>y<sp/>*<sp/>Z;</highlight></codeline>
+<codeline lineno="767"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>qa_sum[2][6]<sp/>+=<sp/>sq_norm<sp/>*<sp/>X;<sp/>qa_sum[2][7]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Y;<sp/>qa_sum[2][8]<sp/>+=<sp/>sq_norm<sp/>*<sp/>Z;</highlight></codeline>
+<codeline lineno="768"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="769"><highlight class="normal"></highlight></codeline>
+<codeline lineno="770"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[1][3]<sp/>=<sp/>qa_sum[0][0];<sp/>qa_sum[1][4]<sp/>=<sp/>qa_sum[0][1];<sp/>qa_sum[1][5]<sp/>=<sp/>qa_sum[0][2];</highlight></codeline>
+<codeline lineno="771"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[2][0]<sp/>=<sp/>qa_sum[0][6];<sp/>qa_sum[2][1]<sp/>=<sp/>qa_sum[0][7];<sp/>qa_sum[2][2]<sp/>=<sp/>qa_sum[0][8];</highlight></codeline>
+<codeline lineno="772"><highlight class="normal"><sp/><sp/><sp/><sp/>qa_sum[2][3]<sp/>=<sp/>qa_sum[1][6];<sp/>qa_sum[2][4]<sp/>=<sp/>qa_sum[1][7];<sp/>qa_sum[2][5]<sp/>=<sp/>qa_sum[1][8];</highlight></codeline>
+<codeline lineno="773"><highlight class="normal"></highlight></codeline>
+<codeline lineno="774"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[1][6]<sp/>=<sp/>omega[0][7];<sp/>omega[2][6]<sp/>=<sp/>omega[0][8];<sp/>omega[2][7]<sp/>=<sp/>omega[1][8];</highlight></codeline>
+<codeline lineno="775"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[4][6]<sp/>=<sp/>omega[3][7];<sp/>omega[5][6]<sp/>=<sp/>omega[3][8];<sp/>omega[5][7]<sp/>=<sp/>omega[4][8];</highlight></codeline>
+<codeline lineno="776"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[7][6]<sp/>=<sp/>omega[6][7];<sp/>omega[8][6]<sp/>=<sp/>omega[6][8];<sp/>omega[8][7]<sp/>=<sp/>omega[7][8];</highlight></codeline>
+<codeline lineno="777"><highlight class="normal"></highlight></codeline>
+<codeline lineno="778"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[3][3]<sp/>=<sp/>omega[0][0];<sp/>omega[3][4]<sp/>=<sp/>omega[0][1];<sp/>omega[3][5]<sp/>=<sp/>omega[0][2];</highlight></codeline>
+<codeline lineno="779"><highlight class="normal"><sp/><sp/><sp/><sp/>omega[4][4]<sp/>=<sp/>omega[1][1];<sp/>omega[4][5]<sp/>=<sp/>omega[1][2];<sp/>omega[5][5]<sp/>=<sp/>omega[2][2];</highlight></codeline>
+<codeline lineno="780"><highlight class="normal"></highlight></codeline>
+<codeline lineno="781"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
+<codeline lineno="782"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>i;<sp/>++j)</highlight></codeline>
+<codeline lineno="783"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[i][j]<sp/>=<sp/>omega[j][i];</highlight></codeline>
+<codeline lineno="784"><highlight class="normal"></highlight></codeline>
+<codeline lineno="785"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x3<sp/>q<sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="786"><highlight class="normal"><sp/><sp/><sp/><sp/>q[0][0]<sp/>=<sp/>n;<sp/>q[0][1]<sp/>=<sp/>0;<sp/>q[0][2]<sp/>=<sp/>-sum_img.x;</highlight></codeline>
+<codeline lineno="787"><highlight class="normal"><sp/><sp/><sp/><sp/>q[1][0]<sp/>=<sp/>0;<sp/>q[1][1]<sp/>=<sp/>n;<sp/>q[1][2]<sp/>=<sp/>-sum_img.y;</highlight></codeline>
+<codeline lineno="788"><highlight class="normal"><sp/><sp/><sp/><sp/>q[2][0]<sp/>=<sp/>-sum_img.x;<sp/>q[2][1]<sp/>=<sp/>-sum_img.y;<sp/>q[2][2]<sp/>=<sp/>sq_norm_sum;</highlight></codeline>
+<codeline lineno="789"><highlight class="normal"></highlight></codeline>
+<codeline lineno="790"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x3<sp/>q_inv<sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="791"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!invertSPD3x3(q,<sp/>q_inv))</highlight></codeline>
+<codeline lineno="792"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="793"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!analyticalInverse3x3Symm(q,<sp/>q_inv))<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="794"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="795"><highlight class="normal"></highlight></codeline>
+<codeline lineno="796"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat3x9<sp/>p_mat<sp/>=<sp/>{};</highlight></codeline>
+<codeline lineno="797"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>3;<sp/>++i)</highlight></codeline>
+<codeline lineno="798"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>9;<sp/>++j)</highlight></codeline>
+<codeline lineno="799"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>3;<sp/>++k)</highlight></codeline>
+<codeline lineno="800"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>p_mat[i][j]<sp/>-=<sp/>q_inv[i][k]<sp/>*<sp/>qa_sum[k][j];</highlight></codeline>
+<codeline lineno="801"><highlight class="normal"></highlight></codeline>
+<codeline lineno="802"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>0;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
+<codeline lineno="803"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>j<sp/>=<sp/>0;<sp/>j<sp/>&lt;<sp/>9;<sp/>++j)</highlight></codeline>
+<codeline lineno="804"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>3;<sp/>++k)</highlight></codeline>
+<codeline lineno="805"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>omega[i][j]<sp/>+=<sp/>qa_sum[k][i]<sp/>*<sp/>p_mat[k][j];</highlight></codeline>
+<codeline lineno="806"><highlight class="normal"></highlight></codeline>
+<codeline lineno="807"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Compute<sp/>eigenvalues<sp/>and<sp/>eigenvectors<sp/>of<sp/>Omega</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="808"><highlight class="normal"><sp/><sp/><sp/><sp/>Vec9<sp/>s_eig;</highlight></codeline>
+<codeline lineno="809"><highlight class="normal"><sp/><sp/><sp/><sp/>Mat9x9<sp/>u_mat;</highlight></codeline>
+<codeline lineno="810"><highlight class="normal"><sp/><sp/><sp/><sp/>jacobiSymmetric9x9(omega,<sp/>s_eig,<sp/>u_mat);</highlight></codeline>
+<codeline lineno="811"><highlight class="normal"></highlight></codeline>
+<codeline lineno="812"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(s_eig[0]<sp/>&lt;<sp/>1e-7)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="813"><highlight class="normal"></highlight></codeline>
+<codeline lineno="814"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Identify<sp/>nullspace<sp/>vectors<sp/>(smallest<sp/>eigenvalues)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="815"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>num_null<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="816"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(num_null<sp/>&lt;<sp/>6<sp/>&amp;&amp;<sp/>s_eig[8<sp/>-<sp/>num_null]<sp/>&lt;<sp/>RANK_TOLERANCE)<sp/>num_null++;</highlight></codeline>
+<codeline lineno="817"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(num_null<sp/>==<sp/>0)<sp/>num_null<sp/>=<sp/>1;</highlight></codeline>
+<codeline lineno="818"><highlight class="normal"></highlight></codeline>
+<codeline lineno="819"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>min_reproj_err<sp/>=<sp/>std::numeric_limits&lt;double&gt;::max();</highlight></codeline>
+<codeline lineno="820"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>best_R;</highlight></codeline>
+<codeline lineno="821"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>best_t;</highlight></codeline>
+<codeline lineno="822"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>found_solution<sp/>=<sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="823"><highlight class="normal"></highlight></codeline>
+<codeline lineno="824"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">auto</highlight><highlight class="normal"><sp/>test_candidate_r<sp/>=<sp/>[&amp;](</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vec9<sp/>&amp;r_hat)<sp/>{</highlight></codeline>
+<codeline lineno="825"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>R_cand(</highlight></codeline>
+<codeline lineno="826"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[0],<sp/>r_hat[3],<sp/>r_hat[6]),</highlight></codeline>
+<codeline lineno="827"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[1],<sp/>r_hat[4],<sp/>r_hat[7]),</highlight></codeline>
+<codeline lineno="828"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3(r_hat[2],<sp/>r_hat[5],<sp/>r_hat[8])</highlight></codeline>
+<codeline lineno="829"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>);</highlight></codeline>
+<codeline lineno="830"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Translation<sp/>t<sp/>=<sp/>P<sp/>*<sp/>r_hat</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="831"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>t_cand(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
+<codeline lineno="832"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)</highlight></codeline>
+<codeline lineno="833"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="834"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.x<sp/>+=<sp/>p_mat[0][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
+<codeline lineno="835"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.y<sp/>+=<sp/>p_mat[1][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
+<codeline lineno="836"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>t_cand.z<sp/>+=<sp/>p_mat[2][k]<sp/>*<sp/>r_hat[k];</highlight></codeline>
+<codeline lineno="837"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="838"><highlight class="normal"></highlight></codeline>
+<codeline lineno="839"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(t_cand.z<sp/>&gt;<sp/>0.01)</highlight></codeline>
+<codeline lineno="840"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="841"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>err<sp/>=<sp/>computeReprojectionError(object_points,<sp/>image_points,<sp/>R_cand,<sp/>t_cand,<sp/>fx,<sp/>fy,<sp/>cx,<sp/>cy);</highlight></codeline>
+<codeline lineno="842"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(err<sp/>&lt;<sp/>min_reproj_err)</highlight></codeline>
+<codeline lineno="843"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="844"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>min_reproj_err<sp/>=<sp/>err;</highlight></codeline>
+<codeline lineno="845"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>best_R<sp/>=<sp/>R_cand;</highlight></codeline>
+<codeline lineno="846"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>best_t<sp/>=<sp/>t_cand;</highlight></codeline>
+<codeline lineno="847"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>found_solution<sp/>=<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="848"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="849"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="850"><highlight class="normal"><sp/><sp/><sp/><sp/>};</highlight></codeline>
+<codeline lineno="851"><highlight class="normal"></highlight></codeline>
+<codeline lineno="852"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>9<sp/>-<sp/>num_null;<sp/>i<sp/>&lt;<sp/>9;<sp/>++i)</highlight></codeline>
+<codeline lineno="853"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="854"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>e;</highlight></codeline>
+<codeline lineno="855"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>e[k]<sp/>=<sp/>SQRT3<sp/>*<sp/>u_mat[k][i];</highlight></codeline>
+<codeline lineno="856"><highlight class="normal"></highlight></codeline>
+<codeline lineno="857"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(orthogonalityError(e)<sp/>&lt;<sp/>ORTHOGONALITY_SQUARED_ERROR_THRESHOLD)</highlight></codeline>
+<codeline lineno="858"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="859"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>d<sp/>=<sp/>det3x3(e);</highlight></codeline>
+<codeline lineno="860"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>r_hat;</highlight></codeline>
+<codeline lineno="861"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>r_hat[k]<sp/>=<sp/>d<sp/>*<sp/>e[k];</highlight></codeline>
+<codeline lineno="862"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(r_hat);</highlight></codeline>
+<codeline lineno="863"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="864"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="865"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="866"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>r1,<sp/>r2;</highlight></codeline>
+<codeline lineno="867"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nearestRotationMatrixFOAM(e,<sp/>r1);</highlight></codeline>
+<codeline lineno="868"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>opt_r1<sp/>=<sp/>runSQP(omega,<sp/>r1);</highlight></codeline>
+<codeline lineno="869"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(opt_r1);</highlight></codeline>
+<codeline lineno="870"><highlight class="normal"></highlight></codeline>
+<codeline lineno="871"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>minus_e;</highlight></codeline>
+<codeline lineno="872"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal"><sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>k<sp/>=<sp/>0;<sp/>k<sp/>&lt;<sp/>9;<sp/>++k)<sp/>minus_e[k]<sp/>=<sp/>-e[k];</highlight></codeline>
+<codeline lineno="873"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>nearestRotationMatrixFOAM(minus_e,<sp/>r2);</highlight></codeline>
+<codeline lineno="874"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vec9<sp/>opt_r2<sp/>=<sp/>runSQP(omega,<sp/>r2);</highlight></codeline>
+<codeline lineno="875"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>test_candidate_r(opt_r2);</highlight></codeline>
+<codeline lineno="876"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="877"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="878"><highlight class="normal"></highlight></codeline>
+<codeline lineno="879"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!found_solution)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="880"><highlight class="normal"></highlight></codeline>
+<codeline lineno="881"><highlight class="normal"><sp/><sp/><sp/><sp/>out_rotation<sp/>=<sp/>best_R;</highlight></codeline>
+<codeline lineno="882"><highlight class="normal"><sp/><sp/><sp/><sp/>out_translation<sp/>=<sp/>best_t;</highlight></codeline>
+<codeline lineno="883"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(out_squared_reproj_error)</highlight></codeline>
+<codeline lineno="884"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="885"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*out_squared_reproj_error<sp/>=<sp/>min_reproj_err;</highlight></codeline>
+<codeline lineno="886"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="887"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="888"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="889"><highlight class="normal"></highlight></codeline>
+<codeline lineno="890"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal">&lt;Space<sp/>S&gt;</highlight></codeline>
+<codeline lineno="891"><highlight class="normal"></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec(</highlight></codeline>
+<codeline lineno="892"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;object_points,</highlight></codeline>
+<codeline lineno="893"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;S&gt;</ref>&gt;<sp/>&amp;image_points,</highlight></codeline>
+<codeline lineno="894"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>fy,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cx,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>cy,</highlight></codeline>
+<codeline lineno="895"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_rvec,</highlight></codeline>
+<codeline lineno="896"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;out_translation,</highlight></codeline>
+<codeline lineno="897"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*out_squared_reproj_error)</highlight></codeline>
+<codeline lineno="898"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="899"><highlight class="normal"><sp/><sp/><sp/><sp/>SpacedBasis&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;<sp/>R;</highlight></codeline>
+<codeline lineno="900"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!<ref refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" kindref="member">solve&lt;S&gt;</ref>(object_points,<sp/>image_points,<sp/>fx,<sp/>fy,<sp/>cx,<sp/>cy,<sp/>R,<sp/>out_translation,<sp/>out_squared_reproj_error))</highlight></codeline>
+<codeline lineno="901"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="902"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">false</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="903"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="904"><highlight class="normal"><sp/><sp/><sp/><sp/>out_rvec<sp/>=<sp/>basis_to_rodrigues&lt;Space::OpenCVFaceModel,<sp/>Space::OpenCVCamera&gt;(R);</highlight></codeline>
+<codeline lineno="905"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="906"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="907"><highlight class="normal"></highlight></codeline>
+<codeline lineno="908"><highlight class="normal"></highlight><highlight class="comment">//<sp/>Explicit<sp/>template<sp/>instantiations<sp/>for<sp/>supported<sp/>2D<sp/>spaces</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="909"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" kindref="member">SQPnPSolver::solve&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>(</highlight></codeline>
+<codeline lineno="910"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="911"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="912"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="913"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</ref><sp/>&amp;,</highlight></codeline>
+<codeline lineno="914"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="915"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
 <codeline lineno="916"><highlight class="normal"></highlight></codeline>
-<codeline lineno="917"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec&lt;Space::GodotCameraWorkingImagePixels&gt;(</highlight></codeline>
+<codeline lineno="917"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/><ref refid="class_gaze_1_1_s_q_pn_p_solver_1a7368f5c7343c842188341aeaa5eba229" kindref="member">SQPnPSolver::solve&lt;Space::GodotCameraImagePixels&gt;</ref>(</highlight></codeline>
 <codeline lineno="918"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="919"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="919"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
 <codeline lineno="920"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="921"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
-<codeline lineno="922"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;);</highlight></codeline>
-<codeline lineno="923"><highlight class="normal"></highlight></codeline>
-<codeline lineno="924"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec&lt;Space::GodotCameraImagePixels&gt;(</highlight></codeline>
-<codeline lineno="925"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="926"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
-<codeline lineno="927"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
-<codeline lineno="928"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
-<codeline lineno="929"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;);</highlight></codeline>
-<codeline lineno="930"><highlight class="normal"></highlight></codeline>
-<codeline lineno="931"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="921"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="struct_gaze_1_1_spaced_basis" kindref="compound">SpacedBasis&lt;Space::OpenCVFaceModel, Space::OpenCVCamera&gt;</ref><sp/>&amp;,</highlight></codeline>
+<codeline lineno="922"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="923"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+<codeline lineno="924"><highlight class="normal"></highlight></codeline>
+<codeline lineno="925"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec&lt;Space::GodotCameraWorkingImagePixels&gt;(</highlight></codeline>
+<codeline lineno="926"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="927"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraWorkingImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="928"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="929"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="930"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="931"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+<codeline lineno="932"><highlight class="normal"></highlight></codeline>
+<codeline lineno="933"><highlight class="normal"></highlight><highlight class="keyword">template</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>SQPnPSolver::solve_rvec&lt;Space::GodotCameraImagePixels&gt;(</highlight></codeline>
+<codeline lineno="934"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;OpenCVFaceVector3&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="935"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>std::vector&lt;<ref refid="struct_gaze_1_1_spaced_vector2" kindref="compound">SpacedVector2&lt;Space::GodotCameraImagePixels&gt;</ref>&gt;<sp/>&amp;,</highlight></codeline>
+<codeline lineno="936"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,<sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal">,</highlight></codeline>
+<codeline lineno="937"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="938"><highlight class="normal"><sp/><sp/><sp/><sp/>OpenCVCameraVector3<sp/>&amp;,</highlight></codeline>
+<codeline lineno="939"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>*);</highlight></codeline>
+<codeline lineno="940"><highlight class="normal"></highlight></codeline>
+<codeline lineno="941"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>Gaze</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/core/sqpnp_solver.cpp"/>
   </compounddef>

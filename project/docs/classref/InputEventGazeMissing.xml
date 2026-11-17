@@ -6,20 +6,33 @@
 	<methods>
 		<method name="is_face_tracked">
 			<return type="bool"></return>
-			<description></description>
+			<description>Indicates whether valid face tracking data is present in this event.
+
+bool True if face is tracked; false for missing or lost tracking events.
+
+bool True if face is tracked; false for missing or lost tracking events.</description>
 		</method>
 		<method name="set_reason">
 			<return type="void"></return>
 			<param index="0" name="p_reason" type="MissingReason"></param>
-			<description></description>
+			<description>Sets the reason why gaze tracking was not achieved for this frame.
+
+p_reason
+MissingReason enum value.
+
+MissingReason enum value.</description>
 		</method>
 		<method name="get_reason">
 			<return type="MissingReason"></return>
-			<description></description>
+			<description>Retrieves the reason why gaze tracking was not achieved for this frame.
+
+MissingReason Enum value indicating the cause.
+
+MissingReason Enum value indicating the cause.</description>
 		</method>
 		<method name="copy_from">
 			<return type="void"></return>
-			<param index="0" name="p_other" type="const Ref&lt; InputEventGazeMissing &gt; &amp;"></param>
+			<param index="0" name="p_other" type="const Ref&lt; InputEventGazeBase &gt; &amp;"></param>
 			<description></description>
 		</method>
 		<method name="as_text">

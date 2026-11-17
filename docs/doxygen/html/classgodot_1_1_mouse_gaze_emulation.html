@@ -48,7 +48,7 @@ mermaid.initialize({ startOnLoad: true, theme: theme });
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;1.0.0</span>
+   <div id="projectname">Godot Gaze<span id="projectnumber">&#160;0.1.0</span>
    </div>
    <div id="projectbrief">Advanced Gaze and Head Pose Tracking GDExtension for Godot Engine</div>
   </td>
@@ -144,6 +144,14 @@ Public Member Functions</h2></td></tr>
 void&#160;</td><td class="memItemRight"><b>set_dwell_time</b> (float p_sec)</td></tr>
 <tr class="memitem:a2cdce985a5d4d3817ea234293f9bdebb" id="r_a2cdce985a5d4d3817ea234293f9bdebb"><td class="memItemLeft"><a id="a2cdce985a5d4d3817ea234293f9bdebb" name="a2cdce985a5d4d3817ea234293f9bdebb"></a>
 float&#160;</td><td class="memItemRight"><b>get_dwell_time</b> () const</td></tr>
+<tr class="memitem:aec3f79ba0f11b5e433c247c5877bf536" id="r_aec3f79ba0f11b5e433c247c5877bf536"><td class="memItemLeft"><a id="aec3f79ba0f11b5e433c247c5877bf536" name="aec3f79ba0f11b5e433c247c5877bf536"></a>
+void&#160;</td><td class="memItemRight"><b>set_stillness_duration</b> (float p_sec)</td></tr>
+<tr class="memitem:a61b8da3c0f024e7eb1d7086365636f9f" id="r_a61b8da3c0f024e7eb1d7086365636f9f"><td class="memItemLeft"><a id="a61b8da3c0f024e7eb1d7086365636f9f" name="a61b8da3c0f024e7eb1d7086365636f9f"></a>
+float&#160;</td><td class="memItemRight"><b>get_stillness_duration</b> () const</td></tr>
+<tr class="memitem:a7aac969d181f9fc791cf51c698d57301" id="r_a7aac969d181f9fc791cf51c698d57301"><td class="memItemLeft"><a id="a7aac969d181f9fc791cf51c698d57301" name="a7aac969d181f9fc791cf51c698d57301"></a>
+void&#160;</td><td class="memItemRight"><b>set_stillness_threshold</b> (float p_px)</td></tr>
+<tr class="memitem:a1f3f9100e591ab596629fc34921264c3" id="r_a1f3f9100e591ab596629fc34921264c3"><td class="memItemLeft"><a id="a1f3f9100e591ab596629fc34921264c3" name="a1f3f9100e591ab596629fc34921264c3"></a>
+float&#160;</td><td class="memItemRight"><b>get_stillness_threshold</b> () const</td></tr>
 <tr class="memitem:a00e12d116326073fb5735a10712fe4e9" id="r_a00e12d116326073fb5735a10712fe4e9"><td class="memItemLeft"><a id="a00e12d116326073fb5735a10712fe4e9" name="a00e12d116326073fb5735a10712fe4e9"></a>
 void&#160;</td><td class="memItemRight"><b>set_transition_duration</b> (float p_sec)</td></tr>
 <tr class="memitem:af2b999207383e834ebae202c21e7f763" id="r_af2b999207383e834ebae202c21e7f763"><td class="memItemLeft"><a id="af2b999207383e834ebae202c21e7f763" name="af2b999207383e834ebae202c21e7f763"></a>
@@ -152,10 +160,18 @@ float&#160;</td><td class="memItemRight"><b>get_transition_duration</b> () const
 void&#160;</td><td class="memItemRight"><b>set_motion_threshold</b> (float p_px)</td></tr>
 <tr class="memitem:a7f1a095c1fe48e6b320fda6c6428abc3" id="r_a7f1a095c1fe48e6b320fda6c6428abc3"><td class="memItemLeft"><a id="a7f1a095c1fe48e6b320fda6c6428abc3" name="a7f1a095c1fe48e6b320fda6c6428abc3"></a>
 float&#160;</td><td class="memItemRight"><b>get_motion_threshold</b> () const</td></tr>
+<tr class="memitem:ab08a302e8a02d695f846fd477c81de8a" id="r_ab08a302e8a02d695f846fd477c81de8a"><td class="memItemLeft"><a id="ab08a302e8a02d695f846fd477c81de8a" name="ab08a302e8a02d695f846fd477c81de8a"></a>
+bool&#160;</td><td class="memItemRight"><b>is_physical_mouse_still</b> () const</td></tr>
+<tr class="memitem:a7157894ee9f2b519da722738de09e9bd" id="r_a7157894ee9f2b519da722738de09e9bd"><td class="memItemLeft"><a id="a7157894ee9f2b519da722738de09e9bd" name="a7157894ee9f2b519da722738de09e9bd"></a>
+bool&#160;</td><td class="memItemRight"><b>is_physical_mouse_active</b> () const</td></tr>
+<tr class="memitem:a9e38f1115fe63ac589caebd31e6a211e" id="r_a9e38f1115fe63ac589caebd31e6a211e"><td class="memItemLeft"><a id="a9e38f1115fe63ac589caebd31e6a211e" name="a9e38f1115fe63ac589caebd31e6a211e"></a>
+bool&#160;</td><td class="memItemRight"><b>has_interacted</b> () const</td></tr>
+<tr class="memitem:ab84b9180fb0514a741a43b0d6905f15a" id="r_ab84b9180fb0514a741a43b0d6905f15a"><td class="memItemLeft"><a id="ab84b9180fb0514a741a43b0d6905f15a" name="ab84b9180fb0514a741a43b0d6905f15a"></a>
+float&#160;</td><td class="memItemRight"><b>get_stillness_timer</b> () const</td></tr>
 <tr class="memitem:a9e74a89a6854d3fb68fbbdf9cdc7a9a0" id="r_a9e74a89a6854d3fb68fbbdf9cdc7a9a0"><td class="memItemLeft"><a id="a9e74a89a6854d3fb68fbbdf9cdc7a9a0" name="a9e74a89a6854d3fb68fbbdf9cdc7a9a0"></a>
 void&#160;</td><td class="memItemRight"><b>notify_camera_event</b> (const Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_base.html">InputEventGazeBase</a> &gt; &amp;p_cam_event)</td></tr>
-<tr class="memitem:ad99c6c67b39f951d13c96bc39855c20a" id="r_ad99c6c67b39f951d13c96bc39855c20a"><td class="memItemLeft"><a id="ad99c6c67b39f951d13c96bc39855c20a" name="ad99c6c67b39f951d13c96bc39855c20a"></a>
-void&#160;</td><td class="memItemRight"><b>update</b> (double p_delta_sec, bool p_camera_tracking_active, bool p_face_detected, bool p_emulate_gaze_from_mouse, DisplayServer *p_ds)</td></tr>
+<tr class="memitem:a066ee263cdcfa190d751da92e31bb8a9" id="r_a066ee263cdcfa190d751da92e31bb8a9"><td class="memItemLeft"><a id="a066ee263cdcfa190d751da92e31bb8a9" name="a066ee263cdcfa190d751da92e31bb8a9"></a>
+void&#160;</td><td class="memItemRight"><b>update</b> (double p_delta_sec, bool p_camera_tracking_active, bool p_face_detected, bool p_emulate_gaze_from_mouse, bool p_emulate_mouse_from_gaze, <a class="el" href="classgodot_1_1_gaze_display_server.html">GazeDisplayServer</a> *p_gds)</td></tr>
 <tr class="memitem:a3345192d5a062013b209db4e285bae74" id="r_a3345192d5a062013b209db4e285bae74"><td class="memItemLeft"><a id="a3345192d5a062013b209db4e285bae74" name="a3345192d5a062013b209db4e285bae74"></a>
 bool&#160;</td><td class="memItemRight"><b>is_emulation_active</b> () const</td></tr>
 <tr class="memitem:ac36edc4787dffd8ad575392e70965f88" id="r_ac36edc4787dffd8ad575392e70965f88"><td class="memItemLeft"><a id="ac36edc4787dffd8ad575392e70965f88" name="ac36edc4787dffd8ad575392e70965f88"></a>
@@ -166,8 +182,8 @@ float&#160;</td><td class="memItemRight"><b>get_dwell_timer</b> () const</td></t
 float&#160;</td><td class="memItemRight"><b>get_blend_progress</b> () const</td></tr>
 <tr class="memitem:a7f3e88da3516e15cdd2cfca90b7ea651" id="r_a7f3e88da3516e15cdd2cfca90b7ea651"><td class="memItemLeft"><a id="a7f3e88da3516e15cdd2cfca90b7ea651" name="a7f3e88da3516e15cdd2cfca90b7ea651"></a>
 float&#160;</td><td class="memItemRight"><b>get_eased_blend_factor</b> () const</td></tr>
-<tr class="memitem:a474f5948d1b127f84103d44dd6223e4f" id="r_a474f5948d1b127f84103d44dd6223e4f"><td class="memItemLeft"><a id="a474f5948d1b127f84103d44dd6223e4f" name="a474f5948d1b127f84103d44dd6223e4f"></a>
-Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_base.html">InputEventGazeBase</a> &gt;&#160;</td><td class="memItemRight"><b>synthesize_event</b> (DisplayServer *p_ds, const Ref&lt; <a class="el" href="classgodot_1_1_gaze_device_profile.html">GazeDeviceProfile</a> &gt; &amp;p_profile, const Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; &amp;p_event_factory, uint64_t &amp;r_frame_id, uint64_t &amp;r_last_event_time_usec, Vector2 &amp;r_last_gaze_pos, Vector2 &amp;r_last_screen_pos)</td></tr>
+<tr class="memitem:a96dd95d6a8dcc404f5429419849cd238" id="r_a96dd95d6a8dcc404f5429419849cd238"><td class="memItemLeft"><a id="a96dd95d6a8dcc404f5429419849cd238" name="a96dd95d6a8dcc404f5429419849cd238"></a>
+Ref&lt; <a class="el" href="classgodot_1_1_input_event_gaze_base.html">InputEventGazeBase</a> &gt;&#160;</td><td class="memItemRight"><b>synthesize_event</b> (<a class="el" href="classgodot_1_1_gaze_display_server.html">GazeDisplayServer</a> *p_gds, const Ref&lt; <a class="el" href="classgodot_1_1_gaze_device_profile.html">GazeDeviceProfile</a> &gt; &amp;p_profile, const Ref&lt; <a class="el" href="classgodot_1_1_gaze_event_factory.html">GazeEventFactory</a> &gt; &amp;p_event_factory, uint64_t &amp;r_frame_id, uint64_t &amp;r_last_event_time_usec, Vector2 &amp;r_last_gaze_pos, Vector2 &amp;r_last_screen_pos)</td></tr>
 <tr class="memitem:ae5683ebe731de153dd75ef8e32eba833" id="r_ae5683ebe731de153dd75ef8e32eba833"><td class="memItemLeft"><a id="ae5683ebe731de153dd75ef8e32eba833" name="ae5683ebe731de153dd75ef8e32eba833"></a>
 void&#160;</td><td class="memItemRight"><b>reset</b> ()</td></tr>
 </table>

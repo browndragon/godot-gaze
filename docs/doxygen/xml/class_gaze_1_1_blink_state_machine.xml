@@ -1,0 +1,304 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="class_gaze_1_1_blink_state_machine" kind="class" language="C++" prot="public">
+    <compoundname>Gaze::BlinkStateMachine</compoundname>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18" prot="public" static="no" strong="no">
+        <type></type>
+        <name>State</name>
+        <qualifiedname>Gaze::BlinkStateMachine::State</qualifiedname>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18a1a923d1faf2c60f419f5bc5e23f02cc2" prot="public">
+          <name>STATE_UNTRACKED</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18ad0fbeaa021302a26948a2b443b036db7" prot="public">
+          <name>STATE_EYES_OPEN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18aa60d0339ffced18f7d6747f8e05ddd77" prot="public">
+          <name>STATE_CLICK_PRESSED</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="18" column="5" bodyfile="src/core/blink_state_machine.hpp" bodystart="18" bodyend="22"/>
+      </memberdef>
+      <memberdef kind="enum" id="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Action</name>
+        <qualifiedname>Gaze::BlinkStateMachine::Action</qualifiedname>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a4e3c63f7eaac1632dff6f8b4ec07660b" prot="public">
+          <name>ACTION_NONE</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56aa1315053f5b2ffb3c3bde1c0d358e7a0" prot="public">
+          <name>ACTION_BUTTON_DOWN</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a27f477d746a7008c0b88e17c5ce234c8" prot="public">
+          <name>ACTION_BUTTON_UP</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="24" column="5" bodyfile="src/core/blink_state_machine.hpp" bodystart="24" bodyend="28"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="class_gaze_1_1_blink_state_machine_1a7384f090c32d6083f3b7d165e76d37f6" prot="public" static="no" mutable="no">
+        <type>State</type>
+        <definition>State Gaze::BlinkStateMachine::state</definition>
+        <argsstring></argsstring>
+        <name>state</name>
+        <qualifiedname>Gaze::BlinkStateMachine::state</qualifiedname>
+        <initializer>= STATE_UNTRACKED</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="30" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_blink_state_machine_1ad6934cd5e5f7d4e177e7ae388991ace8" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::BlinkStateMachine::open_threshold</definition>
+        <argsstring></argsstring>
+        <name>open_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::open_threshold</qualifiedname>
+        <initializer>= 0.35f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="31" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="class_gaze_1_1_blink_state_machine_1a1a1767e04dd2d3c87d52e8cf64a23f52" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float Gaze::BlinkStateMachine::close_threshold</definition>
+        <argsstring></argsstring>
+        <name>close_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::close_threshold</qualifiedname>
+        <initializer>= 0.25f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="32" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1ab7c6df569f4ed4146b335a947615e5b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>Gaze::BlinkStateMachine::BlinkStateMachine</definition>
+        <argsstring>()=default</argsstring>
+        <name>BlinkStateMachine</name>
+        <qualifiedname>Gaze::BlinkStateMachine::BlinkStateMachine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="34" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1af8a24e59ac33094231e6ce9570a1af84" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::BlinkStateMachine::reset</definition>
+        <argsstring>(Action &amp;out_action)</argsstring>
+        <name>reset</name>
+        <qualifiedname>Gaze::BlinkStateMachine::reset</qualifiedname>
+        <param>
+          <type>Action &amp;</type>
+          <declname>out_action</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="36" column="10" bodyfile="src/core/blink_state_machine.hpp" bodystart="36" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1afd8371ccd59d25bf6a1f4b6cceac04c1" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>Action</type>
+        <definition>Action Gaze::BlinkStateMachine::update</definition>
+        <argsstring>(bool face_detected, float left_open, float right_open, bool physical_mouse_active)</argsstring>
+        <name>update</name>
+        <qualifiedname>Gaze::BlinkStateMachine::update</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>face_detected</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>left_open</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>right_open</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>physical_mouse_active</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="45" column="12" bodyfile="src/core/blink_state_machine.hpp" bodystart="45" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1aed136fc7b6ccff895dc054f7d40ac6b4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool Gaze::BlinkStateMachine::is_button_down</definition>
+        <argsstring>() const</argsstring>
+        <name>is_button_down</name>
+        <qualifiedname>Gaze::BlinkStateMachine::is_button_down</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="87" column="10" bodyfile="src/core/blink_state_machine.hpp" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1a0917d0e685770863dc89b5604edda393" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>State</type>
+        <definition>State Gaze::BlinkStateMachine::get_state</definition>
+        <argsstring>() const</argsstring>
+        <name>get_state</name>
+        <qualifiedname>Gaze::BlinkStateMachine::get_state</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="88" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1a6a32e054b3c25c6704e04009d1d7d53a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::BlinkStateMachine::set_open_threshold</definition>
+        <argsstring>(float p_th)</argsstring>
+        <name>set_open_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::set_open_threshold</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_th</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="89" column="10" bodyfile="src/core/blink_state_machine.hpp" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1aec60bbe5397e2e2e6c24ed85bd2ff85d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::BlinkStateMachine::get_open_threshold</definition>
+        <argsstring>() const</argsstring>
+        <name>get_open_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::get_open_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="90" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1ac64d0eb21a9114399fd9ef5ec418a7a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Gaze::BlinkStateMachine::set_close_threshold</definition>
+        <argsstring>(float p_th)</argsstring>
+        <name>set_close_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::set_close_threshold</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>p_th</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="91" column="10" bodyfile="src/core/blink_state_machine.hpp" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="class_gaze_1_1_blink_state_machine_1ab1eb022f755242c731685ce35b239cfa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float</type>
+        <definition>float Gaze::BlinkStateMachine::get_close_threshold</definition>
+        <argsstring>() const</argsstring>
+        <name>get_close_threshold</name>
+        <qualifiedname>Gaze::BlinkStateMachine::get_close_threshold</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/core/blink_state_machine.hpp" line="92" column="11" bodyfile="src/core/blink_state_machine.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/core/blink_state_machine.hpp" line="16" column="1" bodyfile="src/core/blink_state_machine.hpp" bodystart="16" bodyend="93"/>
+    <listofallmembers>
+      <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>Action</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56aa1315053f5b2ffb3c3bde1c0d358e7a0" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>ACTION_BUTTON_DOWN</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a27f477d746a7008c0b88e17c5ce234c8" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>ACTION_BUTTON_UP</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a2509ed887d7551057ca25e40b5880a56a4e3c63f7eaac1632dff6f8b4ec07660b" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>ACTION_NONE</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1ab7c6df569f4ed4146b335a947615e5b2" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>BlinkStateMachine</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a1a1767e04dd2d3c87d52e8cf64a23f52" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>close_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1ab1eb022f755242c731685ce35b239cfa" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>get_close_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1aec60bbe5397e2e2e6c24ed85bd2ff85d" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>get_open_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a0917d0e685770863dc89b5604edda393" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>get_state</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1aed136fc7b6ccff895dc054f7d40ac6b4" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>is_button_down</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1ad6934cd5e5f7d4e177e7ae388991ace8" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>open_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1af8a24e59ac33094231e6ce9570a1af84" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>reset</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1ac64d0eb21a9114399fd9ef5ec418a7a6" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>set_close_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a6a32e054b3c25c6704e04009d1d7d53a" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>set_open_threshold</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>State</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1a7384f090c32d6083f3b7d165e76d37f6" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>state</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18aa60d0339ffced18f7d6747f8e05ddd77" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>STATE_CLICK_PRESSED</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18ad0fbeaa021302a26948a2b443b036db7" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>STATE_EYES_OPEN</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1adebe5427f958d7a7f0a65600199d2c18a1a923d1faf2c60f419f5bc5e23f02cc2" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>STATE_UNTRACKED</name></member>
+      <member refid="class_gaze_1_1_blink_state_machine_1afd8371ccd59d25bf6a1f4b6cceac04c1" prot="public" virt="non-virtual"><scope>Gaze::BlinkStateMachine</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

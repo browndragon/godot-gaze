@@ -11,61 +11,65 @@
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
     <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
     <incdepgraph>
-      <node id="48">
+      <node id="55">
+        <label>../core/blink_state_machine.hpp</label>
+        <link refid="blink__state__machine_8hpp"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
         <label>camera_interface.hpp</label>
         <link refid="camera__interface_8hpp"/>
+        <childnode refid="22" relation="include">
+        </childnode>
         <childnode refid="21" relation="include">
         </childnode>
-        <childnode refid="20" relation="include">
-        </childnode>
       </node>
-      <node id="16">
+      <node id="17">
         <label>camera_placement.hpp</label>
         <link refid="camera__placement_8hpp"/>
-        <childnode refid="17" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
       </node>
-      <node id="25">
+      <node id="26">
         <label>../core/face_model_geometry.hpp</label>
         <link refid="face__model__geometry_8hpp"/>
-        <childnode refid="17" relation="include">
+        <childnode refid="18" relation="include">
         </childnode>
-        <childnode refid="23" relation="include">
+        <childnode refid="24" relation="include">
         </childnode>
       </node>
-      <node id="46">
+      <node id="52">
         <label>face_pipeline.hpp</label>
         <link refid="face__pipeline_8hpp"/>
-        <childnode refid="47" relation="include">
+        <childnode refid="53" relation="include">
         </childnode>
-        <childnode refid="21" relation="include">
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
         </childnode>
         <childnode refid="48" relation="include">
         </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
-        </childnode>
-        <childnode refid="42" relation="include">
-        </childnode>
       </node>
-      <node id="45">
+      <node id="51">
         <label>../core/gaze_frame_data.hpp</label>
         <link refid="gaze__frame__data_8hpp_source"/>
-        <childnode refid="23" relation="include">
+        <childnode refid="24" relation="include">
         </childnode>
-        <childnode refid="21" relation="include">
+        <childnode refid="22" relation="include">
         </childnode>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="46" relation="include">
-        </childnode>
-      </node>
-      <node id="18">
-        <label>math_defs.hpp</label>
-        <link refid="math__defs_8hpp"/>
         <childnode refid="19" relation="include">
         </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>math_defs.hpp</label>
+        <link refid="math__defs_8hpp"/>
         <childnode refid="20" relation="include">
         </childnode>
         <childnode refid="21" relation="include">
@@ -74,73 +78,113 @@
         </childnode>
         <childnode refid="23" relation="include">
         </childnode>
-      </node>
-      <node id="17">
-        <label>opencv_space_conversions.hpp</label>
-        <link refid="opencv__space__conversions_8hpp"/>
-        <childnode refid="18" relation="include">
-        </childnode>
-        <childnode refid="19" relation="include">
-        </childnode>
         <childnode refid="24" relation="include">
         </childnode>
       </node>
-      <node id="42">
-        <label>pipeline_config.hpp</label>
-        <link refid="pipeline__config_8hpp"/>
+      <node id="45">
+        <label>../core/mouse_stillness_arbitrator.hpp</label>
+        <link refid="mouse__stillness__arbitrator_8hpp"/>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>opencv_space_conversions.hpp</label>
+        <link refid="opencv__space__conversions_8hpp"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
         <childnode refid="25" relation="include">
         </childnode>
       </node>
-      <node id="15">
-        <label>../core/projection_engine.hpp</label>
-        <link refid="projection__engine_8hpp"/>
-        <childnode refid="16" relation="include">
-        </childnode>
-        <childnode refid="17" relation="include">
+      <node id="48">
+        <label>pipeline_config.hpp</label>
+        <link refid="pipeline__config_8hpp"/>
+        <childnode refid="26" relation="include">
         </childnode>
       </node>
-      <node id="26">
+      <node id="16">
+        <label>../core/projection_engine.hpp</label>
+        <link refid="projection__engine_8hpp"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
         <label>gaze_device_profile.hpp</label>
         <link refid="gaze__device__profile_8hpp"/>
-        <childnode refid="27" relation="include">
+        <childnode refid="28" relation="include">
         </childnode>
         <childnode refid="9" relation="include">
         </childnode>
-        <childnode refid="28" relation="include">
+        <childnode refid="32" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
-        <childnode refid="29" relation="include">
-        </childnode>
-      </node>
-      <node id="40">
-        <label>gaze_event_factory.hpp</label>
-        <link refid="gaze__event__factory_8hpp_source"/>
-        <childnode refid="27" relation="include">
-        </childnode>
-        <childnode refid="37" relation="include">
+        <childnode refid="33" relation="include">
         </childnode>
       </node>
       <node id="43">
+        <label>gaze_display_server.hpp</label>
+        <link refid="gaze__display__server_8hpp_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>gaze_event_factory.hpp</label>
+        <link refid="gaze__event__factory_8hpp_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+      </node>
+      <node id="49">
         <label>gaze_frame.hpp</label>
         <link refid="gaze__frame_8hpp_source"/>
         <childnode refid="4" relation="include">
         </childnode>
-        <childnode refid="11" relation="include">
+        <childnode refid="12" relation="include">
         </childnode>
-        <childnode refid="44" relation="include">
+        <childnode refid="50" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
-        <childnode refid="28" relation="include">
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
         </childnode>
       </node>
-      <node id="41">
+      <node id="47">
         <label>gaze_pipeline_config.hpp</label>
         <link refid="gaze__pipeline__config_8hpp"/>
-        <childnode refid="27" relation="include">
+        <childnode refid="29" relation="include">
         </childnode>
-        <childnode refid="42" relation="include">
+        <childnode refid="48" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>gaze_profile.hpp</label>
+        <link refid="gaze__profile_8hpp"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
         </childnode>
       </node>
       <node id="3">
@@ -170,89 +214,97 @@
         </childnode>
         <childnode refid="15" relation="include">
         </childnode>
-        <childnode refid="25" relation="include">
+        <childnode refid="16" relation="include">
         </childnode>
         <childnode refid="26" relation="include">
         </childnode>
-        <childnode refid="30" relation="include">
+        <childnode refid="27" relation="include">
         </childnode>
-        <childnode refid="33" relation="include">
-        </childnode>
-        <childnode refid="35" relation="include">
-        </childnode>
-        <childnode refid="41" relation="include">
-        </childnode>
-        <childnode refid="43" relation="include">
+        <childnode refid="34" relation="include">
         </childnode>
         <childnode refid="37" relation="include">
         </childnode>
-        <childnode refid="40" relation="include">
-        </childnode>
-        <childnode refid="45" relation="include">
-        </childnode>
-        <childnode refid="23" relation="include">
+        <childnode refid="39" relation="include">
         </childnode>
         <childnode refid="47" relation="include">
         </childnode>
         <childnode refid="49" relation="include">
         </childnode>
-        <childnode refid="50" relation="include">
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
         </childnode>
         <childnode refid="51" relation="include">
         </childnode>
-      </node>
-      <node id="37">
-        <label>input_event_gaze.hpp</label>
-        <link refid="input__event__gaze_8hpp_source"/>
         <childnode refid="38" relation="include">
         </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>input_event_gaze.hpp</label>
+        <link refid="input__event__gaze_8hpp_source"/>
+        <childnode refid="41" relation="include">
+        </childnode>
         <childnode refid="9" relation="include">
         </childnode>
         <childnode refid="10" relation="include">
         </childnode>
         <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="39" relation="include">
-        </childnode>
-      </node>
-      <node id="35">
-        <label>mouse_gaze_emulation.hpp</label>
-        <link refid="mouse__gaze__emulation_8hpp_source"/>
-        <childnode refid="36" relation="include">
-        </childnode>
-        <childnode refid="14" relation="include">
-        </childnode>
-        <childnode refid="29" relation="include">
-        </childnode>
-        <childnode refid="9" relation="include">
-        </childnode>
-        <childnode refid="10" relation="include">
-        </childnode>
-        <childnode refid="8" relation="include">
-        </childnode>
-        <childnode refid="37" relation="include">
-        </childnode>
-        <childnode refid="26" relation="include">
-        </childnode>
-        <childnode refid="40" relation="include">
-        </childnode>
-      </node>
-      <node id="33">
-        <label>one_euro_smoother.hpp</label>
-        <link refid="one__euro__smoother_8hpp_source"/>
-        <childnode refid="30" relation="include">
-        </childnode>
-        <childnode refid="34" relation="include">
-        </childnode>
-      </node>
-      <node id="30">
-        <label>smoother.hpp</label>
-        <link refid="smoother_8hpp_source"/>
-        <childnode refid="27" relation="include">
         </childnode>
         <childnode refid="31" relation="include">
         </childnode>
-        <childnode refid="32" relation="include">
+      </node>
+      <node id="39">
+        <label>mouse_gaze_emulation.hpp</label>
+        <link refid="mouse__gaze__emulation_8hpp_source"/>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>one_euro_smoother.hpp</label>
+        <link refid="one__euro__smoother_8hpp_source"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>smoother.hpp</label>
+        <link refid="smoother_8hpp_source"/>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="36" relation="include">
         </childnode>
       </node>
       <node id="1">
@@ -262,129 +314,138 @@
         </childnode>
         <childnode refid="3" relation="include">
         </childnode>
-        <childnode refid="52" relation="include">
+        <childnode refid="59" relation="include">
         </childnode>
-        <childnode refid="53" relation="include">
+        <childnode refid="60" relation="include">
         </childnode>
-        <childnode refid="54" relation="include">
+        <childnode refid="61" relation="include">
         </childnode>
         <childnode refid="6" relation="include">
         </childnode>
-        <childnode refid="55" relation="include">
+        <childnode refid="62" relation="include">
         </childnode>
-        <childnode refid="56" relation="include">
+        <childnode refid="63" relation="include">
         </childnode>
       </node>
       <node id="2">
         <label>web_binding_state.hpp</label>
         <link refid="web__binding__state_8hpp"/>
       </node>
-      <node id="22">
+      <node id="23">
         <label>algorithm</label>
       </node>
-      <node id="19">
+      <node id="20">
         <label>cmath</label>
       </node>
-      <node id="51">
+      <node id="58">
         <label>condition_variable</label>
       </node>
-      <node id="21">
+      <node id="46">
+        <label>cstddef</label>
+      </node>
+      <node id="22">
         <label>cstdint</label>
       </node>
-      <node id="36">
-        <label>godot_cpp/classes/display_server.hpp</label>
+      <node id="30">
+        <label>godot_cpp/classes/config_file.hpp</label>
       </node>
-      <node id="53">
+      <node id="60">
         <label>godot_cpp/classes/file_access.hpp</label>
       </node>
-      <node id="11">
+      <node id="12">
         <label>godot_cpp/classes/image.hpp</label>
       </node>
-      <node id="12">
+      <node id="13">
         <label>godot_cpp/classes/image_texture.hpp</label>
       </node>
-      <node id="38">
+      <node id="41">
         <label>godot_cpp/classes/input_event_action.hpp</label>
       </node>
-      <node id="52">
+      <node id="59">
         <label>godot_cpp/classes/java_script_bridge.hpp</label>
       </node>
       <node id="4">
         <label>godot_cpp/classes/object.hpp</label>
       </node>
-      <node id="54">
+      <node id="61">
         <label>godot_cpp/classes/os.hpp</label>
       </node>
       <node id="6">
         <label>godot_cpp/classes/project_settings.hpp</label>
       </node>
-      <node id="29">
+      <node id="33">
         <label>godot_cpp/classes/ref.hpp</label>
       </node>
       <node id="5">
         <label>godot_cpp/classes/ref_counted.hpp</label>
       </node>
-      <node id="27">
+      <node id="29">
         <label>godot_cpp/classes/resource.hpp</label>
       </node>
-      <node id="14">
+      <node id="15">
         <label>godot_cpp/classes/time.hpp</label>
       </node>
-      <node id="55">
+      <node id="62">
         <label>godot_cpp/core/class_db.hpp</label>
       </node>
-      <node id="13">
+      <node id="14">
         <label>godot_cpp/templates/safe_refcount.hpp</label>
       </node>
-      <node id="31">
+      <node id="35">
         <label>godot_cpp/variant/array.hpp</label>
       </node>
-      <node id="44">
+      <node id="50">
         <label>godot_cpp/variant/packed_byte_array.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/variant/rect2.hpp</label>
+      </node>
+      <node id="44">
+        <label>godot_cpp/variant/rect2i.hpp</label>
       </node>
       <node id="7">
         <label>godot_cpp/variant/rid.hpp</label>
       </node>
-      <node id="39">
+      <node id="31">
         <label>godot_cpp/variant/string.hpp</label>
       </node>
       <node id="8">
         <label>godot_cpp/variant/transform3d.hpp</label>
       </node>
-      <node id="56">
+      <node id="63">
         <label>godot_cpp/variant/utility_functions.hpp</label>
       </node>
-      <node id="32">
+      <node id="36">
         <label>godot_cpp/variant/variant.hpp</label>
       </node>
       <node id="9">
         <label>godot_cpp/variant/vector2.hpp</label>
       </node>
-      <node id="28">
+      <node id="32">
         <label>godot_cpp/variant/vector2i.hpp</label>
       </node>
       <node id="10">
         <label>godot_cpp/variant/vector3.hpp</label>
       </node>
-      <node id="24">
+      <node id="25">
         <label>limits</label>
       </node>
-      <node id="47">
+      <node id="53">
         <label>memory</label>
       </node>
-      <node id="50">
+      <node id="57">
         <label>mutex</label>
       </node>
-      <node id="34">
+      <node id="38">
         <label>one_euro_filter.hpp</label>
       </node>
-      <node id="49">
+      <node id="56">
         <label>thread</label>
       </node>
-      <node id="20">
+      <node id="21">
         <label>type_traits</label>
       </node>
-      <node id="23">
+      <node id="24">
         <label>vector</label>
       </node>
     </incdepgraph>

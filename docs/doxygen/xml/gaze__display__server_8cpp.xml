@@ -3,16 +3,25 @@
   <compounddef id="gaze__display__server_8cpp" kind="file" language="C++">
     <compoundname>gaze_display_server.cpp</compoundname>
     <includes refid="gaze__display__server_8hpp" local="yes">gaze_display_server.hpp</includes>
+    <includes refid="register__types_8hpp" local="yes">register_types.hpp</includes>
     <includes local="no">godot_cpp/core/class_db.hpp</includes>
     <includes local="no">godot_cpp/classes/display_server.hpp</includes>
+    <includes local="no">godot_cpp/classes/input.hpp</includes>
+    <includes local="no">godot_cpp/classes/input_event_mouse_motion.hpp</includes>
+    <includes local="no">godot_cpp/classes/input_event_mouse_button.hpp</includes>
     <includes local="no">godot_cpp/classes/engine.hpp</includes>
+    <includes local="no">godot_cpp/classes/scene_tree.hpp</includes>
+    <includes local="no">godot_cpp/classes/window.hpp</includes>
+    <includes local="no">godot_cpp/classes/canvas_item.hpp</includes>
     <includes local="no">godot_cpp/variant/utility_functions.hpp</includes>
     <includes refid="gaze__display__types_8hpp" local="yes">../core/gaze_display_types.hpp</includes>
     <includes refid="gaze__display__fallback_8hpp" local="yes">../native/gaze_display_fallback.hpp</includes>
     <incdepgraph>
-      <node id="11">
+      <node id="18">
         <label>../core/gaze_display_types.hpp</label>
         <link refid="gaze__display__types_8hpp_source"/>
+        <childnode refid="19" relation="include">
+        </childnode>
       </node>
       <node id="1">
         <label>src/godot/gaze_display_server.cpp</label>
@@ -31,6 +40,20 @@
         </childnode>
         <childnode refid="12" relation="include">
         </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
       </node>
       <node id="2">
         <label>gaze_display_server.hpp</label>
@@ -44,28 +67,55 @@
         <childnode refid="6" relation="include">
         </childnode>
       </node>
-      <node id="12">
-        <label>../native/gaze_display_fallback.hpp</label>
-        <link refid="gaze__display__fallback_8hpp_source"/>
-        <childnode refid="11" relation="include">
+      <node id="7">
+        <label>register_types.hpp</label>
+        <link refid="register__types_8hpp"/>
+        <childnode refid="8" relation="include">
         </childnode>
       </node>
-      <node id="8">
-        <label>godot_cpp/classes/display_server.hpp</label>
+      <node id="20">
+        <label>../native/gaze_display_fallback.hpp</label>
+        <link refid="gaze__display__fallback_8hpp_source"/>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>cstdint</label>
+      </node>
+      <node id="16">
+        <label>godot_cpp/classes/canvas_item.hpp</label>
       </node>
       <node id="9">
+        <label>godot_cpp/classes/display_server.hpp</label>
+      </node>
+      <node id="13">
         <label>godot_cpp/classes/engine.hpp</label>
+      </node>
+      <node id="10">
+        <label>godot_cpp/classes/input.hpp</label>
+      </node>
+      <node id="12">
+        <label>godot_cpp/classes/input_event_mouse_button.hpp</label>
+      </node>
+      <node id="11">
+        <label>godot_cpp/classes/input_event_mouse_motion.hpp</label>
       </node>
       <node id="3">
         <label>godot_cpp/classes/object.hpp</label>
       </node>
-      <node id="7">
+      <node id="14">
+        <label>godot_cpp/classes/scene_tree.hpp</label>
+      </node>
+      <node id="15">
+        <label>godot_cpp/classes/window.hpp</label>
+      </node>
+      <node id="8">
         <label>godot_cpp/core/class_db.hpp</label>
       </node>
       <node id="6">
         <label>godot_cpp/variant/rect2i.hpp</label>
       </node>
-      <node id="10">
+      <node id="17">
         <label>godot_cpp/variant/utility_functions.hpp</label>
       </node>
       <node id="4">
@@ -86,7 +136,7 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.cpp" line="33" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="33" bodyend="-1"/>
+        <location file="src/godot/gaze_display_server.cpp" line="50" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="50" bodyend="-1"/>
       </memberdef>
       <memberdef kind="define" id="gaze__display__server_8cpp_1afba3d913c73cd612abf62fb9d54bf29f" prot="public" static="no">
         <name>NATIVE_GET_WINDOW_RECT</name>
@@ -97,7 +147,29 @@
         </detaileddescription>
         <inbodydescription>
         </inbodydescription>
-        <location file="src/godot/gaze_display_server.cpp" line="34" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="34" bodyend="-1"/>
+        <location file="src/godot/gaze_display_server.cpp" line="51" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="gaze__display__server_8cpp_1a4a9e16c09fc791fea20b334f2d1a6d76" prot="public" static="no">
+        <name>NATIVE_GET_MOUSE_POSITION</name>
+        <initializer>Gaze::gaze_fallback_get_mouse_position</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.cpp" line="52" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="define" id="gaze__display__server_8cpp_1af9815553a4d2c29c749e26a388347037" prot="public" static="no">
+        <name>NATIVE_GET_MOUSE_BUTTONS</name>
+        <initializer>Gaze::gaze_fallback_get_mouse_button_state</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/godot/gaze_display_server.cpp" line="53" column="9" bodyfile="src/godot/gaze_display_server.cpp" bodystart="53" bodyend="-1"/>
       </memberdef>
     </sectiondef>
     <briefdescription>
@@ -106,172 +178,292 @@
     </detaileddescription>
     <programlisting>
 <codeline lineno="1"><highlight class="preprocessor">#include<sp/>&quot;gaze_display_server.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/display_server.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/engine.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../core/gaze_display_types.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="7"><highlight class="normal"></highlight></codeline>
-<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(__APPLE__)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;TargetConditionals.h&gt;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>TARGET_OS_IPHONE<sp/>||<sp/>TARGET_OS_SIMULATOR</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../ios/gaze_display_ios.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_ios_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_ios_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../macos/gaze_display_macos.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_macos_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_macos_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(_WIN32)<sp/>||<sp/>defined(WINDOWS_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../windows/gaze_display_windows.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_windows_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_windows_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__ANDROID__)<sp/>||<sp/>defined(ANDROID_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../android/gaze_display_android.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_android_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_android_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(WEB_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../web/gaze_display_server_web.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_web_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_web_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../native/gaze_display_fallback.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_fallback_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_fallback_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
-<codeline lineno="36"><highlight class="normal"></highlight></codeline>
-<codeline lineno="37"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
-<codeline lineno="38"><highlight class="normal"></highlight></codeline>
-<codeline lineno="39"><highlight class="normal"><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref><sp/>*GazeDisplayServer::singleton<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="40"><highlight class="normal"></highlight></codeline>
-<codeline lineno="41"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeDisplayServer::_bind_methods()<sp/>{</highlight></codeline>
-<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_size_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">GazeDisplayServer::get_screen_size_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
-<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_size_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">GazeDisplayServer::get_screen_size_pixels</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
-<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_pixel_pitch_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a4ecf8b703f58b2acad09c8bc4b508a94" kindref="member">GazeDisplayServer::get_pixel_pitch_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
-<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_scale&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kindref="member">GazeDisplayServer::get_screen_scale</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
-<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_window_rect_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;window&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kindref="member">GazeDisplayServer::get_window_rect_pixels</ref>,<sp/>DEFVAL(0));</highlight></codeline>
-<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_default_camera_offset_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" kindref="member">GazeDisplayServer::get_default_camera_offset_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
-<codeline lineno="48"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="49"><highlight class="normal"></highlight></codeline>
-<codeline lineno="50"><highlight class="normal">GazeDisplayServer::GazeDisplayServer()<sp/>{</highlight></codeline>
-<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(singleton<sp/>==<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
-<codeline lineno="52"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>singleton<sp/>=<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="54"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="2"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="register__types_8hpp" kindref="compound">register_types.hpp</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/core/class_db.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="4"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/display_server.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input_event_mouse_motion.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/input_event_mouse_button.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/engine.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/scene_tree.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/window.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/canvas_item.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/utility_functions.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../core/gaze_display_types.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(__APPLE__)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;TargetConditionals.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>TARGET_OS_IPHONE<sp/>||<sp/>TARGET_OS_SIMULATOR</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../ios/gaze_display_ios.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_ios_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_ios_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_ios_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_ios_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../macos/gaze_display_macos.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_macos_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_macos_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="27"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_macos_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_macos_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(_WIN32)<sp/>||<sp/>defined(WINDOWS_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../windows/gaze_display_windows.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_windows_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_windows_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="34"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_windows_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="35"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_windows_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="36"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(__ANDROID__)<sp/>||<sp/>defined(ANDROID_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../android/gaze_display_android.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_android_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_android_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_android_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_android_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"></highlight><highlight class="preprocessor">#elif<sp/>defined(WEB_ENABLED)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../web/gaze_display_server_web.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_web_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_web_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_web_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_web_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight><highlight class="preprocessor">#else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;../native/gaze_display_fallback.hpp&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_METRICS<sp/>Gaze::gaze_fallback_get_display_metrics</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_WINDOW_RECT<sp/>Gaze::gaze_fallback_get_window_rect</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_POSITION<sp/>Gaze::gaze_fallback_get_mouse_position</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>NATIVE_GET_MOUSE_BUTTONS<sp/>Gaze::gaze_fallback_get_mouse_button_state</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
 <codeline lineno="55"><highlight class="normal"></highlight></codeline>
-<codeline lineno="56"><highlight class="normal">GazeDisplayServer::~GazeDisplayServer()<sp/>{</highlight></codeline>
-<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(singleton<sp/>==<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
-<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>singleton<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="60"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="61"><highlight class="normal"></highlight></codeline>
-<codeline lineno="62"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">GazeDisplayServer::get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
-<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
-<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>ds)<sp/>{</highlight></codeline>
-<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
-<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="72"><highlight class="normal"></highlight></codeline>
-<codeline lineno="73"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
-<codeline lineno="74"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(metrics.width_mm,<sp/>metrics.height_mm);</highlight></codeline>
-<codeline lineno="75"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="76"><highlight class="normal"></highlight></codeline>
-<codeline lineno="77"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">GazeDisplayServer::get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
-<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
-<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
-<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="84"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="85"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="86"><highlight class="normal"></highlight></codeline>
-<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
-<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics.pixel_width<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/>metrics.pixel_height<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(metrics.pixel_width,<sp/>metrics.pixel_height);</highlight></codeline>
-<codeline lineno="90"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref><sp/>*GazeDisplayServer::singleton<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>GazeDisplayServer::_bind_methods()<sp/>{</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_size_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">GazeDisplayServer::get_screen_size_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_size_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">GazeDisplayServer::get_screen_size_pixels</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_pixel_pitch_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a4ecf8b703f58b2acad09c8bc4b508a94" kindref="member">GazeDisplayServer::get_pixel_pitch_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_screen_scale&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kindref="member">GazeDisplayServer::get_screen_scale</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_window_rect_pixels&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;window&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kindref="member">GazeDisplayServer::get_window_rect_pixels</ref>,<sp/>DEFVAL(0));</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_default_camera_offset_mm&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;screen&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" kindref="member">GazeDisplayServer::get_default_camera_offset_mm</ref>,<sp/>DEFVAL(-1));</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;mouse_get_position&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" kindref="member">GazeDisplayServer::mouse_get_position</ref>);</highlight></codeline>
+<codeline lineno="68"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;get_window_mouse_position&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;window&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a2c065195e453e3fdc4e6b4c08a1563a5" kindref="member">GazeDisplayServer::get_window_mouse_position</ref>,<sp/>DEFVAL(0));</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;mouse_get_button_state&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1af46c5c44cae47f6d06f276fe592c2a46" kindref="member">GazeDisplayServer::mouse_get_button_state</ref>);</highlight></codeline>
+<codeline lineno="70"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;parse_mouse_motion&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;position&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;relative&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;velocity&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" kindref="member">GazeDisplayServer::parse_mouse_motion</ref>);</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;parse_mouse_button&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;button&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;pressed&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;position&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" kindref="member">GazeDisplayServer::parse_mouse_button</ref>);</highlight></codeline>
+<codeline lineno="72"><highlight class="normal"><sp/><sp/><sp/><sp/>ClassDB::bind_method(D_METHOD(</highlight><highlight class="stringliteral">&quot;window_px_to_canvas&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;win_pos&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="stringliteral">&quot;local_to&quot;</highlight><highlight class="normal">),<sp/>&amp;<ref refid="classgodot_1_1_gaze_display_server_1ae6d36dd5c45e4a3cf05a9658d8c029ad" kindref="member">GazeDisplayServer::window_px_to_canvas</ref>,<sp/>DEFVAL(</highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="73"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="74"><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><ref refid="classgodot_1_1_gaze_display_server" kindref="compound">GazeDisplayServer</ref><sp/>*<ref refid="classgodot_1_1_gaze_display_server_1a0003a6a08e0d79e2f56a09550717f9eb" kindref="member">GazeDisplayServer::get_singleton</ref>()<sp/>{</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!singleton)<sp/>{</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>setup_gaze_singletons();</highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/><sp/><sp/>Engine<sp/>*engine<sp/>=<sp/>Engine::get_singleton();</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(engine<sp/>&amp;&amp;<sp/>engine-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;GazeDisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="81"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Object::cast_to&lt;GazeDisplayServer&gt;(engine-&gt;get_singleton(</highlight><highlight class="stringliteral">&quot;GazeDisplayServer&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="83"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>singleton;</highlight></codeline>
+<codeline lineno="84"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="85"><highlight class="normal"></highlight></codeline>
+<codeline lineno="86"><highlight class="normal">GazeDisplayServer::GazeDisplayServer()<sp/>{</highlight></codeline>
+<codeline lineno="87"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(singleton<sp/>==<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="88"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>singleton<sp/>=<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="89"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="90"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="91"><highlight class="normal"></highlight></codeline>
-<codeline lineno="92"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
-<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2i<sp/>sz<sp/>=<sp/>ds-&gt;screen_get_size(screen_idx);</highlight></codeline>
-<codeline lineno="96"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>scale<sp/>=<sp/>ds-&gt;screen_get_scale(screen_idx);</highlight></codeline>
-<codeline lineno="97"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(scale<sp/>&gt;<sp/>0.0)<sp/>{</highlight></codeline>
-<codeline lineno="98"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(sz.x<sp/>/<sp/>scale,<sp/>sz.y<sp/>/<sp/>scale);</highlight></codeline>
-<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(sz.x,<sp/>sz.y);</highlight></codeline>
-<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="92"><highlight class="normal">GazeDisplayServer::~GazeDisplayServer()<sp/>{</highlight></codeline>
+<codeline lineno="93"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(singleton<sp/>==<sp/></highlight><highlight class="keyword">this</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="94"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>singleton<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="95"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="96"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="97"><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">GazeDisplayServer::get_screen_size_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
 <codeline lineno="102"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(1920,<sp/>1080);</highlight></codeline>
-<codeline lineno="104"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="105"><highlight class="normal"></highlight></codeline>
-<codeline lineno="106"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1a4ecf8b703f58b2acad09c8bc4b508a94" kindref="member">GazeDisplayServer::get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mm<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">get_screen_size_mm</ref>(p_screen);</highlight></codeline>
-<codeline lineno="108"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>px<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(p_screen);</highlight></codeline>
-<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>pitch_x<sp/>=<sp/>(px.x<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mm.x<sp/>/<sp/>px.x)<sp/>:<sp/>0.20;</highlight></codeline>
-<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>pitch_y<sp/>=<sp/>(px.y<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mm.y<sp/>/<sp/>px.y)<sp/>:<sp/>0.20;</highlight></codeline>
-<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(pitch_x,<sp/>pitch_y);</highlight></codeline>
-<codeline lineno="112"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="113"><highlight class="normal"></highlight></codeline>
-<codeline lineno="114"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kindref="member">GazeDisplayServer::get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
-<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
-<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
-<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
-<codeline lineno="123"><highlight class="normal"></highlight></codeline>
-<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
-<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics.scale_factor<sp/>&gt;<sp/>0.0)<sp/>{</highlight></codeline>
-<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>metrics.scale_factor;</highlight></codeline>
-<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="128"><highlight class="normal"></highlight></codeline>
-<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
-<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ds-&gt;screen_get_scale(screen_idx);</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>ds)<sp/>{</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(metrics.width_mm,<sp/>metrics.height_mm);</highlight></codeline>
+<codeline lineno="111"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"></highlight></codeline>
+<codeline lineno="113"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">GazeDisplayServer::get_screen_size_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"></highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics.pixel_width<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/>metrics.pixel_height<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(metrics.pixel_width,<sp/>metrics.pixel_height);</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"></highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2i<sp/>sz<sp/>=<sp/>ds-&gt;screen_get_size(screen_idx);</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(sz.x,<sp/>sz.y);</highlight></codeline>
 <codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1.0;</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(1920,<sp/>1080);</highlight></codeline>
 <codeline lineno="136"><highlight class="normal">}</highlight></codeline>
 <codeline lineno="137"><highlight class="normal"></highlight></codeline>
-<codeline lineno="138"><highlight class="normal"></highlight></codeline>
-<codeline lineno="139"><highlight class="normal">Rect2i<sp/><ref refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kindref="member">GazeDisplayServer::get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;headless&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
-<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2<sp/>scr_sz<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(0);</highlight></codeline>
-<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(0,<sp/>0,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.x,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.y);</highlight></codeline>
-<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeWindowRect<sp/>rect<sp/>=<sp/>NATIVE_GET_WINDOW_RECT(p_window);</highlight></codeline>
-<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rect.width<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/>rect.height<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
-<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(rect.x,<sp/>rect.y,<sp/>rect.width,<sp/>rect.height);</highlight></codeline>
-<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
-<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
-<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
-<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(ds-&gt;window_get_position(p_window),<sp/>ds-&gt;window_get_size(p_window));</highlight></codeline>
-<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
-<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>scr_sz<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(0);</highlight></codeline>
-<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(0,<sp/>0,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.x,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.y);</highlight></codeline>
-<codeline lineno="159"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="138"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1a4ecf8b703f58b2acad09c8bc4b508a94" kindref="member">GazeDisplayServer::get_pixel_pitch_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>mm<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1aec81508eb77a870a1a2f61c908d90c3b" kindref="member">get_screen_size_mm</ref>(p_screen);</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>px<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(p_screen);</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>pitch_x<sp/>=<sp/>(px.x<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mm.x<sp/>/<sp/>px.x)<sp/>:<sp/>0.20;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>pitch_y<sp/>=<sp/>(px.y<sp/>&gt;<sp/>0.0)<sp/>?<sp/>(mm.y<sp/>/<sp/>px.y)<sp/>:<sp/>0.20;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(pitch_x,<sp/>pitch_y);</highlight></codeline>
+<codeline lineno="144"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"></highlight></codeline>
+<codeline lineno="146"><highlight class="normal"></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kindref="member">GazeDisplayServer::get_screen_scale</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>screen_idx<sp/>=<sp/>p_screen;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0<sp/>&amp;&amp;<sp/>Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>screen_idx<sp/>=<sp/>ds-&gt;window_get_current_screen();</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(screen_idx<sp/>&lt;<sp/>0)<sp/>screen_idx<sp/>=<sp/>0;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"></highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeDisplayMetrics<sp/>metrics<sp/>=<sp/>NATIVE_GET_METRICS(screen_idx);</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(metrics.scale_factor<sp/>&gt;<sp/>0.0)<sp/>{</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>metrics.scale_factor;</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
 <codeline lineno="160"><highlight class="normal"></highlight></codeline>
-<codeline lineno="161"><highlight class="normal"></highlight></codeline>
-<codeline lineno="162"><highlight class="normal"></highlight></codeline>
-<codeline lineno="163"><highlight class="normal">Vector3<sp/><ref refid="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" kindref="member">GazeDisplayServer::get_default_camera_offset_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
-<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector3(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
-<codeline lineno="165"><highlight class="normal">}</highlight></codeline>
-<codeline lineno="166"><highlight class="normal"></highlight></codeline>
-<codeline lineno="167"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>ds-&gt;screen_get_scale(screen_idx);</highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>1.0;</highlight></codeline>
+<codeline lineno="168"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="169"><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"></highlight></codeline>
+<codeline lineno="171"><highlight class="normal">Rect2i<sp/><ref refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kindref="member">GazeDisplayServer::get_window_rect_pixels</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="172"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="174"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;headless&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2<sp/>scr_sz<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(0);</highlight></codeline>
+<codeline lineno="176"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(0,<sp/>0,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.x,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.y);</highlight></codeline>
+<codeline lineno="177"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="178"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="179"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeWindowRect<sp/>rect<sp/>=<sp/>NATIVE_GET_WINDOW_RECT(p_window);</highlight></codeline>
+<codeline lineno="180"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(rect.width<sp/>&gt;<sp/>0<sp/>&amp;&amp;<sp/>rect.height<sp/>&gt;<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="181"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(rect.x,<sp/>rect.y,<sp/>rect.width,<sp/>rect.height);</highlight></codeline>
+<codeline lineno="182"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="183"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="184"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="185"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds)<sp/>{</highlight></codeline>
+<codeline lineno="186"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(ds-&gt;window_get_position(p_window),<sp/>ds-&gt;window_get_size(p_window));</highlight></codeline>
+<codeline lineno="187"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="188"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="189"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>scr_sz<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1ad3f43e47d01af5e8120ff1a0116e9d48" kindref="member">get_screen_size_pixels</ref>(0);</highlight></codeline>
+<codeline lineno="190"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Rect2i(0,<sp/>0,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.x,<sp/>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal">)scr_sz.y);</highlight></codeline>
+<codeline lineno="191"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="192"><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"></highlight></codeline>
+<codeline lineno="195"><highlight class="normal">Vector3<sp/><ref refid="classgodot_1_1_gaze_display_server_1a385facf0158530c6ae0fb7ddc0d4bf14" kindref="member">GazeDisplayServer::get_default_camera_offset_mm</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_screen)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector3(0.0,<sp/>0.0,<sp/>0.0);</highlight></codeline>
+<codeline lineno="197"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="198"><highlight class="normal"></highlight></codeline>
+<codeline lineno="199"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" kindref="member">GazeDisplayServer::mouse_get_position</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;headless&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(0,<sp/>0);</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/><sp/><sp/>Gaze::GazeMousePoint<sp/>pt<sp/>=<sp/>NATIVE_GET_MOUSE_POSITION();</highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(pt.x<sp/>!=<sp/>0.0<sp/>||<sp/>pt.y<sp/>!=<sp/>0.0)<sp/>{</highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(pt.x,<sp/>pt.y);</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="210"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//<sp/>Fallback<sp/>if<sp/>native<sp/>returns<sp/>(0,0)<sp/>(e.g.<sp/>headless<sp/>or<sp/>before<sp/>cursor<sp/>moves)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="211"><highlight class="normal"><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="212"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="214"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="215"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>!=<sp/></highlight><highlight class="stringliteral">&quot;headless&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Vector2i<sp/>p<sp/>=<sp/>ds-&gt;mouse_get_position();</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">double</highlight><highlight class="normal"><sp/>scale<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1a3ee08268d01a6ad7c76a9e29c3b4632f" kindref="member">get_screen_scale</ref>();</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(scale<sp/>&gt;<sp/>0.0<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>==<sp/></highlight><highlight class="stringliteral">&quot;macOS&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(p.x<sp/>/<sp/>scale,<sp/>p.y<sp/>/<sp/>scale);</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="221"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(p.x,<sp/>p.y);</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="223"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>Vector2(pt.x,<sp/>pt.y);</highlight></codeline>
+<codeline lineno="224"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="225"><highlight class="normal"></highlight></codeline>
+<codeline lineno="226"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1a2c065195e453e3fdc4e6b4c08a1563a5" kindref="member">GazeDisplayServer::get_window_mouse_position</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>p_window)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/><sp/><sp/>Rect2i<sp/>win_rect<sp/>=<sp/><ref refid="classgodot_1_1_gaze_display_server_1aa560e9bc3bb60be8aa7220821ad0eb7a" kindref="member">get_window_rect_pixels</ref>(p_window);</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_display_server_1a2db9b3ee7d0299b77e7279b609567824" kindref="member">mouse_get_position</ref>()<sp/>-<sp/>Vector2(win_rect.position.x,<sp/>win_rect.position.y);</highlight></codeline>
+<codeline lineno="229"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="230"><highlight class="normal"></highlight></codeline>
+<codeline lineno="231"><highlight class="normal">int64_t<sp/><ref refid="classgodot_1_1_gaze_display_server_1af46c5c44cae47f6d06f276fe592c2a46" kindref="member">GazeDisplayServer::mouse_get_button_state</ref>()</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="232"><highlight class="normal"><sp/><sp/><sp/><sp/>int64_t<sp/>native_buttons<sp/>=<sp/>NATIVE_GET_MOUSE_BUTTONS();</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(native_buttons<sp/>!=<sp/>0)<sp/>{</highlight></codeline>
+<codeline lineno="234"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>native_buttons;</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="236"><highlight class="normal"><sp/><sp/><sp/><sp/>DisplayServer<sp/>*ds<sp/>=<sp/></highlight><highlight class="keyword">nullptr</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="237"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(Engine::get_singleton()-&gt;has_singleton(</highlight><highlight class="stringliteral">&quot;DisplayServer&quot;</highlight><highlight class="normal">))<sp/>{</highlight></codeline>
+<codeline lineno="238"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ds<sp/>=<sp/>DisplayServer::get_singleton();</highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(ds<sp/>&amp;&amp;<sp/>ds-&gt;get_name()<sp/>!=<sp/></highlight><highlight class="stringliteral">&quot;headless&quot;</highlight><highlight class="normal">)<sp/>{</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>(int64_t)ds-&gt;mouse_get_button_state();</highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>0;</highlight></codeline>
+<codeline lineno="244"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="245"><highlight class="normal"></highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_display_server_1a4b616296f9164d9f815eb5408f163f12" kindref="member">GazeDisplayServer::parse_mouse_motion</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_relative,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_velocity)<sp/>{</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/><sp/><sp/>Input<sp/>*input<sp/>=<sp/>Input::get_singleton();</highlight></codeline>
+<codeline lineno="249"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!input)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="250"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventMouseMotion&gt;<sp/>mm;</highlight></codeline>
+<codeline lineno="251"><highlight class="normal"><sp/><sp/><sp/><sp/>mm.instantiate();</highlight></codeline>
+<codeline lineno="252"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_device(-1);</highlight></codeline>
+<codeline lineno="253"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_meta(</highlight><highlight class="stringliteral">&quot;synthetic_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="254"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_position(p_position);</highlight></codeline>
+<codeline lineno="255"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_global_position(p_position);</highlight></codeline>
+<codeline lineno="256"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_relative(p_relative);</highlight></codeline>
+<codeline lineno="257"><highlight class="normal"><sp/><sp/><sp/><sp/>mm-&gt;set_velocity(p_velocity);</highlight></codeline>
+<codeline lineno="258"><highlight class="normal"><sp/><sp/><sp/><sp/>input-&gt;parse_input_event(mm);</highlight></codeline>
+<codeline lineno="259"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="260"><highlight class="normal"></highlight></codeline>
+<codeline lineno="261"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="classgodot_1_1_gaze_display_server_1a49a158a4bcfa6d5b549b871e12960ce7" kindref="member">GazeDisplayServer::parse_mouse_button</ref>(int64_t<sp/>p_button,<sp/></highlight><highlight class="keywordtype">bool</highlight><highlight class="normal"><sp/>p_pressed,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_position)<sp/>{</highlight></codeline>
+<codeline lineno="262"><highlight class="normal"><sp/><sp/><sp/><sp/>Input<sp/>*input<sp/>=<sp/>Input::get_singleton();</highlight></codeline>
+<codeline lineno="263"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(!input)<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="264"><highlight class="normal"><sp/><sp/><sp/><sp/>Ref&lt;InputEventMouseButton&gt;<sp/>mb;</highlight></codeline>
+<codeline lineno="265"><highlight class="normal"><sp/><sp/><sp/><sp/>mb.instantiate();</highlight></codeline>
+<codeline lineno="266"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_device(-1);</highlight></codeline>
+<codeline lineno="267"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_meta(</highlight><highlight class="stringliteral">&quot;synthetic_gaze&quot;</highlight><highlight class="normal">,<sp/></highlight><highlight class="keyword">true</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="268"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_button_index((MouseButton)p_button);</highlight></codeline>
+<codeline lineno="269"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_pressed(p_pressed);</highlight></codeline>
+<codeline lineno="270"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_position(p_position);</highlight></codeline>
+<codeline lineno="271"><highlight class="normal"><sp/><sp/><sp/><sp/>mb-&gt;set_global_position(p_position);</highlight></codeline>
+<codeline lineno="272"><highlight class="normal"><sp/><sp/><sp/><sp/>input-&gt;parse_input_event(mb);</highlight></codeline>
+<codeline lineno="273"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="274"><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal">Vector2<sp/><ref refid="classgodot_1_1_gaze_display_server_1ae6d36dd5c45e4a3cf05a9658d8c029ad" kindref="member">GazeDisplayServer::window_px_to_canvas</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Vector2<sp/>&amp;p_win_pos,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>CanvasItem<sp/>*p_local_to)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/><sp/><sp/>SceneTree<sp/>*st<sp/>=<sp/>Object::cast_to&lt;SceneTree&gt;(Engine::get_singleton()-&gt;get_main_loop());</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"><sp/><sp/><sp/><sp/>Vector2<sp/>canvas_pos<sp/>=<sp/>p_win_pos;</highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(st<sp/>&amp;&amp;<sp/>st-&gt;get_root())<sp/>{</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>canvas_pos<sp/>=<sp/>st-&gt;get_root()-&gt;get_final_transform().affine_inverse().xform(p_win_pos);</highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(p_local_to)<sp/>{</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>canvas_pos<sp/>=<sp/>p_local_to-&gt;get_global_transform_with_canvas().affine_inverse().xform(canvas_pos);</highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>canvas_pos;</highlight></codeline>
+<codeline lineno="285"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="286"><highlight class="normal"></highlight></codeline>
+<codeline lineno="287"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
     </programlisting>
     <location file="src/godot/gaze_display_server.cpp"/>
   </compounddef>

@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.17.0" xml:lang="en-US">
+  <compounddef id="gaze__profile_8hpp" kind="file" language="C++">
+    <compoundname>gaze_profile.hpp</compoundname>
+    <includes local="no">godot_cpp/classes/resource.hpp</includes>
+    <includes local="no">godot_cpp/classes/config_file.hpp</includes>
+    <includes local="no">godot_cpp/variant/string.hpp</includes>
+    <includedby refid="gaze__device__profile_8hpp" local="yes">src/godot/gaze_device_profile.hpp</includedby>
+    <includedby refid="gaze__profile_8cpp" local="yes">src/godot/gaze_profile.cpp</includedby>
+    <includedby refid="register__types_8cpp" local="yes">src/godot/register_types.cpp</includedby>
+    <incdepgraph>
+      <node id="1">
+        <label>src/godot/gaze_profile.hpp</label>
+        <link refid="gaze__profile_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>godot_cpp/classes/config_file.hpp</label>
+      </node>
+      <node id="2">
+        <label>godot_cpp/classes/resource.hpp</label>
+      </node>
+      <node id="4">
+        <label>godot_cpp/variant/string.hpp</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="3">
+        <label>src/godot/gaze_device_profile.cpp</label>
+        <link refid="gaze__device__profile_8cpp"/>
+      </node>
+      <node id="2">
+        <label>src/godot/gaze_device_profile.hpp</label>
+        <link refid="gaze__device__profile_8hpp"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>src/godot/gaze_profile.cpp</label>
+        <link refid="gaze__profile_8cpp"/>
+      </node>
+      <node id="1">
+        <label>src/godot/gaze_profile.hpp</label>
+        <link refid="gaze__profile_8hpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>src/godot/gaze_server.hpp</label>
+        <link refid="gaze__server_8hpp_source"/>
+      </node>
+      <node id="5">
+        <label>src/godot/mouse_gaze_emulation.hpp</label>
+        <link refid="mouse__gaze__emulation_8hpp_source"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classgodot_1_1_gaze_profile" prot="public">godot::GazeProfile</innerclass>
+    <innernamespace refid="namespacegodot">godot</innernamespace>
+    <briefdescription>
+<para>Common base class for serializable Godot Gaze profiles (device and biological). </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="normal"></highlight></codeline>
+<codeline lineno="5"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="6"><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/resource.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/classes/config_file.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;godot_cpp/variant/string.hpp&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal">godot<sp/>{</highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13" refid="classgodot_1_1_gaze_profile" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">GazeProfile<sp/>:<sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal"><sp/>Resource<sp/>{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/><sp/><sp/>GDCLASS(GazeProfile,<sp/>Resource);</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="keyword">protected</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_bind_methods();</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>_write_to_config(Ref&lt;ConfigFile&gt;<sp/>&amp;p_cfg)</highlight><highlight class="keyword"><sp/>const<sp/></highlight><highlight class="normal">{}</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>Error<sp/>_read_from_config(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>Ref&lt;ConfigFile&gt;<sp/>&amp;p_cfg)<sp/>{<sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>OK;<sp/>}</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight></codeline>
+<codeline lineno="22"><highlight class="normal"></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>GazeProfile()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">virtual</highlight><highlight class="normal"><sp/>~GazeProfile()<sp/>=<sp/></highlight><highlight class="keywordflow">default</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/><sp/><sp/>Error<sp/>save_to_file(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;p_path);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal"><sp/><sp/><sp/><sp/>Error<sp/>load_from_file(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>String<sp/>&amp;p_path);</highlight></codeline>
+<codeline lineno="28"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>godot</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/godot/gaze_profile.hpp"/>
+  </compounddef>
+</doxygen>
